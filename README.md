@@ -98,7 +98,7 @@ itself at 20:30 IST on weekdays (or `POST /api/rebuild`).
 | Strike-level view | Nearest-expiry chain, ATM ± 8 strikes, OI, ΔOI, premiums; highest call-OI / put-OI strikes and max pain, all from the same bhavcopy | nothing extra (EOD) |
 | Live quotes | LTP, day change, futures OI vs previous close for all 210 stocks every `POLL_SECONDS` during market hours; live premiums/OI on an open strike table; sort by live % | `BROKER=groww` with a Groww API subscription (₹499 + GST/month, TOTP key, see below), or `BROKER=kite` with Kite Connect's paid plan and the daily `python -m server.kite_login` |
 | Plain-language reading | "Explain these numbers" on a row: Claude writes 90–130 words on what the data shows, what would confirm/contradict it, and the main risk. It is not allowed to say buy/sell/enter/exit/hold or name a strike to trade, and a filter rejects any output that does, falling back to a deterministic summary | `ANTHROPIC_API_KEY` |
-| Orders | Tap a strike or "Order: future" → sheet → **Review** (contract, quantity = lots × lot size, notional, margin, paper/live badge) → **Place**. Every order needs a preview token (90 s, tamper-proof), lots ≤ `MAX_LOTS_PER_ORDER`, ≤ `MAX_ORDERS_PER_DAY`; real orders also need an explicit acknowledgement checkbox | `PAPER=true` works with no account (simulated fills in `data/paper_orders.jsonl`); real orders need `PAPER=false`, `BROKER=kite`, a Kite plan, and a **SEBI-whitelisted static IP** for the machine running the server |
+| Orders | Tap a strike or "Order: future" → sheet → **Review** (liquidity class, expected fill from the live book, slippage, charges, margin, risk vs caps, paper/live badge) → **Place**. Every order needs a preview token (90 s, tamper-proof), lots ≤ `MAX_LOTS_PER_ORDER`, ≤ `MAX_ORDERS_PER_DAY`; real orders also need an explicit acknowledgement checkbox | `PAPER=true` works with no account: the honest paper engine (guide 12) fills against live depth, books full charges, enforces stops/risk caps and keeps a ledger. Real orders need `PAPER=false`, `BROKER=kite`, a Kite plan, and a **SEBI-whitelisted static IP** for the machine running the server |
 
 `BROKER=fake` gives random-walk quotes with no account, for trying the live UI and the paper
 order flow locally. `python -m scanner.demo --install` fills synthetic OI/PCR/strikes into the
@@ -214,4 +214,8 @@ server/live.py        quote poller (Kite; FakeProvider for local demo)
 server/broker.py      PaperBroker (default) and KiteBroker; preview tokens; contract naming
 server/commentary.py  Anthropic call with the descriptive-only brief and output filter
 server/kite_login.py  daily access-token helper
+server/paper.py       paper ledger: book-walk fills, marks, stops, T-2 exits (guide 12)
+server/charges.py     the full charge stack; server/liquidity.py, server/fills.py, server/risk.py
+scanner/backtest_cheap_options.py  cheap-option backtest from NSE bhavcopies
+tests/                pytest suite (pip install -r requirements-dev.txt)
 ```
