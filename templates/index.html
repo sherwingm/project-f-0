@@ -192,6 +192,18 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outl
 .olist { font-size:13px; }
 .olist .o { border-top:1px solid var(--line); padding:8px 0; display:flex; justify-content:space-between; gap:8px; }
 .olist .o span:last-child { text-align:right; color:var(--muted); }
+.olist .o span:first-child b, .olist .o span:last-child b { color:var(--ink); }
+.olist .o b.up { color:var(--bull); } .olist .o b.down { color:var(--bear); }
+.oh { font-size:13px; color:var(--muted); margin:14px 0 4px; }
+.reasons { margin:4px 0 8px; padding-left:18px; font-size:13px; color:var(--muted); }
+.reasons li { margin:2px 0; }
+.err .reasons { color:var(--bear); }
+.tag { display:inline-block; font-size:12px; border:1px solid var(--accent); color:var(--accent); border-radius:8px; padding:3px 8px; margin:2px 0 8px; }
+.strikes.lv { margin:0 0 10px; }
+.strikes.lv td, .strikes.lv th { text-align:left; }
+.closebox { padding:0 0 6px; }
+.paperbar { flex-wrap:wrap; }
+.paperbar b.up { color:var(--bull); } .paperbar b.down { color:var(--bear); }
 
 /* permanent disclaimer */
 .disclaimer {
@@ -222,9 +234,11 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outl
     </div>
     <p id="built"></p>
     <div class="livebar" id="livebar" hidden><span class="dot" id="livedot"></span><span id="livetext"></span></div>
+    <div class="livebar paperbar" id="paperbar" hidden></div>
   </header>
 
   <div id="notice" class="notice" hidden></div>
+  <div id="ddnotice" class="notice" hidden></div>
 
   <section class="summary" aria-label="Summary">
     <div class="summary-line"><strong id="headline"></strong><span id="universe"></span></div>
@@ -536,7 +550,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const j = await r.json(); LIVE = j;
       $("#livebar").hidden = false; $("#livedot").className = "dot" + (j.updated_at && j.market_open ? " on" : "");
       $("#livetext").textContent = j.error ? "Live feed error: " + j.error : j.updated_at ? `Live quotes as of ${j.updated_at} IST${j.market_open ? "" : " (market closed)"}, every ${j.poll_seconds}s` : (j.market_open ? "Waiting for the first live quote…" : "Market closed. Live quotes resume at 09:15 IST.");
-      render();
+      render(); refreshPaperBar();
     } catch (e) { $("#livebar").hidden = false; $("#livetext").textContent = "Live feed unreachable"; }
   }
   if (SERVER.live) { pollLive(); setInterval(pollLive, Math.max(10, SERVER.poll_seconds) * 1000); }
@@ -544,9 +558,53 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   // ---- orders
   if (SERVER.orders) { $("#ordersBtn").hidden = false; $("#ordersBtn").addEventListener("click", openOrders); }
 
+  const LIQ_PILL = { accept: "b", penalty: "u", lottery: "n", refuse: "r" };
+  const FILL_RULE = { normal: "book walk + 1 tick", penalty: "book walk + 1 tick + half spread", lottery: "best level ± 1 tick (lottery)" };
+  const kv = (k, v) => `<div><span>${k}</span><span>${v}</span></div>`;
+  const plural = (n, w) => `${n} ${w}${n === 1 ? "" : "s"}`;
+  const money = v => v == null ? "—" : "₹" + inr(v);
+  const getJson = async (url, opts) => { const r = await fetch(url, { ...auth, ...(opts || {}) }); const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status); return j; };
+
+  // The paper engine's review: everything the server checked before it will accept Place.
+  function paperReviewHtml(pv) {
+    const r = pv.review; if (!r) return "";
+    const liq = r.liquidity, f = r.fill, ce = r.charges_entry, rt = r.round_trip_now, k = r.risk;
+    let h = r.queued ? `<p class="notice" style="margin:8px 0">${esc(r.queued.message)}</p>` : "";
+    h += `<div class="review">${kv("Contract", esc(pv.tradingsymbol))}${kv("Quantity", `${inr(r.qty)} (${r.lots} × ${pv.lot_size})`)}
+      ${kv("This order", r.intent === "exit" ? "closes (part of) your open position" : "opens a new position")}
+      ${liq ? kv("Liquidity", `<span class="pill ${LIQ_PILL[liq.class] || "n"}">${esc(liq.class)}</span>`) : kv("Liquidity", r.quote_error ? "no quote: " + esc(r.quote_error) : "no live quote")}
+      ${liq ? kv("Book", `spread ${liq.spread_pct != null ? liq.spread_pct + "%" : "—"} · visible ${inr(liq.visible_qty)} · strike/contract OI ${liq.oi_lots != null ? inr(liq.oi_lots) + " lots" : "—"}`) : ""}</div>`;
+    if (liq && liq.reasons.length) h += `<ul class="reasons">${liq.reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    if (r.bucket === "cheap_near_expiry") h += `<p class="tag"><b>cheap_near_expiry</b> · tracked as its own bucket on the scoreboard</p>`;
+    if (f) {
+      h += `<div class="review">${kv("Expected fill", `₹${inr(f.price)}${r.queued ? " <small>(estimate from the last quote)</small>" : ""}`)}${kv("Mid", money(f.mid))}
+        ${kv("Slippage vs mid", f.slippage_vs_mid != null ? `₹${inr(f.slippage_vs_mid)} a unit (${f.slippage_pct}%), ${money(f.slippage_value)} in all` : "—")}${kv("Fill rule", FILL_RULE[f.mode] || esc(f.mode))}</div>
+        <table class="strikes lv"><thead><tr><th>Depth level used ₹</th><th>Quantity</th></tr></thead><tbody>${f.levels.map(l => `<tr><td>${inr(l.price)}${l.overflow ? " <small>beyond the visible depth: worst level + one spread</small>" : ""}</td><td>${inr(l.qty)}</td></tr>`).join("")}</tbody></table>`;
+    }
+    if (ce) {
+      h += `<div class="review">${kv("Charges, this order", `${money(ce.total)} <small>brokerage ${inr(ce.brokerage)} · STT ${inr(ce.stt)} · NSE ${inr(ce.exchange)} · SEBI ${inr(ce.sebi)} · stamp ${inr(ce.stamp)} · GST ${inr(ce.gst)}</small>`)}
+        ${r.exit_estimate ? kv("This exit realises", `entry ₹${inr(r.exit_estimate.entry_price)} · both legs' charges ${money(r.exit_estimate.charges_total)} · net <b class="${dirClass(r.exit_estimate.net_pnl)}">${money(r.exit_estimate.net_pnl)}</b>`)
+          : rt ? kv("Round trip if closed at once", rt.exit_price != null ? `exit ₹${inr(rt.exit_price)} · charges ${money(rt.charges.total)} · net <b class="${dirClass(rt.net_pnl)}">${money(rt.net_pnl)}</b>` : esc(rt.note || "")) : ""}</div>`;
+    }
+    if (k) {
+      const ks = k.kill_switch;
+      h += `<div class="review">${kv("Margin", k.margin != null ? `${money(k.margin)} (${esc(k.margin_source)}) · open + this ${money(k.margin_after)} of ${money(k.margin_cap)} cap` : "—")}
+        ${kv("Risk", k.max_loss != null ? `max loss ${money(k.max_loss)} of the ${money(k.cap)} per-trade cap (${k.used_pct}%) · cap allows ${plural(k.max_lots, "lot")}` : `per-trade cap ${money(k.cap)}`)}
+        ${kv("Day P&L", `<b class="${dirClass(k.day_pnl)}">${money(k.day_pnl)}</b> · week ${money(k.week_pnl)}`)}
+        ${kv("Kill switch", ks.active ? `<b class="down">ON</b> ${esc(ks.reason)}` : `off · halts at ${money(ks.day_limit)} a day, ${money(ks.week_limit)} a week`)}
+        ${kv("New positions", `${k.new_positions_today} today · ${k.new_positions_month} this month`)}</div>`;
+    } else if (r.intent === "exit") {
+      h += `<p class="count" style="margin:4px 0">Closing a position: the loss halts and sizing limits do not apply to exits.</p>`;
+    }
+    if (r.warnings && r.warnings.length) h += `<ul class="reasons">${r.warnings.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
+    if (r.blocked.length) h += `<div class="err"><b>The server will not accept this order:</b><ul class="reasons">${r.blocked.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
+    return h;
+  }
+
   function openSheet(s, instrument, strike) {
     if (!SERVER.orders || !s.chain) return;
-    const st = { instrument, strike, side: "BUY", lots: 1, order_type: "LIMIT", price: null, preview: null, err: "", done: null, ack: false };
+    const st = { instrument, strike, side: "BUY", lots: 1, order_type: SERVER.paper ? "MARKET" : "LIMIT", price: null, stop: null,
+                 preview: null, err: "", done: null, ack: false, riskCap: null };
     const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
     const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); bg.appendChild(sheet);
     const q = LIVE.quotes[s.symbol];
@@ -555,48 +613,61 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const row = s.chain.strikes.find(r => r.strike === st.strike); if (!row) return null;
       return st.instrument === "CE" ? (row.ce_live_ltp ?? row.ce_close) : (row.pe_live_ltp ?? row.pe_close);
     };
+    const maxLots = () => Math.max(1, Math.min(SERVER.max_lots, st.riskCap ?? SERVER.max_lots));
+    const capNote = () => st.riskCap == null ? "" : st.riskCap < 1 ? " · the per-trade risk cap allows none" : ` · per-trade risk cap ${st.riskCap}`;
+    const stopNeed = () => st.instrument === "FUT" ? "required for futures" : st.side === "SELL" ? "required for short options" : "optional";
     function draw() {
       const contract = st.instrument === "FUT" ? `${s.symbol} ${s.chain.expiry} future` : `${s.symbol} ${s.chain.expiry} ${fmtStrike(st.strike)} ${st.instrument}`;
       const qty = st.lots * (s.lot_size || 0);
       if (st.done) {
-        sheet.innerHTML = `<h2>${st.done.paper ? "Paper order recorded" : "Order sent to broker"}</h2><p class="sub">${esc(contract)}</p>
-          <div class="review"><div><span>Order id</span><span>${esc(st.done.order_id)}</span></div><div><span>Status</span><span>${esc(st.done.status)}</span></div>
-          <div><span>Quantity</span><span>${inr(st.done.quantity)}</span></div>${st.done.fill_price != null ? `<div><span>Fill price</span><span>₹${inr(st.done.fill_price)}</span></div>` : ""}</div>
+        const d = st.done, queued = d.status === "QUEUED";
+        sheet.innerHTML = `<h2>${d.paper ? (queued ? "Paper order queued" : "Paper order " + esc(d.status.toLowerCase())) : "Order sent to broker"}</h2><p class="sub">${esc(contract)}</p>
+          <div class="review">${kv("Order id", esc(d.order_id))}${kv("Status", esc(d.status))}${kv("Quantity", inr(d.quantity))}
+          ${d.fill_price != null ? kv("Fill price", "₹" + inr(d.fill_price)) : ""}${queued ? kv("Fills", "first poll at or after " + esc((d.fill_after || "").slice(0, 16).replace("T", " ")) + " IST") : ""}
+          ${d.charges ? kv("Charges", money(d.charges.total)) : ""}${d.net_pnl != null ? kv("Net P&L", `<b class="${dirClass(d.net_pnl)}">${money(d.net_pnl)}</b>`) : ""}
+          ${d.bucket ? kv("Bucket", esc(d.bucket)) : ""}</div>
           <button class="btn primary" type="button" id="closeSheet">Close</button>`;
         $("#closeSheet", sheet).addEventListener("click", () => bg.remove()); return;
       }
+      const pv = st.preview, canPlace = pv && pv.token;
       sheet.innerHTML = `<h2>${esc(contract)}</h2><p class="sub">Lot size ${s.lot_size ?? "?"} · reference ₹${inr(refPrice())} · <span class="badge ${SERVER.paper ? "paper" : "live"}">${SERVER.paper ? "PAPER" : "LIVE BROKER"}</span></p>
         ${st.instrument !== "FUT" ? `<div class="field"><label>Option</label><div class="seg2"><button type="button" data-i="CE" aria-pressed="${st.instrument === "CE"}">Call ${fmtStrike(st.strike)}</button><button type="button" data-i="PE" aria-pressed="${st.instrument === "PE"}">Put ${fmtStrike(st.strike)}</button></div></div>` : ""}
         <div class="field"><label>Side</label><div class="seg2"><button type="button" class="buy" data-side="BUY" aria-pressed="${st.side === "BUY"}">Buy</button><button type="button" class="sell" data-side="SELL" aria-pressed="${st.side === "SELL"}">Sell</button></div></div>
-        <div class="field"><label>Lots (max ${SERVER.max_lots}) · quantity ${inr(qty)}</label><div class="stepper"><button type="button" data-d="-1" aria-label="fewer lots">−</button><b>${st.lots}</b><button type="button" data-d="1" aria-label="more lots">+</button></div></div>
-        <div class="field"><label>Order type</label><div class="seg2"><button type="button" data-t="LIMIT" aria-pressed="${st.order_type === "LIMIT"}">Limit</button><button type="button" data-t="MARKET" aria-pressed="${st.order_type === "MARKET"}">Market</button></div></div>
-        ${st.order_type === "LIMIT" ? `<div class="field"><label>Limit price ₹</label><input class="num" id="px" type="number" inputmode="decimal" step="0.05" value="${st.price ?? refPrice() ?? ""}"></div>` : ""}
-        ${st.preview ? `<div class="review"><div><span>Contract</span><span>${esc(st.preview.tradingsymbol)}</span></div><div><span>Quantity</span><span>${inr(st.preview.quantity)} (${st.lots} × ${st.preview.lot_size})</span></div>
-          <div><span>Notional</span><span>₹${inr(st.preview.notional)}</span></div><div><span>Est. margin</span><span>${st.preview.estimated_margin != null ? "₹" + inr(st.preview.estimated_margin) : "not available"}</span></div>
-          <div><span>Orders today</span><span>${st.preview.orders_today} of ${st.preview.max_orders_per_day}</span></div></div>
-          ${!SERVER.paper ? `<label class="chk"><input type="checkbox" id="ack" ${st.ack ? "checked" : ""}> I understand this sends a real ${st.side} order for ${inr(st.preview.quantity)} units to my broker account, and that F&O losses can exceed the capital invested.</label>` : ""}` : ""}
+        <div class="field"><label>Lots (max ${maxLots()}${capNote()}) · quantity ${inr(qty)}</label><div class="stepper"><button type="button" data-d="-1" aria-label="fewer lots">−</button><b>${st.lots}</b><button type="button" data-d="1" aria-label="more lots">+</button></div></div>
+        <div class="field"><label>Order type</label><div class="seg2"><button type="button" data-t="MARKET" aria-pressed="${st.order_type === "MARKET"}">Market</button><button type="button" data-t="LIMIT" aria-pressed="${st.order_type === "LIMIT"}">Limit</button></div></div>
+        ${st.order_type === "LIMIT" ? `<div class="field"><label>Limit price ₹${SERVER.paper ? " (a cap on the fill; paper orders never rest)" : ""}</label><input class="num" id="px" type="number" inputmode="decimal" step="0.05" value="${st.price ?? refPrice() ?? ""}"></div>` : ""}
+        ${SERVER.paper ? `<div class="field"><label>Stop ₹ (${stopNeed()}; the exit fills at the next poll's book, not at this price)</label><input class="num" id="stopPx" type="number" inputmode="decimal" step="0.05" value="${st.stop ?? ""}"></div>` : ""}
+        ${pv ? (pv.review ? paperReviewHtml(pv) : `<div class="review">${kv("Contract", esc(pv.tradingsymbol))}${kv("Quantity", `${inr(pv.quantity)} (${st.lots} × ${pv.lot_size})`)}
+          ${kv("Notional", money(pv.notional))}${kv("Est. margin", pv.estimated_margin != null ? money(pv.estimated_margin) : "not available")}${kv("Orders today", `${pv.orders_today} of ${pv.max_orders_per_day}`)}</div>`)
+          + (!SERVER.paper ? `<label class="chk"><input type="checkbox" id="ack" ${st.ack ? "checked" : ""}> I understand this sends a real ${st.side} order for ${inr(pv.quantity)} units to my broker account, and that F&O losses can exceed the capital invested.</label>` : "") : ""}
         ${st.err ? `<p class="err">${esc(st.err)}</p>` : ""}
-        <div class="actions">${st.preview ? `<button class="btn ${SERVER.paper ? "primary" : "danger"}" type="button" id="place" ${!SERVER.paper && !st.ack ? "disabled" : ""}>${SERVER.paper ? "Record paper order" : "Place real order"}</button><button class="btn" type="button" id="back">Edit</button>` : `<button class="btn primary" type="button" id="review">Review order</button>`}<button class="btn" type="button" id="cancel">Cancel</button></div>`;
-      sheet.querySelectorAll("[data-i]").forEach(b => b.addEventListener("click", () => { st.instrument = b.dataset.i; st.price = null; st.preview = null; draw(); }));
-      sheet.querySelectorAll("[data-side]").forEach(b => b.addEventListener("click", () => { st.side = b.dataset.side; st.preview = null; draw(); }));
-      sheet.querySelectorAll("[data-d]").forEach(b => b.addEventListener("click", () => { st.lots = Math.min(SERVER.max_lots, Math.max(1, st.lots + Number(b.dataset.d))); st.preview = null; draw(); }));
-      sheet.querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => { st.order_type = b.dataset.t; st.preview = null; draw(); }));
+        <div class="actions">${pv ? (canPlace ? `<button class="btn ${SERVER.paper ? "primary" : "danger"}" type="button" id="place" ${!SERVER.paper && !st.ack ? "disabled" : ""}>${SERVER.paper ? (pv.review && pv.review.queued ? "Queue paper order" : "Place paper order") : "Place real order"}</button>` : "") + `<button class="btn" type="button" id="back">Edit</button>` : `<button class="btn primary" type="button" id="review">Review order</button>`}<button class="btn" type="button" id="cancel">Cancel</button></div>`;
+      const reset = () => { st.preview = null; st.err = ""; };
+      sheet.querySelectorAll("[data-i]").forEach(b => b.addEventListener("click", () => { st.instrument = b.dataset.i; st.price = null; reset(); draw(); }));
+      sheet.querySelectorAll("[data-side]").forEach(b => b.addEventListener("click", () => { st.side = b.dataset.side; reset(); draw(); }));
+      sheet.querySelectorAll("[data-d]").forEach(b => b.addEventListener("click", () => { st.lots = Math.min(maxLots(), Math.max(1, st.lots + Number(b.dataset.d))); reset(); draw(); }));
+      sheet.querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => { st.order_type = b.dataset.t; reset(); draw(); }));
       const px = $("#px", sheet); if (px) px.addEventListener("input", () => { st.price = Number(px.value); st.preview = null; });
+      const sp = $("#stopPx", sheet); if (sp) sp.addEventListener("input", () => { st.stop = sp.value === "" ? null : Number(sp.value); st.preview = null; });
       const ack = $("#ack", sheet); if (ack) ack.addEventListener("change", () => { st.ack = ack.checked; $("#place", sheet).disabled = !st.ack; });
       $("#cancel", sheet).addEventListener("click", () => bg.remove());
-      const back = $("#back", sheet); if (back) back.addEventListener("click", () => { st.preview = null; st.err = ""; draw(); });
+      const back = $("#back", sheet); if (back) back.addEventListener("click", () => { reset(); draw(); });
       const review = $("#review", sheet); if (review) review.addEventListener("click", () => submit("/api/order/preview"));
       const place = $("#place", sheet); if (place) place.addEventListener("click", () => submit("/api/order"));
     }
-    function body() { return { symbol: s.symbol, instrument: st.instrument, expiry: s.chain.expiry, strike: st.instrument === "FUT" ? null : st.strike, side: st.side, lots: st.lots, order_type: st.order_type, price: st.order_type === "LIMIT" ? (st.price ?? refPrice()) : null }; }
+    function body() {
+      return { symbol: s.symbol, instrument: st.instrument, expiry: s.chain.expiry, strike: st.instrument === "FUT" ? null : st.strike, side: st.side, lots: st.lots,
+               order_type: st.order_type, price: st.order_type === "LIMIT" ? (st.price ?? refPrice()) : null, stop: SERVER.paper ? st.stop : null };
+    }
     async function submit(url) {
       st.err = "";
       if (st.order_type === "LIMIT") { const v = $("#px", sheet); if (v) st.price = Number(v.value); }
+      const sv = $("#stopPx", sheet); if (sv) st.stop = sv.value === "" ? null : Number(sv.value);
       try {
         const payload = body(); if (url === "/api/order") payload.token = st.preview.token;
-        const r = await fetch(url, { ...auth, method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
-        const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status);
-        if (url === "/api/order") st.done = j; else st.preview = j;
+        const j = await getJson(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        if (url === "/api/order") { st.done = j; refreshPaperBar(); }
+        else { st.preview = j; const cap = j.review && j.review.risk && j.review.risk.max_lots; st.riskCap = cap != null ? cap : null; }
       } catch (e) { st.err = e.message; }
       draw();
     }
@@ -606,15 +677,79 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   async function openOrders() {
     const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
     const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub">Loading…</p>`; bg.appendChild(sheet); document.body.appendChild(bg);
+    if (SERVER.paper) return paperOrders(sheet, bg);
     try {
-      const [o, p] = await Promise.all([fetch("/api/orders", auth).then(r => r.json()), fetch("/api/positions", auth).then(r => r.json())]);
-      sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub"><span class="badge ${SERVER.paper ? "paper" : "live"}">${SERVER.paper ? "PAPER" : "LIVE BROKER"}</span></p>
-        <h3 style="font-size:13px;color:var(--muted);margin:10px 0 4px">Open positions</h3><div class="olist">${p.length ? p.map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b></span><span>${x.quantity > 0 ? "+" : ""}${inr(x.quantity)} @ ₹${inr(x.avg_price)}${x.pnl != null ? " · P&L ₹" + inr(x.pnl) : ""}</span></div>`).join("") : "<div class='o'><span>None</span></div>"}</div>
-        <h3 style="font-size:13px;color:var(--muted);margin:14px 0 4px">Orders</h3><div class="olist">${o.length ? o.slice(0, 50).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.price ? " @ ₹" + inr(x.price) : ""}</span><span>${esc(x.status)}<br>${esc((x.placed_at || "").slice(0, 16))}</span></div>`).join("") : "<div class='o'><span>None yet</span></div>"}</div>
+      const [o, p] = await Promise.all([getJson("/api/orders"), getJson("/api/positions")]);
+      sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub"><span class="badge live">LIVE BROKER</span></p>
+        <h3 class="oh">Open positions</h3><div class="olist">${p.length ? p.map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b></span><span>${x.quantity > 0 ? "+" : ""}${inr(x.quantity)} @ ₹${inr(x.avg_price)}${x.pnl != null ? " · P&L ₹" + inr(x.pnl) : ""}</span></div>`).join("") : "<div class='o'><span>None</span></div>"}</div>
+        <h3 class="oh">Orders</h3><div class="olist">${o.length ? o.slice(0, 50).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.price ? " @ ₹" + inr(x.price) : ""}</span><span>${esc(x.status)}<br>${esc((x.placed_at || "").slice(0, 16))}</span></div>`).join("") : "<div class='o'><span>None yet</span></div>"}</div>
         <div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`;
       $("#closeO", sheet).addEventListener("click", () => bg.remove());
     } catch (e) { sheet.innerHTML = `<h2>Orders & positions</h2><p class="err">${esc(e.message)}</p>`; }
   }
+
+  function paperSummaryLine(sm) {
+    return `Equity <b>${money(sm.equity)}</b> on ${money(sm.capital)} · day <b class="${dirClass(sm.day_pnl)}">${money(sm.day_pnl)}</b> · week <b class="${dirClass(sm.week_pnl)}">${money(sm.week_pnl)}</b> · drawdown ${sm.drawdown_pct}% · open margin ${money(sm.open_margin)}` +
+      (sm.kill_switch ? ` · kill switch ${sm.kill_switch.active ? '<b class="down">ON</b>' : "off"}` : "");
+  }
+
+  async function paperOrders(sheet, bg) {
+    try {
+      const [sm, pos, tr, rf, ords] = await Promise.all([getJson("/api/paper/summary"), getJson("/api/paper/positions"), getJson("/api/paper/trades"), getJson("/api/paper/refusals"), getJson("/api/orders")]);
+      const posHtml = pos.map(p => `<div class="o"><span><b>${esc(p.tradingsymbol)}</b> ${p.side === "BUY" ? "long" : "short"} ${plural(p.lots, "lot")} (${inr(p.qty)})
+          <br>entry ₹${inr(p.entry.price)} · mark ${p.mark ? "₹" + inr(p.mark.price) + (p.mark.stale ? " <small>(no " + (p.side === "BUY" ? "bid" : "ask") + ")</small>" : "") : "—"}
+          <br>stop ${p.stop != null ? "₹" + inr(p.stop) + (p.stop_triggered_at ? " <b class='down'>triggered</b>, exits at the next poll" : "") : "none"} · expiry ${esc(p.expiry)} · T-2 ${esc(p.t2_date)}${p.bucket === "cheap_near_expiry" ? " · <b>cheap_near_expiry</b>" : ""}</span>
+          <span><b class="${dirClass(p.unrealised)}">${money(p.unrealised)}</b><br><small>MTM, net of charges</small><br><button class="btn" type="button" data-close="${esc(p.id)}">Close…</button></span></div><div class="closebox" id="cl-${esc(p.id)}"></div>`).join("");
+      const trHtml = tr.trades.slice(0, 50).map(t => `<div class="o"><span><b>${esc(t.tradingsymbol)}</b> ${t.side === "BUY" ? "long" : "short"} ${plural(t.lots, "lot")} · ${esc(t.reason)}
+          <br>₹${inr(t.entry.price)} → ₹${inr(t.exit.price)} · charges ${money(t.charges_total)} · ${esc(t.bucket)}</span>
+          <span><b class="${dirClass(t.net_pnl)}">${money(t.net_pnl)}</b>${t.return_pct != null ? "<br>" + pct(t.return_pct) : ""}<br><small>${esc((t.closed_at || "").slice(0, 16).replace("T", " "))}</small></span></div>`).join("");
+      const ordHtml = ords.slice(0, 40).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.auto ? " · auto " + esc(x.auto) : ""}${x.reason ? "<br><small>" + esc(x.reason) + "</small>" : ""}</span>
+          <span>${esc(x.status)}${x.fill_price != null ? " @ ₹" + inr(x.fill_price) : ""}<br>${esc((x.filled_at || x.placed_at || "").slice(0, 16).replace("T", " "))}</span></div>`).join("");
+      const refHtml = rf.refusals.map(x => `<div class="o"><span><b>${esc(x.contract || x.symbol)}</b> ${esc(x.side || "")} ${inr(x.qty)}<br><small>${(x.reasons || []).map(esc).join("; ")}</small></span><span>${esc((x.time || "").slice(0, 16).replace("T", " "))}<br><small>${esc(x.stage || "")}</small></span></div>`).join("");
+      sheet.innerHTML = `<h2>Paper account</h2><p class="sub"><span class="badge paper">PAPER</span> ${paperSummaryLine(sm)}</p>
+        ${sm.kill_switch && sm.kill_switch.active ? `<p class="err">${esc(sm.kill_switch.reason)}</p>` : ""}
+        ${sm.drawdown_review ? `<p class="notice">${esc(sm.drawdown_review_message)}</p>` : ""}
+        ${sm.queued_orders ? `<p class="count">${plural(sm.queued_orders, "order")} queued for the next session's 09:20 poll.</p>` : ""}
+        <h3 class="oh">Open positions (${pos.length})</h3><div class="olist">${posHtml || "<div class='o'><span>None</span></div>"}</div>
+        <h3 class="oh">Closed trades (${tr.trades.length}), net of fills and charges</h3><div class="olist">${trHtml || "<div class='o'><span>None yet</span></div>"}</div>
+        <h3 class="oh">Refusals: ${rf.count}</h3>${rf.count ? `<button class="btn" type="button" id="showRef">Show the reasons</button><div class="olist" id="refList" hidden>${refHtml}</div>` : "<p class='count'>None: every order so far found enough liquidity.</p>"}
+        <h3 class="oh">Order log</h3><div class="olist">${ordHtml || "<div class='o'><span>None yet</span></div>"}</div>
+        <div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`;
+      $("#closeO", sheet).addEventListener("click", () => bg.remove());
+      const sr = $("#showRef", sheet); if (sr) sr.addEventListener("click", () => { const l = $("#refList", sheet); l.hidden = !l.hidden; sr.textContent = l.hidden ? "Show the reasons" : "Hide the reasons"; });
+      sheet.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closePosition(pos.find(p => p.id === b.dataset.close), sheet, bg)));
+    } catch (e) { sheet.innerHTML = `<h2>Paper account</h2><p class="err">${esc(e.message)}</p><div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`; $("#closeO", sheet).addEventListener("click", () => bg.remove()); }
+  }
+
+  // Manual exit from the Orders screen: the opposite side of the position's own contract, reviewed first.
+  async function closePosition(p, sheet, bg) {
+    const box = $("#cl-" + CSS.escape(p.id), sheet); if (!box) return;
+    const body = { symbol: p.symbol, instrument: p.instrument, expiry: p.expiry, strike: p.instrument === "FUT" ? null : p.strike,
+                   side: p.side === "BUY" ? "SELL" : "BUY", lots: p.lots, order_type: "MARKET", price: null, stop: null };
+    box.innerHTML = `<p class="count">Reviewing the exit…</p>`;
+    try {
+      const pv = await getJson("/api/order/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      box.innerHTML = paperReviewHtml(pv) + `<div class="actions">${pv.token ? `<button class="btn primary" type="button" data-go>${pv.review.queued ? "Queue the exit" : "Place the exit"}</button>` : ""}<button class="btn" type="button" data-no>Cancel</button></div>`;
+      box.querySelector("[data-no]").addEventListener("click", () => { box.innerHTML = ""; });
+      const go = box.querySelector("[data-go]");
+      if (go) go.addEventListener("click", async () => {
+        go.disabled = true;
+        try { await getJson("/api/order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, token: pv.token }) }); refreshPaperBar(); paperOrders(sheet, bg); }
+        catch (e) { box.insertAdjacentHTML("beforeend", `<p class="err">${esc(e.message)}</p>`); go.disabled = false; }
+      });
+    } catch (e) { box.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+  }
+
+  // One line under the header: the paper account at a glance, and the drawdown banner when it applies.
+  async function refreshPaperBar() {
+    if (!(SERVER.orders && SERVER.paper)) return;
+    try {
+      const sm = await getJson("/api/paper/summary");
+      const b = $("#paperbar"); b.hidden = false; b.innerHTML = `<span class="badge paper">PAPER</span> ${paperSummaryLine(sm)}`;
+      const n = $("#ddnotice"); n.hidden = !sm.drawdown_review; if (sm.drawdown_review) n.innerHTML = `<b>Review labels and sizing.</b> ${esc(sm.drawdown_review_message)}`;
+    } catch (e) { /* the page works without it */ }
+  }
+  refreshPaperBar();
 
   function cell(label, value, sub, cls = "") {
     return `<div class="cell"><small>${label}</small><b class="${cls}">${value}</b><em>${sub}</em></div>`;

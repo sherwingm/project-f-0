@@ -230,16 +230,25 @@ class PaperLedger:
                         book_block.append(f"expected fill Rs {f['price']:.2f} is beyond your limit Rs {req.price:.2f}; "
                                           "the paper engine does not rest orders (use Market, or a limit the book reaches)")
                 review["charges_entry"] = ch.leg(req.instrument, req.side, qty, f["price"])
-                opp = "SELL" if req.side == "BUY" else "BUY"
-                try:
-                    back = fill(opp, qty, quote["depth"], self.tick, mode if mode != "lottery" else "lottery")
-                    rt = ch.round_trip(req.instrument, req.side, qty, f["price"], back["price"])
-                    sign = 1 if req.side == "BUY" else -1
-                    review["round_trip_now"] = {"exit_price": back["price"], "charges": rt,
-                                                "net_pnl": round(sign * (back["price"] - f["price"]) * qty - rt["total"], 2)}
-                except NoLiquidity:
-                    review["round_trip_now"] = {"exit_price": None, "charges": None, "net_pnl": None,
-                                                "note": "no opposite side in the book to exit into right now"}
+                if intent == "exit":                  # what closing this part realises, net of both legs' charges
+                    frac = qty / pos["qty"]
+                    sign = 1 if pos["side"] == "BUY" else -1
+                    gross = sign * (f["price"] - pos["entry"]["price"]) * qty
+                    entry_part = pos["entry_charges_open"] * frac
+                    review["exit_estimate"] = {"entry_price": pos["entry"]["price"], "gross_pnl": round(gross, 2),
+                                               "charges_total": round(entry_part + review["charges_entry"]["total"], 2),
+                                               "net_pnl": round(gross - entry_part - review["charges_entry"]["total"], 2)}
+                else:                                 # an entry: what an immediate round trip would cost
+                    opp = "SELL" if req.side == "BUY" else "BUY"
+                    try:
+                        back = fill(opp, qty, quote["depth"], self.tick, mode)
+                        rt = ch.round_trip(req.instrument, req.side, qty, f["price"], back["price"])
+                        sign = 1 if req.side == "BUY" else -1
+                        review["round_trip_now"] = {"exit_price": back["price"], "charges": rt,
+                                                    "net_pnl": round(sign * (back["price"] - f["price"]) * qty - rt["total"], 2)}
+                    except NoLiquidity:
+                        review["round_trip_now"] = {"exit_price": None, "charges": None, "net_pnl": None,
+                                                    "note": "no opposite side in the book to exit into right now"}
                 if intent == "entry":
                     underlying = quote.get("underlying") or self.quotes.spot(req.symbol)
                     review["margin"] = estimate_margin(req.instrument, req.side, qty, f["price"], underlying, req.strike)

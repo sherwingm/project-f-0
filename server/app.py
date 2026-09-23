@@ -15,6 +15,7 @@ Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
     GET  /api/paper/summary        paper account: capital, equity, day/week P&L, drawdown, open margin, kill switch
     GET  /api/paper/positions      open paper positions with marks, stops, expiry and T-2 date
     GET  /api/paper/trades         closed paper trades, net of fills and charges
+    GET  /api/paper/refusals       orders refused for liquidity, newest first, with the quote they were judged on
     POST /api/rebuild              re-run the EOD build (also runs itself daily at 20:30 IST)
 """
 from __future__ import annotations
@@ -35,6 +36,7 @@ from pydantic import BaseModel
 
 from scanner.build import ROOT, build
 from server.broker import OrderRequest, PaperBroker, check_token, make_broker, preview_token, tradingsymbol
+from server.liquidity import read_refusals
 from server.paper import PaperLedger, PaperRejected, QuoteSource
 from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
@@ -362,6 +364,12 @@ def api_paper_positions(_: str = Depends(auth)):
 @app.get("/api/paper/trades")
 def api_paper_trades(_: str = Depends(auth)):
     return {"trades": _ledger().trades_view()}
+
+
+@app.get("/api/paper/refusals")
+def api_paper_refusals(_: str = Depends(auth)):
+    rows = read_refusals(_ledger().refusals_path, limit=100_000)
+    return {"count": len(rows), "refusals": rows[:200]}
 
 
 @app.post("/api/rebuild")
