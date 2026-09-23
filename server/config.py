@@ -26,6 +26,12 @@ no live feed, no commentary, and password-protected access.
 
   Paper engine (guide 12)
     CHARGES_JSON          JSON object overriding any rate in server/charges.py, e.g. {"OPT_NSE_PER_LAKH": 35.03}
+    LIQ_FUT_ACCEPT_SPREAD_PCT 0.05   LIQ_FUT_REFUSE_SPREAD_PCT 0.15   futures spread bands, % of mid
+    LIQ_FUT_ACCEPT_DEPTH_PCT  25     LIQ_FUT_REFUSE_DEPTH_PCT  50     order qty as % of visible depth
+    LIQ_OPT_ACCEPT_SPREAD_PCT 3      LIQ_OPT_REFUSE_SPREAD_PCT 8      options spread bands, % of mid
+    LIQ_OPT_ACCEPT_DEPTH_PCT  20     LIQ_OPT_REFUSE_DEPTH_PCT  100    order qty as % of visible depth
+    LIQ_OPT_MIN_OI_LOTS       50                                      strike OI floor for options
+    LOTTERY_MAX_PREMIUM       2      LOTTERY_MAX_SESSIONS      2      cheap / near-expiry bucket
 """
 from __future__ import annotations
 
@@ -68,6 +74,18 @@ class Settings:
     data_dir: Path = field(default_factory=lambda: Path(os.getenv("DATA_DIR", "data")))
     # ---- paper engine: charges (server/charges.py)
     charges_json: str = os.getenv("CHARGES_JSON", "")
+    # ---- paper engine: liquidity classes (server/liquidity.py)
+    liq_fut_accept_spread_pct: float = float(os.getenv("LIQ_FUT_ACCEPT_SPREAD_PCT", "0.05"))
+    liq_fut_refuse_spread_pct: float = float(os.getenv("LIQ_FUT_REFUSE_SPREAD_PCT", "0.15"))
+    liq_fut_accept_depth_pct: float = float(os.getenv("LIQ_FUT_ACCEPT_DEPTH_PCT", "25"))
+    liq_fut_refuse_depth_pct: float = float(os.getenv("LIQ_FUT_REFUSE_DEPTH_PCT", "50"))
+    liq_opt_accept_spread_pct: float = float(os.getenv("LIQ_OPT_ACCEPT_SPREAD_PCT", "3"))
+    liq_opt_refuse_spread_pct: float = float(os.getenv("LIQ_OPT_REFUSE_SPREAD_PCT", "8"))
+    liq_opt_accept_depth_pct: float = float(os.getenv("LIQ_OPT_ACCEPT_DEPTH_PCT", "20"))
+    liq_opt_refuse_depth_pct: float = float(os.getenv("LIQ_OPT_REFUSE_DEPTH_PCT", "100"))
+    liq_opt_min_oi_lots: float = float(os.getenv("LIQ_OPT_MIN_OI_LOTS", "50"))
+    lottery_max_premium: float = float(os.getenv("LOTTERY_MAX_PREMIUM", "2"))
+    lottery_max_sessions: int = int(os.getenv("LOTTERY_MAX_SESSIONS", "2"))
 
     @property
     def kite_ready(self) -> bool:
