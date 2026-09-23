@@ -12,6 +12,9 @@ Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
     POST /api/order/preview        resolve the contract, quantity, margin -> confirmation token
     POST /api/order                place it (paper by default); needs the token from preview
     GET  /api/orders, /api/positions
+    GET  /api/paper/summary        paper account: capital, equity, day/week P&L, drawdown, open margin, kill switch
+    GET  /api/paper/positions      open paper positions with marks, stops, expiry and T-2 date
+    GET  /api/paper/trades         closed paper trades, net of fills and charges
     POST /api/rebuild              re-run the EOD build (also runs itself daily at 20:30 IST)
 """
 from __future__ import annotations
@@ -31,7 +34,8 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 
 from scanner.build import ROOT, build
-from server.broker import OrderRequest, check_token, make_broker, preview_token, tradingsymbol
+from server.broker import OrderRequest, PaperBroker, check_token, make_broker, preview_token, tradingsymbol
+from server.paper import PaperLedger, PaperRejected, QuoteSource
 from server.commentary import Commentary
 from server.verdict import Verdict
 from server.config import settings
@@ -59,6 +63,7 @@ class State:
         self.lock = threading.Lock()
         self.feed: LiveFeed | None = None
         self.broker = make_broker(settings)
+        self.ledger: PaperLedger | None = None
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.orders_today = Counter()
@@ -128,6 +133,13 @@ def startup() -> None:
         state.feed.start()
     if not settings.orders_enabled:
         state.broker = None
+    elif isinstance(state.broker, PaperBroker):
+        state.ledger = PaperLedger(settings.data_dir, QuoteSource(state.feed), always_open=bool(state.feed and state.feed.poll_always))
+        state.broker.ledger = state.ledger
+        if state.feed:
+            state.feed.hooks.append(lambda feed: state.ledger.on_poll(feed))
+        log.info("paper engine on: capital Rs %s, fills against %s", f"{state.ledger.state['capital']:,.0f}",
+                 "the live book" if state.feed else "nothing (no live feed: paper orders cannot fill)")
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()
 
 
@@ -233,6 +245,7 @@ class OrderBody(BaseModel):
     lots: int
     order_type: str = "LIMIT"
     price: float | None = None
+    stop: float | None = None
     token: str | None = None
 
 
@@ -269,6 +282,16 @@ def _prepare(body: OrderBody) -> tuple[OrderRequest, dict, float | None]:
 def api_order_preview(body: OrderBody, _: str = Depends(auth)):
     req, resolved, ref = _prepare(body)
     payload = body.model_dump(exclude={"token"})
+    if state.ledger is not None:                     # paper: the full review against the live book
+        review = state.ledger.preview(req, resolved, body.stop)
+        px = (review.get("fill") or {}).get("price") or req.price or ref or 0
+        ok = not review["blocked"]
+        if not ok:
+            log.info("paper preview blocked %s: %s", resolved["tradingsymbol"], "; ".join(review["blocked"]))
+        return {**resolved, "paper": True, "reference_price": ref, "notional": round(px * resolved["quantity"], 2),
+                "estimated_margin": review.get("margin"), "orders_today": sum(state.orders_today.values()),
+                "max_orders_per_day": settings.max_orders_per_day, "review": review,
+                "token": preview_token(payload) if ok else None}
     margin = state.broker.margin(req, resolved, ref)
     notional = (req.price or ref or 0) * resolved["quantity"]
     return {**resolved, "paper": state.broker.paper, "reference_price": ref, "notional": round(notional, 2),
@@ -288,10 +311,17 @@ def api_order(body: OrderBody, _: str = Depends(auth)):
     if state.orders_today[today] >= settings.max_orders_per_day:
         raise HTTPException(429, f"daily cap of {settings.max_orders_per_day} orders reached")
     req, resolved, ref = _prepare(body)
-    try:
-        rec = state.broker.place(req, resolved, ref)
-    except Exception as exc:  # noqa: BLE001 - broker rejections come back as a readable error
-        raise HTTPException(502, f"broker rejected the order: {exc}")
+    if state.ledger is not None:
+        try:
+            rec = state.ledger.submit(req, resolved, body.stop)
+        except PaperRejected as exc:                 # risk, liquidity or sizing block: readable, logged
+            log.info("paper order blocked %s: %s", resolved["tradingsymbol"], exc)
+            raise HTTPException(400, str(exc))
+    else:
+        try:
+            rec = state.broker.place(req, resolved, ref)
+        except Exception as exc:  # noqa: BLE001 - broker rejections come back as a readable error
+            raise HTTPException(502, f"broker rejected the order: {exc}")
     state.orders_today[today] += 1
     log.info("order %s: %s", rec["order_id"], {k: rec[k] for k in ("tradingsymbol", "side", "quantity", "order_type", "price", "paper")})
     return rec
@@ -305,6 +335,27 @@ def api_orders(_: str = Depends(auth)):
 @app.get("/api/positions")
 def api_positions(_: str = Depends(auth)):
     return state.broker.positions() if state.broker else []
+
+
+def _ledger() -> PaperLedger:
+    if state.ledger is None:
+        raise HTTPException(404, "paper trading is off (set ORDERS=true with PAPER=true)")
+    return state.ledger
+
+
+@app.get("/api/paper/summary")
+def api_paper_summary(_: str = Depends(auth)):
+    return _ledger().summary()
+
+
+@app.get("/api/paper/positions")
+def api_paper_positions(_: str = Depends(auth)):
+    return _ledger().positions_view()
+
+
+@app.get("/api/paper/trades")
+def api_paper_trades(_: str = Depends(auth)):
+    return {"trades": _ledger().trades_view()}
 
 
 @app.post("/api/rebuild")

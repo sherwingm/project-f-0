@@ -54,6 +54,15 @@ def t_minus(expiry, n: int, hol: set[date] | None = None) -> date:
     return d
 
 
+MARKET_OPEN, MARKET_CLOSE = time(9, 15), time(15, 30)
+
+
+def market_open_at(now: datetime | None = None) -> bool:
+    """Normal market hours on a session day (09:15-15:30 IST)."""
+    now = (now or datetime.now(IST)).astimezone(IST)
+    return is_session(now.date()) and MARKET_OPEN <= now.time() <= MARKET_CLOSE
+
+
 def fill_at() -> time:
     h, m = settings.paper_queue_fill_at.split(":")
     return time(int(h), int(m))

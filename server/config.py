@@ -35,6 +35,8 @@ no live feed, no commentary, and password-protected access.
     FILL_TICK             0.05   tick size for fills (one tick of latency, rounding against the order)
     PAPER_QUEUE_FILL_AT   09:20  market-closed paper orders fill at the first poll at/after this IST time
     NSE_HOLIDAYS          comma-separated YYYY-MM-DD trading holidays (sessions are weekdays minus these)
+    PAPER_CAPITAL         500000   starting capital of the paper account (data/paper_ledger.json keeps its own once created)
+    MARGIN_ESTIMATE_PCT   18       margin estimate: % of notional for futures / short options (long options: the premium)
 """
 from __future__ import annotations
 
@@ -93,6 +95,9 @@ class Settings:
     fill_tick: float = float(os.getenv("FILL_TICK", "0.05"))
     paper_queue_fill_at: str = os.getenv("PAPER_QUEUE_FILL_AT", "09:20")
     nse_holidays: str = os.getenv("NSE_HOLIDAYS", "")
+    # ---- paper engine: ledger (server/paper.py)
+    paper_capital: float = float(os.getenv("PAPER_CAPITAL", "500000"))
+    margin_estimate_pct: float = float(os.getenv("MARGIN_ESTIMATE_PCT", "18"))
 
     @property
     def kite_ready(self) -> bool:

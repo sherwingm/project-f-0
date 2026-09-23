@@ -118,44 +118,39 @@ class Broker:
 
 
 class PaperBroker(Broker):
-    """Simulated fills written to data/paper_orders.jsonl. MARKET fills at the reference price
-    (live LTP if the feed is on, else the EOD close); LIMIT fills at the limit price."""
+    """Paper orders go through the paper ledger (server/paper.py): filled against the live book with
+    the liquidity class and fill engine, charged, marked every poll and exited by hand, by stop or at
+    T-2. Order events are logged to data/paper_orders.jsonl. Nothing here can reach a broker."""
     name = "paper"
     paper = True
 
-    def __init__(self, data_dir: Path):
+    def __init__(self, data_dir: Path, ledger=None):
         self.path = data_dir / "paper_orders.jsonl"
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.ledger = ledger
 
-    def place(self, req: OrderRequest, resolved: dict, ref_price: float | None) -> dict:
-        fill = req.price if req.order_type == "LIMIT" else ref_price
-        rec = {"order_id": f"PAPER-{int(time.time() * 1000)}", "placed_at": datetime.now(IST).isoformat(timespec="seconds"),
-               "status": "COMPLETE" if fill is not None else "OPEN", "paper": True,
-               **asdict(req), **resolved, "fill_price": fill}
-        with self.path.open("a") as fh:
-            fh.write(json.dumps(rec) + "\n")
-        return rec
+    def place(self, req: OrderRequest, resolved: dict, ref_price: float | None, stop: float | None = None) -> dict:
+        if self.ledger is None:
+            raise RuntimeError("the paper ledger is not running")
+        return self.ledger.submit(req, resolved, stop)
 
     def orders(self) -> list[dict]:
         if not self.path.exists():
             return []
-        return [json.loads(l) for l in self.path.read_text().splitlines() if l.strip()][::-1]
+        latest: dict[str, dict] = {}
+        for line in self.path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                o = json.loads(line)
+                latest[o.get("order_id")] = o            # the latest event per order wins (queued -> filled)
+        return sorted(latest.values(), key=lambda o: o.get("filled_at") or o.get("placed_at") or "", reverse=True)
 
     def positions(self) -> list[dict]:
-        net: dict[str, dict] = {}
-        for o in self.orders():
-            if o["status"] != "COMPLETE":
-                continue
-            p = net.setdefault(o["tradingsymbol"], {"tradingsymbol": o["tradingsymbol"], "symbol": o["symbol"], "quantity": 0, "value": 0.0})
-            sign = 1 if o["side"] == "BUY" else -1
-            p["quantity"] += sign * o["quantity"]
-            p["value"] += sign * o["quantity"] * (o["fill_price"] or 0)
-        out = []
-        for p in net.values():
-            if p["quantity"]:
-                p["avg_price"] = round(p["value"] / p["quantity"], 2)
-                out.append({k: v for k, v in p.items() if k != "value"})
-        return out
+        if self.ledger is None:
+            return []
+        return [{"tradingsymbol": p["tradingsymbol"], "symbol": p["symbol"],
+                 "quantity": p["qty"] if p["side"] == "BUY" else -p["qty"], "avg_price": p["entry"]["price"],
+                 "pnl": p.get("unrealised"), "last_price": (p.get("mark") or {}).get("price")}
+                for p in self.ledger.positions_view()]
 
 
 class KiteBroker(Broker):

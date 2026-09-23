@@ -123,6 +123,7 @@ class LiveFeed:
         self.quotes: dict[str, dict] = {}
         self.updated_at: str | None = None
         self.error: str | None = None
+        self.hooks: list = []              # called with the feed after every successful poll (paper ledger marks)
         self._stop = threading.Event()
         self.reload(scan, fut_tradingsymbols or {})
 
@@ -173,6 +174,11 @@ class LiveFeed:
             fresh[sym] = row
         with self.lock:
             self.quotes, self.updated_at, self.error = fresh, now.strftime("%H:%M:%S"), None
+        for hook in list(self.hooks):
+            try:
+                hook(self)
+            except Exception as exc:  # noqa: BLE001 - a hook must never stop the feed
+                log.warning("live poll hook %s failed: %s", getattr(hook, "__name__", hook), exc)
 
     def snapshot(self) -> dict:
         with self.lock:
