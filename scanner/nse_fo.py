@@ -43,6 +43,13 @@ NSE_HEADERS = {
 }
 
 BHAVCOPY_URL = "https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_0_{ymd}_F_0000.csv.zip"
+# Before the UDiFF cutover (2024-07-05) the F&O bhavcopy lived in the old format and layout:
+OLD_BHAVCOPY_URL = "https://nsearchives.nseindia.com/content/historical/DERIVATIVES/{yyyy}/{MON}/fo{dd}{MON}{yyyy}bhav.csv.zip"
+UDIFF_FROM = date(2024, 7, 5)
+OLD_TO_UDIFF = {"SYMBOL": "TckrSymb", "EXPIRY_DT": "XpryDt", "STRIKE_PR": "StrkPric", "OPTION_TYP": "OptnTp",
+                "CLOSE": "ClsPric", "OPEN_INT": "OpnIntrst", "CHG_IN_OI": "ChngInOpnIntrst",
+                "CONTRACTS": "TtlTradgVol", "TIMESTAMP": "TradDt"}
+OLD_INSTRUMENT = {"FUTSTK": "STF", "OPTSTK": "STO", "FUTIDX": "IDF", "OPTIDX": "IDO"}
 
 COLUMNS = ["TradDt", "TckrSymb", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric", "UndrlygPric",
            "OpnIntrst", "ChngInOpnIntrst", "TtlTradgVol"]
@@ -61,7 +68,12 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
     if cache_file and cache_file.exists():
         return pd.read_csv(cache_file, usecols=lambda c: c in _WANTED)
 
-    url = BHAVCOPY_URL.format(ymd=ymd)
+    old_format = day < UDIFF_FROM
+    if old_format:
+        mon = day.strftime("%b").upper()
+        url = OLD_BHAVCOPY_URL.format(yyyy=day.year, MON=mon, dd=f"{day.day:02d}")
+    else:
+        url = BHAVCOPY_URL.format(ymd=ymd)
     r = requests.get(url, headers=NSE_HEADERS, timeout=timeout)
     if r.status_code == 404:
         raise BhavcopyUnavailable(f"No F&O bhavcopy for {day} (404)")
@@ -73,12 +85,35 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
     with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
         name = next(n for n in zf.namelist() if n.lower().endswith(".csv"))
         with zf.open(name) as fh:
-            df = pd.read_csv(fh, usecols=lambda c: c in _WANTED)
+            if old_format:
+                df = _from_old_format(pd.read_csv(fh), day)
+            else:
+                df = pd.read_csv(fh, usecols=lambda c: c in _WANTED)
 
     if cache_dir:
         cache_dir.mkdir(parents=True, exist_ok=True)
         df.to_csv(cache_file, index=False)
     return df
+
+
+def _from_old_format(df: pd.DataFrame, day: date) -> pd.DataFrame:
+    """Old-format columns -> the UDiFF names the rest of the code reads. UndrlygPric does not exist
+    in the old files and is left null; NewBrdLotQty likewise."""
+    df = df.rename(columns=lambda c: str(c).strip())
+    out = pd.DataFrame()
+    out["TradDt"] = pd.to_datetime(df["TIMESTAMP"], format="%d-%b-%Y").dt.strftime("%Y-%m-%d")
+    out["TckrSymb"] = df["SYMBOL"].astype(str).str.strip()
+    out["FinInstrmTp"] = df["INSTRUMENT"].astype(str).str.strip().map(OLD_INSTRUMENT)
+    out["XpryDt"] = pd.to_datetime(df["EXPIRY_DT"], format="%d-%b-%Y").dt.strftime("%Y-%m-%d")
+    out["StrkPric"] = pd.to_numeric(df["STRIKE_PR"], errors="coerce")
+    opt = df["OPTION_TYP"].astype(str).str.strip()
+    out["OptnTp"] = opt.where(opt.isin(["CE", "PE"]))
+    out["ClsPric"] = pd.to_numeric(df["CLOSE"], errors="coerce")
+    out["UndrlygPric"] = float("nan")
+    out["OpnIntrst"] = pd.to_numeric(df["OPEN_INT"], errors="coerce").fillna(0).astype(int)
+    out["ChngInOpnIntrst"] = pd.to_numeric(df["CHG_IN_OI"], errors="coerce").fillna(0)
+    out["TtlTradgVol"] = pd.to_numeric(df["CONTRACTS"], errors="coerce").fillna(0)
+    return out[out["FinInstrmTp"].notna()].reset_index(drop=True)
 
 
 def latest_available_bhavcopy(not_after: date, lookback_days: int = 7,
