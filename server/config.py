@@ -23,6 +23,9 @@ no live feed, no commentary, and password-protected access.
     MAX_LOTS_PER_ORDER    default 5
     MAX_ORDERS_PER_DAY    default 20
     DATA_DIR              default ./data
+
+  Paper engine (guide 12)
+    CHARGES_JSON          JSON object overriding any rate in server/charges.py, e.g. {"OPT_NSE_PER_LAKH": 35.03}
 """
 from __future__ import annotations
 
@@ -63,6 +66,8 @@ class Settings:
     max_lots_per_order: int = int(os.getenv("MAX_LOTS_PER_ORDER", "5"))
     max_orders_per_day: int = int(os.getenv("MAX_ORDERS_PER_DAY", "20"))
     data_dir: Path = field(default_factory=lambda: Path(os.getenv("DATA_DIR", "data")))
+    # ---- paper engine: charges (server/charges.py)
+    charges_json: str = os.getenv("CHARGES_JSON", "")
 
     @property
     def kite_ready(self) -> bool:
