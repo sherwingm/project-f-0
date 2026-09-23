@@ -2,7 +2,7 @@
  "meta": {
   "as_of": "2026-09-18",
   "as_of_label": "Fri 18 Sep 2026",
-  "generated_at_ist": "2026-09-24 02:33 IST",
+  "generated_at_ist": "2026-09-24 02:47 IST",
   "universe_size": 210,
   "stocks_with_data": 210,
   "missing_symbols": [],
@@ -95,8 +95,15 @@
   "events_status": {
    "available": true,
    "counts": {
-    "ban": 5,
-    "insider": 2
+    "insider": 14257,
+    "capacity": 2481,
+    "block_deal": 1318,
+    "results_date": 1251,
+    "order_win": 1156,
+    "results": 498,
+    "ban": 178,
+    "bulk_deal": 93,
+    "rating": 42
    },
    "sources": {
     "nse_ann": {
@@ -130,6 +137,7 @@
    }
   },
   "disclaimer": "This is a data scan based on previous session's closing data. Labels describe common interpretations of OI/volume/PCR patterns \u2014 they are not trade recommendations, entry/exit signals, or predictions. F&O trading carries high risk including potential loss beyond capital invested.",
+  "event_patterns": null,
   "commentary": null
  },
  "summary": {
@@ -265,6 +273,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -393,6 +412,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -521,6 +551,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -645,10 +686,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-08",
+      "event_time": "23:20",
+      "subject": "Adani Energy Solutions Limited has informed the Exchange about Letter of Award for supply of 2,500 MW Round-the-Clock (RTC) Power and Execution of Power Purchase Agreement",
+      "url": "https://nsearchives.nseindia.com/corporate/ADANITRANS_08092026231922_AESLMSEDCLLoA.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -777,6 +846,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -905,6 +985,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1029,10 +1120,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-09",
+      "event_time": "14:14",
+      "subject": "Adani Ports and Special Economic Zone Limited has informed the Exchange about receipt of Letter of Award (LOA) for development and operations of two dry bulk berths at Paradip Port, Odisha.",
+      "url": "https://nsearchives.nseindia.com/corporate/rkbhagia_09092026141400_SEINTIMATION.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1157,10 +1276,53 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-07",
+      "event_time": "16:30",
+      "subject": "Adani Power Limited has informed the Exchange about Declaration of the Successful Resolution Applicant and issuance of Letter of Intent for acquiring GVK Energy Limited",
+      "url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_07092026163040_APLLOIResoPlanapprovedbyCOCGVK07092026.pdf",
+      "source": "nse_ann"
+     },
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-08",
+      "event_time": "23:00",
+      "subject": "Adani Power Limited has informed the Exchange about Assignment of Maharashtra State Electricity Distribution Co. Limited s 2500 MW RE RTC Power Supply Contract by Adani Power Limited to Powerpulse Trading Solutions Limited",
+      "url": "https://nsearchives.nseindia.com/corporate/ADANIPOWER_08092026230030_12390.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor",
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "bullish",
+    "confidence": "medium",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 1
+    },
+    "events_score": 1.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1289,6 +1451,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1417,6 +1590,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1545,6 +1729,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1673,6 +1868,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1801,6 +2007,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -1929,6 +2146,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2057,6 +2285,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2181,10 +2420,52 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "block_deal",
+      "subtype": "other_sell",
+      "tier": 1,
+      "direction": -1,
+      "value_cr": 40.02,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-17",
+      "event_time": null,
+      "subject": "JALAJ A DANI SELL 164,000 @ 2440",
+      "url": "https://www.nseindia.com/report-detail/display-bulk-and-block-deals",
+      "source": "nse_block"
+     },
+     {
+      "type": "block_deal",
+      "subtype": "other_buy",
+      "tier": 1,
+      "direction": 1,
+      "value_cr": 40.02,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-17",
+      "event_time": null,
+      "subject": "SMITI HOLDING AND TRADING COMPANY PRIVATE LIMITED BUY 164,000 @ 2440",
+      "url": "https://www.nseindia.com/report-detail/display-bulk-and-block-deals",
+      "source": "nse_block"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "block_deal": "other_sell"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2313,6 +2594,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2441,6 +2733,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2565,10 +2868,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-09",
+      "event_time": "17:19",
+      "subject": "We hereby inform that AU Small Finance Bank ( AU SFB ) has received RBI s letter dated September 8, 2026 according its approval to ICICI Prudential Asset Management Company Limited ( I-Pru AMC ) (along with the schemes of ICICI Prudential Mutual Fund, funds under AIF managed by I-Pru AMC, clients of PMS of I-Pru AMC) to acquire  aggregate holding  of up to 9.95% of the paid-up share capital or voting rights in AU SFB. The aforesaid approval granted by RBI is subject to compliance with the releva",
+      "url": "https://nsearchives.nseindia.com/corporate/AUBANK_09092026171843_ICICI_SE_Submission.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2693,10 +3024,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-12",
+      "event_time": "12:41",
+      "subject": "Aurobindo Pharma Limited has informed the Exchange about Acquisition",
+      "url": "https://nsearchives.nseindia.com/corporate/AUROPHARMA_12092026124039_LtrToSEsA1Biochem12092026.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2825,6 +3184,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -2953,6 +3323,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3081,6 +3462,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3209,6 +3601,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3337,6 +3740,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3472,6 +3886,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3600,6 +4025,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3728,6 +4164,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3856,6 +4303,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -3984,6 +4442,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4112,6 +4581,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4240,6 +4720,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4364,10 +4855,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-14",
+      "event_time": "18:55",
+      "subject": "Bharat Heavy Electricals Limited has informed the Exchange about Outcome of Board Meeting   Equity investment in Joint Venture",
+      "url": "https://nsearchives.nseindia.com/corporate/BHEL_14092026185510_BMoutcomeNBPPL.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4492,10 +5011,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-08",
+      "event_time": "08:31",
+      "subject": "Biocon Limited has informed the Exchange regarding a press release dated September 08, 2026, titled \"Biocon Secures 10-Year Supply Contract for Pertuzumab in Brazil\".",
+      "url": "https://nsearchives.nseindia.com/corporate/BIOCON_08092026083042_Pressrelease08092026.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4624,6 +5171,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4752,6 +5310,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -4880,6 +5449,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5008,6 +5588,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5132,10 +5723,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-10",
+      "event_time": "18:03",
+      "subject": "BSE Limited has informed the Exchange regarding 'further acquisition of equity stake in India International Bullion Holding IFSC Limited.'.",
+      "url": "https://nsearchives.nseindia.com/corporate/BSE1_10092026180312_NSEIntimation.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5264,6 +5883,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5392,6 +6022,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5520,6 +6161,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5648,6 +6300,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5776,6 +6439,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -5904,6 +6578,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6032,6 +6717,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6160,6 +6856,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6288,6 +6995,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6416,6 +7134,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6540,10 +7269,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-07",
+      "event_time": "17:35",
+      "subject": "Container Corporation Of India Limited has informed the Exchange about Awarding of order(s)/contract(s)",
+      "url": "https://nsearchives.nseindia.com/corporate/CONCOR_07092026173528_CONCOR_SE_07092026Reg30.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6672,6 +7429,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6800,6 +7568,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -6928,6 +7707,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7056,6 +7846,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7184,6 +7985,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7309,9 +8121,27 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "capacity",
+      "date": "2026-09-21",
+      "sessions": 1,
+      "subject": "Dixon Technologies (India) Limited has informed the Exchange about Acquisition"
+     }
+    ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7440,6 +8270,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7568,6 +8409,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7696,6 +8548,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7824,6 +8687,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -7952,6 +8826,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8080,6 +8965,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8208,6 +9104,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8336,6 +9243,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8464,6 +9382,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8592,6 +9521,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8720,6 +9660,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8848,6 +9799,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -8976,6 +9938,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9104,6 +10077,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9232,6 +10216,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9360,6 +10355,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9488,6 +10494,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9616,6 +10633,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9744,6 +10772,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -9872,6 +10911,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10000,6 +11050,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10128,6 +11189,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10256,6 +11328,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10384,6 +11467,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10512,6 +11606,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10640,6 +11745,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10768,6 +11884,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -10896,6 +12023,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11024,6 +12162,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11152,6 +12301,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11280,6 +12440,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11408,6 +12579,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11536,6 +12718,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11664,6 +12857,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11792,6 +12996,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -11920,6 +13135,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12048,6 +13274,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12176,6 +13413,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12304,6 +13552,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12428,10 +13687,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-16",
+      "event_time": "18:18",
+      "subject": "Infosys Limited has informed the Exchange regarding 'Infosys Announces Expansion of Indore Development Center'.",
+      "url": "https://nsearchives.nseindia.com/corporate/Infosys_16092026181805_PR_16092026.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12556,7 +13843,22 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-07",
+      "event_time": "22:01",
+      "subject": "Clarification on Press Release dated 3rd September, 2026 regarding 100 MW Order",
+      "url": "https://nsearchives.nseindia.com/corporate/INOXWIND_07092026220101_Clarification_on_Press_Release_regarding_100_MW_Order_s.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [
      {
       "type": "ban",
@@ -12566,7 +13868,20 @@
      }
     ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12695,6 +14010,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12823,6 +14149,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -12951,6 +14288,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13079,6 +14427,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13207,6 +14566,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13335,6 +14705,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13459,10 +14840,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-04",
+      "event_time": "11:42",
+      "subject": "JSW Energy Limited has informed the Exchange about JSW Energy surpasses 15 GW of capacity milestone; adds 1,572 MW in FY27",
+      "url": "https://nsearchives.nseindia.com/corporate/KRUTIKAJSWEL_04092026114225_LettertoBSENSE.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13591,6 +15000,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13719,6 +15139,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13847,6 +15278,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -13975,6 +15417,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14103,6 +15556,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14231,6 +15695,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14359,6 +15834,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14487,6 +15973,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14615,6 +16112,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14750,6 +16258,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -14874,10 +16393,36 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "results",
+      "subtype": null,
+      "tier": 1,
+      "direction": 0,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "significant",
+      "event_date": "2026-09-09",
+      "event_time": "13:05",
+      "subject": "The Exchange has sought clarification from Life Insurance Corporation Of India for the quarter ended 30-Jun-2026 with respect to Regulation 33 of the SEBI (Listing Obligations and Disclosure Requirements) Regulations, 2015. On basis of above the Company is required to clarify the following:  The response of the Company is awaited.",
+      "url": "-",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15006,6 +16551,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15134,6 +16690,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15262,6 +16829,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15390,6 +16968,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15518,6 +17107,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15646,6 +17246,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15774,6 +17385,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -15909,6 +17531,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16037,6 +17670,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16165,6 +17809,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16293,6 +17948,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16421,6 +18087,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16549,6 +18226,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16677,6 +18365,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16805,6 +18504,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -16933,6 +18643,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17061,6 +18782,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17189,6 +18921,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17313,10 +19056,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-09",
+      "event_time": "18:09",
+      "subject": "Muthoot Finance Limited has informed the Exchange about Acquisition",
+      "url": "https://nsearchives.nseindia.com/corporate/MUTHOOTFIN_09092026180915_MFIN_Reg_30_AAF_Right_issue_SD.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17445,6 +19216,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17573,6 +19355,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17697,10 +19490,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-07",
+      "event_time": "09:39",
+      "subject": "Info Edge (India) Limited has informed the Exchange about Disclosure under Regulation 30 of the Securities and Exchange Board of India (Listing Obligations and Disclosure Requirements) Regulations, 2015",
+      "url": "https://nsearchives.nseindia.com/corporate/NAUKRI2_07092026093931_Stock_Exchange_Intimation-_IEIL_to_SIHL.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17825,10 +19646,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "order_win",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": 144.98,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-15",
+      "event_time": "15:56",
+      "subject": "NBCC (India) Limited has informed the Exchange regarding 'Intimation of Work Orders received by NBCC (India) Limited in the ordinary course of business amounting to Rs. 144.98 Cr. approx.'.",
+      "url": "https://nsearchives.nseindia.com/corporate/NBCC_15092026155527_STXWorkorder.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "order_win": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -17957,6 +19806,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18085,6 +19945,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18213,6 +20084,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18337,10 +20219,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-12",
+      "event_time": "17:01",
+      "subject": "NTPC Limited has informed the Exchange about declaration of COD of second part capacity of 6.3 MW of Vanki Wind EnergyProject located in Nakhatrana, Kutch, Gujarat of NTPC Renewable Energy Limited, a stepdown subsidiary of NTPC Limited through NGEL",
+      "url": "https://nsearchives.nseindia.com/corporate/NTPC_12092026170051_20260912_STEX_NGELCOMMISSIOING.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18469,6 +20379,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18597,6 +20518,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18725,6 +20657,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18853,6 +20796,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -18981,6 +20935,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19109,6 +21074,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19237,6 +21213,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19365,6 +21352,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19493,6 +21491,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19621,6 +21630,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19749,6 +21769,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -19877,6 +21908,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20005,6 +22047,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20133,6 +22186,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20261,6 +22325,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20389,6 +22464,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20517,6 +22603,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20645,6 +22742,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20773,6 +22881,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -20898,9 +23017,27 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "capacity",
+      "date": "2026-09-23",
+      "sessions": 3,
+      "subject": "Power Grid Corporation of India Limited has informed the Exchange about Acquisition of Barmer HVDC Power Transmission Limited by POWERGRID under TBCB route."
+     }
+    ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21029,6 +23166,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21154,9 +23302,27 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "capacity",
+      "date": "2026-09-21",
+      "sessions": 1,
+      "subject": "Premier Energies Limited has informed the Exchange regarding a press release dated September 21, 2026, titled \"Premier Energies Commissions India s Largest Solar Cell Facility, becomes largest Cell manufacturer with 10.6 GW capacity\"."
+     }
+    ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21281,10 +23447,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-10",
+      "event_time": "10:25",
+      "subject": "Prestige Estates Projects Limited has informed the Exchange about Incorporation of a wholly-owned subsidiaries",
+      "url": "https://nsearchives.nseindia.com/corporate/PRESTIGE_10092026102434_Intimation.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21413,6 +23607,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21541,6 +23746,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21669,6 +23885,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21804,6 +24031,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -21932,6 +24170,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22060,6 +24309,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22195,6 +24455,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22323,6 +24594,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22451,6 +24733,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22579,6 +24872,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22707,6 +25011,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22835,6 +25150,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -22963,6 +25289,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23087,10 +25424,52 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-14",
+      "event_time": "12:23",
+      "subject": "Solar Industries India Limited has informed the Exchange regarding a press release dated September 14, 2026, titled \"Press release on proposed acquisition of Omnia Holdings Limited by Solar SA Investments Proprietary Limited\".",
+      "url": "https://nsearchives.nseindia.com/corporate/SOLARINDS_14092026122254_signed_pressrelease.pdf",
+      "source": "nse_ann"
+     },
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-14",
+      "event_time": "12:31",
+      "subject": "Solar Industries India Limited has informed the Exchange about Acquisition",
+      "url": "https://nsearchives.nseindia.com/corporate/SOLARINDS_14092026123119_Solarandomniadeal.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "bullish",
+    "confidence": "medium",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 1
+    },
+    "events_score": 1.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23219,6 +25598,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23347,6 +25737,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23475,6 +25876,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23599,10 +26011,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": null,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-04",
+      "event_time": "16:27",
+      "subject": "Supreme Industries Limited has informed the Exchange regarding 'Disclosure under Regulation 10 (6) of SEBI (Substantial Acquisition of Share andTakeover) Regulation, 2011",
+      "url": "https://nsearchives.nseindia.com/corporate/SUPREMEIND_04092026162633_StockExchangeIntimationregarding106.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23731,6 +26171,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23859,6 +26310,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -23987,6 +26449,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24115,6 +26588,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24243,6 +26727,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24371,6 +26866,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24506,6 +27012,17 @@
     ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24634,6 +27151,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24762,6 +27290,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -24890,6 +27429,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25018,6 +27568,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25146,6 +27707,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25274,6 +27846,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25402,6 +27985,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25527,9 +28121,27 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "capacity",
+      "date": "2026-09-23",
+      "sessions": 3,
+      "subject": "UltraTech Cement Limited has informed the Exchange regarding 'Company Update: Commissioning of cement capacity'."
+     }
+    ],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25658,6 +28270,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25786,6 +28409,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -25910,10 +28544,38 @@
    "chain": null,
    "events": {
     "today": [],
-    "last_10": [],
+    "last_10": [
+     {
+      "type": "capacity",
+      "subtype": null,
+      "tier": 1,
+      "direction": 1,
+      "value_cr": 1415.0,
+      "materiality": null,
+      "bucket": "minor",
+      "event_date": "2026-09-15",
+      "event_time": "10:27",
+      "subject": "UNO Minda Limited has informed the Exchange regarding a press release dated September 15, 2026, titled \"Uno Minda Announces four Major Strategic Expansions Across Multiple Divisions with combined investment of Rs. 1,415 crore.\".",
+      "url": "https://nsearchives.nseindia.com/corporate/MINDAIND1_15092026102559_Press_release4_New_Project_Sept_2026.pdf",
+      "source": "nse_ann"
+     }
+    ],
     "upcoming": [],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "capacity": "minor"
+    }
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.5,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26042,6 +28704,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26170,6 +28843,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26298,6 +28982,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26426,6 +29121,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26554,6 +29260,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26682,6 +29399,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26810,6 +29538,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -26938,6 +29677,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   },
   {
@@ -27066,6 +29816,17 @@
     "upcoming": [],
     "analyst_view": [],
     "flags": {}
+   },
+   "verdict": {
+    "lean": "mixed",
+    "confidence": "low",
+    "votes": {
+     "data": 0,
+     "model": 0,
+     "events": 0
+    },
+    "events_score": 0.0,
+    "rule": "data, model and events each vote; high needs all three agreeing and a confident model; low means two disagree or none votes"
    }
   }
  ]

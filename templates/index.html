@@ -140,6 +140,15 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outl
 .readout p { margin:0 0 8px; } .readout p:last-child { margin:0; }
 
 
+.verdictcard { border:1px solid var(--line); border-radius:12px; padding:10px 12px; background:var(--bg); }
+.verdictcard .vhead { margin:0 0 8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.verdictcard .vhead small { color:var(--muted); }
+.vrows > div { display:flex; gap:8px; padding:3px 0; font-size:13px; }
+.vrows > div > b { flex:0 0 56px; color:var(--muted); font-weight:600; }
+.vrows > div > span { flex:1; min-width:0; }
+.vlist { margin:0; padding-left:16px; }
+.vlist li { margin:2px 0; }
+.vlist small, .vrows small { color:var(--muted); }
 /* live, strikes, commentary, orders */
 .livebar { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); margin:6px 0 0; }
 .livebar .dot { width:8px; height:8px; border-radius:50%; background:var(--neutral); flex:0 0 auto; }
@@ -554,6 +563,37 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     return wrap;
   }
 
+  // ---- verdict card: deterministic, computed at build time (scanner/verdict_rules.py); identical
+  //      with or without any AI. The optional "Weigh the evidence" AI summary renders BELOW it.
+  function verdictCard(s) {
+    const v = s.verdict; if (!v) return "";
+    const ev = s.events || { today: [], last_10: [], upcoming: [], analyst_view: [], flags: {} };
+    const pat = meta.event_patterns || {};
+    const cls = v.lean === "bullish" ? "b" : v.lean === "bearish" ? "r" : "n";
+    const patLine = t => {
+      const p = pat[t]; if (!p || !p.count) return "";
+      return ` <small>pattern over ${p.count} cases: pre ${sgnpct(p.pre)}, day ${sgnpct(p.day)}, post ${sgnpct(p.post)}</small>`;
+    };
+    const evLines = [];
+    for (const u of ev.upcoming) evLines.push(`<li>${esc(u.type)} in ${u.sessions} session${u.sessions === 1 ? "" : "s"} (${esc(u.date)})${patLine(u.type)}</li>`);
+    for (const e of ev.last_10) evLines.push(`<li>${esc(e.type)}${e.subtype ? " / " + esc(e.subtype) : ""} [${esc(e.bucket)}] ${esc(e.event_date)}${e.value_cr ? " · ₹" + inr(e.value_cr) + " cr" : ""}${patLine(e.type)}</li>`);
+    const analyst = ev.analyst_view.map(a => `<li><a href="${esc(a.url)}" target="_blank" rel="noopener">${esc(a.subject.slice(0, 90))}</a> <small>${esc(a.label)}</small></li>`).join("");
+    const filings = ev.last_10.filter(e => e.url).slice(0, 6).map(e => `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.type)} ${esc(e.event_date)}</a>`).join(" · ");
+    const m = s.model;
+    return `<div class="section verdictcard"><h3>Verdict (computed by fixed rules, not advice)</h3>
+      <p class="vhead"><span class="pill ${cls}">Lean: ${esc(v.lean)}</span> <b>confidence ${esc(v.confidence)}</b>
+        <small>votes — data ${sgn0(v.votes.data)}, model ${sgn0(v.votes.model)}, events ${sgn0(v.votes.events)} (score ${v.events_score})</small></p>
+      <div class="vrows">
+        <div><b>Data</b><span>${esc(s.label)} · price ${pct(s.price_change_pct)} · vol ${ratio(s.volume_ratio)} · OI ${pct(s.oi_change_pct)} · PCR ${num(s.pcr)}</span></div>
+        <div><b>Events</b><span>${evLines.length ? `<ul class="vlist">${evLines.join("")}</ul>` : "none in the last 10 sessions"}</span></div>
+        <div><b>Model</b><span>${m ? `p(up) ${num(m.p_up)} · p(down) ${num(m.p_down)} · p(flat) ${num(m.p_flat)} <small>out-of-sample Brier ${num(m.oos_brier)} (lower is better; 0.667 = know-nothing), trained through ${esc(m.trained_through)}</small>` : "no model in this build"}</span></div>
+        <div><b>Analyst</b><span>${analyst ? `<ul class="vlist">${analyst}</ul>` : "no analyst views (tier-3 news) in the last 5 sessions"}</span></div>
+        <div><b>News</b><span>${filings || "no filing links in the window"}</span></div>
+      </div></div>`;
+  }
+  function sgnpct(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
+  function sgn0(v) { return v > 0 ? "+1" : v < 0 ? "−1" : "0"; }
+
   function liveLine(s) {
     const q = LIVE.quotes[s.symbol]; if (!q) return "";
     return `<div class="l3">Live <b class="${dirClass(q.chg_pct)}">₹${inr(q.ltp)} ${pct(q.chg_pct)}</b>` +
@@ -576,6 +616,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       </div>
       ${callMode && !callFor(s.symbol) ? `<div class="why"><h3>Label hidden</h3><p class="count" style="margin:0">Make your call on this row first; the label and its reasons appear after.</p></div>` : `<div class="why"><h3>Why “${esc(s.label)}”</h3><ul>${s.reasons.map(r => "<li>" + esc(r) + "</li>").join("")}</ul></div>`}
       <div class="chart"><h3>Close, last ${s.chart_closes.length} sessions</h3>${sparkline(s)}</div>
+      ${verdictCard(s)}
       <div class="section" id="strikes-${s.symbol}">${strikesEl(s, s.chain)}</div>
       ${SERVER.commentary ? `<div class="section"><h3>Plain-language reading</h3><button class="btn" type="button" data-explain="${s.symbol}">Explain these numbers</button><div class="commentary" id="c-${s.symbol}"></div></div>` : ""}
       ${SERVER.verdict ? `<div class="section"><h3>Evidence verdict (numbers + news)</h3><button class="btn" type="button" data-verdict="${s.symbol}">Weigh the evidence</button><div class="commentary verdict" id="v-${s.symbol}"></div></div>` : ""}

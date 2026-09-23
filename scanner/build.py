@@ -136,6 +136,12 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
         },
         "stocks": stocks,
     }
+    patterns_path = ROOT / "data" / "event_patterns.json"
+    try:
+        scan["meta"]["event_patterns"] = json.loads(patterns_path.read_text(encoding="utf-8")) if patterns_path.exists() else None
+    except (OSError, json.JSONDecodeError) as exc:
+        log.warning("event_patterns.json unreadable: %s", exc)
+        scan["meta"]["event_patterns"] = None
     try:                                              # model inference is optional: no model.pkl, no block
         from .model import infer_for_scan, load_model
         payload = load_model()
@@ -147,6 +153,9 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
     except Exception as exc:  # noqa: BLE001 - the scan never fails for want of the model
         log.warning("model inference skipped: %s", exc)
         scan["meta"]["model"] = None
+    from .verdict_rules import verdict
+    for s in stocks:
+        s["verdict"] = verdict(s)
     scan["meta"]["commentary"] = generate_commentary(scan) if commentary else None
     return scan
 
