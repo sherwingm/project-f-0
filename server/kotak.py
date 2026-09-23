@@ -27,6 +27,7 @@ from __future__ import annotations
 
 import io
 import logging
+import os
 import re
 import threading
 import time
@@ -39,6 +40,24 @@ import requests
 from server.broker import Broker, OrderRequest
 
 log = logging.getLogger(__name__)
+
+# The SDK logs Kotak's error bodies, and Kotak echoes the consumer key back in them
+# ("Consumer key '<key>' is invalid"), so its console and file logs would print and store the key.
+# Both are off unless the operator opts in with NEO_LOG_LEVEL / NEO_LOG_FILE_ENABLED; our own
+# errors carry the (redacted) message instead. Must run before neo_api_client is imported.
+os.environ.setdefault("NEO_LOG_LEVEL", "NOLOG")
+os.environ.setdefault("NEO_LOG_FILE_ENABLED", "false")
+_SECRETS: set[str] = set()
+
+
+def redact(text) -> str:
+    """Replace every registered Kotak credential in ``text`` with <redacted>."""
+    out = str(text)
+    for s in sorted(_SECRETS, key=len, reverse=True):
+        out = out.replace(s, "<redacted>")
+    return out
+
+
 IST = timezone(timedelta(hours=5, minutes=30))
 EPOCH_OFFSET = 315511200          # Kotak scrip-master expiry epoch -> unix (per the SDK's own conversion)
 MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
@@ -56,6 +75,7 @@ class KotakSession:
         if not consumer_key:
             raise ValueError("KOTAK_CONSUMER_KEY is required (Neo app -> More -> Trade API -> Generate application)")
         self.consumer_key, self.mobile, self.ucc, self.totp_secret, self.mpin = consumer_key, mobile, ucc, totp_secret, mpin
+        _SECRETS.update(s for s in (consumer_key, mobile, ucc, totp_secret, mpin) if s and len(s) >= 4)
         self.environment = environment
         self._client = None
         self._trade_ready = False
@@ -119,9 +139,9 @@ def _raise_if_error(r, what: str) -> None:
         err = r.get("error") or r.get("Error")
         if err is True:                      # Kotak's REST errors: {"error": true, "message": "..."}
             err = r.get("message") or r.get("errMsg") or r
-        raise RuntimeError(f"Kotak {what}: {err}")
+        raise RuntimeError(redact(f"Kotak {what}: {err}"))
     if isinstance(r, dict) and str(r.get("stat", "")).lower() == "not_ok":
-        raise RuntimeError(f"Kotak {what}: {r.get('errMsg') or r.get('emsg') or r}")
+        raise RuntimeError(redact(f"Kotak {what}: {r.get('errMsg') or r.get('emsg') or r}"))
 
 
 class RateLimiter:
