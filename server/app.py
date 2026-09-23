@@ -173,6 +173,28 @@ def _events_run() -> None:
     r = Runner()
     r.ensure_shares()
     r.run_day(datetime.now(IST).date())
+    _maybe_retrain()
+
+
+def _maybe_retrain(max_age_days: int = 31) -> None:
+    """Monthly model retrain from the rebuild hook, in its own thread so the 20:30 build never waits."""
+    from scanner.model import MODEL_PATH
+    try:
+        age_ok = MODEL_PATH.exists() and (time.time() - MODEL_PATH.stat().st_mtime) < max_age_days * 86400
+    except OSError:
+        age_ok = False
+    if age_ok:
+        return
+
+    def _job() -> None:
+        try:
+            from scanner.model import train
+            from datetime import date as _date
+            train(since=_date.today().replace(year=_date.today().year - 3))
+            log.info("model retrained")
+        except Exception as exc:  # noqa: BLE001
+            log.error("model retrain failed: %s", exc)
+    threading.Thread(target=_job, name="model-retrain", daemon=True).start()
 
 
 def _rebuild() -> dict:

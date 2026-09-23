@@ -136,6 +136,17 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
         },
         "stocks": stocks,
     }
+    try:                                              # model inference is optional: no model.pkl, no block
+        from .model import infer_for_scan, load_model
+        payload = load_model()
+        if payload is not None:
+            infer_for_scan(stocks, scan["meta"].get("index_closes"), payload)
+            scan["meta"]["model"] = {"trained_through": payload["trained_through"],
+                                     "oos_brier": payload["oos_brier"], "oos_accuracy": payload.get("oos_accuracy"),
+                                     "engine": payload.get("engine")}
+    except Exception as exc:  # noqa: BLE001 - the scan never fails for want of the model
+        log.warning("model inference skipped: %s", exc)
+        scan["meta"]["model"] = None
     scan["meta"]["commentary"] = generate_commentary(scan) if commentary else None
     return scan
 
