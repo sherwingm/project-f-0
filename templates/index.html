@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F&amp;O EOD scan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#E9EDF2; --surface:#FFFFFF; --ink:#1A2430; --muted:#5B6773; --line:#D5DBE2; --line-strong:#B9C2CC;
+  --bull:#157A57; --bull-soft:#DCEFE6; --bear:#B0362E; --bear-soft:#F6E0DD;
+  --neutral:#6F7A86; --neutral-soft:#E6E9ED; --unc:#8A6D2B; --unc-soft:#F5EBD3;
+  --accent:#24456F; --accent-ink:#FFFFFF; --focus:#2F6FD6;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#131B26; --surface:#1B2533; --ink:#EAF0F6; --muted:#98A6B5; --line:#2C3A4B; --line-strong:#3E4E62;
+    --bull:#4CC38A; --bull-soft:#173427; --bear:#F07F76; --bear-soft:#3D1F1D;
+    --neutral:#8E9AA8; --neutral-soft:#26303C; --unc:#D9B15C; --unc-soft:#3A2F17;
+    --accent:#8FB4E8; --accent-ink:#0F1A2B; --focus:#8FB4E8;
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#131B26; --surface:#1B2533; --ink:#EAF0F6; --muted:#98A6B5; --line:#2C3A4B; --line-strong:#3E4E62;
+  --bull:#4CC38A; --bull-soft:#173427; --bear:#F07F76; --bear-soft:#3D1F1D;
+  --neutral:#8E9AA8; --neutral-soft:#26303C; --unc:#D9B15C; --unc-soft:#3A2F17;
+  --accent:#8FB4E8; --accent-ink:#0F1A2B; --focus:#8FB4E8;
+}
+html { scroll-padding-top:calc(env(safe-area-inset-top,0px) + 56px); }
+*, *::before, *::after { box-sizing:inherit; }
+body {
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Public Sans",-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:15px; line-height:1.45; font-variant-numeric:tabular-nums;
+  -webkit-text-size-adjust:100%;
+}
+button { font:inherit; color:inherit; }
+button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.wrap { max-width:640px; margin:0 auto; padding:0 12px 168px; }
+
+/* header */
+.head { padding:18px 2px 10px; }
+.head h1 { font-size:22px; font-weight:700; margin:0; letter-spacing:-0.01em; }
+.head #asof { margin:2px 0 0; font-size:15px; font-weight:500; color:var(--ink); }
+.head p { margin:4px 0 0; color:var(--muted); font-size:13px; }
+
+/* notice when OI/PCR are missing */
+.notice { border:1px solid var(--unc); background:var(--unc-soft); color:var(--ink); border-radius:10px; padding:10px 12px; font-size:13px; margin:8px 0 12px; }
+.notice b { color:var(--unc); }
+
+/* summary: the market bar */
+.summary { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 12px 10px; margin:6px 0 12px; }
+.summary-line { display:flex; align-items:baseline; justify-content:space-between; gap:8px; margin-bottom:8px; }
+.summary-line strong { font-size:16px; }
+.summary-line span { color:var(--muted); font-size:13px; }
+.bar { display:flex; height:18px; border-radius:6px; overflow:hidden; gap:2px; }
+.bar i { display:block; height:100%; }
+.bar .b { background:var(--bull); } .bar .r { background:var(--bear); } .bar .n { background:var(--neutral); } .bar .u { background:var(--unc); }
+.segs { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:10px; }
+.seg { border:1px solid var(--line); background:transparent; border-radius:10px; padding:8px 6px; text-align:left; min-height:56px; cursor:pointer; }
+.seg strong { display:block; font-size:20px; line-height:1.1; font-weight:700; }
+.seg small { display:block; font-size:12px; color:var(--muted); margin-top:2px; }
+.seg[aria-pressed="true"] { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); }
+.seg.b strong { color:var(--bull); } .seg.r strong { color:var(--bear); } .seg.n strong { color:var(--neutral); } .seg.u strong { color:var(--unc); }
+
+/* controls */
+.controls { position:sticky; top:env(safe-area-inset-top,0px); z-index:5; background:var(--bg); padding:6px 0 8px; margin:0 -12px; padding-left:12px; padding-right:12px; border-bottom:1px solid var(--line); }
+.search { width:100%; padding:11px 12px; border:1px solid var(--line-strong); border-radius:10px; background:var(--surface); color:var(--ink); font-size:16px; }
+.search::placeholder { color:var(--muted); }
+.sorts { display:flex; gap:6px; margin-top:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:2px; }
+.sorts::-webkit-scrollbar { display:none; }
+.chip { flex:0 0 auto; border:1px solid var(--line-strong); background:var(--surface); border-radius:999px; padding:8px 12px; font-size:13px; min-height:36px; cursor:pointer; white-space:nowrap; }
+.chip[aria-pressed="true"] { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+.count { font-size:13px; color:var(--muted); margin:8px 2px 6px; }
+
+/* rows */
+.list { display:flex; flex-direction:column; gap:6px; }
+.row { background:var(--surface); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.row-btn { width:100%; display:block; text-align:left; background:none; border:0; padding:11px 12px; cursor:pointer; }
+.l1 { display:flex; justify-content:space-between; align-items:baseline; gap:8px; }
+.sym { font-weight:700; font-size:15px; }
+.chg { font-weight:700; font-size:15px; }
+.l2 { display:flex; align-items:center; gap:10px; margin-top:4px; font-size:13px; color:var(--muted); }
+.l2 .m b { color:var(--ink); font-weight:600; }
+.l2 .pill { margin-left:auto; }
+.pill { display:inline-block; border-radius:999px; padding:2px 9px; font-size:12px; font-weight:600; line-height:1.6; white-space:nowrap; }
+.pill.b { background:var(--bull-soft); color:var(--bull); } .pill.r { background:var(--bear-soft); color:var(--bear); }
+.pill.n { background:var(--neutral-soft); color:var(--neutral); } .pill.u { background:var(--unc-soft); color:var(--unc); }
+.up { color:var(--bull); } .down { color:var(--bear); } .flat { color:var(--muted); }
+.row.open { border-color:var(--line-strong); }
+
+/* expanded detail */
+.detail { border-top:1px solid var(--line); padding:12px; }
+.grid { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.cell { background:var(--bg); border-radius:10px; padding:8px 10px; }
+.cell small { display:block; font-size:12px; color:var(--muted); }
+.cell b { display:block; font-size:16px; font-weight:600; margin-top:1px; }
+.cell em { display:block; font-style:normal; font-size:12px; color:var(--muted); margin-top:1px; }
+.why { margin:12px 0 0; }
+.why h3 { font-size:13px; font-weight:600; margin:0 0 6px; color:var(--muted); }
+.why ul { margin:0; padding-left:18px; font-size:14px; }
+.why li { margin:3px 0; }
+.chart { margin-top:12px; }
+.chart h3 { font-size:13px; font-weight:600; margin:0 0 6px; color:var(--muted); }
+.chart svg { width:100%; height:110px; display:block; }
+.chart .axis { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); margin-top:4px; }
+.chart .mm { display:flex; justify-content:space-between; font-size:12px; color:var(--muted); }
+.empty { text-align:center; color:var(--muted); padding:32px 8px; }
+
+.news { margin:4px 0 8px; padding-left:18px; } .news li { margin:4px 0; } .news a { color:var(--accent); }
+/* call tracking */
+.callbar { display:flex; gap:6px; align-items:center; margin:6px 0 8px; flex-wrap:wrap; }
+.callbar .chip[aria-pressed="true"] { background:var(--bear); border-color:var(--bear); color:#fff; }
+.callbtns { display:flex; gap:6px; margin-left:auto; }
+.callbtns button { border:1px solid var(--line-strong); background:var(--surface); border-radius:8px; padding:4px 10px; font-size:12px; font-weight:600; min-height:32px; cursor:pointer; }
+.callbtns .b { color:var(--bull); } .callbtns .r { color:var(--bear); } .callbtns .n { color:var(--neutral); }
+.yours { margin-left:auto; font-size:12px; color:var(--muted); }
+.yours b { color:var(--ink); }
+.scoreboard { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:0 0 12px; font-size:14px; }
+.scoreboard h2 { font-size:15px; margin:0 0 6px; }
+.scoreboard .stat { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0; }
+.scoreboard .stat div { background:var(--bg); border-radius:10px; padding:8px 10px; }
+.scoreboard .stat small { display:block; color:var(--muted); font-size:12px; }
+.scoreboard .stat b { font-size:20px; }
+.scoreboard table { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
+.scoreboard th, .scoreboard td { padding:5px 4px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
+.scoreboard td.ok { color:var(--bull); } .scoreboard td.bad { color:var(--bear); }
+.scoreboard select { font:inherit; padding:4px 6px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); color:var(--ink); }
+.scoreboard .tools { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+.scoreboard .tools .chip { min-height:32px; padding:5px 10px; }
+/* AI read-out (descriptive only) */
+.readout { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:12px 14px; margin:0 0 12px; font-size:14px; }
+.readout h2 { font-size:13px; font-weight:600; color:var(--muted); margin:0 0 6px; }
+.readout p { margin:0 0 8px; } .readout p:last-child { margin:0; }
+
+
+/* live, strikes, commentary, orders */
+.livebar { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--muted); margin:6px 0 0; }
+.livebar .dot { width:8px; height:8px; border-radius:50%; background:var(--neutral); flex:0 0 auto; }
+.livebar .dot.on { background:var(--bull); }
+.headrow { display:flex; align-items:flex-start; justify-content:space-between; gap:8px; }
+.btn { border:1px solid var(--line-strong); background:var(--surface); border-radius:10px; padding:9px 12px; font-size:14px; min-height:40px; cursor:pointer; }
+.btn.primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
+.btn.danger { background:var(--bear); color:#fff; border-color:var(--bear); }
+.btn[disabled] { opacity:.5; cursor:default; }
+.l3 { margin-top:4px; font-size:13px; color:var(--muted); }
+.l3 b { color:var(--ink); font-weight:600; }
+.section { margin-top:14px; }
+.section h3 { font-size:13px; font-weight:600; margin:0 0 6px; color:var(--muted); }
+.levels { font-size:13px; color:var(--muted); margin:0 0 8px; line-height:1.5; }
+.levels b { color:var(--ink); font-weight:600; }
+.strikes { width:100%; border-collapse:collapse; font-size:12px; }
+.strikes th { font-weight:500; color:var(--muted); text-align:right; padding:4px 3px; border-bottom:1px solid var(--line); white-space:nowrap; }
+.strikes td { text-align:right; padding:5px 3px; border-bottom:1px solid var(--line); white-space:nowrap; }
+.strikes th.k, .strikes td.k { text-align:center; font-weight:600; background:var(--bg); }
+.strikes tr.atm td.k { outline:2px solid var(--accent); outline-offset:-2px; }
+.strikes td.hi-pe { color:var(--bull); font-weight:600; } .strikes td.hi-ce { color:var(--bear); font-weight:600; }
+.strikes small { display:block; color:var(--muted); font-size:11px; }
+.strikes tr.tap { cursor:pointer; }
+.actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
+.commentary { font-size:14px; line-height:1.5; margin:8px 0 0; }
+.commentary small { display:block; color:var(--muted); font-size:12px; margin-top:6px; }
+.sheet-bg { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:20; display:flex; align-items:flex-end; justify-content:center; }
+.sheet { background:var(--surface); color:var(--ink); width:100%; max-width:640px; border-radius:16px 16px 0 0; padding:14px 14px calc(14px + env(safe-area-inset-bottom,0px)); max-height:88vh; overflow:auto; }
+.sheet h2 { font-size:17px; margin:0 0 4px; }
+.sheet .sub { color:var(--muted); font-size:13px; margin:0 0 10px; }
+.field { margin:10px 0; }
+.field label { display:block; font-size:12px; color:var(--muted); margin-bottom:4px; }
+.seg2 { display:flex; border:1px solid var(--line-strong); border-radius:10px; overflow:hidden; }
+.seg2 button { flex:1; border:0; background:var(--surface); padding:10px; min-height:42px; cursor:pointer; }
+.seg2 button[aria-pressed="true"] { background:var(--accent); color:var(--accent-ink); }
+.seg2 button.buy[aria-pressed="true"] { background:var(--bull); color:#fff; } .seg2 button.sell[aria-pressed="true"] { background:var(--bear); color:#fff; }
+.stepper { display:flex; align-items:center; gap:10px; }
+.stepper button { width:42px; height:42px; border-radius:10px; border:1px solid var(--line-strong); background:var(--surface); font-size:20px; cursor:pointer; }
+.stepper b { font-size:18px; min-width:2ch; text-align:center; }
+.num { width:100%; padding:10px 12px; border:1px solid var(--line-strong); border-radius:10px; background:var(--surface); color:var(--ink); font-size:16px; }
+.review { background:var(--bg); border-radius:10px; padding:10px 12px; font-size:14px; margin:10px 0; }
+.review div { display:flex; justify-content:space-between; gap:8px; padding:2px 0; }
+.review span:first-child { color:var(--muted); }
+.badge { display:inline-block; border-radius:6px; padding:2px 8px; font-size:12px; font-weight:700; }
+.badge.paper { background:var(--neutral-soft); color:var(--neutral); } .badge.live { background:var(--bear); color:#fff; }
+.err { color:var(--bear); font-size:13px; margin:6px 0; }
+.ok { color:var(--bull); font-size:14px; margin:6px 0; }
+.chk { display:flex; gap:8px; align-items:flex-start; font-size:13px; margin:8px 0; }
+.chk input { width:20px; height:20px; margin:0; }
+.olist { font-size:13px; }
+.olist .o { border-top:1px solid var(--line); padding:8px 0; display:flex; justify-content:space-between; gap:8px; }
+.olist .o span:last-child { text-align:right; color:var(--muted); }
+
+/* permanent disclaimer */
+.disclaimer {
+  position:fixed; left:0; right:0; bottom:0; z-index:10;
+  background:var(--surface); border-top:2px solid var(--bear);
+  padding:10px 14px calc(10px + env(safe-area-inset-bottom,0px));
+  font-size:12px; line-height:1.4; color:var(--ink);
+}
+.disclaimer div { max-width:640px; margin:0 auto; }
+.disclaimer b { color:var(--bear); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .detail { animation:open .16s ease-out; }
+  @keyframes open { from { opacity:0; transform:translateY(-4px);} to { opacity:1; transform:none;} }
+}
+@media (min-width:480px) { .grid { grid-template-columns:repeat(4,1fr); } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="head">
+    <div class="headrow">
+      <div>
+        <h1>F&amp;O scan</h1>
+        <p id="asof"></p>
+      </div>
+      <button class="btn" id="ordersBtn" type="button" hidden>Orders</button>
+    </div>
+    <p id="built"></p>
+    <div class="livebar" id="livebar" hidden><span class="dot" id="livedot"></span><span id="livetext"></span></div>
+  </header>
+
+  <div id="notice" class="notice" hidden></div>
+
+  <section class="summary" aria-label="Summary">
+    <div class="summary-line"><strong id="headline"></strong><span id="universe"></span></div>
+    <div class="bar" id="bar" aria-hidden="true"></div>
+    <div class="segs" id="segs" role="group" aria-label="Filter by label"></div>
+  </section>
+
+  <section class="readout" id="readout" hidden aria-label="Plain-English read-out"></section>
+
+  <div class="controls">
+    <input class="search" id="q" type="search" inputmode="search" autocomplete="off" placeholder="Find a symbol" aria-label="Find a symbol">
+    <div class="sorts" id="sorts" role="group" aria-label="Sort"></div>
+  </div>
+  <div class="callbar">
+    <button class="chip" type="button" id="callToggle" aria-pressed="false">Call mode</button>
+    <button class="chip" type="button" id="scoreToggle" aria-pressed="false">Scoreboard</button>
+    <span class="count" id="callHint" style="margin:0"></span>
+  </div>
+  <section class="scoreboard" id="scoreboard" hidden aria-label="Your calls versus the system"></section>
+  <p class="count" id="count" aria-live="polite"></p>
+
+  <div class="list" id="list"></div>
+</div>
+
+<footer class="disclaimer" role="note"><div id="disc"></div></footer>
+
+<script>
+const SCAN = /*__SCAN_DATA__*/;
+const SERVER = Object.assign({ live: false, orders: false, paper: true, commentary: false, broker: "none", max_lots: 5, poll_seconds: 30 }, /*__SERVER__*/{});
+(function () {
+  const $ = (s, el = document) => el.querySelector(s);
+  const meta = SCAN.meta, stocks = SCAN.stocks, sum = SCAN.summary;
+  let LIVE = { quotes: {}, updated_at: null, market_open: false };
+  const auth = { credentials: "same-origin" };
+  const LABELS = { "Bullish setup": "b", "Bearish setup": "r", "Neutral": "n", "Unclassified": "u" };
+
+  // ---- header & disclaimer (always rendered, never dismissible)
+  $("#asof").textContent = "Closing data of " + meta.as_of_label;
+  $("#built").textContent = "Stock-level end-of-day scan of the NSE F&O segment, built " + meta.generated_at_ist + ". Tap a row for the numbers behind its label and a 30-session chart.";
+  $("#disc").innerHTML = "<b>Read before using.</b> " + esc(meta.disclaimer);
+  if (meta.demo) {
+    document.title = "F&O scan — DEMO (synthetic OI)"; $("h1").textContent = "F&O scan — DEMO";
+    const n = $("#notice"); n.hidden = false;
+    n.innerHTML = "<b>Demo data.</b> OI, PCR and strikes on this page are synthetic, generated for testing the interface and the order flow. Prices and volumes are real.";
+  } else if (meta.fo_available && meta.chain_available === false) {
+    const n = $("#notice"); n.hidden = false;
+    n.innerHTML = "<b>Strike tables are not in this build</b> (" + esc(meta.chain_status) + "). Futures OI, PCR and the labels are complete and unaffected.";
+  } else if (!meta.fo_available) {
+    const n = $("#notice"); n.hidden = false;
+    n.innerHTML = "<b>OI and PCR are not in this build.</b> Price change and volume ratio are complete for every stock, but NSE's F&O bhavcopy could not be fetched from the build machine (" + esc(meta.fo_status) +
+      "), so no stock is given a setup label: all are Unclassified rather than guessed. Rebuild from a machine that can reach nseindia.com to fill them in.";
+  }
+
+  if (meta.fo_warnings && meta.fo_warnings.length) {
+    const n = document.createElement("p"); n.className = "count";
+    const syms = [...new Set(meta.fo_warnings.map(w => w.symbol))];
+    n.textContent = `Data notes on ${syms.length} stock${syms.length === 1 ? "" : "s"} (shown inside the row): ${syms.slice(0, 12).join(", ")}${syms.length > 12 ? "…" : ""}`;
+    $(".summary").appendChild(n);
+  }
+
+  // ---- summary
+  const total = stocks.length;
+  $("#headline").textContent = `${sum.bullish} Bullish, ${sum.bearish} Bearish, ${sum.neutral} Neutral` + (sum.unclassified ? `, ${sum.unclassified} Unclassified` : "");
+  $("#universe").textContent = `${total} of ${meta.universe_size} F&O stocks`;
+  const bar = $("#bar");
+  [["b", sum.bullish], ["r", sum.bearish], ["n", sum.neutral], ["u", sum.unclassified]].forEach(([c, v]) => {
+    if (!v) return; const i = document.createElement("i"); i.className = c; i.style.width = (100 * v / total) + "%"; bar.appendChild(i);
+  });
+
+  if (meta.commentary) {
+    const r = $("#readout"); r.hidden = false;
+    r.innerHTML = "<h2>Plain-English read of the numbers above (written by an AI from this data; descriptive only, not advice)</h2>" +
+      meta.commentary.split(/\n{2,}/).map(pa => "<p>" + esc(pa.trim()) + "</p>").join("");
+  }
+
+  // ---- state
+  let filter = "all", sortKey = "price_change_pct", sortDir = -1, query = "", openSym = null;
+
+  // ---- call tracking: your own bullish/bearish/neutral call, made before the label is shown,
+  //      scored later against what the price actually did, alongside the system's label.
+  const CALLS_KEY = "fos_calls_v1", SETTINGS_KEY = "fos_calls_settings";
+  let callMode = false, showScore = false, storageOk = true;
+  let calls = [], scoreCfg = { horizon: 3, threshold: 1.0 };
+  try { calls = JSON.parse(localStorage.getItem(CALLS_KEY) || "[]"); scoreCfg = Object.assign(scoreCfg, JSON.parse(localStorage.getItem(SETTINGS_KEY) || "{}")); }
+  catch (e) { storageOk = false; }
+  const LEAN = { "Bullish setup": "bullish", "Bearish setup": "bearish", "Neutral": "neutral" };
+  const saveCalls = () => { try { localStorage.setItem(CALLS_KEY, JSON.stringify(calls)); localStorage.setItem(SETTINGS_KEY, JSON.stringify(scoreCfg)); } catch (e) { storageOk = false; } };
+  const callFor = sym => calls.find(c => c.symbol === sym && c.as_of === meta.as_of);
+  function recordCall(s, call) {
+    if (callFor(s.symbol)) return;
+    calls.push({ symbol: s.symbol, as_of: meta.as_of, call, system: LEAN[s.label] || null, close: s.close, made_at: new Date().toISOString(), rets: {} });
+    saveCalls(); render(); renderScoreboard();
+  }
+  // fill in forward returns for every horizon the current page's price history can answer
+  function scoreCalls() {
+    let changed = false;
+    for (const c of calls) {
+      const st = stocks.find(x => x.symbol === c.symbol); if (!st) continue;
+      const i = st.chart_dates.indexOf(c.as_of); if (i < 0) continue;
+      for (const h of [1, 3, 5]) {
+        if (c.rets[h] == null && i + h < st.chart_closes.length) { c.rets[h] = +((st.chart_closes[i + h] / st.chart_closes[i] - 1) * 100).toFixed(2); changed = true; }
+      }
+    }
+    if (changed) saveCalls();
+  }
+  const outcomeOf = ret => ret > scoreCfg.threshold ? "bullish" : ret < -scoreCfg.threshold ? "bearish" : "neutral";
+  function scoreStats() {
+    const h = scoreCfg.horizon, scored = calls.filter(c => c.rets[h] != null);
+    const you = scored.filter(c => c.call === outcomeOf(c.rets[h])).length;
+    const sysScored = scored.filter(c => c.system), sys = sysScored.filter(c => c.system === outcomeOf(c.rets[h])).length;
+    const agree = calls.filter(c => c.system && c.system === c.call).length;
+    const byCall = {};
+    for (const k of ["bullish", "bearish", "neutral"]) { const g = scored.filter(c => c.call === k); byCall[k] = { n: g.length, ok: g.filter(c => c.call === outcomeOf(c.rets[h])).length }; }
+    return { total: calls.length, scored: scored.length, you, sys, sysScored: sysScored.length, agree, byCall };
+  }
+  function renderScoreboard() {
+    const el = $("#scoreboard"); el.hidden = !showScore; if (!showScore) return;
+    scoreCalls(); const st = scoreStats(), h = scoreCfg.horizon;
+    const pctOf = (a, b) => b ? Math.round(100 * a / b) + "%" : "—";
+    const rows = calls.slice().reverse().slice(0, 30).map(c => {
+      const r = c.rets[h]; const o = r == null ? null : outcomeOf(r);
+      return `<tr><td>${esc(c.symbol)}</td><td>${esc(c.as_of.slice(5))}</td><td class="${o ? (c.call === o ? "ok" : "bad") : ""}">${esc(c.call)}</td><td class="${o && c.system ? (c.system === o ? "ok" : "bad") : ""}">${esc(c.system || "—")}</td><td>${r == null ? "pending" : (r > 0 ? "+" : "") + r + "%"}</td></tr>`;
+    }).join("");
+    el.innerHTML = `<h2>Your calls vs the system</h2>
+      <p class="count" style="margin:0">A call is scored by the close ${h} session${h === 1 ? "" : "s"} later: up more than ${scoreCfg.threshold}% counts as bullish, down more than ${scoreCfg.threshold}% bearish, in between neutral. The system's label is scored by the same rule.${storageOk ? "" : " Storage is unavailable in this browser, so calls last only for this visit."}</p>
+      <div class="stat"><div><small>Your accuracy</small><b>${pctOf(st.you, st.scored)}</b><small>${st.you} of ${st.scored} scored</small></div>
+        <div><small>System accuracy</small><b>${pctOf(st.sys, st.sysScored)}</b><small>${st.sys} of ${st.sysScored} scored</small></div>
+        <div><small>Calls made</small><b>${st.total}</b><small>${st.total - st.scored} waiting for data</small></div>
+        <div><small>You agreed with the label</small><b>${pctOf(st.agree, st.total)}</b><small>before seeing it</small></div></div>
+      <p class="count" style="margin:0">By your call — bullish ${pctOf(st.byCall.bullish.ok, st.byCall.bullish.n)} (${st.byCall.bullish.n}), bearish ${pctOf(st.byCall.bearish.ok, st.byCall.bearish.n)} (${st.byCall.bearish.n}), neutral ${pctOf(st.byCall.neutral.ok, st.byCall.neutral.n)} (${st.byCall.neutral.n}).</p>
+      <div class="tools"><label>Horizon <select id="hz">${[1,3,5].map(v => `<option value="${v}" ${v === h ? "selected" : ""}>${v} session${v === 1 ? "" : "s"}</option>`).join("")}</select></label>
+        <label>Threshold <select id="th">${[0.5,1,2].map(v => `<option value="${v}" ${v === scoreCfg.threshold ? "selected" : ""}>±${v}%</option>`).join("")}</select></label>
+        <button class="chip" type="button" id="exportCalls">Export</button><label class="chip" style="cursor:pointer">Import<input type="file" id="importCalls" accept="application/json" hidden></label>
+        <button class="chip" type="button" id="clearCalls">Clear all</button></div>
+      ${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>Stock</th><th>Date</th><th>You</th><th>System</th><th>Move</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p class=\"count\">No calls yet. Turn on Call mode, judge a stock from its numbers, then tap Bull, Bear or Neutral.</p>"}`;
+    $("#hz").addEventListener("change", e => { scoreCfg.horizon = +e.target.value; saveCalls(); renderScoreboard(); });
+    $("#th").addEventListener("change", e => { scoreCfg.threshold = +e.target.value; saveCalls(); renderScoreboard(); });
+    $("#exportCalls").addEventListener("click", () => { const a = document.createElement("a"); a.href = "data:application/json," + encodeURIComponent(JSON.stringify({ calls, scoreCfg }, null, 1)); a.download = "fo-scanner-calls.json"; a.click(); });
+    $("#importCalls").addEventListener("change", async e => { try { const j = JSON.parse(await e.target.files[0].text()); const inc = j.calls || j; const have = new Set(calls.map(c => c.symbol + c.as_of)); for (const c of inc) if (!have.has(c.symbol + c.as_of)) calls.push(c); saveCalls(); renderScoreboard(); render(); } catch (err) { alert("Could not read that file"); } });
+    $("#clearCalls").addEventListener("click", () => { if (confirm("Delete all recorded calls?")) { calls = []; saveCalls(); renderScoreboard(); render(); } });
+  }
+  $("#callToggle").addEventListener("click", e => { callMode = !callMode; e.currentTarget.setAttribute("aria-pressed", callMode); $("#callHint").textContent = callMode ? "Labels hidden until you call each stock" : ""; render(); });
+  $("#scoreToggle").addEventListener("click", e => { showScore = !showScore; e.currentTarget.setAttribute("aria-pressed", showScore); renderScoreboard(); });
+  scoreCalls();
+
+  const segs = $("#segs");
+  const segDefs = [["all", "All", total, ""], ["Bullish setup", "Bullish", sum.bullish, "b"], ["Bearish setup", "Bearish", sum.bearish, "r"], ["Neutral", "Neutral", sum.neutral, "n"]];
+  if (sum.unclassified) segDefs.push(["Unclassified", "Unclassified", sum.unclassified, "u"]);
+  segs.style.gridTemplateColumns = `repeat(${segDefs.length},1fr)`;
+  segDefs.forEach(([key, name, n, cls]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "seg " + cls; b.dataset.key = key;
+    b.setAttribute("aria-pressed", key === filter); b.innerHTML = `<strong>${n}</strong><small>${name}</small>`;
+    b.addEventListener("click", () => { filter = key; openSym = null; render(); });
+    segs.appendChild(b);
+  });
+
+  const sorts = $("#sorts");
+  const sortDefs = [["price_change_pct", "Price %"], ["volume_ratio", "Volume ×"], ["oi_change_pct", "OI %"], ["pcr", "PCR"], ["symbol", "A–Z"]];
+  if (SERVER.live) sortDefs.unshift(["live_chg_pct", "Live %"], ["live_oi_chg_pct", "Live OI %"], ["live_pcr", "Live PCR"]);
+  const liveVal = (s, key) => { const q = LIVE.quotes[s.symbol]; return q ? (key === "live_chg_pct" ? q.chg_pct : key === "live_pcr" ? q.live_pcr : q.fut_oi_chg_pct) : null; };
+  sortDefs.forEach(([key, name]) => {
+    const b = document.createElement("button"); b.type = "button"; b.className = "chip"; b.dataset.key = key; b.textContent = name;
+    b.addEventListener("click", () => {
+      if (sortKey === key) sortDir = -sortDir; else { sortKey = key; sortDir = key === "symbol" ? 1 : -1; }
+      render();
+    });
+    sorts.appendChild(b);
+  });
+
+  $("#q").addEventListener("input", e => { query = e.target.value.trim().toUpperCase(); render(); });
+
+  // ---- render
+  function render() {
+    segs.querySelectorAll(".seg").forEach(b => b.setAttribute("aria-pressed", b.dataset.key === filter));
+    sorts.querySelectorAll(".chip").forEach(b => {
+      const on = b.dataset.key === sortKey; b.setAttribute("aria-pressed", on);
+      b.textContent = sortDefs.find(d => d[0] === b.dataset.key)[1] + (on ? (sortDir < 0 ? " ↓" : " ↑") : "");
+    });
+
+    let rows = stocks.filter(s => (filter === "all" || s.label === filter) && (!query || s.symbol.includes(query)));
+    rows.sort((a, b) => {
+      if (sortKey === "symbol") return sortDir * a.symbol.localeCompare(b.symbol);
+      const x = sortKey.startsWith("live_") ? liveVal(a, sortKey) : a[sortKey], y = sortKey.startsWith("live_") ? liveVal(b, sortKey) : b[sortKey];
+      if (x == null && y == null) return a.symbol.localeCompare(b.symbol);
+      if (x == null) return 1; if (y == null) return -1;         // missing values always sink to the bottom
+      return sortDir * (x - y) || a.symbol.localeCompare(b.symbol);
+    });
+
+    $("#count").textContent = rows.length === total ? `All ${total} stocks` : `${rows.length} of ${total} stocks`;
+    const list = $("#list"); list.innerHTML = "";
+    if (!rows.length) { list.innerHTML = `<p class="empty">No stocks match. Clear the search or pick another label.</p>`; return; }
+    const frag = document.createDocumentFragment();
+    rows.forEach(s => frag.appendChild(rowEl(s)));
+    list.appendChild(frag);
+  }
+
+  function rowEl(s) {
+    const cls = LABELS[s.label] || "n";
+    const wrap = document.createElement("div"); wrap.className = "row" + (openSym === s.symbol ? " open" : "");
+    const btn = document.createElement("button"); btn.type = "button"; btn.className = "row-btn";
+    btn.setAttribute("aria-expanded", openSym === s.symbol); btn.setAttribute("aria-controls", "d-" + s.symbol);
+    const mine = callFor(s.symbol), blind = callMode && !mine;
+    const tail = blind
+      ? `<span class="callbtns" role="group" aria-label="Your call"><button type="button" class="b" data-call="bullish">Bull</button><button type="button" class="r" data-call="bearish">Bear</button><button type="button" class="n" data-call="neutral">Neutral</button></span>`
+      : mine ? `<span class="yours">You: <b>${esc(mine.call)}</b> · </span><span class="pill ${cls}">${esc(s.label)}</span>` : `<span class="pill ${cls}">${esc(s.label)}</span>`;
+    btn.innerHTML =
+      `<div class="l1"><span class="sym">${esc(s.symbol)}</span><span class="chg ${dirClass(s.price_change_pct)}">${pct(s.price_change_pct)}</span></div>
+       <div class="l2"><span class="m">Vol <b>${ratio(s.volume_ratio)}</b></span><span class="m">OI <b>${pct(s.oi_change_pct)}</b></span><span class="m">PCR <b>${num(s.pcr)}</b></span>${tail}</div>` + liveLine(s);
+    btn.querySelectorAll("[data-call]").forEach(b => b.addEventListener("click", ev => { ev.stopPropagation(); recordCall(s, b.dataset.call); }));
+    btn.addEventListener("click", () => { openSym = openSym === s.symbol ? null : s.symbol; render(); if (openSym) wrap.scrollIntoView({ block: "nearest" }); });
+    wrap.appendChild(btn);
+    if (openSym === s.symbol) wrap.appendChild(detailEl(s));
+    return wrap;
+  }
+
+  function liveLine(s) {
+    const q = LIVE.quotes[s.symbol]; if (!q) return "";
+    return `<div class="l3">Live <b class="${dirClass(q.chg_pct)}">₹${inr(q.ltp)} ${pct(q.chg_pct)}</b>` +
+      (q.fut_oi != null ? ` · fut OI <b>${inr(q.fut_oi)}</b> <b class="${dirClass(q.fut_oi_chg_pct)}">${pct(q.fut_oi_chg_pct)}</b> vs close${q.oi_ts ? " <small>(" + q.oi_ts + ")</small>" : ""}` : "") +
+      (q.live_pcr != null ? ` · PCR <b>${num(q.live_pcr)}</b>${q.pcr_ts ? " <small>(" + q.pcr_ts + ")</small>" : ""}` : "") + `</div>`;
+  }
+
+  function detailEl(s) {
+    const d = document.createElement("div"); d.className = "detail"; d.id = "d-" + s.symbol;
+    d.innerHTML = `
+      <div class="grid">
+        ${cell("Close", "₹" + inr(s.close), "prev ₹" + inr(s.prev_close) + " (" + s.prev_date + ")")}
+        ${cell("Price change", pct(s.price_change_pct), "close vs previous close", dirClass(s.price_change_pct))}
+        ${cell("Volume", inr(s.volume), "20-day avg " + (s.avg_volume_20d != null ? inr(s.avg_volume_20d) : "—"))}
+        ${cell("Volume ratio", ratio(s.volume_ratio), "volume ÷ its 20-day average")}
+        ${cell("Futures OI", s.fut_oi != null ? inr(s.fut_oi) : "—", s.fut_oi_prev != null ? "prev " + inr(s.fut_oi_prev) : "not available")}
+        ${cell("OI change", pct(s.oi_change_pct), "all expiries combined", dirClass(s.oi_change_pct))}
+        ${cell("Options OI", s.call_oi != null ? "C " + inr(s.call_oi) : "—", s.put_oi != null ? "P " + inr(s.put_oi) : "not available")}
+        ${cell("PCR", num(s.pcr), "put OI ÷ call OI")}
+      </div>
+      ${callMode && !callFor(s.symbol) ? `<div class="why"><h3>Label hidden</h3><p class="count" style="margin:0">Make your call on this row first; the label and its reasons appear after.</p></div>` : `<div class="why"><h3>Why “${esc(s.label)}”</h3><ul>${s.reasons.map(r => "<li>" + esc(r) + "</li>").join("")}</ul></div>`}
+      <div class="chart"><h3>Close, last ${s.chart_closes.length} sessions</h3>${sparkline(s)}</div>
+      <div class="section" id="strikes-${s.symbol}">${strikesEl(s, s.chain)}</div>
+      ${SERVER.commentary ? `<div class="section"><h3>Plain-language reading</h3><button class="btn" type="button" data-explain="${s.symbol}">Explain these numbers</button><div class="commentary" id="c-${s.symbol}"></div></div>` : ""}
+      ${SERVER.verdict ? `<div class="section"><h3>Evidence verdict (numbers + news)</h3><button class="btn" type="button" data-verdict="${s.symbol}">Weigh the evidence</button><div class="commentary verdict" id="v-${s.symbol}"></div></div>` : ""}
+      ${SERVER.orders && s.chain ? `<div class="actions"><button class="btn" type="button" data-trade="FUT">Order: ${esc(s.symbol)} future</button></div>` : ""}`;
+    d.querySelectorAll("[data-explain]").forEach(b => b.addEventListener("click", () => explain(s, b)));
+    d.querySelectorAll("[data-verdict]").forEach(b => b.addEventListener("click", () => verdict(s, b, false)));
+    d.querySelectorAll("[data-trade]").forEach(b => b.addEventListener("click", () => openSheet(s, "FUT", null)));
+    d.querySelectorAll("tr.tap").forEach(tr => tr.addEventListener("click", () => openSheet(s, "CE", Number(tr.dataset.strike))));
+    if (s.chain && SERVER.live) refreshChain(s, d);
+    return d;
+  }
+
+  function strikesEl(s, chain) {
+    if (!chain) return `<h3>Strikes</h3><p class="levels">${s.chain_problem ? "Strike table unavailable for this stock: " + esc(s.chain_problem) + "." : meta.chain_available === false ? "Strike tables could not be built for this session (" + esc(meta.chain_status || "") + "); OI, PCR and labels are unaffected." : meta.fo_available ? "No options data for this stock." : "Strike-level data needs the F&O bhavcopy, which is not in this build."}</p>`;
+    const live = chain.live_at ? ` · live ${chain.live_at}` : "";
+    const rows = chain.strikes.map(r => {
+      const isAtm = r.strike === chain.atm, hiCe = r.strike === chain.max_call_oi_strike, hiPe = r.strike === chain.max_put_oi_strike;
+      const ceOi = r.ce_live_oi ?? r.ce_oi, peOi = r.pe_live_oi ?? r.pe_oi, cePx = r.ce_live_ltp ?? r.ce_close, pePx = r.pe_live_ltp ?? r.pe_close;
+      return `<tr class="${isAtm ? "atm" : ""}${SERVER.orders ? " tap" : ""}" data-strike="${r.strike}">
+        <td class="${hiPe ? "hi-pe" : ""}">${inr(peOi)}<small>${sgn(r.pe_oi_chg)}</small></td><td>${inr(pePx)}</td>
+        <td class="k">${fmtStrike(r.strike)}</td>
+        <td>${inr(cePx)}</td><td class="${hiCe ? "hi-ce" : ""}">${inr(ceOi)}<small>${sgn(r.ce_oi_chg)}</small></td></tr>`;
+    }).join("");
+    const note = chain.one_sided_strikes ? `<p class="levels" style="color:var(--muted)">${chain.one_sided_strikes} strike${chain.one_sided_strikes === 1 ? " is" : "s are"} listed on one side only in NSE's file; the missing side shows 0 OI and no price.</p>` : "";
+    return `<h3>Strikes, expiry ${chain.expiry}${live}</h3>${note}
+      <p class="levels">Highest call OI at <b>${fmtStrike(chain.max_call_oi_strike)}</b> (commonly read as a resistance zone) · highest put OI at <b>${fmtStrike(chain.max_put_oi_strike)}</b> (support zone) · max pain <b>${fmtStrike(chain.max_pain)}</b> · ATM <b>${fmtStrike(chain.atm)}</b>. Total put OI ${inr(chain.total_pe_oi)}, call OI ${inr(chain.total_ce_oi)}.${SERVER.orders ? " Tap a strike to prepare an order." : ""}</p>
+      <div style="overflow-x:auto"><table class="strikes"><thead><tr><th>Put OI<br><small>Δ OI</small></th><th>Put ₹</th><th class="k">Strike</th><th>Call ₹</th><th>Call OI<br><small>Δ OI</small></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  }
+
+  async function refreshChain(s, d) {
+    try {
+      const r = await fetch(`/api/chain/${encodeURIComponent(s.symbol)}`, auth); if (!r.ok) return;
+      const chain = await r.json(); const el = d.querySelector(`#strikes-${CSS.escape(s.symbol)}`); if (!el) return;
+      el.innerHTML = strikesEl(s, chain);
+      el.querySelectorAll("tr.tap").forEach(tr => tr.addEventListener("click", () => openSheet(s, "CE", Number(tr.dataset.strike))));
+    } catch (e) { /* keep EOD chain */ }
+  }
+
+  async function explain(s, btn) {
+    const box = $("#c-" + CSS.escape(s.symbol)); btn.disabled = true; btn.textContent = "Reading the numbers…";
+    try {
+      const r = await fetch(`/api/commentary/${encodeURIComponent(s.symbol)}`, auth); const j = await r.json();
+      if (!r.ok) throw new Error(j.error || r.status);
+      box.innerHTML = esc(j.text) + `<small>${j.ai ? "Written by AI (" + esc(j.model) + ") from the numbers above. Descriptive only: it does not tell you what to trade." : "Deterministic summary (AI reading unavailable)."}</small>`;
+      btn.remove();
+    } catch (e) { box.innerHTML = `<span class="err">Could not get a reading: ${esc(e.message)}</span>`; btn.disabled = false; btn.textContent = "Explain these numbers"; }
+  }
+
+  async function verdict(s, btn, refresh) {
+    const box = $("#v-" + CSS.escape(s.symbol)); btn.disabled = true; btn.textContent = "Searching news and weighing the numbers…";
+    try {
+      const r = await fetch(`/api/verdict/${encodeURIComponent(s.symbol)}${refresh ? "?refresh=1" : ""}`, auth); const j = await r.json();
+      if (!r.ok) throw new Error(j.error || r.status);
+      const cls = j.lean === "bullish" ? "b" : j.lean === "bearish" ? "r" : "n";
+      const news = (j.news || []).map(n => `<li><a href="${esc(n.url || "#")}" target="_blank" rel="noopener">${esc(n.headline)}</a> <small>${esc(n.source || "")} ${esc(n.date || "")} ${n.direction === "+" ? "▲" : n.direction === "-" ? "▼" : "•"}</small>${n.why ? `<br><small>${esc(n.why)}</small>` : ""}</li>`).join("");
+      box.innerHTML = `<p><span class="pill ${cls}">Leans ${esc(j.lean)}</span> <b>${esc(j.confidence)} confidence</b></p>
+        <p><b>Data:</b> ${esc(j.data_read)}</p>
+        ${news ? `<p><b>News found:</b></p><ul class="news">${news}</ul>` : "<p><b>News:</b> nothing material found in the last 10 days.</p>"}
+        <p><b>Weighing it:</b> ${esc(j.reasoning)}</p>
+        <p><b>Risks to this read:</b> ${esc(j.risks)}</p>
+        <p><b>What would change it:</b> ${esc(j.would_change)}</p>
+        <small>${j.deterministic ? "Data-only verdict; the AI assessment was unavailable or discarded." : "AI assessment (" + esc(SERVER.model || "Claude") + ", web search) generated " + esc(j.generated_at || "") + "."} An assessment of evidence for your own judgement, not a trade recommendation. <button class="btn" type="button" data-refresh="${esc(s.symbol)}" style="margin-left:6px">Refresh with latest news</button></small>`;
+      box.querySelector("[data-refresh]").addEventListener("click", ev => verdict(s, ev.currentTarget, true));
+      btn.remove();
+    } catch (e) { box.innerHTML = `<span class="err">Could not get a verdict: ${esc(e.message)}</span>`; btn.disabled = false; btn.textContent = "Weigh the evidence"; }
+  }
+
+  // ---- live polling
+  async function pollLive() {
+    try {
+      const r = await fetch("/api/live", auth); if (!r.ok) throw new Error(r.status);
+      const j = await r.json(); LIVE = j;
+      $("#livebar").hidden = false; $("#livedot").className = "dot" + (j.updated_at && j.market_open ? " on" : "");
+      $("#livetext").textContent = j.error ? "Live feed error: " + j.error : j.updated_at ? `Live quotes as of ${j.updated_at} IST${j.market_open ? "" : " (market closed)"}, every ${j.poll_seconds}s` : (j.market_open ? "Waiting for the first live quote…" : "Market closed. Live quotes resume at 09:15 IST.");
+      render();
+    } catch (e) { $("#livebar").hidden = false; $("#livetext").textContent = "Live feed unreachable"; }
+  }
+  if (SERVER.live) { pollLive(); setInterval(pollLive, Math.max(10, SERVER.poll_seconds) * 1000); }
+
+  // ---- orders
+  if (SERVER.orders) { $("#ordersBtn").hidden = false; $("#ordersBtn").addEventListener("click", openOrders); }
+
+  function openSheet(s, instrument, strike) {
+    if (!SERVER.orders || !s.chain) return;
+    const st = { instrument, strike, side: "BUY", lots: 1, order_type: "LIMIT", price: null, preview: null, err: "", done: null, ack: false };
+    const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
+    const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); bg.appendChild(sheet);
+    const q = LIVE.quotes[s.symbol];
+    const refPrice = () => {
+      if (st.instrument === "FUT") return (q && (q.fut_ltp || q.ltp)) || s.close;
+      const row = s.chain.strikes.find(r => r.strike === st.strike); if (!row) return null;
+      return st.instrument === "CE" ? (row.ce_live_ltp ?? row.ce_close) : (row.pe_live_ltp ?? row.pe_close);
+    };
+    function draw() {
+      const contract = st.instrument === "FUT" ? `${s.symbol} ${s.chain.expiry} future` : `${s.symbol} ${s.chain.expiry} ${fmtStrike(st.strike)} ${st.instrument}`;
+      const qty = st.lots * (s.lot_size || 0);
+      if (st.done) {
+        sheet.innerHTML = `<h2>${st.done.paper ? "Paper order recorded" : "Order sent to broker"}</h2><p class="sub">${esc(contract)}</p>
+          <div class="review"><div><span>Order id</span><span>${esc(st.done.order_id)}</span></div><div><span>Status</span><span>${esc(st.done.status)}</span></div>
+          <div><span>Quantity</span><span>${inr(st.done.quantity)}</span></div>${st.done.fill_price != null ? `<div><span>Fill price</span><span>₹${inr(st.done.fill_price)}</span></div>` : ""}</div>
+          <button class="btn primary" type="button" id="closeSheet">Close</button>`;
+        $("#closeSheet", sheet).addEventListener("click", () => bg.remove()); return;
+      }
+      sheet.innerHTML = `<h2>${esc(contract)}</h2><p class="sub">Lot size ${s.lot_size ?? "?"} · reference ₹${inr(refPrice())} · <span class="badge ${SERVER.paper ? "paper" : "live"}">${SERVER.paper ? "PAPER" : "LIVE BROKER"}</span></p>
+        ${st.instrument !== "FUT" ? `<div class="field"><label>Option</label><div class="seg2"><button type="button" data-i="CE" aria-pressed="${st.instrument === "CE"}">Call ${fmtStrike(st.strike)}</button><button type="button" data-i="PE" aria-pressed="${st.instrument === "PE"}">Put ${fmtStrike(st.strike)}</button></div></div>` : ""}
+        <div class="field"><label>Side</label><div class="seg2"><button type="button" class="buy" data-side="BUY" aria-pressed="${st.side === "BUY"}">Buy</button><button type="button" class="sell" data-side="SELL" aria-pressed="${st.side === "SELL"}">Sell</button></div></div>
+        <div class="field"><label>Lots (max ${SERVER.max_lots}) · quantity ${inr(qty)}</label><div class="stepper"><button type="button" data-d="-1" aria-label="fewer lots">−</button><b>${st.lots}</b><button type="button" data-d="1" aria-label="more lots">+</button></div></div>
+        <div class="field"><label>Order type</label><div class="seg2"><button type="button" data-t="LIMIT" aria-pressed="${st.order_type === "LIMIT"}">Limit</button><button type="button" data-t="MARKET" aria-pressed="${st.order_type === "MARKET"}">Market</button></div></div>
+        ${st.order_type === "LIMIT" ? `<div class="field"><label>Limit price ₹</label><input class="num" id="px" type="number" inputmode="decimal" step="0.05" value="${st.price ?? refPrice() ?? ""}"></div>` : ""}
+        ${st.preview ? `<div class="review"><div><span>Contract</span><span>${esc(st.preview.tradingsymbol)}</span></div><div><span>Quantity</span><span>${inr(st.preview.quantity)} (${st.lots} × ${st.preview.lot_size})</span></div>
+          <div><span>Notional</span><span>₹${inr(st.preview.notional)}</span></div><div><span>Est. margin</span><span>${st.preview.estimated_margin != null ? "₹" + inr(st.preview.estimated_margin) : "not available"}</span></div>
+          <div><span>Orders today</span><span>${st.preview.orders_today} of ${st.preview.max_orders_per_day}</span></div></div>
+          ${!SERVER.paper ? `<label class="chk"><input type="checkbox" id="ack" ${st.ack ? "checked" : ""}> I understand this sends a real ${st.side} order for ${inr(st.preview.quantity)} units to my broker account, and that F&O losses can exceed the capital invested.</label>` : ""}` : ""}
+        ${st.err ? `<p class="err">${esc(st.err)}</p>` : ""}
+        <div class="actions">${st.preview ? `<button class="btn ${SERVER.paper ? "primary" : "danger"}" type="button" id="place" ${!SERVER.paper && !st.ack ? "disabled" : ""}>${SERVER.paper ? "Record paper order" : "Place real order"}</button><button class="btn" type="button" id="back">Edit</button>` : `<button class="btn primary" type="button" id="review">Review order</button>`}<button class="btn" type="button" id="cancel">Cancel</button></div>`;
+      sheet.querySelectorAll("[data-i]").forEach(b => b.addEventListener("click", () => { st.instrument = b.dataset.i; st.price = null; st.preview = null; draw(); }));
+      sheet.querySelectorAll("[data-side]").forEach(b => b.addEventListener("click", () => { st.side = b.dataset.side; st.preview = null; draw(); }));
+      sheet.querySelectorAll("[data-d]").forEach(b => b.addEventListener("click", () => { st.lots = Math.min(SERVER.max_lots, Math.max(1, st.lots + Number(b.dataset.d))); st.preview = null; draw(); }));
+      sheet.querySelectorAll("[data-t]").forEach(b => b.addEventListener("click", () => { st.order_type = b.dataset.t; st.preview = null; draw(); }));
+      const px = $("#px", sheet); if (px) px.addEventListener("input", () => { st.price = Number(px.value); st.preview = null; });
+      const ack = $("#ack", sheet); if (ack) ack.addEventListener("change", () => { st.ack = ack.checked; $("#place", sheet).disabled = !st.ack; });
+      $("#cancel", sheet).addEventListener("click", () => bg.remove());
+      const back = $("#back", sheet); if (back) back.addEventListener("click", () => { st.preview = null; st.err = ""; draw(); });
+      const review = $("#review", sheet); if (review) review.addEventListener("click", () => submit("/api/order/preview"));
+      const place = $("#place", sheet); if (place) place.addEventListener("click", () => submit("/api/order"));
+    }
+    function body() { return { symbol: s.symbol, instrument: st.instrument, expiry: s.chain.expiry, strike: st.instrument === "FUT" ? null : st.strike, side: st.side, lots: st.lots, order_type: st.order_type, price: st.order_type === "LIMIT" ? (st.price ?? refPrice()) : null }; }
+    async function submit(url) {
+      st.err = "";
+      if (st.order_type === "LIMIT") { const v = $("#px", sheet); if (v) st.price = Number(v.value); }
+      try {
+        const payload = body(); if (url === "/api/order") payload.token = st.preview.token;
+        const r = await fetch(url, { ...auth, method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        const j = await r.json(); if (!r.ok) throw new Error(j.error || r.status);
+        if (url === "/api/order") st.done = j; else st.preview = j;
+      } catch (e) { st.err = e.message; }
+      draw();
+    }
+    draw(); document.body.appendChild(bg);
+  }
+
+  async function openOrders() {
+    const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
+    const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub">Loading…</p>`; bg.appendChild(sheet); document.body.appendChild(bg);
+    try {
+      const [o, p] = await Promise.all([fetch("/api/orders", auth).then(r => r.json()), fetch("/api/positions", auth).then(r => r.json())]);
+      sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub"><span class="badge ${SERVER.paper ? "paper" : "live"}">${SERVER.paper ? "PAPER" : "LIVE BROKER"}</span></p>
+        <h3 style="font-size:13px;color:var(--muted);margin:10px 0 4px">Open positions</h3><div class="olist">${p.length ? p.map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b></span><span>${x.quantity > 0 ? "+" : ""}${inr(x.quantity)} @ ₹${inr(x.avg_price)}${x.pnl != null ? " · P&L ₹" + inr(x.pnl) : ""}</span></div>`).join("") : "<div class='o'><span>None</span></div>"}</div>
+        <h3 style="font-size:13px;color:var(--muted);margin:14px 0 4px">Orders</h3><div class="olist">${o.length ? o.slice(0, 50).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.price ? " @ ₹" + inr(x.price) : ""}</span><span>${esc(x.status)}<br>${esc((x.placed_at || "").slice(0, 16))}</span></div>`).join("") : "<div class='o'><span>None yet</span></div>"}</div>
+        <div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`;
+      $("#closeO", sheet).addEventListener("click", () => bg.remove());
+    } catch (e) { sheet.innerHTML = `<h2>Orders & positions</h2><p class="err">${esc(e.message)}</p>`; }
+  }
+
+  function cell(label, value, sub, cls = "") {
+    return `<div class="cell"><small>${label}</small><b class="${cls}">${value}</b><em>${sub}</em></div>`;
+  }
+
+  function sparkline(s) {
+    const v = s.chart_closes, n = v.length, W = 320, H = 100, P = 4;
+    const lo = Math.min(...v), hi = Math.max(...v), span = (hi - lo) || 1;
+    const x = i => P + (W - 2 * P) * i / (n - 1), y = c => H - P - (H - 2 * P) * (c - lo) / span;
+    const pts = v.map((c, i) => `${x(i).toFixed(1)},${y(c).toFixed(1)}`);
+    const up = v[n - 1] >= v[0], col = up ? "var(--bull)" : "var(--bear)";
+    const iLo = v.indexOf(lo), iHi = v.indexOf(hi);
+    return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="30 day close chart, low ${lo} high ${hi}">
+        <path d="M${pts[0]} L${pts.slice(1).join(" ")} L${W - P},${H} L${P},${H} Z" fill="${col}" opacity="0.12"/>
+        <polyline points="${pts.join(" ")}" fill="none" stroke="${col}" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linejoin="round"/>
+        <circle cx="${x(n - 1).toFixed(1)}" cy="${y(v[n - 1]).toFixed(1)}" r="3" fill="${col}"/>
+      </svg>
+      <div class="mm"><span>Low ₹${inr(lo)} (${s.chart_dates[iLo]})</span><span>High ₹${inr(hi)} (${s.chart_dates[iHi]})</span></div>
+      <div class="axis"><span>${s.chart_dates[0]}</span><span>${s.chart_dates[n - 1]}</span></div>`;
+  }
+
+  // ---- formatting
+  function pct(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v.toFixed(2) + "%"; }
+  function ratio(v) { return v == null ? "—" : v.toFixed(2) + "×"; }
+  function num(v) { return v == null ? "—" : v.toFixed(2); }
+  function inr(v) { return v == null ? "—" : Number(v).toLocaleString("en-IN", { maximumFractionDigits: 2 }); }
+  function fmtStrike(v) { return v == null ? "—" : (Number.isInteger(v) ? v : v.toFixed(2)); }
+  function sgn(v) { return v == null ? "" : (v > 0 ? "+" : "") + inr(v); }
+  function dirClass(v) { return v == null || v === 0 ? "flat" : v > 0 ? "up" : "down"; }
+  function esc(t) { return String(t).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+
+  render();
+})();
+</script>
+</body>
+</html>

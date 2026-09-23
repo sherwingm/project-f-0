@@ -1,0 +1,22 @@
+# Render blueprint: EOD scan + live feed + commentary. (Order placement to a real broker needs a
+# SEBI-whitelisted static IP, which Render's free tier does not give you; keep PAPER=true here.)
+services:
+  - type: web
+    name: fo-scanner
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements-server.txt && python -m scanner.build || true
+    startCommand: uvicorn server.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_PASSWORD
+        sync: false
+      - key: BROKER
+        value: none
+      - key: PAPER
+        value: "true"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: KITE_API_KEY
+        sync: false
+      - key: KITE_ACCESS_TOKEN
+        sync: false

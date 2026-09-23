@@ -1,0 +1,26 @@
+name: Daily F&O scan
+# Runs after NSE publishes the F&O bhavcopy and eod2_data has synced (≈ 20:30 IST, Mon–Fri),
+# rebuilds docs/index.html and commits it, so GitHub Pages serves the fresh scan.
+on:
+  schedule:
+    - cron: "0 15 * * 1-5"      # 15:00 UTC = 20:30 IST
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - run: pip install -r requirements.txt
+      - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
+        run: python -m scanner.build
+      - name: Commit refreshed page
+        run: |
+          git config user.name "fo-scanner-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add docs/index.html data/scan.json data/cache/fo_universe.txt
+          git diff --cached --quiet || git commit -m "scan: $(python -c "import json;print(json.load(open('data/scan.json'))['meta']['as_of'])")"
+          git push

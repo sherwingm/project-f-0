@@ -1,0 +1,9 @@
+-r requirements.txt
+fastapi>=0.110
+uvicorn[standard]>=0.29
+pydantic>=2
+anthropic>=0.40
+kiteconnect>=5
+growwapi>=0.1
+pyotp>=2.9
+kotakneoapi>=3.0

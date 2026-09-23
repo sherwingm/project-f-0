@@ -1,0 +1,13 @@
+data/eod2/
+data/cache/*.csv
+__pycache__/
+*.pyc
+.env
+data/paper_orders.jsonl
+logs/
+.claude/
+data/paper_ledger.json
+data/paper_queue.jsonl
+data/refusals.jsonl
+data/backtest_*.csv
+.pytest_cache/
