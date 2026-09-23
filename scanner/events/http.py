@@ -60,13 +60,14 @@ class EventHttp:
             log.warning("warmup failed (%s); continuing without cookies", exc)
         self._warmed = True
 
-    def get(self, url: str, referer: str | None = None, warm: bool = True) -> requests.Response:
+    def get(self, url: str, referer: str | None = None, warm: bool = True,
+            tries: int | None = None) -> requests.Response:
         if warm and "nseindia.com" in url:
             self.warmup()
         headers = {"Referer": referer} if referer else {}
         backoff = config.EVENTS_BACKOFF_START
         last = "no attempt made"
-        for attempt in range(config.EVENTS_BACKOFF_TRIES):
+        for attempt in range(tries or config.EVENTS_BACKOFF_TRIES):
             _pace()
             try:
                 r = self.s.get(url, headers=headers, timeout=self.timeout)

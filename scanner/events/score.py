@@ -97,6 +97,13 @@ def refresh_shares(symbols: list[str], http: EventHttp | None = None, path: Path
     http = http or EventHttp()
     out = load_shares(path)
     today = date.today().isoformat()
+    try:                                             # Akamai refuses this endpoint on some networks: one probe
+        http.get(QUOTE_URL.format(sym="RELIANCE"), "https://www.nseindia.com/get-quotes/equity?symbol=RELIANCE",
+                 tries=1)
+    except FetchError as exc:
+        log.warning("quote-equity is refused on this network (%s); keeping the %d cached shares rows "
+                    "and bucketing sized events as 'minor'", exc, len(out))
+        return out
     for i, sym in enumerate(symbols):
         try:
             q = http.get_json(QUOTE_URL.format(sym=sym.replace("&", "%26")),
