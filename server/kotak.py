@@ -6,7 +6,8 @@ KotakProvider (live data, read-only)
     Needs only KOTAK_CONSUMER_KEY. Kotak's quotes(), option_chain(), expiries() and scrip_master()
     authenticate with the consumer key alone (no TOTP session), so a data-only deployment holds
     nothing that can trade.
-      quotes()        50 instruments per call, 25 calls/second: LTP, volume, open_int, previous close
+      quotes()        50 instruments per call, 25 calls/second: LTP, volume, open_int, previous close,
+                      5-level depth (also for one contract on demand: quote_one)
       option_chain()  one underlying per call: every strike's LTP, OI and OI change -> exact PCR
     Each poll: LTP + futures OI for the whole universe in ~10 quote calls, plus a rolling sweep of
     KOTAK_CHAIN_CALLS_PER_POLL option chains for live PCR / strike OI (default 12: at a 30 s poll the
@@ -282,33 +283,19 @@ class KotakProvider:
                 rec = self.master.resolve_key(p)
                 if not rec:
                     continue
+                tok_to_key[("nse_fo", rec["token"])] = k      # options too: the quote carries their depth
                 if p.get("fut"):
-                    tok_to_key[("nse_fo", rec["token"])] = k
                     futs.append(p["sym"])
                 else:
                     opt_wanted.setdefault((p["sym"], rec["expiry"]), []).append((rec["tradingsymbol"], k))
 
-        # LTP / volume / OI / previous close in batches of 50
+        # LTP / volume / OI / previous close / 5-level depth in batches of 50
         items = [{"instrument_token": t, "exchange_segment": seg} for (seg, t) in tok_to_key]
         for batch in _chunks(items, 50):
-            self.limiter.wait()
-            resp = self.s.client().quotes(instrument_tokens=batch, quote_type="all")
-            rows = resp if isinstance(resp, list) else (resp.get("data") if isinstance(resp, dict) else None)
-            if not isinstance(rows, list):
-                raise RuntimeError(f"Kotak quotes: unexpected response {str(resp)[:200]}")
-            for q in rows:
+            for q in self._quotes(batch):
                 key = tok_to_key.get((str(q.get("exchange", "")).lower(), str(q.get("exchange_token", ""))))
-                if not key:
-                    continue
-                d = {"last_price": _f(q.get("ltp")), "volume": _i(q.get("last_volume")),
-                     "timestamp": _ts(q.get("lstup_time"))}
-                if key.startswith("NFO:"):
-                    d["open_interest"] = _i(q.get("open_int"))
-                else:
-                    prev = _f((q.get("ohlc") or {}).get("close"))
-                    if prev:
-                        d["ohlc"] = {"close": prev}
-                out[key] = d
+                if key:
+                    out[key] = _parse_quote(q, fo=key.startswith("NFO:"))
 
         # rolling option-chain sweep -> exact live PCR per stock
         self._sweep(sorted(set(futs)))
@@ -330,9 +317,36 @@ class KotakProvider:
                 continue
             for ts, ourkey in wanted:
                 row = c["strikes"].get(ts)
-                if row:
-                    out[ourkey] = row
+                if row:                                   # chain adds prev OI / OI change; the quote's own fields win
+                    out[ourkey] = {**row, **{k: v for k, v in out.get(ourkey, {}).items() if v is not None}}
         return out
+
+    def quote_one(self, tradingsymbol: str) -> dict:
+        """One F&O contract on demand (the fill engine's options are not in the polling universe):
+        last_price, volume, open_interest, timestamp and 5-level depth, plus the contract's
+        lot size and expiry from the scrip master. Accepts RELIANCE26SEP1300CE or NFO:RELIANCE26SEP1300CE."""
+        self.master.load()
+        ts = tradingsymbol.split(":", 1)[1] if ":" in tradingsymbol else tradingsymbol
+        rec = self.master.fo_by_symbol.get(ts)
+        if rec is None:
+            m = KEY_RE.match(ts)
+            rec = self.master.resolve_key(m.groupdict()) if m else None
+        if rec is None:
+            raise ValueError(f"{ts} is not in Kotak's NSE F&O scrip master")
+        rows = [q for q in self._quotes([{"instrument_token": rec["token"], "exchange_segment": "nse_fo"}])
+                if str(q.get("exchange_token", "")) == rec["token"]]
+        if not rows:
+            raise RuntimeError(f"Kotak quotes: no quote returned for {ts}")
+        return {**_parse_quote(rows[0], fo=True), "tradingsymbol": rec["tradingsymbol"],
+                "lot_size": rec["lot_size"], "expiry": rec["expiry"]}
+
+    def _quotes(self, batch: list[dict]) -> list[dict]:
+        self.limiter.wait()
+        resp = self.s.client().quotes(instrument_tokens=batch, quote_type="all")
+        rows = resp if isinstance(resp, list) else (resp.get("data") if isinstance(resp, dict) else None)
+        if not isinstance(rows, list):
+            raise RuntimeError(redact(f"Kotak quotes: unexpected response {str(resp)[:200]}"))
+        return rows
 
     # ---- chains
     def _sweep(self, symbols: list[str]) -> None:
@@ -453,6 +467,38 @@ class KotakBroker(Broker):
 
 
 # ---------------------------------------------------------------- helpers
+DEPTH_LEVELS = 5
+
+
+def _parse_quote(q: dict, fo: bool) -> dict:
+    d = {"last_price": _f(q.get("ltp")), "volume": _i(q.get("last_volume")),
+         "timestamp": _ts(q.get("lstup_time")), "depth": _depth(q.get("depth"))}
+    if fo:
+        d["open_interest"] = _i(q.get("open_int"))
+    else:
+        prev = _f((q.get("ohlc") or {}).get("close"))
+        if prev:
+            d["ohlc"] = {"close": prev}
+    return d
+
+
+def _depth(raw) -> dict:
+    """Kotak depth {"buy": [{price, quantity, orders}], "sell": [...]} (strings) ->
+    {"bid": [(price, qty), ...], "ask": [...]}, floats/ints, best level first, empty levels dropped."""
+    raw = raw if isinstance(raw, dict) else {}
+
+    def side(levels, best_high: bool) -> list[tuple[float, int]]:
+        out = []
+        for lv in levels if isinstance(levels, list) else []:
+            px, qty = _f((lv or {}).get("price")), _i((lv or {}).get("quantity"))
+            if px and px > 0 and qty and qty > 0:
+                out.append((px, qty))
+        out.sort(key=lambda x: -x[0] if best_high else x[0])
+        return out[:DEPTH_LEVELS]
+
+    return {"bid": side(raw.get("buy"), True), "ask": side(raw.get("sell"), False)}
+
+
 _SHARED: KotakSession | None = None
 
 

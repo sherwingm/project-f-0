@@ -123,7 +123,8 @@ def startup() -> None:
     elif src == "fake":  # local demo without a broker: random-walk quotes
         closes = {s: v["close"] for s, v in state.stocks.items()}
         fo = {s: v.get("fut_oi") for s, v in state.stocks.items()}
-        state.feed = LiveFeed(FakeProvider(closes, fo), state.scan, settings.poll_seconds, state.fut_symbols(), poll_always=True)
+        lots = {s: v.get("lot_size") for s, v in state.stocks.items()}
+        state.feed = LiveFeed(FakeProvider(closes, fo, lots), state.scan, settings.poll_seconds, state.fut_symbols(), poll_always=True)
         state.feed.start()
     if not settings.orders_enabled:
         state.broker = None
