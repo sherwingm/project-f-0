@@ -21,6 +21,8 @@ def test_results_date_moves_to_the_meeting_day():
 
 def test_results_and_order_and_capacity():
     assert classify(item(category="Financial Results", subject="Unaudited financial results for the quarter"))["type"] == "results"
+    boiler = classify(item(category="Outcome of Board Meeting", subject="Outcome of Board Meeting held on September 22, 2026."))
+    assert boiler["type"] == "results_maybe" and boiler["subtype"] == "unlinked"     # linked to results_date in the runner
     e = classify(item(subject="Bagged an order worth Rs 800 crore from NTPC"))
     assert e["type"] == "order_win" and e["direction"] == 1
     assert classify(item(category="Press Release", subject="Received letter of award (LoA)"))["type"] == "order_win"
@@ -31,13 +33,22 @@ def test_results_and_order_and_capacity():
 
 
 def test_rating_requires_a_registered_cra():
+    from scanner.events.score import finalise_rating
     up = classify(item(category="Credit Rating", subject="CRISIL upgrades the long-term rating to AA"))
     assert up["type"] == "rating" and up["direction"] == 1 and up["subtype"] == "upgrade"
     down = classify(item(category="Credit Rating", subject="ICRA places the rating on negative watch"))
     assert down["direction"] == -1 and down["subtype"] == "downgrade"
     same = classify(item(category="Credit Rating", subject="CARE reaffirms the rating at A1+"))
     assert same["direction"] == 0 and same["subtype"] == "reaffirm"
-    assert classify(item(category="Credit Rating", subject="Joe's Rating Shop upgrades us to AAA+")) is None
+    # boilerplate subject: an unverified candidate, resolved from the attachment's first page
+    boiler = classify(item(category="Credit Rating", subject="X Ltd has informed the Exchange about Credit Rating"))
+    assert boiler["subtype"] == "unverified" and boiler["raw_json"]["needs_text"]
+    assert finalise_rating(dict(boiler), "India Ratings has downgraded the NCDs to IND A-")["subtype"] == "downgrade"
+    # a fake rating from a non-registered name is discarded, with or without attachment text
+    fake = classify(item(category="Credit Rating", subject="Joe's Rating Shop upgrades us to AAA+"))
+    assert fake["subtype"] == "unverified"
+    assert finalise_rating(dict(fake), "Joe's Rating Shop upgrades us to AAA+") is None
+    assert finalise_rating(dict(fake), None) is None
 
 
 def test_deals_insider_and_ban_rules():

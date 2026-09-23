@@ -50,10 +50,10 @@ def meeting_date(text: str) -> str | None:
     return None
 
 
-def _rating(item) -> tuple[int, str] | None:
-    text = f"{item.get('subject', '')} {item.get('text', '')}"
-    if not _CRA.search(text):
-        return None                                   # not a registered CRA: discarded entirely
+def rating_direction(text: str) -> tuple[int, str] | None:
+    """Direction and subtype from text that names a registered CRA; None when no CRA is named."""
+    if not _CRA.search(text or ""):
+        return None
     if DOWNGRADE.search(text):
         return -1, "downgrade"
     if UPGRADE.search(text):
@@ -61,6 +61,18 @@ def _rating(item) -> tuple[int, str] | None:
     if REAFFIRM.search(text):
         return 0, "reaffirm"
     return 0, "other"
+
+
+def _rating(item) -> tuple[int, str]:
+    """NSE's list-level subject is often boilerplate ('... about Credit Rating') with the agency named
+    only in the attachment. A subject that names a registered CRA resolves here; anything else becomes
+    an `unverified` candidate that score.finalise_rating() must resolve from the attachment's first
+    page — and drops when no registered CRA appears there either."""
+    resolved = rating_direction(f"{item.get('subject', '')} {item.get('text', '')}")
+    if resolved is None:
+        item.setdefault("extra", {})["needs_text"] = True
+        return 0, "unverified"
+    return resolved
 
 
 def _deal(item) -> tuple[int, str]:
@@ -94,8 +106,11 @@ FILINGS = ("nse_ann", "bse_ann")
 RULES: tuple[Rule, ...] = (
     Rule("rating", FILINGS, re.compile(r"credit rating", re.I), None, lambda i: _rating(i)),
     Rule("results_date", FILINGS, re.compile(r"board meeting", re.I), RESULTS_WORDS, lambda i: (0, "scheduled")),
-    Rule("results", FILINGS, re.compile(r"financial results|outcome of board meeting", re.I), RESULTS_WORDS,
-         lambda i: (0, None)),
+    Rule("results", FILINGS, re.compile(r"financial results", re.I), None, lambda i: (0, None)),
+    # boilerplate "Outcome of Board Meeting held on <date>" resolves to results only when the results
+    # words appear, or (in the runner) when the store holds a results_date for that symbol and day
+    Rule("results", FILINGS, re.compile(r"outcome of board meeting", re.I), RESULTS_WORDS, lambda i: (0, None)),
+    Rule("results_maybe", FILINGS, re.compile(r"outcome of board meeting", re.I), None, lambda i: (0, "unlinked")),
     Rule("order_win", FILINGS, re.compile(r"updates|press release|general|company update|award", re.I),
          re.compile(r"\border(?!s? passed)\w*\b|contract|letter of award|\bLoA\b|bagged|awarded|work order", re.I),
          lambda i: (1, None)),

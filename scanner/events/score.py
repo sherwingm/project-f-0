@@ -34,6 +34,23 @@ QUOTE_URL = "https://www.nseindia.com/api/quote-equity?symbol={sym}"
 ALWAYS_SIGNIFICANT = ("rating", "results", "results_date", "ban")
 
 
+def finalise_rating(event: dict, page1_text: str | None) -> dict | None:
+    """A rating whose subject already named a registered CRA passes through. An `unverified` candidate
+    is resolved from the attachment's first page: kept (with direction and subtype) when a registered
+    CRA is named there, dropped otherwise — including when there is no attachment text at all."""
+    from .taxonomy import rating_direction
+    if event.get("type") != "rating":
+        return event
+    if event.get("subtype") != "unverified":
+        return event
+    resolved = rating_direction(page1_text or "")
+    if resolved is None:
+        return None
+    event["direction"], event["subtype"] = resolved
+    (event.get("raw_json") or {}).pop("needs_text", None)
+    return event
+
+
 def parse_value_cr(text: str) -> float | None:
     best = None
     for num, unit in VALUE_RE.findall(text or ""):
