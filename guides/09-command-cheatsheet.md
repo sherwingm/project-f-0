@@ -35,6 +35,14 @@ DATA_PROVIDER=kotak KOTAK_CONSUMER_KEY=... ORDERS=true PAPER=true BROKER=none AP
 # ---------- read-only live data via Upstox (alternative): guide 02a
 DATA_PROVIDER=upstox UPSTOX_ANALYTICS_TOKEN=... APP_PASSWORD=x uvicorn server.app:app --port 8000
 
+# ---------- events, event study, model, verdict card (guide 14)
+python -m scanner.events.run --day 2026-09-24            # fetch/classify/store today's exchange events
+python -m scanner.events.run --backfill 2023-01-01 2026-09-24        # 3-year fill, resumable
+python -m scanner.events.run --backfill 2023-01-01 2026-09-24 --rating-attachments   # rating PDFs pass
+python -m scanner.event_study --since 2023-01-01         # CAR table + data/event_patterns.json
+python -m scanner.model --train --since 2023-01-01       # walk-forward train -> data/model.pkl + report
+python -m scanner.model --report                         # print the saved model report
+
 # ---------- paper engine (guide 12)
 python -m pytest                                         # the test suite (pip install -r requirements-dev.txt)
 python -m scanner.backtest_cheap_options --months 12 --max-premium 2 --dte 3 7 --out data/backtest_cheap.csv
@@ -80,6 +88,19 @@ GET  /api/paper/refusals    orders refused for liquidity, with reasons and the q
 | `MAX_LOTS_PER_ORDER`, `MAX_ORDERS_PER_DAY` | server-side caps | 5, 20 |
 | `ANTHROPIC_API_KEY`, `COMMENTARY_MODEL` | AI reading | —, claude-sonnet-4-6 |
 | `KITE_API_KEY`, `KITE_API_SECRET`, `KITE_ACCESS_TOKEN` | Zerodha alternative | — |
+
+Events and model (guide 14):
+
+| Key | Meaning | Default |
+|---|---|---|
+| `EVENTS_DB` | SQLite event store | data/events.sqlite |
+| `EVENTS_RATE_SECONDS` | shared floor between any two fetcher requests | 1.0 |
+| `EVENT_ORDER_BUCKETS_PCT` | order/capex buckets, % of market cap | 1,5,20 |
+| `EVENT_DEAL_BUCKETS_PCT` | deal buckets, % of shares outstanding | 0.5,2,5 |
+| `EVENT_INSIDER_BUCKETS_PCT` | insider buckets, % of company traded | 0.1,1,3 |
+| `EVENT_REGISTERED_CRAS` | rating agencies accepted for `rating` events | CRISIL,ICRA,CARE,… |
+| `EVENTS_RECENT_SESSIONS` / `EVENTS_ANALYST_SESSIONS` / `EVENTS_UPCOMING_SESSIONS` | join windows | 10 / 5 / 10 |
+| `EVENT_RSS_ET` / `EVENT_RSS_MC` / `EVENT_RSS_BS` | tier-3 feeds (analyst views only) | ET/MC/BS |
 
 Paper engine (guide 12; all server-side):
 
