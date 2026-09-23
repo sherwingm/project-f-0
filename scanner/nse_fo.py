@@ -46,6 +46,8 @@ BHAVCOPY_URL = "https://nsearchives.nseindia.com/content/fo/BhavCopy_NSE_FO_0_0_
 
 COLUMNS = ["TradDt", "TckrSymb", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric", "UndrlygPric",
            "OpnIntrst", "ChngInOpnIntrst", "TtlTradgVol"]
+OPTIONAL_COLUMNS = ["NewBrdLotQty"]          # lot size per contract; kept when present (older caches lack it)
+_WANTED = set(COLUMNS) | set(OPTIONAL_COLUMNS)
 
 
 class BhavcopyUnavailable(Exception):
@@ -57,7 +59,7 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
     ymd = day.strftime("%Y%m%d")
     cache_file = (cache_dir / f"fo_bhavcopy_{ymd}.csv") if cache_dir else None
     if cache_file and cache_file.exists():
-        return pd.read_csv(cache_file, usecols=COLUMNS)
+        return pd.read_csv(cache_file, usecols=lambda c: c in _WANTED)
 
     url = BHAVCOPY_URL.format(ymd=ymd)
     r = requests.get(url, headers=NSE_HEADERS, timeout=timeout)
@@ -71,7 +73,7 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
     with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
         name = next(n for n in zf.namelist() if n.lower().endswith(".csv"))
         with zf.open(name) as fh:
-            df = pd.read_csv(fh, usecols=COLUMNS)
+            df = pd.read_csv(fh, usecols=lambda c: c in _WANTED)
 
     if cache_dir:
         cache_dir.mkdir(parents=True, exist_ok=True)
