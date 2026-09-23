@@ -18,6 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 from .classify import BULLISH, BEARISH, NEUTRAL, UNCLASSIFIED, classify
+from .events_join import events_for_scan, events_status
 from .equity import equity_metrics, index_closes
 from .nse_fo import BhavcopyUnavailable, download_fo_bhavcopy, fo_metrics
 from .commentary import generate_commentary
@@ -77,6 +78,13 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
                 log.error("option chains: %s", exc)
 
     fo_by_symbol = {r["symbol"]: r for r in fo.to_dict("records")} if len(fo) else {}
+    calendar = sorted({d for r in rows for d in r["chart_dates"]})
+    try:
+        ev = events_for_scan([r["symbol"] for r in rows], as_of.strftime("%Y-%m-%d"), calendar)
+        ev_status = events_status()
+    except Exception as exc:  # noqa: BLE001 - the scan never fails for want of events
+        log.warning("events join failed: %s", exc)
+        ev, ev_status = {}, {"available": False, "error": str(exc)}
     stocks = []
     for r in rows:
         f = fo_by_symbol.get(r["symbol"], {})
@@ -91,6 +99,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
         r.update(classify(r))
         r["lot_size"] = lots.get(r["symbol"]) or None
         r["chain"] = chains.get(r["symbol"])
+        r["events"] = ev.get(r["symbol"]) or {"today": [], "last_10": [], "upcoming": [], "analyst_view": [], "flags": {}}
         stocks.append(r)
     stocks.sort(key=lambda s: s["symbol"])
 
@@ -118,6 +127,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
             },
             "thresholds": {"volume_above": 1.0, "pcr_low": 0.7, "pcr_high": 1.3, "volume_window_days": 20},
             "index_closes": index,
+            "events_status": ev_status,
             "disclaimer": DISCLAIMER,
         },
         "summary": {
