@@ -181,6 +181,8 @@ class Runner:
         if e["type"] == "rating" and e.get("subtype") == "unverified":
             text = self._page1(e, budget_left)
             return finalise_rating(e, text)
+        if getattr(self, "_pdf_ratings_only", False):
+            return e
         if e["type"] in ("order_win", "capacity") and e.get("value_cr") is None:
             from .score import parse_value_cr
             if parse_value_cr(e.get("subject") or "") is None:
@@ -191,7 +193,9 @@ class Runner:
 
     def _page1(self, e: dict, budget_left: int) -> str | None:
         url = e.get("url") or ""
-        if self.fixtures or not url.lower().endswith(".pdf") or budget_left < 0:
+        allow = budget_left >= 0 or (getattr(self, "_pdf_ratings_only", False)
+                                     and e["type"] == "rating" and e.get("subtype") == "unverified")
+        if self.fixtures or not url.lower().endswith(".pdf") or not allow:
             return None
         try:
             return pdf_first_page_text(self.http.download(url, "https://www.nseindia.com/"))
@@ -217,7 +221,11 @@ class Runner:
         return out
 
     # ------------------------------------------------------------ back-fill
-    def backfill(self, start: date, end: date) -> dict[str, int]:
+    def backfill(self, start: date, end: date, rating_attachments: bool = False) -> dict[str, int]:
+        """rating_attachments: fetch each unverified rating's filing PDF (first page) so boilerplate
+        'informed the Exchange about Credit Rating' subjects resolve; order/capacity PDFs stay off.
+        Meant as a second pass over nse_ann (delete its key from events_backfill.json to redo it)."""
+        self._pdf_ratings_only = rating_attachments
         progress = json.loads(PROGRESS_PATH.read_text()) if PROGRESS_PATH.exists() else {}
         total: dict[str, int] = {}
         jobs = [("nse_ann", nse_announcements.backfill(start, end, self.http)),
@@ -276,6 +284,8 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="fetch, classify and store exchange events")
     ap.add_argument("--day", type=date.fromisoformat)
     ap.add_argument("--backfill", nargs=2, type=date.fromisoformat, metavar=("START", "END"))
+    ap.add_argument("--rating-attachments", action="store_true",
+                    help="with --backfill: resolve boilerplate rating filings from their PDFs (first page)")
     ap.add_argument("--fixtures", action="store_true", help="one fixture day (2026-09-22), no network")
     ap.add_argument("--no-shares", action="store_true", help="skip the monthly shares-outstanding refresh")
     ap.add_argument("-v", "--verbose", action="store_true")
@@ -285,7 +295,7 @@ def main() -> None:
     if not a.no_shares and not a.fixtures:
         r.ensure_shares()
     if a.backfill:
-        total = r.backfill(*a.backfill)
+        total = r.backfill(*a.backfill, rating_attachments=a.rating_attachments)
     else:
         total = r.run_day(a.day or (date(2026, 9, 22) if a.fixtures else datetime.now(IST).date()))
     print("events by type:", json.dumps(dict(sorted(total.items())), indent=1))
