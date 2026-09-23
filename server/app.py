@@ -152,17 +152,27 @@ def startup() -> None:
 
 
 def _daily_rebuild_loop() -> None:
+    """19:45 IST: fetch the day's exchange events (guide 12 spec); 20:30 IST: rebuild the scan, which
+    joins them in. A failed event run never blocks the rebuild."""
+    jobs = [((19, 45), _events_run), ((20, 30), _rebuild)]
     while True:
         now = datetime.now(IST)
-        target = now.replace(hour=20, minute=30, second=0, microsecond=0)
-        if target <= now:
-            target += timedelta(days=1)
-        time.sleep((target - now).total_seconds())
-        if target.weekday() < 5:
+        when, job = min(((now.replace(hour=h, minute=m, second=0, microsecond=0)
+                          + (timedelta(days=1) if now.replace(hour=h, minute=m, second=0, microsecond=0) <= now
+                             else timedelta())), fn) for (h, m), fn in jobs)
+        time.sleep((when - now).total_seconds())
+        if when.weekday() < 5:
             try:
-                _rebuild()
+                job()
             except Exception as exc:  # noqa: BLE001
-                log.error("scheduled rebuild failed: %s", exc)
+                log.error("scheduled %s failed: %s", job.__name__, exc)
+
+
+def _events_run() -> None:
+    from scanner.events.run import Runner
+    r = Runner()
+    r.ensure_shares()
+    r.run_day(datetime.now(IST).date())
 
 
 def _rebuild() -> dict:

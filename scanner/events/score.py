@@ -116,12 +116,16 @@ def refresh_shares(symbols: list[str], http: EventHttp | None = None, path: Path
 
 # ---------------------------------------------------------------- scoring
 class Scorer:
-    def __init__(self, closes: dict[str, float] | None = None, shares: dict[str, float] | None = None):
+    def __init__(self, closes: dict[str, float] | None = None, shares: dict[str, float] | None = None,
+                 close_fn=None):
         self.closes = closes or {}                    # eod2 close per symbol (₹)
         self.shares = shares if shares is not None else load_shares()
+        self.close_fn = close_fn                      # (symbol, iso_date) -> close near that date, for back-fills
 
-    def market_cap_cr(self, symbol: str) -> float | None:
-        c, n = self.closes.get(symbol), self.shares.get(symbol)
+    def market_cap_cr(self, symbol: str, on_date: str | None = None) -> float | None:
+        c = self.close_fn(symbol, on_date) if (self.close_fn and on_date) else None
+        c = c if c else self.closes.get(symbol)
+        n = self.shares.get(symbol)
         return c * n / 1e7 if c and n else None
 
     def score(self, event: dict) -> dict:
@@ -134,7 +138,7 @@ class Scorer:
         if t in ("order_win", "capacity"):
             if event.get("value_cr") is None:
                 event["value_cr"] = parse_value_cr(event.get("subject") or "")
-            mcap = self.market_cap_cr(sym)
+            mcap = self.market_cap_cr(sym, event.get("event_date"))
             pct = event["value_cr"] / mcap * 100 if event.get("value_cr") and mcap else None
             event["materiality"] = round(pct, 4) if pct is not None else None
             event["bucket"] = bucket_of(pct, config.ORDER_BUCKETS_PCT)
