@@ -36,6 +36,7 @@ from pydantic import BaseModel
 from scanner.build import ROOT, build
 from server.broker import OrderRequest, PaperBroker, check_token, make_broker, preview_token, tradingsymbol
 from server.paper import PaperLedger, PaperRejected, QuoteSource
+from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
 from server.verdict import Verdict
 from server.config import settings
@@ -135,6 +136,11 @@ def startup() -> None:
         state.broker = None
     elif isinstance(state.broker, PaperBroker):
         state.ledger = PaperLedger(settings.data_dir, QuoteSource(state.feed), always_open=bool(state.feed and state.feed.poll_always))
+        margin_fn = None
+        if settings.kotak_consumer_key and settings.kotak_mobile and settings.kotak_ucc and settings.kotak_totp_secret and settings.kotak_mpin:
+            from server.kotak import shared_session
+            margin_fn = kotak_margin_fn(shared_session(settings))   # used only while a Kotak trade session exists
+        state.ledger.risk = RiskGate(settings, margin_fn)
         state.broker.ledger = state.ledger
         if state.feed:
             state.feed.hooks.append(lambda feed: state.ledger.on_poll(feed))

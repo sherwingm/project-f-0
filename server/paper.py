@@ -387,6 +387,8 @@ class PaperLedger:
                     self._mark(pos, quote, now)
                     self._check_stop(pos, now)
             self._touch_day(now)
+            if self.risk is not None:
+                self.risk.state(self, now)            # latches the daily / weekly halt as soon as it is hit
             self._save()
 
     def process_queue(self, now: datetime) -> list[dict]:
