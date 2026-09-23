@@ -18,7 +18,7 @@ from pathlib import Path
 import pandas as pd
 
 from .classify import BULLISH, BEARISH, NEUTRAL, UNCLASSIFIED, classify
-from .equity import equity_metrics
+from .equity import equity_metrics, index_closes
 from .nse_fo import BhavcopyUnavailable, download_fo_bhavcopy, fo_metrics
 from .commentary import generate_commentary
 from .strikes import option_chains
@@ -40,6 +40,9 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
 
     as_of, rows = equity_metrics(universe, local_dir=eod2_dir)
     log.info("equity metrics for %d/%d stocks as of %s", len(rows), len(universe), as_of.date())
+    index = index_closes(eod2_dir, as_of)
+    if index and index["dates"][-1] != as_of.strftime("%Y-%m-%d"):
+        log.warning("index %s ends %s, before the scan date %s", index["name"], index["dates"][-1], as_of.date())
 
     fo_status = "ok"
     chain_status = "ok"
@@ -111,8 +114,10 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
                 "prices_volume": "NSE bhavcopy via BennyThadikaran/eod2_data (Quantis pipeline)",
                 "oi_pcr": "NSE F&O bhavcopy (UDiFF) via nsearchives.nseindia.com",
                 "strikes": "same bhavcopy, nearest expiry, ATM ± 8 strikes; max pain computed over the full chain",
+                "index": "NIFTY 50 closes from eod2_data daily/nifty 50.csv (market adjustment for the scoreboard)",
             },
             "thresholds": {"volume_above": 1.0, "pcr_low": 0.7, "pcr_high": 1.3, "volume_window_days": 20},
+            "index_closes": index,
             "disclaimer": DISCLAIMER,
         },
         "summary": {

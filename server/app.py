@@ -37,7 +37,7 @@ from pydantic import BaseModel
 from scanner.build import ROOT, build
 from server.broker import OrderRequest, PaperBroker, check_token, make_broker, preview_token, tradingsymbol
 from server.liquidity import read_refusals
-from server.paper import PaperLedger, PaperRejected, QuoteSource
+from server.paper import PaperLedger, PaperRejected, QuoteSource, trade_stats
 from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
 from server.verdict import Verdict
@@ -363,7 +363,8 @@ def api_paper_positions(_: str = Depends(auth)):
 
 @app.get("/api/paper/trades")
 def api_paper_trades(_: str = Depends(auth)):
-    return {"trades": _ledger().trades_view()}
+    trades = _ledger().trades_view()
+    return {"trades": trades, "stats": trade_stats(trades)}
 
 
 @app.get("/api/paper/refusals")

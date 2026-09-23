@@ -225,6 +225,6 @@ def test_api_preview_place_and_paper_endpoints(tmp_path, monkeypatch):
     assert placed["status"] == "FILLED"
     assert c.get("/api/paper/summary", auth=("user", "pw")).json()["open_positions"] == 1
     assert c.get("/api/paper/positions", auth=("user", "pw")).json()[0]["tradingsymbol"] == CE
-    assert c.get("/api/paper/trades", auth=("user", "pw")).json() == {"trades": []}
+    assert c.get("/api/paper/trades", auth=("user", "pw")).json()["trades"] == []
     blocked = c.post("/api/order/preview", json={**body, "instrument": "FUT", "strike": None}, auth=("user", "pw")).json()
     assert blocked["token"] is None and any("stop" in b for b in blocked["review"]["blocked"])

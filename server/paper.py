@@ -38,6 +38,7 @@ import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
+from scanner.binomial import hits_needed
 from server import charges as ch
 from server import sessions
 from server.config import settings
@@ -580,6 +581,24 @@ class PaperLedger:
         if p is None:
             raise PaperRejected("that position is no longer open")
         return p
+
+
+def trade_stats(trades: list[dict]) -> dict:
+    """Realistic-net results per closed trade (after fills and charges), overall and by bucket."""
+    out = {}
+    for name, rows in (("all", trades), ("normal", [t for t in trades if t.get("bucket") != "cheap_near_expiry"]),
+                       ("cheap_near_expiry", [t for t in trades if t.get("bucket") == "cheap_near_expiry"])):
+        n = len(rows)
+        nets = sorted(t["net_pnl"] for t in rows)
+        rets = [t["return_pct"] for t in rows if t.get("return_pct") is not None]
+        wins = sum(1 for v in nets if v > 0)
+        out[name] = {"trades": n, "wins": wins, "win_rate": round(wins / n * 100, 1) if n else None,
+                     "mean_net_pnl": round(sum(nets) / n, 2) if n else None,
+                     "median_net_pnl": round((nets[(n - 1) // 2] + nets[n // 2]) / 2, 2) if n else None,
+                     "total_net_pnl": round(sum(nets), 2), "total_charges": round(sum(t.get("charges_total", 0) for t in rows), 2),
+                     "mean_return_pct": round(sum(rets) / len(rets), 2) if rets else None,
+                     "hits_needed": hits_needed(n), "clears_coin": (wins >= hits_needed(n)) if n else None}
+    return out
 
 
 def _req_dict(req) -> dict:

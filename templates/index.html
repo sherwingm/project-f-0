@@ -265,6 +265,80 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outl
 
 <footer class="disclaimer" role="note"><div id="disc"></div></footer>
 
+<script id="scoring">
+// Honest scoring rules as pure functions, used by the scoreboard below and by tests/test_step8_scoreboard.py (node).
+//  - move: the stock's return over h sessions minus the index's over the same sessions (market-adjusted)
+//  - a bullish/bearish call is a hit when |move| > threshold and the move is in its direction;
+//    smaller moves and neutral calls are shown but not scored
+//  - only the first call on a stock in any 3 sessions is scored; later ones are duplicates
+//  - beating a coin at N scored calls needs N/2 + 1.645·√N/2 hits (31/50, 59/100, 112/200, 217/400)
+const Scoring = (() => {
+  const needed = n => n > 0 ? Math.ceil(n / 2 + 1.645 * Math.sqrt(n) / 2) : null;
+  const refLine = () => "Hits needed to beat a coin at this N: " + [50, 100, 200, 400].map(n => `${needed(n)}/${n}`).join(", ");
+  const weekdaysBetween = (a, b) => {
+    const d = new Date(a + "T00:00:00Z"), e = new Date(b + "T00:00:00Z"); let n = 0;
+    while (d < e) { d.setUTCDate(d.getUTCDate() + 1); const w = d.getUTCDay(); if (w > 0 && w < 6) n++; }
+    return n;
+  };
+  // sessions the page knows (every stock's chart dates and the index's); weekdays for anything outside them
+  function calendar(dateLists) {
+    const dates = [...new Set([].concat(...dateLists))].sort(), pos = new Map(dates.map((d, i) => [d, i]));
+    return { dates, between: (a, b) => pos.has(a) && pos.has(b) ? pos.get(b) - pos.get(a) : (a <= b ? weekdaysBetween(a, b) : -weekdaysBetween(b, a)) };
+  }
+  function fwd(dates, closes, d, h) {
+    const i = dates.indexOf(d);
+    return i < 0 || i + h >= closes.length ? null : { ret: (closes[i + h] / closes[i] - 1) * 100, to: dates[i + h] };
+  }
+  function indexReturn(index, from, to) {
+    if (!index) return null;
+    const a = index.dates.indexOf(from), b = index.dates.indexOf(to);
+    return a < 0 || b < 0 ? null : (index.closes[b] / index.closes[a] - 1) * 100;
+  }
+  function adjusted(dates, closes, index, d, h) {
+    const f = fwd(dates, closes, d, h); if (!f) return null;
+    if (!index) return +f.ret.toFixed(2);
+    const ir = indexReturn(index, d, f.to);
+    return ir == null ? null : +(f.ret - ir).toFixed(2);
+  }
+  // items: [{symbol, as_of, dir: "bullish" | "bearish" | anything else, move: adjusted % or null}]
+  function score(items, cal, threshold, gap = 3) {
+    const last = {}, counts = { dup: 0, small: 0, nodir: 0, pending: 0 };
+    let n = 0, hits = 0;
+    const rows = items.slice().sort((a, b) => a.as_of.localeCompare(b.as_of) || a.symbol.localeCompare(b.symbol)).map(it => {
+      let status;
+      if (last[it.symbol] != null && cal.between(last[it.symbol], it.as_of) < gap) status = "dup";
+      else {
+        last[it.symbol] = it.as_of;
+        if (it.dir !== "bullish" && it.dir !== "bearish") status = "nodir";
+        else if (it.move == null) status = "pending";
+        else if (Math.abs(it.move) <= threshold) status = "small";
+        else { n++; const hit = (it.move > 0) === (it.dir === "bullish"); if (hit) hits++; status = hit ? "hit" : "miss"; }
+      }
+      if (status in counts) counts[status]++;
+      return { ...it, status };
+    });
+    const need = needed(n);
+    return { n, hits, accuracy: n ? hits / n : null, needed: need, clears: n ? hits >= need : null, ...counts, rows };
+  }
+  // naive baseline: "always bullish on the top-k volume-ratio stocks" on every session the page has
+  function baseline(stocks, cal, index, h, k = 10) {
+    const items = [];
+    for (const d of cal.dates) {
+      const ranked = [];
+      for (const s of stocks) {
+        const i = (s.chart_dates || []).indexOf(d);
+        const v = i >= 0 && s.chart_volume_ratios ? s.chart_volume_ratios[i] : null;
+        if (v != null) ranked.push([v, s]);
+      }
+      ranked.sort((a, b) => b[0] - a[0] || a[1].symbol.localeCompare(b[1].symbol));
+      for (const [, s] of ranked.slice(0, k))
+        items.push({ symbol: s.symbol, as_of: d, dir: "bullish", move: adjusted(s.chart_dates, s.chart_closes, index, d, h) });
+    }
+    return items;
+  }
+  return { needed, refLine, calendar, fwd, indexReturn, adjusted, score, baseline };
+})();
+</script>
 <script>
 const SCAN = /*__SCAN_DATA__*/;
 const SERVER = Object.assign({ live: false, orders: false, paper: true, commentary: false, broker: "none", max_lots: 5, poll_seconds: 30 }, /*__SERVER__*/{});
@@ -332,53 +406,79 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     calls.push({ symbol: s.symbol, as_of: meta.as_of, call, system: LEAN[s.label] || null, close: s.close, made_at: new Date().toISOString(), rets: {} });
     saveCalls(); render(); renderScoreboard();
   }
-  // fill in forward returns for every horizon the current page's price history can answer
+  // forward stock and index returns for each call, stored while the page's history still covers them
+  const IDX = meta.index_closes || null;
+  const CAL = Scoring.calendar(stocks.map(s => s.chart_dates || []).concat(IDX ? [IDX.dates] : []));
   function scoreCalls() {
     let changed = false;
     for (const c of calls) {
       const st = stocks.find(x => x.symbol === c.symbol); if (!st) continue;
-      const i = st.chart_dates.indexOf(c.as_of); if (i < 0) continue;
+      c.rets = c.rets || {}; c.irets = c.irets || {};
       for (const h of [1, 3, 5]) {
-        if (c.rets[h] == null && i + h < st.chart_closes.length) { c.rets[h] = +((st.chart_closes[i + h] / st.chart_closes[i] - 1) * 100).toFixed(2); changed = true; }
+        const f = Scoring.fwd(st.chart_dates, st.chart_closes, c.as_of, h); if (!f) continue;
+        if (c.rets[h] == null) { c.rets[h] = +f.ret.toFixed(2); changed = true; }
+        if (c.irets[h] == null) { const ir = Scoring.indexReturn(IDX, c.as_of, f.to); if (ir != null) { c.irets[h] = +ir.toFixed(2); changed = true; } }
       }
     }
     if (changed) saveCalls();
   }
-  const outcomeOf = ret => ret > scoreCfg.threshold ? "bullish" : ret < -scoreCfg.threshold ? "bearish" : "neutral";
+  // market-adjusted move in %, or null while unknown; raw when this build has no index
+  const moveOf = (c, h) => {
+    const r = c.rets && c.rets[h]; if (r == null) return null;
+    if (!IDX) return r;
+    const ir = c.irets && c.irets[h]; return ir == null ? null : +(r - ir).toFixed(2);
+  };
   function scoreStats() {
-    const h = scoreCfg.horizon, scored = calls.filter(c => c.rets[h] != null);
-    const you = scored.filter(c => c.call === outcomeOf(c.rets[h])).length;
-    const sysScored = scored.filter(c => c.system), sys = sysScored.filter(c => c.system === outcomeOf(c.rets[h])).length;
-    const agree = calls.filter(c => c.system && c.system === c.call).length;
-    const byCall = {};
-    for (const k of ["bullish", "bearish", "neutral"]) { const g = scored.filter(c => c.call === k); byCall[k] = { n: g.length, ok: g.filter(c => c.call === outcomeOf(c.rets[h])).length }; }
-    return { total: calls.length, scored: scored.length, you, sys, sysScored: sysScored.length, agree, byCall };
+    const h = scoreCfg.horizon, th = scoreCfg.threshold;
+    const as = key => calls.map(c => ({ symbol: c.symbol, as_of: c.as_of, dir: c[key], move: moveOf(c, h), c }));
+    return { you: Scoring.score(as("call"), CAL, th), sys: Scoring.score(as("system"), CAL, th),
+             base: Scoring.score(Scoring.baseline(stocks, CAL, IDX, h), CAL, th),
+             agree: calls.filter(c => c.system && c.system === c.call).length, total: calls.length };
   }
   function renderScoreboard() {
     const el = $("#scoreboard"); el.hidden = !showScore; if (!showScore) return;
-    scoreCalls(); const st = scoreStats(), h = scoreCfg.horizon;
+    scoreCalls(); const st = scoreStats(), h = scoreCfg.horizon, th = scoreCfg.threshold;
     const pctOf = (a, b) => b ? Math.round(100 * a / b) + "%" : "—";
+    const need = s => !s.n ? "—" : s.needed > s.n ? "N too small" : s.needed + "/" + s.n;
+    const line = (name, s) => `<tr><td>${name}</td><td>${s.n}</td><td>${s.hits}</td><td>${pctOf(s.hits, s.n)}</td><td>${need(s)}</td><td class="${s.clears ? "ok" : s.n ? "bad" : ""}">${s.n ? (s.clears ? "yes" : "no") : "—"}</td></tr>`;
+    const STATUS = { hit: "scored: hit", miss: "scored: miss", dup: "duplicate: within 3 sessions of an earlier call", small: `move within ±${th}%`, nodir: "neutral: no direction", pending: "waiting for data" };
+    const yours = new Map(st.you.rows.map(r => [r.c, r])), sys = new Map(st.sys.rows.map(r => [r.c, r]));
+    const cls = r => r && r.status === "hit" ? "ok" : r && r.status === "miss" ? "bad" : "";
     const rows = calls.slice().reverse().slice(0, 30).map(c => {
-      const r = c.rets[h]; const o = r == null ? null : outcomeOf(r);
-      return `<tr><td>${esc(c.symbol)}</td><td>${esc(c.as_of.slice(5))}</td><td class="${o ? (c.call === o ? "ok" : "bad") : ""}">${esc(c.call)}</td><td class="${o && c.system ? (c.system === o ? "ok" : "bad") : ""}">${esc(c.system || "—")}</td><td>${r == null ? "pending" : (r > 0 ? "+" : "") + r + "%"}</td></tr>`;
+      const m = moveOf(c, h), y = yours.get(c), s = sys.get(c);
+      return `<tr><td>${esc(c.symbol)}</td><td>${esc(c.as_of.slice(5))}</td><td class="${cls(y)}">${esc(c.call)}</td><td class="${cls(s)}">${esc(c.system || "—")}</td><td>${m == null ? "pending" : (m > 0 ? "+" : "") + m + "%"}</td><td>${esc(STATUS[y.status])}</td></tr>`;
     }).join("");
     el.innerHTML = `<h2>Your calls vs the system</h2>
-      <p class="count" style="margin:0">A call is scored by the close ${h} session${h === 1 ? "" : "s"} later: up more than ${scoreCfg.threshold}% counts as bullish, down more than ${scoreCfg.threshold}% bearish, in between neutral. The system's label is scored by the same rule.${storageOk ? "" : " Storage is unavailable in this browser, so calls last only for this visit."}</p>
-      <div class="stat"><div><small>Your accuracy</small><b>${pctOf(st.you, st.scored)}</b><small>${st.you} of ${st.scored} scored</small></div>
-        <div><small>System accuracy</small><b>${pctOf(st.sys, st.sysScored)}</b><small>${st.sys} of ${st.sysScored} scored</small></div>
-        <div><small>Calls made</small><b>${st.total}</b><small>${st.total - st.scored} waiting for data</small></div>
-        <div><small>You agreed with the label</small><b>${pctOf(st.agree, st.total)}</b><small>before seeing it</small></div></div>
-      <p class="count" style="margin:0">By your call — bullish ${pctOf(st.byCall.bullish.ok, st.byCall.bullish.n)} (${st.byCall.bullish.n}), bearish ${pctOf(st.byCall.bearish.ok, st.byCall.bearish.n)} (${st.byCall.bearish.n}), neutral ${pctOf(st.byCall.neutral.ok, st.byCall.neutral.n)} (${st.byCall.neutral.n}).</p>
+      <p class="count" style="margin:0">Scored on the ${IDX ? "market-adjusted" : "raw"} move ${h} session${h === 1 ? "" : "s"} later: the stock's return ${IDX ? "minus " + esc(IDX.name) + "'s over the same sessions" : "(this build has no index, so moves are not market-adjusted)"}. A bullish or bearish call is a hit when the move goes its way by more than ±${th}%. Smaller moves and neutral calls are shown but not scored, and only the first call on a stock in any 3 sessions counts. The system's label and the baseline are scored by the same rules.${storageOk ? "" : " Storage is unavailable in this browser, so calls last only for this visit."}</p>
+      <div style="overflow-x:auto"><table><thead><tr><th></th><th>Scored</th><th>Hits</th><th>Accuracy</th><th>Needed</th><th>Beats a coin</th></tr></thead><tbody>
+        ${line("You", st.you)}${line("System labels", st.sys)}${line("Baseline: always bullish on the top-10 volume-ratio stocks", st.base)}</tbody></table></div>
+      <p class="count" style="margin:6px 0 0">${Scoring.refLine()} (N/2 + 1.645·√N/2).</p>
+      <p class="count" style="margin:4px 0 0">Calls made ${st.total} · waiting for data ${st.you.pending} · duplicates ${st.you.dup} · moves within ±${th}% ${st.you.small} · neutral ${st.you.nodir} · you agreed with the label on ${pctOf(st.agree, st.total)} of calls, before seeing it. The baseline runs over the ${CAL.dates.length} sessions in this page's history.</p>
+      <div id="paperScore"></div>
       <div class="tools"><label>Horizon <select id="hz">${[1,3,5].map(v => `<option value="${v}" ${v === h ? "selected" : ""}>${v} session${v === 1 ? "" : "s"}</option>`).join("")}</select></label>
-        <label>Threshold <select id="th">${[0.5,1,2].map(v => `<option value="${v}" ${v === scoreCfg.threshold ? "selected" : ""}>±${v}%</option>`).join("")}</select></label>
+        <label>Threshold <select id="th">${[0.5,1,2].map(v => `<option value="${v}" ${v === th ? "selected" : ""}>±${v}%</option>`).join("")}</select></label>
         <button class="chip" type="button" id="exportCalls">Export</button><label class="chip" style="cursor:pointer">Import<input type="file" id="importCalls" accept="application/json" hidden></label>
         <button class="chip" type="button" id="clearCalls">Clear all</button></div>
-      ${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>Stock</th><th>Date</th><th>You</th><th>System</th><th>Move</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p class=\"count\">No calls yet. Turn on Call mode, judge a stock from its numbers, then tap Bull, Bear or Neutral.</p>"}`;
+      ${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>Stock</th><th>Date</th><th>You</th><th>System</th><th>Move</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p class=\"count\">No calls yet. Turn on Call mode, judge a stock from its numbers, then tap Bull, Bear or Neutral.</p>"}`;
     $("#hz").addEventListener("change", e => { scoreCfg.horizon = +e.target.value; saveCalls(); renderScoreboard(); });
     $("#th").addEventListener("change", e => { scoreCfg.threshold = +e.target.value; saveCalls(); renderScoreboard(); });
     $("#exportCalls").addEventListener("click", () => { const a = document.createElement("a"); a.href = "data:application/json," + encodeURIComponent(JSON.stringify({ calls, scoreCfg }, null, 1)); a.download = "fo-scanner-calls.json"; a.click(); });
     $("#importCalls").addEventListener("change", async e => { try { const j = JSON.parse(await e.target.files[0].text()); const inc = j.calls || j; const have = new Set(calls.map(c => c.symbol + c.as_of)); for (const c of inc) if (!have.has(c.symbol + c.as_of)) calls.push(c); saveCalls(); renderScoreboard(); render(); } catch (err) { alert("Could not read that file"); } });
     $("#clearCalls").addEventListener("click", () => { if (confirm("Delete all recorded calls?")) { calls = []; saveCalls(); renderScoreboard(); render(); } });
+    if (SERVER.orders && SERVER.paper) renderPaperScore();
+  }
+  // second score, from the paper ledger: what the trades made after real fills and charges, per bucket
+  async function renderPaperScore() {
+    const box = $("#paperScore"); if (!box) return;
+    try {
+      const S = (await getJson("/api/paper/trades")).stats;
+      const need = s => !s.trades ? "—" : s.hits_needed > s.trades ? "N too small" : s.hits_needed + "/" + s.trades;
+      const row = (name, s) => `<tr><td>${name}</td><td>${s.trades}</td><td>${s.wins}</td><td>${s.win_rate != null ? s.win_rate + "%" : "—"}</td><td>${money(s.mean_net_pnl)}</td><td>${s.mean_return_pct != null ? pct(s.mean_return_pct) : "—"}</td><td>${money(s.total_net_pnl)}</td><td>${need(s)}</td></tr>`;
+      box.innerHTML = `<h2 style="margin-top:12px">Paper trades, realistic net</h2>
+        <p class="count" style="margin:0">Each closed paper trade after its fills (book walk, spread, ticks) and both legs' charges. Return is on the capital committed: the premium for a long option, the margin otherwise. Won = net P&L above zero; Needed = wins to beat a coin at that N.</p>
+        <div style="overflow-x:auto"><table><thead><tr><th>Bucket</th><th>Trades</th><th>Won</th><th>Win rate</th><th>Mean net</th><th>Mean return</th><th>Total net</th><th>Needed</th></tr></thead>
+        <tbody>${row("All", S.all)}${row("normal", S.normal)}${row("cheap_near_expiry", S.cheap_near_expiry)}</tbody></table></div>`;
+    } catch (e) { box.innerHTML = ""; }
   }
   $("#callToggle").addEventListener("click", e => { callMode = !callMode; e.currentTarget.setAttribute("aria-pressed", callMode); $("#callHint").textContent = callMode ? "Labels hidden until you call each stock" : ""; render(); });
   $("#scoreToggle").addEventListener("click", e => { showScore = !showScore; e.currentTarget.setAttribute("aria-pressed", showScore); renderScoreboard(); });

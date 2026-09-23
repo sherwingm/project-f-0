@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 RAW_BASE = "https://raw.githubusercontent.com/BennyThadikaran/eod2_data/main/daily/{name}.csv"
 VOL_WINDOW = 20      # sessions in the average-volume baseline
 CHART_DAYS = 30      # closes kept for the expandable chart
+INDEX_FILE = "nifty 50"   # eod2's NIFTY 50 file (daily/nifty 50.csv): the market the scoreboard adjusts for
 
 
 def eod2_filename(symbol: str) -> str:
@@ -54,6 +55,8 @@ def equity_metrics_one(symbol: str, df: pd.DataFrame, as_of: pd.Timestamp | None
     baseline = df["Volume"].iloc[-(VOL_WINDOW + 1):-1]          # the 20 sessions before the last one
     avg_vol = float(baseline.mean()) if len(baseline) == VOL_WINDOW else None
     closes = df["Close"].iloc[-CHART_DAYS:]
+    # each session's volume / the average of the 20 sessions before it, for the scoreboard's naive baseline
+    ratios = (df["Volume"] / df["Volume"].rolling(VOL_WINDOW).mean().shift(1)).iloc[-CHART_DAYS:]
     return {
         "symbol": symbol,
         "date": last.name.strftime("%Y-%m-%d"),
@@ -66,7 +69,35 @@ def equity_metrics_one(symbol: str, df: pd.DataFrame, as_of: pd.Timestamp | None
         "volume_ratio": round(float(last["Volume"]) / avg_vol, 2) if avg_vol else None,
         "chart_dates": [d.strftime("%Y-%m-%d") for d in closes.index],
         "chart_closes": [round(float(c), 2) for c in closes.values],
+        "chart_volume_ratios": [None if pd.isna(v) else round(float(v), 2) for v in ratios.values],
     }
+
+
+def index_closes(local_dir: Path | None, as_of: pd.Timestamp, name: str = INDEX_FILE, days: int = CHART_DAYS,
+                 timeout: int = 60) -> dict | None:
+    """The last `days` closes of an eod2 index file up to `as_of`, for market-adjusted scoring.
+    Returns {"name", "dates", "closes"} or None when the file cannot be read (the page then scores raw moves)."""
+    path = local_dir / f"{name}.csv" if local_dir else None
+    try:
+        if path and path.exists():
+            raw = pd.read_csv(path, usecols=["Date", "Close"], parse_dates=["Date"])
+        else:
+            r = requests.get(RAW_BASE.format(name=requests.utils.quote(name)), timeout=timeout)
+            r.raise_for_status()
+            from io import StringIO
+            raw = pd.read_csv(StringIO(r.text), usecols=["Date", "Close"], parse_dates=["Date"])
+            if path:
+                local_dir.mkdir(parents=True, exist_ok=True)
+                raw.to_csv(path, index=False)
+    except Exception as exc:  # noqa: BLE001 - the scan never fails for want of the index
+        log.warning("index %s unavailable (%s); the scoreboard will use raw moves", name, exc)
+        return None
+    raw = raw[raw["Close"] > 0].set_index("Date").sort_index()
+    raw = raw[raw.index <= as_of].iloc[-days:]
+    if raw.empty:
+        return None
+    return {"name": name.upper(), "dates": [d.strftime("%Y-%m-%d") for d in raw.index],
+            "closes": [round(float(c), 2) for c in raw["Close"].values]}
 
 
 def equity_metrics(symbols: list[str], local_dir: Path | None, workers: int = 8) -> tuple[pd.Timestamp, list[dict]]:
