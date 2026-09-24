@@ -217,6 +217,7 @@ server/kite_login.py  daily access-token helper
 server/paper.py       paper ledger: book-walk fills, marks, stops, T-2 exits (guide 12)
 server/charges.py     the full charge stack; server/liquidity.py, server/fills.py, server/risk.py
 scanner/backtest_cheap_options.py  cheap-option backtest from NSE bhavcopies
+scanner/backtest_labels.py         label backtest: labels vs the market-adjusted move that followed
 scanner/events/       free exchange-event feed: fetchers, taxonomy, buckets, store (guide 14)
 scanner/event_study.py  market-adjusted returns around each event type (T-5..T+5)
 scanner/model.py      walk-forward gradient boosting on scan + event features; scanner/verdict_rules.py

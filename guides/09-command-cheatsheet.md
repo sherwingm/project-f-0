@@ -47,6 +47,7 @@ python -m scanner.model --report                         # print the saved model
 python -m pytest                                         # the test suite (pip install -r requirements-dev.txt)
 python -m scanner.backtest_cheap_options --months 12 --max-premium 2 --dte 3 7 --out data/backtest_cheap.csv
                                                          # cheap-option backtest from NSE bhavcopies (home connection)
+python -m scanner.backtest_labels --horizon 3 --threshold 0.5 1 2   # labels vs the 3-session market-adjusted move (cached bhavcopies)
 rm data/paper_ledger.json data/paper_orders.jsonl data/paper_queue.jsonl   # start the paper account over
 
 # ---------- Tailscale

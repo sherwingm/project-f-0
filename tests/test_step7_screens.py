@@ -1,4 +1,5 @@
 """Step 7: what the Review and Orders screens are fed, and that the page shows it."""
+from datetime import datetime
 from pathlib import Path
 
 import pytest
@@ -10,6 +11,7 @@ from server.broker import PaperBroker
 from server.config import settings
 from server.paper import PaperLedger
 from server.risk import RiskGate
+from server.sessions import IST
 from tests.test_step5_paper import CE, EXP, StubQuotes
 
 AUTH = ("user", "pw")
@@ -72,14 +74,15 @@ def test_market_closed_review_says_when_it_fills_and_place_queues(client, monkey
     assert c.get("/api/paper/summary", auth=AUTH).json()["queued_orders"] == 1
 
 
-def test_refusals_endpoint_counts_and_lists_reasons(client, monkeypatch):
-    c, _, q = client
-    monkeypatch.setattr(settings, "allow_lottery", False)         # refused either way: on spread, or near expiry
+def test_refusals_endpoint_counts_and_lists_reasons(client):
+    c, ledger, q = client
+    ledger.clock = lambda: datetime(2026, 9, 10, 10, 0, tzinfo=IST)   # 13 sessions to the 29 Sep expiry: not lottery
     q.set(CE, 10.0, 11.0)                                        # 9.5% spread: refused
     pv = c.post("/api/order/preview", json=BODY, auth=AUTH).json()
+    assert pv["review"]["sessions_to_expiry"] == 13
     assert pv["token"] is None and any("liquidity" in b for b in pv["review"]["blocked"])
     rf = c.get("/api/paper/refusals", auth=AUTH).json()
-    assert rf["count"] == 1 and rf["refusals"][0]["contract"] == CE and rf["refusals"][0]["reasons"]
+    assert rf["count"] == 1 and rf["refusals"][0]["contract"] == CE and "spread above 8%" in rf["refusals"][0]["reasons"]
 
 
 def test_positions_expose_mtm_stop_expiry_and_t2(client):

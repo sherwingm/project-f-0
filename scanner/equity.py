@@ -21,9 +21,24 @@ CHART_DAYS = 30      # closes kept for the expandable chart
 INDEX_FILE = "nifty 50"   # eod2's NIFTY 50 file (daily/nifty 50.csv): the market the scoreboard adjusts for
 
 
+# Old NSE symbols (still in older bhavcopies) -> the symbol eod2 files the same company's history under.
+# Renames only: a merger into another listed stock (HDFC -> HDFCBANK, IDFC -> IDFCFIRSTB) is not an alias.
+# TMPV's eod2 history is not adjusted for the Oct 2025 demerger (660.75 on 2025-10-13, 395.45 on 2025-10-14).
+EOD2_ALIASES = {
+    "TATAMOTORS": "TMPV",          # Tata Motors -> Tata Motors Passenger Vehicles (demerger, Oct 2025)
+    "LTIM": "LTM",                 # LTIMindtree
+    "MCDOWELL-N": "UNITDSPR",      # United Spirits
+    "L&TFH": "LTF",                # L&T Finance
+    "GMRINFRA": "GMRAIRPORT",      # GMR Airports
+    "PVR": "PVRINOX",              # PVR INOX
+    "IBULHSGFIN": "SAMMAANCAP",    # Sammaan Capital
+}
+_MISSING: set[str] = set()
+
+
 def eod2_filename(symbol: str) -> str:
     # eod2 names files with the lowercase NSE symbol, special characters kept (m&m.csv, bajaj-auto.csv)
-    return symbol.lower()
+    return EOD2_ALIASES.get(symbol.upper(), symbol).lower()
 
 
 def load_symbol(symbol: str, local_dir: Path | None, timeout: int = 60) -> pd.DataFrame:
@@ -34,6 +49,10 @@ def load_symbol(symbol: str, local_dir: Path | None, timeout: int = 60) -> pd.Da
                           parse_dates=["Date"])
     else:
         r = requests.get(RAW_BASE.format(name=name), timeout=timeout)
+        if r.status_code == 404 and symbol not in _MISSING:       # once per symbol per run
+            _MISSING.add(symbol)
+            log.warning("eod2 has no file for %s (tried daily/%s.csv); if NSE renamed it, add it to "
+                        "EOD2_ALIASES in scanner/equity.py", symbol, name)
         r.raise_for_status()
         from io import StringIO
         raw = pd.read_csv(StringIO(r.text), usecols=["Date", "Open", "High", "Low", "Close", "Volume", "Series"],

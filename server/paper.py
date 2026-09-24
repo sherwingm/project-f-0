@@ -37,6 +37,7 @@ import threading
 import time
 from datetime import date, datetime, timedelta
 from pathlib import Path
+from typing import Callable
 
 from scanner.binomial import hits_needed
 from server import charges as ch
@@ -118,8 +119,10 @@ class QuoteSource:
 
 class PaperLedger:
     def __init__(self, data_dir: Path, quotes: QuoteSource | None = None, capital: float | None = None,
-                 tick: float | None = None, rules: Rules | None = None, always_open: bool = False):
+                 tick: float | None = None, rules: Rules | None = None, always_open: bool = False,
+                 clock: Callable[[], datetime] | None = None):
         self.dir = Path(data_dir)
+        self.clock = clock or (lambda: datetime.now(IST))    # injectable, so tests can pin the session
         self.dir.mkdir(parents=True, exist_ok=True)
         self.path = self.dir / "paper_ledger.json"
         self.orders_path = self.dir / "paper_orders.jsonl"
@@ -163,7 +166,7 @@ class PaperLedger:
                  stage: str = "preview") -> dict:
         """Everything the Review screen shows, and the list of reasons the order cannot go through.
         Runs the same way at preview, at place and when a queued order comes due."""
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         contract = contract_of(req, resolved)
         qty = int(resolved["quantity"])
         pos = self._position_for(contract["tradingsymbol"])
@@ -271,7 +274,7 @@ class PaperLedger:
             return self.evaluate(req, resolved, stop, now, stage="preview")
 
     def submit(self, req, resolved: dict, stop: float | None = None, now: datetime | None = None) -> dict:
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         with self.lock:
             self._ensure_day(now)
             review = self.evaluate(req, resolved, stop, now, stage="place")
@@ -378,7 +381,7 @@ class PaperLedger:
     def on_poll(self, feed=None, now: datetime | None = None) -> None:
         """Called after every live poll: run due queued orders, execute triggered stops and forced T-2
         exits against this poll's depth, mark everything else and look for new stop triggers."""
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         with self.lock:
             if not self.is_open(now):
                 return
@@ -521,14 +524,14 @@ class PaperLedger:
         self.state["peak_equity"] = round(max(self.state.get("peak_equity", self.state["capital"]), eq), 2)
 
     def day_pnl(self, now: datetime | None = None) -> float:
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         d = now.date().isoformat()
         daily = self.state["daily"]
         start = daily[d]["start_equity"] if d in daily else (daily[max(daily)]["end_equity"] if daily else self.state["capital"])
         return round(self.equity() - start, 2)
 
     def week_pnl(self, now: datetime | None = None) -> float:
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         monday = (now.date() - timedelta(days=now.weekday())).isoformat()
         daily = self.state["daily"]
         this_week = sorted(d for d in daily if d >= monday)
@@ -550,7 +553,7 @@ class PaperLedger:
 
     # ------------------------------------------------------------ views
     def summary(self, now: datetime | None = None) -> dict:
-        now = (now or datetime.now(IST)).astimezone(IST)
+        now = (now or self.clock()).astimezone(IST)
         with self.lock:
             eq, peak = self.equity(), max(self.state.get("peak_equity", self.state["capital"]), self.equity())
             out = {"capital": self.state["capital"], "cash": round(self.state["cash"], 2), "equity": eq,
