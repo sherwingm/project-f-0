@@ -32,6 +32,7 @@ EOD2_ALIASES = {
     "GMRINFRA": "GMRAIRPORT",      # GMR Airports
     "PVR": "PVRINOX",              # PVR INOX
     "IBULHSGFIN": "SAMMAANCAP",    # Sammaan Capital
+    "ZOMATO": "ETERNAL",           # Eternal (Zomato), Mar 2025
 }
 _MISSING: set[str] = set()
 

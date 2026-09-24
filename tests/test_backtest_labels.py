@@ -84,3 +84,39 @@ def test_table_prints(df, capsys):
     print_table(summarise(df, CAL, threshold=1.0), 1.0, 3)
     out = capsys.readouterr().out
     assert "Bullish setup" in out and "Neutral scored as if bearish (base rate)" in out and "hits needed" in out
+
+
+def test_rows_carry_the_inputs_and_both_returns(df):
+    r = at(df, 30, "ABC")
+    assert r["price_change_pct"] == 5.0 and r["volume_ratio"] == 3.0 and r["pcr"] == 1.0
+    assert r["oi_change_pct"] == pytest.approx(10.0)
+    assert r["fwd_return"] == pytest.approx(3.0) and r["nifty_fwd_return"] == pytest.approx(1.0)
+    assert r["move"] == pytest.approx(r["fwd_return"] - r["nifty_fwd_return"])
+
+
+def test_annotate_marks_scored_rows_and_reasons(df):
+    from scanner.backtest_labels import annotate
+    a = annotate(df, CAL, threshold=1.0)
+    row = lambda i, s: a[(a["date"] == CAL[i].isoformat()) & (a["symbol"] == s)].iloc[0]
+    assert (row(30, "ABC")["scored"], row(30, "ABC")["hit"]) == ("Y", "Y")
+    assert (row(31, "ABC")["scored"], row(31, "ABC")["scored_reason"], row(31, "ABC")["hit"]) == ("N", "dup", "")
+    assert (row(30, "XYZ")["scored"], row(30, "XYZ")["hit"]) == ("Y", "N")
+    assert row(30, "NEU")["scored_reason"] == "neutral" and row(30, "NEU")["scored"] == "N"
+    assert annotate(df, CAL, threshold=2.0).pipe(lambda x: x[(x["date"] == CAL[30].isoformat()) & (x["symbol"] == "ABC")])[
+        "scored_reason"].iloc[0] == "small"
+
+
+def test_versus_base_and_z():
+    from scanner.backtest_labels import two_prop_z
+    assert two_prop_z(60, 100, 50, 100) == pytest.approx(1.421, abs=0.001)
+    assert two_prop_z(1, 1, 2, 2) is None and two_prop_z(0, 0, 5, 10) is None
+
+
+def test_versus_base_rows(df):
+    from scanner.backtest_labels import versus_base
+    rows = {(r["label"], r["threshold_pct"]): r for r in versus_base(df, CAL, [1.0])}
+    bull = rows[(BULLISH, 1.0)]
+    assert (bull["scored_n"], bull["hits"], bull["hit_pct"], bull["base_n"], bull["base_hit_pct"]) == (1, 1, 100.0, 2, 100.0)
+    assert bull["diff_pts"] == 0.0 and bull["needs_vs_coin"] == 2
+    bear = rows[(BEARISH, 1.0)]
+    assert (bear["hits"], bear["base_hits"], bear["base_n"]) == (0, 0, 2)

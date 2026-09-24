@@ -6,6 +6,15 @@ For every session in the window, every stock option in that day's bhavcopy with 
 and dte-min..dte-max sessions to expiry becomes one row: date, symbol, contract, strike, premium, spot
 (UndrlygPric), sessions to expiry, lot size, volume, OI, and the scanner's label for the stock that day
 (scanner.classify on that day's futures OI/PCR from the bhavcopy plus eod2 price change and volume ratio).
+
+Rows that cannot be valued are flagged in column `excluded` and left out of the summary (they stay in the CSV):
+    below_intrinsic   the close is below the option's intrinsic value on the buy date (spot: UndrlygPric, else
+                      the same-expiry future), by more than 1% of spot: a stale print from a contract that did
+                      not trade, not a price anyone could buy at
+    contract_changed  the contract no longer exists on its expiry day: NSE adjusted the strikes (bonus, split,
+                      demerger), so the old strike cannot be valued against the post-action price
+    price_adjusted    the future's raw move from the buy date to the exit/expiry day differs from eod2's
+                      corporate-action-adjusted move by more than CA_TOLERANCE: a corporate action in the window
 One lot is bought at the close + 1 tick; cost = entry x lot + buy-leg charges (server/charges.py). Outcomes:
     (a) exit   sell at the option's close `--hold` (3) sessions later - 1 tick, less sell-leg charges. A sale that
                would not cover its own charges is not made: payoff 0.
@@ -40,6 +49,7 @@ from .universe import fetch_fo_lots
 
 log = logging.getLogger("backtest")
 TICK = 0.05
+CA_TOLERANCE = 0.03                  # |raw futures move / eod2 adjusted move - 1| beyond this = corporate action
 MONTHS = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"]
 
 
@@ -90,11 +100,58 @@ def run(inp: Inputs, start: date, end: date, max_premium: float = 2.0, dte: tupl
             prices.popitem(last=False)
         return m
 
+    futs: OrderedDict = OrderedDict()                     # {(symbol, expiry): future close} per session
+
+    def futs_on(day: date) -> dict:
+        if day in futs:
+            futs.move_to_end(day)
+            return futs[day]
+        b = inp.bhav(day) if day in pos else None
+        m = {}
+        if b is not None:
+            f = b[(b["FinInstrmTp"] == "STF") & (b["ClsPric"] > 0)]
+            m = {(t, _d(x)): float(c) for t, x, c in zip(f["TckrSymb"], f["XpryDt"], f["ClsPric"])}
+        futs[day] = m
+        if len(futs) > 12:
+            futs.popitem(last=False)
+        return m
+
+    def excluded(sym: str, d: date, e: date, k: float, typ: str, premium: float, spot: float | None,
+                 ends: list[date]) -> str:
+        s0 = spot or futs_on(d).get((sym, e))
+        if s0:
+            intrinsic = max(0.0, s0 - k) if typ == "CE" else max(0.0, k - s0)
+            if premium < intrinsic - 0.01 * s0:
+                return "below_intrinsic"
+        if e in pos and e <= cal[-1]:
+            on_expiry = closes_on(e)
+            if on_expiry is not None and (sym, e, k, typ) not in on_expiry:
+                return "contract_changed"
+        f = frame(sym)
+        f0 = futs_on(d).get((sym, e))
+        for end in ends:
+            f1 = futs_on(end).get((sym, e))
+            if f is None or not f0 or not f1:
+                continue
+            a0, a1 = f["Close"].get(pd.Timestamp(d)), f["Close"].get(pd.Timestamp(end))
+            if a0 and a1 and abs((f1 / f0) / (a1 / a0) - 1) > CA_TOLERANCE:
+                return "price_adjusted"
+        return ""
+
     def spot_at_expiry(sym: str, e: date) -> float | None:
+        """The underlying's close on expiry day: UndrlygPric (UDiFF files); else the close of the stock future
+        expiring that day, which settles to the underlying's close (old-format files have no UndrlygPric);
+        else eod2's close, which is adjusted for later corporate actions and so a last resort."""
         if e not in expiry_spot:
             b = inp.bhav(e) if e in pos else None
-            expiry_spot[e] = {} if b is None else \
-                b[b["UndrlygPric"] > 0].groupby("TckrSymb")["UndrlygPric"].first().astype(float).to_dict()
+            m: dict[str, float] = {}
+            if b is not None:
+                stf = b[(b["FinInstrmTp"] == "STF") & (b["ClsPric"] > 0)]
+                stf = stf[stf["XpryDt"].map(_d) == e]
+                m.update(stf.groupby("TckrSymb")["ClsPric"].first().astype(float).to_dict())
+                if "UndrlygPric" in b:
+                    m.update(b[b["UndrlygPric"] > 0].groupby("TckrSymb")["UndrlygPric"].first().astype(float).to_dict())
+            expiry_spot[e] = m
         v = expiry_spot[e].get(sym)
         if v is None:                                    # no bhavcopy for that day: eod2's close
             f = frame(sym)
@@ -144,7 +201,10 @@ def run(inp: Inputs, start: date, end: date, max_premium: float = 2.0, dte: tupl
             row = {"date": d.isoformat(), "symbol": sym, "contract": contract_name(sym, e, k, typ), "type": typ, "strike": k,
                    "expiry": e.isoformat(), "premium": premium, "spot": float(r["UndrlygPric"]) if r["UndrlygPric"] > 0 else None,
                    "dte": exps[r["XpryDt"]], "lot": lot, "volume": int(r["TtlTradgVol"]), "oi": int(r["OpnIntrst"]),
-                   "label": labels[sym], "entry_price": entry, "cost": round(cost, 2)}
+                   "label": labels[sym], "entry_price": entry, "cost": round(cost, 2),
+                   "excluded": excluded(sym, d, e, k, typ, premium,
+                                        float(r["UndrlygPric"]) if r["UndrlygPric"] > 0 else None,
+                                        [x for x in (exit_day, e) if x is not None and x in pos])}
             # (a) sell `hold` sessions later at that close - 1 tick
             xc = exit_closes.get((sym, e, k, typ)) if exit_closes is not None else None
             if exit_day is None or xc is None:
@@ -204,6 +264,9 @@ def groups(df: pd.DataFrame, dte: tuple[int, int]) -> list[tuple[str, pd.Series]
 
 
 def summarise(df: pd.DataFrame, dte: tuple[int, int]) -> dict[str, list[dict]]:
+    """Per group and exit rule; rows flagged in `excluded` are left out."""
+    if "excluded" in df:
+        df = df[df["excluded"].fillna("").astype(str) == ""]
     out: dict[str, list[dict]] = {}
     for key, _ in OUTCOMES:
         rows = []
@@ -298,6 +361,7 @@ def _read_index(eod2_dir: Path) -> pd.DataFrame:
 def main() -> None:
     ap = argparse.ArgumentParser(description="Backtest cheap near-expiry stock options from NSE bhavcopies (numbers only)")
     ap.add_argument("--months", type=int, default=12)
+    ap.add_argument("--since", type=date.fromisoformat, default=None, help="start date (overrides --months)")
     ap.add_argument("--max-premium", type=float, default=2.0)
     ap.add_argument("--dte", type=int, nargs=2, default=[3, 7], metavar=("MIN", "MAX"), help="sessions to expiry, inclusive")
     ap.add_argument("--hold", type=int, default=3, help="sessions until the outcome (a) exit")
@@ -312,7 +376,7 @@ def main() -> None:
 
     inp = NseInputs(a.eod2_dir, a.cache_dir)
     end = inp.eod2_last                                   # labels need eod2 price/volume for the day
-    start = (pd.Timestamp(end) - pd.DateOffset(months=a.months)).date() + timedelta(days=1)
+    start = a.since or (pd.Timestamp(end) - pd.DateOffset(months=a.months)).date() + timedelta(days=1)
     log.info("window %s to %s (%d sessions); calendar runs to %s", start, end,
              sum(start <= d <= end for d in inp.sessions), inp.sessions[-1])
     df = run(Inputs(inp.sessions, inp.bhav, inp.equity, inp.lots), start, end, a.max_premium, tuple(a.dte), a.hold, a.tick, a.min_volume)

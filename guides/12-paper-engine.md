@@ -75,7 +75,10 @@ Two scores, deliberately separate:
    bucket (`normal` vs `cheap_near_expiry`). A high hit rate with a negative mean net is the classic
    cheap-option shape: many small losses, a rare large win. The bucket exists so that shape cannot hide
    inside the ordinary trades — and `python -m scanner.backtest_cheap_options` (guide 09) measures the same
-   bucket across a year of history instead of your handful of fills.
+   bucket across a year of history instead of your handful of fills. Rows that cannot be valued are flagged
+   in the CSV's `excluded` column and left out of the summary: a close below intrinsic value (a stale print
+   from a contract that did not trade), and contracts spanning a bonus, split or demerger (NSE adjusts their
+   strikes, so the old strike cannot be valued against the post-action price).
 
 ## Files and endpoints
 

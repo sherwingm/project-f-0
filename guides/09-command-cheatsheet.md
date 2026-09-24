@@ -49,6 +49,7 @@ python -m scanner.backtest_cheap_options --months 12 --max-premium 2 --dte 3 7 -
                                                          # cheap-option backtest from NSE bhavcopies (home connection)
 python -m scanner.bhav_cache --since 2023-01-01               # fill the F&O bhavcopy cache (resumable, 1 request/s, home connection)
 python -m scanner.backtest_labels --horizon 3 --threshold 0.5 1 2   # labels vs the 3-session market-adjusted move (cached bhavcopies)
+python -m scanner.results_export --since 2023-01-01          # all result CSVs + column notes -> data/results/ (--only labels cheap events model)
 rm data/paper_ledger.json data/paper_orders.jsonl data/paper_queue.jsonl   # start the paper account over
 
 # ---------- Tailscale

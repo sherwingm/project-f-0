@@ -99,3 +99,36 @@ def test_missing_outcome_data_is_left_blank_not_guessed():
     inp = Inputs(sessions=[D0, D1, D2], bhav=lambda d: BHAV[D0] if d == D0 else None, equity=equity, lots={})
     r = run(inp, D0, D0, max_premium=2.0, dte=(2, 2), hold=2)
     assert r["exit_net"].isna().all() and r["expiry_net"].isna().all()
+
+
+def test_old_format_days_take_the_expiry_spot_from_the_expiring_future():
+    # old-format bhavcopies have no UndrlygPric; the future expiring that day settles to the underlying's close
+    old = {d: b.assign(UndrlygPric=float("nan")).drop(columns=["NewBrdLotQty"]) for d, b in BHAV.items()}
+    inp =Inputs(sessions=[D0, D1, D2], bhav=old.get, equity=equity, lots={"ABC": 100})
+    c = run(inp, D0, D0, max_premium=2.0, dte=(2, 2), hold=2).set_index("type").loc["CE"]
+    assert c["expiry_spot"] == 114.0 and c["intrinsic"] == 4.0 and pd.isna(c["spot"]) and c["lot"] == 100
+
+
+def test_corporate_actions_are_flagged_and_left_out_of_the_summary():
+    # the 110 CE disappears on expiry day (strikes adjusted, e.g. a bonus): contract_changed
+    changed = {**BHAV, D2: BHAV[D2][~((BHAV[D2]["OptnTp"] == "CE") & (BHAV[D2]["StrkPric"] == 110))]}
+    r = run(Inputs([D0, D1, D2], changed.get, equity, {"ABC": 100}), D0, D0, 2.0, (2, 2), 2).set_index("type")
+    assert r.loc["CE", "excluded"] == "contract_changed" and r.loc["PE", "excluded"] == ""
+
+    # eod2 halves its (adjusted) history while the raw future moved +8.6%: price_adjusted
+    def adjusted(sym):
+        days = pd.bdate_range(end=pd.Timestamp(D2), periods=32)
+        close = [100.0] * 29 + [105.0, 110.0, 57.0]
+        return pd.DataFrame({"Open": close, "High": close, "Low": close, "Close": close, "Volume": [1000.0] * 32},
+                            index=days)
+    r2 = run(Inputs([D0, D1, D2], BHAV.get, adjusted, {"ABC": 100}), D0, D0, 2.0, (2, 2), 2)
+    assert set(r2["excluded"]) == {"price_adjusted"}
+    s = summarise(r2, (2, 2))
+    assert all(row["count"] == 0 for rows in s.values() for row in rows)          # flagged rows are left out
+
+
+def test_a_close_below_intrinsic_is_a_stale_print_and_is_excluded():
+    # the 110 CE closes at Rs 1.00 while ABC trades at 120: Rs 10 in the money, so Rs 1 is not a real price
+    stale = {**BHAV, D0: rows(D0, 1.00, 0.50, 120.0)}
+    r = run(Inputs([D0, D1, D2], stale.get, equity, {"ABC": 100}), D0, D0, 2.0, (2, 2), 2).set_index("type")
+    assert r.loc["CE", "excluded"] == "below_intrinsic" and r.loc["PE", "excluded"] == ""

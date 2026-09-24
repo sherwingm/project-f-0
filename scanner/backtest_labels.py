@@ -23,11 +23,11 @@ from typing import Callable
 
 import pandas as pd
 
-from .backtest_cheap_options import _label, _read_index
+from .backtest_cheap_options import _read_index
 from .binomial import binomial_line, hits_needed
 from .build import ROOT
-from .classify import BEARISH, BULLISH, NEUTRAL, UNCLASSIFIED
-from .equity import load_symbol
+from .classify import BEARISH, BULLISH, NEUTRAL, UNCLASSIFIED, classify
+from .equity import equity_metrics_one, load_symbol
 from .nse_fo import download_fo_bhavcopy, fo_metrics
 from .universe import fetch_fo_lots
 
@@ -44,7 +44,8 @@ GROUPS = ((BULLISH, "bullish", "Bullish setup"),
 def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame | None],
         equity: Callable[[str], pd.DataFrame | None], symbols: list[str], index: pd.Series,
         horizon: int = HORIZON) -> pd.DataFrame:
-    """One row per stock-day: date, symbol, label, move (market-adjusted %, None when the horizon is past the data)."""
+    """One row per stock-day: date, symbol, label, the four inputs the label was computed from, and the stock's
+    and NIFTY's returns over the horizon with move = their difference (%, None when the horizon is past the data)."""
     pos = {d: i for i, d in enumerate(cal)}
     idx = {d.date() if hasattr(d, "date") else d: float(v) for d, v in index.items()}
     frames: dict[str, pd.DataFrame | None] = {}
@@ -60,34 +61,59 @@ def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame |
                 frames[sym] = equity(sym)
                 f = frames[sym]
                 closes[sym] = {} if f is None else {t.date(): float(c) for t, c in f["Close"].items()}
-            label = _label(sym, d, frames[sym], fo.get(sym))
+            inputs = label_inputs(sym, d, frames[sym], fo.get(sym))
             c0, c1 = closes[sym].get(d), closes[sym].get(to) if to else None
-            move = None
+            ret = nifty = move = None
             if c0 and c1 and idx.get(d) and idx.get(to):
+                ret, nifty = round((c1 / c0 - 1) * 100, 3), round((idx[to] / idx[d] - 1) * 100, 3)
                 move = round(((c1 / c0) - (idx[to] / idx[d])) * 100, 3)
-            rows.append({"date": d.isoformat(), "symbol": sym, "label": label, "to": to.isoformat() if to else None,
-                         "move": move})
+            rows.append({"date": d.isoformat(), "symbol": sym, **inputs, "to": to.isoformat() if to else None,
+                         "fwd_return": ret, "nifty_fwd_return": nifty, "move": move})
         if n % 25 == 0:
             log.info("%s: %d of %d sessions", d, n, len(days))
-    return pd.DataFrame(rows, columns=["date", "symbol", "label", "to", "move"])
+    return pd.DataFrame(rows, columns=["date", "symbol", "label", "price_change_pct", "volume_ratio", "oi_change_pct",
+                                       "pcr", "to", "fwd_return", "nifty_fwd_return", "move"])
+
+
+def label_inputs(sym: str, d: date, frame: pd.DataFrame | None, fo: dict | None) -> dict:
+    """The label and the four numbers it came from (same path as backtest_cheap_options._label)."""
+    out = {"label": UNCLASSIFIED, "price_change_pct": None, "volume_ratio": None, "oi_change_pct": None, "pcr": None}
+    m = equity_metrics_one(sym, frame, as_of=pd.Timestamp(d)) if frame is not None else None
+    if not m or m["date"] != d.isoformat():
+        return out
+    clean = lambda v: None if v is None or pd.isna(v) else float(v)
+    fo = fo or {}
+    row = {**m, "oi_change_pct": clean(fo.get("oi_change_pct")), "pcr": clean(fo.get("pcr"))}
+    return {"label": classify(row)["label"], "price_change_pct": m["price_change_pct"], "volume_ratio": m["volume_ratio"],
+            "oi_change_pct": None if row["oi_change_pct"] is None else round(row["oi_change_pct"], 3),
+            "pcr": None if row["pcr"] is None else round(row["pcr"], 4)}
+
+
+def statuses(items: pd.DataFrame, direction: str, threshold: float, cal_pos: dict[str, int], gap: int = GAP):
+    """(row index, status) for one stream of calls pointing `direction`, by the page's Scoring.score rules:
+    dup (within `gap` sessions of the stock's previous scored call), pending (no move yet), small
+    (|move| <= threshold), hit or miss."""
+    last: dict[str, int] = {}
+    for i, r in items.sort_values(["date", "symbol"]).iterrows():
+        p = cal_pos[r["date"]]
+        if r["symbol"] in last and p - last[r["symbol"]] < gap:
+            yield i, "dup"
+            continue
+        last[r["symbol"]] = p
+        mv = r["move"]
+        if mv is None or (isinstance(mv, float) and math.isnan(mv)):
+            yield i, "pending"
+        elif abs(mv) <= threshold:
+            yield i, "small"
+        else:
+            yield i, "hit" if (mv > 0) == (direction == "bullish") else "miss"
 
 
 def score(items: pd.DataFrame, direction: str, threshold: float, cal_pos: dict[str, int], gap: int = GAP) -> dict:
     """Scoring.score from the page, for one stream of calls that all point `direction`."""
-    last: dict[str, int] = {}
     c = {"hit": 0, "miss": 0, "dup": 0, "small": 0, "pending": 0}
-    for r in items.sort_values(["date", "symbol"]).itertuples(index=False):
-        p = cal_pos[r.date]
-        if r.symbol in last and p - last[r.symbol] < gap:
-            c["dup"] += 1
-            continue
-        last[r.symbol] = p
-        if r.move is None or (isinstance(r.move, float) and math.isnan(r.move)):
-            c["pending"] += 1
-        elif abs(r.move) <= threshold:
-            c["small"] += 1
-        else:
-            c["hit" if (r.move > 0) == (direction == "bullish") else "miss"] += 1
+    for _, st in statuses(items, direction, threshold, cal_pos, gap):
+        c[st] += 1
     n = c["hit"] + c["miss"]
     return {"n": n, "hits": c["hit"], "hit_pct": round(c["hit"] / n * 100, 2) if n else None,
             "needed": hits_needed(n), "clears": c["hit"] >= hits_needed(n) if n else None,
@@ -101,6 +127,50 @@ def summarise(df: pd.DataFrame, cal: list[date], threshold: float, gap: int = GA
         sub = df[df["label"] == label]
         out.append({"group": name, "stock_days": len(sub), **score(sub, direction, threshold, cal_pos, gap)})
     return out
+
+
+def annotate(df: pd.DataFrame, cal: list[date], threshold: float, gap: int = GAP) -> pd.DataFrame:
+    """Per stock-day: scored Y/N, scored_reason (dup / small / pending / neutral / unclassified) and hit Y/N
+    (blank unless scored). Bullish and Bearish labels are scored as calls; Neutral and Unclassified are not."""
+    cal_pos = {d.isoformat(): i for i, d in enumerate(cal)}
+    out = df.copy()
+    out["scored"], out["scored_reason"], out["hit"] = "N", "", ""
+    out.loc[out["label"] == NEUTRAL, "scored_reason"] = "neutral"
+    out.loc[out["label"] == UNCLASSIFIED, "scored_reason"] = "unclassified"
+    for label, direction in ((BULLISH, "bullish"), (BEARISH, "bearish")):
+        for i, st in statuses(out[out["label"] == label], direction, threshold, cal_pos, gap):
+            if st in ("hit", "miss"):
+                out.at[i, "scored"], out.at[i, "hit"] = "Y", "Y" if st == "hit" else "N"
+            else:
+                out.at[i, "scored_reason"] = st
+    return out
+
+
+def versus_base(df: pd.DataFrame, cal: list[date], thresholds, gap: int = GAP) -> list[dict]:
+    """Per label x threshold: the label's hit rate against Neutral scored the same way (the base rate),
+    the difference in points, a two-proportion z, and the hits needed to beat a coin at that N."""
+    cal_pos = {d.isoformat(): i for i, d in enumerate(cal)}
+    out = []
+    for th in thresholds:
+        for label, direction in ((BULLISH, "bullish"), (BEARISH, "bearish")):
+            sub = df[df["label"] == label]
+            s = score(sub, direction, th, cal_pos, gap)
+            b = score(df[df["label"] == NEUTRAL], direction, th, cal_pos, gap)
+            out.append({"label": label, "threshold_pct": th, "stock_days": len(sub), "scored_n": s["n"],
+                        "hits": s["hits"], "hit_pct": s["hit_pct"], "base_n": b["n"], "base_hits": b["hits"],
+                        "base_hit_pct": b["hit_pct"],
+                        "diff_pts": round(s["hit_pct"] - b["hit_pct"], 2) if s["n"] and b["n"] else None,
+                        "z_vs_base": two_prop_z(s["hits"], s["n"], b["hits"], b["n"]), "needs_vs_coin": s["needed"]})
+    return out
+
+
+def two_prop_z(h1: int, n1: int, h0: int, n0: int) -> float | None:
+    """z for p1 - p0 with the pooled standard error; None when either side is empty or the pool is degenerate."""
+    if not n1 or not n0:
+        return None
+    p = (h1 + h0) / (n1 + n0)
+    se = math.sqrt(p * (1 - p) * (1 / n1 + 1 / n0))
+    return round((h1 / n1 - h0 / n0) / se, 3) if se else None
 
 
 def print_table(summary: list[dict], threshold: float, horizon: int) -> None:
