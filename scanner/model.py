@@ -338,7 +338,8 @@ def load_model(path: Path = MODEL_PATH) -> dict | None:
 
 
 def infer_for_scan(stocks: list[dict], index_closes: dict | None, payload: dict | None = None) -> None:
-    """Adds model: {p_up, p_down, p_flat, trained_through, oos_brier, base_brier} to each scan stock, in place."""
+    """Adds model: {p_up, p_down, p_flat, trained_through, oos_brier, base_brier} to each scan stock, in place, and
+    model_top_decile: "up" / "down" / "both" when p_up / p_down is in the top 10% of that day's scan, else None."""
     payload = payload or load_model()
     if payload is None:
         return
@@ -369,10 +370,14 @@ def infer_for_scan(stocks: list[dict], index_closes: dict | None, payload: dict 
     df = pd.DataFrame(rows)
     X, _ = featurise(df, payload["features"])
     proba = _proba_ordered(payload["model"], X)
+    cut_down, cut_up = np.quantile(proba[:, 0], 0.9), np.quantile(proba[:, 2], 0.9)
     for s, p in zip(stocks, proba):
         s["model"] = {"p_down": round(float(p[0]), 3), "p_flat": round(float(p[1]), 3), "p_up": round(float(p[2]), 3),
                       "trained_through": payload["trained_through"], "oos_brier": payload["oos_brier"],
                       "base_brier": payload.get("base_brier")}
+        # display only (never a vote): is this stock's p_up / p_down in the top 10% of today's scan?
+        top = [k for k, hit in (("up", p[2] >= cut_up), ("down", p[0] >= cut_down)) if hit]
+        s["model_top_decile"] = "both" if len(top) == 2 else (top[0] if top else None)
 
 
 def main() -> None:

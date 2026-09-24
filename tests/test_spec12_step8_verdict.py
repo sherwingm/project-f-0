@@ -79,7 +79,7 @@ def test_verdict_is_model_free_safe(model_counts):
 
 @pytest.mark.parametrize("piece", [
     "Verdict (computed by fixed rules, not advice)", "verdictCard(s)", "p(up)", "out-of-sample Brier",
-    "vs base rate", "vote weight",
+    "vs base rate", "vote weight", "top decile of today's p(", "display only, not a vote",
     "no analyst views (tier-3 news)", "pattern over ", "event_patterns", "votes — data"])
 def test_card_is_in_the_template(piece):
     assert piece in TEMPLATE

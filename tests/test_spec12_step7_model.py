@@ -118,3 +118,29 @@ def test_base_rate_brier_and_fold_fields():
     assert o["brier"] >= o["base_brier"] - 0.01                                   # noise: no better than the base
     assert {"train_end", "test_start", "test_end", "base_brier", "top_decile"} <= set(f)
     assert set(f["top_decile"]) == {"up", "down"}
+
+
+def test_model_top_decile_flag_is_per_day_and_display_only(monkeypatch, tmp_path):
+    from scanner import model as model_mod
+    from scanner.verdict_rules import verdict
+    monkeypatch.setattr(model_mod, "SECTORS_PATH", tmp_path / "sectors.csv")
+    n = 20
+    ups = np.linspace(0.10, 0.60, n)                                    # stock i: p_up rises, p_down falls with i
+    downs = np.linspace(0.55, 0.05, n)
+
+    class Stub:
+        classes_ = np.array(["down", "flat", "up"])
+
+        def predict_proba(self, X):
+            return np.stack([downs, 1 - ups - downs, ups], axis=1)
+
+    payload = {"model": Stub(), "features": featurise(synth(60))[1], "classes": list(CLASSES),
+               "trained_through": "2026-06-30", "oos_brier": 0.67, "base_brier": 0.667}
+    stocks = [{"symbol": f"S{i}", "price_change_pct": 0.0, "volume_ratio": 1.0, "oi_change_pct": 0.0, "pcr": 1.0,
+               "label": "Neutral", "chart_closes": [], "events": {"flags": {}}} for i in range(n)]
+    infer_for_scan(stocks, None, payload)
+    flags = [s["model_top_decile"] for s in stocks]
+    assert flags[-2:] == ["up", "up"] and flags[:2] == ["down", "down"] and flags.count(None) == n - 4
+    before = verdict(stocks[-1])
+    stocks[-1]["model_top_decile"] = None
+    assert verdict(stocks[-1]) == before                                 # never a vote
