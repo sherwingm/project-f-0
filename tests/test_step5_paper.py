@@ -25,6 +25,10 @@ def at(day, hh=10, mm=0):
     return datetime(2026, 9, day, hh, mm, tzinfo=IST)
 
 
+CLOCK = lambda: at(22)                      # every ledger built here reads this, never the machine's clock:
+                                            # Tue 22 Sep, 5 sessions before the 29 Sep expiry the tests trade
+
+
 class StubQuotes:
     """Quote source whose book the test sets directly."""
     def __init__(self):
@@ -53,7 +57,7 @@ def resolved(ts, lots=1):
 @pytest.fixture
 def lg(tmp_path):
     q = StubQuotes()
-    ledger = PaperLedger(tmp_path, q, capital=500_000)
+    ledger = PaperLedger(tmp_path, q, capital=500_000, clock=CLOCK)
     return ledger, q
 
 
@@ -200,12 +204,12 @@ def test_ledger_survives_a_restart(lg, tmp_path):
     ledger, q = lg
     q.set(CE, 4.0, 4.1)
     ledger.submit(order(), resolved(CE), now=at(21))
-    again = PaperLedger(tmp_path, q)
+    again = PaperLedger(tmp_path, q, clock=CLOCK)
     assert again.positions_view()[0]["tradingsymbol"] == CE and again.state["cash"] == ledger.state["cash"]
 
 
 def test_no_live_depth_means_no_fill(tmp_path):
-    ledger = PaperLedger(tmp_path, None, capital=500_000)
+    ledger = PaperLedger(tmp_path, None, capital=500_000, clock=CLOCK)
     with pytest.raises(PaperRejected, match="no live depth"):
         ledger.submit(order(), resolved(CE), now=at(21))
 
@@ -217,7 +221,7 @@ def test_api_preview_place_and_paper_endpoints(tmp_path, monkeypatch):
 
     q = StubQuotes()
     q.set(CE, 4.0, 4.1)
-    ledger = PaperLedger(tmp_path, q, capital=500_000, always_open=True)
+    ledger = PaperLedger(tmp_path, q, capital=500_000, always_open=True, clock=CLOCK)
     monkeypatch.setattr(settings, "app_password", "pw")
     monkeypatch.setattr(app_mod.state, "ledger", ledger)
     monkeypatch.setattr(app_mod.state, "broker", PaperBroker(tmp_path, ledger))

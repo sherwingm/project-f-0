@@ -5,7 +5,7 @@ import pytest
 
 from server.paper import PaperLedger, PaperRejected
 from server.risk import RiskGate
-from tests.test_step5_paper import CE, FUT, StubQuotes, allow_lottery, at, order, resolved  # noqa: F401 (autouse fixture)
+from tests.test_step5_paper import CE, CLOCK, FUT, StubQuotes, allow_lottery, at, order, resolved  # noqa: F401 (autouse fixture)
 
 DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, weekly_loss_halt_pct=3.0, drawdown_review_pct=10,
                 margin_cap_pct=30, max_new_positions_per_day=3, max_new_positions_per_month=20, block_expiry_day_entries=True)
@@ -13,7 +13,7 @@ DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, weekly_loss_hal
 
 def make(tmp_path, **over):
     q = StubQuotes()
-    ledger = PaperLedger(tmp_path, q, capital=500_000)
+    ledger = PaperLedger(tmp_path, q, capital=500_000, clock=CLOCK)
     ledger.risk = RiskGate(SimpleNamespace(**{**DEFAULTS, **over}))
     return ledger, q
 

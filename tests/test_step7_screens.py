@@ -12,7 +12,7 @@ from server.config import settings
 from server.paper import PaperLedger
 from server.risk import RiskGate
 from server.sessions import IST
-from tests.test_step5_paper import CE, EXP, StubQuotes
+from tests.test_step5_paper import CE, CLOCK, EXP, StubQuotes
 
 AUTH = ("user", "pw")
 BODY = {"symbol": "RELIANCE", "instrument": "CE", "expiry": EXP, "strike": 1300, "side": "BUY", "lots": 1, "order_type": "MARKET"}
@@ -29,7 +29,7 @@ def allow_lottery(monkeypatch):
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     q = StubQuotes()
-    ledger = PaperLedger(tmp_path, q, capital=500_000, always_open=True)
+    ledger = PaperLedger(tmp_path, q, capital=500_000, always_open=True, clock=CLOCK)
     ledger.risk = RiskGate(settings)
     monkeypatch.setattr(settings, "app_password", "pw")
     monkeypatch.setattr(app_mod.state, "ledger", ledger)
