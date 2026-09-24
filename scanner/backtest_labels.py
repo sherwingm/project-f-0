@@ -34,6 +34,7 @@ from .universe import fetch_fo_lots
 log = logging.getLogger("backtest_labels")
 HORIZON = 3
 GAP = 3
+RETURN_HORIZONS = (1, 3, 5)          # market-adjusted returns reported per label (adj_1, adj_3, adj_5)
 # (label, scored as, row name)
 GROUPS = ((BULLISH, "bullish", "Bullish setup"),
           (NEUTRAL, "bullish", "Neutral scored as if bullish (base rate)"),
@@ -43,9 +44,10 @@ GROUPS = ((BULLISH, "bullish", "Bullish setup"),
 
 def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame | None],
         equity: Callable[[str], pd.DataFrame | None], symbols: list[str], index: pd.Series,
-        horizon: int = HORIZON) -> pd.DataFrame:
+        horizon: int = HORIZON, extra_horizons: tuple[int, ...] = RETURN_HORIZONS) -> pd.DataFrame:
     """One row per stock-day: date, symbol, label, the four inputs the label was computed from, and the stock's
-    and NIFTY's returns over the horizon with move = their difference (%, None when the horizon is past the data)."""
+    and NIFTY's returns over the horizon with move = their difference (%, None when the horizon is past the data),
+    plus adj_<h> = the same difference over each of `extra_horizons` sessions."""
     pos = {d: i for i, d in enumerate(cal)}
     idx = {d.date() if hasattr(d, "date") else d: float(v) for d, v in index.items()}
     frames: dict[str, pd.DataFrame | None] = {}
@@ -56,6 +58,7 @@ def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame |
         fo = {} if b is None else {r["symbol"]: r for r in fo_metrics(b).to_dict("records")}
         j = pos[d] + horizon
         to = cal[j] if j < len(cal) else None
+        ends = {h: (cal[pos[d] + h] if pos[d] + h < len(cal) else None) for h in extra_horizons}
         for sym in symbols:
             if sym not in frames:
                 frames[sym] = equity(sym)
@@ -67,12 +70,18 @@ def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame |
             if c0 and c1 and idx.get(d) and idx.get(to):
                 ret, nifty = round((c1 / c0 - 1) * 100, 3), round((idx[to] / idx[d] - 1) * 100, 3)
                 move = round(((c1 / c0) - (idx[to] / idx[d])) * 100, 3)
+            adj = {}
+            for h, e in ends.items():
+                ce = closes[sym].get(e) if e else None
+                adj[f"adj_{h}"] = round(((ce / c0) - (idx[e] / idx[d])) * 100, 3) \
+                    if c0 and ce and idx.get(d) and idx.get(e) else None
             rows.append({"date": d.isoformat(), "symbol": sym, **inputs, "to": to.isoformat() if to else None,
-                         "fwd_return": ret, "nifty_fwd_return": nifty, "move": move})
+                         "fwd_return": ret, "nifty_fwd_return": nifty, "move": move, **adj})
         if n % 25 == 0:
             log.info("%s: %d of %d sessions", d, n, len(days))
     return pd.DataFrame(rows, columns=["date", "symbol", "label", "price_change_pct", "volume_ratio", "oi_change_pct",
-                                       "pcr", "to", "fwd_return", "nifty_fwd_return", "move"])
+                                       "pcr", "to", "fwd_return", "nifty_fwd_return", "move",
+                                       *(f"adj_{h}" for h in extra_horizons)])
 
 
 def label_inputs(sym: str, d: date, frame: pd.DataFrame | None, fo: dict | None) -> dict:
@@ -161,6 +170,48 @@ def versus_base(df: pd.DataFrame, cal: list[date], thresholds, gap: int = GAP) -
                         "base_hit_pct": b["hit_pct"],
                         "diff_pts": round(s["hit_pct"] - b["hit_pct"], 2) if s["n"] and b["n"] else None,
                         "z_vs_base": two_prop_z(s["hits"], s["n"], b["hits"], b["n"]), "needs_vs_coin": s["needed"]})
+    return out
+
+
+def non_overlapping(items: pd.DataFrame, cal_pos: dict[str, int], gap: int) -> pd.DataFrame:
+    """At most one row per stock in any `gap` sessions (the first), so a stock's h-session windows do not overlap."""
+    keep, last = [], {}
+    for i, r in items.sort_values(["date", "symbol"]).iterrows():
+        p = cal_pos[r["date"]]
+        if r["symbol"] in last and p - last[r["symbol"]] < gap:
+            continue
+        last[r["symbol"]] = p
+        keep.append(i)
+    return items.loc[keep]
+
+
+def _stats(v: pd.Series) -> dict:
+    v = v.dropna().astype(float)
+    n = len(v)
+    sd = float(v.std(ddof=1)) if n > 1 else None
+    return {"n": n, "mean": round(float(v.mean()), 4) if n else None, "median": round(float(v.median()), 4) if n else None,
+            "t": round(float(v.mean()) / (sd / math.sqrt(n)), 3) if n > 1 and sd else None, "sd": sd}
+
+
+def returns_vs_base(df: pd.DataFrame, cal: list[date], horizons=RETURN_HORIZONS) -> list[dict]:
+    """Per label x horizon: mean / median market-adjusted return with its t, the same for Neutral, and Welch's t of
+    the difference. Rows are non-overlapping per stock (one per `h` sessions); columns adj_<h> from run()."""
+    cal_pos = {d.isoformat(): i for i, d in enumerate(cal)}
+    out = []
+    for h in horizons:
+        col = f"adj_{h}"
+        base = _stats(non_overlapping(df[(df["label"] == NEUTRAL) & df[col].notna()], cal_pos, h)[col])
+        for label in (BULLISH, BEARISH):
+            s = _stats(non_overlapping(df[(df["label"] == label) & df[col].notna()], cal_pos, h)[col])
+            welch = None
+            if s["n"] > 1 and base["n"] > 1 and s["sd"] and base["sd"]:
+                welch = round((s["mean"] - base["mean"]) / math.sqrt(s["sd"] ** 2 / s["n"] + base["sd"] ** 2 / base["n"]), 3)
+            out.append({"label": label, "horizon_sessions": h, "stock_days": int((df["label"] == label).sum()),
+                        "n_returns": s["n"], "mean_adj_return": s["mean"], "median_adj_return": s["median"],
+                        "t_mean": s["t"], "base_n_returns": base["n"], "base_mean_adj_return": base["mean"],
+                        "base_median_adj_return": base["median"], "base_t_mean": base["t"],
+                        "diff_mean": round(s["mean"] - base["mean"], 4) if s["n"] and base["n"] else None,
+                        "welch_t_vs_base": welch})
     return out
 
 

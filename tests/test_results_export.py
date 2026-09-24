@@ -25,7 +25,8 @@ def test_labels_tables():
     abc = detail[(detail["symbol"] == "ABC") & (detail["date"] == CAL[30].isoformat())].iloc[0]
     assert abc["adj_fwd3_return"] == pytest.approx(2.0) and abc["scored"] == "Y" and abc["hit"] == "Y"
     assert {c for c, _ in rx.DOCS["labels_summary"][1]} <= set(summary.columns)
-    assert len(summary) == 2 * len(rx.THRESHOLDS)
+    assert (summary["row_type"] == "hit_rate").sum() == 2 * len(rx.THRESHOLDS)
+    assert (summary["row_type"] == "returns").sum() == 2 * 3                     # Bullish/Bearish x 1, 3, 5 sessions
 
 
 def test_cheap_tables(result):  # noqa: F811

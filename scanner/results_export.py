@@ -49,19 +49,34 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
                           f"(|adj_fwd3_return| <= {DETAIL_THRESHOLD:g}%), pending (no forward data), neutral, unclassified"),
         ("hit", "Y when scored and the move went the label's way, N when scored and it did not, blank otherwise"),
     ]),
-    "labels_summary": ("Per label x threshold, scored by the page's scoreboard rules; base = Neutral stock-days "
-                       "scored the same way in the same direction.", [
+    "labels_summary": ("Two kinds of row. hit_rate rows: per label x threshold, scored by the page's scoreboard rules; "
+                       "base = Neutral stock-days scored the same way in the same direction. returns rows: per label x "
+                       "horizon, market-adjusted returns (stock minus NIFTY 50) against Neutral over the same horizon, "
+                       "one stock-day per stock per horizon (non-overlapping windows). Columns that do not apply to a "
+                       "row type are blank.", [
+        ("row_type", "hit_rate or returns"),
         ("label", "Bullish setup (scored as bullish) or Bearish setup (scored as bearish)"),
-        ("threshold_pct", "a call is scored only when |adj_fwd3_return| exceeds this, %"),
+        ("threshold_pct", "hit_rate rows: a call is scored only when |adj_fwd3_return| exceeds this, %"),
+        ("horizon_sessions", "sessions ahead the return is measured over (3 on hit_rate rows)"),
         ("stock_days", "stock-days with this label"),
-        ("scored_n", "calls scored (not dup, small or pending)"),
-        ("hits", "scored calls where the move went the label's way"),
-        ("hit_pct", "hits / scored_n x 100"),
-        ("base_n", "Neutral stock-days scored in the same direction at the same threshold"),
-        ("base_hit_pct", "hit % of those Neutral stock-days"),
-        ("diff_pts", "hit_pct minus base_hit_pct, percentage points"),
-        ("z_vs_base", "two-proportion z of hit_pct vs base_hit_pct (pooled standard error)"),
-        ("needs_vs_coin", "hits needed at scored_n to beat a coin (N/2 + 1.645 x sqrt(N)/2)"),
+        ("scored_n", "hit_rate rows: calls scored (not dup, small or pending)"),
+        ("hits", "hit_rate rows: scored calls where the move went the label's way"),
+        ("hit_pct", "hit_rate rows: hits / scored_n x 100"),
+        ("base_n", "hit_rate rows: Neutral stock-days scored in the same direction at the same threshold"),
+        ("base_hit_pct", "hit_rate rows: hit % of those Neutral stock-days"),
+        ("diff_pts", "hit_rate rows: hit_pct minus base_hit_pct, percentage points"),
+        ("z_vs_base", "hit_rate rows: two-proportion z of hit_pct vs base_hit_pct (pooled standard error)"),
+        ("needs_vs_coin", "hit_rate rows: hits needed at scored_n to beat a coin (N/2 + 1.645 x sqrt(N)/2)"),
+        ("n_returns", "returns rows: stock-days used (one per stock per horizon_sessions)"),
+        ("mean_adj_return", "returns rows: mean market-adjusted return over horizon_sessions, %"),
+        ("median_adj_return", "returns rows: median market-adjusted return, %"),
+        ("t_mean", "returns rows: t-statistic of mean_adj_return against zero"),
+        ("base_n_returns", "returns rows: Neutral stock-days used, same rule"),
+        ("base_mean_adj_return", "returns rows: Neutral mean market-adjusted return, %"),
+        ("base_median_adj_return", "returns rows: Neutral median market-adjusted return, %"),
+        ("base_t_mean", "returns rows: t-statistic of the Neutral mean against zero"),
+        ("diff_mean", "returns rows: mean_adj_return minus base_mean_adj_return, percentage points"),
+        ("welch_t_vs_base", "returns rows: Welch's t of the difference in means"),
     ]),
     "cheap_options_detail": ("One row per cheap stock option tested (ClsPric <= Rs 2, 3-7 sessions to expiry), one lot "
                              "bought at the close + 1 tick (scanner.backtest_cheap_options).", [
@@ -158,9 +173,12 @@ def write(df: pd.DataFrame, name: str, out_dir: Path) -> Path:
 # ---------------------------------------------------------------- labels
 def labels_tables(df: pd.DataFrame, cal: list[date]) -> tuple[pd.DataFrame, pd.DataFrame]:
     from .backtest_labels import annotate, versus_base
+    from .backtest_labels import returns_vs_base
     detail = annotate(df, cal, DETAIL_THRESHOLD).rename(columns={
         "fwd_return": "fwd3_return", "nifty_fwd_return": "nifty_fwd3_return", "move": "adj_fwd3_return"})
-    return detail, pd.DataFrame(versus_base(df, cal, THRESHOLDS))
+    hits = pd.DataFrame(versus_base(df, cal, THRESHOLDS)).assign(row_type="hit_rate", horizon_sessions=3)
+    rets = pd.DataFrame(returns_vs_base(df, cal)).assign(row_type="returns")
+    return detail, pd.concat([hits, rets], ignore_index=True)
 
 
 def run_labels(since: date, out_dir: Path, eod2_dir: Path, cache_dir: Path) -> pd.DataFrame:

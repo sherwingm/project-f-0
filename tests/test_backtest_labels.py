@@ -120,3 +120,16 @@ def test_versus_base_rows(df):
     assert bull["diff_pts"] == 0.0 and bull["needs_vs_coin"] == 2
     bear = rows[(BEARISH, 1.0)]
     assert (bear["hits"], bear["base_hits"], bear["base_n"]) == (0, 0, 2)
+
+
+def test_returns_at_1_3_5_sessions_vs_neutral(df):
+    from scanner.backtest_labels import returns_vs_base
+    abc30 = at(df, 30, "ABC")
+    assert (abc30["adj_1"], abc30["adj_3"], abc30["adj_5"]) == (pytest.approx(1.0), pytest.approx(2.0), pytest.approx(2.0))
+    assert at(df, 31, "ABC")["adj_1"] == pytest.approx(-1.0)                   # flat stock, NIFTY +1% on s32
+    rows = {(r["label"], r["horizon_sessions"]): r for r in returns_vs_base(df, CAL)}
+    b1, b3 = rows[(BULLISH, 1)], rows[(BULLISH, 3)]
+    assert b1["n_returns"] == 2 and b1["mean_adj_return"] == pytest.approx(0.0)        # s30 and s31 both kept at h=1
+    assert b3["n_returns"] == 1 and b3["mean_adj_return"] == pytest.approx(2.0)        # s31 overlaps s30 at h=3
+    assert b3["base_n_returns"] == 2 and b3["base_mean_adj_return"] == pytest.approx(2.25)  # NEU +2.5, XYZ s31 +2.0
+    assert b3["diff_mean"] == pytest.approx(-0.25) and b3["t_mean"] is None               # one value: no t
