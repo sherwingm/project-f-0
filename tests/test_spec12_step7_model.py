@@ -108,3 +108,13 @@ def test_infer_for_scan_adds_the_model_block(monkeypatch, tmp_path):
         m = s["model"]
         assert m["trained_through"] == "2026-06-30" and m["oos_brier"] == 0.61
         assert 0.999 < m["p_up"] + m["p_down"] + m["p_flat"] < 1.001
+
+
+def test_base_rate_brier_and_fold_fields():
+    report = walk_forward(synth(9000, signal=False), min_train=1500)
+    o, f = report["overall"], report["folds"][0]
+    shares = np.array(list(report["class_share"].values()))
+    assert o["base_brier"] == pytest.approx(1 - (shares ** 2).sum(), abs=0.02)   # constant forecast at the shares
+    assert o["brier"] >= o["base_brier"] - 0.01                                   # noise: no better than the base
+    assert {"train_end", "test_start", "test_end", "base_brier", "top_decile"} <= set(f)
+    assert set(f["top_decile"]) == {"up", "down"}

@@ -93,7 +93,8 @@ shuffling, no future data, retrained monthly.
 Reading `data/model_report.json` / `python -m scanner.model --report`:
 
 - **Brier score** (0 best): a know-nothing forecaster quoting the base rates scores ≈ 0.63–0.67 on
-  three classes. The model earns its place only *below* that.
+  three classes. The report carries that number as `base_brier` (per fold: the training set's class
+  shares, scored on the test quarter). The model earns its place only *below* it.
 - **Accuracy vs the class share**: predicting "flat" always scores the flat share; accuracy alone
   flatters. The per-class precision/recall shows whether up/down are ever caught.
 - **Top-decile hit rate vs base rate** is the honest line: among the 10% of stock-days the model was
@@ -104,11 +105,14 @@ Reading `data/model_report.json` / `python -m scanner.model --report`:
 ## The verdict card
 
 Deterministic, fixed rule in `scanner/verdict_rules.py`, computed at build time. Data, model and
-events each vote; the lean is bullish/bearish only when every non-zero vote agrees, else mixed.
-Confidence is **high** only when all three vote the same way *and* the model is confident
-(p ≥ 0.40, margin ≥ 0.15); **low** when two votes disagree or none votes. The card cites the label
-and its four numbers, each event flag with its historical pattern, p_up/p_down with the model's
-out-of-sample Brier next to them, analyst views clearly labelled as news, and the filing links.
+events each vote, but the model's vote is multiplied by `VERDICT_MODEL_WEIGHT`, **0 by default**: its
+out-of-sample Brier does not beat the base rate, so it is shown and does not count. The lean is
+bullish/bearish only when every non-zero counted vote agrees, else mixed. Confidence is **high** when
+every counted vote agrees (with weight 0: data and events; with the model counted it must also be
+confident, p ≥ 0.40 and margin ≥ 0.15); **low** when two counted votes disagree or none votes. The card
+cites the label and its four numbers, each event flag with its historical pattern, p_up/p_down with the
+model's out-of-sample Brier next to the base-rate Brier and the vote it would have cast, analyst views
+clearly labelled as news, and the filing links.
 It is a summary of evidence, not advice, and it is identical with or without an LLM.
 
 ## What these numbers do and do not mean

@@ -235,7 +235,7 @@ def _make_model():
 def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
     quarters = sorted(df["quarter"].unique())
     folds = []
-    all_proba, all_true = [], []
+    all_proba, all_true, all_base = [], [], []
     feature_names = featurise(df.iloc[:1])[1]
     for q in quarters:
         train = df[df["quarter"] < q]
@@ -247,16 +247,22 @@ def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
         Xte, _ = featurise(test, feature_names)
         model.fit(Xtr, train["y"].to_numpy())
         proba = _proba_ordered(model, Xte)
-        folds.append({"quarter": q, "train_rows": len(train), "test_rows": len(test),
-                      **_metrics(test["y"].to_numpy(), proba)})
+        yte = test["y"].to_numpy()
+        base = np.tile([(train["y"] == c).mean() for c in CLASSES], (len(test), 1))   # know-nothing forecast
+        folds.append({"quarter": q, "train_end": str(train["day"].max()), "test_start": str(test["day"].min()),
+                      "test_end": str(test["day"].max()), "train_rows": len(train), "test_rows": len(test),
+                      **_metrics(yte, proba), "base_brier": _brier(yte, base), "top_decile": _top_decile(yte, proba)})
         all_proba.append(proba)
-        all_true.append(test["y"].to_numpy())
-        log.info("fold %s: acc %.3f brier %.3f (n=%d)", q, folds[-1]["accuracy"], folds[-1]["brier"], len(test))
+        all_true.append(yte)
+        all_base.append(base)
+        log.info("fold %s: acc %.3f brier %.3f base %.3f (n=%d)", q, folds[-1]["accuracy"], folds[-1]["brier"],
+                 folds[-1]["base_brier"], len(test))
     if not folds:
         raise RuntimeError("not enough rows for a single walk-forward fold")
     proba = np.vstack(all_proba)
     y = np.concatenate(all_true)
     overall = _metrics(y, proba)
+    overall["base_brier"] = _brier(y, np.vstack(all_base))
     overall["top_decile"] = _top_decile(y, proba)
     return {"engine": _make_model()[1], "horizon_sessions": HORIZON, "threshold_pct": THRESH,
             "classes": list(CLASSES), "features": feature_names, "rows": len(df),
@@ -270,11 +276,15 @@ def _proba_ordered(model, X) -> np.ndarray:
     return p[:, order]
 
 
+def _brier(y: np.ndarray, proba: np.ndarray) -> float:
+    """Multi-class Brier score: sum over classes of (p - outcome)^2, averaged over rows (0 best, 2 worst)."""
+    onehot = np.stack([(y == c).astype(float) for c in CLASSES], axis=1)
+    return round(float(((proba - onehot) ** 2).sum(axis=1).mean()), 4)
+
+
 def _metrics(y: np.ndarray, proba: np.ndarray) -> dict:
     pred = np.array(CLASSES)[proba.argmax(axis=1)]
-    onehot = np.stack([(y == c).astype(float) for c in CLASSES], axis=1)
-    out = {"accuracy": round(float((pred == y).mean()), 4),
-           "brier": round(float(((proba - onehot) ** 2).sum(axis=1).mean()), 4)}
+    out = {"accuracy": round(float((pred == y).mean()), 4), "brier": _brier(y, proba)}
     for k, c in enumerate(CLASSES):
         tp = float(((pred == c) & (y == c)).sum())
         out[f"precision_{c}"] = round(tp / max(1.0, float((pred == c).sum())), 4)
@@ -307,6 +317,7 @@ def train(since: date, until: date | None = None, out: Path = MODEL_PATH, report
     model.fit(X, fit_rows["y"].to_numpy())
     payload = {"model": model, "engine": engine, "features": feature_names, "classes": list(CLASSES),
                "trained_through": str(fit_rows["day"].max()), "oos_brier": report["overall"]["brier"],
+               "base_brier": report["overall"]["base_brier"],
                "oos_accuracy": report["overall"]["accuracy"], "trained_at": datetime.now().isoformat(timespec="seconds")}
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_bytes(pickle.dumps(payload))
@@ -327,7 +338,7 @@ def load_model(path: Path = MODEL_PATH) -> dict | None:
 
 
 def infer_for_scan(stocks: list[dict], index_closes: dict | None, payload: dict | None = None) -> None:
-    """Adds model: {p_up, p_down, p_flat, trained_through, oos_brier} to each scan stock, in place."""
+    """Adds model: {p_up, p_down, p_flat, trained_through, oos_brier, base_brier} to each scan stock, in place."""
     payload = payload or load_model()
     if payload is None:
         return
@@ -360,7 +371,8 @@ def infer_for_scan(stocks: list[dict], index_closes: dict | None, payload: dict 
     proba = _proba_ordered(payload["model"], X)
     for s, p in zip(stocks, proba):
         s["model"] = {"p_down": round(float(p[0]), 3), "p_flat": round(float(p[1]), 3), "p_up": round(float(p[2]), 3),
-                      "trained_through": payload["trained_through"], "oos_brier": payload["oos_brier"]}
+                      "trained_through": payload["trained_through"], "oos_brier": payload["oos_brier"],
+                      "base_brier": payload.get("base_brier")}
 
 
 def main() -> None:
@@ -381,12 +393,14 @@ def main() -> None:
         return
     o = report["overall"]
     print(f"engine {report['engine']} | rows {report['rows']} | classes {report['class_share']}")
-    print(f"{'fold':<10}{'train':>9}{'test':>8}{'acc':>8}{'brier':>8} | precision/recall per class")
+    print(f"{'fold':<10}{'train':>9}{'test':>8}{'acc':>8}{'brier':>8}{'base':>8} | precision/recall per class")
     for f in report["folds"]:
         pr = "  ".join(f"{c}: {f[f'precision_{c}']:.2f}/{f[f'recall_{c}']:.2f}" for c in CLASSES)
-        print(f"{f['quarter']:<10}{f['train_rows']:>9}{f['test_rows']:>8}{f['accuracy']:>8.3f}{f['brier']:>8.3f} | {pr}")
+        base = f"{f['base_brier']:>8.3f}" if f.get("base_brier") is not None else f"{'-':>8}"
+        print(f"{f['quarter']:<10}{f['train_rows']:>9}{f['test_rows']:>8}{f['accuracy']:>8.3f}{f['brier']:>8.3f}{base} | {pr}")
     pr = "  ".join(f"{c}: {o[f'precision_{c}']:.2f}/{o[f'recall_{c}']:.2f}" for c in CLASSES)
-    print(f"{'OVERALL':<10}{'':>9}{sum(f['test_rows'] for f in report['folds']):>8}{o['accuracy']:>8.3f}{o['brier']:>8.3f} | {pr}")
+    base = f"{o['base_brier']:>8.3f}" if o.get("base_brier") is not None else f"{'-':>8}"
+    print(f"{'OVERALL':<10}{'':>9}{sum(f['test_rows'] for f in report['folds']):>8}{o['accuracy']:>8.3f}{o['brier']:>8.3f}{base} | {pr}")
     for c, td in o.get("top_decile", {}).items():
         print(f"top decile {c}: hit rate {td['hit_rate']} vs base {td['base_rate']} (n={td['n']}, p >= {td['p_cut']})")
 
