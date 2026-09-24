@@ -77,13 +77,13 @@ def test_backfill_resumes_from_the_progress_file(runner, monkeypatch):
         for label in ("2026-01-01", "2026-01-02"):                 # ban labels are ISO dates in real sources
             calls.append((kw.get("kind", "ann"), label))
             yield label, []
-    for mod in (run_mod.nse_announcements, run_mod.nse_pit, run_mod.nse_ban):
+    for mod in (run_mod.nse_announcements, run_mod.nse_pit, run_mod.nse_ban, run_mod.nse_board_meetings):
         monkeypatch.setattr(mod, "backfill", fake_backfill)
     monkeypatch.setattr(run_mod.nse_deals, "backfill", fake_backfill)
     run_mod.PROGRESS_PATH.write_text(json.dumps({"nse_ann": ["2026-01-01"]}))     # first chunk already done
     r.backfill(date(2026, 1, 1), date(2026, 1, 31))
     progress = json.loads(run_mod.PROGRESS_PATH.read_text())
-    assert set(progress) == {"nse_ann", "nse_block", "nse_bulk", "nse_pit", "nse_ban"}
+    assert set(progress) == {"nse_ann", "nse_block", "nse_bulk", "nse_pit", "nse_ban", "nse_bm"}
     assert progress["nse_ann"] == ["2026-01-01", "2026-01-02"]
     assert progress["nse_block"] == ["2026-01-01", "2026-01-02"]
 

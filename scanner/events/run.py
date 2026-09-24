@@ -26,7 +26,7 @@ from . import config
 from .http import EventHttp, FetchError
 from .score import (Scorer, finalise_rating, load_shares, pdf_first_page_text, refresh_shares,
                     shares_age_days, value_from_attachment)
-from .sources import bse_announcements, nse_announcements, nse_ban, nse_deals, nse_pit, rss
+from .sources import bse_announcements, nse_announcements, nse_ban, nse_board_meetings, nse_deals, nse_pit, rss
 from .store import Store
 from .taxonomy import analyst_view, classify, name_index
 
@@ -42,7 +42,8 @@ RESULTS_GAP_DAYS = 5                  # another results filing for a stock withi
 
 FIXTURES_BY_SOURCE = {"nse_ann": "nse_announcements.json", "nse_block": "nse_block_deals.json",
                       "nse_bulk": "nse_bulk_deals.json", "nse_ban": "nse_ban.csv", "nse_pit": "nse_pit.json",
-                      "bse_ann": "bse_announcements.json", "rss:et_markets": "rss_et.xml"}
+                      "bse_ann": "bse_announcements.json", "rss:et_markets": "rss_et.xml",
+                      "nse_bm": "nse_board_meetings.json"}
 
 
 def load_names(http: EventHttp | None = None, path: Path = NAMES_PATH) -> dict[str, str]:
@@ -115,13 +116,15 @@ class Runner:
             return nse_pit.fetch(day, self.http, fixture=fx)
         if name == "bse_ann":
             return bse_announcements.fetch(day, self.http, fixture=fx)
+        if name == "nse_bm":
+            return nse_board_meetings.fetch_ahead(day, self.http, fixture=fx)
         if name.startswith("rss:"):
             feed = name.split(":", 1)[1]
             return rss.fetch(day, self.http, fixture=fx, feed=feed)
         raise ValueError(name)
 
     def sources(self) -> list[str]:
-        return ["nse_ann", "bse_ann", "nse_block", "nse_bulk", "nse_ban", "nse_pit"] + \
+        return ["nse_ann", "bse_ann", "nse_block", "nse_bulk", "nse_ban", "nse_pit", "nse_bm"] + \
                [f"rss:{f}" for f in (["et_markets"] if self.fixtures else list(config.RSS_FEEDS))]
 
     # ------------------------------------------------------------ the day
@@ -211,14 +214,13 @@ class Runner:
             if kept is None:
                 self._log_rating_drop(e, text, budget_left)
             return kept
-        if getattr(self, "_pdf_ratings_only", False):
-            return e
         if e["type"] in ("order_win", "capacity") and e.get("value_cr") is None:
             from .score import parse_value_cr
-            if parse_value_cr(e.get("subject") or "") is None:
-                text = self._page1(e, budget_left)
-                if text:
-                    e["value_cr"] = parse_value_cr(text)
+            value = parse_value_cr(e.get("subject") or "")
+            if value is None:
+                text = self._page1(e, budget_left)          # daily runs within budget; back-fill with --order-attachments
+                value = parse_value_cr(text, first=True) if text else None
+            e["value_cr"] = value
         return e
 
     def _log_rating_drop(self, e: dict, text: str | None, budget_left: int) -> None:
@@ -242,8 +244,9 @@ class Runner:
 
     def _page1(self, e: dict, budget_left: int) -> str | None:
         url = e.get("url") or ""
-        allow = budget_left >= 0 or (getattr(self, "_pdf_ratings_only", False)
-                                     and e["type"] == "rating" and e.get("subtype") == "unverified")
+        allow = budget_left >= 0 or \
+            (getattr(self, "_pdf_ratings_only", False) and e["type"] == "rating" and e.get("subtype") == "unverified") or \
+            (getattr(self, "_pdf_orders", False) and e["type"] == "order_win")
         if self.fixtures or not url.lower().endswith(".pdf") or not allow:
             return None
         try:
@@ -270,17 +273,20 @@ class Runner:
         return out
 
     # ------------------------------------------------------------ back-fill
-    def backfill(self, start: date, end: date, rating_attachments: bool = False) -> dict[str, int]:
+    def backfill(self, start: date, end: date, rating_attachments: bool = False,
+                 order_attachments: bool = False) -> dict[str, int]:
         """rating_attachments: fetch each unverified rating's filing PDF (first page) so boilerplate
         'informed the Exchange about Credit Rating' subjects resolve; order/capacity PDFs stay off.
         Meant as a second pass over nse_ann (delete its key from events_backfill.json to redo it)."""
         self._pdf_ratings_only = rating_attachments
+        self._pdf_orders = order_attachments           # order_win without a value in the subject: read page 1
         progress = json.loads(PROGRESS_PATH.read_text()) if PROGRESS_PATH.exists() else {}
         total: dict[str, int] = {}
         jobs = [("nse_ann", nse_announcements.backfill(start, end, self.http)),
                 ("nse_block", nse_deals.backfill(start, end, self.http, kind="block")),
                 ("nse_bulk", nse_deals.backfill(start, end, self.http, kind="bulk")),
                 ("nse_pit", nse_pit.backfill(start, end, self.http)),
+                ("nse_bm", nse_board_meetings.backfill(start, end, self.http)),
                 ("nse_ban", nse_ban.backfill(start, end, self.http))]
         for src, gen in jobs:
             done = set(progress.get(src, []))
@@ -335,6 +341,8 @@ def main() -> None:
     ap.add_argument("--backfill", nargs=2, type=date.fromisoformat, metavar=("START", "END"))
     ap.add_argument("--rating-attachments", action="store_true",
                     help="with --backfill: resolve boilerplate rating filings from their PDFs (first page)")
+    ap.add_argument("--order-attachments", action="store_true",
+                    help="with --backfill: read the value of order wins with no ₹ value in the subject from page 1")
     ap.add_argument("--fixtures", action="store_true", help="one fixture day (2026-09-22), no network")
     ap.add_argument("--no-shares", action="store_true", help="skip the monthly shares-outstanding refresh")
     ap.add_argument("-v", "--verbose", action="store_true")
@@ -344,7 +352,7 @@ def main() -> None:
     if not a.no_shares and not a.fixtures:
         r.ensure_shares()
     if a.backfill:
-        total = r.backfill(*a.backfill, rating_attachments=a.rating_attachments)
+        total = r.backfill(*a.backfill, rating_attachments=a.rating_attachments, order_attachments=a.order_attachments)
     else:
         total = r.run_day(a.day or (date(2026, 9, 22) if a.fixtures else datetime.now(IST).date()))
     print("events by type:", json.dumps(dict(sorted(total.items())), indent=1))

@@ -118,3 +118,66 @@ def test_rating_drops_are_logged_with_a_reason(tmp_path, monkeypatch):
                        "page 1 has no extractable text (scanned image)",
                        "page 1 names no SEBI-registered CRA (names Moody's)"]
     assert kept[-1]["subtype"] == "reaffirm" and kept[:4] == [None] * 4
+
+
+# ---------------------------------------------------------------- board meetings -> results_date
+def test_board_meetings_become_dated_results_meetings():
+    from scanner.events.sources import nse_board_meetings as bm
+    items = bm.fetch(date(2026, 9, 22), fixture="nse_board_meetings.json")
+    by = {i["symbol"]: i for i in items}
+    assert len(items) == 3 and by["HDFCBANK"]["subject"].startswith("Revised")     # the later intimation wins
+    events = {i["symbol"]: classify(i) for i in items}
+    hd = events["HDFCBANK"]
+    assert (hd["type"], hd["subtype"], hd["event_date"], hd["id"]) == ("results_date", "scheduled", "2026-10-18",
+                                                                        "nse_bm:HDFCBANK:2026-10-18")
+    assert events["INFY"]["type"] == "results_date" and events["INFY"]["event_date"] == "2026-10-15"
+    assert events["ITC"] is None                                                      # fund raising: not results
+
+
+# ---------------------------------------------------------------- order-win values and shares
+@pytest.mark.parametrize("text,largest,first", [
+    ("bagged orders worth Rs. 1,234.5 crore", 1234.5, 1234.5),
+    ("an order of ₹ 500 Cr. taking the order book to Rs 20,000 crore", 20000.0, 500.0),
+    ("Rs.500/- crores", 500.0, 500.0),
+    ("INR 2,500 million", 250.0, 250.0),
+    ("orders worth 1,200 crore from NTPC", 1200.0, 1200.0),
+    ("Rs 50 lakh", 0.5, 0.5),
+    ("USD 100 million", None, None),
+])
+def test_value_parsing(text, largest, first):
+    from scanner.events.score import parse_value_cr
+    assert parse_value_cr(text) == largest and parse_value_cr(text, first=True) == first
+
+
+def test_shares_from_the_market_cap_file():
+    import io
+    import zipfile
+    from scanner.events.score import shares_from_mcap_file
+    csv_text = ("Trade Date,Symbol,Series,Security Name,Category,Last Trade Date,Face Value(Rs.),Issue Size,"
+                "Close Price/Paid up value(Rs.),Market Cap(Rs.)              \n"
+                "24 SEP 2026,RELIANCE,EQ,RELIANCE IND ,Listed ,24 SEP 2026, 10.00,   13532538722, 1219.20, 1.6e13 \n"
+                "24 SEP 2026,SOMEBOND,N1,BOND ,Listed ,24 SEP 2026, 1000.00,   500, 1000, 5e5 \n")
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w") as zf:
+        zf.writestr("mcap24092026.csv", csv_text)
+
+    class R:
+        def __init__(self, code, content=b""):
+            self.status_code, self.content = code, content
+
+    urls = []
+    got = shares_from_mcap_file(date(2026, 9, 26), get=lambda u: urls.append(u) or (R(200, buf.getvalue()) if "PR240926" in u else R(404)))
+    assert got == {"RELIANCE": 13532538722.0} and urls[-1].endswith("PR240926.zip") and len(urls) == 2
+
+
+def test_backfill_reads_order_values_from_page_one_only_when_asked(tmp_path, monkeypatch):
+    monkeypatch.setattr(run_mod, "STATUS_PATH", tmp_path / "s.json")
+    r = run_mod.Runner(store=Store(tmp_path / "events.sqlite"), universe={"LT"}, fixtures=False)
+    e = classify(ann("Updates", "Larsen & Toubro has informed the Exchange about an order win", symbol="LT"))
+    e["url"] = "https://nsearchives.nseindia.com/corporate/LT_order.pdf"
+    assert e["type"] == "order_win" and e["value_cr"] is None
+    monkeypatch.setattr(run_mod, "pdf_first_page_text", lambda b: "an order of Rs 2,500 crore; order book Rs 5,00,000 crore")
+    monkeypatch.setattr(r.http, "download", lambda url, ref: b"%PDF")
+    assert r._finalise(dict(e), -1)["value_cr"] is None                    # plain back-fill: no PDFs
+    r._pdf_orders = True
+    assert r._finalise(dict(e), -1)["value_cr"] == 2500.0                  # first value on page 1, not the book

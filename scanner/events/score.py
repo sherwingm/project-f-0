@@ -1,8 +1,13 @@
 """Value, materiality and bucket for a classified event, from official data only.
 
-Value parsing: ₹/Rs/INR + number + unit, normalised to ₹ crore; the largest value in the text wins
-(an order announcement usually headlines the aggregate). Market cap = eod2 close × shares outstanding
-(NSE quote-equity issuedSize, cached in data/cache/shares_outstanding.csv, refreshed monthly).
+Value parsing: ₹/Rs/INR/Rupees + number + unit (crore, lakh, million, billion; "Rs. 500/- crore" and
+"Cr." included), or a number + crore after worth/valued at/aggregating/amounting to/order of; normalised to
+₹ crore. In a subject the largest value wins (the headline is usually the aggregate); on an attachment's
+first page the first value wins (later ones tend to be order-book totals). Values in foreign currency are
+not converted. Market cap = eod2 close on the event date × shares outstanding: eod2 closes are adjusted for
+bonuses and splits, so today's share count gives the market cap at that date. Shares come from NSE's
+quote-equity issuedSize, or, where that endpoint is refused, from the Issue Size column of NSE's daily
+market-cap file (PR bundle, mcapDDMMYYYY.csv); cached in data/cache/shares_outstanding.csv, refreshed monthly.
 
 Buckets (config, env-overridable):
     orders/capex   value ÷ market cap          < 1% ignore · 1–5% minor · 5–20% significant · > 20% major
@@ -26,9 +31,14 @@ from .http import EventHttp, FetchError
 
 log = logging.getLogger(__name__)
 
-VALUE_RE = re.compile(r"(?:₹|\bRs\.?|\bINR)\s*([\d,]+(?:\.\d+)?)\s*(crores?|cr\b|lakhs?|mn\b|million|bn\b|billion)", re.I)
-UNITS_TO_CR = {"crore": 1.0, "crores": 1.0, "cr": 1.0, "lakh": 0.01, "lakhs": 0.01,
-               "mn": 0.1, "million": 0.1, "bn": 100.0, "billion": 100.0}
+VALUE_RE = re.compile(r"(?:₹|\bRs\.?|\bINR|\brupees)\s*([\d,]+(?:\.\d+)?)\s*(?:/-\s*)?"
+                      r"(crores?|crs?\b|cr\b|lakhs?|lacs?|mn\b|million|bn\b|billion)", re.I)
+WORTH_RE = re.compile(r"(?:worth|valued at|value of|aggregating(?: to)?|amounting to|order of|contract of)\s+"
+                      r"(?:about |approximately |approx\.? |around |over |more than )?([\d,]+(?:\.\d+)?)\s*"
+                      r"(crores?|crs?\b|cr\b)", re.I)
+UNITS_TO_CR = {"crore": 1.0, "crores": 1.0, "cr": 1.0, "crs": 1.0, "lakh": 0.01, "lakhs": 0.01, "lac": 0.01,
+               "lacs": 0.01, "mn": 0.1, "million": 0.1, "bn": 100.0, "billion": 100.0}
+PR_URL = "https://nsearchives.nseindia.com/archives/equities/bhavcopy/pr/PR{ddmmyy}.zip"
 SHARES_PATH = ROOT / "data" / "cache" / "shares_outstanding.csv"
 QUOTE_URL = "https://www.nseindia.com/api/quote-equity?symbol={sym}"
 ALWAYS_SIGNIFICANT = ("rating", "results", "results_date", "ban")
@@ -51,15 +61,19 @@ def finalise_rating(event: dict, page1_text: str | None) -> dict | None:
     return event
 
 
-def parse_value_cr(text: str) -> float | None:
-    best = None
-    for num, unit in VALUE_RE.findall(text or ""):
-        try:
-            v = float(num.replace(",", "")) * UNITS_TO_CR[unit.lower().rstrip(".")]
-        except (ValueError, KeyError):
-            continue
-        best = v if best is None else max(best, v)
-    return best
+def parse_value_cr(text: str, first: bool = False) -> float | None:
+    """₹ crore from free text: the largest value, or the first one in reading order when first=True."""
+    found = []
+    for rx in (VALUE_RE, WORTH_RE):
+        for m in rx.finditer(text or ""):
+            try:
+                found.append((m.start(), float(m.group(1).replace(",", "")) * UNITS_TO_CR[m.group(2).lower().rstrip(".")]))
+            except (ValueError, KeyError):
+                continue
+    found = [f for f in found if f[1] > 0]
+    if not found:
+        return None
+    return min(found)[1] if first else max(v for _, v in found)
 
 
 def bucket_of(pct: float | None, bounds: tuple[float, float, float]) -> str:
@@ -101,8 +115,14 @@ def refresh_shares(symbols: list[str], http: EventHttp | None = None, path: Path
         http.get(QUOTE_URL.format(sym="RELIANCE"), "https://www.nseindia.com/get-quotes/equity?symbol=RELIANCE",
                  tries=1)
     except FetchError as exc:
-        log.warning("quote-equity is refused on this network (%s); keeping the %d cached shares rows "
-                    "and bucketing sized events as 'minor'", exc, len(out))
+        mcap = shares_from_mcap_file()
+        if not mcap:
+            log.warning("quote-equity is refused on this network (%s) and no market-cap file was found; keeping "
+                        "the %d cached shares rows and bucketing sized events as 'minor'", exc, len(out))
+            return out
+        log.info("quote-equity is refused (%s); shares from NSE's market-cap file (%d symbols)", exc, len(mcap))
+        out.update({s: mcap[s] for s in symbols if s in mcap})
+        _write_shares(path, out, today)
         return out
     for i, sym in enumerate(symbols):
         try:
@@ -115,10 +135,54 @@ def refresh_shares(symbols: list[str], http: EventHttp | None = None, path: Path
             log.warning("shares outstanding %s: %s", sym, exc)
         if (i + 1) % 50 == 0:
             log.info("shares outstanding: %d/%d", i + 1, len(symbols))
+    _write_shares(path, out, today)
+    return out
+
+
+def _write_shares(path: Path, out: dict[str, float], today: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("symbol,shares,as_of\n" + "".join(f"{s},{int(v)},{today}\n" for s, v in sorted(out.items())),
                     encoding="utf-8")
-    return out
+
+
+def shares_from_mcap_file(today: date | None = None, lookback_days: int = 10, get=None) -> dict[str, float]:
+    """{symbol: Issue Size} for EQ series from the latest NSE PR bundle (nsearchives, which answers where the
+    quote API does not). Walks back over weekends and holidays; {} when nothing is found."""
+    import zipfile
+    from datetime import timedelta
+
+    import requests
+
+    from ..nse_fo import NSE_HEADERS
+    get = get or (lambda url: requests.get(url, headers=NSE_HEADERS, timeout=60))
+    d = today or date.today()
+    for _ in range(lookback_days):
+        d -= timedelta(days=1)
+        if d.weekday() >= 5:
+            continue
+        try:
+            r = get(PR_URL.format(ddmmyy=d.strftime("%d%m%y")))
+        except Exception as exc:  # noqa: BLE001
+            log.info("PR bundle %s: %s", d, exc)
+            continue
+        if r.status_code != 200:
+            continue
+        with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
+            name = next((n for n in zf.namelist() if n.lower().startswith("mcap")), None)
+            if not name:
+                continue
+            out = {}
+            for row in csv.DictReader(io.StringIO(zf.read(name).decode("latin-1"))):
+                row = {k.strip(): (v or "").strip() for k, v in row.items() if k}
+                if row.get("Series") != "EQ":
+                    continue
+                try:
+                    out[row["Symbol"]] = float(row["Issue Size"])
+                except (KeyError, ValueError):
+                    continue
+            if out:
+                return out
+    return {}
 
 
 # ---------------------------------------------------------------- scoring
@@ -195,4 +259,4 @@ def value_from_attachment(event: dict, http: EventHttp) -> None:
     except FetchError as exc:
         log.info("attachment %s: %s", url, exc)
         return
-    event["value_cr"] = parse_value_cr(text)
+    event["value_cr"] = parse_value_cr(text, first=True)

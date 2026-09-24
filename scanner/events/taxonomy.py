@@ -116,6 +116,8 @@ RULES: tuple[Rule, ...] = (
     Rule("results", FILINGS, re.compile(r"outcome of board meeting", re.I), RESULTS_WORDS, lambda i: (0, None)),
     Rule("results_date", FILINGS, re.compile(r"^(?!.*outcome).*board meeting", re.I), RESULTS_WORDS,
          lambda i: (0, "scheduled")),
+    # NSE's board-meetings feed: the dated results meeting (the announcements feed carries no intimations)
+    Rule("results_date", ("nse_bm",), None, RESULTS_WORDS, lambda i: (0, "scheduled")),
     Rule("results_maybe", FILINGS, re.compile(r"outcome of board meeting", re.I), None, lambda i: (0, "unlinked")),
     Rule("order_win", FILINGS, re.compile(r"updates|press release|general|company update|award", re.I),
          re.compile(r"\border(?!s? passed)\w*\b|contract|letter of award|\bLoA\b|bagged|awarded|work order", re.I),
