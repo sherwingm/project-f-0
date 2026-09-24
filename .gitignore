@@ -11,3 +11,7 @@ data/paper_queue.jsonl
 data/refusals.jsonl
 data/backtest_*.csv
 .pytest_cache/
+data/events.sqlite
+data/events.sqlite-shm
+data/events.sqlite-wal
+data/cache/events_backfill.json
