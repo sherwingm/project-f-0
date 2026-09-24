@@ -84,3 +84,22 @@ def test_summary_groups_subtypes_buckets_and_results_proxy():
     assert set(p) == {"results", "rating", "order_win"}
     assert p["results"]["count"] == 2 and p["results"]["day"] == row["day_mean"]
     print_table(s)                                                    # must not raise
+
+
+def test_post_window_starts_at_the_t_plus_1_close():
+    # +10% on T+1 (the reaction day the results proxy is measured on), then flat: post excludes it
+    stock = [100.0] * 11 + [110.0] * 9
+    r = study([ev()], {"ABC": series(stock)}, flat_index()).iloc[0]
+    assert r["car_day"] == 0.0 and r["reaction"] == pytest.approx(10.0)
+    assert r["car_post"] == pytest.approx(0.0)
+    stock = [100.0] * 11 + [110.0] * 4 + [121.0] * 5                   # T+1 -> T+5: 110 -> 121
+    assert study([ev()], {"ABC": series(stock)}, flat_index()).iloc[0]["car_post"] == pytest.approx(10.0)
+
+
+def test_every_window_has_median_and_t_and_sized_types_always_show_buckets():
+    stock = [100.0] * 10 + [104.0] * 10
+    df = study([ev(), ev(symbol="DEF")], {"ABC": series(stock), "DEF": series(stock)}, flat_index())
+    s = summarise(df)
+    assert "order_win [major]" in list(s["group"])                    # one bucket only, still shown
+    for w in ("pre", "day", "post"):
+        assert {f"{w}_mean", f"{w}_median", f"{w}_pos_pct", f"{w}_t"} <= set(s.columns)

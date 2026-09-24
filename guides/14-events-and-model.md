@@ -66,9 +66,10 @@ stock's `events` block: `today`, `last_10` (tier 1–2, bucket ≠ ignore), `upc
 
 ## The event study (`python -m scanner.event_study --since 2023-01-01`)
 
-For every tier-1/2 event: the stock's return **minus NIFTY 50's** (CAR) over pre (T−5→T−1), day,
-and post (T→T+5), per type / subtype / bucket, with count, mean, median, share positive and a
-t-statistic. How to read it:
+For every tier-1/2 event: the stock's return **minus NIFTY 50's** (CAR) over pre (close T−5→T−1),
+day (close T−1→T) and post (close T+1→T+5, so it excludes T+1, the day the results beat/miss proxy is
+measured on), per type / subtype / bucket, with count and, for every window, mean, median, share
+positive and a t-statistic. How to read it:
 
 - **pre vs post is the "buy the rumour, sell the news" test.** A positive pre-window with a flat or
   negative post-window means the move happened before the filing became public.

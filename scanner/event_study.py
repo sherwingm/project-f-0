@@ -3,12 +3,13 @@
     python -m scanner.event_study --since 2023-01-01 --out data/event_study.csv
 
 For every tier-1/2 event with bucket != ignore: the stock's cumulative return minus NIFTY 50's over
-    pre   T-5 -> T-1   (the "rumour" window)
-    day   T-1 -> T     (the event session)
-    post  T   -> T+5   (the "news" window)
+    pre   close T-5 -> close T-1   (the "rumour" window)
+    day   close T-1 -> close T     (the event session)
+    post  close T+1 -> close T+5   (after the reaction: excludes T+1, the day the results beat/miss
+                                    proxy is measured on, so the proxy cannot leak into the post mean)
 computed on eod2 closes aligned to the index's calendar. Printed per type, per subtype and per
-bucket: count, mean and median CAR for each window, share positive (day and post), and the
-t-statistic of each mean. For `results`, beat/miss subtype rows use the day+1 reaction as a proxy
+bucket (always for the sized types in BUCKETED): count, and for every window the mean, median, share
+positive and t-statistic of the mean. For `results`, beat/miss subtype rows use the day+1 reaction as a proxy
 (a real beat/miss needs the numbers; the reaction is what the market judged) — stated as a proxy.
 The table is printed, never interpreted. data/event_patterns.json carries {type: {pre, day, post,
 count}} for the UI's verdict card.
@@ -29,6 +30,7 @@ from .equity import INDEX_FILE, load_symbol
 
 log = logging.getLogger("event_study")
 PRE, POST = 5, 5
+BUCKETED = ("order_win", "capacity", "block_deal", "bulk_deal", "insider")   # materiality-sized types
 REACTION_PCT = 2.0                   # |day + day+1 CAR| beyond this = beat/miss proxy for results
 
 
@@ -57,7 +59,7 @@ def study(events: list[dict], closes: dict[str, pd.Series], index: pd.Series) ->
             v = s.to_numpy(dtype=float)
             row["car_pre"] = _car(v, ix, i - PRE, i - 1)
             row["car_day"] = _car(v, ix, i - 1, i)
-            row["car_post"] = _car(v, ix, i, i + POST)
+            row["car_post"] = _car(v, ix, i + 1, i + POST)
             row["reaction"] = _car(v, ix, i - 1, min(i + 1, len(cal) - 1))
         rows.append(row)
     return pd.DataFrame(rows)
@@ -80,7 +82,7 @@ def summarise(df: pd.DataFrame) -> pd.DataFrame:
         for sub, gg in g.groupby("subtype", dropna=True):
             if len(gg) and sub:
                 groups.append((f"{typ} / {sub}", gg))
-        if g["bucket"].nunique() > 1:                 # bucket rows only where the type is actually sized
+        if typ in BUCKETED or g["bucket"].nunique() > 1:   # bucket rows where the type is sized
             for bkt, gg in g.groupby("bucket", dropna=True):
                 groups.append((f"{typ} [{bkt}]", gg))
     if "results" in set(df["type"]):
@@ -117,11 +119,12 @@ def patterns(summary: pd.DataFrame) -> dict:
 
 def print_table(summary: pd.DataFrame) -> None:
     print(f"{'group':<46}{'count':>7} | {'pre mean':>9}{'med':>7}{'pos%':>6}{'t':>7} | "
-          f"{'day mean':>9}{'pos%':>6}{'t':>7} | {'post mean':>10}{'med':>7}{'pos%':>6}{'t':>7}")
+          f"{'day mean':>9}{'med':>7}{'pos%':>6}{'t':>7} | {'post mean':>10}{'med':>7}{'pos%':>6}{'t':>7}")
     f = lambda v, w, p=3: f"{v:>{w}.{p}f}" if v is not None and not (isinstance(v, float) and math.isnan(v)) else f"{'-':>{w}}"
     for r in summary.to_dict("records"):
         print(f"{r['group'][:45]:<46}{r['count']:>7} | {f(r['pre_mean'], 9)}{f(r['pre_median'], 7)}"
-              f"{f(r['pre_pos_pct'], 6, 1)}{f(r['pre_t'], 7, 2)} | {f(r['day_mean'], 9)}{f(r['day_pos_pct'], 6, 1)}"
+              f"{f(r['pre_pos_pct'], 6, 1)}{f(r['pre_t'], 7, 2)} | {f(r['day_mean'], 9)}{f(r['day_median'], 7)}"
+              f"{f(r['day_pos_pct'], 6, 1)}"
               f"{f(r['day_t'], 7, 2)} | {f(r['post_mean'], 10)}{f(r['post_median'], 7)}"
               f"{f(r['post_pos_pct'], 6, 1)}{f(r['post_t'], 7, 2)}")
 
@@ -162,8 +165,8 @@ def main() -> None:
     summary = summarise(df)
     a.patterns_out.write_text(json.dumps(patterns(summary), indent=1), encoding="utf-8")
     print(f"{len(df)} events -> {a.out}; patterns -> {a.patterns_out}")
-    print("CAR = stock minus NIFTY 50, close to close. pre = T-5..T-1, day = T, post = T..T+5. "
-          "results beat/miss uses the day+1 reaction as a proxy.")
+    print("CAR = stock minus NIFTY 50, close to close. pre = close T-5 -> T-1, day = T-1 -> T, "
+          "post = close T+1 -> T+5. results beat/miss uses the T-1 -> T+1 reaction as a proxy.")
     print_table(summary)
 
 
