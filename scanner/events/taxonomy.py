@@ -20,6 +20,7 @@ DOWNGRADE = re.compile(r"downgrad|revis\w+ (?:the )?(?:rating )?downward|negativ
                        r"outlook .*(?:revised|changed).*negative|rating watch with negative", re.I)
 REAFFIRM = re.compile(r"reaffirm|re-affirm|reiterat|retain|maintain|assigned|unchanged", re.I)
 RESULTS_WORDS = re.compile(r"financial results|results for the|unaudited|audited results|quarterly results|results of the", re.I)
+RESULTS_CATEGORY = re.compile(r"^(?!.*clarification)(?!.*integrated)\s*financial results?\b", re.I)
 FUND_WORDS = re.compile(r"mutual fund|\bmf\b|fund\b|insurance|\bfpi\b|\bfii\b|pension|investment|capital|asset management|amc\b", re.I)
 PROMOTER_WORDS = re.compile(r"promoter", re.I)
 DIRECTOR_WORDS = re.compile(r"director|kmp|key managerial", re.I)
@@ -105,11 +106,16 @@ class Rule:
 FILINGS = ("nse_ann", "bse_ann")
 RULES: tuple[Rule, ...] = (
     Rule("rating", FILINGS, re.compile(r"credit rating", re.I), None, lambda i: _rating(i)),
-    Rule("results_date", FILINGS, re.compile(r"board meeting", re.I), RESULTS_WORDS, lambda i: (0, "scheduled")),
-    Rule("results", FILINGS, re.compile(r"financial results", re.I), None, lambda i: (0, None)),
+    # NSE files results under "Financial Result Updates" (to early 2025) and under "Outcome of Board Meeting"
+    # ("... has submitted to the Exchange, the financial results for the period ended ...", from 2025). Not
+    # results: "Clarification - Financial Results" (the exchange querying a filing), "Integrated Filing-
+    # Financial" (a later compliance copy), press releases and newspaper copies of the same numbers.
+    Rule("results", FILINGS, RESULTS_CATEGORY, None, lambda i: (0, None)),
     # boilerplate "Outcome of Board Meeting held on <date>" resolves to results only when the results
     # words appear, or (in the runner) when the store holds a results_date for that symbol and day
     Rule("results", FILINGS, re.compile(r"outcome of board meeting", re.I), RESULTS_WORDS, lambda i: (0, None)),
+    Rule("results_date", FILINGS, re.compile(r"^(?!.*outcome).*board meeting", re.I), RESULTS_WORDS,
+         lambda i: (0, "scheduled")),
     Rule("results_maybe", FILINGS, re.compile(r"outcome of board meeting", re.I), None, lambda i: (0, "unlinked")),
     Rule("order_win", FILINGS, re.compile(r"updates|press release|general|company update|award", re.I),
          re.compile(r"\border(?!s? passed)\w*\b|contract|letter of award|\bLoA\b|bagged|awarded|work order", re.I),
@@ -147,7 +153,9 @@ def classify(item: dict) -> dict | None:
             md = meeting_date(f"{item.get('subject', '')} {item.get('text', '')}")
             if md and md > item["event_date"]:
                 event_date = md
-        return {"id": f"{src}:{item['source_id']}", "symbol": item["symbol"], "event_date": event_date,
+        # one results event per stock per day, however many filings carry the numbers
+        eid = f"{src}:results:{item['symbol']}:{event_date}" if rule.type == "results" else f"{src}:{item['source_id']}"
+        return {"id": eid, "symbol": item["symbol"], "event_date": event_date,
                 "event_time": item.get("event_time"), "type": rule.type, "subtype": subtype, "tier": rule.tier,
                 "direction": direction, "value_cr": None, "materiality": None, "bucket": "minor",
                 "source": src, "subject": (item.get("subject") or "")[:500], "url": item.get("url") or "",

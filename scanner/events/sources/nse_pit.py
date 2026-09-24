@@ -2,8 +2,12 @@
 
 API: https://www.nseindia.com/api/corporates-pit?index=equities&from_date=DD-MM-YYYY&to_date=DD-MM-YYYY
 Rows carry symbol, acqName, personCategory (Promoters / Promoter Group / Director / Employee / ...),
-tdpTransactionType (Buy/Sell/Pledge...), secAcq (quantity), secVal (value), befAcqSharesPerc,
-afterAcqSharesPerc, secAcqPer (% of holding traded), intimDt / date.
+tdpTransactionType (Buy/Sell/Pledge...), secAcq (quantity), secVal (value), befAcqSharesPer,
+afterAcqSharesPer (% of the company held before / after), date (NSE's broadcast time, '23-Jan-2025 18:21'),
+intimDt / acqfromDt / acqtoDt (typed by the company, and sometimes wrong: '23-Jan-1925', '10-Nov-2026').
+
+The event date is the broadcast time: it is when the market could see the filing, and it is always inside the
+requested window. intimDt is only a fallback. A date outside VALID_YEARS is dropped and counted.
 
 Note: as of this build the endpoint answers HTTP 200 with an empty data list from a residential
 connection; the shape below is NSE's documented one, exercised by the fixture. An empty answer is a
@@ -25,6 +29,7 @@ URL = "https://www.nseindia.com/api/corporates-pit?index=equities&from_date={a}&
 REFERER = "https://www.nseindia.com/companies-listing/corporate-filings-insider-trading"
 SOURCE = "nse_pit"
 BACKFILL_CHUNK_DAYS = 30
+VALID_YEARS = (2000, 2035)
 
 
 def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None,
@@ -36,8 +41,11 @@ def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None,
     out = []
     for r in payload.get("data", []) if isinstance(payload, dict) else []:
         sym = str(r.get("symbol") or "").strip().upper()
-        d, t = parse_nse_ts(r.get("intimDt") or r.get("date"))
+        d, t = parse_nse_ts(r.get("date") or r.get("intimDt"))
         if not sym or not d:
+            continue
+        if not VALID_YEARS[0] <= int(d[:4]) <= VALID_YEARS[1]:
+            log.warning("nse_pit %s: dropped, date %r (intimDt %r) is not plausible", sym, r.get("date"), r.get("intimDt"))
             continue
         qty = _f(r.get("secAcq"))
         sid = hashlib.md5(f"{sym}|{r.get('acqName')}|{r.get('date')}|{qty}|{r.get('tdpTransactionType')}".encode()).hexdigest()[:16]
@@ -49,7 +57,9 @@ def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None,
                               "side": str(r.get("tdpTransactionType") or "").strip().upper(),
                               "quantity": qty, "value": _f(r.get("secVal")),
                               "pct_traded": _f(r.get("secAcqPer")),
-                              "pct_before": _f(r.get("befAcqSharesPerc")), "pct_after": _f(r.get("afterAcqSharesPerc"))}})
+                              "pct_before": _f(_either(r, "befAcqSharesPer", "befAcqSharesPerc")),
+                              "pct_after": _f(_either(r, "afterAcqSharesPer", "afterAcqSharesPerc")),
+                              "intimated": r.get("intimDt")}})
     return out
 
 
@@ -57,6 +67,11 @@ def backfill(start: date, end: date, http: EventHttp | None = None):
     http = http or EventHttp()
     for a, b in chunks(start, end, BACKFILL_CHUNK_DAYS):
         yield f"{a}..{b}", fetch(a, http, until=b)
+
+
+def _either(r: dict, live: str, documented: str):
+    """The live API sends befAcqSharesPer / afterAcqSharesPer; the documented shape says ...Perc."""
+    return r.get(live) if r.get(live) not in (None, "") else r.get(documented)
 
 
 def _f(v):

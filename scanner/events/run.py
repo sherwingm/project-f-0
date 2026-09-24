@@ -16,6 +16,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+import re
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
@@ -30,11 +31,14 @@ from .store import Store
 from .taxonomy import analyst_view, classify, name_index
 
 log = logging.getLogger("events")
+OTHER_AGENCIES = re.compile(r"moody'?s|fitch|s&p global|standard & poor'?s|r&i\b|japan credit rating", re.I)
 IST = timezone(timedelta(hours=5, minutes=30))
 STATUS_PATH = ROOT / "data" / "cache" / "events_status.json"
 PROGRESS_PATH = ROOT / "data" / "cache" / "events_backfill.json"
+RATING_DROPS_PATH = ROOT / "data" / "cache" / "rating_drops.jsonl"
 NAMES_PATH = ROOT / "data" / "cache" / "equity_names.csv"
 MAX_ATTACHMENTS_PER_RUN = 40          # PDF page-1 lookups per daily run (backfill chunks budget their own)
+RESULTS_GAP_DAYS = 5                  # another results filing for a stock within this many days is the same results
 
 FIXTURES_BY_SOURCE = {"nse_ann": "nse_announcements.json", "nse_block": "nse_block_deals.json",
                       "nse_bulk": "nse_bulk_deals.json", "nse_ban": "nse_ban.csv", "nse_pit": "nse_pit.json",
@@ -157,6 +161,7 @@ class Runner:
         first, maybes = [], []
         for e in events:
             (maybes if e["type"] == "results_maybe" else first).append(e)
+        first = self._one_results(first)
         done = []
         for e in first:
             e = self._finalise(e, attachments_budget)
@@ -173,14 +178,39 @@ class Runner:
                     self.store.events_for(e["symbol"], since=e["event_date"], until=e["event_date"])):
                 e["type"], e["subtype"] = "results", "outcome"
                 linked.append(self.scorer.score(e))
+        linked = self._one_results(linked)
         if linked:
             self.store.upsert(linked)
         return done + linked
 
+    def _one_results(self, events: list[dict]) -> list[dict]:
+        """Drop a results event when the stock already has results (in this batch or the store) up to
+        RESULTS_GAP_DAYS earlier: the board outcome, the results filing and a next-day copy are one event."""
+        out, last = [], {}
+        for e in sorted(events, key=lambda x: (x["event_date"], x.get("event_time") or "")):
+            if e["type"] != "results":
+                out.append(e)
+                continue
+            d = date.fromisoformat(e["event_date"])
+            prev = last.get(e["symbol"])
+            if prev is None:
+                lo = (d - timedelta(days=RESULTS_GAP_DAYS)).isoformat()
+                stored = [x["event_date"] for x in self.store.events_for(e["symbol"], since=lo, until=e["event_date"])
+                          if x["type"] == "results" and x["id"] != e["id"]]
+                prev = max(stored) if stored else None
+            if prev is not None and 0 <= (d - date.fromisoformat(prev)).days <= RESULTS_GAP_DAYS:
+                continue
+            last[e["symbol"]] = e["event_date"]
+            out.append(e)
+        return out
+
     def _finalise(self, e: dict, budget_left: int) -> dict | None:
         if e["type"] == "rating" and e.get("subtype") == "unverified":
             text = self._page1(e, budget_left)
-            return finalise_rating(e, text)
+            kept = finalise_rating(e, text)
+            if kept is None:
+                self._log_rating_drop(e, text, budget_left)
+            return kept
         if getattr(self, "_pdf_ratings_only", False):
             return e
         if e["type"] in ("order_win", "capacity") and e.get("value_cr") is None:
@@ -190,6 +220,25 @@ class Runner:
                 if text:
                     e["value_cr"] = parse_value_cr(text)
         return e
+
+    def _log_rating_drop(self, e: dict, text: str | None, budget_left: int) -> None:
+        """Why a 'Credit Rating' filing did not become a rating event, one JSON line per filing."""
+        url = e.get("url") or ""
+        if not url.lower().endswith(".pdf"):
+            why = "no PDF attachment"
+        elif text is None:
+            pdf_allowed = budget_left >= 0 or getattr(self, "_pdf_ratings_only", False)
+            why = "attachment not read (no --rating-attachments pass / budget spent)" if not pdf_allowed                 else "attachment download or PDF read failed"
+        elif not text.strip():
+            why = "page 1 has no extractable text (scanned image)"
+        else:
+            other = OTHER_AGENCIES.search(text)
+            why = "page 1 names no SEBI-registered CRA" + (f" (names {other.group(0)})" if other else "")
+        rec = {"date": e["event_date"], "symbol": e["symbol"], "reason": why, "subject": (e.get("subject") or "")[:200],
+               "url": url}
+        RATING_DROPS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with RATING_DROPS_PATH.open("a", encoding="utf-8") as fh:
+            fh.write(json.dumps(rec) + "\n")
 
     def _page1(self, e: dict, budget_left: int) -> str | None:
         url = e.get("url") or ""
