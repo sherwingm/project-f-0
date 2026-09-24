@@ -17,6 +17,13 @@ BODY = {"symbol": "RELIANCE", "instrument": "CE", "expiry": EXP, "strike": 1300,
 TEMPLATE = (Path(__file__).resolve().parent.parent / "templates" / "index.html").read_text(encoding="utf-8")
 
 
+@pytest.fixture(autouse=True)
+def allow_lottery(monkeypatch):
+    """These tests cover the engine with the cheap / near-expiry bucket switched on (ALLOW_LOTTERY=true)."""
+    from server.config import settings
+    monkeypatch.setattr(settings, "allow_lottery", True)
+
+
 @pytest.fixture
 def client(tmp_path, monkeypatch):
     q = StubQuotes()
@@ -65,8 +72,9 @@ def test_market_closed_review_says_when_it_fills_and_place_queues(client, monkey
     assert c.get("/api/paper/summary", auth=AUTH).json()["queued_orders"] == 1
 
 
-def test_refusals_endpoint_counts_and_lists_reasons(client):
+def test_refusals_endpoint_counts_and_lists_reasons(client, monkeypatch):
     c, _, q = client
+    monkeypatch.setattr(settings, "allow_lottery", False)         # refused either way: on spread, or near expiry
     q.set(CE, 10.0, 11.0)                                        # 9.5% spread: refused
     pv = c.post("/api/order/preview", json=BODY, auth=AUTH).json()
     assert pv["token"] is None and any("liquidity" in b for b in pv["review"]["blocked"])

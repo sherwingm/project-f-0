@@ -10,9 +10,11 @@ Futures
     penalty  spread 0.05-0.15%, or qty 25-50% of visible depth: the fill adds half a spread
     refuse   spread > 0.15%, qty > 50% of visible depth, or no bid / no ask
 Options
-    lottery  premium < Rs 2 or sessions to expiry <= 2: not refused for spread or OI; fills at best ask + 1 tick
-             (buys) / best bid - 1 tick (sells), tagged bucket "cheap_near_expiry". Still needs the side it
-             trades against (an ask to buy, a bid to sell) and qty <= 100% of that side's visible depth.
+    lottery  premium < Rs 2 or sessions to expiry <= 2. Refused unless ALLOW_LOTTERY is true (default false),
+             reason "cheap/near-expiry disabled (ALLOW_LOTTERY)". When allowed: not refused for spread or OI;
+             fills at best ask + 1 tick (buys) / best bid - 1 tick (sells), tagged bucket "cheap_near_expiry".
+             Still needs the side it trades against (an ask to buy, a bid to sell) and qty <= 100% of that
+             side's visible depth.
     accept   spread <= 3% of mid, strike OI >= 50 lots, qty <= 20% of visible depth
     penalty  spread 3-8%, or qty 20-100% of visible depth
     refuse   no bid or no ask, OI < 50 lots, qty > 100% of visible depth, or spread > 8%
@@ -51,10 +53,12 @@ class Rules:
     opt_min_oi_lots: float = 50
     lottery_max_premium: float = 2
     lottery_max_sessions: int = 2
+    allow_lottery: bool = False
 
     @classmethod
     def from_settings(cls, s=settings) -> "Rules":
-        return cls(**{f.name: getattr(s, f.name if f.name.startswith("lottery") else "liq_" + f.name) for f in fields(cls)})
+        return cls(**{f.name: getattr(s, f.name if f.name.startswith(("lottery", "allow")) else "liq_" + f.name)
+                      for f in fields(cls)})
 
 
 def classify(contract: dict, quote: dict | None, lots: int, sessions_to_expiry: int | None,
@@ -116,6 +120,8 @@ def _options(r: Rules, bid, ask, spread, depth_pct, oi_lots, premium, dte, side)
     if cheap or near:
         why = ([f"premium Rs {premium:.2f} < Rs {r.lottery_max_premium:g}"] if cheap else []) + \
               ([f"{dte} session{'s' if dte != 1 else ''} to expiry (<= {r.lottery_max_sessions})"] if near else [])
+        if not r.allow_lottery:
+            return "refuse", why + ["cheap/near-expiry disabled (ALLOW_LOTTERY)"], False
         need = "ask" if side == "BUY" else "bid"
         if (ask if side == "BUY" else bid) is None:
             return "refuse", why + [f"lottery bucket still needs an {need} to trade against; there is none"], False

@@ -117,6 +117,7 @@ Paper engine (guide 12; all server-side):
 | `LIQ_OPT_ACCEPT_DEPTH_PCT` / `LIQ_OPT_REFUSE_DEPTH_PCT` | order size as % of visible depth | 20 / 100 |
 | `LIQ_OPT_MIN_OI_LOTS` | strike OI floor for options | 50 |
 | `LOTTERY_MAX_PREMIUM` / `LOTTERY_MAX_SESSIONS` | the cheap / near-expiry bucket | 2 / 2 |
+| `ALLOW_LOTTERY` | trade the cheap / near-expiry bucket (false: refused, "cheap/near-expiry disabled (ALLOW_LOTTERY)") | false |
 | `RISK_PER_TRADE_PCT` | max loss per trade, % of capital (lots capped to fit) | 0.5 |
 | `DAILY_LOSS_HALT_PCT` / `WEEKLY_LOSS_HALT_PCT` | kill switch: no new entries past this loss | 1.0 / 3.0 |
 | `DRAWDOWN_REVIEW_PCT` | "review labels and sizing" banner threshold | 10 |

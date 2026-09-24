@@ -14,6 +14,13 @@ CE = "RELIANCE26SEP1300CE"
 FUT = "RELIANCE26SEPFUT"
 
 
+@pytest.fixture(autouse=True)
+def allow_lottery(monkeypatch):
+    """These tests cover the engine with the cheap / near-expiry bucket switched on (ALLOW_LOTTERY=true)."""
+    from server.config import settings
+    monkeypatch.setattr(settings, "allow_lottery", True)
+
+
 def at(day, hh=10, mm=0):
     return datetime(2026, 9, day, hh, mm, tzinfo=IST)
 

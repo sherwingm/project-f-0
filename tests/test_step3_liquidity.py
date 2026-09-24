@@ -65,20 +65,38 @@ def test_option_order_exactly_the_visible_depth_is_penalty_and_above_is_refused(
     assert classify(CE, b, 1, 10)["class"] == "refuse"
 
 
+LOTTERY_ON = Rules(allow_lottery=True)
+
+
 def test_cheap_premium_is_lottery_even_with_wide_spread_and_low_oi():
-    r = classify(CE, book(0.5, 1.5, oi=5 * 500), 1, 10)
+    r = classify(CE, book(0.5, 1.5, oi=5 * 500), 1, 10, rules=LOTTERY_ON)
     assert r["class"] == "lottery" and r["bucket"] == BUCKET_CHEAP
 
 
 def test_near_expiry_is_lottery_regardless_of_premium():
-    r = classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=2)
+    r = classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=2, rules=LOTTERY_ON)
     assert r["class"] == "lottery" and r["bucket"] == BUCKET_CHEAP
-    assert classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=3)["class"] == "refuse"
+    assert classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=3, rules=LOTTERY_ON)["class"] == "refuse"
 
 
 def test_lottery_still_needs_the_side_it_trades_against():
-    assert classify(CE, book(1.0, None, oi=1), 1, 10)["class"] == "refuse"            # buy, no ask
-    assert classify({**CE, "side": "SELL"}, book(1.0, None, oi=1), 1, 10)["class"] == "lottery"
+    assert classify(CE, book(1.0, None, oi=1), 1, 10, rules=LOTTERY_ON)["class"] == "refuse"            # buy, no ask
+    assert classify({**CE, "side": "SELL"}, book(1.0, None, oi=1), 1, 10, rules=LOTTERY_ON)["class"] == "lottery"
+
+
+def test_lottery_is_refused_unless_allow_lottery(tmp_path, monkeypatch):
+    from server.config import settings
+    path = tmp_path / "refusals.jsonl"
+    cheap, near = book(0.5, 1.5, oi=5 * 500), book(40.0, 44.0, oi=100 * 500)
+    for b, dte in ((cheap, 10), (near, 2)):
+        r = classify(CE, b, 1, dte, rules=Rules(), refusals_path=path)          # the default: off
+        assert r["class"] == "refuse" and r["reasons"][-1] == "cheap/near-expiry disabled (ALLOW_LOTTERY)"
+        assert r["bucket"] == BUCKET_NORMAL
+    assert [json.loads(l)["reasons"][-1] for l in path.read_text().splitlines()] == ["cheap/near-expiry disabled (ALLOW_LOTTERY)"] * 2
+    assert settings.allow_lottery is False and Rules.from_settings().allow_lottery is False
+    monkeypatch.setattr(settings, "allow_lottery", True)
+    assert Rules.from_settings().allow_lottery is True
+    assert classify(CE, cheap, 1, 10)["class"] == "lottery"
 
 
 def test_normal_bucket_on_ordinary_fills():

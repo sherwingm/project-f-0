@@ -19,7 +19,9 @@ to stop the account from flattering you. Nothing in it can reach a broker.
    | lottery | — | premium < ₹2 **or** ≤ 2 sessions to expiry | best ask + 1 tick (buys) / best bid − 1 tick (sells) |
    | refuse | spread > 0.15%, order > 50% of depth, or a missing side | no bid or ask, OI < 50 lots, order > 100% of depth, spread > 8% | logged to `data/refusals.jsonl`, order rejected |
 
-   A *lottery* order is not refused for spread or OI — that is the point of the bucket — but it still
+   The lottery class is **off by default** (`ALLOW_LOTTERY=false`): a cheap or near-expiry option is refused
+   with the reason "cheap/near-expiry disabled (ALLOW_LOTTERY)" and logged like any other refusal. With `ALLOW_LOTTERY=true`, a
+   *lottery* order is not refused for spread or OI — that is the point of the bucket — but it still
    needs the side it trades against, and it is tagged **cheap_near_expiry** on every screen and score.
 3. **Fill** (`server/fills.py`). Buys walk the asks, sells walk the bids; the price is the volume-weighted
    average of the levels consumed, plus one tick against you for latency, rounded to the tick against you.
