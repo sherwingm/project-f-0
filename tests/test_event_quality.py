@@ -80,21 +80,46 @@ def test_one_results_event_per_stock_across_filings_and_nearby_days(tmp_path, mo
 
 
 # ---------------------------------------------------------------- c) deals row cap
-def test_deals_split_any_answer_at_the_row_cap(monkeypatch):
-    per_day = {date(2025, 3, d): n for d, n in ((3, 30), (4, 40), (5, 45), (6, 0), (7, 70))}
+def test_deals_are_read_from_the_uncapped_csv():
+    # 176 bulk deals on one day: the JSON answer stops at 70, the CSV has them all
+    lines = ['\ufeff"Date ","Symbol ","Security Name ","Client Name ","Buy / Sell ","Quantity Traded ",'
+             '"Trade Price / Wght. Avg. Price ","Remarks "']
+    lines += [f'"10-JUN-2026","ABC","Abc Ltd","CLIENT {i}","BUY","12,54,{i:03d}","378.02","-"' for i in range(176)]
 
-    def answer(url):
-        a, b = (date(int(x[6:10]), int(x[3:5]), int(x[:2])) for x in (url.split("from=")[1][:10], url.split("to=")[1][:10]))
-        rows = [{"BD_DT_DATE": d.strftime("%d-%b-%Y").upper(), "BD_SYMBOL": "ABC", "BD_CLIENT_NAME": f"C{i}",
-                 "BD_BUY_SELL": "BUY", "BD_QTY_TRD": 100 + i, "BD_TP_WATP": 10} for d, n in per_day.items() if a <= d <= b
-                for i in range(n)]
-        return {"data": rows[:nse_deals.ROW_CAP]}                           # the endpoint's silent cap
+    class CsvHttp:
+        def __init__(self):
+            self.urls = []
 
-    http = Http(answer)
-    items = nse_deals.fetch(date(2025, 3, 3), http, kind="bulk", until=date(2025, 3, 7))
-    assert len(items) == 30 + 40 + 45 + 70                                  # everything, the 70-row day included
-    assert len(http.urls) > 1
-    assert nse_deals.BACKFILL_CHUNK_DAYS == {"block": 30, "bulk": 1}
+        def get(self, url, referer):
+            self.urls.append(url)
+            return type("R", (), {"content": "\n".join(lines).encode("utf-8")})()
+
+    http = CsvHttp()
+    items = nse_deals.fetch(date(2026, 6, 1), http, kind="bulk", until=date(2026, 6, 30))
+    assert len(items) == 176 and http.urls[0].endswith("&csv=true") and len(http.urls) == 1
+    assert items[0]["extra"]["quantity"] == 1254000 and items[0]["extra"]["price"] == 378.02
+    assert items[0]["event_date"] == "2026-06-10" and items[0]["extra"]["client"] == "CLIENT 0"
+    assert nse_deals.BACKFILL_CHUNK_DAYS == {"block": 30, "bulk": 30}
+
+
+def test_a_failed_fetch_stops_its_source_only(tmp_path, monkeypatch):
+    monkeypatch.setattr(run_mod, "STATUS_PATH", tmp_path / "s.json")
+    monkeypatch.setattr(run_mod, "PROGRESS_PATH", tmp_path / "p.json")
+    r = run_mod.Runner(store=Store(tmp_path / "events.sqlite"), universe={"ABC"}, fixtures=True)
+
+    def ok(start, end, http=None, **kw):
+        yield "2026-01-01", []
+
+    def broken(start, end, http=None, **kw):
+        yield "chunk-1", []
+        raise run_mod.FetchError("ConnectionError")
+
+    for mod in (run_mod.nse_announcements, run_mod.nse_pit, run_mod.nse_ban, run_mod.nse_board_meetings):
+        monkeypatch.setattr(mod, "backfill", ok)
+    monkeypatch.setattr(run_mod.nse_deals, "backfill", broken)
+    r.backfill(date(2026, 1, 1), date(2026, 1, 31))
+    progress = json.loads((tmp_path / "p.json").read_text())
+    assert progress["nse_bulk"] == ["chunk-1"] and progress["nse_bm"] == ["2026-01-01"]   # later sources still ran
 
 
 # ---------------------------------------------------------------- d) rating drop reasons

@@ -290,7 +290,14 @@ class Runner:
                 ("nse_ban", nse_ban.backfill(start, end, self.http))]
         for src, gen in jobs:
             done = set(progress.get(src, []))
-            for label, items in gen:
+            while True:
+                try:
+                    label, items = next(gen)
+                except StopIteration:
+                    break
+                except Exception as exc:  # noqa: BLE001 - the fetch runs inside the generator: stop this source,
+                    log.warning("backfill %s stopped (%s); run again to resume from here", src, exc)  # keep the rest
+                    break
                 if label in done:
                     continue
                 try:
