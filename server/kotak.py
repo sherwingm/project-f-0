@@ -246,6 +246,12 @@ def _read_csv(url: str) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- live data
+# Kotak's quotes call refuses 50 instruments ("Please set the Neo symbol max value to 50"); 49 is accepted.
+QUOTE_BATCH = 49
+# option_chain answers "Rate limit exceeded" to calls 0.25 s apart and not to calls 1 s apart (checked 2026-09-28)
+CHAIN_MIN_INTERVAL = 1.0
+
+
 class KotakProvider:
     """quote(keys) -> {key: {...}} in the shape LiveFeed expects.
 
@@ -263,6 +269,7 @@ class KotakProvider:
         self.chain_strikes = chain_strikes          # per side; Kotak wants a multiple of 10
         self._chains: dict[str, dict] = {}
         self._cursor = 0
+        self._last_chain = 0.0
 
     def quote(self, keys: list[str]) -> dict[str, dict]:
         self.master.load()
@@ -289,9 +296,9 @@ class KotakProvider:
                 else:
                     opt_wanted.setdefault((p["sym"], rec["expiry"]), []).append((rec["tradingsymbol"], k))
 
-        # LTP / volume / OI / previous close / 5-level depth in batches of 50
+        # LTP / volume / OI / previous close / 5-level depth in batches of QUOTE_BATCH
         items = [{"instrument_token": t, "exchange_segment": seg} for (seg, t) in tok_to_key]
-        for batch in _chunks(items, 50):
+        for batch in _chunks(items, QUOTE_BATCH):
             for q in self._quotes(batch):
                 key = tok_to_key.get((str(q.get("exchange", "")).lower(), str(q.get("exchange_token", ""))))
                 if key:
@@ -368,19 +375,29 @@ class KotakProvider:
 
     def _fetch_chain(self, sym: str, expiry: str | None) -> dict | None:
         self.limiter.wait()
+        wait = CHAIN_MIN_INTERVAL - (time.monotonic() - self._last_chain)
+        if wait > 0:
+            time.sleep(wait)
+        self._last_chain = time.monotonic()
         resp = self.s.client().option_chain(exchange="nse_fo", underlying=sym, expiry=expiry,
                                             instrument_type="option", count=self.chain_strikes)
         _raise_if_error(resp, f"option_chain {sym}")
-        data = (resp or {}).get("data") or {}
+        # the live API answers {call, put, common_data, ...} at the top level with short keys (inst, oi.cur,
+        # oi.prev, oi.chg, quote.vol, quote.pc; seen 2026-09-28); the documented shape wraps it in "data" with
+        # long keys (instrument, openInterest.current, ...). Both are read.
+        resp = resp or {}
+        data = resp.get("data") if isinstance(resp.get("data"), dict) else resp
         strikes: dict[str, dict] = {}
         call_oi = put_oi = 0.0
         for side in ("call", "put"):
             for leg in data.get(side) or []:
-                inst, q, oi = leg.get("instrument") or {}, leg.get("quote") or {}, leg.get("openInterest") or {}
+                inst = leg.get("instrument") or leg.get("inst") or {}
+                q, oi = leg.get("quote") or {}, leg.get("openInterest") or leg.get("oi") or {}
                 ts = str(inst.get("symbol", "")).strip()
-                cur = _f(oi.get("current")) or 0.0
-                strikes[ts] = {"last_price": _f(q.get("ltp")), "open_interest": int(cur), "prev_oi": _i(oi.get("previous")),
-                               "oi_change": _i(oi.get("change")), "volume": _i(q.get("volume")), "prev_close": _f(q.get("prevClose"))}
+                cur = _f(_first(oi, "current", "cur")) or 0.0
+                strikes[ts] = {"last_price": _f(q.get("ltp")), "open_interest": int(cur),
+                               "prev_oi": _i(_first(oi, "previous", "prev")), "oi_change": _i(_first(oi, "change", "chg")),
+                               "volume": _i(_first(q, "volume", "vol")), "prev_close": _f(_first(q, "prevClose", "pc"))}
                 if side == "call":
                     call_oi += cur
                 else:
@@ -391,6 +408,11 @@ class KotakProvider:
                  "lot_size": _i(common.get("mktLot")), "ts": datetime.now(IST).strftime("%H:%M:%S"), "epoch": time.time()}
         self._chains[sym] = chain
         return chain
+
+
+def _first(d: dict, *keys):
+    """The first of `keys` present in d (live and documented payloads name the same field differently)."""
+    return next((d[k] for k in keys if k in d), None)
 
 
 # ---------------------------------------------------------------- orders

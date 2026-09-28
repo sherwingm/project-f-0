@@ -114,7 +114,7 @@ VPS with a fixed IP and reach it over Tailscale/HTTPS.
 `DATA_PROVIDER=kotak` with `KOTAK_CONSUMER_KEY` feeds live LTP, futures OI and exact PCR for the
 universe; Kotak's quotes/option-chain/scrip-master endpoints authenticate with the consumer key,
 so no TOTP or MPIN is stored for a data-only or paper deployment. Adapter `server/kotak.py`:
-50-instrument quote batches (about nine calls per poll), a rolling option-chain sweep for PCR and
+49-instrument quote batches (about nine calls per poll), a rolling option-chain sweep for PCR and
 per-strike OI, contracts from Kotak's scrip master (their epoch offset and `dStrikePrice;`
 column handled). `KotakBroker` exists for real orders (`BROKER=kotak PAPER=false`, all five
 credentials) and has not been run against a live account. `python -m server.kotak_login` checks

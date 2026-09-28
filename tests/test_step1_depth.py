@@ -68,3 +68,56 @@ def test_kotak_error_messages_never_carry_the_key():
     with pytest.raises(RuntimeError) as exc:
         _raise_if_error({"error": True, "message": "Consumer key 'super-secret-consumer-key' is invalid. "}, "quotes")
     assert "super-secret-consumer-key" not in str(exc.value) and "<redacted>" in str(exc.value)
+
+
+def test_quote_batches_stay_under_kotaks_limit():
+    from server.kotak import QUOTE_BATCH
+    provider, fake = kotak_provider()
+    toks = [{"instrument_token": str(i), "exchange_segment": "nse_cm"} for i in range(120)]
+    fake.book.update({t["instrument_token"]: {"exchange_token": t["instrument_token"], "exchange": "nse_cm"} for t in toks})
+    provider.master.eq.update({f"S{i}": {"token": str(i)} for i in range(120)})
+    provider.quote([f"NSE:S{i}" for i in range(120)])
+    assert QUOTE_BATCH == 49 and fake.calls and max(len(c) for c in fake.calls) <= 49
+
+
+LIVE_CHAIN = {  # the live option_chain shape (2026-09-28): top-level call/put, short keys, strings
+    "common_data": {"mktLot": "500", "multiplier": "1", "expiryDt": "2026-09-29", "unlSymbol": "RELIANCE", "exSeg": "nse_fo"},
+    "call": [{"inst": {"neoSymbol": "nse_fo|1", "symbol": "RELIANCE26SEP1200CE", "optType": "CE", "strkPrc": "1200"},
+              "quote": {"ltp": "9.5", "pc": "20.1", "vol": "1500"}, "oi": {"cur": "2000000", "prev": "1800000", "chg": "200000"}}],
+    "put": [{"inst": {"neoSymbol": "nse_fo|2", "symbol": "RELIANCE26SEP1200PE", "optType": "PE", "strkPrc": "1200"},
+             "quote": {"ltp": "6.7", "pc": "3.2", "vol": "900"}, "oi": {"cur": "1500000", "prev": "1600000", "chg": "-100000"}}],
+    "future_contracts": [], "spot": {}, "future": {}}
+
+
+@pytest.mark.parametrize("shape", ["live", "documented"])
+def test_option_chain_parses_the_live_and_the_documented_shape(shape):
+    provider, fake = kotak_provider()
+    if shape == "live":
+        resp = LIVE_CHAIN
+    else:
+        long = lambda leg: {"instrument": leg["inst"], "quote": {"ltp": leg["quote"]["ltp"], "prevClose": leg["quote"]["pc"],
+                                                                  "volume": leg["quote"]["vol"]},
+                            "openInterest": {"current": leg["oi"]["cur"], "previous": leg["oi"]["prev"], "change": leg["oi"]["chg"]}}
+        resp = {"data": {"common_data": LIVE_CHAIN["common_data"], "call": [long(LIVE_CHAIN["call"][0])],
+                         "put": [long(LIVE_CHAIN["put"][0])]}}
+    fake.option_chain = lambda **kw: resp
+    c = provider._fetch_chain("RELIANCE", EXPIRY)
+    assert (c["call_oi"], c["put_oi"], c["pcr"], c["lot_size"], c["expiry"]) == (2000000, 1500000, 0.75, 500, "2026-09-29")
+    ce = c["strikes"]["RELIANCE26SEP1200CE"]
+    assert (ce["last_price"], ce["open_interest"], ce["prev_oi"], ce["oi_change"], ce["volume"], ce["prev_close"]) == \
+        (9.5, 2000000, 1800000, 200000, 1500, 20.1)
+
+
+def test_option_chain_calls_are_spaced(monkeypatch):
+    from server import kotak
+    provider, fake = kotak_provider()
+    fake.option_chain = lambda **kw: LIVE_CHAIN
+    t = {"now": 100.0}
+    sleeps = []
+    monkeypatch.setattr(kotak.time, "monotonic", lambda: t["now"])
+    monkeypatch.setattr(kotak.time, "sleep", lambda s: (sleeps.append(round(s, 3)), t.__setitem__("now", t["now"] + s)))
+    monkeypatch.setattr(provider.limiter, "wait", lambda: None)
+    for _ in range(3):
+        provider._fetch_chain("RELIANCE", EXPIRY)
+        t["now"] += 0.25                                   # each call takes 0.25 s
+    assert sleeps == [0.75, 0.75] and kotak.CHAIN_MIN_INTERVAL == 1.0

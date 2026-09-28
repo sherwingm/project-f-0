@@ -39,6 +39,8 @@ class FakeNeo:
 
     def quotes(self, instrument_tokens=None, quote_type=None):
         self.calls.append(instrument_tokens)
+        if len(instrument_tokens) >= 50:                  # the live API refuses 50 (checked 2026-09-28)
+            return {"fault": {"code": "400", "description": "Please set the Neo symbol max value to 50."}}
         return [self.book[i["instrument_token"]] for i in instrument_tokens if i["instrument_token"] in self.book]
 
     def option_chain(self, **kwargs):
