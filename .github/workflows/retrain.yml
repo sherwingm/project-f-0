@@ -12,11 +12,11 @@ concurrency:
   cancel-in-progress: false
 jobs:
   retrain:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04               # pinned: ubuntu-latest moves to Ubuntu 26 from 2026-10-19
     timeout-minutes: 180
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -24,13 +24,13 @@ jobs:
         run: pip install -r requirements.txt scikit-learn
 
       - name: Restore the event store
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/events.sqlite
           key: events-${{ github.run_id }}
           restore-keys: events-
       - name: Restore the bhavcopy cache
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/cache/fo_bhavcopy_*.csv
           key: bhav-${{ github.run_id }}
@@ -40,7 +40,7 @@ jobs:
         run: python -m scanner.bhav_cache --since 2023-01-01
       - name: Save the bhavcopy cache
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: data/cache/fo_bhavcopy_*.csv
           key: bhav-${{ github.run_id }}

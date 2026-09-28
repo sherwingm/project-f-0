@@ -17,11 +17,11 @@ concurrency:
   cancel-in-progress: false
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04               # pinned: ubuntu-latest moves to Ubuntu 26 from 2026-10-19
     timeout-minutes: 60
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -30,7 +30,7 @@ jobs:
 
       - name: Restore the event store
         id: events
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: data/events.sqlite
           key: events-${{ github.run_id }}
@@ -45,7 +45,7 @@ jobs:
         run: python -m scanner.events.run || true
       - name: Save the event store
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: data/events.sqlite
           key: events-${{ github.run_id }}
