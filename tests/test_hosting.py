@@ -85,3 +85,19 @@ def test_nothing_is_public_without_the_password():
     c = TestClient(app_mod.app)
     assert c.get("/openapi.json").status_code == 404 and c.get("/docs").status_code == 404
     assert c.get("/api/live").status_code in (401, 503)                     # 503 when APP_PASSWORD is unset
+
+
+def test_public_access_needs_no_login_and_never_allows_real_orders(monkeypatch):
+    from fastapi.testclient import TestClient
+    c = TestClient(app_mod.app)
+    monkeypatch.setattr(settings, "public_access", False)
+    monkeypatch.setattr(settings, "app_password", "pw")
+    assert c.get("/api/scan").status_code == 401                                      # login on: refused
+    assert c.get("/api/scan", auth=("user", "pw")).status_code == 200
+    monkeypatch.setattr(settings, "public_access", True)
+    assert c.get("/api/scan").status_code == 200                                      # login off: open
+    monkeypatch.setattr(settings, "orders", True)
+    monkeypatch.setattr(settings, "paper", False)
+    assert settings.orders_enabled is False                                           # no real orders without a login
+    monkeypatch.setattr(settings, "paper", True)
+    assert settings.orders_enabled is True                                            # paper orders still work

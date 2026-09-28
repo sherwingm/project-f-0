@@ -84,6 +84,7 @@ GET  /api/paper/refusals    orders refused for liquidity, with reasons and the q
 | `ORDERS` | order sheet on/off (keep false for read-only) | false |
 | `BROKER` | `none` / `groww` / `kite` / `fake`, only when `ORDERS=true` | none |
 | `PAPER` | simulate orders locally | true |
+| `PUBLIC_ACCESS` | no login (paper orders only; real orders refused while on) | false (true in render.yaml) |
 | `SCAN_URL` | read `data/scan.json` from this URL (the GitHub Action's raw file) instead of building it on the server | empty (build here) |
 | `GROWW_TOTP_TOKEN`, `GROWW_TOTP_SECRET` | Groww TOTP key (headless login) | — |
 | `GROWW_ACCESS_TOKEN` | alternative: pasted daily token | — |

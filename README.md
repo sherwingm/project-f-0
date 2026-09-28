@@ -85,8 +85,9 @@ One-time setup:
    `KOTAK_CONSUMER_KEY` (from `.env`), `SCAN_URL` =
    `https://raw.githubusercontent.com/<user>/<repo>/main/data/scan.json`. The server reads the scan from there
    at start-up and at 21:00 / 22:00 IST and never contacts NSE itself.
-4. **Phone** → open both URLs → browser menu → *Add to Home Screen*. The Render page asks for user `user` and
-   your `APP_PASSWORD`.
+4. **Phone** → open both URLs → browser menu → *Add to Home Screen*. `render.yaml` sets `PUBLIC_ACCESS=true`: no
+   login, anyone with the URL can see the page and place paper orders; real orders are always refused while it is
+   on. Set it to `false` in Render to ask for user `user` and your `APP_PASSWORD` again.
 
 Every day: nothing. If NSE refuses GitHub's runner, the nightly job fails before committing (yesterday's page
 stays) and GitHub emails you; run `python -m scanner.build` at home and push instead. Monthly: Actions →

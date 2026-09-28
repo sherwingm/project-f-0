@@ -48,13 +48,15 @@ from server.live import FakeProvider, KiteProvider, LiveFeed, market_open
 log = logging.getLogger("server")
 IST = timezone(timedelta(hours=5, minutes=30))
 app = FastAPI(title="F&O scanner", docs_url=None, redoc_url=None, openapi_url=None)   # nothing public without the password
-security = HTTPBasic()
+security = HTTPBasic(auto_error=False)
 
 
-def auth(c: HTTPBasicCredentials = Depends(security)) -> str:
+def auth(c: HTTPBasicCredentials | None = Depends(security)) -> str:
+    if settings.public_access:                      # PUBLIC_ACCESS=true: no login (paper orders only, see config)
+        return "public"
     if not settings.app_password:
         raise HTTPException(503, "APP_PASSWORD is not set on the server")
-    if not (secrets.compare_digest(c.username, "user") and secrets.compare_digest(c.password, settings.app_password)):
+    if c is None or not (secrets.compare_digest(c.username, "user") and secrets.compare_digest(c.password, settings.app_password)):
         raise HTTPException(401, "Unauthorized", headers={"WWW-Authenticate": "Basic"})
     return c.username
 

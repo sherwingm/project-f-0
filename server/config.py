@@ -2,6 +2,8 @@
 no live feed, no commentary, and password-protected access.
 
     APP_PASSWORD          required; the page and API sit behind HTTP Basic auth (user: "user")
+    PUBLIC_ACCESS         true | false (default false): no login at all; anyone with the URL sees the page and
+                          can place PAPER orders. Real orders are always refused while this is on.
     DATA_PROVIDER         none | upstox | groww | kite | fake   (default: same as BROKER)
                           where live quotes come from; upstox is read-only and free (Analytics Token)
     KOTAK_CONSUMER_KEY    Kotak Neo: Neo app → More → Trade API → Generate application (enough for live data)
@@ -65,6 +67,7 @@ def _bool(name: str, default: bool) -> bool:
 @dataclass
 class Settings:
     app_password: str = os.getenv("APP_PASSWORD", "")
+    public_access: bool = _bool("PUBLIC_ACCESS", False)
     broker: str = os.getenv("BROKER", "none").lower()
     data_provider: str = os.getenv("DATA_PROVIDER", os.getenv("BROKER", "none")).lower()
     orders: bool = _bool("ORDERS", False)
@@ -166,6 +169,8 @@ class Settings:
     @property
     def orders_enabled(self) -> bool:
         # off unless ORDERS=true; then paper orders always work and real orders need a configured broker
+        if self.public_access and not self.paper:     # no login: never real orders
+            return False
         return self.orders and (self.paper or self.kite_ready or self.groww_ready or self.kotak_ready)
 
     @property

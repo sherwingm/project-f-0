@@ -20,7 +20,9 @@ services:
     envVars:
       - key: PYTHON_VERSION
         value: "3.12.7"
-      - key: APP_PASSWORD             # you choose it; the page asks for user "user" and this password
+      - key: PUBLIC_ACCESS            # true: no login (paper orders only); false: user "user" + APP_PASSWORD
+        value: "true"
+      - key: APP_PASSWORD             # only used when PUBLIC_ACCESS is false
         sync: false
       - key: KOTAK_CONSUMER_KEY       # from your .env; entered in the Render dashboard, never committed
         sync: false
