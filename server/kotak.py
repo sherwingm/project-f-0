@@ -328,6 +328,18 @@ class KotakProvider:
                     out[ourkey] = {**row, **{k: v for k, v in out.get(ourkey, {}).items() if v is not None}}
         return out
 
+    def futures(self, symbols, today: str | None = None) -> dict[str, list[str]]:
+        """{symbol: [near, next, far futures tradingsymbols]} for contracts expiring today or later, from Kotak's
+        scrip master: the live feed's contracts roll by themselves after each expiry, and summing their OI gives
+        the same all-expiry total the EOD scan's fut_oi is (so the live OI change compares like with like)."""
+        self.master.load()
+        today = today or datetime.now(IST).date().isoformat()
+        by: dict[str, list[tuple[str, str]]] = {}
+        for r in self.master.fo.values():
+            if r["type"] == "FUT" and r["expiry"] >= today:
+                by.setdefault(r["symbol"], []).append((r["expiry"], r["tradingsymbol"]))
+        return {sym: [ts for _, ts in sorted(by[sym])] for sym in symbols if sym in by}
+
     def quote_one(self, tradingsymbol: str) -> dict:
         """One F&O contract on demand (the fill engine's options are not in the polling universe):
         last_price, volume, open_interest, timestamp and 5-level depth, plus the contract's

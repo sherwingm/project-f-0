@@ -127,10 +127,16 @@ class LiveFeed:
         self._stop = threading.Event()
         self.reload(scan, fut_tradingsymbols or {})
 
-    def reload(self, scan: dict, fut_tradingsymbols: dict[str, str]) -> None:
+    def reload(self, scan: dict, fut_tradingsymbols: dict[str, str | list[str]]) -> None:
+        """fut_tradingsymbols: {symbol: near future} or {symbol: [near, next, far]}. With the full list, fut_oi is
+        the OI summed over every expiry, like the EOD scan's fut_oi, and fut_oi_chg_pct compares the two; with the
+        near contract alone, fut_oi_chg_pct is left out (near-month OI against an all-expiry total is not a
+        change: it reads -60 % or worse as the month's contract rolls off)."""
         self.eod = {s["symbol"]: s for s in scan["stocks"]}
-        self.fut_keys = {sym: "NFO:" + ts for sym, ts in fut_tradingsymbols.items()}
-        self.keys = ["NSE:" + s for s in self.eod] + list(self.fut_keys.values())
+        self.fut_all = {sym: ["NFO:" + t for t in ([ts] if isinstance(ts, str) else ts)]
+                        for sym, ts in fut_tradingsymbols.items() if ts}
+        self.fut_keys = {sym: keys[0] for sym, keys in self.fut_all.items()}
+        self.keys = ["NSE:" + s for s in self.eod] + [k for keys in self.fut_all.values() for k in keys]
 
     def start(self) -> None:
         threading.Thread(target=self._loop, name="live-feed", daemon=True).start()
@@ -163,9 +169,13 @@ class LiveFeed:
                    "depth": q.get("depth")}
             f = raw.get(self.fut_keys.get(sym, ""))
             if f:
-                oi, oi_eod = f.get("open_interest"), e.get("fut_oi")
-                row.update({"fut_ltp": f.get("last_price"), "fut_oi": oi,
-                            "fut_oi_chg_pct": round((oi / oi_eod - 1) * 100, 2) if oi and oi_eod else None,
+                keys = self.fut_all.get(sym, [])
+                ois = [(raw.get(k) or {}).get("open_interest") for k in keys]
+                whole = len(keys) > 1 and all(v is not None for v in ois)
+                oi, oi_eod = (sum(ois) if whole else None), e.get("fut_oi")
+                row.update({"fut_ltp": f.get("last_price"), "fut_oi": oi if whole else f.get("open_interest"),
+                            "fut_oi_near": f.get("open_interest"), "fut_oi_all_expiries": whole,
+                            "fut_oi_chg_pct": round((oi / oi_eod - 1) * 100, 2) if whole and oi and oi_eod else None,
                             "oi_ts": f.get("oi_ts"), "fut_depth": f.get("depth"),
                             "fut_tradingsymbol": self.fut_keys[sym].split(":", 1)[1]})
             p = raw.get("PCR:" + sym)          # providers that sweep option chains add exact live PCR

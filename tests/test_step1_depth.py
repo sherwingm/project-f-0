@@ -121,3 +121,37 @@ def test_option_chain_calls_are_spaced(monkeypatch):
         provider._fetch_chain("RELIANCE", EXPIRY)
         t["now"] += 0.25                                   # each call takes 0.25 s
     assert sleeps == [0.75, 0.75] and kotak.CHAIN_MIN_INTERVAL == 1.0
+
+
+def _with_october(provider, fake):
+    from tests.fakes import kotak_expiry, kotak_quote
+    import pandas as pd
+    provider.master.ingest_fo(pd.DataFrame([
+        {"pSymbol": "35002", "pSymbolName": "RELIANCE", "pTrdSymbol": "RELIANCE26OCTFUT", "pOptionType": "XX",
+         "pInstType": "FUTSTK", "lLotSize": 500, "dStrikePrice;": -1, "pExpiryDate": kotak_expiry("2026-10-27")},
+        {"pSymbol": "35000", "pSymbolName": "RELIANCE", "pTrdSymbol": "RELIANCE26AUGFUT", "pOptionType": "XX",
+         "pInstType": "FUTSTK", "lLotSize": 500, "dStrikePrice;": -1, "pExpiryDate": kotak_expiry("2026-08-25")}]))
+    fake.book["35002"] = kotak_quote("nse_fo", "35002", "RELIANCE26OCTFUT", "1255.0000", oi="654322")
+
+
+def test_futures_are_every_live_contract_nearest_first():
+    provider, fake = kotak_provider()
+    _with_october(provider, fake)
+    assert provider.futures(["RELIANCE", "NOPE"], today="2026-09-28") == {"RELIANCE": ["RELIANCE26SEPFUT", "RELIANCE26OCTFUT"]}
+    assert provider.futures(["RELIANCE"], today="2026-09-30") == {"RELIANCE": ["RELIANCE26OCTFUT"]}   # Sep rolled off
+
+
+def test_live_oi_change_compares_all_expiries_with_the_eod_total():
+    provider, fake = kotak_provider()
+    _with_october(provider, fake)
+    feed = LiveFeed(provider, SCAN, fut_tradingsymbols=provider.futures(["RELIANCE"], today="2026-09-28"))
+    feed.poll_once()
+    q = feed.snapshot()["quotes"]["RELIANCE"]
+    assert q["fut_oi"] == 12345678 + 654322 and q["fut_oi_near"] == 12345678 and q["fut_oi_all_expiries"]
+    assert q["fut_oi_chg_pct"] == 8.33                                        # 13,000,000 vs the scan's 12,000,000
+    assert q["fut_tradingsymbol"] == "RELIANCE26SEPFUT" and q["fut_depth"]["ask"][0] == (1248.2, 500)
+
+    near_only = LiveFeed(provider, SCAN, fut_tradingsymbols={"RELIANCE": "RELIANCE26SEPFUT"})
+    near_only.poll_once()
+    r = near_only.snapshot()["quotes"]["RELIANCE"]
+    assert r["fut_oi"] == 12345678 and r["fut_oi_chg_pct"] is None and not r["fut_oi_all_expiries"]

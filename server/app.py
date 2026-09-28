@@ -70,6 +70,7 @@ class State:
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.orders_today = Counter()
+        self.fut_source = None               # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
 
     def load_scan(self, path: Path) -> None:
         scan = json.loads(path.read_text())
@@ -79,9 +80,15 @@ class State:
         if self.feed:
             self.feed.reload(scan, self.fut_symbols())
 
-    def fut_symbols(self) -> dict[str, str]:
-        """Nearest-expiry futures tradingsymbol per stock (Kite naming; the option chain expiry is
-        the same monthly cycle as the near futures contract)."""
+    def fut_symbols(self) -> dict[str, str | list[str]]:
+        """Futures per stock for the live feed: every live contract, nearest first, when the provider lists them
+        (fut_source); else the nearest-expiry tradingsymbol (Kite naming; the option chain expiry is the same
+        monthly cycle as the near futures contract)."""
+        if self.fut_source is not None:
+            try:
+                return self.fut_source(sorted(self.stocks))
+            except Exception as exc:  # noqa: BLE001 - fall back to the scan's contract
+                log.warning("futures from the provider failed (%s); using the scan's expiry", exc)
         out = {}
         for sym, s in self.stocks.items():
             exp = (s.get("chain") or {}).get("expiry")
@@ -112,6 +119,7 @@ def startup() -> None:
     elif src == "kotak":
         from server.kotak import KotakProvider, shared_session
         provider = KotakProvider(shared_session(settings), settings.kotak_chain_calls_per_poll)
+        state.fut_source = provider.futures
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols())
         state.feed.start()
         log.info("live feed on (Kotak Neo, consumer key only): LTP + futures OI every %ss, PCR/strike OI for %d stocks per poll",
