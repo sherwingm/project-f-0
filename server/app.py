@@ -16,7 +16,8 @@ Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
     GET  /api/paper/positions      open paper positions with marks, stops, expiry and T-2 date
     GET  /api/paper/trades         closed paper trades, net of fills and charges
     GET  /api/paper/refusals       orders refused for liquidity, newest first, with the quote they were judged on
-    POST /api/rebuild              re-run the EOD build (also runs itself daily at 20:30 IST)
+    POST /api/rebuild              re-run the EOD build (also runs itself daily at 20:30 IST); with SCAN_URL set,
+                                   re-read the scan from there instead (also at 21:00 and 22:00 IST)
 """
 from __future__ import annotations
 
@@ -104,8 +105,14 @@ SCAN_PATH = ROOT / "data" / "scan.json"
 @app.on_event("startup")
 def startup() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    if settings.scan_url:
+        try:
+            _pull_scan()
+        except Exception as exc:  # noqa: BLE001 - the copy in the image is the fallback
+            log.warning("could not read the scan from SCAN_URL (%s); using the local copy", exc)
     if SCAN_PATH.exists():
-        state.load_scan(SCAN_PATH)
+        if not state.scan:
+            state.load_scan(SCAN_PATH)
     else:
         log.warning("no data/scan.json yet; run `python -m scanner.build` or POST /api/rebuild")
     src = settings.live_source
@@ -162,7 +169,8 @@ def startup() -> None:
 def _daily_rebuild_loop() -> None:
     """19:45 IST: fetch the day's exchange events (guide 12 spec); 20:30 IST: rebuild the scan, which
     joins them in. A failed event run never blocks the rebuild."""
-    jobs = [((19, 45), _events_run), ((20, 30), _rebuild)]
+    jobs = [((21, 0), _pull_scan), ((22, 0), _pull_scan)] if settings.scan_url else \
+        [((19, 45), _events_run), ((20, 30), _rebuild)]
     while True:
         now = datetime.now(IST)
         when, job = min(((now.replace(hour=h, minute=m, second=0, microsecond=0)
@@ -205,7 +213,25 @@ def _maybe_retrain(max_age_days: int = 31) -> None:
     threading.Thread(target=_job, name="model-retrain", daemon=True).start()
 
 
+def _pull_scan() -> dict:
+    """Read the scan someone else built (SCAN_URL, e.g. the GitHub Action's raw data/scan.json), keep a local copy,
+    and load it. Refuses anything that is not a scan, so a bad download never replaces a good scan."""
+    import requests
+    r = requests.get(settings.scan_url, timeout=60, headers={"Cache-Control": "no-cache"})
+    r.raise_for_status()
+    scan = r.json()
+    if not isinstance(scan, dict) or not scan.get("stocks") or "meta" not in scan:
+        raise ValueError("SCAN_URL did not return a scan (no stocks/meta)")
+    SCAN_PATH.parent.mkdir(parents=True, exist_ok=True)
+    SCAN_PATH.write_text(json.dumps(scan))
+    state.load_scan(SCAN_PATH)
+    log.info("scan %s read from SCAN_URL (%d stocks)", scan["meta"].get("as_of"), len(scan["stocks"]))
+    return scan["meta"]
+
+
 def _rebuild() -> dict:
+    if settings.scan_url:
+        return _pull_scan()
     scan = build(ROOT / "data" / "eod2", settings.data_dir / "cache")
     SCAN_PATH.parent.mkdir(parents=True, exist_ok=True)
     SCAN_PATH.write_text(json.dumps(scan))

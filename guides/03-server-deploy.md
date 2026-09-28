@@ -3,6 +3,13 @@
 Result: the server runs on a machine that stays on during market hours, restarts itself, and
 rebuilds the scan every evening.
 
+## The free setup: Render from GitHub (recommended to start)
+
+`render.yaml` deploys this server to Render's free tier straight from the GitHub repo, with Kotak live data and
+paper orders, and reads the scan the nightly GitHub Action builds (`SCAN_URL`) instead of building it here. The
+steps are in the README, *Put it on your phone*. The rest of this guide is for running the server on your own
+machine or a VPS (needed later for real orders from a whitelisted static IP, or to keep the paper ledger).
+
 ## Where to run it
 
 | Option | Pros | Cons | Static IP |

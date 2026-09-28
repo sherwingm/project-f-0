@@ -23,6 +23,9 @@ no live feed, no commentary, and password-protected access.
     MAX_LOTS_PER_ORDER    default 5
     MAX_ORDERS_PER_DAY    default 20
     DATA_DIR              default ./data
+    SCAN_URL              optional: where to read data/scan.json from instead of building it here (e.g. the raw
+                          GitHub URL a GitHub Action commits it to). Read at start-up and at 21:00 / 22:00 IST
+                          on weekdays; the server then never contacts NSE itself.
 
   Paper engine (guide 12)
     CHARGES_JSON          JSON object overriding any rate in server/charges.py, e.g. {"OPT_NSE_PER_LAKH": 35.03}
@@ -84,6 +87,7 @@ class Settings:
     poll_seconds: int = int(os.getenv("POLL_SECONDS", "30"))
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")
+    scan_url: str = os.getenv("SCAN_URL", "").strip()
     max_lots_per_order: int = int(os.getenv("MAX_LOTS_PER_ORDER", "5"))
     max_orders_per_day: int = int(os.getenv("MAX_ORDERS_PER_DAY", "20"))
     data_dir: Path = field(default_factory=lambda: Path(os.getenv("DATA_DIR", "data")))

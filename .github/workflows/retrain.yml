@@ -1,0 +1,56 @@
+name: Retrain model
+# Manual (Actions tab -> Retrain model -> Run workflow), about once a month. Fills the F&O bhavcopy cache from
+# 2023-01-01 (kept in the Actions cache between runs, so later runs download only the new sessions), retrains the
+# walk-forward model on it plus the event store, and commits data/model.pkl + data/model_report.json.
+# NSE may refuse GitHub's runners; the job then fails at the bhavcopy step and the old model stays.
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: daily-scan              # never at the same time as the nightly scan
+  cancel-in-progress: false
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements.txt scikit-learn
+
+      - name: Restore the event store
+        uses: actions/cache/restore@v4
+        with:
+          path: data/events.sqlite
+          key: events-${{ github.run_id }}
+          restore-keys: events-
+      - name: Restore the bhavcopy cache
+        uses: actions/cache/restore@v4
+        with:
+          path: data/cache/fo_bhavcopy_*.csv
+          key: bhav-${{ github.run_id }}
+          restore-keys: bhav-
+
+      - name: Fill the bhavcopy cache (1 request/s, resumable)
+        run: python -m scanner.bhav_cache --since 2023-01-01
+      - name: Save the bhavcopy cache
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/cache/fo_bhavcopy_*.csv
+          key: bhav-${{ github.run_id }}
+
+      - name: Retrain
+        run: python -m scanner.model --train --since 2023-01-01
+      - name: Commit the model
+        run: |
+          git config user.name "fo-scanner-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/model.pkl data/model_report.json
+          git diff --cached --quiet || git commit -m "model: retrained $(date -u +%F)"
+          git push

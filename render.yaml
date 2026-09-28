@@ -1,22 +1,40 @@
-# Render blueprint: EOD scan + live feed + commentary. (Order placement to a real broker needs a
-# SEBI-whitelisted static IP, which Render's free tier does not give you; keep PAPER=true here.)
+# Render blueprint: the live server (Kotak live data + paper orders) for the phone.
+# The EOD scan is built by the GitHub Action (.github/workflows/daily.yml) and read from SCAN_URL, so this
+# server never contacts NSE (which refuses many cloud IPs). Real orders need a SEBI-whitelisted static IP,
+# which Render's free tier does not give: keep PAPER=true here.
+# Free tier: sleeps after 15 min without visits (first open ~50 s); its disk is wiped on every restart, so the
+# paper ledger starts over after a sleep or deploy.
 services:
   - type: web
     name: fo-scanner
     runtime: python
     plan: free
-    buildCommand: pip install -r requirements-server.txt && python -m scanner.build || true
+    buildCommand: pip install -r requirements-server.txt
     startCommand: uvicorn server.app:app --host 0.0.0.0 --port $PORT
+    buildFilter:                     # the nightly scan commit must not redeploy (and wipe the paper ledger)
+      ignoredPaths:
+        - docs/**
+        - data/scan.json
+        - data/event_patterns.json
+        - "**/*.md"
     envVars:
-      - key: APP_PASSWORD
+      - key: PYTHON_VERSION
+        value: "3.12.7"
+      - key: APP_PASSWORD             # you choose it; the page asks for user "user" and this password
         sync: false
+      - key: KOTAK_CONSUMER_KEY       # from your .env; entered in the Render dashboard, never committed
+        sync: false
+      - key: SCAN_URL                 # https://raw.githubusercontent.com/<you>/fo-scanner/main/data/scan.json
+        sync: false
+      - key: DATA_PROVIDER
+        value: kotak
+      - key: ORDERS
+        value: "true"
       - key: BROKER
         value: none
       - key: PAPER
         value: "true"
-      - key: ANTHROPIC_API_KEY
-        sync: false
-      - key: KITE_API_KEY
-        sync: false
-      - key: KITE_ACCESS_TOKEN
+      - key: ALLOW_LOTTERY
+        value: "false"
+      - key: ANTHROPIC_API_KEY        # optional: the plain-language reading and the evidence verdict
         sync: false

@@ -64,20 +64,37 @@ mobile connection they work with the browser-like headers the code already sends
 reports `F&O data: unavailable`, run it from a machine/network that can open that URL in a
 browser, or run it on a schedule at home and push the result.
 
-## Put it on your phone (free, ~3 minutes)
+## Put it on your phone (free): GitHub + GitHub Pages + Render
 
-The page is static, so it needs no server, no cold starts and nothing that sleeps. GitHub Pages
-is the fastest free host; Render "Static Site" or Netlify work identically (publish dir `docs/`).
+| Piece | Where | What it does |
+|---|---|---|
+| Code + daily scan | this GitHub repo, branch `main` | the only copy that matters |
+| EOD page | GitHub Pages, folder `/docs` | labels, charts, verdict card, call tracking; always on |
+| Nightly refresh | GitHub Actions, `.github/workflows/daily.yml`, 20:30 IST Mon–Fri | events → scan → commits `docs/index.html` + `data/scan.json` |
+| Live data + paper orders | Render free web service, `render.yaml` | Kotak LTP, futures OI, depth, live PCR; password-protected |
 
-1. Push this folder to a GitHub repo (private is fine for Pages on a paid plan; public works free).
-2. Repo → Settings → Pages → Source: *Deploy from a branch*, branch `main`, folder `/docs`.
-3. Your URL is `https://<user>.github.io/<repo>/`. Open it on the phone → browser menu →
-   *Add to Home Screen*. It behaves like an app and opens full screen.
-4. Refresh daily: `.github/workflows/daily.yml` runs at 20:30 IST Mon–Fri, rebuilds, commits
-   `docs/index.html`, and Pages redeploys in about a minute. Enable it under Actions → *Run
-   workflow* once to test. If GitHub's runner IPs are refused by NSE (see above), run
-   `python -m scanner.build && git commit -am scan && git push` locally instead — or from a
-   `cron` job on any always-on box in India.
+GitHub Pages only serves files, so live Kotak data needs the Python server; Render runs it from the same repo.
+
+One-time setup:
+1. **Repo settings** → Actions → General → Workflow permissions → *Read and write*. Settings → Pages → *Deploy
+   from a branch* → `main`, `/docs`. Your page: `https://<user>.github.io/<repo>/`.
+2. **Event store seed** (once, from the PC that holds `data/events.sqlite`):
+   `gh release create state-seed data/events.sqlite --title "event store seed" --notes "first-run seed"`.
+   The nightly job keeps the store in the Actions cache after that.
+3. **Render** → sign in with GitHub → New → *Blueprint* → this repo. Enter `APP_PASSWORD` (your choice),
+   `KOTAK_CONSUMER_KEY` (from `.env`), `SCAN_URL` =
+   `https://raw.githubusercontent.com/<user>/<repo>/main/data/scan.json`. The server reads the scan from there
+   at start-up and at 21:00 / 22:00 IST and never contacts NSE itself.
+4. **Phone** → open both URLs → browser menu → *Add to Home Screen*. The Render page asks for user `user` and
+   your `APP_PASSWORD`.
+
+Every day: nothing. If NSE refuses GitHub's runner, the nightly job fails before committing (yesterday's page
+stays) and GitHub emails you; run `python -m scanner.build` at home and push instead. Monthly: Actions →
+*Retrain model* → *Run workflow* (`.github/workflows/retrain.yml`; commits `data/model.pkl`).
+
+Free-tier limits: Render sleeps after 15 min without visits (first open ~50 s) and polls Kotak only while awake;
+its disk is wiped on restart, so the paper ledger starts over after a sleep or deploy (a paid disk, or the server
+at home, keeps it). Nightly scan commits do not redeploy the server (`buildFilter` in `render.yaml`).
 
 ## Server mode: live quotes, strikes, commentary, orders
 

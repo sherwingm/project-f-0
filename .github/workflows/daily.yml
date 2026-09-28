@@ -1,28 +1,70 @@
 name: Daily F&O scan
-# Runs after NSE publishes the F&O bhavcopy and eod2_data has synced (≈ 20:30 IST, Mon–Fri),
-# rebuilds docs/index.html and commits it, so GitHub Pages serves the fresh scan.
+# Runs after NSE publishes the F&O bhavcopy and eod2_data has synced (≈ 20:30 IST, Mon–Fri): fetches the day's
+# exchange events, rebuilds the scan and commits docs/index.html + data/scan.json, so GitHub Pages serves the
+# fresh page and the live server (SCAN_URL) picks it up at 21:00 IST.
+# The event store (data/events.sqlite, too big to commit daily) lives in the Actions cache; the very first run
+# seeds it from the `state-seed` release.
+# If NSE refuses the runner and the scan has no F&O data, the job fails before committing: yesterday's page stays
+# up and GitHub emails you.
 on:
   schedule:
     - cron: "0 15 * * 1-5"      # 15:00 UTC = 20:30 IST
   workflow_dispatch:
 permissions:
   contents: write
+concurrency:
+  group: daily-scan
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-        with: { python-version: "3.12" }
-      - run: pip install -r requirements.txt
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements.txt scikit-learn    # scikit-learn: the scan's model block reads data/model.pkl
+
+      - name: Restore the event store
+        id: events
+        uses: actions/cache/restore@v4
+        with:
+          path: data/events.sqlite
+          key: events-${{ github.run_id }}
+          restore-keys: events-
+      - name: First run only - seed the event store from the state-seed release
+        if: steps.events.outputs.cache-matched-key == ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release download state-seed --pattern events.sqlite --dir data || echo "no seed release; starting with an empty event store"
+
       - name: Fetch the day's exchange events (never blocks the build; NSE may refuse runner IPs)
         run: python -m scanner.events.run || true
+      - name: Save the event store
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: data/events.sqlite
+          key: events-${{ github.run_id }}
+
       - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
         run: python -m scanner.build
+      - name: Refuse a scan without F&O data
+        run: |
+          python - <<'EOF'
+          import json, sys
+          m = json.load(open("data/scan.json", encoding="utf-8"))["meta"]
+          print("as_of", m.get("as_of"), "| F&O:", m.get("fo_status"), "| strike tables:", m.get("chain_status"))
+          sys.exit(0 if m.get("fo_status") == "ok" else "F&O data unavailable (NSE refused the runner?): not committing")
+          EOF
+
       - name: Commit refreshed page
         run: |
           git config user.name "fo-scanner-bot"
           git config user.email "bot@users.noreply.github.com"
-          git add docs/index.html data/scan.json data/cache/fo_universe.txt
+          git add docs/index.html data/scan.json data/event_patterns.json data/cache/fo_universe.txt data/cache/events_status.json
           git diff --cached --quiet || git commit -m "scan: $(python -c "import json;print(json.load(open('data/scan.json'))['meta']['as_of'])")"
           git push
