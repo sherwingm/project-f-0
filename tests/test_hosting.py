@@ -78,3 +78,10 @@ def test_render_blueprint_keeps_secrets_out_and_paper_on():
         assert env[secret].get("sync") is False and "value" not in env[secret]
     assert env["PAPER"]["value"] == "true" and env["BROKER"]["value"] == "none" and env["DATA_PROVIDER"]["value"] == "kotak"
     assert "data/scan.json" in svc["buildFilter"]["ignoredPaths"]           # the nightly commit does not redeploy
+
+
+def test_nothing_is_public_without_the_password():
+    from fastapi.testclient import TestClient
+    c = TestClient(app_mod.app)
+    assert c.get("/openapi.json").status_code == 404 and c.get("/docs").status_code == 404
+    assert c.get("/api/live").status_code in (401, 503)                     # 503 when APP_PASSWORD is unset

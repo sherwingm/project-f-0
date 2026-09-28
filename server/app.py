@@ -47,7 +47,7 @@ from server.live import FakeProvider, KiteProvider, LiveFeed, market_open
 
 log = logging.getLogger("server")
 IST = timezone(timedelta(hours=5, minutes=30))
-app = FastAPI(title="F&O scanner", docs_url=None, redoc_url=None)
+app = FastAPI(title="F&O scanner", docs_url=None, redoc_url=None, openapi_url=None)   # nothing public without the password
 security = HTTPBasic()
 
 
