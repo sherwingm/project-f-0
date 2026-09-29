@@ -133,3 +133,11 @@ def test_returns_at_1_3_5_sessions_vs_neutral(df):
     assert b3["n_returns"] == 1 and b3["mean_adj_return"] == pytest.approx(2.0)        # s31 overlaps s30 at h=3
     assert b3["base_n_returns"] == 2 and b3["base_mean_adj_return"] == pytest.approx(2.25)  # NEU +2.5, XYZ s31 +2.0
     assert b3["diff_mean"] == pytest.approx(-0.25) and b3["t_mean"] is None               # one value: no t
+
+
+def test_clustered_statistics_are_reported(df):
+    from scanner.backtest_labels import returns_vs_base, versus_base
+    r = {(x["label"], x["horizon_sessions"]): x for x in returns_vs_base(df, CAL)}[(BULLISH, 1)]
+    assert {"t_mean_clustered", "base_t_mean_clustered", "diff_t_clustered"} <= set(r)
+    h = versus_base(df, CAL, [1.0])[0]
+    assert "z_vs_base_clustered" in h

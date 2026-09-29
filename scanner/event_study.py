@@ -9,7 +9,7 @@ For every tier-1/2 event with bucket != ignore: the stock's cumulative return mi
                                     proxy is measured on, so the proxy cannot leak into the post mean)
 computed on eod2 closes aligned to the index's calendar. Printed per type, per subtype and per
 bucket (always for the sized types in BUCKETED): count, and for every window the mean, median, share
-positive and t-statistic of the mean. For `results`, beat/miss subtype rows use the day+1 reaction as a proxy
+positive, t-statistic of the mean, and the date-clustered t (events on the same day are not independent). For `results`, beat/miss subtype rows use the day+1 reaction as a proxy
 (a real beat/miss needs the numbers; the reaction is what the market judged) — stated as a proxy.
 The table is printed, never interpreted. data/event_patterns.json carries {type: {pre, day, post,
 count}} for the UI's verdict card.
@@ -26,6 +26,7 @@ from pathlib import Path
 import pandas as pd
 
 from .build import ROOT
+from .stats import clustered_t
 from .equity import INDEX_FILE, load_symbol
 
 log = logging.getLogger("event_study")
@@ -94,6 +95,7 @@ def summarise(df: pd.DataFrame) -> pd.DataFrame:
         row = {"group": name, "count": len(g)}
         for w in ("pre", "day", "post"):
             v = g[f"car_{w}"].dropna()
+            row[f"{w}_tc"] = clustered_t(v, g.loc[v.index, "event_date"]) if len(v) > 1 else None
             n = len(v)
             mean = float(v.mean()) if n else None
             sd = float(v.std(ddof=1)) if n > 1 else None
@@ -118,15 +120,16 @@ def patterns(summary: pd.DataFrame) -> dict:
 
 
 def print_table(summary: pd.DataFrame) -> None:
-    print(f"{'group':<46}{'count':>7} | {'pre mean':>9}{'med':>7}{'pos%':>6}{'t':>7} | "
-          f"{'day mean':>9}{'med':>7}{'pos%':>6}{'t':>7} | {'post mean':>10}{'med':>7}{'pos%':>6}{'t':>7}")
+    """t = ordinary t of the mean; tc = the same with standard errors clustered by event date."""
+    print(f"{'group':<46}{'count':>7} | {'pre mean':>9}{'med':>7}{'pos%':>6}{'t':>7}{'tc':>7} | "
+          f"{'day mean':>9}{'med':>7}{'pos%':>6}{'t':>7}{'tc':>7} | {'post mean':>10}{'med':>7}{'pos%':>6}{'t':>7}{'tc':>7}")
     f = lambda v, w, p=3: f"{v:>{w}.{p}f}" if v is not None and not (isinstance(v, float) and math.isnan(v)) else f"{'-':>{w}}"
     for r in summary.to_dict("records"):
-        print(f"{r['group'][:45]:<46}{r['count']:>7} | {f(r['pre_mean'], 9)}{f(r['pre_median'], 7)}"
-              f"{f(r['pre_pos_pct'], 6, 1)}{f(r['pre_t'], 7, 2)} | {f(r['day_mean'], 9)}{f(r['day_median'], 7)}"
-              f"{f(r['day_pos_pct'], 6, 1)}"
-              f"{f(r['day_t'], 7, 2)} | {f(r['post_mean'], 10)}{f(r['post_median'], 7)}"
-              f"{f(r['post_pos_pct'], 6, 1)}{f(r['post_t'], 7, 2)}")
+        cells = [f"{r['group'][:45]:<46}{r['count']:>7}"]
+        for w, width in (("pre", 9), ("day", 9), ("post", 10)):
+            cells.append(f"{f(r[f'{w}_mean'], width)}{f(r[f'{w}_median'], 7)}{f(r[f'{w}_pos_pct'], 6, 1)}"
+                         f"{f(r[f'{w}_t'], 7, 2)}{f(r.get(f'{w}_tc'), 7, 2)}")
+        print(" | ".join(cells))
 
 
 def load_index(eod2_dir: Path) -> pd.Series:

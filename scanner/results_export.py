@@ -66,6 +66,7 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ("base_hit_pct", "hit_rate rows: hit % of those Neutral stock-days"),
         ("diff_pts", "hit_rate rows: hit_pct minus base_hit_pct, percentage points"),
         ("z_vs_base", "hit_rate rows: two-proportion z of hit_pct vs base_hit_pct (pooled standard error)"),
+        ("z_vs_base_clustered", "hit_rate rows: the same difference as a t with standard errors clustered by date"),
         ("needs_vs_coin", "hit_rate rows: hits needed at scored_n to beat a coin (N/2 + 1.645 x sqrt(N)/2)"),
         ("n_returns", "returns rows: stock-days used (one per stock per horizon_sessions)"),
         ("mean_adj_return", "returns rows: mean market-adjusted return over horizon_sessions, %"),
@@ -77,6 +78,9 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ("base_t_mean", "returns rows: t-statistic of the Neutral mean against zero"),
         ("diff_mean", "returns rows: mean_adj_return minus base_mean_adj_return, percentage points"),
         ("welch_t_vs_base", "returns rows: Welch's t of the difference in means"),
+        ("t_mean_clustered", "returns rows: t of mean_adj_return, standard error clustered by date"),
+        ("base_t_mean_clustered", "returns rows: t of the Neutral mean, clustered by date"),
+        ("diff_t_clustered", "returns rows: t of diff_mean, clustered by date (dates shared by both groups)"),
     ]),
     "cheap_options_detail": ("One row per cheap stock option tested (ClsPric <= Rs 2, 3-7 sessions to expiry), one lot "
                              "bought at the close + 1 tick (scanner.backtest_cheap_options).", [
@@ -131,14 +135,17 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
         ("pre_median", "median CAR, close T-5 -> close T-1"),
         ("pre_pos_pct", "share of events with pre CAR > 0, %"),
         ("pre_t", "t-statistic of pre_mean"),
+        ("pre_tc", "t of pre_mean with standard errors clustered by event date"),
         ("day_mean", "mean CAR, close T-1 -> close T"),
         ("day_median", "median CAR, close T-1 -> close T"),
         ("day_pos_pct", "share with day CAR > 0, %"),
         ("day_t", "t-statistic of day_mean"),
+        ("day_tc", "t of day_mean clustered by event date"),
         ("post_mean", "mean CAR, close T+1 -> close T+5"),
         ("post_median", "median CAR, close T+1 -> close T+5"),
         ("post_pos_pct", "share with post CAR > 0, %"),
         ("post_t", "t-statistic of post_mean"),
+        ("post_tc", "t of post_mean clustered by event date"),
     ]),
     "model_folds": ("Walk-forward folds of the NSE model (train on every earlier quarter, test on the next), plus "
                     "an OVERALL row over all test rows (scanner.model).", [

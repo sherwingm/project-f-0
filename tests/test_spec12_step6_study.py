@@ -103,3 +103,15 @@ def test_every_window_has_median_and_t_and_sized_types_always_show_buckets():
     assert "order_win [major]" in list(s["group"])                    # one bucket only, still shown
     for w in ("pre", "day", "post"):
         assert {f"{w}_mean", f"{w}_median", f"{w}_pos_pct", f"{w}_t"} <= set(s.columns)
+
+
+def test_every_window_has_a_date_clustered_t():
+    # two events on the same day moving together count as one date, so tc is smaller than t
+    up = [100.0] * 10 + [104.0] * 10
+    up2 = [100.0] * 10 + [104.2] * 10
+    other = [100.0] * 10 + [100.5] * 10
+    later = ev(symbol="LATER", event_date=DATES[12].strftime("%Y-%m-%d"))
+    df = study([ev(), ev(symbol="DEF"), later], {"ABC": series(up), "DEF": series(up2), "LATER": series(other)}, flat_index())
+    row = summarise(df).iloc[0]
+    assert {"pre_tc", "day_tc", "post_tc"} <= set(row.index)
+    assert row["day_tc"] is not None and abs(row["day_tc"]) < abs(row["day_t"])

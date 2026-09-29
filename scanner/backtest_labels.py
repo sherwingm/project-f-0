@@ -27,6 +27,7 @@ from .backtest_cheap_options import _read_index
 from .binomial import binomial_line, hits_needed
 from .build import ROOT
 from .classify import BEARISH, BULLISH, NEUTRAL, UNCLASSIFIED, classify
+from .stats import clustered_diff_t, clustered_t
 from .equity import equity_metrics_one, load_symbol
 from .nse_fo import download_fo_bhavcopy, fo_metrics
 from .universe import fetch_fo_lots
@@ -165,11 +166,13 @@ def versus_base(df: pd.DataFrame, cal: list[date], thresholds, gap: int = GAP) -
             sub = df[df["label"] == label]
             s = score(sub, direction, th, cal_pos, gap)
             b = score(df[df["label"] == NEUTRAL], direction, th, cal_pos, gap)
+            hs, hb = _hits(sub, direction, th, cal_pos, gap), _hits(df[df["label"] == NEUTRAL], direction, th, cal_pos, gap)
             out.append({"label": label, "threshold_pct": th, "stock_days": len(sub), "scored_n": s["n"],
                         "hits": s["hits"], "hit_pct": s["hit_pct"], "base_n": b["n"], "base_hits": b["hits"],
                         "base_hit_pct": b["hit_pct"],
                         "diff_pts": round(s["hit_pct"] - b["hit_pct"], 2) if s["n"] and b["n"] else None,
-                        "z_vs_base": two_prop_z(s["hits"], s["n"], b["hits"], b["n"]), "needs_vs_coin": s["needed"]})
+                        "z_vs_base": two_prop_z(s["hits"], s["n"], b["hits"], b["n"]),
+                        "z_vs_base_clustered": clustered_diff_t(hs[1], hs[0], hb[1], hb[0]), "needs_vs_coin": s["needed"]})
     return out
 
 
@@ -200,9 +203,11 @@ def returns_vs_base(df: pd.DataFrame, cal: list[date], horizons=RETURN_HORIZONS)
     out = []
     for h in horizons:
         col = f"adj_{h}"
-        base = _stats(non_overlapping(df[(df["label"] == NEUTRAL) & df[col].notna()], cal_pos, h)[col])
+        bdf = non_overlapping(df[(df["label"] == NEUTRAL) & df[col].notna()], cal_pos, h)
+        base = _stats(bdf[col])
         for label in (BULLISH, BEARISH):
-            s = _stats(non_overlapping(df[(df["label"] == label) & df[col].notna()], cal_pos, h)[col])
+            sdf = non_overlapping(df[(df["label"] == label) & df[col].notna()], cal_pos, h)
+            s = _stats(sdf[col])
             welch = None
             if s["n"] > 1 and base["n"] > 1 and s["sd"] and base["sd"]:
                 welch = round((s["mean"] - base["mean"]) / math.sqrt(s["sd"] ** 2 / s["n"] + base["sd"] ** 2 / base["n"]), 3)
@@ -211,8 +216,21 @@ def returns_vs_base(df: pd.DataFrame, cal: list[date], horizons=RETURN_HORIZONS)
                         "t_mean": s["t"], "base_n_returns": base["n"], "base_mean_adj_return": base["mean"],
                         "base_median_adj_return": base["median"], "base_t_mean": base["t"],
                         "diff_mean": round(s["mean"] - base["mean"], 4) if s["n"] and base["n"] else None,
-                        "welch_t_vs_base": welch})
+                        "welch_t_vs_base": welch,
+                        "t_mean_clustered": clustered_t(sdf[col], sdf["date"]),
+                        "base_t_mean_clustered": clustered_t(bdf[col], bdf["date"]),
+                        "diff_t_clustered": clustered_diff_t(sdf[col], sdf["date"], bdf[col], bdf["date"])})
     return out
+
+
+def _hits(items: pd.DataFrame, direction: str, threshold: float, cal_pos: dict[str, int], gap: int):
+    """(dates, 1/0 hit) of the scored rows, for the date-clustered difference in hit rates."""
+    dates, hits = [], []
+    for i, st in statuses(items, direction, threshold, cal_pos, gap):
+        if st in ("hit", "miss"):
+            dates.append(items.at[i, "date"])
+            hits.append(1.0 if st == "hit" else 0.0)
+    return dates, hits
 
 
 def two_prop_z(h1: int, n1: int, h0: int, n0: int) -> float | None:
