@@ -68,12 +68,23 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
     if cache_file and cache_file.exists():
         return pd.read_csv(cache_file, usecols=lambda c: c in _WANTED)
 
+    raw, old_format = _download_raw(day, timeout)
+    df = _from_old_format(raw, day) if old_format else raw[[c for c in raw.columns if c in _WANTED]]
+
+    if cache_dir:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        df.to_csv(cache_file, index=False)
+    return df
+
+
+def _download_raw(day: date, timeout: int = 60) -> tuple[pd.DataFrame, bool]:
+    """The whole F&O bhavcopy for `day` as NSE publishes it, and whether it is the pre-UDiFF format."""
     old_format = day < UDIFF_FROM
     if old_format:
         mon = day.strftime("%b").upper()
         url = OLD_BHAVCOPY_URL.format(yyyy=day.year, MON=mon, dd=f"{day.day:02d}")
     else:
-        url = BHAVCOPY_URL.format(ymd=ymd)
+        url = BHAVCOPY_URL.format(ymd=day.strftime("%Y%m%d"))
     r = requests.get(url, headers=NSE_HEADERS, timeout=timeout)
     if r.status_code == 404:
         raise BhavcopyUnavailable(f"No F&O bhavcopy for {day} (404)")
@@ -81,15 +92,32 @@ def download_fo_bhavcopy(day: date, cache_dir: Path | None = None, timeout: int 
         raise BhavcopyUnavailable(f"NSE refused the request for {day} (HTTP {r.status_code}); "
                                   "this usually means the client IP or headers are blocked")
     r.raise_for_status()
-
     with zipfile.ZipFile(io.BytesIO(r.content)) as zf:
         name = next(n for n in zf.namelist() if n.lower().endswith(".csv"))
         with zf.open(name) as fh:
-            if old_format:
-                df = _from_old_format(pd.read_csv(fh), day)
-            else:
-                df = pd.read_csv(fh, usecols=lambda c: c in _WANTED)
+            return pd.read_csv(fh), old_format
 
+
+def download_fo_opens(day: date, cache_dir: Path | None = None, timeout: int = 60) -> pd.DataFrame:
+    """Stock-option session opens for `day`: TckrSymb, XpryDt, StrkPric, OptnTp, OpnPric (0 = no opening trade).
+    The main cache keeps closes only; opens are fetched on demand and cached as fo_opens_YYYYMMDD.csv."""
+    cache_file = (cache_dir / f"fo_opens_{day:%Y%m%d}.csv") if cache_dir else None
+    if cache_file and cache_file.exists():
+        return pd.read_csv(cache_file)
+    raw, old_format = _download_raw(day, timeout)
+    raw = raw.rename(columns=lambda c: str(c).strip())
+    if old_format:
+        raw = raw[raw["INSTRUMENT"].astype(str).str.strip() == "OPTSTK"]
+        df = pd.DataFrame({"TckrSymb": raw["SYMBOL"].astype(str).str.strip(),
+                           "XpryDt": pd.to_datetime(raw["EXPIRY_DT"], format="%d-%b-%Y").dt.strftime("%Y-%m-%d"),
+                           "StrkPric": pd.to_numeric(raw["STRIKE_PR"], errors="coerce"),
+                           "OptnTp": raw["OPTION_TYP"].astype(str).str.strip(),
+                           "OpnPric": pd.to_numeric(raw["OPEN"], errors="coerce").fillna(0)})
+    else:
+        raw = raw[raw["FinInstrmTp"] == "STO"]
+        df = pd.DataFrame({"TckrSymb": raw["TckrSymb"], "XpryDt": raw["XpryDt"], "StrkPric": raw["StrkPric"],
+                           "OptnTp": raw["OptnTp"], "OpnPric": pd.to_numeric(raw["OpnPric"], errors="coerce").fillna(0)})
+    df = df.reset_index(drop=True)
     if cache_dir:
         cache_dir.mkdir(parents=True, exist_ok=True)
         df.to_csv(cache_file, index=False)
