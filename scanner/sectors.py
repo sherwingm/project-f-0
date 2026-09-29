@@ -1,4 +1,4 @@
-"""Stock -> NSE sector index map (strategies/S1_weak_sector_put.md) and sector index closes from eod2.
+"""Stock -> NSE sector index map (strategies/S1_v2_weak_sector_put.md) and sector index closes from eod2.
 
     python -m scanner.sectors            # writes data/sector_map.csv from NSE's constituent lists
 

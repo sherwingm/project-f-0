@@ -1,8 +1,12 @@
-# S1 v2 · Weak-sector results-miss put debit spread
+# S1 v2 · Weak-sector results-miss put debit spread — CLOSED
+
+**Status: closed at the signal level** (`DECISIONS.md`). Results-miss signals in weak sectors, net of the
+leave-one-out sector: 10 sessions −0.34 %, t −0.7; 20 sessions −0.11 %, t −0.2; N 119. Option arms untradable
+on liquidity (0 trades); technical arm 17 trades, t 0.56. Report: `data/results/S1_v2_backtest_report.md`.
 
 Strategy 1 under the gate in `DECISIONS.md`. **Pre-registered**: every choice is fixed here before any v2
 backtest is run; nothing is tuned after one. v1 (naked put, 1-month-low exit, 2.5x target) is superseded.
-Backtest: `python -m scanner.backtest_s1` (diagnostic first, then the three arms; output in `data/results/`).
+Backtest: `python -m scanner.backtest_s1_v2` (diagnostic first, then the three arms; output in `data/results/`).
 
 ## Universe
 - Stocks with option contracts in that day's NSE F&O bhavcopy (point in time).
@@ -112,12 +116,12 @@ open (a leg disappears from the bhavcopy, or the future moves > 3 % differently 
 are excluded and counted.
 
 Every table (each arm; overall and by sub-period) is also broken down by AMFI category and by volatility
-tercile, with the same metrics. The full report (`data/results/S1_backtest_report.md`) has, in order: header
+tercile, with the same metrics. The full report (`data/results/S1_v2_backtest_report.md`) has, in order: header
 (window, sessions, universe by year, the constituent-history bias, AMFI lists used, every parameter),
 diagnostic, main tables (with signals removed by the liquidity gate), breakdowns (category, tercile,
 extreme-drawdown subgroup, budget distribution), slippage sensitivity, S1 v2 equity curve by exit month with the
 maximum drawdown (₹ and % of the ₹5,00,000 paper capital), and the gate for S1 v2 and S1-alt. Trade list:
-`data/results/S1_trades.csv`.
+`data/results/S1_v2_trades.csv`.
 
 ## Known limits
 - **Constituent-history bias**: sector membership and NSE industry are today's lists, applied to all dates.

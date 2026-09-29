@@ -1,8 +1,8 @@
 """S1 v2 · weak-sector results-miss put debit spread, with S1-alt (naked put) and the secondary technical arm,
-backtested exactly as strategies/S1_weak_sector_put.md pre-registers them (numbers only).
+backtested exactly as strategies/S1_v2_weak_sector_put.md pre-registers them (numbers only).
 
-    python -m scanner.backtest_s1 --diagnostic          # the stock-level diagnostic only (run first)
-    python -m scanner.backtest_s1 --since 2021-01-01    # diagnostic, then the three arms -> data/results/
+    python -m scanner.backtest_s1_v2 --diagnostic          # the stock-level diagnostic only (run first)
+    python -m scanner.backtest_s1_v2 --since 2021-01-01    # diagnostic, then the three arms -> data/results/
 
 Signals after each close; entry at the next session's option open +/- 1 tick per leg; exits on closes.
 Every choice the definition fixes is a module constant below; nothing here is tuned.
@@ -28,7 +28,7 @@ from .backtest_cheap_options import sessions_to
 from .build import ROOT
 from .stats import PERIODS, clustered_t
 
-log = logging.getLogger("backtest_s1")
+log = logging.getLogger("backtest_s1_v2")
 
 # ---------------------------------------------------------------- the pre-registered parameters
 M1, M3, SECTOR_DMA, STOCK_DMA = 21, 63, 50, 20          # sessions
@@ -869,7 +869,7 @@ def write_report(path: Path, *, window: tuple[str, str], sessions: int, missing:
                 f"\nMaximum drawdown: Rs {dd_rs:,.2f} ({dd_pct:g} % of Rs {CAPITAL:,.0f} paper capital).\n")
     sec["7"] = "## 7. Gate (DECISIONS.md)\n\n" + "\n".join(
         f"### {LABELS[arm]}\n\n" + md(pd.DataFrame(gate_check(results[arm][0]))) for arm in ("S1v2", "S1alt"))
-    text = "# S1 v2 backtest report\n\nNumbers only.\n\n" + "\n".join(sec[k] for k in "1234567")
+    text = "# S1 v2 backtest report (closed)\n\nNumbers only.\n\n" + "\n".join(sec[k] for k in "1234567")
     path.write_text(text, encoding="utf-8")
     return sec
 
@@ -893,17 +893,17 @@ def main() -> None:
     a.out_dir.mkdir(parents=True, exist_ok=True)
     m = Market(inp)
     diag = diagnostic(m, inp.results, universe, a.since, end)
-    diag.to_csv(a.out_dir / "S1_diagnostic_signals.csv", index=False)
+    diag.to_csv(a.out_dir / "S1_v2_diagnostic_signals.csv", index=False)
     print("## 2. Diagnostic\n" + md(summarise_diagnostic(diag)), flush=True)
     if a.diagnostic:
         return
     results = run(inp, a.since, end, m=m)
     for old in ("s1_trades.csv", "s1_summary.csv"):                  # v1 outputs; also fixes the file name's case
         (a.out_dir / old).unlink(missing_ok=True)
-    trade_list(results).to_csv(a.out_dir / "S1_trades.csv", index=False)
+    trade_list(results).to_csv(a.out_dir / "S1_v2_trades.csv", index=False)
     cats = amfi.load()
     versions = sorted({v for v in (cats.version_on(d) for d in window) if v})
-    sec = write_report(a.out_dir / "S1_backtest_report.md", window=(window[0], window[-1]),
+    sec = write_report(a.out_dir / "S1_v2_backtest_report.md", window=(window[0], window[-1]),
                        sessions=sum(d in universe for d in window), missing=[d for d in window if d not in universe],
                        universe=universe, amfi_versions=versions, diag=diag, results=results,
                        excluded={k: int((v[0]["excluded"].fillna("") != "").sum()) for k, v in results.items()})

@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from scanner import backtest_s1 as s1
+from scanner import backtest_s1_v2 as s1
 from server import charges as ch
 
 
