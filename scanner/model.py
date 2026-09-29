@@ -134,7 +134,6 @@ def build_dataset(since: date, until: date, eod2_dir: Path | None = None, cache_
     cal = [d.strftime("%Y-%m-%d") for d in index.index]
     nifty = index.to_numpy(dtype=float)
     sectors = sector_map(store)
-    top = {s for s, _ in Counter(sectors.get(x, "other") for x in universe).most_common(TOP_SECTORS)}
 
     # per-day futures OI / PCR from the cached bhavcopies
     fo_by_day: dict[str, dict[str, dict]] = {}
@@ -153,6 +152,7 @@ def build_dataset(since: date, until: date, eod2_dir: Path | None = None, cache_
     if pit:
         universe = sorted(set().union(*(set(v) for v in fo_by_day.values()))) if fo_by_day else []
         log.info("point-in-time universe: %d stocks across the window", len(universe))
+    top = {s for s, _ in Counter(sectors.get(x, "other") for x in universe).most_common(TOP_SECTORS)}
 
     pos = {d: i for i, d in enumerate(cal)}
     frames = []
@@ -281,6 +281,31 @@ def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
             "classes": list(CLASSES), "features": feature_names, "rows": len(df),
             "class_share": {c: round(float((df['y'] == c).mean()), 4) for c in CLASSES},
             "folds": folds, "overall": overall, "by_period": by_period}
+
+
+def oos_predictions(df: pd.DataFrame, min_train: int = 5000, purge: int = HORIZON) -> pd.DataFrame:
+    """Out-of-sample probabilities for every row: each quarter predicted by a model trained only on earlier rows,
+    purged of the rows whose `purge`-session label reaches into that quarter (the last `purge` sessions before it),
+    so the model never sees a test day. Quarters without enough earlier rows get no prediction.
+    Returns symbol, day, p_down, p_flat, p_up."""
+    days = sorted(df["day"].astype(str).unique())
+    pos = {d: i for i, d in enumerate(days)}
+    out = []
+    for q in sorted(df["quarter"].unique()):
+        test = df[df["quarter"] == q]
+        k = pos[str(test["day"].min())]
+        cutoff = days[k - purge] if k - purge >= 0 else days[0]
+        train = df[df["day"].astype(str) < cutoff]
+        if len(train) < min_train or not len(test):
+            continue
+        model, _ = _make_model()
+        Xtr, names = featurise(train)
+        model.fit(Xtr, train["y"].to_numpy())
+        p = _proba_ordered(model, featurise(test, names)[0])
+        out.append(pd.DataFrame({"symbol": test["symbol"].to_numpy(), "day": test["day"].astype(str).to_numpy(),
+                                 "p_down": p[:, 0], "p_flat": p[:, 1], "p_up": p[:, 2]}))
+        log.info("oos %s: trained on %d rows through %s", q, len(train), train["day"].max())
+    return pd.concat(out, ignore_index=True) if out else pd.DataFrame(columns=["symbol", "day", "p_down", "p_flat", "p_up"])
 
 
 def _proba_ordered(model, X) -> np.ndarray:
