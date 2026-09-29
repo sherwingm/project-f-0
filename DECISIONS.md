@@ -36,3 +36,4 @@ Closed; not reopened without a new definition that goes through the gate.
 | Shorting short-buildup | −₹487 per trade |
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
+| S1 weak-sector results-miss put (v2 spread, S1-alt naked put, technical arm) | Closed at the signal level: results-miss signals in weak sectors show no drift net of the leave-one-out sector (10 sessions −0.34 %, t −0.7; 20 sessions −0.11 %, t −0.2; N 119); the option arms were untradable on liquidity (0 trades); the technical arm had 17 trades, t 0.56, one trade = the mean (`strategies/S1_weak_sector_put.md`, `data/results/S1_backtest_report.md`) |
