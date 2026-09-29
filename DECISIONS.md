@@ -12,6 +12,8 @@ editing this file on purpose, in its own commit, with the reason.
   broker); nothing switches it implicitly. `PUBLIC_ACCESS=true` refuses real orders outright.
 - **Risk defaults unchanged** (`server/config.py`, guide 12). **`ALLOW_LOTTERY=false`.**
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
+- **Long options only.** No option selling, no spreads, no futures positions: every trade is a bought CE or
+  PE, with maximum loss = the premium paid. (Futures may appear in a diagnostic, never as a trade.)
 
 ## One strategy: S1, by version
 There is one strategy, **S1**, iterated by pre-registered versions (S1 v1, v2, v3 …) until one clears the gate.
@@ -43,6 +45,8 @@ re-tuning the same rules. Every report states the test-window / holdout split.
 |---|---|---|
 | S1 v1 · weak-sector naked put, 1-month-low exit | Superseded before running | Replaced by v2 before any v1 result was read |
 | S1 v2 · weak-sector results-miss put debit spread (`strategies/S1_v2_weak_sector_put.md`) | **Closed** at the signal level | Results-miss signals in weak sectors, net of the leave-one-out sector: 10 sessions −0.34 %, t −0.7; 20 sessions −0.11 %, t −0.2; N 119. Option arms untradable on liquidity (0 trades); the technical arm had 17 trades, t 0.56 (`data/results/S1_v2_backtest_report.md`) |
+| S1 v3 · strength score, one trade a day (`strategies/S1_v3_strength_score.md`) | **Closed** at the diagnostic stop | Selected stocks, signed, net of the leave-one-out sector, 2021-2024: 5 sessions −0.16 %, t −1.66; 20 sessions −0.46 %, t −2.34 (< 1.5: stop); N 1,923. Option backtest not run (`data/results/S1_v3_backtest_report.md`) |
+| S1 v4 · results-beat continuation, long calls (`strategies/S1_v4_results_beat.md`) | Pre-registered | |
 
 ## Closed earlier ideas
 Closed before the S1 structure; not reopened except as a component of an S1 version.
