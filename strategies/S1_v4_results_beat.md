@@ -4,6 +4,8 @@ S1, version 4, under the gate in `DECISIONS.md`. **Pre-registered**: every choic
 Long options only (`DECISIONS.md`): every trade is a bought call; maximum loss = the premium paid.
 Test window **2021-01-01 to 2024-12-31**; 2025-01-01 onward is the holdout, untouched unless the gate passes.
 Backtest: `python -m scanner.backtest_s1_v4`.
+Signals whose day +1 + 20 sessions falls after 2024-12-31 are not taken (both exit variants and the diagnostic),
+so no trade reads a holdout price.
 
 ## Signal
 - A results filing (event store, type `results`, with its filing time). **Day 0** = the first full session after
