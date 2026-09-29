@@ -141,3 +141,9 @@ def test_clustered_statistics_are_reported(df):
     assert {"t_mean_clustered", "base_t_mean_clustered", "diff_t_clustered"} <= set(r)
     h = versus_base(df, CAL, [1.0])[0]
     assert "z_vs_base_clustered" in h
+
+
+def test_point_in_time_symbols_skip_stocks_not_in_fo_or_without_prices():
+    pit = {CAL[30].isoformat(): {"ABC", "NOPRICE"}, CAL[31].isoformat(): {"XYZ"}}
+    out = run(DAYS[:2], CAL, bhav, FRAMES.get, pit, INDEX, horizon=3)
+    assert list(zip(out["date"], out["symbol"])) == [(CAL[30].isoformat(), "ABC"), (CAL[31].isoformat(), "XYZ")]

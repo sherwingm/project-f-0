@@ -44,11 +44,13 @@ GROUPS = ((BULLISH, "bullish", "Bullish setup"),
 
 
 def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame | None],
-        equity: Callable[[str], pd.DataFrame | None], symbols: list[str], index: pd.Series,
+        equity: Callable[[str], pd.DataFrame | None], symbols: list[str] | dict[str, set[str]], index: pd.Series,
         horizon: int = HORIZON, extra_horizons: tuple[int, ...] = RETURN_HORIZONS) -> pd.DataFrame:
     """One row per stock-day: date, symbol, label, the four inputs the label was computed from, and the stock's
     and NIFTY's returns over the horizon with move = their difference (%, None when the horizon is past the data),
-    plus adj_<h> = the same difference over each of `extra_horizons` sessions."""
+    plus adj_<h> = the same difference over each of `extra_horizons` sessions.
+    symbols: one list for every day, or a point-in-time map {YYYY-MM-DD: symbols in F&O that day}; with the map, a
+    stock with no eod2 history is skipped rather than counted as Unclassified."""
     pos = {d: i for i, d in enumerate(cal)}
     idx = {d.date() if hasattr(d, "date") else d: float(v) for d, v in index.items()}
     frames: dict[str, pd.DataFrame | None] = {}
@@ -60,11 +62,14 @@ def run(days: list[date], cal: list[date], bhav: Callable[[date], pd.DataFrame |
         j = pos[d] + horizon
         to = cal[j] if j < len(cal) else None
         ends = {h: (cal[pos[d] + h] if pos[d] + h < len(cal) else None) for h in extra_horizons}
-        for sym in symbols:
+        pit = isinstance(symbols, dict)
+        for sym in (sorted(symbols.get(d.isoformat(), ())) if pit else symbols):
             if sym not in frames:
                 frames[sym] = equity(sym)
                 f = frames[sym]
                 closes[sym] = {} if f is None else {t.date(): float(c) for t, c in f["Close"].items()}
+            if pit and frames[sym] is None:
+                continue
             inputs = label_inputs(sym, d, frames[sym], fo.get(sym))
             c0, c1 = closes[sym].get(d), closes[sym].get(to) if to else None
             ret = nifty = move = None

@@ -38,3 +38,20 @@ def test_difference_t_with_singletons_matches_hc1_and_shared_dates_shrink_it():
     x = np.repeat(shock, 5) + 0.4 + RNG.normal(0, 0.3, 150)      # label group
     y = np.repeat(shock, 20) + RNG.normal(0, 0.3, 600)          # base group, same dates
     assert clustered_diff_t(x, np.repeat(days, 5), y, np.repeat(days, 20)) > 5      # common shock cancels
+
+
+def test_periods():
+    from scanner.stats import period_of
+    assert [period_of(d) for d in ("2021-01-01", "2022-12-31", "2023-06-01", "2026-09-29", "2020-12-31")] == \
+        ["2021-22", "2021-22", "2023-24", "2025-26", None]
+
+
+def test_point_in_time_universe_reads_each_days_futures(tmp_path):
+    import pandas as pd
+    from scanner.universe import pit_universe
+    pd.DataFrame({"TckrSymb": ["ABC", "ABC", "NIFTY", "OLD"], "FinInstrmTp": ["STF", "STO", "IDF", "STF"]}).to_csv(
+        tmp_path / "fo_bhavcopy_20210104.csv", index=False)
+    pd.DataFrame({"TckrSymb": ["ABC", "NEW"], "FinInstrmTp": ["STF", "STF"]}).to_csv(tmp_path / "fo_bhavcopy_20260929.csv", index=False)
+    u = pit_universe(tmp_path)
+    assert u == {"2021-01-04": {"ABC", "OLD"}, "2026-09-29": {"ABC", "NEW"}}                 # no index, left and joined
+    assert pit_universe(tmp_path, since="2026-01-01") == {"2026-09-29": {"ABC", "NEW"}}

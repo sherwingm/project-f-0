@@ -144,3 +144,13 @@ def test_model_top_decile_flag_is_per_day_and_display_only(monkeypatch, tmp_path
     before = verdict(stocks[-1])
     stocks[-1]["model_top_decile"] = None
     assert verdict(stocks[-1]) == before                                 # never a vote
+
+
+def test_walk_forward_reports_by_period():
+    df = synth(9000, signal=False)
+    df["day"] = df["quarter"].map(lambda q: f"{q[:4]}-{int(q[-1]) * 3 - 1:02d}-15")    # a date inside each quarter
+    report = walk_forward(df, min_train=1500)
+    bp = report["by_period"]
+    assert set(bp) <= {"2021-22", "2023-24", "2025-26"} and "2025-26" in bp and "2023-24" in bp
+    assert sum(m["n"] for m in bp.values()) == sum(f["test_rows"] for f in report["folds"])
+    assert {"accuracy", "brier", "base_brier", "top_decile", "first", "last"} <= set(bp["2025-26"])

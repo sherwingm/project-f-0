@@ -141,7 +141,7 @@ def load_index(eod2_dir: Path) -> pd.Series:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="event study: market-adjusted returns around stored events")
-    ap.add_argument("--since", type=date.fromisoformat, default=date(2023, 1, 1))
+    ap.add_argument("--since", type=date.fromisoformat, default=date(2021, 1, 1))
     ap.add_argument("--until", type=date.fromisoformat, default=None)
     ap.add_argument("--out", type=Path, default=ROOT / "data" / "event_study.csv")
     ap.add_argument("--patterns-out", type=Path, default=ROOT / "data" / "event_patterns.json")

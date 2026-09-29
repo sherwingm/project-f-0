@@ -25,8 +25,10 @@ def test_labels_tables():
     abc = detail[(detail["symbol"] == "ABC") & (detail["date"] == CAL[30].isoformat())].iloc[0]
     assert abc["adj_fwd3_return"] == pytest.approx(2.0) and abc["scored"] == "Y" and abc["hit"] == "Y"
     assert {c for c, _ in rx.DOCS["labels_summary"][1]} <= set(summary.columns)
-    assert (summary["row_type"] == "hit_rate").sum() == 2 * len(rx.THRESHOLDS)
-    assert (summary["row_type"] == "returns").sum() == 2 * 3                     # Bullish/Bearish x 1, 3, 5 sessions
+    allp = summary[summary["period"] == "all"]
+    assert (allp["row_type"] == "hit_rate").sum() == 2 * len(rx.THRESHOLDS)
+    assert (allp["row_type"] == "returns").sum() == 2 * 3                        # Bullish/Bearish x 1, 3, 5 sessions
+    assert set(summary["period"]) == {"all", "2025-26"}                           # the synthetic days are in 2026
 
 
 def test_cheap_tables(result):  # noqa: F811
@@ -58,4 +60,9 @@ def test_folds_table():
                                            "top_decile": fold["top_decile"]}}
     t = rx.folds_table(report)
     assert list(t["fold"]) == ["2024Q1", "OVERALL"] and t.iloc[1]["n"] == 10
+    assert list(t["period"]) == ["2023-24", "all"]
+    report["by_period"] = {"2023-24": {"n": 10, "first": "2024-01-01", "last": "2024-03-28", "accuracy": 0.4,
+                                       "brier": 0.66, "base_brier": 0.667, "top_decile": fold["top_decile"]}}
+    t2 = rx.folds_table(report)
+    assert list(t2["fold"]) == ["2024Q1", "OVERALL", "PERIOD"] and t2.iloc[2]["period"] == "2023-24"
     assert t.iloc[0]["top_decile_hit_up"] == 0.4 and t.iloc[1]["base_brier"] == 0.667

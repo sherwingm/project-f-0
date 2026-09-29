@@ -61,3 +61,13 @@ def clustered_diff_t(values, clusters, base, base_clusters) -> float | None:
         return None
     v = g / (g - 1) * (n - 1) / (n - k) * bread @ meat @ bread
     return round(float(beta[1] / math.sqrt(v[1, 1])), 3) if v[1, 1] > 0 else None
+
+
+# the strategy gate's reporting periods (DECISIONS.md)
+PERIODS = (("2021-22", "2021-01-01", "2022-12-31"), ("2023-24", "2023-01-01", "2024-12-31"),
+           ("2025-26", "2025-01-01", "2026-12-31"))
+
+
+def period_of(iso_date: str) -> str | None:
+    """'2021-22' / '2023-24' / '2025-26' for a YYYY-MM-DD date, None outside them."""
+    return next((name for name, a, b in PERIODS if a <= str(iso_date)[:10] <= b), None)

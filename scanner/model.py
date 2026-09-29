@@ -34,6 +34,7 @@ from .classify import classify
 from .equity import load_symbol
 from .event_study import load_index
 from .nse_fo import fo_metrics
+from .stats import PERIODS
 
 log = logging.getLogger("model")
 MODEL_PATH = ROOT / "data" / "model.pkl"
@@ -128,9 +129,7 @@ def build_dataset(since: date, until: date, eod2_dir: Path | None = None, cache_
     if store is None:
         from .events.store import Store
         store = Store()
-    if universe is None:
-        from .universe import fetch_fo_lots
-        universe = sorted(fetch_fo_lots(cache_path=cache_dir / "fo_universe.txt"))
+    pit = universe is None                          # point in time: the stocks with futures on each cached day
     index = load_index(eod2_dir)
     cal = [d.strftime("%Y-%m-%d") for d in index.index]
     nifty = index.to_numpy(dtype=float)
@@ -151,6 +150,9 @@ def build_dataset(since: date, until: date, eod2_dir: Path | None = None, cache_
         except Exception as exc:  # noqa: BLE001
             log.warning("%s: %s", f.name, exc)
     log.info("futures OI/PCR for %d sessions", len(fo_by_day))
+    if pit:
+        universe = sorted(set().union(*(set(v) for v in fo_by_day.values()))) if fo_by_day else []
+        log.info("point-in-time universe: %d stocks across the window", len(universe))
 
     pos = {d: i for i, d in enumerate(cal)}
     frames = []
@@ -175,6 +177,8 @@ def build_dataset(since: date, until: date, eod2_dir: Path | None = None, cache_
         rows = []
         for d, i in pos.items():
             if not (since.isoformat() <= d <= until.isoformat()) or i == 0:
+                continue
+            if pit and sym not in fo_by_day.get(d, {}):   # not in F&O that day (or no bhavcopy for it)
                 continue
             fo = fo_by_day.get(d, {}).get(sym, {})
             pc = chg[i - 1]
@@ -235,7 +239,7 @@ def _make_model():
 def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
     quarters = sorted(df["quarter"].unique())
     folds = []
-    all_proba, all_true, all_base = [], [], []
+    all_proba, all_true, all_base, all_days = [], [], [], []
     feature_names = featurise(df.iloc[:1])[1]
     for q in quarters:
         train = df[df["quarter"] < q]
@@ -255,6 +259,7 @@ def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
         all_proba.append(proba)
         all_true.append(yte)
         all_base.append(base)
+        all_days.append(test["day"].astype(str).to_numpy())
         log.info("fold %s: acc %.3f brier %.3f base %.3f (n=%d)", q, folds[-1]["accuracy"], folds[-1]["brier"],
                  folds[-1]["base_brier"], len(test))
     if not folds:
@@ -264,10 +269,18 @@ def walk_forward(df: pd.DataFrame, min_train: int = 5000) -> dict:
     overall = _metrics(y, proba)
     overall["base_brier"] = _brier(y, np.vstack(all_base))
     overall["top_decile"] = _top_decile(y, proba)
+    days, base_all = np.concatenate(all_days), np.vstack(all_base)
+    by_period = {}
+    for name, a, b in PERIODS:
+        m = (days >= a) & (days <= b)
+        if m.sum():
+            by_period[name] = {**_metrics(y[m], proba[m]), "n": int(m.sum()), "first": str(days[m].min()),
+                               "last": str(days[m].max()), "base_brier": _brier(y[m], base_all[m]),
+                               "top_decile": _top_decile(y[m], proba[m])}
     return {"engine": _make_model()[1], "horizon_sessions": HORIZON, "threshold_pct": THRESH,
             "classes": list(CLASSES), "features": feature_names, "rows": len(df),
             "class_share": {c: round(float((df['y'] == c).mean()), 4) for c in CLASSES},
-            "folds": folds, "overall": overall}
+            "folds": folds, "overall": overall, "by_period": by_period}
 
 
 def _proba_ordered(model, X) -> np.ndarray:
@@ -384,7 +397,7 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="train / inspect the NSE model (numbers only)")
     ap.add_argument("--train", action="store_true")
     ap.add_argument("--report", action="store_true")
-    ap.add_argument("--since", type=date.fromisoformat, default=date(2023, 1, 1))
+    ap.add_argument("--since", type=date.fromisoformat, default=date(2021, 1, 1))
     ap.add_argument("--until", type=date.fromisoformat, default=None)
     ap.add_argument("-v", "--verbose", action="store_true")
     a = ap.parse_args()
@@ -408,6 +421,11 @@ def main() -> None:
     print(f"{'OVERALL':<10}{'':>9}{sum(f['test_rows'] for f in report['folds']):>8}{o['accuracy']:>8.3f}{o['brier']:>8.3f}{base} | {pr}")
     for c, td in o.get("top_decile", {}).items():
         print(f"top decile {c}: hit rate {td['hit_rate']} vs base {td['base_rate']} (n={td['n']}, p >= {td['p_cut']})")
+    for name, m in (report.get("by_period") or {}).items():
+        td = m.get("top_decile") or {}
+        print(f"{name}: n {m['n']} ({m['first']}..{m['last']}) acc {m['accuracy']:.3f} brier {m['brier']:.4f} "
+              f"base {m['base_brier']:.4f} | top decile up {td.get('up', {}).get('hit_rate')} vs "
+              f"{td.get('up', {}).get('base_rate')}, down {td.get('down', {}).get('hit_rate')} vs {td.get('down', {}).get('base_rate')}")
 
 
 if __name__ == "__main__":

@@ -73,3 +73,16 @@ def _parse_mktlots(text: str) -> dict[str, int]:
         v = str(r[lot_col]).strip()
         out[r["SYMBOL"]] = int(v) if v.isdigit() else 0
     return out
+
+
+def pit_universe(cache_dir: Path, since: str | None = None, until: str | None = None) -> dict[str, set[str]]:
+    """Point-in-time F&O universe: {YYYY-MM-DD: stocks with stock futures (STF) in that day's cached bhavcopy}.
+    Stocks that later left F&O are in; stocks that joined later are not yet; index derivatives never are."""
+    out: dict[str, set[str]] = {}
+    for f in sorted(Path(cache_dir).glob("fo_bhavcopy_*.csv")):
+        d = f"{f.stem[-8:-4]}-{f.stem[-4:-2]}-{f.stem[-2:]}"
+        if (since and d < since) or (until and d > until):
+            continue
+        b = pd.read_csv(f, usecols=["TckrSymb", "FinInstrmTp"])
+        out[d] = set(b.loc[b["FinInstrmTp"] == "STF", "TckrSymb"].astype(str).str.strip())
+    return out

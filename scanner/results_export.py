@@ -1,8 +1,11 @@
 """Write the result tables to data/results/ (numbers only). Every CSV has a header row and a companion .md next
 to it that explains each column in one line.
 
-    python -m scanner.results_export --since 2023-01-01                    # all four parts
-    python -m scanner.results_export --since 2023-01-01 --only labels      # labels | cheap | events | model
+    python -m scanner.results_export --since 2021-01-01                    # all four parts
+    python -m scanner.results_export --since 2021-01-01 --only labels      # labels | cheap | events | model
+
+Every summary has a `period` column: `all`, then 2021-22, 2023-24 and 2025-26 (DECISIONS.md reporting periods).
+The label backtest runs on the point-in-time F&O universe (the stocks with futures in each day's bhavcopy).
 
 labels   labels_detail.csv, labels_summary.csv      scanner.backtest_labels on every cached bhavcopy session
 cheap    cheap_options_detail.csv, cheap_options_summary.csv   scanner.backtest_cheap_options
@@ -25,6 +28,7 @@ from server import charges as ch
 
 from .binomial import hits_needed
 from .build import ROOT
+from .stats import PERIODS, period_of
 
 log = logging.getLogger("results_export")
 OUT_DIR = ROOT / "data" / "results"
@@ -54,6 +58,7 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
                        "horizon, market-adjusted returns (stock minus NIFTY 50) against Neutral over the same horizon, "
                        "one stock-day per stock per horizon (non-overlapping windows). Columns that do not apply to a "
                        "row type are blank.", [
+        ("period", "all, or the reporting period the rows were computed over: 2021-22, 2023-24, 2025-26"),
         ("row_type", "hit_rate or returns"),
         ("label", "Bullish setup (scored as bullish) or Bearish setup (scored as bearish)"),
         ("threshold_pct", "hit_rate rows: a call is scored only when |adj_fwd3_return| exceeds this, %"),
@@ -111,6 +116,7 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
     ]),
     "cheap_options_summary": ("The backtest's summary table by group, both exit rules; rows flagged "
                               "in cheap_options_detail.excluded are left out.", [
+        ("period", "all, or the reporting period of the buy dates: 2021-22, 2023-24, 2025-26"),
         ("exit_rule", "3s = sold at the close 3 sessions later; expiry = held to expiry"),
         ("group", "the subset of contracts"),
         ("n", "contracts in the group with an outcome"),
@@ -126,6 +132,7 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
     ]),
     "event_study": ("Market-adjusted returns (stock minus NIFTY 50, close to close, %) around each stored tier-1/2 "
                     "event, per type / subtype / bucket (scanner.event_study).", [
+        ("period", "all, or the reporting period of the event dates: 2021-22, 2023-24, 2025-26"),
         ("group", "type, 'type / subtype' or 'type [bucket]' as printed by the study"),
         ("type", "event type"),
         ("subtype", "subtype, blank on type and bucket rows"),
@@ -149,7 +156,8 @@ DOCS: dict[str, tuple[str, list[tuple[str, str]]]] = {
     ]),
     "model_folds": ("Walk-forward folds of the NSE model (train on every earlier quarter, test on the next), plus "
                     "an OVERALL row over all test rows (scanner.model).", [
-        ("fold", "test quarter, or OVERALL"),
+        ("period", "reporting period of the test quarter (2021-22, 2023-24, 2025-26); on OVERALL / PERIOD rows, all or that period"),
+        ("fold", "test quarter, OVERALL, or PERIOD (all test rows of that period)"),
         ("train_end", "last day in the training data"),
         ("test_start", "first day tested"),
         ("test_end", "last day tested"),
@@ -183,9 +191,14 @@ def labels_tables(df: pd.DataFrame, cal: list[date]) -> tuple[pd.DataFrame, pd.D
     from .backtest_labels import returns_vs_base
     detail = annotate(df, cal, DETAIL_THRESHOLD).rename(columns={
         "fwd_return": "fwd3_return", "nifty_fwd_return": "nifty_fwd3_return", "move": "adj_fwd3_return"})
-    hits = pd.DataFrame(versus_base(df, cal, THRESHOLDS)).assign(row_type="hit_rate", horizon_sessions=3)
-    rets = pd.DataFrame(returns_vs_base(df, cal)).assign(row_type="returns")
-    return detail, pd.concat([hits, rets], ignore_index=True)
+    parts = []
+    for name, a, b in (("all", "0000", "9999"),) + PERIODS:
+        sub = df[(df["date"] >= a) & (df["date"] <= b)]
+        if not len(sub):
+            continue
+        parts.append(pd.DataFrame(versus_base(sub, cal, THRESHOLDS)).assign(row_type="hit_rate", horizon_sessions=3, period=name))
+        parts.append(pd.DataFrame(returns_vs_base(sub, cal)).assign(row_type="returns", period=name))
+    return detail, pd.concat(parts, ignore_index=True)
 
 
 def run_labels(since: date, out_dir: Path, eod2_dir: Path, cache_dir: Path) -> pd.DataFrame:
@@ -193,13 +206,13 @@ def run_labels(since: date, out_dir: Path, eod2_dir: Path, cache_dir: Path) -> p
     from .backtest_labels import run
     from .equity import load_symbol
     from .nse_fo import download_fo_bhavcopy
-    from .universe import fetch_fo_lots
+    from .universe import pit_universe
     index = _read_index(eod2_dir)["Close"]
     cal = [t.date() for t in index.index]
     in_cal = set(cal)
     days = sorted(d for d in (date.fromisoformat(f"{p.stem[-8:-4]}-{p.stem[-4:-2]}-{p.stem[-2:]}")
                               for p in cache_dir.glob("fo_bhavcopy_*.csv")) if d >= since and d in in_cal)
-    symbols = sorted(fetch_fo_lots(cache_path=cache_dir / "fo_universe.txt"))
+    symbols = pit_universe(cache_dir, since.isoformat())            # point in time: each day's F&O stocks
 
     def equity(sym):
         try:
@@ -230,10 +243,14 @@ def cheap_tables(df: pd.DataFrame, tick: float = 0.05) -> tuple[pd.DataFrame, pd
     d = d.rename(columns={"dte": "sessions_to_expiry", "exit_net": "net_3s", "expiry_net": "net_expiry",
                           "exit_multiple": "multiple_3s", "expiry_multiple": "multiple_expiry"})
     rows = []
-    for key, _ in OUTCOMES:
-        for r in summarise(df, (3, 7))[key]:
+    for period, a, b in (("all", "0000", "9999"),) + PERIODS:
+      sub = df[(df["date"].astype(str) >= a) & (df["date"].astype(str) <= b)]
+      if not len(sub):
+          continue
+      for key, _ in OUTCOMES:
+        for r in summarise(sub, (3, 7))[key]:
             need = hits_needed(r["count"])
-            rows.append({"exit_rule": "3s" if key == "exit" else "expiry", "group": r["group"], "n": r["count"],
+            rows.append({"period": period, "exit_rule": "3s" if key == "exit" else "expiry", "group": r["group"], "n": r["count"],
                          "wins": r["wins"], "pct_net_positive": r["pct_positive"], "mean_multiple": r["mean_multiple"],
                          "median_multiple": r["median_multiple"], "best_multiple": r["best_multiple"],
                          "worst_multiple": r["worst_multiple"], "net_per_1000": r["net_per_1000"],
@@ -274,7 +291,13 @@ def run_events(since: date, out_dir: Path, eod2_dir: Path) -> pd.DataFrame:
             closes[sym] = load_symbol(sym, eod2_dir)["Close"]
         except Exception as exc:  # noqa: BLE001
             log.warning("%s: no eod2 closes (%s)", sym, exc)
-    table = event_table(summarise(study(events, closes, index)))
+    rows = study(events, closes, index)
+    parts = []
+    for name, a, b in (("all", "0000", "9999"),) + PERIODS:
+        sub = rows[(rows["event_date"] >= a) & (rows["event_date"] <= b)]
+        if len(sub):
+            parts.append(event_table(summarise(sub)).assign(period=name))
+    table = pd.concat(parts, ignore_index=True)
     write(table, "event_study", out_dir)
     return table
 
@@ -287,9 +310,18 @@ def folds_table(report: dict) -> pd.DataFrame:
                                  "test_start": report["folds"][0].get("test_start"),
                                  "test_end": report["folds"][-1].get("test_end")}]:
         td = f.get("top_decile") or {}
-        rows.append({"fold": f["quarter"], "train_end": f.get("train_end"), "test_start": f.get("test_start"),
+        rows.append({"period": "all" if f["quarter"] == "OVERALL" else (period_of(f.get("test_start") or "") or "all"), "fold": f["quarter"], "train_end": f.get("train_end"), "test_start": f.get("test_start"),
                      "test_end": f.get("test_end"), "n": f["test_rows"], "accuracy": f["accuracy"], "brier": f["brier"],
                      "base_brier": f.get("base_brier"),
+                     "top_decile_hit_up": (td.get("up") or {}).get("hit_rate"),
+                     "top_decile_base_up": (td.get("up") or {}).get("base_rate"),
+                     "top_decile_hit_down": (td.get("down") or {}).get("hit_rate"),
+                     "top_decile_base_down": (td.get("down") or {}).get("base_rate")})
+    for name, m in (report.get("by_period") or {}).items():
+        td = m.get("top_decile") or {}
+        rows.append({"period": name, "fold": "PERIOD", "train_end": None, "test_start": m.get("first"),
+                     "test_end": m.get("last"), "n": m["n"], "accuracy": m["accuracy"], "brier": m["brier"],
+                     "base_brier": m.get("base_brier"),
                      "top_decile_hit_up": (td.get("up") or {}).get("hit_rate"),
                      "top_decile_base_up": (td.get("up") or {}).get("base_rate"),
                      "top_decile_hit_down": (td.get("down") or {}).get("hit_rate"),
@@ -306,7 +338,7 @@ def run_model(since: date, out_dir: Path) -> pd.DataFrame:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description="write the result tables to data/results/ (numbers only)")
-    ap.add_argument("--since", type=date.fromisoformat, default=date(2023, 1, 1))
+    ap.add_argument("--since", type=date.fromisoformat, default=date(2021, 1, 1))
     ap.add_argument("--only", nargs="+", choices=PARTS, default=list(PARTS))
     ap.add_argument("--out-dir", type=Path, default=OUT_DIR)
     ap.add_argument("--eod2-dir", type=Path, default=ROOT / "data" / "eod2")
