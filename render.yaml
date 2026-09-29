@@ -16,6 +16,7 @@ services:
         - docs/**
         - data/scan.json
         - data/event_patterns.json
+        - data/live_snapshots/**
         - "**/*.md"
     envVars:
       - key: PYTHON_VERSION

@@ -1,0 +1,45 @@
+name: Opening snapshot (09:30 live labels)
+# The live server (Render free tier) sleeps after 15 min without visits and its disk is wiped when it does, so this
+# job keeps it awake around the open and collects the opening snapshot of live labels it writes at its first poll
+# between 09:30 and 10:30 IST (GET /api/live/snapshot), then commits it to data/live_snapshots/<date>.json. The
+# nightly scan embeds the committed snapshots and the scoreboard scores them as their own group.
+# No snapshot (holiday, server down, no live data): the job ends green with a note and nothing is committed.
+on:
+  schedule:
+    - cron: "35 3 * * 1-5"      # 03:35 UTC = 09:05 IST (GitHub may start scheduled runs some minutes late)
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: live-snapshot
+  cancel-in-progress: false
+env:
+  LIVE_URL: ${{ vars.LIVE_URL || 'https://fo-scanner.onrender.com' }}
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04               # pinned: ubuntu-latest moves to Ubuntu 26 from 2026-10-19
+    timeout-minutes: 110
+    steps:
+      - uses: actions/checkout@v7
+      - name: Keep the server awake and fetch today's snapshot (until 10:45 IST)
+        run: |
+          d=$(TZ=Asia/Kolkata date +%F)
+          stop=$(TZ=Asia/Kolkata date -d "$d 10:45" +%s)
+          mkdir -p data/live_snapshots
+          while [ "$(date +%s)" -lt "$stop" ]; do
+            curl -s -o /dev/null --max-time 90 "$LIVE_URL/api/live" || true          # a visit keeps it awake
+            if curl -sf --max-time 90 "$LIVE_URL/api/live/snapshot?date=$d" -o "data/live_snapshots/$d.json"; then
+              echo "snapshot $d collected"; break
+            fi
+            rm -f "data/live_snapshots/$d.json"
+            sleep 240
+          done
+          if [ ! -s "data/live_snapshots/$d.json" ]; then echo "::notice::no opening snapshot for $d (holiday, server asleep or no live data)"; fi
+      - name: Commit the snapshot
+        run: |
+          git config user.name "fo-scanner-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/live_snapshots
+          git diff --cached --quiet && exit 0
+          git commit -m "live snapshot: $(TZ=Asia/Kolkata date +%F)"
+          git pull --rebase origin main && git push

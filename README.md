@@ -93,6 +93,13 @@ Every day: nothing. If NSE refuses GitHub's runner, the nightly job fails before
 stays) and GitHub emails you; run `python -m scanner.build` at home and push instead. Monthly: Actions →
 *Retrain model* → *Run workflow* (`.github/workflows/retrain.yml`; commits `data/model.pkl`).
 
+**Live labels and the 09:30 snapshot.** During market hours the live page applies the same label rule to live
+inputs every poll (live price change, volume so far pro rata to the time of day, live all-expiry futures OI change,
+live PCR) and shows it as a dashed `live:` pill next to the EOD label. The first poll between 09:30 and 10:30 IST
+writes an opening snapshot; `.github/workflows/live-snapshot.yml` keeps the server awake from 09:05, collects it
+and commits `data/live_snapshots/<date>.json`; the nightly scan embeds it and the scoreboard scores it as its own
+row ("09:30 live labels"), by the same rules as the EOD labels. The model never sees live data.
+
 Free-tier limits: Render sleeps after 15 min without visits (first open ~50 s) and polls Kotak only while awake;
 its disk is wiped on restart, so the paper ledger starts over after a sleep or deploy (a paid disk, or the server
 at home, keeps it). Nightly scan commits do not redeploy the server (`buildFilter` in `render.yaml`).

@@ -92,6 +92,7 @@ button:focus-visible, input:focus-visible { outline:2px solid var(--focus); outl
 .pill { display:inline-block; border-radius:999px; padding:2px 9px; font-size:12px; font-weight:600; line-height:1.6; white-space:nowrap; }
 .pill.b { background:var(--bull-soft); color:var(--bull); } .pill.r { background:var(--bear-soft); color:var(--bear); }
 .pill.n { background:var(--neutral-soft); color:var(--neutral); } .pill.u { background:var(--unc-soft); color:var(--unc); }
+.pill.live { margin-left:4px; border:1px dashed currentColor; background:transparent; }
 .up { color:var(--bull); } .down { color:var(--bear); } .flat { color:var(--muted); }
 .row.open { border-color:var(--line-strong); }
 
@@ -440,7 +441,13 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   function scoreStats() {
     const h = scoreCfg.horizon, th = scoreCfg.threshold;
     const as = key => calls.map(c => ({ symbol: c.symbol, as_of: c.as_of, dir: c[key], move: moveOf(c, h), c }));
+    const snaps = (meta.live_snapshots || []).map(x => {
+      const st = stocks.find(y => y.symbol === x.symbol);
+      return { symbol: x.symbol, as_of: x.date, dir: LEAN[x.label] || null,
+               move: st ? Scoring.adjusted(st.chart_dates, st.chart_closes, IDX, x.date, h) : null };
+    });
     return { you: Scoring.score(as("call"), CAL, th), sys: Scoring.score(as("system"), CAL, th),
+             snap: Scoring.score(snaps, CAL, th), snapDays: new Set((meta.live_snapshots || []).map(x => x.date)).size,
              base: Scoring.score(Scoring.baseline(stocks, CAL, IDX, h), CAL, th),
              agree: calls.filter(c => c.system && c.system === c.call).length, total: calls.length };
   }
@@ -460,7 +467,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     el.innerHTML = `<h2>Your calls vs the system</h2>
       <p class="count" style="margin:0">Scored on the ${IDX ? "market-adjusted" : "raw"} move ${h} session${h === 1 ? "" : "s"} later: the stock's return ${IDX ? "minus " + esc(IDX.name) + "'s over the same sessions" : "(this build has no index, so moves are not market-adjusted)"}. A bullish or bearish call is a hit when the move goes its way by more than ±${th}%. Smaller moves and neutral calls are shown but not scored, and only the first call on a stock in any 3 sessions counts. The system's label and the baseline are scored by the same rules.${storageOk ? "" : " Storage is unavailable in this browser, so calls last only for this visit."}</p>
       <div style="overflow-x:auto"><table><thead><tr><th></th><th>Scored</th><th>Hits</th><th>Accuracy</th><th>Needed</th><th>Beats a coin</th></tr></thead><tbody>
-        ${line("You", st.you)}${line("System labels", st.sys)}${line("Baseline: always bullish on the top-10 volume-ratio stocks", st.base)}</tbody></table></div>
+        ${line("You", st.you)}${line("System labels", st.sys)}${line(`09:30 live labels (${st.snapDays} opening snapshot${st.snapDays === 1 ? "" : "s"})`, st.snap)}${line("Baseline: always bullish on the top-10 volume-ratio stocks", st.base)}</tbody></table></div>
       <p class="count" style="margin:6px 0 0">${Scoring.refLine()} (N/2 + 1.645·√N/2).</p>
       <p class="count" style="margin:4px 0 0">Calls made ${st.total} · waiting for data ${st.you.pending} · duplicates ${st.you.dup} · moves within ±${th}% ${st.you.small} · neutral ${st.you.nodir} · you agreed with the label on ${pctOf(st.agree, st.total)} of calls, before seeing it. The baseline runs over the ${CAL.dates.length} sessions in this page's history.</p>
       <div id="paperScore"></div>
@@ -552,7 +559,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     const mine = callFor(s.symbol), blind = callMode && !mine;
     const tail = blind
       ? `<span class="callbtns" role="group" aria-label="Your call"><button type="button" class="b" data-call="bullish">Bull</button><button type="button" class="r" data-call="bearish">Bear</button><button type="button" class="n" data-call="neutral">Neutral</button></span>`
-      : mine ? `<span class="yours">You: <b>${esc(mine.call)}</b> · </span><span class="pill ${cls}">${esc(s.label)}</span>` : `<span class="pill ${cls}">${esc(s.label)}</span>`;
+      : mine ? `<span class="yours">You: <b>${esc(mine.call)}</b> · </span><span class="pill ${cls}">${esc(s.label)}</span>${livePill(s)}` : `<span class="pill ${cls}">${esc(s.label)}</span>${livePill(s)}`;
     btn.innerHTML =
       `<div class="l1"><span class="sym">${esc(s.symbol)}</span><span class="chg ${dirClass(s.price_change_pct)}">${pct(s.price_change_pct)}</span></div>
        <div class="l2"><span class="m">Vol <b>${ratio(s.volume_ratio)}</b></span><span class="m">OI <b>${pct(s.oi_change_pct)}</b></span><span class="m">PCR <b>${num(s.pcr)}</b></span>${tail}</div>` + liveLine(s);
@@ -594,11 +601,18 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   function sgnpct(v) { return v == null ? "—" : (v > 0 ? "+" : "") + v + "%"; }
   function sgn0(v) { return v > 0 ? "+1" : v < 0 ? "−1" : "0"; }
 
+  // live label: the same rule on live inputs (server/live.py), next to the EOD label; descriptive, never a vote
+  function livePill(s) {
+    const q = LIVE.quotes && LIVE.quotes[s.symbol]; if (!q || !q.live_label) return "";
+    const short = { "Bullish setup": "Bullish", "Bearish setup": "Bearish", "Neutral": "Neutral", "Unclassified": "Unclassified" };
+    return ` <span class="pill ${LABELS[q.live_label] || "u"} live" title="${esc((q.live_reasons || []).join(" · "))}">live: ${esc(short[q.live_label] || q.live_label)}</span>`;
+  }
   function liveLine(s) {
     const q = LIVE.quotes[s.symbol]; if (!q) return "";
     return `<div class="l3">Live <b class="${dirClass(q.chg_pct)}">₹${inr(q.ltp)} ${pct(q.chg_pct)}</b>` +
       (q.fut_oi != null ? ` · fut OI <b>${inr(q.fut_oi)}</b> <b class="${dirClass(q.fut_oi_chg_pct)}">${pct(q.fut_oi_chg_pct)}</b> vs close${q.oi_ts ? " <small>(" + q.oi_ts + ")</small>" : ""}` : "") +
-      (q.live_pcr != null ? ` · PCR <b>${num(q.live_pcr)}</b>${q.pcr_ts ? " <small>(" + q.pcr_ts + ")</small>" : ""}` : "") + `</div>`;
+      (q.live_pcr != null ? ` · PCR <b>${num(q.live_pcr)}</b>${q.pcr_ts ? " <small>(" + q.pcr_ts + ")</small>" : ""}` : "") +
+      (q.live_volume_ratio != null ? ` · vol <b>${ratio(q.live_volume_ratio)}</b> <small>pro rata</small>` : "") + `</div>`;
   }
 
   function detailEl(s) {

@@ -26,6 +26,25 @@ from .strikes import option_chains
 from .universe import fetch_fo_lots
 
 ROOT = Path(__file__).resolve().parent.parent
+
+
+def live_snapshot_calls(folder: Path, sessions: list[str]) -> list[dict]:
+    """The 09:30 opening snapshots (data/live_snapshots/<date>.json, committed by the snapshot workflow) as
+    {date, symbol, label, taken_at} for the Bullish / Bearish rows, only for dates that are sessions in this
+    page's history (a holiday snapshot would carry yesterday's quotes). The page scores them as their own group."""
+    if not sessions or not folder.exists():
+        return []
+    keep, out = set(sessions), []
+    for path in sorted(folder.glob("*.json")):
+        try:
+            snap = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if snap.get("date") not in keep:
+            continue
+        out += [{"date": snap["date"], "symbol": r["symbol"], "label": r["label"], "taken_at": snap.get("taken_at")}
+                for r in snap.get("rows", []) if r.get("label") in (BULLISH, BEARISH)]
+    return out
 IST = timezone(timedelta(hours=5, minutes=30))
 log = logging.getLogger("scanner")
 
@@ -127,6 +146,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
             },
             "thresholds": {"volume_above": 1.0, "pcr_low": 0.7, "pcr_high": 1.3, "volume_window_days": 20},
             "index_closes": index,
+            "live_snapshots": live_snapshot_calls(ROOT / "data" / "live_snapshots", (index or {}).get("dates") or []),
             "events_status": ev_status,
             "disclaimer": DISCLAIMER,
         },

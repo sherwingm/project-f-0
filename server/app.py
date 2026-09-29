@@ -151,6 +151,8 @@ def startup() -> None:
         lots = {s: v.get("lot_size") for s, v in state.stocks.items()}
         state.feed = LiveFeed(FakeProvider(closes, fo, lots), state.scan, settings.poll_seconds, state.fut_symbols(), poll_always=True)
         state.feed.start()
+    if state.feed:
+        state.feed.snapshot_dir = settings.data_dir / "live_snapshots"
     if not settings.orders_enabled:
         state.broker = None
     elif isinstance(state.broker, PaperBroker):
@@ -263,6 +265,19 @@ def api_live(_: str = Depends(auth)):
     if not state.feed:
         return {"enabled": False, "market_open": market_open(), "quotes": {}}
     return {"enabled": True, **state.feed.snapshot()}
+
+
+@app.get("/api/live/snapshot")
+def api_live_snapshot(date: str | None = None, _: str = Depends(auth)):
+    """The 09:30 opening snapshot of live labels for `date` (default today, IST), for the GitHub workflow."""
+    import re
+    d = date or datetime.now(IST).date().isoformat()
+    if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", d):
+        raise HTTPException(400, "date must be YYYY-MM-DD")
+    path = settings.data_dir / "live_snapshots" / f"{d}.json"
+    if not path.exists():
+        raise HTTPException(404, f"no opening snapshot for {d}")
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @app.get("/api/chain/{symbol}")

@@ -5,6 +5,13 @@ Provider = anything with quote(keys) -> {key: {...}}. KiteProvider wraps Kite Co
 universe (210 equities + 210 futures = 420 keys) is one request every POLL_SECONDS.
 Live OI change is measured against the previous close's futures OI from the EOD scan, so the
 page can show "OI +2.1% vs close" next to the EOD numbers.
+
+Live label: every poll applies the EOD label rule (scanner.classify) to live inputs: the live price change,
+today's volume so far against the 20-day average scaled to the time of day (pro rata over the 375-minute
+session, the first 15 minutes floored), the live all-expiry futures OI change, and the live PCR (the EOD PCR
+until the chain sweep reaches the stock). Descriptive, like the EOD label; the model never sees live data.
+Opening snapshot: the first poll between 09:30 and 10:30 IST on a session day writes every stock's live label
+to <snapshot_dir>/<date>.json (GET /api/live/snapshot), which a GitHub workflow commits for scoring.
 """
 from __future__ import annotations
 
@@ -13,12 +20,32 @@ import math
 import random
 import threading
 import time
+import json
 import zlib
 from datetime import datetime, timedelta, timezone
+from pathlib import Path
+
+from scanner.classify import classify
 
 log = logging.getLogger(__name__)
 IST = timezone(timedelta(hours=5, minutes=30))
 MARKET_OPEN, MARKET_CLOSE = (9, 15), (15, 30)
+SESSION_MINUTES = 375                 # 09:15 -> 15:30
+MIN_ELAPSED_MINUTES = 15              # pro-rata volume floor, so 09:16 does not give absurd ratios
+SNAPSHOT_FROM, SNAPSHOT_UNTIL = (9, 30), (10, 30)
+
+
+def live_label(row: dict, eod: dict, now: datetime) -> dict:
+    """The EOD label rule on live inputs (see the module docstring)."""
+    elapsed = (now.hour * 60 + now.minute) - (MARKET_OPEN[0] * 60 + MARKET_OPEN[1])
+    frac = min(1.0, max(MIN_ELAPSED_MINUTES, elapsed) / SESSION_MINUTES)
+    vol, avg = row.get("volume"), eod.get("avg_volume_20d")
+    vr = round(vol / (avg * frac), 2) if vol and avg else None
+    pcr = row.get("live_pcr") if row.get("live_pcr") is not None else eod.get("pcr")
+    c = classify({"price_change_pct": row.get("chg_pct"), "volume_ratio": vr,
+                  "oi_change_pct": row.get("fut_oi_chg_pct"), "pcr": pcr})
+    return {"live_label": c["label"], "live_reasons": c["reasons"], "live_volume_ratio": vr,
+            "live_label_pcr": "live" if row.get("live_pcr") is not None else "eod"}
 
 
 def market_open(now: datetime | None = None) -> bool:
@@ -124,6 +151,7 @@ class LiveFeed:
         self.updated_at: str | None = None
         self.error: str | None = None
         self.hooks: list = []              # called with the feed after every successful poll (paper ledger marks)
+        self.snapshot_dir: Path | None = None   # set by the app: the 09:30 opening snapshot is written there
         self._stop = threading.Event()
         self.reload(scan, fut_tradingsymbols or {})
 
@@ -154,9 +182,9 @@ class LiveFeed:
                     log.warning("live poll failed: %s", exc)
             self._stop.wait(self.poll_seconds)
 
-    def poll_once(self) -> None:
+    def poll_once(self, now: datetime | None = None) -> None:
         raw = self.provider.quote(self.keys)
-        now = datetime.now(IST)
+        now = now or datetime.now(IST)
         fresh: dict[str, dict] = {}
         for sym, e in self.eod.items():
             q = raw.get("NSE:" + sym)
@@ -181,14 +209,38 @@ class LiveFeed:
             p = raw.get("PCR:" + sym)          # providers that sweep option chains add exact live PCR
             if p:
                 row.update({"live_pcr": p.get("pcr"), "live_call_oi": p.get("call_oi"), "live_put_oi": p.get("put_oi"), "pcr_ts": p.get("pcr_ts")})
+            row.update(live_label(row, e, now))
             fresh[sym] = row
         with self.lock:
             self.quotes, self.updated_at, self.error = fresh, now.strftime("%H:%M:%S"), None
+        try:
+            self._maybe_snapshot(fresh, now)
+        except OSError as exc:
+            log.warning("opening snapshot not written: %s", exc)
         for hook in list(self.hooks):
             try:
                 hook(self)
             except Exception as exc:  # noqa: BLE001 - a hook must never stop the feed
                 log.warning("live poll hook %s failed: %s", getattr(hook, "__name__", hook), exc)
+
+    def _maybe_snapshot(self, fresh: dict, now: datetime) -> Path | None:
+        """The first poll between SNAPSHOT_FROM and SNAPSHOT_UNTIL on a weekday writes <date>.json once."""
+        if self.snapshot_dir is None or now.weekday() >= 5 or not fresh:
+            return None
+        if not (SNAPSHOT_FROM <= (now.hour, now.minute) <= SNAPSHOT_UNTIL):
+            return None
+        path = Path(self.snapshot_dir) / f"{now.date().isoformat()}.json"
+        if path.exists():
+            return None
+        rows = [{"symbol": sym, "label": r.get("live_label"), "ltp": r.get("ltp"), "chg_pct": r.get("chg_pct"),
+                 "volume_ratio": r.get("live_volume_ratio"), "oi_chg_pct": r.get("fut_oi_chg_pct"),
+                 "pcr": r.get("live_pcr"), "pcr_source": r.get("live_label_pcr")} for sym, r in sorted(fresh.items())]
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps({"date": now.date().isoformat(), "taken_at": now.strftime("%H:%M:%S"),
+                                    "rule": "scanner.classify on live inputs; volume pro rata to the time of day",
+                                    "rows": rows}), encoding="utf-8")
+        log.info("opening snapshot %s written (%d stocks, %s)", path.name, len(rows), now.strftime("%H:%M:%S"))
+        return path
 
     def snapshot(self) -> dict:
         with self.lock:
