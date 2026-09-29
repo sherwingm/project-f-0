@@ -13,27 +13,43 @@ editing this file on purpose, in its own commit, with the reason.
 - **Risk defaults unchanged** (`server/config.py`, guide 12). **`ALLOW_LOTTERY=false`.**
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
 
-## One strategy at a time: the strategy gate
-A strategy moves forward only through these steps, in order:
-1. **Define** it on one page with no open parameters.
-2. **Backtest** 2021-01-01 to the latest session with the engine's fills and the post-April-2026 charges
-   (`server/charges.py`, `CHARGES_EFFECTIVE = 2026-04-01`). Pass = all of:
+## One strategy: S1, by version
+There is one strategy, **S1**, iterated by pre-registered versions (S1 v1, v2, v3 …) until one clears the gate.
+Ideas from elsewhere (for example a results-beat signal) enter only as components of a new S1 version.
+
+Each version moves forward only through these steps, in order:
+1. **Define** it on one page with no open parameters (`strategies/S1_vN_*.md`), committed before any run.
+2. **Diagnostic** on the stock returns first, as the version's page specifies.
+3. **Backtest on the test window only: 2021-01-01 to 2024-12-31**, with the engine's fills and expiry rule
+   (`scanner/option_engine.py`) and the post-April-2026 charges (`server/charges.py`,
+   `CHARGES_EFFECTIVE = 2026-04-01`).
+4. **Gate** on the test window. Pass = all of:
    - net mean per trade > 0 after costs;
    - date-clustered t >= 2;
-   - positive in each of 2021-22, 2023-24 and 2025-26;
+   - positive in each sub-period of the test window (2021-22 and 2023-24);
    - at least 200 trades.
-3. **Paper** for at least 6 weeks or 30 trades, with fills and costs within 20 % of the backtest and no rule
+5. **Holdout: 2025-01-01 to the latest session**, evaluated **once**, and only for a version that passed the gate
+   on 2021-2024. It must be positive with date-clustered t >= 1.
+6. **Paper** for at least 6 weeks or 30 trades, with fills and costs within 20 % of the backtest and no rule
    changes during the run.
-4. **Live** only after 2 and 3 pass, one lot.
-5. **Combinations** only from strategies that passed individually, and then through the same gate.
+7. **Live** only after 4, 5 and 6 pass, one lot.
 
-## Closed strategies
-Closed; not reopened without a new definition that goes through the gate.
+A version that fails is **closed with its numbers**. The next version starts from the diagnostic, not from
+re-tuning the same rules. Every report states the test-window / holdout split.
 
-| Strategy | Headline result |
+## S1 versions
+
+| Version | Status | Record |
+|---|---|---|
+| S1 v1 · weak-sector naked put, 1-month-low exit | Superseded before running | Replaced by v2 before any v1 result was read |
+| S1 v2 · weak-sector results-miss put debit spread (`strategies/S1_v2_weak_sector_put.md`) | **Closed** at the signal level | Results-miss signals in weak sectors, net of the leave-one-out sector: 10 sessions −0.34 %, t −0.7; 20 sessions −0.11 %, t −0.2; N 119. Option arms untradable on liquidity (0 trades); the technical arm had 17 trades, t 0.56 (`data/results/S1_v2_backtest_report.md`) |
+
+## Closed earlier ideas
+Closed before the S1 structure; not reopened except as a component of an S1 version.
+
+| Idea | Headline result |
 |---|---|
 | Buildup labels, long | +₹54 per lakh of alpha against ₹250 of costs |
 | Shorting short-buildup | −₹487 per trade |
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
-| S1 weak-sector results-miss put (v2 spread, S1-alt naked put, technical arm) | Closed at the signal level: results-miss signals in weak sectors show no drift net of the leave-one-out sector (10 sessions −0.34 %, t −0.7; 20 sessions −0.11 %, t −0.2; N 119); the option arms were untradable on liquidity (0 trades); the technical arm had 17 trades, t 0.56, one trade = the mean (`strategies/S1_weak_sector_put.md`, `data/results/S1_backtest_report.md`) |
