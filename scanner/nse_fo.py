@@ -26,6 +26,7 @@ import zipfile
 from datetime import date, timedelta
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 import requests
 
@@ -118,6 +119,47 @@ def download_fo_opens(day: date, cache_dir: Path | None = None, timeout: int = 6
         df = pd.DataFrame({"TckrSymb": raw["TckrSymb"], "XpryDt": raw["XpryDt"], "StrkPric": raw["StrkPric"],
                            "OptnTp": raw["OptnTp"], "OpnPric": pd.to_numeric(raw["OpnPric"], errors="coerce").fillna(0)})
     df = df.reset_index(drop=True)
+    if cache_dir:
+        cache_dir.mkdir(parents=True, exist_ok=True)
+        df.to_csv(cache_file, index=False)
+    return df
+
+
+def stock_option_prices(raw: pd.DataFrame, old_format: bool) -> pd.DataFrame:
+    """Stock-option rows of a raw bhavcopy: TckrSymb, XpryDt, StrkPric, OptnTp, OpnPric, HghPric, LwPric, ClsPric,
+    TtlTradgVol (contracts), TtlTrfVal (Rs, notional: (strike + premium) x quantity, as NSE reports it) and
+    NewBrdLotQty. The old files carry no lot size: open interest is always whole lots, so the lot is the greatest
+    common divisor of the stock's non-zero option open interests that day (0 when it has none)."""
+    raw = raw.rename(columns=lambda c: str(c).strip())
+    num = lambda s: pd.to_numeric(s, errors="coerce")
+    if old_format:
+        raw = raw[raw["INSTRUMENT"].astype(str).str.strip() == "OPTSTK"]
+        df = pd.DataFrame({"TckrSymb": raw["SYMBOL"].astype(str).str.strip(),
+                           "XpryDt": pd.to_datetime(raw["EXPIRY_DT"], format="%d-%b-%Y").dt.strftime("%Y-%m-%d"),
+                           "StrkPric": num(raw["STRIKE_PR"]), "OptnTp": raw["OPTION_TYP"].astype(str).str.strip(),
+                           "OpnPric": num(raw["OPEN"]), "HghPric": num(raw["HIGH"]), "LwPric": num(raw["LOW"]),
+                           "ClsPric": num(raw["CLOSE"]), "TtlTradgVol": num(raw["CONTRACTS"]),
+                           "TtlTrfVal": num(raw["VAL_INLAKH"]) * 1e5})
+        oi = num(raw["OPEN_INT"]).fillna(0).astype("int64")
+        lots = {s: int(np.gcd.reduce(g[g > 0].to_numpy())) if (g > 0).any() else 0
+                for s, g in oi.groupby(df["TckrSymb"])}
+        df["NewBrdLotQty"] = df["TckrSymb"].map(lots)
+    else:
+        raw = raw[raw["FinInstrmTp"] == "STO"]
+        df = pd.DataFrame({c: raw[c] for c in ("TckrSymb", "XpryDt", "StrkPric", "OptnTp")})
+        for c in ("OpnPric", "HghPric", "LwPric", "ClsPric", "TtlTradgVol", "TtlTrfVal", "NewBrdLotQty"):
+            df[c] = num(raw[c])
+    df[["OpnPric", "TtlTradgVol", "TtlTrfVal"]] = df[["OpnPric", "TtlTradgVol", "TtlTrfVal"]].fillna(0)
+    return df.reset_index(drop=True)
+
+
+def download_fo_prices(day: date, cache_dir: Path | None = None, timeout: int = 60) -> pd.DataFrame:
+    """stock_option_prices for `day`, fetched on demand and cached as fo_prices_YYYYMMDD.csv (the backtest engine's
+    fills: scanner/option_engine.py)."""
+    cache_file = (cache_dir / f"fo_prices_{day:%Y%m%d}.csv") if cache_dir else None
+    if cache_file and cache_file.exists():
+        return pd.read_csv(cache_file)
+    df = stock_option_prices(*_download_raw(day, timeout))
     if cache_dir:
         cache_dir.mkdir(parents=True, exist_ok=True)
         df.to_csv(cache_file, index=False)
