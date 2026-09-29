@@ -94,14 +94,14 @@ def test_lot_from_open_interest():
 
 
 # ---------------------------------------------------------------- synthetic market
-def _synthetic(results_time="18:00"):
+def _synthetic(results_time="18:00", lot=200, contracts=500):
     cal = [d.strftime("%Y-%m-%d") for d in pd.bdate_range("2026-03-02", periods=130)]
     n = len(cal)
     sig = 100
     idx = pd.to_datetime(cal)
     peers = {f"P{j}": pd.Series(1000 * np.cumprod(np.r_[1, np.full(n - 1, 1 - 0.003 + 0.0005 * j)]), index=idx)
              for j in range(3)}                                          # a falling sector of three peers
-    stock_px = 1000 * np.cumprod(np.r_[1, np.full(n - 1, 1 - 0.002)])
+    stock_px = 1000 * np.cumprod(np.r_[1, np.full(n - 1, 1 - 0.002)]) * (1 + 0.002 * (np.arange(n) % 2))
     stock_px[sig:] *= 0.95                                               # day 0: -5 % on results
     stock = {"ABC": pd.Series(stock_px, index=idx), **peers}
     sector_of = {s: "nifty metal" for s in stock}
@@ -113,13 +113,13 @@ def _synthetic(results_time="18:00"):
         i = cal.index(d)
         spot = float(stock_px[i])
         rows = [dict(TckrSymb="ABC", FinInstrmTp="STF", XpryDt=e, StrkPric=0, OptnTp=None, ClsPric=spot,
-                     OpnIntrst=1e6, UndrlygPric=spot, NewBrdLotQty=250, TtlTradgVol=500) for e in expiries]
+                     OpnIntrst=1e6, UndrlygPric=spot, NewBrdLotQty=lot, TtlTradgVol=contracts) for e in expiries]
         long_c, short_c = (40.0, 16.0) if i <= sig + 1 else (state["long"], state["short"])
         for e in expiries:
             for k in np.arange(700.0, 900.0, 10.0):
                 c = long_c if k in (780.0, 770.0) else short_c if k == 730.0 else 5.0
                 rows.append(dict(TckrSymb="ABC", FinInstrmTp="STO", XpryDt=e, StrkPric=k, OptnTp="PE", ClsPric=c,
-                                 OpnIntrst=1e6, UndrlygPric=spot, NewBrdLotQty=250, TtlTradgVol=500))
+                                 OpnIntrst=1e6, UndrlygPric=spot, NewBrdLotQty=lot, TtlTradgVol=contracts))
         return pd.DataFrame(rows)
 
     def opens(d):
@@ -127,7 +127,7 @@ def _synthetic(results_time="18:00"):
                              for e in expiries for k, p in ((780.0, 40.0), (770.0, 40.0), (730.0, 16.0))])
 
     inp = s1.Inputs(cal=cal, bhav=bhav, opens=opens, stock=stock, sector_of=sector_of, bench=bench,
-                    results=[("ABC", cal[sig - 1], results_time)])
+                    results=[("ABC", cal[sig - 1], results_time)], category=lambda sym, d: ("mid", "2025-12-31"))
     return inp, cal, sig, state, stock_px
 
 
@@ -135,7 +135,7 @@ def test_the_synthetic_signal_fires_on_day_0():
     inp, cal, sig, _, px = _synthetic()
     m = s1.Market(inp)
     sigs = s1.results_signals(m, inp.results)
-    assert list(sigs) == [sig] and sigs[sig]["ABC"] == pytest.approx((0.998 * 0.95 - 1 + 0.0025) * 100)
+    assert list(sigs) == [sig] and sigs[sig]["ABC"] == pytest.approx((px[sig] / px[sig - 1] - 1 + 0.0025) * 100)
     assert s1.sector_weak(m.state("ABC", sig))
 
 
@@ -145,25 +145,26 @@ def test_spread_trade_end_to_end_with_the_stop():
     out = s1.run(inp, cal[sig], cal[sig], arms=("S1v2",))
     assert len(out["S1v2"][0]) == 0                                      # entry is the next session
     state["long"], state["short"] = 20.0, 10.0                           # value 10 <= 0.5 x 24.1
-    trades, skips = s1.run(inp, cal[sig], cal[sig + 4], arms=("S1v2",))["S1v2"]
+    trades, skips, _ = s1.run(inp, cal[sig], cal[sig + 4], arms=("S1v2",))["S1v2"]
     t = trades.iloc[0]
     assert (t["signal_date"], t["entry_date"], t["long_k"], t["short_k"]) == (cal[sig], cal[sig + 1], 780.0, 730.0)
     assert spot * 0.93 <= 730 <= spot * 0.95 and t["expiry"] == "2026-08-27"
-    assert (t["long_in"], t["short_in"], t["debit"], t["qty"]) == (40.05, 15.95, 24.1, 250)
+    assert (t["long_in"], t["short_in"], t["debit"], t["qty"]) == (40.05, 15.95, 24.1, 200)
     assert t["exit_date"] == cal[sig + 2] and t["exit_reason"] == "1_stop" and t["held"] == 1
     assert (t["long_out"], t["short_out"]) == (19.95, 10.05)
-    charges = (ch.leg("PE", "BUY", 250, 40.05)["total"] + ch.leg("PE", "SELL", 250, 15.95)["total"]
-               + ch.leg("PE", "SELL", 250, 19.95)["total"] + ch.leg("PE", "BUY", 250, 10.05)["total"])
-    slip = 0.02 * 250 * (40.05 + 15.95 + 19.95 + 10.05)
-    gross = 250 * ((19.95 - 40.05) - (10.05 - 15.95))
+    assert (t["lots"], t["budget"], t["category"], t["slip_rate"]) == (1, 5000.0, "mid", 0.02)   # own vol = the median
+    charges = (ch.leg("PE", "BUY", 200, 40.05)["total"] + ch.leg("PE", "SELL", 200, 15.95)["total"]
+               + ch.leg("PE", "SELL", 200, 19.95)["total"] + ch.leg("PE", "BUY", 200, 10.05)["total"])
+    slip = 0.02 * 200 * (40.05 + 15.95 + 19.95 + 10.05)
+    gross = 200 * ((19.95 - 40.05) - (10.05 - 15.95))
     assert t["net"] == pytest.approx(gross - charges - slip, abs=0.02)
-    assert t["net_pct"] == pytest.approx(t["net"] / (24.1 * 250) * 100, abs=0.001)
+    assert t["net_pct"] == pytest.approx(t["net"] / (24.1 * 200) * 100, abs=0.001)
 
 
 def test_trailing_exit_cooldown_and_ban():
     inp, cal, sig, state, _ = _synthetic()
     state["long"], state["short"] = 70.0, 15.0                           # value 55 >= 2 x 24.1: armed, peak 55
-    trades, _ = s1.run(inp, cal[sig], cal[sig + 3], arms=("S1v2",))["S1v2"]
+    trades, _, _ = s1.run(inp, cal[sig], cal[sig + 3], arms=("S1v2",))["S1v2"]
     assert trades.empty
     inp2, cal, sig, state2, _ = _synthetic()
     base = inp2.bhav
@@ -172,11 +173,11 @@ def test_trailing_exit_cooldown_and_ban():
         state2["long"], state2["short"] = (70.0, 15.0) if cal.index(d) <= sig + 2 else (50.0, 15.0)
         return base(d)
     inp2.bhav = bhav
-    trades, _ = s1.run(inp2, cal[sig], cal[sig + 4], arms=("S1v2",))["S1v2"]
+    trades, _, _ = s1.run(inp2, cal[sig], cal[sig + 4], arms=("S1v2",))["S1v2"]
     assert trades.iloc[0]["exit_reason"] == "4_trailing" and trades.iloc[0]["exit_date"] == cal[sig + 3]
     inp3, cal, sig, _, _ = _synthetic()
     inp3.ban = {cal[sig + 1]: {"ABC"}}                                   # in ban on the entry day
-    trades, skips = s1.run(inp3, cal[sig], cal[sig + 3], arms=("S1v2",))["S1v2"]
+    trades, skips, _ = s1.run(inp3, cal[sig], cal[sig + 3], arms=("S1v2",))["S1v2"]
     assert trades.empty and skips["in_ban_on_entry_day"] == 1
 
 
@@ -187,7 +188,7 @@ def test_a_filing_before_the_open_moves_day_0():
 
 
 def test_naked_arm_and_debit_bounds():
-    inp, cal, sig, state, _ = _synthetic()
+    inp, cal, sig, state, _ = _synthetic(lot=100)                       # 40.05 x 100 fits the Rs 5,000 budget
     state["long"], state["short"] = 20.0, 10.0
     out = s1.run(inp, cal[sig], cal[sig + 4], arms=("S1alt",))
     t = out["S1alt"][0].iloc[0]
@@ -196,8 +197,59 @@ def test_naked_arm_and_debit_bounds():
     inp, cal, sig, state, _ = _synthetic()
     inp.opens = lambda d: pd.DataFrame([dict(TckrSymb="ABC", XpryDt="2026-08-27", StrkPric=780.0, OptnTp="PE", OpnPric=60.0),
                                         dict(TckrSymb="ABC", XpryDt="2026-08-27", StrkPric=730.0, OptnTp="PE", OpnPric=16.0)])
-    _, skips = s1.run(inp, cal[sig], cal[sig + 2], arms=("S1v2",))["S1v2"]
-    assert skips["debit_outside_2000_8000"] == 1                         # 44.1 x 250 = 11,025
+    _, skips, _ = s1.run(inp, cal[sig], cal[sig + 2], arms=("S1v2",))["S1v2"]
+    assert skips["debit_outside_2000_8000"] == 1                         # 44.1 x 200 = 8,820
+    inp, cal, sig, _, _ = _synthetic(lot=300)                            # 24.1 x 300 = 7,230 > the Rs 5,000 budget
+    _, skips, _ = s1.run(inp, cal[sig], cal[sig + 2], arms=("S1v2",))["S1v2"]
+    assert skips["debit_above_budget"] == 1
+
+
+def test_sizing_tercile_and_liquidity_rules():
+    assert s1.budget(0.02, 0.02) == 5000.0
+    assert s1.budget(0.04, 0.02) == 2500.0 and s1.budget(0.1, 0.02) == 2000.0      # clipped below
+    assert s1.budget(0.01, 0.02) == 8000.0 and s1.budget(0.015, 0.02) == pytest.approx(6666.67, abs=0.01)
+    assert s1.lots_for(5000, 2400) == 2 and s1.lots_for(5000, 5001) == 0 and s1.lots_for(5000, 0) == 0
+    u = np.array([0.01, 0.02, 0.03, 0.04, 0.05, 0.06])
+    assert [s1.tercile(v, u) for v in (0.01, 0.02, 0.03, 0.04, 0.05, 0.06)] == ["low", "low", "mid", "mid", "high", "high"]
+    assert s1.liquid(100, 50 * 200, 200) and not s1.liquid(99, 1e9, 200) and not s1.liquid(500, 49 * 200, 200)
+    r = np.r_[np.nan, np.tile([0.01, -0.01], 10)]
+    v = s1.realised_vol(r)
+    assert math.isnan(v[19]) and v[20] == pytest.approx(np.std(np.log1p(r[1:21]), ddof=1))
+
+
+def test_the_liquidity_gate_removes_the_signal_and_records_its_category():
+    inp, cal, sig, _, _ = _synthetic(contracts=99)
+    trades, skips, gate = s1.run(inp, cal[sig], cal[sig + 3], arms=("S1v2",))["S1v2"]
+    assert trades.empty and skips["liquidity_gate"] == 1
+    assert gate.to_dict("records") == [{"signal_date": cal[sig], "symbol": "ABC", "category": "mid"}]
+
+
+def test_amfi_list_in_force_and_aliases():
+    from scanner import amfi
+    assert amfi.in_force_from("2024-06-30") == "2024-08-01" and amfi.in_force_from("2024-12-31") == "2025-02-01"
+    table = pd.DataFrame({"half_end": ["2024-06-30", "2024-12-31", "2024-12-31"], "symbol": ["ABC", "ABC", "LTF"],
+                          "category": ["small", "mid", "mid"], "rank": [300, 200, 150]})
+    c = amfi.Categories(table)
+    assert c.category_on("ABC", "2024-07-31") == ("unknown", None)
+    assert c.category_on("ABC", "2024-08-01") == ("small", "2024-06-30")
+    assert c.category_on("ABC", "2025-01-31") == ("small", "2024-06-30")
+    assert c.category_on("ABC", "2025-02-01") == ("mid", "2024-12-31")
+    assert c.category_on("ABC", "2026-09-30") == ("mid", "2024-12-31")     # the latest list stays in force
+    assert c.category_on("L&TFH", "2025-03-03") == ("mid", "2024-12-31")   # old name -> eod2 alias
+    assert c.category_on("XYZ", "2025-03-03") == ("unknown", "2024-12-31")
+
+
+def test_equity_curve_and_gate():
+    t = pd.DataFrame({"entry_date": ["2021-01-04", "2021-01-20", "2023-02-01", "2025-03-03"],
+                      "exit_date": ["2021-01-15", "2021-02-10", "2023-02-20", "2025-03-20"],
+                      "net": [100.0, -300.0, 50.0, 400.0], "debit_rs": [1000.0] * 4, "net_pct": [10.0, -30.0, 5.0, 40.0],
+                      "excluded": [""] * 4, "exit_reason": ["4_trailing", "1_stop", "3_20_sessions", "4_trailing"]})
+    curve, dd, dd_pct = s1.equity_curve(t)
+    assert list(curve["cumulative_rs"]) == [100.0, -200.0, -150.0, 250.0]
+    assert list(curve["drawdown_rs"]) == [0.0, -300.0, -250.0, 0.0] and dd == -300.0 and dd_pct == -0.06
+    g = {r["test"]: r["result"] for r in s1.gate_check(t)}
+    assert g["net mean > 0 after costs (% of debit)"] == "pass" and g["positive in 2021-22 (mean %)"] == "fail"
+    assert g["N >= 200"] == "fail" and g["OVERALL"] == "FAIL"
 
 
 def test_metrics_and_periods():
@@ -206,9 +258,9 @@ def test_metrics_and_periods():
                       "net_pct": [10.0, -5.0, 20.0, -1.0], "excluded": [""] * 4, "rel63": [-20, -5, -5, -5],
                       "exit_reason": ["4_trailing", "1_stop", "3_20_sessions", "1_stop"]})
     s = s1.summarise(t)
-    a = s[(s["group"] == "all")].set_index("period")
+    a = s[(s["by"] == "all")].set_index("period")
     assert a.loc["all", "n"] == 4 and a.loc["all", "hit_rate_pct"] == 50.0 and a.loc["all", "net_per_1000"] == 60.0
     assert a.loc["2021-22", "n"] == 2 and a.loc["2021-22", "mean_pct"] == 2.5 and a.loc["all", "mean_rs"] == 60.0
     assert a.loc["all", "exit_1_stop_pct"] == 50.0 and a.loc["2023-24", "exit_3_20_sessions_pct"] == 100.0
-    e = s[s["group"] != "all"].set_index("period")
+    e = s[s["by"] == "subgroup"].set_index("period")
     assert e.loc["all", "n"] == 1

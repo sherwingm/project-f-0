@@ -43,7 +43,11 @@ DEBIT_MIN, DEBIT_MAX = 2000.0, 8000.0                   # spread net debit per l
 TICK, MIN_PREMIUM = 0.05, 2.0                           # one tick adverse per leg; naked put < Rs 2 refused (lottery)
 STOP, EXPIRY_BUFFER, MAX_SESSIONS = 0.5, 5, 20
 TRAIL_ARM, TRAIL_KEEP = 2.0, 0.75
-SLIPPAGE, SENSITIVITY = 0.02, (0.01, 0.02, 0.03)        # of premium, per leg per side
+SLIPPAGE = {"large": 0.01, "mid": 0.02, "small": 0.03, "unknown": 0.03}   # of premium, per leg per side, by AMFI
+SENSITIVITY = (0.01, 0.02, 0.03)                        # flat slippage sensitivities
+MIN_CONTRACTS, MIN_OI_LOTS = 100, 50                    # liquidity gate on the long strike, signal day
+BASE_BUDGET, BUDGET_MIN, BUDGET_MAX, VOL_WINDOW = 5000.0, 2000.0, 8000.0, 20
+CAPITAL = 500000.0                                      # paper capital, for the drawdown in %
 EXTREME_REL63 = -15.0                                   # pre-registered subgroup: sector 63-session relative return
 DIAG_HORIZONS = (10, 20)
 CA_TOLERANCE = 0.03
@@ -169,6 +173,33 @@ def choose_put(chain: dict, d: date, spot: float) -> tuple[str, float] | None:
     return (expiries[1], max(strikes)) if strikes else None
 
 
+def realised_vol(ret: np.ndarray, window: int = VOL_WINDOW) -> np.ndarray:
+    """Standard deviation (ddof 1) of the last `window` daily log returns, per session; NaN if any is missing."""
+    lr = pd.Series(np.log1p(ret))
+    return lr.rolling(window, min_periods=window).std(ddof=1).to_numpy()
+
+
+def budget(own_vol: float, median_vol: float) -> float:
+    """Risk budget: Rs 5,000 x (universe median 20-day vol / the stock's), clipped to Rs 2,000-8,000."""
+    return float(np.clip(BASE_BUDGET * median_vol / own_vol, BUDGET_MIN, BUDGET_MAX))
+
+
+def lots_for(budget_rs: float, per_lot_rs: float) -> int:
+    """The largest whole number of lots whose net debit (or premium) fits the budget."""
+    return int(budget_rs // per_lot_rs) if per_lot_rs > 0 else 0
+
+
+def tercile(own_vol: float, universe_vols: np.ndarray) -> str:
+    """low / mid / high: the stock's share of the day's universe at or below its 20-day vol, in thirds."""
+    p = (universe_vols <= own_vol).mean()
+    return "low" if p <= 1 / 3 else "mid" if p <= 2 / 3 else "high"
+
+
+def liquid(contracts: float, oi: float, lot: int) -> bool:
+    """Liquidity gate on the long strike: >= 100 contracts traded and OI >= 50 lots on the signal day."""
+    return contracts >= MIN_CONTRACTS and oi >= MIN_OI_LOTS * lot
+
+
 def exit_reason(value: float, debit: float, peak: float, held: int, to_expiry: int) -> str | None:
     """The first exit rule that holds on this close, in the pre-registered order. value / debit / peak per share."""
     if value <= STOP * debit:
@@ -194,6 +225,7 @@ class Inputs:
     results: list[tuple[str, str, str | None]] = field(default_factory=list)   # (symbol, date, time)
     ban: dict[str, set[str]] = field(default_factory=dict)
     lots: dict[str, int] = field(default_factory=dict)
+    category: Callable[[str, str], tuple[str, str | None]] = lambda sym, d: ("unknown", None)  # AMFI, point in time
 
 
 def _align(s: pd.Series | None, cal: list[str]) -> np.ndarray:
@@ -215,6 +247,7 @@ class Market:
         self.bench = _align(inp.bench, inp.cal)
         self.close = {s: _align(v, inp.cal) for s, v in inp.stock.items()}
         self.ret = {s: daily_returns(a) for s, a in self.close.items()}
+        self.vol = {s: realised_vol(r) for s, r in self.ret.items()}
         self.sector_of = {s: k for s, k in inp.sector_of.items() if s in self.close}
         n = len(inp.cal)
         members: dict[str, list[str]] = {}
@@ -357,10 +390,13 @@ class Arm:
     last_exit: dict = field(default_factory=dict)
     done: list = field(default_factory=list)
     skips: Counter = field(default_factory=Counter)
+    gate: list = field(default_factory=list)
 
 
-def run(inp: Inputs, start: str, end: str, arms: tuple[str, ...] = tuple(ARMS)) -> dict[str, tuple[pd.DataFrame, Counter]]:
-    m = Market(inp)
+def run(inp: Inputs, start: str, end: str, arms: tuple[str, ...] = tuple(ARMS),
+        m: Market | None = None) -> dict[str, tuple[pd.DataFrame, Counter, pd.DataFrame]]:
+    """{arm: (trades, skipped-signal counts, the signals the liquidity gate removed)}."""
+    m = m or Market(inp)
     cal, cal_dates = m.cal, m.cal_dates
     miss = results_signals(m, inp.results)
     state = {a: Arm(a, *ARMS[a]) for a in arms}
@@ -394,6 +430,8 @@ def run(inp: Inputs, start: str, end: str, arms: tuple[str, ...] = tuple(ARMS)) 
         if i + 1 >= len(cal):
             continue
         ban_next = inp.ban.get(cal[i + 1], set())
+        uvols = np.array([m.vol[s][i] for s in day.universe if s in m.vol and not math.isnan(m.vol[s][i])])
+        med_vol = float(np.median(uvols)) if len(uvols) else math.nan
         for sym in sorted(day.universe):
             lr = m.loo(sym)
             if lr is None:
@@ -421,17 +459,30 @@ def run(inp: Inputs, start: str, end: str, arms: tuple[str, ...] = tuple(ARMS)) 
                 if not lot:
                     a.skips["no_lot_size"] += 1
                     continue
+                cat, version = inp.category(sym, d)
+                _, oi, contracts = chain[(pick[0], pick[1])]
+                if not liquid(contracts, oi, lot):
+                    a.skips["liquidity_gate"] += 1
+                    a.gate.append({"signal_date": d, "symbol": sym, "category": cat})
+                    continue
+                v = m.vol[sym][i]
+                if math.isnan(v) or v <= 0 or math.isnan(med_vol):
+                    a.skips["no_volatility"] += 1
+                    continue
                 a.pending[sym] = {"symbol": sym, "sector": m.sector_of[sym], "trigger": a.trigger,
                                   "structure": a.structure, "signal_date": d, "signal_i": i, "expiry": pick[0],
                                   "long_k": pick[1], "short_k": pick[2] if a.structure == "spread" else None,
-                                  "spot": day.spot.get(sym), "lot": lot, "rel21": st[0], "rel63": st[1]}
+                                  "spot": day.spot.get(sym), "lot": lot, "rel21": st[0], "rel63": st[1],
+                                  "category": cat, "amfi_list": version, "vol20": v, "median_vol20": med_vol,
+                                  "vol_tercile": tercile(v, uvols), "budget": round(budget(v, med_vol), 2)}
         if n_day % 100 == 0:
             log.info("%s: %d of %d sessions; %s", d, n_day, len(days),
                      ", ".join(f"{a.name} {len(a.done)} closed" for a in state.values()))
     out = {}
     for a in state.values():
         a.skips["still_open_at_end"] = len(a.open)
-        out[a.name] = (trades_frame(a.done), a.skips)
+        out[a.name] = (trades_frame(a.done), a.skips,
+                       pd.DataFrame(a.gate, columns=["signal_date", "symbol", "category"]))
     return out
 
 
@@ -450,7 +501,10 @@ def _enter(a: Arm, sym: str, p: dict, omap: dict, day: Day, d: str, i: int, m: M
     if a.structure == "spread" and not DEBIT_MIN <= debit * p["lot"] <= DEBIT_MAX:
         a.skips["debit_outside_2000_8000"] += 1
         return
-    lots = 1
+    lots = lots_for(p["budget"], debit * p["lot"])
+    if lots < 1:
+        a.skips["debit_above_budget"] += 1
+        return
     a.open[sym] = {**p, "entry_date": d, "entry_i": i, "lots": lots, "qty": p["lot"] * lots, "long_in": long_in,
                    "short_in": short_in, "debit": debit, "peak": -math.inf,
                    "fut0": day.futs.get((sym, p["expiry"])), "stock0": m.close[sym][i]}
@@ -497,10 +551,11 @@ def _charges(qty: int, long_in: float, short_in: float, long_out: float, short_o
     return c
 
 
-TRADE_COLUMNS = ["signal_date", "entry_date", "exit_date", "symbol", "sector", "trigger", "structure", "expiry",
-                 "long_k", "short_k", "spot", "lot", "lots", "qty", "long_in", "short_in", "debit", "debit_rs",
-                 "long_out", "short_out", "value", "exit_reason", "held", "rel21", "rel63", "charges", "premium_turnover",
-                 "slip_rate", "slippage", "net", "net_pct", "excluded"]
+TRADE_COLUMNS = ["signal_date", "entry_date", "exit_date", "symbol", "category", "amfi_list", "sector", "trigger",
+                 "structure", "expiry", "long_k", "short_k", "spot", "lot", "lots", "qty", "budget", "vol20",
+                 "median_vol20", "vol_tercile", "long_in", "short_in", "debit", "debit_rs", "long_out", "short_out",
+                 "value", "exit_reason", "held", "rel21", "rel63", "charges", "premium_turnover", "slip_rate",
+                 "slippage", "net", "net_pct", "excluded"]
 
 
 def trades_frame(done: list[dict]) -> pd.DataFrame:
@@ -511,7 +566,7 @@ def trades_frame(done: list[dict]) -> pd.DataFrame:
         r = {k: t.get(k) for k in TRADE_COLUMNS}
         r["debit_rs"] = round(t["debit"] * qty, 2)
         r["held"] = t["exit_i"] - t["entry_i"]
-        r["slip_rate"] = SLIPPAGE
+        r["slip_rate"] = SLIPPAGE.get(t.get("category"), SLIPPAGE["unknown"])
         if t["long_out"] is not None:
             r["charges"] = round(_charges(qty, t["long_in"], t["short_in"], t["long_out"], t["short_out"], spread), 2)
             r["premium_turnover"] = round(qty * (t["long_in"] + t["short_in"] + t["long_out"] + t["short_out"]), 2)
@@ -536,6 +591,9 @@ def with_slippage(df: pd.DataFrame, rate: float | None = None) -> pd.DataFrame:
 
 
 # ---------------------------------------------------------------- summaries
+ALL_PERIODS = (("all", "0000", "9999"),) + PERIODS
+
+
 def metrics(g: pd.DataFrame) -> dict:
     """N, hit rate, mean / median net return (% of debit and Rs), net per Rs 1,000 risked (risked = entry debit),
     date-clustered t of the % return, the 5th percentile %, and each exit reason's share."""
@@ -553,28 +611,121 @@ def metrics(g: pd.DataFrame) -> dict:
     return row
 
 
+def _in(df: pd.DataFrame, col: str, a: str, b: str) -> pd.DataFrame:
+    return df[(df[col] >= a) & (df[col] <= b)]
+
+
 def by_period(trades: pd.DataFrame, **extra) -> list[dict]:
-    out = []
-    for name, a, b in (("all", "0000", "9999"),) + PERIODS:
-        g = trades[(trades["entry_date"] >= a) & (trades["entry_date"] <= b)]
-        out.append({**extra, "period": name, **metrics(g)})
-    return out
+    return [{**extra, "period": name, **metrics(_in(trades, "entry_date", a, b))} for name, a, b in ALL_PERIODS]
 
 
-def summarise(trades: pd.DataFrame) -> pd.DataFrame:
-    rows = by_period(trades, group="all")
-    ext = trades[trades["rel63"] < EXTREME_REL63]
-    rows += by_period(ext, group="extreme_rel63_below_-15")
+def summarise(trades: pd.DataFrame, gate: pd.DataFrame | None = None) -> pd.DataFrame:
+    """Rows by (by, group, period): all trades, each AMFI category, each volatility tercile, the extreme-drawdown
+    subgroup. With `gate`, the signals the liquidity gate removed (by signal date) for the all / category rows."""
+    cuts = [("all", "all", trades)]
+    if "category" in trades.columns:
+        cuts += [("category", c, trades[trades["category"] == c]) for c in ("large", "mid", "small", "unknown")
+                 if (trades["category"] == c).any() or (gate is not None and (gate["category"] == c).any())]
+    if "vol_tercile" in trades.columns:
+        cuts += [("vol_tercile", t, trades[trades["vol_tercile"] == t]) for t in ("low", "mid", "high")]
+    cuts.append(("subgroup", f"rel63<{EXTREME_REL63:g}", trades[trades["rel63"] < EXTREME_REL63]))
+    rows = []
+    for by, group, g in cuts:
+        for r in by_period(g, by=by, group=group):
+            if gate is not None:
+                a, b = next((a, b) for n, a, b in ALL_PERIODS if n == r["period"])
+                gg = gate if by == "all" else gate[gate["category"] == group] if by == "category" else None
+                r["gate_removed"] = None if gg is None else len(_in(gg, "signal_date", a, b))
+            rows.append(r)
     return pd.DataFrame(rows)
 
 
+def budget_distribution(trades: pd.DataFrame) -> dict:
+    t = trades[trades["excluded"].fillna("") == ""]
+    b = t["budget"].astype(float)
+    if b.empty:
+        return {"n": 0}
+    q = b.quantile([0, 0.1, 0.25, 0.5, 0.75, 0.9, 1]).round(0)
+    return {"n": len(b), "mean": round(b.mean(), 0), **{f"p{round(k * 100)}": v for k, v in q.items()},
+            "at_2000_pct": round((b <= BUDGET_MIN).mean() * 100, 2), "at_8000_pct": round((b >= BUDGET_MAX).mean() * 100, 2),
+            **{f"lots_{k}_pct": round(v * 100, 2) for k, v in t["lots"].value_counts(normalize=True).sort_index().items()}}
+
+
+def equity_curve(trades: pd.DataFrame) -> tuple[pd.DataFrame, float, float]:
+    """Net P&L by exit month: month, trades, net, cumulative, drawdown from the running peak (peak starts at 0);
+    and the maximum drawdown in Rs (trade by trade, in exit order) and in % of the paper capital."""
+    t = trades[trades["excluded"].fillna("") == ""].copy()
+    if t.empty:
+        return pd.DataFrame(columns=["month", "trades", "net_rs", "cumulative_rs", "drawdown_rs"]), 0.0, 0.0
+    t["month"] = t["exit_date"].str[:7]
+    g = t.groupby("month").agg(trades=("net", "size"), net_rs=("net", "sum")).reset_index()
+    g["cumulative_rs"] = g["net_rs"].cumsum()
+    g["drawdown_rs"] = g["cumulative_rs"] - np.maximum(g["cumulative_rs"].cummax(), 0.0)
+    g = g.round(2)
+    cum = t.sort_values(["exit_date", "entry_date"])["net"].cumsum()
+    max_dd = float((cum - np.maximum(cum.cummax(), 0.0)).min())
+    return g, round(max_dd, 2), round(max_dd / CAPITAL * 100, 3)
+
+
+def gate_check(trades: pd.DataFrame) -> list[dict]:
+    """The DECISIONS.md strategy gate on one arm's trades (primary slippage)."""
+    allm = metrics(trades)
+    per = {n: metrics(_in(trades, "entry_date", a, b)) for n, a, b in PERIODS}
+    rows = [{"test": "net mean > 0 after costs (% of debit)", "value": allm["mean_pct"],
+             "result": "pass" if (allm["mean_pct"] or 0) > 0 else "fail"},
+            {"test": "date-clustered t >= 2", "value": allm["t_clustered"],
+             "result": "pass" if (allm["t_clustered"] or 0) >= 2 else "fail"}]
+    rows += [{"test": f"positive in {n} (mean %)", "value": v["mean_pct"],
+              "result": "pass" if (v["mean_pct"] or 0) > 0 else "fail"} for n, v in per.items()]
+    rows.append({"test": "N >= 200", "value": allm["n"], "result": "pass" if allm["n"] >= 200 else "fail"})
+    rows.append({"test": "OVERALL", "value": "", "result": "PASS" if all(r["result"] == "pass" for r in rows) else "FAIL"})
+    return rows
+
+
+def trade_list(results: dict) -> pd.DataFrame:
+    """One row per trade across the arms, in the report's trade-list layout."""
+    frames = []
+    for arm, (t, _, _) in results.items():
+        if t.empty:
+            continue
+        frames.append(pd.DataFrame({
+            "arm": arm, "date": t["signal_date"], "entry_date": t["entry_date"], "symbol": t["symbol"],
+            "category": t["category"], "sector": t["sector"], "trigger": t["trigger"], "structure": t["structure"],
+            "strikes": [f"{lk:g}/{sk:g}" if s == "spread" else f"{lk:g}"
+                        for lk, sk, s in zip(t["long_k"], t["short_k"], t["structure"])],
+            "expiry": t["expiry"], "lots": t["lots"], "budget": t["budget"], "entry_debit": t["debit_rs"],
+            "entry_debit_per_share": t["debit"], "exit_date": t["exit_date"], "exit_reason": t["exit_reason"],
+            "exit_value": t["value"], "charges": t["charges"], "slippage": t["slippage"], "net_rs": t["net"],
+            "net_pct": t["net_pct"], "sessions_held": t["held"], "vol_tercile": t["vol_tercile"],
+            "rel63": pd.to_numeric(t["rel63"]).round(3), "excluded": t["excluded"]}))
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def _cell(v) -> str:
+    if v is None or (isinstance(v, float) and math.isnan(v)):
+        return ""
+    if isinstance(v, (float, np.floating)):
+        return f"{float(v):,.3f}".rstrip("0").rstrip(".")
+    return str(v)
+
+
+def md(df: pd.DataFrame) -> str:
+    """A pipe table (no tabulate dependency)."""
+    if df.empty:
+        return "(none)\n"
+    cols = [str(c) for c in df.columns]
+    lines = ["| " + " | ".join(cols) + " |", "|" + "|".join("---" for _ in cols) + "|"]
+    lines += ["| " + " | ".join(_cell(v) for v in row) + " |" for row in df.itertuples(index=False)]
+    return "\n".join(lines) + "\n"
+
+
 # ---------------------------------------------------------------- real inputs
-def option_universe(cache_dir: Path, since: str) -> dict[str, set[str]]:
+def option_universe(cache_dir: Path, since: str, until: str = "9999-12-31") -> dict[str, set[str]]:
     """{date: stocks with option contracts in that day's cached bhavcopy}."""
     out = {}
     for f in sorted(Path(cache_dir).glob("fo_bhavcopy_*.csv")):
         d = f"{f.stem[-8:-4]}-{f.stem[-4:-2]}-{f.stem[-2:]}"
-        if d < since:
+        if not since <= d <= until:
             continue
         b = pd.read_csv(f, usecols=["TckrSymb", "FinInstrmTp"])
         out[d] = set(b.loc[b["FinInstrmTp"] == "STO", "TckrSymb"].astype(str).str.strip())
@@ -582,6 +733,7 @@ def option_universe(cache_dir: Path, since: str) -> dict[str, set[str]]:
 
 
 def load_inputs(eod2_dir: Path, cache_dir: Path, symbols: set[str]) -> Inputs:
+    from . import amfi
     from .backtest_cheap_options import _read_index
     from .equity import load_symbol
     from .events.store import Store
@@ -620,9 +772,106 @@ def load_inputs(eod2_dir: Path, cache_dir: Path, symbols: set[str]) -> Inputs:
         for e in st.all_of_type("ban"):
             if e.get("subtype") == "in":                  # one "in" row per trade date in the ban
                 ban.setdefault(e["event_date"], set()).add(e["symbol"])
+    cats = amfi.load()
     return Inputs(cal=cal, bhav=bhav, opens=opens, stock=stock, sector_of=sector_of,
                   bench=index_closes(BENCHMARK, eod2_dir), results=results, ban=ban,
-                  lots=fetch_fo_lots(cache_path=cache_dir / "fo_universe.txt"))
+                  lots=fetch_fo_lots(cache_path=cache_dir / "fo_universe.txt"), category=cats.category_on)
+
+
+# ---------------------------------------------------------------- the report
+BIAS = ("Constituent-history bias: sector membership (NSE index lists) and NSE industry are today's lists, "
+        "applied to every date; NSE publishes no free history of index constituents.")
+LABELS = {"S1v2": "S1 v2 (put debit spread)", "S1alt": "S1-alt (naked put)",
+          "technical": "Secondary arm (technical trigger, spread)"}
+
+
+def parameters() -> list[str]:
+    return [
+        "Universe: stocks with option contracts in that day's F&O bhavcopy; not in the F&O ban list on the entry day.",
+        f"Sector: equal-weight daily return of the other stocks in the same sector of data/sector_map.csv "
+        f"(leave-one-out, >= {MIN_PEERS} others per day); benchmark NIFTY 500 (eod2 index close).",
+        f"Sector filter at the signal close: {M1}-session relative return < 0; {M3}-session relative return < 0; "
+        f"level < its {SECTOR_DMA}-session average.",
+        f"Trigger (S1 v2, S1-alt): results filing, day-0 return minus the leave-one-out sector's <= {MISS_PCT:g} %; "
+        f"day 0 = first full session after the filing time (before 09:15 on a session day: that day). One position "
+        f"per stock; {COOLDOWN}-session cooldown after an exit.",
+        f"Trigger (secondary arm): close < {STOCK_DMA}-session average and {M1}-session return < the leave-one-out "
+        f"sector's, every session it holds (same position and cooldown rules).",
+        f"Spread expiry: first listed expiry with >= {MIN_SESSIONS_TO_EXPIRY} sessions after the signal day. "
+        f"Long: strike nearest spot (tie: higher). Short: strike in [{SHORT_BAND[0]:g}, {SHORT_BAND[1]:g}] x spot "
+        f"nearest {SHORT_TARGET:g} x spot (tie: higher). Net debit per lot Rs {DEBIT_MIN:,.0f}-{DEBIT_MAX:,.0f}.",
+        f"S1-alt: long put, highest strike in [{NAKED_BAND:g} x spot, spot], second expiry after the signal day; "
+        f"opening premium < Rs {MIN_PREMIUM:g} refused.",
+        f"Liquidity gate: long strike >= {MIN_CONTRACTS} contracts traded and OI >= {MIN_OI_LOTS} lots on the signal day.",
+        f"Sizing: budget = Rs {BASE_BUDGET:,.0f} x (universe median {VOL_WINDOW}-day realised vol / the stock's), "
+        f"clipped to Rs {BUDGET_MIN:,.0f}-{BUDGET_MAX:,.0f}; lots = floor(budget / net debit or premium per lot at the "
+        f"fill); 0 lots: no trade. Vol = std (ddof 1) of the last {VOL_WINDOW} daily log returns (eod2 adjusted).",
+        f"Entry: day t+1 open + 1 tick (Rs {TICK:g}) on the long leg, - 1 tick on the short leg.",
+        f"Exits on each close, in order: 1 value <= {STOP:g} x entry debit; 2 <= {EXPIRY_BUFFER} sessions to expiry; "
+        f"3 {MAX_SESSIONS} sessions since entry; 4 after a close >= {TRAIL_ARM:g} x debit, a close < {TRAIL_KEEP:g} x "
+        f"the highest close since entry. Exit fills: long close - 1 tick, short close + 1 tick.",
+        f"Slippage per leg per side, % of premium: large {SLIPPAGE['large']:.0%}, mid {SLIPPAGE['mid']:.0%}, small "
+        f"{SLIPPAGE['small']:.0%} (not found in the AMFI list: {SLIPPAGE['unknown']:.0%}); sensitivities flat 1 / 2 / 3 %.",
+        f"Charges (server/charges.py, effective {ch.CHARGES_EFFECTIVE}): STT {ch.OPT_STT_SELL_PCT:g} % of premium on "
+        f"sells; exchange Rs {ch.OPT_NSE_PER_LAKH:g} per lakh per side; brokerage Rs {ch.OPT_BROKERAGE:g} per order; "
+        f"GST {ch.GST_PCT:g} %; SEBI Rs {ch.SEBI_PER_CRORE:g} per crore; stamp {ch.OPT_STAMP_BUY_PCT:g} % on buys.",
+        f"Risked = entry debit (premium for S1-alt) x quantity. Hit = net > 0. t clustered on entry date (CR1). "
+        f"Worst 5 % = 5th percentile of net %. Subgroup: sector {M3}-session relative return < {EXTREME_REL63:g} %.",
+        f"Volatility tercile: the stock's 20-day vol against the signal day's universe (low / mid / high thirds).",
+        f"Corporate actions: a trade whose leg leaves the bhavcopy, or whose future moves > {CA_TOLERANCE:.0%} "
+        f"differently from eod2's adjusted close, is excluded and counted.",
+    ]
+
+
+def write_report(path: Path, *, window: tuple[str, str], sessions: int, missing: list[str],
+                 universe: dict[str, set[str]], amfi_versions: list[str], diag: pd.DataFrame,
+                 results: dict, excluded: dict[str, int]) -> dict[str, str]:
+    """Writes the markdown report; returns its sections by number (for printing)."""
+    years = sorted({d[:4] for d in universe})
+    uni = pd.DataFrame([{"year": y, "stocks": len(set().union(*(v for d, v in universe.items() if d[:4] == y))),
+                         "sessions": sum(d[:4] == y for d in universe)} for y in years])
+    sec: dict[str, str] = {}
+    sec["1"] = "\n".join([
+        "## 1. Header", "",
+        f"- Data window: {window[0]} to {window[1]} (first and last session).",
+        f"- Sessions cached: {sessions} F&O bhavcopies in the window; missing: {', '.join(missing) or 'none'}.",
+        f"- {BIAS}",
+        f"- AMFI lists used (half-year ending): {', '.join(amfi_versions)}. In force from 1 Aug (June list) or "
+        f"1 Feb (December list); the June 2026 list is not published at AMFI's address, so the December 2025 list "
+        f"stays in force after 2026-08-01.",
+        "", "Universe size by year (stocks with option contracts in at least one session):", "", md(uni),
+        "Parameters in force:", ""] + [f"- {p}" for p in parameters()]) + "\n"
+    sec["2"] = "## 2. Diagnostic (stock return minus leave-one-out sector, close t to close t+h, %)\n\n" + \
+        md(summarise_diagnostic(diag))
+    main, brk = ["## 3. Main tables\n"], ["## 4. Breakdowns\n"]
+    for arm, (t, skips, gate) in results.items():
+        s = summarise(t, gate)
+        main.append(f"### {LABELS[arm]}\n\nTrades {len(t)}, excluded for corporate actions {excluded[arm]}. "
+                    f"Signals not traded: {', '.join(f'{k} {v}' for k, v in sorted(skips.items()))}.\n")
+        main.append(md(s[s["by"] == "all"].drop(columns=["by", "group"])))
+        brk.append(f"### {LABELS[arm]}\n\nBy AMFI category:\n")
+        brk.append(md(s[s["by"] == "category"].drop(columns=["by"])))
+        brk.append("\nBy 20-day volatility tercile:\n")
+        brk.append(md(s[s["by"] == "vol_tercile"].drop(columns=["by", "gate_removed"])))
+        brk.append(f"\nExtreme-drawdown subgroup (sector {M3}-session relative return < {EXTREME_REL63:g} %):\n")
+        brk.append(md(s[s["by"] == "subgroup"].drop(columns=["by", "gate_removed"])))
+        brk.append("\nRisk budget distribution (Rs, traded):\n")
+        brk.append(md(pd.DataFrame([budget_distribution(t)])))
+        g = gate.groupby("category").size().rename("removed").reset_index() if not gate.empty else gate
+        brk.append("\nSignals removed by the liquidity gate, by AMFI category:\n")
+        brk.append(md(g))
+    sec["3"], sec["4"] = "\n".join(main), "\n".join(brk)
+    v2 = results["S1v2"][0]
+    sens = pd.concat([pd.DataFrame(by_period(with_slippage(v2, r), slippage=f"flat {r:.0%}")) for r in SENSITIVITY])
+    sec["5"] = "## 5. Sensitivity (S1 v2, flat slippage per leg per side)\n\n" + md(sens)
+    curve, dd_rs, dd_pct = equity_curve(v2)
+    sec["6"] = ("## 6. Equity curve (S1 v2, by exit month)\n\n" + md(curve) +
+                f"\nMaximum drawdown: Rs {dd_rs:,.2f} ({dd_pct:g} % of Rs {CAPITAL:,.0f} paper capital).\n")
+    sec["7"] = "## 7. Gate (DECISIONS.md)\n\n" + "\n".join(
+        f"### {LABELS[arm]}\n\n" + md(pd.DataFrame(gate_check(results[arm][0]))) for arm in ("S1v2", "S1alt"))
+    text = "# S1 v2 backtest report\n\nNumbers only.\n\n" + "\n".join(sec[k] for k in "1234567")
+    path.write_text(text, encoding="utf-8")
+    return sec
 
 
 def main() -> None:
@@ -635,22 +884,31 @@ def main() -> None:
     ap.add_argument("--cache-dir", type=Path, default=ROOT / "data" / "cache")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-    pd.set_option("display.width", 250)
-    pd.set_option("display.max_columns", 40)
-    universe = option_universe(a.cache_dir, a.since)
+    from . import amfi
+
+    universe = option_universe(a.cache_dir, a.since, a.until)
     inp = load_inputs(a.eod2_dir, a.cache_dir, set().union(*universe.values()))
     end = min(a.until, inp.cal[-1])
+    window = [d for d in inp.cal if a.since <= d <= end]
     a.out_dir.mkdir(parents=True, exist_ok=True)
     m = Market(inp)
     diag = diagnostic(m, inp.results, universe, a.since, end)
-    diag.to_csv(a.out_dir / "s1_diagnostic_signals.csv", index=False)
-    print(summarise_diagnostic(diag).to_string(index=False))
+    diag.to_csv(a.out_dir / "S1_diagnostic_signals.csv", index=False)
+    print("## 2. Diagnostic\n" + md(summarise_diagnostic(diag)), flush=True)
     if a.diagnostic:
         return
-    for name, (trades, skips) in run(inp, a.since, end).items():
-        trades.to_csv(a.out_dir / f"s1_{name}_trades.csv", index=False)
-        print(f"\n{name}: {len(trades)} trades; signals not traded: {dict(skips)}")
-        print(summarise(trades).to_string(index=False))
+    results = run(inp, a.since, end, m=m)
+    for old in ("s1_trades.csv", "s1_summary.csv"):                  # v1 outputs; also fixes the file name's case
+        (a.out_dir / old).unlink(missing_ok=True)
+    trade_list(results).to_csv(a.out_dir / "S1_trades.csv", index=False)
+    cats = amfi.load()
+    versions = sorted({v for v in (cats.version_on(d) for d in window) if v})
+    sec = write_report(a.out_dir / "S1_backtest_report.md", window=(window[0], window[-1]),
+                       sessions=sum(d in universe for d in window), missing=[d for d in window if d not in universe],
+                       universe=universe, amfi_versions=versions, diag=diag, results=results,
+                       excluded={k: int((v[0]["excluded"].fillna("") != "").sum()) for k, v in results.items()})
+    print(sec["3"])
+    print(sec["7"])
 
 
 if __name__ == "__main__":

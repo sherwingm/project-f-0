@@ -40,6 +40,28 @@ Backtest: `python -m scanner.backtest_s1` (diagnostic first, then the three arms
   greatest common divisor of the stock's non-zero open interests that day (open interest is whole lots).
 - Net debit per lot at the entry fill must be between ₹2,000 and ₹8,000; otherwise no trade.
 
+## Market-cap tags (AMFI)
+- Every trade carries the stock's AMFI category (large / mid / small) from the half-yearly AMFI list
+  (`python -m scanner.amfi` → `data/amfi_categories.csv`; ranks 1–100 large, 101–250 mid, the rest small),
+  **point in time**: the list for the half ending 30 Jun is in force from 1 Aug, the one ending 31 Dec from 1 Feb
+  (SEBI's compliance date), and the latest list stays in force until the next is published. Lists used: Jun-2020
+  … Dec-2025 (the Jun-2026 list is not published at AMFI's address). A stock not found under its symbol or its
+  eod2 alias is "unknown".
+
+## Liquidity gate
+- Skip the signal if the chosen **long** strike traded fewer than 100 contracts (bhavcopy `TtlTradgVol`, in
+  contracts) or had open interest under 50 lots on the signal day. Signals removed are reported, by AMFI category.
+
+## Position sizing
+- Realised volatility = standard deviation (ddof 1) of the last 20 daily log returns (eod2 adjusted closes).
+- Risk budget = ₹5,000 × (median 20-day vol of the signal day's universe ÷ the stock's 20-day vol), clipped to
+  ₹2,000–₹8,000.
+- Lots = the largest whole number whose net debit (spread) or premium (naked put), at the entry fill, fits the
+  budget; 0 lots: no trade. The ₹2,000–₹8,000 per-lot debit bound above still applies to the spread.
+- The distribution of budgets is reported.
+- Volatility tercile (report only): the stock's 20-day vol against the signal day's universe — low if at most a
+  third of the universe is at or below it, mid if at most two thirds, else high.
+
 ## Entry
 - Day t+1 opening price + 1 tick (₹0.05) for the long leg, − 1 tick for the short leg (no historical depth).
 - No opening trade (open = 0) in either leg: no trade.
@@ -59,7 +81,8 @@ short close + 1 tick.
 - Charges: `server/charges.py`, the post-2026-04-01 schedule, on all four orders (STT 0.15 % of premium on sells,
   ₹35.53 per lakh of premium exchange charge per side, ₹20 brokerage per order, 18 % GST, plus SEBI fee and
   stamp duty as that file sets them).
-- Slippage s = 2 % of premium per leg per side (primary), 1 % and 3 % as sensitivities.
+- Slippage per leg per side, % of premium, by AMFI category (primary): large 1 %, mid 2 %, small 3 %
+  (unknown 3 %). Sensitivities: flat 2 %, and flat 1 % and 3 %.
 - Net ₹ = (exit value − entry debit at the fills) × quantity − charges − slippage. Risked = entry debit × quantity.
 
 ## Pre-registered subgroup
@@ -68,7 +91,8 @@ Signals where the sector's 63-session relative return (filter 2) is below −15 
 ## S1-alt (comparison): same signal, naked put
 Same universe, sector filter, trigger, entry, costs and exits 1–4, with value = the put's close. Instrument: the
 long put at the highest listed strike in [0.97 × spot, spot], the second expiry after t (next month), 1 lot.
-Refused as the paper engine refuses: opening premium < ₹2 (`ALLOW_LOTTERY=false`).
+Refused as the paper engine refuses: opening premium < ₹2 (`ALLOW_LOTTERY=false`). Same liquidity gate (its
+long put), sizing (lots = floor(budget ÷ premium per lot)) and category slippage.
 
 ## Secondary arm (report only, not a gate)
 The technical trigger in place of results: close < its 20-session average and a 21-session return worse than
@@ -86,6 +110,14 @@ date-clustered t (clustered on entry date), worst 5 % (5th percentile of net %),
 (1/2/3/4), and the extreme-drawdown subgroup. Trades whose contract is adjusted for a corporate action while
 open (a leg disappears from the bhavcopy, or the future moves > 3 % differently from eod2's adjusted close)
 are excluded and counted.
+
+Every table (each arm; overall and by sub-period) is also broken down by AMFI category and by volatility
+tercile, with the same metrics. The full report (`data/results/S1_backtest_report.md`) has, in order: header
+(window, sessions, universe by year, the constituent-history bias, AMFI lists used, every parameter),
+diagnostic, main tables (with signals removed by the liquidity gate), breakdowns (category, tercile,
+extreme-drawdown subgroup, budget distribution), slippage sensitivity, S1 v2 equity curve by exit month with the
+maximum drawdown (₹ and % of the ₹5,00,000 paper capital), and the gate for S1 v2 and S1-alt. Trade list:
+`data/results/S1_trades.csv`.
 
 ## Known limits
 - **Constituent-history bias**: sector membership and NSE industry are today's lists, applied to all dates.
