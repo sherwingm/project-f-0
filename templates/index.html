@@ -476,7 +476,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     $("#clearCalls").addEventListener("click", () => { if (confirm("Delete all recorded calls?")) { calls = []; saveCalls(); renderScoreboard(); render(); } });
     if (SERVER.orders && SERVER.paper) renderPaperScore();
   }
-  // second score, from the paper ledger: what the trades made after real fills and charges, per bucket
+  // second score, from the paper ledger: what the trades made after real fills and charges (one group)
   async function renderPaperScore() {
     const box = $("#paperScore"); if (!box) return;
     try {
@@ -485,8 +485,8 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const row = (name, s) => `<tr><td>${name}</td><td>${s.trades}</td><td>${s.wins}</td><td>${s.win_rate != null ? s.win_rate + "%" : "—"}</td><td>${money(s.mean_net_pnl)}</td><td>${s.mean_return_pct != null ? pct(s.mean_return_pct) : "—"}</td><td>${money(s.total_net_pnl)}</td><td>${need(s)}</td></tr>`;
       box.innerHTML = `<h2 style="margin-top:12px">Paper trades, realistic net</h2>
         <p class="count" style="margin:0">Each closed paper trade after its fills (book walk, spread, ticks) and both legs' charges. Return is on the capital committed: the premium for a long option, the margin otherwise. Won = net P&L above zero; Needed = wins to beat a coin at that N.</p>
-        <div style="overflow-x:auto"><table><thead><tr><th>Bucket</th><th>Trades</th><th>Won</th><th>Win rate</th><th>Mean net</th><th>Mean return</th><th>Total net</th><th>Needed</th></tr></thead>
-        <tbody>${row("All", S.all)}${row("normal", S.normal)}${row("cheap_near_expiry", S.cheap_near_expiry)}</tbody></table></div>`;
+        <div style="overflow-x:auto"><table><thead><tr><th></th><th>Trades</th><th>Won</th><th>Win rate</th><th>Mean net</th><th>Mean return</th><th>Total net</th><th>Needed</th></tr></thead>
+        <tbody>${row("All paper trades", S.all)}</tbody></table></div>`;
     } catch (e) { box.innerHTML = ""; }
   }
   $("#callToggle").addEventListener("click", e => { callMode = !callMode; e.currentTarget.setAttribute("aria-pressed", callMode); $("#callHint").textContent = callMode ? "Labels hidden until you call each stock" : ""; render(); });
@@ -716,7 +716,6 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       ${liq ? kv("Liquidity", `<span class="pill ${LIQ_PILL[liq.class] || "n"}">${esc(liq.class)}</span>`) : kv("Liquidity", r.quote_error ? "no quote: " + esc(r.quote_error) : "no live quote")}
       ${liq ? kv("Book", `spread ${liq.spread_pct != null ? liq.spread_pct + "%" : "—"} · visible ${inr(liq.visible_qty)} · strike/contract OI ${liq.oi_lots != null ? inr(liq.oi_lots) + " lots" : "—"}`) : ""}</div>`;
     if (liq && liq.reasons.length) h += `<ul class="reasons">${liq.reasons.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
-    if (r.bucket === "cheap_near_expiry") h += `<p class="tag"><b>cheap_near_expiry</b> · tracked as its own bucket on the scoreboard</p>`;
     if (f) {
       h += `<div class="review">${kv("Expected fill", `₹${inr(f.price)}${r.queued ? " <small>(estimate from the last quote)</small>" : ""}`)}${kv("Mid", money(f.mid))}
         ${kv("Slippage vs mid", f.slippage_vs_mid != null ? `₹${inr(f.slippage_vs_mid)} a unit (${f.slippage_pct}%), ${money(f.slippage_value)} in all` : "—")}${kv("Fill rule", FILL_RULE[f.mode] || esc(f.mode))}</div>
@@ -766,7 +765,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
           <div class="review">${kv("Order id", esc(d.order_id))}${kv("Status", esc(d.status))}${kv("Quantity", inr(d.quantity))}
           ${d.fill_price != null ? kv("Fill price", "₹" + inr(d.fill_price)) : ""}${queued ? kv("Fills", "first poll at or after " + esc((d.fill_after || "").slice(0, 16).replace("T", " ")) + " IST") : ""}
           ${d.charges ? kv("Charges", money(d.charges.total)) : ""}${d.net_pnl != null ? kv("Net P&L", `<b class="${dirClass(d.net_pnl)}">${money(d.net_pnl)}</b>`) : ""}
-          ${d.bucket ? kv("Bucket", esc(d.bucket)) : ""}</div>
+</div>
           <button class="btn primary" type="button" id="closeSheet">Close</button>`;
         $("#closeSheet", sheet).addEventListener("click", () => bg.remove()); return;
       }
@@ -839,10 +838,10 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const [sm, pos, tr, rf, ords] = await Promise.all([getJson("/api/paper/summary"), getJson("/api/paper/positions"), getJson("/api/paper/trades"), getJson("/api/paper/refusals"), getJson("/api/orders")]);
       const posHtml = pos.map(p => `<div class="o"><span><b>${esc(p.tradingsymbol)}</b> ${p.side === "BUY" ? "long" : "short"} ${plural(p.lots, "lot")} (${inr(p.qty)})
           <br>entry ₹${inr(p.entry.price)} · mark ${p.mark ? "₹" + inr(p.mark.price) + (p.mark.stale ? " <small>(no " + (p.side === "BUY" ? "bid" : "ask") + ")</small>" : "") : "—"}
-          <br>stop ${p.stop != null ? "₹" + inr(p.stop) + (p.stop_triggered_at ? " <b class='down'>triggered</b>, exits at the next poll" : "") : "none"} · expiry ${esc(p.expiry)} · T-2 ${esc(p.t2_date)}${p.bucket === "cheap_near_expiry" ? " · <b>cheap_near_expiry</b>" : ""}</span>
+          <br>stop ${p.stop != null ? "₹" + inr(p.stop) + (p.stop_triggered_at ? " <b class='down'>triggered</b>, exits at the next poll" : "") : "none"} · expiry ${esc(p.expiry)} · T-2 ${esc(p.t2_date)}</span>
           <span><b class="${dirClass(p.unrealised)}">${money(p.unrealised)}</b><br><small>MTM, net of charges</small><br><button class="btn" type="button" data-close="${esc(p.id)}">Close…</button></span></div><div class="closebox" id="cl-${esc(p.id)}"></div>`).join("");
       const trHtml = tr.trades.slice(0, 50).map(t => `<div class="o"><span><b>${esc(t.tradingsymbol)}</b> ${t.side === "BUY" ? "long" : "short"} ${plural(t.lots, "lot")} · ${esc(t.reason)}
-          <br>₹${inr(t.entry.price)} → ₹${inr(t.exit.price)} · charges ${money(t.charges_total)} · ${esc(t.bucket)}</span>
+          <br>₹${inr(t.entry.price)} → ₹${inr(t.exit.price)} · charges ${money(t.charges_total)}</span>
           <span><b class="${dirClass(t.net_pnl)}">${money(t.net_pnl)}</b>${t.return_pct != null ? "<br>" + pct(t.return_pct) : ""}<br><small>${esc((t.closed_at || "").slice(0, 16).replace("T", " "))}</small></span></div>`).join("");
       const ordHtml = ords.slice(0, 40).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.auto ? " · auto " + esc(x.auto) : ""}${x.reason ? "<br><small>" + esc(x.reason) + "</small>" : ""}</span>
           <span>${esc(x.status)}${x.fill_price != null ? " @ ₹" + inr(x.fill_price) : ""}<br>${esc((x.filled_at || x.placed_at || "").slice(0, 16).replace("T", " "))}</span></div>`).join("");

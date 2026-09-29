@@ -44,7 +44,7 @@ from server import charges as ch
 from server import sessions
 from server.config import settings
 from server.fills import NoLiquidity, PaperQueue, fill
-from server.liquidity import BUCKET_NORMAL, Rules, classify
+from server.liquidity import Rules, classify
 
 log = logging.getLogger(__name__)
 IST = sessions.IST
@@ -185,7 +185,7 @@ class PaperLedger:
                   "lots": req.lots, "qty": qty, "order_type": req.order_type, "limit_price": req.price, "stop": stop,
                   "sessions_to_expiry": dte, "expiry": req.expiry,
                   "t2_date": sessions.t_minus(req.expiry, 2).isoformat(), "queued": None, "liquidity": None,
-                  "fill": None, "bucket": BUCKET_NORMAL, "charges_entry": None, "round_trip_now": None,
+                  "fill": None, "charges_entry": None, "round_trip_now": None,
                   "margin": None, "max_loss": None, "blocked": blocked, "warnings": []}
         open_now = self.is_open(now)
         # with the market closed the book is stale: book-dependent checks warn now and decide at 09:20
@@ -211,7 +211,6 @@ class PaperLedger:
         liq = classify(contract, quote, req.lots, dte, rules=self.rules,
                        refusals_path=self.refusals_path if intent == "entry" and open_now else None, stage=stage)
         review["liquidity"] = liq
-        review["bucket"] = liq["bucket"]
         mode = MODE_FOR_CLASS.get(liq["class"])
         if liq["class"] == "refuse":
             if intent == "entry":
@@ -304,12 +303,12 @@ class PaperLedger:
             pos = self._position_by_id(review["position_id"])
             closed = self._close(pos, int(resolved["quantity"]), f, liq.get("class"), now, "manual")
             rec = {**base, "status": "FILLED", "fill_price": f["price"], "fill": f, "liquidity_class": liq.get("class"),
-                   "bucket": pos["bucket"], "position_id": pos["id"], "net_pnl": closed["net_pnl"],
+                   "position_id": pos["id"], "net_pnl": closed["net_pnl"],
                    "charges": closed["exit_charges"]}
         else:
             pos = self._open(req, resolved, stop, review, f, liq, now)
             rec = {**base, "status": "FILLED", "fill_price": f["price"], "fill": f, "liquidity_class": liq.get("class"),
-                   "bucket": pos["bucket"], "position_id": pos["id"], "charges": pos["entry_charges"]}
+                   "position_id": pos["id"], "charges": pos["entry_charges"]}
         self._log_order(rec)
         return rec
 
@@ -320,9 +319,9 @@ class PaperLedger:
                "strike": req.strike, "tradingsymbol": resolved["tradingsymbol"], "lot_size": int(resolved["lot_size"]),
                "side": req.side, "lots": req.lots, "qty": qty,
                "entry": {"price": f["price"], "levels": f["levels"], "class": liq.get("class"), "mode": f["mode"],
-                         "bucket": liq.get("bucket", BUCKET_NORMAL), "mid": f["mid"], "slippage_vs_mid": f["slippage_vs_mid"],
+                         "mid": f["mid"], "slippage_vs_mid": f["slippage_vs_mid"],
                          "overflow_qty": f["overflow_qty"]},
-               "bucket": liq.get("bucket", BUCKET_NORMAL), "entry_charges": entry_ch, "entry_charges_open": entry_ch["total"],
+               "entry_charges": entry_ch, "entry_charges_open": entry_ch["total"],
                "stop": stop, "max_loss_at_entry": review["max_loss"], "margin": review["margin"] or 0.0,
                "opened_at": now.isoformat(timespec="seconds"), "t2_date": review["t2_date"], "stop_triggered_at": None,
                "mark": None}
@@ -351,7 +350,7 @@ class PaperLedger:
         committed = pos["entry"]["price"] * qty if is_option(pos["instrument"]) and pos["side"] == "BUY" else pos["margin"] * frac
         ml = pos.get("max_loss_at_entry")
         closed = {k: pos[k] for k in ("id", "symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size", "side",
-                                      "bucket", "stop", "opened_at", "t2_date")}
+                                      "stop", "opened_at", "t2_date")}
         lots = qty // pos["lot_size"] if pos["lot_size"] else pos["lots"]
         closed.update({"lots": lots, "qty": qty, "entry": pos["entry"], "entry_charges": entry_part,
                        "exit": {"price": f["price"], "levels": f["levels"], "class": liq_class, "mode": f["mode"],
@@ -456,7 +455,7 @@ class PaperLedger:
                          "side": exit_side, "lots": closed["lots"], "order_type": "MARKET", "price": None,
                          "tradingsymbol": pos["tradingsymbol"], "quantity": closed["qty"], "lot_size": pos["lot_size"],
                          "intent": "exit", "status": "FILLED", "auto": reason, "fill_price": f["price"], "fill": f,
-                         "liquidity_class": liq["class"], "bucket": pos["bucket"], "position_id": pos["id"],
+                         "liquidity_class": liq["class"], "position_id": pos["id"],
                          "net_pnl": closed["net_pnl"], "charges": closed["exit_charges"]})
         return True
 
@@ -587,10 +586,9 @@ class PaperLedger:
 
 
 def trade_stats(trades: list[dict]) -> dict:
-    """Realistic-net results per closed trade (after fills and charges), overall and by bucket."""
+    """Realistic-net results over all closed trades (after fills and charges): one group, no buckets."""
     out = {}
-    for name, rows in (("all", trades), ("normal", [t for t in trades if t.get("bucket") != "cheap_near_expiry"]),
-                       ("cheap_near_expiry", [t for t in trades if t.get("bucket") == "cheap_near_expiry"])):
+    for name, rows in (("all", trades),):
         n = len(rows)
         nets = sorted(t["net_pnl"] for t in rows)
         rets = [t["return_pct"] for t in rows if t.get("return_pct") is not None]

@@ -21,7 +21,7 @@ TEMPLATE = (Path(__file__).resolve().parent.parent / "templates" / "index.html")
 
 @pytest.fixture(autouse=True)
 def allow_lottery(monkeypatch):
-    """These tests cover the engine with the cheap / near-expiry bucket switched on (ALLOW_LOTTERY=true)."""
+    """These tests cover the engine with the cheap / near-expiry fill rule switched on (ALLOW_LOTTERY=true)."""
     from server.config import settings
     monkeypatch.setattr(settings, "allow_lottery", True)
 
@@ -41,9 +41,9 @@ def client(tmp_path, monkeypatch):
 
 def test_review_carries_everything_the_sheet_shows(client):
     c, _, q = client
-    q.set(CE, 1.0, 1.1, oi=5000)                                 # cheap: lottery bucket
+    q.set(CE, 1.0, 1.1, oi=5000)                                 # cheap: lottery fill rule
     r = c.post("/api/order/preview", json=BODY, auth=AUTH).json()["review"]
-    assert r["liquidity"]["class"] == "lottery" and r["liquidity"]["reasons"] and r["bucket"] == "cheap_near_expiry"
+    assert r["liquidity"]["class"] == "lottery" and r["liquidity"]["reasons"] and "bucket" not in r
     assert r["fill"]["price"] == 1.15 and r["fill"]["slippage_vs_mid"] is not None and r["fill"]["levels"]
     assert r["charges_entry"]["total"] > 0 and r["round_trip_now"]["charges"]["total"] > r["charges_entry"]["total"]
     assert r["risk"]["margin"] == pytest.approx(575.0) and r["risk"]["cap"] == 2500
@@ -91,13 +91,13 @@ def test_positions_expose_mtm_stop_expiry_and_t2(client):
     pv = c.post("/api/order/preview", json=BODY, auth=AUTH).json()
     c.post("/api/order", json={**BODY, "token": pv["token"]}, auth=AUTH)
     p = c.get("/api/paper/positions", auth=AUTH).json()[0]
-    for k in ("unrealised", "stop", "expiry", "t2_date", "bucket", "mark", "entry", "lots"):
+    for k in ("unrealised", "stop", "expiry", "t2_date", "mark", "entry", "lots"):
         assert k in p
     assert p["t2_date"] == "2026-09-25"
 
 
 @pytest.mark.parametrize("text", [
-    "tracked as its own bucket on the scoreboard", "Slippage vs mid", "Depth level used", "Charges, this order",
+    "Slippage vs mid", "Depth level used", "Charges, this order",
     "Round trip if closed at once", "Margin", "per-trade cap", "Day P&L", "Kill switch", "MTM, net of charges",
     "T-2", "Refusals:", "Show the reasons", "Closed trades", "/api/paper/summary", "/api/paper/refusals", "paperbar"])
 def test_template_has_the_review_and_orders_screen_pieces(text):

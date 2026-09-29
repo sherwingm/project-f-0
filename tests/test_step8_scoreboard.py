@@ -1,4 +1,4 @@
-"""Step 8: honest scoreboard. Build data (index closes, daily volume ratios), the ledger's per-bucket stats,
+"""Step 8: honest scoreboard. Build data (index closes, daily volume ratios), the ledger's one-group stats,
 and the page's scoring rules, run in node straight from the template."""
 import json
 import re
@@ -41,12 +41,12 @@ def test_index_closes_reads_eod2_index_file_up_to_the_scan_date(tmp_path):
     assert index_closes(tmp_path, as_of=days[40], name="no such index") is None      # falls back to none
 
 
-def test_trade_stats_by_bucket():
-    t = lambda net, bucket, ret: {"net_pnl": net, "bucket": bucket, "return_pct": ret, "charges_total": 50}
-    s = trade_stats([t(100, "normal", 5), t(-50, "normal", -2.5), t(900, "cheap_near_expiry", 300), t(-40, "cheap_near_expiry", -100)])
+def test_trade_stats_are_one_group():
+    t = lambda net, ret: {"net_pnl": net, "return_pct": ret, "charges_total": 50}
+    s = trade_stats([t(100, 5), t(-50, -2.5), t(900, 300), t(-40, -100)])
+    assert set(s) == {"all"}                                         # DECISIONS.md: no buckets
     assert s["all"]["trades"] == 4 and s["all"]["wins"] == 2 and s["all"]["total_net_pnl"] == 910
-    assert s["normal"]["mean_net_pnl"] == 25 and s["normal"]["mean_return_pct"] == 1.25
-    assert s["cheap_near_expiry"]["win_rate"] == 50.0 and s["cheap_near_expiry"]["hits_needed"] == hits_needed(2)
+    assert s["all"]["win_rate"] == 50.0 and s["all"]["hits_needed"] == hits_needed(4)
     assert s["all"]["total_charges"] == 200
 
 

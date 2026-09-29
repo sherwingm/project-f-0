@@ -36,10 +36,10 @@ no live feed, no commentary, and password-protected access.
     LIQ_OPT_ACCEPT_SPREAD_PCT 3      LIQ_OPT_REFUSE_SPREAD_PCT 8      options spread bands, % of mid
     LIQ_OPT_ACCEPT_DEPTH_PCT  20     LIQ_OPT_REFUSE_DEPTH_PCT  100    order qty as % of visible depth
     LIQ_OPT_MIN_OI_LOTS       50                                      strike OI floor for options
-    LOTTERY_MAX_PREMIUM       2      LOTTERY_MAX_SESSIONS      2      cheap / near-expiry bucket
+    LOTTERY_MAX_PREMIUM       2      LOTTERY_MAX_SESSIONS      2      cheap / near-expiry contracts
     ALLOW_LOTTERY             false  false: options with premium < LOTTERY_MAX_PREMIUM or <= LOTTERY_MAX_SESSIONS
                                      to expiry are refused, "cheap/near-expiry disabled (ALLOW_LOTTERY)";
-                                     true: traded as the tagged cheap_near_expiry bucket
+                                     true: traded with the lottery fill rule (DECISIONS.md: keep false)
     FILL_TICK             0.05   tick size for fills (one tick of latency, rounding against the order)
     PAPER_QUEUE_FILL_AT   09:20  market-closed paper orders fill at the first poll at/after this IST time
     NSE_HOLIDAYS          comma-separated YYYY-MM-DD trading holidays (sessions are weekdays minus these)

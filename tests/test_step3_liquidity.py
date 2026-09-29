@@ -1,7 +1,7 @@
-"""Step 3: liquidity classes for futures and options, the lottery bucket, and the refusal log."""
+"""Step 3: liquidity classes for futures and options, the lottery fill class, and the refusal log."""
 import json
 
-from server.liquidity import BUCKET_CHEAP, BUCKET_NORMAL, Rules, classify, read_refusals
+from server.liquidity import Rules, classify, read_refusals
 
 FUT = {"symbol": "RELIANCE", "instrument": "FUT", "tradingsymbol": "RELIANCE26SEPFUT", "lot_size": 500, "side": "BUY"}
 CE = {"symbol": "RELIANCE", "instrument": "CE", "tradingsymbol": "RELIANCE26SEP1300CE", "lot_size": 500, "side": "BUY",
@@ -70,12 +70,12 @@ LOTTERY_ON = Rules(allow_lottery=True)
 
 def test_cheap_premium_is_lottery_even_with_wide_spread_and_low_oi():
     r = classify(CE, book(0.5, 1.5, oi=5 * 500), 1, 10, rules=LOTTERY_ON)
-    assert r["class"] == "lottery" and r["bucket"] == BUCKET_CHEAP
+    assert r["class"] == "lottery"
 
 
 def test_near_expiry_is_lottery_regardless_of_premium():
     r = classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=2, rules=LOTTERY_ON)
-    assert r["class"] == "lottery" and r["bucket"] == BUCKET_CHEAP
+    assert r["class"] == "lottery"
     assert classify(CE, book(40.0, 44.0, oi=1), 1, sessions_to_expiry=3, rules=LOTTERY_ON)["class"] == "refuse"
 
 
@@ -91,7 +91,6 @@ def test_lottery_is_refused_unless_allow_lottery(tmp_path, monkeypatch):
     for b, dte in ((cheap, 10), (near, 2)):
         r = classify(CE, b, 1, dte, rules=Rules(), refusals_path=path)          # the default: off
         assert r["class"] == "refuse" and r["reasons"][-1] == "cheap/near-expiry disabled (ALLOW_LOTTERY)"
-        assert r["bucket"] == BUCKET_NORMAL
     assert [json.loads(l)["reasons"][-1] for l in path.read_text().splitlines()] == ["cheap/near-expiry disabled (ALLOW_LOTTERY)"] * 2
     assert settings.allow_lottery is False and Rules.from_settings().allow_lottery is False
     monkeypatch.setattr(settings, "allow_lottery", True)
@@ -99,8 +98,9 @@ def test_lottery_is_refused_unless_allow_lottery(tmp_path, monkeypatch):
     assert classify(CE, cheap, 1, 10)["class"] == "lottery"
 
 
-def test_normal_bucket_on_ordinary_fills():
-    assert classify(CE, book(10.0, 10.2, oi=100 * 500), 1, 10)["bucket"] == BUCKET_NORMAL
+def test_no_bucket_tag_anywhere():                              # DECISIONS.md: paper trades are one group
+    assert "bucket" not in classify(CE, book(10.0, 10.2, oi=100 * 500), 1, 10)
+    assert "bucket" not in classify(CE, book(0.5, 1.5, oi=5 * 500), 1, 10, rules=LOTTERY_ON)
 
 
 def test_refusals_are_logged_with_the_quote(tmp_path):

@@ -16,7 +16,7 @@ FUT = "RELIANCE26SEPFUT"
 
 @pytest.fixture(autouse=True)
 def allow_lottery(monkeypatch):
-    """These tests cover the engine with the cheap / near-expiry bucket switched on (ALLOW_LOTTERY=true)."""
+    """These tests cover the engine with the cheap / near-expiry fill rule switched on (ALLOW_LOTTERY=true)."""
     from server.config import settings
     monkeypatch.setattr(settings, "allow_lottery", True)
 
@@ -69,7 +69,7 @@ def test_long_option_entry_charges_cash_and_mark(lg):
     entry_ch = ch.leg("CE", "BUY", 500, 4.15)["total"]
     assert ledger.state["cash"] == pytest.approx(500_000 - 4.15 * 500 - entry_ch, abs=0.01)
     pos = ledger.positions_view()[0]
-    assert pos["bucket"] == "normal" and pos["entry"]["class"] == "accept" and pos["t2_date"] == "2026-09-25"
+    assert "bucket" not in pos and pos["entry"]["class"] == "accept" and pos["t2_date"] == "2026-09-25"
 
     q.set(CE, 5.0, 5.1)
     ledger.on_poll(now=at(21, 11))
@@ -139,7 +139,7 @@ def test_position_opened_on_t2_is_forced_out_at_the_next_sessions_0920(lg):
     ledger, q = lg
     q.set(CE, 4.0, 4.1)
     rec = ledger.submit(order(), resolved(CE), now=at(25, 11))
-    assert rec["bucket"] == "cheap_near_expiry"                  # 2 sessions to expiry: lottery bucket
+    assert rec["liquidity_class"] == "lottery" and "bucket" not in rec   # 2 sessions to expiry: lottery fill
     ledger.on_poll(now=at(25, 14))
     assert ledger.positions_view()
     ledger.on_poll(now=at(28, 9, 20))
@@ -164,11 +164,11 @@ def test_market_closed_order_queues_and_fills_at_0920_on_that_polls_depth(lg, tm
     assert orders[0]["order_id"] == rec["order_id"] and orders[0]["status"] == "FILLED"
 
 
-def test_lottery_fill_is_tagged_cheap_near_expiry(lg):
+def test_lottery_fill_carries_no_bucket_tag(lg):
     ledger, q = lg
     q.set(CE, 1.0, 1.4, oi=500)                                  # wide spread, 1 lot of OI: lottery, not refused
     rec = ledger.submit(order(), resolved(CE), now=at(21))
-    assert rec["liquidity_class"] == "lottery" and rec["bucket"] == "cheap_near_expiry"
+    assert rec["liquidity_class"] == "lottery" and "bucket" not in rec
     assert rec["fill_price"] == 1.45
 
 

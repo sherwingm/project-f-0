@@ -1,4 +1,4 @@
-# 12 · The paper engine: fills, buckets, charges, risk rules, and how to read the scoreboard
+# 12 · The paper engine: fills, charges, risk rules, and how to read the scoreboard
 
 The paper account (`ORDERS=true PAPER=true BROKER=none`) is built to answer one question honestly:
 **would this way of trading have made money after real fills and real costs?** Every rule below exists
@@ -21,8 +21,8 @@ to stop the account from flattering you. Nothing in it can reach a broker.
 
    The lottery class is **off by default** (`ALLOW_LOTTERY=false`): a cheap or near-expiry option is refused
    with the reason "cheap/near-expiry disabled (ALLOW_LOTTERY)" and logged like any other refusal. With `ALLOW_LOTTERY=true`, a
-   *lottery* order is not refused for spread or OI — that is the point of the bucket — but it still
-   needs the side it trades against, and it is tagged **cheap_near_expiry** on every screen and score.
+   *lottery* order is not refused for spread or OI but still needs the side it trades against. Per
+   DECISIONS.md it stays off, and paper trades are one group: no buckets or tags.
 3. **Fill** (`server/fills.py`). Buys walk the asks, sells walk the bids; the price is the volume-weighted
    average of the levels consumed, plus one tick against you for latency, rounded to the tick against you.
    Quantity beyond the visible book fills at the worst visible level plus one full quoted spread. A LIMIT
@@ -71,11 +71,10 @@ Two scores, deliberately separate:
    217/400" is N/2 + 1.645·√N/2 — below it, the accuracy is indistinguishable from coin-flipping. The
    **baseline row** ("always bullish on the top-10 volume-ratio stocks") is scored identically: beat it
    before believing the labels, and expect labels near 33–40% (see guide 10).
-2. **Paper trades, realistic net** — what the trades actually made after fills and charges, overall and by
-   bucket (`normal` vs `cheap_near_expiry`). A high hit rate with a negative mean net is the classic
-   cheap-option shape: many small losses, a rare large win. The bucket exists so that shape cannot hide
-   inside the ordinary trades — and `python -m scanner.backtest_cheap_options` (guide 09) measures the same
-   bucket across a year of history instead of your handful of fills. Rows that cannot be valued are flagged
+2. **Paper trades, realistic net** — what all closed paper trades actually made after fills and charges,
+   as one group (DECISIONS.md: no buckets). A high hit rate with a negative mean net is the classic
+   cheap-option shape: many small losses, a rare large win. `python -m scanner.backtest_cheap_options`
+   (guide 09) measures cheap options across history instead of a handful of fills. Rows that cannot be valued are flagged
    in the CSV's `excluded` column and left out of the summary: a close below intrinsic value (a stale print
    from a contract that did not trade), and contracts spanning a bonus, split or demerger (NSE adjusts their
    strikes, so the old strike cannot be valued against the post-action price).
@@ -89,6 +88,6 @@ Two scores, deliberately separate:
 | `data/paper_queue.jsonl` | orders waiting for the next session's 09:20 poll |
 | `data/refusals.jsonl` | refused orders with reasons and the quote they were judged on |
 | `GET /api/paper/summary` | equity, day/week P&L, drawdown, open margin, kill switch, limits |
-| `GET /api/paper/positions` `trades` `refusals` | the Orders screen's data; trades include per-bucket stats |
+| `GET /api/paper/positions` `trades` `refusals` | the Orders screen's data; trades include the realistic-net stats |
 
 Delete `data/paper_ledger.json` (with the queue and order log) to start the account over.
