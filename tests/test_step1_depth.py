@@ -155,3 +155,15 @@ def test_live_oi_change_compares_all_expiries_with_the_eod_total():
     near_only.poll_once()
     r = near_only.snapshot()["quotes"]["RELIANCE"]
     assert r["fut_oi"] == 12345678 and r["fut_oi_chg_pct"] is None and not r["fut_oi_all_expiries"]
+
+
+def test_option_chain_ignores_impossible_open_interest():
+    import copy
+    provider, fake = kotak_provider()
+    resp = copy.deepcopy(LIVE_CHAIN)
+    resp["call"].append({"inst": {"neoSymbol": "nse_fo|3", "symbol": "RELIANCE26SEP1250CE", "optType": "CE", "strkPrc": "1250"},
+                         "quote": {"ltp": "4.5", "pc": "9.0", "vol": "10"}, "oi": {"cur": "-5517471393969191936"}})
+    fake.option_chain = lambda **kw: resp
+    c = provider._fetch_chain("RELIANCE", EXPIRY)
+    assert (c["call_oi"], c["put_oi"], c["pcr"]) == (2000000, 1500000, 0.75)      # the garbage leg adds nothing
+    assert c["strikes"]["RELIANCE26SEP1250CE"]["open_interest"] == 0 and c["strikes"]["RELIANCE26SEP1250CE"]["last_price"] == 4.5

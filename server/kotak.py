@@ -250,6 +250,7 @@ def _read_csv(url: str) -> pd.DataFrame:
 QUOTE_BATCH = 49
 # option_chain answers "Rate limit exceeded" to calls 0.25 s apart and not to calls 1 s apart (checked 2026-09-28)
 CHAIN_MIN_INTERVAL = 1.0
+MAX_OI = 1e10                   # shares; Kotak's chain sometimes sends overflow garbage (-5.5e18 seen 2026-09-30)
 
 
 class KotakProvider:
@@ -407,6 +408,9 @@ class KotakProvider:
                 q, oi = leg.get("quote") or {}, leg.get("openInterest") or leg.get("oi") or {}
                 ts = str(inst.get("symbol", "")).strip()
                 cur = _f(_first(oi, "current", "cur")) or 0.0
+                if not 0 <= cur <= MAX_OI:               # impossible open interest: drop the leg's OI, keep its price
+                    log.warning("option chain %s: impossible OI %s for %s, ignored", sym, cur, inst.get("symbol"))
+                    cur = 0.0
                 strikes[ts] = {"last_price": _f(q.get("ltp")), "open_interest": int(cur),
                                "prev_oi": _i(_first(oi, "previous", "prev")), "oi_change": _i(_first(oi, "change", "chg")),
                                "volume": _i(_first(q, "volume", "vol")), "prev_close": _f(_first(q, "prevClose", "pc"))}
