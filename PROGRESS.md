@@ -8,7 +8,7 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace
   before then, or the paper account stops being saved (the summary's `persistence.error` shows it).
-- `APP_PASSWORD`: local `.env` and Render → Environment. (A GitHub Actions secret is no longer needed: the
+- `APP_PASSWORD`: local `.env` and Render → Environment (`PUBLIC_ACCESS=false` is live since 2026-09-30). (A GitHub Actions secret is no longer needed: the
   opening-snapshot workflow was deleted.)
 - `KOTAK_CONSUMER_KEY`: Render → Environment and local `.env`; market data only, no login needed.
 
@@ -35,6 +35,12 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   sub-periods, but N 57 < 200.
 - Only positive signal so far: results beats +1.3 % (all) / +1.9 % (strong sector) over 20 sessions net of
   the sector, t ≈ 3, 2021–2024.
+
+## Paper account (live test, Render)
+- Opened 2026-09-30 11:52 IST by the system-test rule (top live setups by volume ratio, 1 lot, ATM, stop 0.5x):
+  APOLLOHOSP 8200 PE, MAXHEALTH 940 PE, FORTIS 780 PE (October expiry). At the 15:36 close: equity ₹5,15,590.29,
+  unrealised +₹15,590.29 after exit charges, no stop triggered, 0 closed trades. Held overnight; the account is
+  in the `paper-state` branch and restored on every restart.
 
 ## Known issues
 - eod2_data stale since 2026-09-25: the fallback fills the gap from tonight's build (first run after the
