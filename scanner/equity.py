@@ -94,7 +94,7 @@ def equity_metrics_one(symbol: str, df: pd.DataFrame, as_of: pd.Timestamp | None
 
 
 def index_closes(local_dir: Path | None, as_of: pd.Timestamp, name: str = INDEX_FILE, days: int = CHART_DAYS,
-                 timeout: int = 60) -> dict | None:
+                 timeout: int = 60, fallback_days: list[str] | None = None) -> dict | None:
     """The last `days` closes of an eod2 index file up to `as_of`, for market-adjusted scoring.
     Returns {"name", "dates", "closes"} or None when the file cannot be read (the page then scores raw moves)."""
     path = local_dir / f"{name}.csv" if local_dir else None
@@ -113,6 +113,9 @@ def index_closes(local_dir: Path | None, as_of: pd.Timestamp, name: str = INDEX_
         log.warning("index %s unavailable (%s); the scoreboard will use raw moves", name, exc)
         return None
     raw = raw[raw["Close"] > 0].set_index("Date").sort_index()
+    if fallback_days:                                  # sessions eod2 lacks, from NSE's index-close file
+        from .cm_fallback import fill_index
+        raw = fill_index(raw["Close"], fallback_days).to_frame("Close")
     raw = raw[raw.index <= as_of].iloc[-days:]
     if raw.empty:
         return None
@@ -120,8 +123,11 @@ def index_closes(local_dir: Path | None, as_of: pd.Timestamp, name: str = INDEX_
             "closes": [round(float(c), 2) for c in raw["Close"].values]}
 
 
-def equity_metrics(symbols: list[str], local_dir: Path | None, workers: int = 8) -> tuple[pd.Timestamp, list[dict]]:
-    """Load every symbol, align all of them on the latest common session, return (as_of, rows)."""
+def equity_metrics(symbols: list[str], local_dir: Path | None, workers: int = 8, fallback_cache: Path | None = None,
+                   fallback_days: list[str] | None = None) -> tuple[pd.Timestamp, list[dict]]:
+    """Load every symbol, align all of them on the latest common session, return (as_of, rows).
+    With `fallback_days` (a list to fill in), sessions eod2 lacks are added from NSE's cash-market bhavcopy
+    (scanner/cm_fallback.py, cached in `fallback_cache`) and listed there."""
     frames: dict[str, pd.DataFrame] = {}
 
     def _load(sym: str):
@@ -135,6 +141,9 @@ def equity_metrics(symbols: list[str], local_dir: Path | None, workers: int = 8)
 
     if not frames:
         raise RuntimeError("No eod2 data loaded for any symbol")
+    if fallback_days is not None:
+        from .cm_fallback import fill
+        fallback_days.extend(fill(frames, fallback_cache))
     # The universe's most common last date; a few symbols can lag (suspended, just listed).
     last_dates = pd.Series({s: f.index[-1] for s, f in frames.items()})
     as_of = last_dates.mode().iloc[0]

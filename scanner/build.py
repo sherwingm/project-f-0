@@ -58,9 +58,12 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
     lots = fetch_fo_lots(cache_path=cache_dir / "fo_universe.txt")
     universe = sorted(lots)
 
-    as_of, rows = equity_metrics(universe, local_dir=eod2_dir)
+    fallback_days: list[str] = []
+    as_of, rows = equity_metrics(universe, local_dir=eod2_dir, fallback_cache=cache_dir, fallback_days=fallback_days)
     log.info("equity metrics for %d/%d stocks as of %s", len(rows), len(universe), as_of.date())
-    index = index_closes(eod2_dir, as_of)
+    if fallback_days:
+        log.warning("prices for %s came from NSE's cash-market bhavcopy (eod2_data lags)", ", ".join(fallback_days))
+    index = index_closes(eod2_dir, as_of, fallback_days=fallback_days)
     if index and index["dates"][-1] != as_of.strftime("%Y-%m-%d"):
         log.warning("index %s ends %s, before the scan date %s", index["name"], index["dates"][-1], as_of.date())
 
@@ -126,6 +129,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
     scan = {
         "meta": {
             "as_of": as_of.strftime("%Y-%m-%d"),
+            "price_fallback_days": fallback_days,
             "as_of_label": as_of.strftime("%a %d %b %Y"),
             "generated_at_ist": datetime.now(IST).strftime("%Y-%m-%d %H:%M IST"),
             "universe_size": len(universe),
