@@ -122,7 +122,10 @@ class Mirror:
         """Bring the local disk up to the durable copy: see the module doc for which copy wins."""
         self.dir.mkdir(parents=True, exist_ok=True)
         restored = []
+        stored: dict[str, bytes] = {}                         # what the durable copy holds now
         remote = self.store.get(LEDGER)
+        if remote is not None:
+            stored[LEDGER] = remote
         local = (self.dir / LEDGER).read_bytes() if (self.dir / LEDGER).exists() else None
         if remote is not None and (local is None or saved_at(remote) > saved_at(local)):
             (self.dir / LEDGER).write_bytes(remote)
@@ -130,21 +133,26 @@ class Mirror:
         longer = lambda r, l: r.count(b"\n") > l.count(b"\n")             # the order log only grows
         for name, newer in ((ORDERS, longer), (QUEUE, lambda r, l: False)):
             r = self.store.get(name)
+            if r is None:
+                continue
+            stored[name] = r
             p = self.dir / name
-            if r is not None and (not p.exists() or newer(r, p.read_bytes())):
+            if not p.exists() or newer(r, p.read_bytes()):
                 p.write_bytes(r)
                 restored.append(name)
         for d in snapshot_days or []:
-            p = self.dir / SNAPSHOTS / f"{d}.json"
+            name = f"{SNAPSHOTS}/{d}.json"
+            r = self.store.get(name)
+            if r is None:
+                continue
+            stored[name] = r
+            p = self.dir / name
             if not p.exists():
-                r = self.store.get(f"{SNAPSHOTS}/{d}.json")
-                if r is not None:
-                    p.parent.mkdir(parents=True, exist_ok=True)
-                    p.write_bytes(r)
-                    restored.append(f"{SNAPSHOTS}/{d}.json")
-        for n in self._names():                               # what the durable copy now matches
-            self._last[n] = (self.dir / n).read_bytes()
-        self._material = material(self._last.get(LEDGER))
+                p.parent.mkdir(parents=True, exist_ok=True)
+                p.write_bytes(r)
+                restored.append(name)
+        self._last = stored                                   # a local file that differs is written on the next flush
+        self._material = material(stored.get(LEDGER))
         self._last_snapshot = time.time()
         self.status["restored"] = restored
         if restored:

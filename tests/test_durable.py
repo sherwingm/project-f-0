@@ -147,3 +147,14 @@ def test_material_ignores_marks_and_saved_at():
     closed = {"positions": [], "closed": [{"id": 1}], "cash": 7}
     m = lambda d: durable.material(json.dumps(d).encode())
     assert m(base) == m(moved) != m(closed)
+
+
+def test_a_local_account_is_written_on_the_first_start_against_an_empty_store(tmp_path):
+    store = DictStore()
+    ledger = PaperLedger(tmp_path, capital=500000)
+    _open_position(ledger)                                         # a disk with a position, a store with nothing
+    (tmp_path / "paper_orders.jsonl").write_text('{"order_id": 1}\n')
+    m = durable.Mirror(tmp_path, store)
+    assert m.restore() == []
+    assert sorted(m.flush(now=1.0)) == ["paper_ledger.json", "paper_orders.jsonl"]
+    assert m.flush(now=2.0) == []
