@@ -1,6 +1,6 @@
-# Render blueprint: a MIRROR of the live server. The primary runs always-on on a VM (guides/17-always-on-host.md)
-# and alone holds LEDGER_GITHUB_TOKEN, so only it writes the paper account; this mirror never does. Once the VM's
-# live feed is confirmed, set DATA_PROVIDER=none here (Render dashboard).
+# Render blueprint: the live server until the always-on VM runs (guides/17-always-on-host.md), then a MIRROR:
+# once the VM's live feed is confirmed, set DATA_PROVIDER=none here and delete LEDGER_GITHUB_TOKEN here, so only
+# the VM writes the paper account.
 # The EOD scan is built by the GitHub Action (.github/workflows/daily.yml) and read from SCAN_URL, so this
 # server never contacts NSE (which refuses many cloud IPs). Real orders need a SEBI-whitelisted static IP,
 # which Render's free tier does not give: keep PAPER=true here.
@@ -47,5 +47,9 @@ services:
         value: "3"
       - key: DAILY_LOSS_HALT_PCT
         value: "2"
+      - key: LEDGER_GITHUB_TOKEN      # the paper account's durable copy (paper-state branch). Set here only while
+        sync: false                   # Render is the only live server; delete it here once the VM (guide 17) runs
+      - key: LEDGER_GITHUB_REPO
+        value: sherwingm/project-f-0
       - key: ANTHROPIC_API_KEY        # optional: the plain-language reading and the evidence verdict
         sync: false
