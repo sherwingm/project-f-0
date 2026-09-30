@@ -20,7 +20,8 @@ import pandas as pd
 from server import charges as ch
 
 from .backtest_cheap_options import sessions_to
-from .backtest_s1_v2 import BIAS, Market, _ret, budget, day0_index, load_inputs, lots_for, md, option_universe
+from .backtest_s1_v2 import (BIAS, Market, _ret, budget, day0_index, load_inputs, lots_for, md, option_universe,
+                             tercile)
 from .build import ROOT
 from .option_engine import TEST_PERIODS, TICK, choose_expiry, entry_fill, split_statement, window
 from .results_coverage import benchmark_returns
@@ -154,8 +155,18 @@ class Days:
 
 
 # ---------------------------------------------------------------- the simulation
+def vol_budget_sizer(entry: float, lot: int, own_vol: float, median_vol: float) -> tuple[int, float | None, str | None]:
+    """v4: budget = Rs 5,000 x median vol / own vol, clipped to Rs 2,000-8,000; lots = floor(budget / premium per lot).
+    Returns (lots, budget, the filter that removed it or None)."""
+    if math.isnan(own_vol) or own_vol <= 0 or math.isnan(median_vol) or lot <= 0:
+        return 0, None, "budget_below_one_lot"
+    bud = budget(own_vol, median_vol)
+    lots = lots_for(bud, entry * lot)
+    return lots, bud, (None if lots >= 1 else "budget_below_one_lot")
+
+
 def simulate(m: Market, sigs: list[Signal], arm: str, max_sessions: int, days: Days, ban: dict[str, set[str]],
-             universe: dict[str, set[str]], category, funnel: Counter) -> pd.DataFrame:
+             universe: dict[str, set[str]], category, funnel: Counter, sizer=vol_budget_sizer) -> pd.DataFrame:
     history: dict[str, list[tuple[int, int]]] = {}
     rows = []
     for s in sigs:
@@ -195,14 +206,12 @@ def simulate(m: Market, sigs: list[Signal], arm: str, max_sessions: int, days: D
             continue
         uv = np.array([m.vol[x][s.i0] for x in universe.get(d0, ()) if x in m.vol and not math.isnan(m.vol[x][s.i0])])
         own = m.vol[s.symbol][s.i0]
-        if not len(uv) or math.isnan(own) or own <= 0 or lot <= 0:
-            funnel["budget_below_one_lot"] += 1
+        med = float(np.median(uv)) if len(uv) else math.nan
+        lots, bud, removed = sizer(entry, lot, own, med)
+        if removed:
+            funnel[removed] += 1
             continue
-        bud = budget(own, float(np.median(uv)))
-        lots = lots_for(bud, entry * lot)
-        if lots < 1:
-            funnel["budget_below_one_lot"] += 1
-            continue
+        terc = tercile(own, uv) if len(uv) and not math.isnan(own) else None
         cat, _ = category(s.symbol, d0)
         t = _path(m, s, exp, k, entry, max_sessions, days)
         history.setdefault(s.symbol, []).append((s.i0 + 1, t["exit_i"]))
@@ -214,7 +223,7 @@ def simulate(m: Market, sigs: list[Signal], arm: str, max_sessions: int, days: D
         rows.append({"arm": arm, "variant": max_sessions, "signal_date": d0, "entry_date": d1, "symbol": s.symbol,
                      "category": cat, "sector": m.sector_of.get(s.symbol, ""), "ar0_pct": round(s.ar0, 3),
                      "raw0_pct": round(s.raw, 3), "expiry": exp, "strike": k, "lot": lot, "lots": lots, "qty": qty,
-                     "budget": round(bud, 2), "entry_price": entry, "entry_source": src, "premium_rs": round(entry * qty, 2),
+                     "budget": None if bud is None else round(bud, 2), "vol_tercile": terc, "entry_price": entry, "entry_source": src, "premium_rs": round(entry * qty, 2),
                      "exit_date": m.cal[t["exit_i"]], "exit_reason": t["reason"], "exit_price": t["exit_price"],
                      "held": t["exit_i"] - (s.i0 + 1), "charges": charges, "slippage": slippage, "net": net,
                      "net_pct": None if net is None else round(net / (entry * qty) * 100, 3), "excluded": t["excluded"]})
