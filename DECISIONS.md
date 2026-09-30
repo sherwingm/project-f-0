@@ -11,6 +11,9 @@ editing this file on purpose, in its own commit, with the reason.
 - **Paper before real.** Real orders need a deliberate configuration change (`PAPER=false` plus a configured
   broker); nothing switches it implicitly. `PUBLIC_ACCESS=true` refuses real orders outright.
 - **Risk defaults unchanged** (`server/config.py`, guide 12). **`ALLOW_LOTTERY=false`.**
+  - Exception, paper only: for the live paper system test from 2026-09-30, the Render paper server runs with
+    `RISK_PER_TRADE_PCT=6` (₹30,000 on ₹5,00,000), because one lot of an ATM stock option costs more than
+    the 0.5 % cap. Revert in `render.yaml` when the test ends.
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
 - **Long options only.** No option selling, no spreads, no futures positions: every trade is a bought CE or
   PE, with maximum loss = the premium paid. (Futures may appear in a diagnostic, never as a trade.)

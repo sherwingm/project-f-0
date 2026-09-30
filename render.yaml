@@ -39,5 +39,7 @@ services:
         value: "true"
       - key: ALLOW_LOTTERY
         value: "false"
+      - key: RISK_PER_TRADE_PCT       # paper system test 2026-09-30 (DECISIONS.md): 6 % = Rs 30,000; the default is 0.5
+        value: "6"
       - key: ANTHROPIC_API_KEY        # optional: the plain-language reading and the evidence verdict
         sync: false
