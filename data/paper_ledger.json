@@ -49,17 +49,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 246.65,
-    "bid": 246.65,
-    "ask": 248.9,
-    "ltp": 250.0,
-    "at": "2026-09-30T13:46:44+05:30",
+    "price": 260.3,
+    "bid": 260.3,
+    "ask": 262.95,
+    "ltp": 258.25,
+    "at": "2026-09-30T14:21:43+05:30",
     "stale": false
    },
-   "unrealised_gross": 2325.0,
-   "exit_charges_est": 82.81,
-   "unrealised": 2205.74,
-   "liquidation_value": 30748.44
+   "unrealised_gross": 4031.25,
+   "exit_charges_est": 86.09,
+   "unrealised": 3908.71,
+   "liquidation_value": 32451.41
   },
   {
    "id": "P-1790749329667-4",
@@ -108,17 +108,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 39.6,
-    "bid": 39.6,
-    "ask": 40.0,
-    "ltp": 39.55,
-    "at": "2026-09-30T13:46:44+05:30",
+    "price": 46.45,
+    "bid": 46.45,
+    "ask": 46.85,
+    "ltp": 46.55,
+    "at": "2026-09-30T14:21:43+05:30",
     "stale": false
    },
-   "unrealised_gross": 4620.0,
-   "exit_charges_est": 63.53,
-   "unrealised": 4525.57,
-   "liquidation_value": 20726.47
+   "unrealised_gross": 8216.25,
+   "exit_charges_est": 70.42,
+   "unrealised": 8114.93,
+   "liquidation_value": 24315.83
   },
   {
    "id": "P-1790749333284-6",
@@ -167,23 +167,30 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 27.45,
-    "bid": 27.45,
-    "ask": 27.8,
-    "ltp": 27.7,
-    "at": "2026-09-30T13:46:44+05:30",
+    "price": 30.1,
+    "bid": 30.1,
+    "ask": 30.45,
+    "ltp": 30.3,
+    "at": "2026-09-30T14:21:43+05:30",
     "stale": false
    },
-   "unrealised_gross": 2673.75,
-   "exit_charges_est": 64.45,
-   "unrealised": 2577.32,
-   "liquidation_value": 21209.3
+   "unrealised_gross": 4727.5,
+   "exit_charges_est": 68.4,
+   "unrealised": 4627.12,
+   "liquidation_value": 23259.1
   }
  ],
  "closed": [],
- "daily": {},
- "peak_equity": 509308.63,
+ "daily": {
+  "2026-09-30": {
+   "start_equity": 500000.0,
+   "end_equity": 516650.76,
+   "realised": 0.0
+  }
+ },
+ "peak_equity": 518948.85,
  "created_at": "2026-09-30T11:52:00+05:30",
- "saved_at": "2026-09-30T13:46:45+05:30",
- "restored_from": "watcher log 13:46:46 IST (Render redeployed 13:47:38 IST)"
+ "saved_at": "2026-09-30T14:21:43+05:30",
+ "restored_from": "watcher log 13:46:46 IST (Render redeployed 13:47:38 IST)",
+ "halts": {}
 }
