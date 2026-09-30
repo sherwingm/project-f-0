@@ -123,8 +123,9 @@ Paper engine (guide 12; all server-side):
 | `LIQ_OPT_MIN_OI_LOTS` | strike OI floor for options | 50 |
 | `LOTTERY_MAX_PREMIUM` / `LOTTERY_MAX_SESSIONS` | the cheap / near-expiry bucket | 2 / 2 |
 | `ALLOW_LOTTERY` | trade the cheap / near-expiry bucket (false: refused, "cheap/near-expiry disabled (ALLOW_LOTTERY)") | false |
-| `RISK_PER_TRADE_PCT` | max loss per trade, % of capital (lots capped to fit) | 0.5 |
-| `DAILY_LOSS_HALT_PCT` / `WEEKLY_LOSS_HALT_PCT` | kill switch: no new entries past this loss | 1.0 / 3.0 |
+| `RISK_PER_TRADE_PCT` | max loss per trade, % of capital (a long option: its premium; lots capped to fit) | 6 |
+| `MAX_OPEN_POSITIONS` | open positions at once | 3 |
+| `DAILY_LOSS_HALT_PCT` / `WEEKLY_LOSS_HALT_PCT` | kill switch: no new entries past this loss | 2.0 / 3.0 |
 | `DRAWDOWN_REVIEW_PCT` | "review labels and sizing" banner threshold | 10 |
 | `MARGIN_CAP_PCT` / `MARGIN_ESTIMATE_PCT` | margin cap, % of capital / estimate, % of notional | 30 / 18 |
 | `MAX_NEW_POSITIONS_PER_DAY` / `MAX_NEW_POSITIONS_PER_MONTH` | intensity caps | 3 / 20 |

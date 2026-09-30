@@ -46,7 +46,7 @@ def test_review_carries_everything_the_sheet_shows(client):
     assert r["liquidity"]["class"] == "lottery" and r["liquidity"]["reasons"] and "bucket" not in r
     assert r["fill"]["price"] == 1.15 and r["fill"]["slippage_vs_mid"] is not None and r["fill"]["levels"]
     assert r["charges_entry"]["total"] > 0 and r["round_trip_now"]["charges"]["total"] > r["charges_entry"]["total"]
-    assert r["risk"]["margin"] == pytest.approx(575.0) and r["risk"]["cap"] == 2500
+    assert r["risk"]["margin"] == pytest.approx(575.0) and r["risk"]["cap"] == 30000     # 6 % of Rs 5 lakh
     assert r["risk"]["kill_switch"]["active"] is False and "day_pnl" in r["risk"]
 
 

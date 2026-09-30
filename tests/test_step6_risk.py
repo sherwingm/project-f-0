@@ -8,7 +8,8 @@ from server.risk import RiskGate
 from tests.test_step5_paper import CE, CLOCK, FUT, StubQuotes, allow_lottery, at, order, resolved  # noqa: F401 (autouse fixture)
 
 DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, weekly_loss_halt_pct=3.0, drawdown_review_pct=10,
-                margin_cap_pct=30, max_new_positions_per_day=3, max_new_positions_per_month=20, block_expiry_day_entries=True)
+                margin_cap_pct=30, max_new_positions_per_day=3, max_new_positions_per_month=20, block_expiry_day_entries=True,
+                max_open_positions=99)
 
 
 def make(tmp_path, **over):
@@ -124,6 +125,17 @@ def test_new_position_limits_per_day_and_month(tmp_path):
     q.set("RELIANCE26SEP1380CE", 1.0, 1.05)
     with pytest.raises(PaperRejected, match="this month"):
         ledger.submit(order(strike=1380.0), resolved("RELIANCE26SEP1380CE"), now=at(23))
+
+
+def test_max_open_positions(tmp_path):
+    ledger, q = make(tmp_path, max_open_positions=2)
+    for k in (1300, 1320):
+        ts = f"RELIANCE26SEP{k}CE"
+        q.set(ts, 1.0, 1.05)
+        ledger.submit(order(strike=float(k)), resolved(ts), now=at(21))
+    q.set("RELIANCE26SEP1340CE", 1.0, 1.05)
+    with pytest.raises(PaperRejected, match="2 positions open already"):
+        ledger.submit(order(strike=1340.0), resolved("RELIANCE26SEP1340CE"), now=at(21, 12))
 
 
 def test_no_entries_on_expiry_day(tmp_path):

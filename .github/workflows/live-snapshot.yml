@@ -15,6 +15,7 @@ concurrency:
   cancel-in-progress: false
 env:
   LIVE_URL: ${{ vars.LIVE_URL || 'https://fo-scanner.onrender.com' }}
+  APP_PASSWORD: ${{ secrets.APP_PASSWORD }}         # the server's login (PUBLIC_ACCESS=false); repo secret
 jobs:
   snapshot:
     runs-on: ubuntu-24.04               # pinned: ubuntu-latest moves to Ubuntu 26 from 2026-10-19
@@ -27,8 +28,8 @@ jobs:
           stop=$(TZ=Asia/Kolkata date -d "$d 10:45" +%s)
           mkdir -p data/live_snapshots
           while [ "$(date +%s)" -lt "$stop" ]; do
-            curl -s -o /dev/null --max-time 90 "$LIVE_URL/api/live" || true          # a visit keeps it awake
-            if curl -sf --max-time 90 "$LIVE_URL/api/live/snapshot?date=$d" -o "data/live_snapshots/$d.json"; then
+            curl -s -o /dev/null --max-time 90 -u "user:$APP_PASSWORD" "$LIVE_URL/api/live" || true   # a visit keeps it awake
+            if curl -sf --max-time 90 -u "user:$APP_PASSWORD" "$LIVE_URL/api/live/snapshot?date=$d" -o "data/live_snapshots/$d.json"; then
               echo "snapshot $d collected"; break
             fi
             rm -f "data/live_snapshots/$d.json"

@@ -70,6 +70,7 @@ class State:
         self.feed: LiveFeed | None = None
         self.broker = make_broker(settings)
         self.ledger: PaperLedger | None = None
+        self.mirror = None                   # server.durable.Mirror when LEDGER_GITHUB_TOKEN is set
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.orders_today = Counter()
@@ -156,6 +157,7 @@ def startup() -> None:
     if not settings.orders_enabled:
         state.broker = None
     elif isinstance(state.broker, PaperBroker):
+        _start_mirror()
         state.ledger = PaperLedger(settings.data_dir, QuoteSource(state.feed), always_open=bool(state.feed and state.feed.poll_always))
         margin_fn = None
         if settings.kotak_consumer_key and settings.kotak_mobile and settings.kotak_ucc and settings.kotak_totp_secret and settings.kotak_mpin:
@@ -215,6 +217,23 @@ def _maybe_retrain(max_age_days: int = 31) -> None:
         except Exception as exc:  # noqa: BLE001
             log.error("model retrain failed: %s", exc)
     threading.Thread(target=_job, name="model-retrain", daemon=True).start()
+
+
+def _start_mirror() -> None:
+    """Restore the paper account from its durable copy (if any file is missing locally) and keep mirroring it."""
+    if not settings.ledger_github_token:
+        log.warning("paper account mirror off (no LEDGER_GITHUB_TOKEN): the ledger is lost on every restart")
+        return
+    from server.durable import GitHubStore, Mirror
+    try:
+        store = GitHubStore(settings.ledger_github_repo, settings.ledger_github_branch, settings.ledger_github_token)
+        store.ensure_branch()
+        state.mirror = Mirror(settings.data_dir, store)
+        state.mirror.restore()
+        state.mirror.start()
+    except Exception as exc:  # noqa: BLE001 - the server still runs; the summary shows the mirror is off
+        log.warning("paper account mirror could not start: %s", exc)
+        state.mirror = None
 
 
 def _pull_scan() -> dict:
@@ -405,6 +424,11 @@ def api_order(body: OrderBody, _: str = Depends(auth)):
     if state.ledger is not None:
         try:
             rec = state.ledger.submit(req, resolved, body.stop)
+            if getattr(state, "mirror", None) is not None:
+                try:
+                    state.mirror.flush(force=True)       # an order is never left only on the wiped disk
+                except Exception as exc:  # noqa: BLE001
+                    log.warning("paper account mirror: %s", exc)
         except PaperRejected as exc:                 # risk, liquidity or sizing block: readable, logged
             log.info("paper order blocked %s: %s", resolved["tradingsymbol"], exc)
             raise HTTPException(400, str(exc))
@@ -436,7 +460,8 @@ def _ledger() -> PaperLedger:
 
 @app.get("/api/paper/summary")
 def api_paper_summary(_: str = Depends(auth)):
-    return _ledger().summary()
+    m = getattr(state, "mirror", None)
+    return {**_ledger().summary(), "persistence": m.status if m is not None else {"enabled": False}}
 
 
 @app.get("/api/paper/positions")

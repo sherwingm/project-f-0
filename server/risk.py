@@ -66,7 +66,7 @@ class RiskGate:
                 if dd >= self.s.drawdown_review_pct else None,
                 "limits": {"risk_per_trade": self.per_trade_cap(cap), "risk_per_trade_pct": self.s.risk_per_trade_pct,
                            "margin_cap": round(self.s.margin_cap_pct / 100 * cap, 2), "margin_cap_pct": self.s.margin_cap_pct,
-                           "max_new_per_day": self.s.max_new_positions_per_day, "max_new_per_month": self.s.max_new_positions_per_month,
+                           "max_new_per_day": self.s.max_new_positions_per_day, "max_open": self.s.max_open_positions, "max_new_per_month": self.s.max_new_positions_per_month,
                            "daily_loss_halt_pct": self.s.daily_loss_halt_pct, "weekly_loss_halt_pct": self.s.weekly_loss_halt_pct,
                            "drawdown_review_pct": self.s.drawdown_review_pct},
                 "new_positions_today": ledger.new_positions(now.date()),
@@ -96,6 +96,9 @@ class RiskGate:
             blocked.append(f"{st['new_positions_today']} new positions today already (limit {self.s.max_new_positions_per_day})")
         if st["new_positions_month"] >= self.s.max_new_positions_per_month:
             blocked.append(f"{st['new_positions_month']} new positions this month already (limit {self.s.max_new_positions_per_month})")
+        n_open = len(ledger.state.get("positions", []))
+        if review.get("intent") == "entry" and n_open >= self.s.max_open_positions:
+            blocked.append(f"{n_open} positions open already (limit {self.s.max_open_positions})")
 
         f = review.get("fill")
         lot = int(contract["lot_size"])

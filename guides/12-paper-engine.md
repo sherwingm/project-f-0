@@ -34,9 +34,10 @@ to stop the account from flattering you. Nothing in it can reach a broker.
    ₹35.53/lakh of premium options), SEBI ₹10/crore, stamp duty on the buy side (0.002% / 0.003%), 18% GST
    on brokerage + NSE + SEBI. Reference round trips, one lot of 500: ₹1,000 future ≈ ₹330; ₹30 option ≈ ₹83.
 5. **Risk gate** (`server/risk.py`) — every entry, at preview and again at place; exits are never blocked:
-   - per trade: max loss ≤ `RISK_PER_TRADE_PCT` (0.5%) of capital — premium × qty for a long option,
+   - per trade: max loss ≤ `RISK_PER_TRADE_PCT` (6%, DECISIONS.md) of capital — premium × qty for a long option,
      |entry − stop| × qty otherwise. **Futures and short options need a stop.** Lots are capped to fit.
-   - kill switch: day P&L ≤ −`DAILY_LOSS_HALT_PCT` (1%) → no new entries until the next session; week
+   - at most `MAX_OPEN_POSITIONS` (3) open at once
+   - kill switch: day P&L ≤ −`DAILY_LOSS_HALT_PCT` (2%) → no new entries until the next session; week
      P&L ≤ −`WEEKLY_LOSS_HALT_PCT` (3%) → none until next week. Latched even if P&L recovers.
    - drawdown ≥ `DRAWDOWN_REVIEW_PCT` (10%) from peak equity → a "review labels and sizing" banner, not a block.
    - margin: open positions + this order ≤ `MARGIN_CAP_PCT` (30%) of capital. Kotak's `margin_required`
