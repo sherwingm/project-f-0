@@ -1,9 +1,11 @@
-# Render blueprint: the live server (Kotak live data + paper orders) for the phone.
+# Render blueprint: a MIRROR of the live server. The primary runs always-on on a VM (guides/17-always-on-host.md)
+# and alone holds LEDGER_GITHUB_TOKEN, so only it writes the paper account; this mirror never does. Once the VM's
+# live feed is confirmed, set DATA_PROVIDER=none here (Render dashboard).
 # The EOD scan is built by the GitHub Action (.github/workflows/daily.yml) and read from SCAN_URL, so this
 # server never contacts NSE (which refuses many cloud IPs). Real orders need a SEBI-whitelisted static IP,
 # which Render's free tier does not give: keep PAPER=true here.
-# Free tier: sleeps after 15 min without visits (first open ~50 s); its disk is wiped on every restart. The paper
-# ledger is mirrored to the repo's paper-state branch (LEDGER_GITHUB_TOKEN) and restored on start.
+# Free tier: sleeps after 15 min without visits (first open ~50 s); its disk is wiped on every restart, so a paper
+# account kept here starts over: the one that counts is the primary's (committed to the paper-state branch).
 services:
   - type: web
     name: fo-scanner
@@ -23,7 +25,7 @@ services:
         value: "3.12.7"
       - key: PUBLIC_ACCESS            # true: no login (paper orders only); false: user "user" + APP_PASSWORD
         value: "false"
-      - key: APP_PASSWORD             # the login password (Render dashboard; also a GitHub secret for live-snapshot.yml)
+      - key: APP_PASSWORD             # the login password (Render dashboard)
         sync: false
       - key: KOTAK_CONSUMER_KEY       # from your .env; entered in the Render dashboard, never committed
         sync: false
@@ -45,9 +47,5 @@ services:
         value: "3"
       - key: DAILY_LOSS_HALT_PCT
         value: "2"
-      - key: LEDGER_GITHUB_TOKEN      # fine-grained token, this repo only, Contents read/write (Render dashboard):
-        sync: false                   # the paper account is mirrored to the paper-state branch and survives restarts
-      - key: LEDGER_GITHUB_REPO
-        value: sherwingm/project-f-0
       - key: ANTHROPIC_API_KEY        # optional: the plain-language reading and the evidence verdict
         sync: false

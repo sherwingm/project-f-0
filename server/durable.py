@@ -1,15 +1,23 @@
-"""Durable copy of the paper account: the Render free disk is wiped on every sleep, restart and deploy.
+"""Durable copy of the paper account and the opening snapshots: any server disk can be lost (Render's free
+disk is wiped on every sleep, restart and deploy; a VM can be rebuilt).
 
-The ledger files are mirrored to a branch of the GitHub repo (default `paper-state`) through the contents API.
-Render deploys only `main`, so these commits never redeploy the server. On start, any mirrored file missing from
-the local disk is restored before the ledger loads.
+The files are committed to a branch of the GitHub repo (default `paper-state`) through the contents API, at the
+same paths as on disk (data/paper_ledger.json, data/paper_orders.jsonl, data/paper_queue.jsonl,
+data/live_snapshots/<date>.json). Render and GitHub Pages build only `main`, so these commits redeploy nothing;
+the nightly scan job copies the snapshots from this branch.
 
-    LEDGER_GITHUB_TOKEN   fine-grained token: this repository only, Contents read and write (Render dashboard)
+When it writes (never on a mark alone):
+- at once (checked every FAST_CHECK s): a fill, an exit, a stop trigger, a cash change, a queued order, a new
+  order-log line, a new opening snapshot;
+- a 15-minute snapshot (SNAPSHOT_EVERY) of the ledger when only its marks changed.
+
+On start: the ledger is taken from the durable copy when the local one is missing or older (its `saved_at`),
+the order log when the local one is missing or shorter, the queue and snapshots when missing.
+
+    LEDGER_GITHUB_TOKEN   fine-grained token: this repository only, Contents read and write
     LEDGER_GITHUB_REPO    owner/name (default sherwingm/project-f-0)
     LEDGER_GITHUB_BRANCH  default paper-state
-
-Flushing: a change to the positions, closed trades, cash or the queue is written within FAST_CHECK seconds;
-mark-only changes at most every SLOW_FLUSH seconds. Without a token the mirror is off and says so.
+Set the token on ONE server only (the primary); a mirror server must not write the account.
 """
 from __future__ import annotations
 
@@ -24,16 +32,16 @@ from pathlib import Path
 import requests
 
 log = logging.getLogger("durable")
-FILES = ("paper_ledger.json", "paper_queue.jsonl", "paper_orders.jsonl")
+LEDGER, ORDERS, QUEUE, SNAPSHOTS = "paper_ledger.json", "paper_orders.jsonl", "paper_queue.jsonl", "live_snapshots"
 FAST_CHECK = 10          # seconds between checks
-SLOW_FLUSH = 300         # seconds: mark-only changes are written at most this often
+SNAPSHOT_EVERY = 900     # seconds: the ledger's 15-minute snapshot when only marks changed
 API = "https://api.github.com"
 
 
 class GitHubStore:
     """get / put whole files on one branch through the GitHub contents API."""
 
-    def __init__(self, repo: str, branch: str, token: str, prefix: str = "paper/", session=None):
+    def __init__(self, repo: str, branch: str, token: str, prefix: str = "data/", session=None):
         self.repo, self.branch, self.prefix = repo, branch, prefix
         self.s = session or requests.Session()
         self.s.headers.update({"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
@@ -94,48 +102,72 @@ def material(ledger_bytes: bytes | None) -> str:
 
 
 class Mirror:
-    def __init__(self, data_dir: Path, store, files=FILES):
-        self.dir, self.store, self.files = Path(data_dir), store, files
+    def __init__(self, data_dir: Path, store):
+        self.dir, self.store = Path(data_dir), store
         self._last: dict[str, bytes] = {}
         self._material = ""
-        self._last_flush = 0.0
+        self._last_snapshot = 0.0
         self.status = {"enabled": True, "last_write": None, "error": None, "restored": []}
         self._stop = threading.Event()
 
-    def restore(self) -> list[str]:
-        """Copy each mirrored file that is missing locally back from the store."""
+    def _names(self) -> list[str]:
+        """The mirrored files present locally, as paths relative to the data dir."""
+        names = [n for n in (LEDGER, ORDERS, QUEUE) if (self.dir / n).exists()]
+        snap = self.dir / SNAPSHOTS
+        if snap.is_dir():
+            names += sorted(f"{SNAPSHOTS}/{f.name}" for f in snap.glob("*.json"))
+        return names
+
+    def restore(self, snapshot_days: list[str] | None = None) -> list[str]:
+        """Bring the local disk up to the durable copy: see the module doc for which copy wins."""
         self.dir.mkdir(parents=True, exist_ok=True)
         restored = []
-        for name in self.files:
+        remote = self.store.get(LEDGER)
+        local = (self.dir / LEDGER).read_bytes() if (self.dir / LEDGER).exists() else None
+        if remote is not None and (local is None or saved_at(remote) > saved_at(local)):
+            (self.dir / LEDGER).write_bytes(remote)
+            restored.append(LEDGER)
+        longer = lambda r, l: r.count(b"\n") > l.count(b"\n")             # the order log only grows
+        for name, newer in ((ORDERS, longer), (QUEUE, lambda r, l: False)):
+            r = self.store.get(name)
             p = self.dir / name
-            data = self.store.get(name)
-            if data is None:
-                continue
-            self._last[name] = data
-            if not p.exists():
-                p.write_bytes(data)
+            if r is not None and (not p.exists() or newer(r, p.read_bytes())):
+                p.write_bytes(r)
                 restored.append(name)
-        self._material = material(self._last.get("paper_ledger.json"))
+        for d in snapshot_days or []:
+            p = self.dir / SNAPSHOTS / f"{d}.json"
+            if not p.exists():
+                r = self.store.get(f"{SNAPSHOTS}/{d}.json")
+                if r is not None:
+                    p.parent.mkdir(parents=True, exist_ok=True)
+                    p.write_bytes(r)
+                    restored.append(f"{SNAPSHOTS}/{d}.json")
+        for n in self._names():                               # what the durable copy now matches
+            self._last[n] = (self.dir / n).read_bytes()
+        self._material = material(self._last.get(LEDGER))
+        self._last_snapshot = time.time()
         self.status["restored"] = restored
         if restored:
             log.info("paper account restored from the durable copy: %s", ", ".join(restored))
         return restored
 
     def flush(self, force: bool = False, now: float | None = None) -> list[str]:
-        """Write the files that changed: now for a material change (or force), else at most every SLOW_FLUSH s."""
+        """Write what changed: at once for anything but marks, the ledger's marks every SNAPSHOT_EVERY seconds."""
         now = time.time() if now is None else now
-        cur = {n: (self.dir / n).read_bytes() for n in self.files if (self.dir / n).exists()}
+        cur = {n: (self.dir / n).read_bytes() for n in self._names()}
         changed = [n for n, b in cur.items() if self._last.get(n) != b]
         if not changed:
             return []
-        mat = material(cur.get("paper_ledger.json"))
-        urgent = force or mat != self._material or "paper_queue.jsonl" in changed
-        if not urgent and now - self._last_flush < SLOW_FLUSH:
+        mat = material(cur.get(LEDGER))
+        marks_only = changed == [LEDGER] and mat == self._material
+        due = now - self._last_snapshot >= SNAPSHOT_EVERY
+        if marks_only and not (force or due):
             return []
         for n in changed:
             self.store.put(n, cur[n], f"paper account: {n}")
             self._last[n] = cur[n]
-        self._material, self._last_flush = mat, now
+        if LEDGER in changed:
+            self._material, self._last_snapshot = mat, now
         self.status.update(last_write=time.strftime("%Y-%m-%d %H:%M:%S"), error=None)
         return changed
 
@@ -152,3 +184,10 @@ class Mirror:
 
     def stop(self) -> None:
         self._stop.set()
+
+
+def saved_at(ledger_bytes: bytes | None) -> str:
+    try:
+        return json.loads(ledger_bytes).get("saved_at") or ""
+    except (TypeError, ValueError):
+        return ""

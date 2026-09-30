@@ -64,16 +64,21 @@ mobile connection they work with the browser-like headers the code already sends
 reports `F&O data: unavailable`, run it from a machine/network that can open that URL in a
 browser, or run it on a schedule at home and push the result.
 
-## Put it on your phone (free): GitHub + GitHub Pages + Render
+## Put it on your phone: GitHub + GitHub Pages + an always-on server (Render is a mirror)
 
 | Piece | Where | What it does |
 |---|---|---|
 | Code + daily scan | this GitHub repo, branch `main` | the only copy that matters |
 | EOD page | GitHub Pages, folder `/docs` | labels, charts, verdict card, call tracking; always on |
 | Nightly refresh | GitHub Actions, `.github/workflows/daily.yml`, 20:30 IST Mon–Fri | events → scan → commits `docs/index.html` + `data/scan.json` |
-| Live data + paper orders | Render free web service, `render.yaml` | Kotak LTP, futures OI, depth, live PCR; password-protected |
+| **Live data + paper orders (primary)** | an always-on VM in Mumbai, `guides/17-always-on-host.md` | Kotak LTP, futures OI, depth, live PCR; the paper account; the 09:30 snapshot |
+| Paper account + opening snapshots | branch `paper-state` of this repo (`server/durable.py`) | survives any restart or rebuild of the server |
+| **Render: mirror only** | Render free web service, `render.yaml` | the same app for a second URL; never writes the paper account |
 
-GitHub Pages only serves files, so live Kotak data needs the Python server; Render runs it from the same repo.
+GitHub Pages only serves files, so live Kotak data needs the Python server. The primary is an always-on VM (guide
+17): it never sleeps, so the live feed, the paper ledger and the 09:30 snapshot run every session. **Render is a
+mirror only**: it sleeps when idle and wipes its disk, it has no `LEDGER_GITHUB_TOKEN` (so it never writes the
+paper account), and once the VM's live feed is confirmed its `DATA_PROVIDER` is set to `none`.
 
 One-time setup:
 1. **Repo settings** → Actions → General → Workflow permissions → *Read and write*. Settings → Pages → *Deploy
@@ -81,28 +86,27 @@ One-time setup:
 2. **Event store seed** (once, from the PC that holds `data/events.sqlite`):
    `gh release create state-seed data/events.sqlite --title "event store seed" --notes "first-run seed"`.
    The nightly job keeps the store in the Actions cache after that.
-3. **Render** → sign in with GitHub → New → *Blueprint* → this repo. Enter `APP_PASSWORD` (your choice),
-   `KOTAK_CONSUMER_KEY` (from `.env`), `SCAN_URL` =
-   `https://raw.githubusercontent.com/<user>/<repo>/main/data/scan.json`. The server reads the scan from there
-   at start-up and at 21:00 / 22:00 IST and never contacts NSE itself.
-4. **Phone** → open both URLs → browser menu → *Add to Home Screen*. `render.yaml` sets `PUBLIC_ACCESS=true`: no
-   login, anyone with the URL can see the page and place paper orders; real orders are always refused while it is
-   on. Set it to `false` in Render to ask for user `user` and your `APP_PASSWORD` again.
+3. **The primary server**: guide 17 (VM, systemd, `.env`, Tailscale, `LEDGER_GITHUB_TOKEN`).
+4. **Render (mirror)** → sign in with GitHub → New → *Blueprint* → this repo. Enter `APP_PASSWORD`,
+   `KOTAK_CONSUMER_KEY`, `SCAN_URL` = `https://raw.githubusercontent.com/<user>/<repo>/main/data/scan.json`.
+   `render.yaml` sets `PUBLIC_ACCESS=false`: both servers ask for user `user` and your `APP_PASSWORD`.
+5. **Phone** → open the Pages URL and the VM's URL (over Tailscale) → browser menu → *Add to Home Screen*.
 
 Every day: nothing. If NSE refuses GitHub's runner, the nightly job fails before committing (yesterday's page
-stays) and GitHub emails you; run `python -m scanner.build` at home and push instead. Monthly: Actions →
-*Retrain model* → *Run workflow* (`.github/workflows/retrain.yml`; commits `data/model.pkl`).
+stays) and GitHub emails you. If eod2_data lags NSE, the build fills the missing sessions from NSE's cash-market
+bhavcopy (`scanner/cm_fallback.py`, listed in the scan's `price_fallback_days`). Monthly: Actions → *Retrain
+model* → *Run workflow* (`.github/workflows/retrain.yml`; commits `data/model.pkl`).
 
 **Live labels and the 09:30 snapshot.** During market hours the live page applies the same label rule to live
 inputs every poll (live price change, volume so far pro rata to the time of day, live all-expiry futures OI change,
 live PCR) and shows it as a dashed `live:` pill next to the EOD label. The first poll between 09:30 and 10:30 IST
-writes an opening snapshot; `.github/workflows/live-snapshot.yml` keeps the server awake from 09:05, collects it
-and commits `data/live_snapshots/<date>.json`; the nightly scan embeds it and the scoreboard scores it as its own
-row ("09:30 live labels"), by the same rules as the EOD labels. The model never sees live data.
+writes an opening snapshot; the primary server commits it to the `paper-state` branch with the paper account, and
+the nightly scan copies `data/live_snapshots/<date>.json` from there, embeds it, and the scoreboard scores it as
+its own row ("09:30 live labels"), by the same rules as the EOD labels. The model never sees live data.
 
-Free-tier limits: Render sleeps after 15 min without visits (first open ~50 s) and polls Kotak only while awake;
-its disk is wiped on restart, so the paper ledger starts over after a sleep or deploy (a paid disk, or the server
-at home, keeps it). Nightly scan commits do not redeploy the server (`buildFilter` in `render.yaml`).
+**The paper account** (`data/paper_ledger.json`, `paper_orders.jsonl`, `paper_queue.jsonl`) is committed to the
+`paper-state` branch on every fill, exit and stop trigger, and in a 15-minute snapshot (never on a mark alone);
+on start the server takes the stored copy when its own is missing or older. Only the primary holds the token.
 
 ## Server mode: live quotes, strikes, commentary, orders
 
@@ -129,7 +133,7 @@ itself at 20:30 IST on weekdays (or `POST /api/rebuild`).
 order flow locally. `python -m scanner.demo --install` fills synthetic OI/PCR/strikes into the
 scan (the page shows a "Demo data" notice) when NSE is unreachable.
 
-Deployment: `render.yaml` runs the server on Render's free tier (EOD + commentary + live quotes
+Deployment: the primary server runs always-on on a VM (guide 17); `render.yaml` runs a mirror on Render's free tier (EOD + commentary + live quotes
 if you add Kite keys). Because API order placement must come from a static IP whitelisted with
 your broker, keep `PAPER=true` on shared hosts; for real orders run the server at home or on a
 VPS with a fixed IP and reach it over Tailscale/HTTPS.

@@ -145,6 +145,7 @@ class PaperLedger:
                 "peak_equity": float(capital), "created_at": datetime.now(IST).isoformat(timespec="seconds")}
 
     def _save(self) -> None:
+        self.state["saved_at"] = datetime.now(IST).isoformat(timespec="seconds")   # the durable copy compares it
         tmp = self.path.with_suffix(".json.tmp")
         tmp.write_text(json.dumps(self.state, indent=1), encoding="utf-8")
         os.replace(tmp, self.path)

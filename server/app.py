@@ -229,7 +229,7 @@ def _start_mirror() -> None:
         store = GitHubStore(settings.ledger_github_repo, settings.ledger_github_branch, settings.ledger_github_token)
         store.ensure_branch()
         state.mirror = Mirror(settings.data_dir, store)
-        state.mirror.restore()
+        state.mirror.restore(snapshot_days=[datetime.now(IST).strftime("%Y-%m-%d")])
         state.mirror.start()
     except Exception as exc:  # noqa: BLE001 - the server still runs; the summary shows the mirror is off
         log.warning("paper account mirror could not start: %s", exc)
