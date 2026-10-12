@@ -15,7 +15,10 @@ editing this file on purpose, in its own commit, with the reason.
   - at most **3 open positions**;
   - **daily loss halt at 2 %** of capital (no new entries until the next session); the other defaults in guide 12
     are unchanged.
-  - Backtests size a position inside a **₹10,000–30,000 budget band**.
+  - Backtests size **one lot costing ₹600–8,000** (lot size × entry fill), from S1 v6 on (2026-10-12). Reason: at
+    the at-the-money strike, v4's ₹2,000–8,000 budget left 3 trades and v5's ₹10,000–30,000 band left 57, short of
+    the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used
+    ₹10,000–30,000.
 - **`ALLOW_LOTTERY=false`.**
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
 - **Long options only.** No option selling, no spreads, no futures positions: every trade is a bought CE or
@@ -54,6 +57,7 @@ re-tuning the same rules. Every report states the test-window / holdout split.
 | S1 v3 · strength score, one trade a day (`strategies/S1_v3_strength_score.md`) | **Closed** at the diagnostic stop | Selected stocks, signed, net of the leave-one-out sector, 2021-2024: 5 sessions −0.16 %, t −1.66; 20 sessions −0.46 %, t −2.34 (< 1.5: stop); N 1,923. Option backtest not run (`data/results/S1_v3_backtest_report.md`) |
 | S1 v4 · results-beat continuation, long calls (`strategies/S1_v4_results_beat.md`) | **Closed**: failed the gate | Test window 2021-2024, 20-session exits: arm A 3 trades, mean −13.9 %, t −0.48; arm B 1 trade. Of 434 beats reaching entry, 320 (A) had an ATM call premium per lot above the ₹8,000 budget cap (median ₹25,000–37,000 per lot) and 110 traded < 50 contracts on day +1. Futures diagnostic (not a trade), 20 sessions net of 0.1 %: A +1.17 %, t 2.40, N 432 (2021-22 −1.24 %, 2023-24 +3.04 %); B +3.12 %, t 3.76, N 152 (`data/results/S1_v4_backtest_report.md`) |
 | S1 v5 · results-beat continuation, long calls, ₹10,000–30,000 band (`strategies/S1_v5_results_beat.md`) | **Closed**: failed the gate (N) | Test window 2021-2024, 20-session exits. Arm A: 170 trades, mean −1.23 % of premium, t −0.13 (2021-22 −17.0 %, 2023-24 +6.3 %). Arm B (strong sector): 57 trades, mean +42.7 %, median −14.0 %, t 2.29, positive in both sub-periods (+42.2 %, +42.9 %), N 57 < 200. Of the beats reaching entry, 131 (A) had a one-lot premium above ₹30,000 and 110 traded < 50 contracts on day +1 (`data/results/S1_v5_backtest_report.md`) |
+| S1 v6 · results-beat continuation, long calls, ₹600–8,000 per lot by walking up the strikes, decay exit (`strategies/S1_v6_results_beat_walk.md`) | **Defined**, not yet run | — |
 
 ## Closed earlier ideas
 Closed before the S1 structure; not reopened except as a component of an S1 version.
