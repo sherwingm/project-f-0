@@ -1,4 +1,8 @@
-# S1 v6 · Results-beat continuation, long calls, ₹600–8,000 per lot, strike walk, decay exit
+# S1 v6 · Results-beat continuation, long calls, ₹600–8,000 per lot, strike walk, decay exit — CLOSED
+
+**Status: closed, failed the gate** (`DECISIONS.md`, 2026-10-13). Primary variant: arm A 234 trades, mean −19.0 %,
+t −2.32; arm B 75 trades, mean −3.7 %, t −0.17. The 3-session decay exit sold after 3.6 sessions on average, long before
+the 20-session drift the futures diagnostic shows (B +3.66 %, t 4.25). Report: `data/results/S1_v6_backtest_report.md`.
 
 S1, version 6, under the gate in `DECISIONS.md`. **Pre-registered**: every choice is fixed here before any v6 run.
 Long options only: every trade is a bought call; maximum loss = the premium paid.
