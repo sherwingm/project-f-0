@@ -509,15 +509,26 @@ DEPTH_LEVELS = 5
 
 
 def _parse_quote(q: dict, fo: bool) -> dict:
+    """Kotak's quote (quote_type="all"; fields checked against a live answer 2026-10-13): avg_cost is the day's
+    average traded price, ohlc.close the previous close, last_volume the day's volume so far."""
     d = {"last_price": _f(q.get("ltp")), "volume": _i(q.get("last_volume")),
-         "timestamp": _ts(q.get("lstup_time")), "depth": _depth(q.get("depth"))}
+         "timestamp": _ts(q.get("lstup_time")), "depth": _depth(q.get("depth")),
+         "atp": _pos(q.get("avg_cost")), "ltq": _i(q.get("last_traded_quantity")),
+         "buy_qty": _i(q.get("total_buy")), "sell_qty": _i(q.get("total_sell")),
+         "wk52_high": _pos(q.get("year_high")), "wk52_low": _pos(q.get("year_low")),
+         "lower_circuit": _pos(q.get("low_price_range")), "upper_circuit": _pos(q.get("high_price_range"))}
+    ohlc = {k: _pos((q.get("ohlc") or {}).get(k)) for k in ("open", "high", "low", "close")}
+    if any(ohlc.values()):
+        d["ohlc"] = ohlc
     if fo:
         d["open_interest"] = _i(q.get("open_int"))
-    else:
-        prev = _f((q.get("ohlc") or {}).get("close"))
-        if prev:
-            d["ohlc"] = {"close": prev}
     return d
+
+
+def _pos(v):
+    """A positive float, else None (Kotak sends "0" for fields it has no value for, e.g. a future's 52-week high)."""
+    f = _f(v)
+    return f if f and f > 0 else None
 
 
 def _depth(raw) -> dict:

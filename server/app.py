@@ -6,7 +6,10 @@ Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
     GET  /                         the page, with the latest scan and server capabilities embedded
     GET  /api/scan                 scan.json
     GET  /api/live                 latest intraday quotes (empty when the feed is off or market closed)
-    GET  /api/chain/{symbol}       nearest-expiry strikes; live premiums/OI when the feed is on
+    GET  /api/chain/{symbol}       nearest-expiry strikes; live premium / % change / volume / OI / ATP / bid-ask when the
+                                   feed is on (and ATM +/- 5 strikes are then polled for 30 min for their charts)
+    GET  /api/intraday/{symbol}    chart candles from the feed's ticks: ?tf=1|5|15 &leg=stock|fut|CE:<strike>|PE:<strike>
+    GET  /api/news/{symbol}        recent news headlines (Google News RSS, cached 15 min)
     GET  /api/commentary/{symbol}  plain-language reading (needs ANTHROPIC_API_KEY)
     GET  /api/verdict/{symbol}     evidence verdict: numbers + web-searched news (needs ANTHROPIC_API_KEY); ?refresh=1 bypasses the day's cache
     POST /api/order/preview        resolve the contract, quantity, margin -> confirmation token
@@ -37,7 +40,9 @@ from pydantic import BaseModel
 
 from scanner.build import ROOT, build
 from server.broker import OrderRequest, PaperBroker, check_token, make_broker, preview_token, tradingsymbol
+from server.candles import candles
 from server.liquidity import read_refusals
+from server.news import News
 from server.paper import PaperLedger, PaperRejected, QuoteSource, trade_stats
 from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
@@ -74,7 +79,8 @@ class State:
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.orders_today = Counter()
-        self.fut_source = None               # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
+        self.news = News()
+        self.fut_source = None              # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
 
     def load_scan(self, path: Path) -> None:
         scan = json.loads(path.read_text())
@@ -305,23 +311,76 @@ def api_chain(symbol: str, _: str = Depends(auth)):
     if not s or not s.get("chain"):
         raise HTTPException(404, "no option chain for this symbol in the current scan")
     chain = json.loads(json.dumps(s["chain"]))
+    sym = symbol.upper()
     if state.feed and (state.feed.poll_always or market_open()):
-        keys = []
-        for row in chain["strikes"]:
-            for t in ("CE", "PE"):
-                keys.append("NFO:" + tradingsymbol(symbol.upper(), t, chain["expiry"], row["strike"]))
+        key = {(row["strike"], t): "NFO:" + tradingsymbol(sym, t, chain["expiry"], row["strike"])
+               for row in chain["strikes"] for t in ("CE", "PE")}
         try:
-            q = state.feed.provider.quote(keys)
+            q = state.feed.provider.quote(list(key.values()))
             for row in chain["strikes"]:
                 for t in ("CE", "PE"):
-                    k = "NFO:" + tradingsymbol(symbol.upper(), t, chain["expiry"], row["strike"])
-                    if k in q:
-                        row[f"{t.lower()}_live_ltp"] = q[k].get("last_price")
-                        row[f"{t.lower()}_live_oi"] = q[k].get("open_interest")
+                    row.update(_live_leg(q.get(key[(row["strike"], t)]), t.lower(), row))
             chain["live_at"] = datetime.now(IST).strftime("%H:%M:%S")
         except Exception as exc:  # noqa: BLE001
             chain["live_error"] = str(exc)
+        strikes = sorted(row["strike"] for row in chain["strikes"])
+        atm = chain.get("atm") if chain.get("atm") in strikes else (strikes[len(strikes) // 2] if strikes else None)
+        if atm is not None:                           # the options around the money get polled for their charts
+            i = strikes.index(atm)
+            state.feed.watch_options(sym, [key[(k, t)] for k in strikes[max(0, i - 5): i + 6] for t in ("CE", "PE")])
     return chain
+
+
+def _live_leg(q: dict | None, t: str, row: dict) -> dict:
+    """One option's live fields for the chain table: price, % change vs its previous close, volume, OI, OI change
+    vs the scan's close, average traded price, best bid / ask."""
+    if not q:
+        return {}
+    ltp, prev = q.get("last_price"), (q.get("ohlc") or {}).get("close") or q.get("prev_close") or row.get(f"{t}_close")
+    oi, oi_eod = q.get("open_interest"), row.get(f"{t}_oi")
+    depth = q.get("depth") or {}
+    return {f"{t}_live_ltp": ltp, f"{t}_live_oi": oi, f"{t}_live_vol": q.get("volume"), f"{t}_live_atp": q.get("atp"),
+            f"{t}_live_chg_pct": round((ltp / prev - 1) * 100, 2) if ltp and prev else None,
+            f"{t}_live_oi_chg": oi - oi_eod if oi is not None and oi_eod is not None else None,
+            f"{t}_bid": (depth.get("bid") or [(None,)])[0][0], f"{t}_ask": (depth.get("ask") or [(None,)])[0][0]}
+
+
+@app.get("/api/intraday/{symbol}")
+def api_intraday(symbol: str, tf: int = 1, leg: str = "stock", _: str = Depends(auth)):
+    """Candles from the live feed's ticks since the server's first poll today (see server/candles.py)."""
+    sym = symbol.upper()
+    if tf not in (1, 3, 5, 15, 30):
+        raise HTTPException(400, "tf must be 1, 3, 5, 15 or 30 (minutes)")
+    if not state.feed:
+        return {"symbol": sym, "leg": leg, "tf": tf, "candles": [], "since": None, "note": "live feed is off"}
+    if leg == "stock":
+        ticks, cols, key = state.feed.ticks(sym), (1, 2, 3), None
+    elif leg == "fut":
+        ticks, cols, key = state.feed.ticks(sym), (4, 6, 7), None
+    else:
+        typ, _sep, strike = leg.upper().partition(":")
+        s = state.stocks.get(sym)
+        exp = ((s or {}).get("chain") or {}).get("expiry")
+        if typ not in ("CE", "PE") or not exp:
+            raise HTTPException(400, "leg must be stock, fut, CE:<strike> or PE:<strike> of a stock with a chain")
+        try:
+            key = "NFO:" + tradingsymbol(sym, typ, exp, float(strike))
+        except ValueError:
+            raise HTTPException(400, "bad strike")
+        ticks, cols = state.feed.option_ticks(key), (1, 2, 3)
+    bars = candles(ticks, tf, *cols)
+    return {"symbol": sym, "leg": leg, "tf": tf, "key": key, "candles": bars,
+            "since": datetime.fromtimestamp(ticks[0][0], IST).strftime("%H:%M") if ticks else None,
+            "ticks": len(ticks), "market_open": market_open()}
+
+
+@app.get("/api/news/{symbol}")
+def api_news(symbol: str, _: str = Depends(auth)):
+    sym = symbol.upper()
+    s = state.stocks.get(sym)
+    if not s:
+        raise HTTPException(404, f"{sym} is not in the scan")
+    return state.news.get(sym, s.get("name"))
 
 
 @app.get("/api/commentary/{symbol}")
