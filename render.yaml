@@ -24,7 +24,7 @@ services:
       - key: PYTHON_VERSION
         value: "3.12.7"
       - key: PUBLIC_ACCESS            # true: no login (paper orders only); false: user "user" + APP_PASSWORD
-        value: "false"
+        value: "true"
       - key: APP_PASSWORD             # the login password (Render dashboard)
         sync: false
       - key: KOTAK_CONSUMER_KEY       # from your .env; entered in the Render dashboard, never committed
