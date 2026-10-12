@@ -13,7 +13,7 @@
    "2026-10-09"
   ],
   "as_of_label": "Fri 09 Oct 2026",
-  "generated_at_ist": "2026-10-10 01:36 IST",
+  "generated_at_ist": "2026-10-13 03:49 IST",
   "universe_size": 213,
   "stocks_with_data": 213,
   "missing_symbols": [],
@@ -1049,54 +1049,54 @@
    "counts": {
     "insider": 14265,
     "block_deal": 3054,
-    "results_date": 2955,
+    "results_date": 2973,
     "results": 2862,
     "capacity": 2483,
-    "ban": 1736,
+    "ban": 1740,
     "bulk_deal": 1569,
     "order_win": 1155,
     "rating": 1151,
-    "analyst_view": 12
+    "analyst_view": 14
    },
    "sources": {
     "nse_ann": {
-     "last_success": "2026-10-10T01:22:50+05:30",
+     "last_success": "2026-10-13T03:47:09+05:30",
      "error": null
     },
     "bse_ann": {
-     "last_success": "2026-10-10T01:23:53+05:30",
+     "last_success": "2026-10-13T03:48:12+05:30",
      "error": null
     },
     "nse_block": {
-     "last_success": "2026-10-10T01:24:13+05:30",
+     "last_success": "2026-10-13T03:48:12+05:30",
      "error": null
     },
     "nse_bulk": {
-     "last_success": "2026-10-10T01:24:33+05:30",
+     "last_success": "2026-10-13T03:48:13+05:30",
      "error": null
     },
     "nse_ban": {
-     "last_success": "2026-10-10T01:28:06+05:30",
+     "last_success": "2026-10-13T03:48:14+05:30",
      "error": null
     },
     "nse_pit": {
-     "last_success": "2026-10-09T01:47:41+05:30",
-     "error": "https://www.nseindia.com/api/corporates-pit?index=equities&from_date=10-10-2026&to_date=10-10-2026: ReadTimeout: HTTPSConnectionPool(host='www.nseindia.com', port=443): Read timed out. (read timeout=30)"
+     "last_success": "2026-10-13T03:48:15+05:30",
+     "error": null
     },
     "rss:et_markets": {
-     "last_success": "2026-10-10T01:31:59+05:30",
+     "last_success": "2026-10-13T03:48:17+05:30",
      "error": null
     },
     "nse_bm": {
-     "last_success": "2026-10-10T01:31:59+05:30",
+     "last_success": "2026-10-13T03:48:17+05:30",
      "error": null
     },
     "rss:moneycontrol": {
-     "last_success": "2026-10-10T01:33:02+05:30",
+     "last_success": "2026-10-13T03:49:21+05:30",
      "error": null
     },
     "rss:business_standard": {
-     "last_success": "2026-10-10T01:33:02+05:30",
+     "last_success": "2026-10-13T03:49:21+05:30",
      "error": null
     }
    }
@@ -3271,14 +3271,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-21",
+      "sessions": 8,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 8
+    }
    },
    "model": {
-    "p_down": 0.34,
-    "p_flat": 0.372,
-    "p_up": 0.288,
+    "p_down": 0.354,
+    "p_flat": 0.364,
+    "p_up": 0.282,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -5109,6 +5118,12 @@
       "date": "2026-10-10",
       "sessions": 0,
       "subject": "AMBUJACEM out of the F&O ban"
+     },
+     {
+      "type": "ban",
+      "date": "2026-10-13",
+      "sessions": 2,
+      "subject": "AMBUJACEM in F&O ban for 2026-10-13"
      }
     ],
     "analyst_view": [],
@@ -10875,6 +10890,12 @@
       "date": "2026-10-10",
       "sessions": 0,
       "subject": "BANDHANBNK out of the F&O ban"
+     },
+     {
+      "type": "ban",
+      "date": "2026-10-13",
+      "sessions": 2,
+      "subject": "BANDHANBNK in F&O ban for 2026-10-13"
      }
     ],
     "analyst_view": [],
@@ -14737,14 +14758,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-23",
+      "sessions": 10,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 10
+    }
    },
    "model": {
-    "p_down": 0.325,
-    "p_flat": 0.385,
-    "p_up": 0.291,
+    "p_down": 0.314,
+    "p_flat": 0.392,
+    "p_up": 0.293,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -18971,14 +19001,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-22",
+      "sessions": 9,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026 and dividend"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 9
+    }
    },
    "model": {
-    "p_down": 0.356,
+    "p_down": 0.353,
     "p_flat": 0.36,
-    "p_up": 0.284,
+    "p_up": 0.287,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -21769,14 +21808,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-16",
+      "sessions": 5,
+      "subject": "Board Meeting Intimation for approval of Un-Audited Financial Results (Standalone and Consolidated) for the quarter and half-year ended 30th September 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 5
+    }
    },
    "model": {
-    "p_down": 0.352,
-    "p_flat": 0.334,
-    "p_up": 0.314,
+    "p_down": 0.337,
+    "p_flat": 0.373,
+    "p_up": 0.29,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -30574,14 +30622,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-22",
+      "sessions": 9,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 9
+    }
    },
    "model": {
-    "p_down": 0.365,
-    "p_flat": 0.307,
-    "p_up": 0.328,
+    "p_down": 0.36,
+    "p_flat": 0.295,
+    "p_up": 0.346,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -34035,14 +34092,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-21",
+      "sessions": 8,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 8
+    }
    },
    "model": {
-    "p_down": 0.324,
-    "p_flat": 0.404,
-    "p_up": 0.272,
+    "p_down": 0.322,
+    "p_flat": 0.407,
+    "p_up": 0.27,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -34385,14 +34451,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-15",
+      "sessions": 4,
+      "subject": "Meeting of Board of Directors of the Bank is scheduled on 15th October 2026, inter alia, to consider and approve the Unaudited (Reviewed) financial results of the Bank for the second quarter and HY period of FY 2026-27 ended on September 30, 2026 and Fund raising plan of the Bank other than Equity Capital"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 4
+    }
    },
    "model": {
-    "p_down": 0.353,
-    "p_flat": 0.402,
-    "p_up": 0.245,
+    "p_down": 0.365,
+    "p_flat": 0.362,
+    "p_up": 0.273,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -34405,7 +34480,7 @@
      "data": 0,
      "model": 0,
      "events": 0,
-     "model_raw": -1,
+     "model_raw": 0,
      "model_weight": 0.0
     },
     "events_score": 0.0,
@@ -36869,14 +36944,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-19",
+      "sessions": 6,
+      "subject": "To consider and approve the audited financial results (Standalone & Consolidated) and audited financial statements (Standalone & Consolidated) of the Company for the quarter and half year ended September 30, 2026."
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 6
+    }
    },
    "model": {
-    "p_down": 0.355,
-    "p_flat": 0.32,
-    "p_up": 0.325,
+    "p_down": 0.353,
+    "p_flat": 0.313,
+    "p_up": 0.334,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -40070,7 +40154,14 @@
       "source": "nse_ban"
      }
     ],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "ban",
+      "date": "2026-10-13",
+      "sessions": 2,
+      "subject": "KAYNES in F&O ban for 2026-10-13"
+     }
+    ],
     "analyst_view": [],
     "flags": {
      "ban": false
@@ -42217,6 +42308,12 @@
       "date": "2026-10-10",
       "sessions": 0,
       "subject": "LICHSGFIN out of the F&O ban"
+     },
+     {
+      "type": "ban",
+      "date": "2026-10-13",
+      "sessions": 2,
+      "subject": "LICHSGFIN in F&O ban for 2026-10-13"
      }
     ],
     "analyst_view": [],
@@ -52747,14 +52844,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-16",
+      "sessions": 5,
+      "subject": "OBEROI REALTY LIMITED has informed the Exchange about Board Meeting to be held on 16-Oct-2026 to consider and approve the Half Yearly Unaudited Financial results of the Company for the period ended September 2026 and Dividend."
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 5
+    }
    },
    "model": {
-    "p_down": 0.345,
-    "p_flat": 0.366,
-    "p_up": 0.289,
+    "p_down": 0.314,
+    "p_flat": 0.431,
+    "p_up": 0.255,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -57656,14 +57762,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-16",
+      "sessions": 5,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 5
+    }
    },
    "model": {
-    "p_down": 0.316,
-    "p_flat": 0.427,
-    "p_up": 0.257,
+    "p_down": 0.332,
+    "p_flat": 0.39,
+    "p_up": 0.278,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
