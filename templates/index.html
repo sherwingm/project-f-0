@@ -1496,7 +1496,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   setTab = function (k) { _setTab(k); try { history.replaceState(null, "", "#" + encodeURIComponent(sel) + (k !== "overview" ? "/" + k : "")); } catch (e) { /* file:// */ } };
 
   // ---- start
-  saveAlerts(); renderSegs(); renderTabs();
+  saveAlerts(); renderSegs(); renderTabs(); renderList();
   if (!fromHash()) { if (sel) select(sel); else render(); if (isPhone()) setMView("list"); }
   navState();
 })();
