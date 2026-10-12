@@ -17,6 +17,7 @@ services:
       ignoredPaths:
         - docs/**
         - data/scan.json
+        - data/financials.json
         - data/event_patterns.json
         - data/live_snapshots/**
         - "**/*.md"

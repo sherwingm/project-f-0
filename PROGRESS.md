@@ -2,7 +2,26 @@
 
 Updated at the end of every session. `DECISIONS.md` is authoritative for rules and the strategy record.
 
-**State as of 2026-09-30.**
+**State as of 2026-10-13.**
+
+## 2026-10-13
+- New PC checkout (`D:\project-f-0-main\project-f-0-main`, linked to `origin/main`). Kotak consumer key regenerated
+  (local `.env` and Render). Render: `PUBLIC_ACCESS=true` (no login, single user; real orders stay refused).
+- **S1 v6 closed** (DECISIONS.md): the 3-session decay exit sold after 3.6 sessions on average and lost money
+  (arm A −19 %, t −2.3; arm B −3.7 %, N 75), while the futures diagnostic of the same signal stayed strong
+  (B +3.66 % over 20 sessions, t 4.25). The 2021-22 results events were back-filled into the local event store.
+- **Trading-terminal page** (`templates/index.html`, one file for Pages and the server): watchlist with tick time,
+  % change, volume and pins; candle chart (TradingView Lightweight Charts 4.2.0) with volume, ATP line and previous
+  close, timeframes 1m/5m/15m (server ticks) and 1D (120 sessions from the scan); option charts for ATM ± 5 strikes of
+  an opened stock; tabs Overview (OHLC, ATP, buy/sell qty, 52-week range, futures, depth), Options (live chain),
+  News (Google News headlines + filings), Results (3 quarters, QoQ / YoY), Signals (verdict card, AI); heatmap,
+  top movers, price alerts, keyboard shortcuts, light/dark, phone layout, links like `#RELIANCE/options`.
+- Server: Kotak's `avg_cost` (ATP), OHLC, LTQ, buy/sell qty, 52-week range, circuits now parsed; intraday tick
+  buffer (`server/live.py`) and `server/candles.py`; `/api/intraday`, `/api/news`, richer `/api/chain`.
+- Quarterly results: `scanner/financials.py` (NSE Integrated Filing XBRL from Mar 2025, older XBRL for YoY) →
+  `data/financials.json`, refreshed nightly for stocks that just reported (40 a run at most).
+- Intraday charts exist only for the time the server was polling: Render's free tier sleeps after 15 minutes
+  without visits, so keep the page open during market hours (or move to the VM).
 
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
@@ -54,7 +73,8 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   market hours.
 
 ## Next
-1. Create the always-on VM (guide 17; Oracle Mumbai), token in its `.env`; confirm the live feed and a restart.
-2. Then Render becomes the mirror: `DATA_PROVIDER=none` and delete `LEDGER_GITHUB_TOKEN` there.
-3. Decide the next S1 version (starting from the diagnostic, DECISIONS.md).
-4. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
+1. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
+2. Decide S1 v7 from the diagnostic: the results-beat drift is real in the stock (v4–v6 futures diagnostics),
+   the losses come from the option expression and exits (DECISIONS.md).
+3. Create the always-on VM (guide 17; Oracle Mumbai), token in its `.env`; confirm the live feed and a restart.
+   Then Render becomes the mirror: `DATA_PROVIDER=none` and delete `LEDGER_GITHUB_TOKEN` there.

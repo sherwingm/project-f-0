@@ -107,8 +107,14 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
     except Exception as exc:  # noqa: BLE001 - the scan never fails for want of events
         log.warning("events join failed: %s", exc)
         ev, ev_status = {}, {"available": False, "error": str(exc)}
+    names, sectors = _names_and_sectors()
+    from .financials import load as load_financials, summary as financials_summary
+    fin = load_financials()                            # data/financials.json (python -m scanner.financials)
     stocks = []
     for r in rows:
+        r["name"] = names.get(r["symbol"])
+        r["sector"] = sectors.get(r["symbol"])
+        r["financials"] = financials_summary(fin[r["symbol"]]) if r["symbol"] in fin else None
         f = fo_by_symbol.get(r["symbol"], {})
         r.update({
             "fut_oi": _int(f.get("fut_oi")),
@@ -191,6 +197,24 @@ def render(scan: dict, template: Path, out: Path) -> None:
         raise ValueError("template is missing the /*__SCAN_DATA__*/ placeholder")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html.replace("/*__SCAN_DATA__*/", payload), encoding="utf-8")
+
+
+def _names_and_sectors() -> tuple[dict[str, str], dict[str, str]]:
+    """Company names (NSE EQUITY_L.csv, cached by the events runner) and sectors (data/sector_map.csv) for the page;
+    either may be empty, the page then shows the symbol alone."""
+    names: dict[str, str] = {}
+    sectors: dict[str, str] = {}
+    try:
+        from .events.run import load_names
+        names = load_names()
+    except Exception as exc:  # noqa: BLE001 - names are cosmetic
+        log.warning("company names unavailable: %s", exc)
+    try:
+        from .sectors import load_map
+        sectors = load_map()
+    except Exception as exc:  # noqa: BLE001
+        log.warning("sector map unavailable: %s", exc)
+    return names, sectors
 
 
 def _fo_warnings(stocks: list[dict], fo_status: str, chain_status: str, chain_problems: dict[str, str]) -> list[dict]:

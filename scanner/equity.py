@@ -18,6 +18,7 @@ log = logging.getLogger(__name__)
 RAW_BASE = "https://raw.githubusercontent.com/BennyThadikaran/eod2_data/main/daily/{name}.csv"
 VOL_WINDOW = 20      # sessions in the average-volume baseline
 CHART_DAYS = 30      # closes kept for the expandable chart
+DAILY_DAYS = 120     # sessions of daily OHLCV for the page's candle chart
 INDEX_FILE = "nifty 50"   # eod2's NIFTY 50 file (daily/nifty 50.csv): the market the scoreboard adjusts for
 
 
@@ -90,7 +91,17 @@ def equity_metrics_one(symbol: str, df: pd.DataFrame, as_of: pd.Timestamp | None
         "chart_dates": [d.strftime("%Y-%m-%d") for d in closes.index],
         "chart_closes": [round(float(c), 2) for c in closes.values],
         "chart_volume_ratios": [None if pd.isna(v) else round(float(v), 2) for v in ratios.values],
+        "daily": daily_ohlcv(df),
     }
+
+
+def daily_ohlcv(df: pd.DataFrame, days: int = DAILY_DAYS) -> dict:
+    """The last `days` sessions as parallel arrays for the page's daily candle chart:
+    {"d": dates, "o", "h", "l", "c": prices, "v": volumes}."""
+    t = df.iloc[-days:]
+    r = lambda col: [None if pd.isna(x) else round(float(x), 2) for x in t[col].values]   # noqa: E731
+    return {"d": [d.strftime("%Y-%m-%d") for d in t.index], "o": r("Open"), "h": r("High"), "l": r("Low"),
+            "c": r("Close"), "v": [None if pd.isna(x) else int(x) for x in t["Volume"].values]}
 
 
 def index_closes(local_dir: Path | None, as_of: pd.Timestamp, name: str = INDEX_FILE, days: int = CHART_DAYS,

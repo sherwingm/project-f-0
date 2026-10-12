@@ -55,6 +55,10 @@ jobs:
           git fetch --depth=1 origin paper-state 2>/dev/null || { echo "no paper-state branch yet"; exit 0; }
           git checkout FETCH_HEAD -- data/live_snapshots 2>/dev/null || echo "no snapshots on paper-state yet"
           git reset -q                                    # keep them as working-tree files; staged below
+      - name: Quarterly results numbers for stocks that just reported (never blocks the build)
+        timeout-minutes: 20
+        continue-on-error: true
+        run: python -m scanner.financials --limit 40 || true
       - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
         run: python -m scanner.build
       - name: Refuse a scan without F&O data
@@ -71,6 +75,7 @@ jobs:
           git config user.name "fo-scanner-bot"
           git config user.email "bot@users.noreply.github.com"
           git add docs/index.html data/scan.json data/event_patterns.json data/cache/fo_universe.txt data/cache/events_status.json
+          git add data/financials.json 2>/dev/null || true
           git add data/live_snapshots 2>/dev/null || true
           git diff --cached --quiet || git commit -m "scan: $(python -c "import json;print(json.load(open('data/scan.json'))['meta']['as_of'])")"
           git push
