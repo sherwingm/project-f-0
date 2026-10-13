@@ -10,6 +10,10 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - **S1 v6 closed** (DECISIONS.md): the 3-session decay exit sold after 3.6 sessions on average and lost money
   (arm A −19 %, t −2.3; arm B −3.7 %, N 75), while the futures diagnostic of the same signal stayed strong
   (B +3.66 % over 20 sessions, t 4.25). The 2021-22 results events were back-filled into the local event store.
+- **S1 v7 closed** (DECISIONS.md): current-month calls down to 3 sessions left, 5-session decay exit, 50 % stop,
+  T-1. Arm A −17.3 % (t −1.5); arm B +31.8 % but t 1.1 and N 84. Near-expiry calls lost most (A −37 %): the stop
+  closed nearly all of them within 2 sessions. Per-trade sheets: `python -m scanner.trade_sheet` (option peak and
+  dip while held and after the exit), `data/results/S1_v6_trade_sheet.xlsx`, `S1_v7_trade_sheet.xlsx`.
 - **Trading-terminal page** (`templates/index.html`, one file for Pages and the server): watchlist with tick time,
   % change, volume and pins; candle chart (TradingView Lightweight Charts 4.2.0) with volume, ATP line and previous
   close, timeframes 1m/5m/15m (server ticks) and 1D (120 sessions from the scan); option charts for ATM ± 5 strikes of
@@ -74,7 +78,8 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 
 ## Next
 1. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
-2. Decide S1 v7 from the diagnostic: the results-beat drift is real in the stock (v4–v6 futures diagnostics),
-   the losses come from the option expression and exits (DECISIONS.md).
+2. Decide S1 v8 from the diagnostic: the results-beat drift is real in the stock (v4–v7 futures diagnostics),
+   the losses come from the option expression and exits (DECISIONS.md). 2021-2024 is now heavily reused:
+   any next version should be judged mainly on the 2025+ holdout.
 3. Create the always-on VM (guide 17; Oracle Mumbai), token in its `.env`; confirm the live feed and a restart.
    Then Render becomes the mirror: `DATA_PROVIDER=none` and delete `LEDGER_GITHUB_TOKEN` there.

@@ -1,4 +1,6 @@
-# S1 v7 · Results-beat continuation, long calls, near-expiry calls allowed, 5-session decay exit + 50 % stop
+# S1 v7 · Results-beat continuation, long calls, near-expiry calls allowed, 5-session decay exit + 50 % stop — CLOSED
+
+**Status: closed, failed the gate** (`DECISIONS.md`, 2026-10-13). Primary variant: arm A 258 trades, mean −17.3 %, t −1.52; arm B 84 trades, mean +31.8 %, t 1.07, N < 200. Near-expiry trades lost most (A −37.3 %, B −12.1 %); the 50 % stop closed 87–95 % of them within about 2 sessions. Report: `data/results/S1_v7_backtest_report.md`; per-trade sheet: `data/results/S1_v7_trade_sheet.xlsx`.
 
 S1, version 7, under the gate in `DECISIONS.md`. **Pre-registered**: every choice is fixed here before any v7 run.
 Long options only: every trade is a bought call; maximum loss = the premium paid.
