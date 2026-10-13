@@ -75,6 +75,7 @@ class State:
         self.feed: LiveFeed | None = None
         self.broker = make_broker(settings)
         self.ledger: PaperLedger | None = None
+        self.rules = None                    # server.rules.RuleTrader: the S1 rule trades in the paper account
         self.mirror = None                   # server.durable.Mirror when LEDGER_GITHUB_TOKEN is set
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
@@ -172,7 +173,10 @@ def startup() -> None:
         state.ledger.risk = RiskGate(settings, margin_fn)
         state.broker.ledger = state.ledger
         if state.feed:
+            from server.rules import RuleTrader
             state.feed.hooks.append(lambda feed: state.ledger.on_poll(feed))
+            state.rules = RuleTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("forward"))
+            state.feed.hooks.append(lambda feed: state.rules.on_poll(datetime.now(IST)))
         log.info("paper engine on: capital Rs %s, fills against %s", f"{state.ledger.state['capital']:,.0f}",
                  "the live book" if state.feed else "nothing (no live feed: paper orders cannot fill)")
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()
@@ -181,7 +185,9 @@ def startup() -> None:
 def _daily_rebuild_loop() -> None:
     """19:45 IST: fetch the day's exchange events (guide 12 spec); 20:30 IST: rebuild the scan, which
     joins them in. A failed event run never blocks the rebuild."""
-    jobs = [((21, 0), _pull_scan), ((22, 0), _pull_scan)] if settings.scan_url else \
+    # the nightly Action commits after midnight IST: pull again before the open, for the rule trades' list
+    jobs = [((8, 40), _pull_scan), ((9, 5), _pull_scan), ((21, 0), _pull_scan), ((22, 0), _pull_scan)] \
+        if settings.scan_url else \
         [((19, 45), _events_run), ((20, 30), _rebuild)]
     while True:
         now = datetime.now(IST)
@@ -586,6 +592,24 @@ def api_paper_positions(_: str = Depends(auth)):
 def api_paper_trades(_: str = Depends(auth)):
     trades = _ledger().trades_view()
     return {"trades": trades, "stats": trade_stats(trades)}
+
+
+@app.post("/api/paper/close/{pid}")
+def api_paper_close(pid: str, _: str = Depends(auth)):
+    """Close one paper position now at the best bid (the results page's Close)."""
+    try:
+        return _ledger().close_now(pid)
+    except PaperRejected as exc:
+        raise HTTPException(409, str(exc))
+
+
+@app.get("/api/paper/rules")
+def api_paper_rules(_: str = Depends(auth)):
+    """The rule trader's day (entries made or refused per stock and entry time) and the archived earlier account."""
+    st = _ledger().state
+    arch = [{**{k: a.get(k) for k in ("epoch", "archived_at", "created_at")},
+             "open": len(a.get("positions", [])), "closed": len(a.get("closed", []))} for a in st.get("archive", [])]
+    return {"epoch": st.get("epoch"), "started": st.get("created_at"), "rules": st.get("rules") or {}, "archive": arch}
 
 
 @app.get("/api/paper/refusals")

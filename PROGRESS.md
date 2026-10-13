@@ -47,6 +47,16 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   show max up / dip while held and after the sale (the server keeps quoting the contract until its T-2 day). The
   terminal's Orders popup is gone (its Orders / Arm buttons open the results page).
 
+- **Paper account restarted for the S1 rule trades (from 14 Oct)** (`server/rules.py`, ledger epoch
+  "2026-10-14 S1 rules"; the hand-placed 30 Sep system-test trades are archived inside the ledger). Each "buy next
+  session" signal of the forward test is bought twice, 1 lot each, outside the manual-order limits: at the open
+  (first poll from 09:15, the strike picked overnight from day 0's prices, at the best ask) and at the close (first
+  poll from 15:20, the walk on today's volume and average price, at ATP + 1 tick). Exits once a session at 15:20 on
+  the last traded price: 50 % stop, 5 sessions without a new closing high, T-1; sold at the best bid. Each trade is
+  tagged with its arms (A, B or both); the results page has one scoreboard per arm, by entry time, and the terminal
+  shows Arm A / Arm B badges. The server pulls the scan at 08:40 and 09:05 for the morning list. Render must be
+  awake at 09:15 and 15:20 (keep the page open, or a free uptime pinger every 5 minutes).
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace

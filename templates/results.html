@@ -85,6 +85,14 @@ h2 small { font-weight:400; font-size:12px; }
 .pl2 b { font:700 16px "JetBrains Mono",monospace; }
 .pl2 em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
 .pl2 .r { text-align:right; }
+.pc .nm { flex:1; min-width:0; }
+.pc .hd .tag { margin-left:0; white-space:nowrap; }
+.arm { white-space:nowrap; font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; background:var(--raise); border:1px solid var(--line-strong); }
+.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; }
+.mode { font:600 10.5px Inter,sans-serif; color:var(--muted); }
+.sb { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
+.sb .tw table td, .sb .tw table th { padding:7px 10px; }
+.sb h3 { margin:0 0 6px; font-size:13px; display:flex; gap:8px; align-items:center; }
 .gap { margin:0; font-size:11.5px; color:var(--unc); background:var(--unc-soft); border-radius:8px; padding:6px 9px; }
 .ex { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .ex > div { background:var(--raise); border-radius:9px; padding:7px 10px; }
@@ -217,14 +225,18 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
   async function loadPaper() {
     if (!SERVER.orders) return;
     try {
-      const [s, p, t, rf, ords] = await Promise.all([getJson("/api/paper/summary"), getJson("/api/paper/positions"), getJson("/api/paper/trades"),
-        getJson("/api/paper/refusals"), getJson("/api/orders")]);
+      const [s, p, t, rf, ords, ru] = await Promise.all([getJson("/api/paper/summary"), getJson("/api/paper/positions"), getJson("/api/paper/trades"),
+        getJson("/api/paper/refusals"), getJson("/api/orders"), getJson("/api/paper/rules").catch(() => null)]);
+      const since = (ru && ru.started) || "";
       P = { summary: s, positions: p || [], trades: (t && t.trades) || [], stats: t && t.stats, refusals: rf || { count: 0, refusals: [] },
-            orders: ords || [], err: "", loaded: true };
+            orders: (ords || []).filter(o => !since || (o.placed_at || o.filled_at || "") >= since), rules: ru, err: "", loaded: true };
     } catch (e) { P.err = e.message; P.loaded = true; }
     const open = P.summary && P.summary.market_open;
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
+  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">Arm ${a}</span>`).join(" ");
+  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)" };
+  function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
   function positionCard(p) {
     const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
     const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
@@ -232,26 +244,31 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price;
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
+    const r = p.rule;
+    const exitLine = r
+      ? `<span>Stop <b class="mono">${rs(e / 2)}</b> (50% at a close)</span><span>No new closing high: <b>${r.stall || 0} of 5</b></span><span>Exit by <b>${day(tMinus1(p.expiry))}</b> (T-1)</span>`
+      : `<span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>`;
     return `<article class="pc">
-      <div class="hd"><div class="nm">${optName(p.symbol, p.strike, p.instrument)}</div><span class="tag ${p.instrument === "PE" ? "pe" : "ce"}">${p.side === "BUY" ? "Bought" : "Sold"} ${p.instrument}</span></div>
-      <div class="sub">Expiry ${day(p.expiry)} · ${lots} · bought ${when(p.opened_at)}</div>
+      <div class="hd"><div class="nm">${optName(p.symbol, p.strike, p.instrument)}</div>${r ? armTags(r.arms) : ""}<span class="tag ${p.instrument === "PE" ? "pe" : "ce"}">${p.side === "BUY" ? "Bought" : "Sold"} ${p.instrument}</span></div>
+      <div class="sub">Expiry ${day(p.expiry)} · ${lots} · bought ${when(p.opened_at)}${r ? ` · <span class="mode">${MODE[r.entry_mode] || ""}</span>` : ""}</div>
       <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
         <div class="now"><small>Now${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}</em></div></div>
       <div class="val"><div><small>Buy value</small><b>${rs(e * p.qty)}</b><em>${rs(e)} × ${num(p.qty, 0)} qty</em></div>
         <div class="r"><small>Value at last price</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
-      ${rail(e, now, pk, tr, p.stop)}
+      ${rail(e, now, pk, tr, r ? e / 2 : p.stop)}
       <div class="pl2">
         <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
         <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)} · MTM, net of charges</em></div></div>
       ${spread != null && spread > 3 ? `<p class="gap">Thin option: the best bid ${rs(bid)} is ${spread.toFixed(1)}% below the last traded price ${rs(now)}, so selling now would get less than the last price shows.</p>` : ""}
-      <div class="ft"><span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>${p.stop_triggered_at ? `<span class="down">stop hit · exits next poll</span>` : ""}
+      <div class="ft">${exitLine}${p.stop_triggered_at ? `<span class="down">stop hit · exits next poll</span>` : ""}
         <button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button></div>
       <p class="err" data-cerr="${esc(p.id)}" hidden></p>
     </article>`;
   }
-  const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you" };
+  const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
+                   rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1" };
   function closedTable(rows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
@@ -259,7 +276,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) <= a.until;
-        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small></td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
+        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
           <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
@@ -280,8 +297,13 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)}</p>` : ""}
       ${s.drawdown_review ? `<p class="err">${esc(s.drawdown_review_message)}</p>` : ""}
       ${s.queued_orders ? `<p class="lead">${s.queued_orders} order(s) queued for the next session's 09:20 poll.</p>` : ""}`;
+    h += scoreboards();
+    const rr = ((P.rules || {}).rules || {}).refused || [];
+    const todayIso = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+    const rToday = rr.filter(x => x.date === todayIso);
+    if (rToday.length) h += `<p class="lead">Rule signals not bought today: ${rToday.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>`;
     h += `<h2>Open positions <small>${P.positions.length ? "entry price first; the bar shows stop · entry · max dip · max up · now" : ""}</small></h2>`;
-    h += P.positions.length ? `<div class="cards">${P.positions.map(positionCard).join("")}</div>` : `<p class="empty">No open positions. Buy a call or a put from the <a href="/terminal">terminal</a>.</p>`;
+    h += P.positions.length ? `<div class="cards">${P.positions.map(positionCard).join("")}</div>` : `<p class="empty">No open positions. The rule trades of the next session are bought at 09:15 and at 15:20 automatically.</p>`;
     h += `<h2>Closed trades <small>net of fills and charges · after the sale the option is followed until its T-2 day</small></h2>`;
     h += P.trades.length ? closedTable(P.trades) : `<p class="empty">None yet.</p>`;
     const rf = P.refusals || { count: 0, refusals: [] };
@@ -292,20 +314,35 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const ords = (P.orders || []).slice(0, 40);
     if (ords.length) h += `<details><summary>Order log (${ords.length})</summary><div class="tw"><table><thead><tr><th>Contract</th><th>Side</th><th>Qty</th><th>Status</th><th>Fill</th><th>Time</th></tr></thead><tbody>${ords.map(x =>
       `<tr><td><b>${esc(x.tradingsymbol)}</b>${x.auto ? ` <small>auto ${esc(x.auto)}</small>` : ""}</td><td>${esc(x.side)}</td><td>${x.quantity ?? ""}</td><td>${esc(x.status)}</td><td>${x.fill_price != null ? rs(x.fill_price) : "—"}</td><td>${when(x.filled_at || x.placed_at)}</td></tr>`).join("")}</tbody></table></div></details>`;
+    const arch = ((P.rules || {}).archive || []);
+    if (arch.length) h += `<p class="note">Earlier test account archived (${arch.map(a => `${esc(a.epoch)}: ${a.open} open, ${a.closed} closed trades, archived ${when(a.archived_at)}`).join("; ")}). This account started ${when((P.rules || {}).started)} with the rule trades only.</p>`;
     if (P.err) h += `<p class="err">Refresh failed: ${esc(P.err)} (showing the last numbers).</p>`;
     return h;
+  }
+  // One scoreboard per arm: closed trades (net of charges) and open positions, by entry time.
+  function scoreboards() {
+    const rows = (arm, mode) => {
+      const cl = P.trades.filter(c => c.rule && c.rule.arms.includes(arm) && (!mode || c.rule.entry_mode === mode));
+      const op = P.positions.filter(x => x.rule && x.rule.arms.includes(arm) && (!mode || x.rule.entry_mode === mode));
+      const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
+      const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
+      const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
+      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
+        <td class="${dir(avg)}">${avg == null ? "—" : pct(avg)}</td><td class="${dir(net)}">${cl.length ? srs(net) : "—"}</td><td>${op.length}</td><td class="${dir(mtm)}">${op.length ? srs(mtm) : "—"}</td></tr>`;
+    };
+    const board = (arm, title) => `<div><h3>${armTags([arm])} ${title}</h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
+      <tbody>${rows(arm, "open")}${rows(arm, "close")}${rows(arm, null)}</tbody></table></div></div>`;
+    return `<h2>Scoreboard <small>rule trades only, 1 lot each, net of charges · a signal in both arms counts in both</small></h2>
+      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>`;
   }
   async function closePos(id, btn) {
     const p = P.positions.find(x => x.id === id); if (!p) return;
     const err = $(`[data-cerr="${CSS.escape(id)}"]`);
-    const body = { symbol: p.symbol, instrument: p.instrument, expiry: p.expiry, strike: p.strike, side: "SELL", lots: p.lots, order_type: "MARKET" };
-    btn.disabled = true; btn.textContent = "Checking…"; err.hidden = true;
+    const bid = (p.mark || {}).bid ?? (p.mark || {}).price;
+    if (!confirm(`Sell ${p.symbol} ${p.strike} ${p.instrument} (${p.lots} lot) now at the best bid (last seen ${rs(bid)})?\nEntry was ${rs(p.entry.price)}. Paper trade.`)) return;
+    btn.disabled = true; btn.textContent = "Selling…"; err.hidden = true;
     try {
-      const pv = await getJson("/api/order/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      const fill = pv.review && pv.review.fill && pv.review.fill.price;
-      if (!pv.token) throw new Error(((pv.review || {}).blocked || []).join("; ") || "the paper engine refused the exit");
-      if (!confirm(`Sell ${p.symbol} ${p.strike} ${p.instrument} (${p.lots} lot) at about ${rs(fill)}?\nEntry was ${rs(p.entry.price)}. Paper trade.`)) { btn.disabled = false; btn.textContent = "Close"; return; }
-      await getJson("/api/order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, token: pv.token }) });
+      await getJson("/api/paper/close/" + encodeURIComponent(id), { method: "POST" });
       await loadPaper(); render();
     } catch (e) { err.textContent = "Not closed: " + e.message; err.hidden = false; btn.disabled = false; btn.textContent = "Close"; }
   }

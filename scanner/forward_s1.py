@@ -162,6 +162,20 @@ def mark(arm: dict, session: str, day: dict, stock_close, cal_dates: list[date])
     return closed_now
 
 
+def open_pick(p: dict, prices: pd.DataFrame | None) -> dict:
+    """The strike for the next open's entry: the rules' walk on day 0's prices."""
+    if prices is None:
+        return {"open_strike": None, "open_reason": "no option prices for the results day"}
+    w = v6.walk_strike(p["strikes"], p["spot"], v6.day1_quotes(prices, p["symbol"], p["expiry"]), CONTRACTS, band=BAND)
+    if isinstance(w, str):
+        return {"open_strike": None, "open_reason": {"walk_below_band": "cheapest liquid lot below Rs 600",
+                                                     "walk_no_liquid_strike_in_band": "no strike with >= 50 contracts "
+                                                     "and a lot in Rs 600-8,000 on the results day",
+                                                     "lottery_refused": "premium below Rs 2"}.get(w, w)}
+    q, px, _src, _walked = w
+    return {"open_strike": q.strike, "open_lot": q.lot, "open_ref": px}
+
+
 def blocked(state_arm: dict, symbol: str, i0: int, pos: dict[str, int]) -> bool:
     """One position per stock and arm, and v4's 10-session cooldown after an exit."""
     if any(x["symbol"] == symbol for x in state_arm["pending"] + state_arm["open"]):
@@ -170,8 +184,11 @@ def blocked(state_arm: dict, symbol: str, i0: int, pos: dict[str, int]) -> bool:
                for x in state_arm["closed"])
 
 
-def new_signals(state: dict, session: str, m: Market, results: list, day: dict, funnel: Counter) -> list[dict]:
-    """Results beats with day 0 = this session -> pending ("buy next session") in each arm that takes them."""
+def new_signals(state: dict, session: str, m: Market, results: list, day: dict, funnel: Counter,
+                prices: pd.DataFrame | None = None) -> list[dict]:
+    """Results beats with day 0 = this session -> pending ("buy next session") in each arm that takes them. With
+    the session's option prices, the strike the live paper account buys at the next open is picked here too
+    (server/rules.py): the same walk on day 0's volume and average price."""
     i = m.pos[session]
     universe = {session: set(day["chain"])}
     sigs = v4.signals(m, results, universe, session, 10 ** 9, funnel)
@@ -198,6 +215,7 @@ def new_signals(state: dict, session: str, m: Market, results: list, day: dict, 
             exp = ch[0]
             p = {**base, "expiry": exp, "spot": float(spot),
                  "strikes": sorted(float(k) for k in chain.loc[chain["XpryDt"] == exp, "StrkPric"].unique())}
+            p.update(open_pick(p, prices))
             st["pending"].append(p)
             added.append(p)
     return added
@@ -213,7 +231,7 @@ def step(state: dict, session: str, m: Market, day: dict, prices: pd.DataFrame |
         closed = mark(arm, session, day, stock_close, m.cal_dates)
         line[arm_name] = {"filled": [t["symbol"] for t in opened], "exited": [t["symbol"] for t in closed]}
     funnel = Counter()
-    added = new_signals(state, session, m, results, day, funnel)
+    added = new_signals(state, session, m, results, day, funnel, prices)
     for arm_name in state["arms"]:
         line[arm_name]["signals"] = [p["symbol"] for p in added if p["arm"] == arm_name]
     state["sessions"].append(line)

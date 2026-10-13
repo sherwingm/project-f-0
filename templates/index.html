@@ -115,6 +115,8 @@ body[data-board] .center, body[data-board] .side { display:none; }
 .ib.on { color:var(--star); border-color:var(--star); }
 .ib.go { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
 .ib.go.pe { background:var(--bear); border-color:var(--bear); color:#fff; }
+.armb { font:700 9.5px Inter,sans-serif; border-radius:5px; padding:0 5px; margin-left:4px; border:1px solid currentColor; vertical-align:1px; white-space:nowrap; }
+.armb.a { color:#4C8DFF; } .armb.b { color:#B07CFF; }
 .pill { display:inline-block; border-radius:999px; padding:1px 8px; font-size:11px; font-weight:600; line-height:1.7; white-space:nowrap; }
 .pill.b { background:var(--bull-soft); color:var(--bull); } .pill.r { background:var(--bear-soft); color:var(--bear); }
 .pill.n { background:var(--neutral-soft); color:var(--neutral); } .pill.u { background:var(--unc-soft); color:var(--unc); }
@@ -679,6 +681,17 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     if (!rows.length) { $("#list").innerHTML = `<p class="empty">${filter === "pinned" ? "No pinned stocks yet. Tap ★ on a stock to pin it." : "No stocks match."}</p>`; return; }
     $("#list").innerHTML = rows.map(rowHtml).join("");
   }
+  // ---- S1 rule trades: which arm a stock is in (the forward test's lists, and the live paper account's rule trades)
+  const ARMS = {};                                    // symbol -> {A: "buy next session" | "open" | "paper", B: ...}
+  function markArms(sym, arm, what) { (ARMS[sym] = ARMS[sym] || {})[arm] = ARMS[sym][arm] || what; }
+  ((meta.forward || {}).arms ? Object.entries(meta.forward.arms) : []).forEach(([arm, st]) => {
+    (st.pending || []).forEach(x => markArms(x.symbol, arm, "buy next session"));
+    (st.open || []).forEach(x => markArms(x.symbol, arm, "open in the forward test"));
+  });
+  function armBadges(sym) {
+    const a = ARMS[sym]; if (!a) return "";
+    return ["A", "B"].filter(k => a[k]).map(k => `<span class="armb ${k.toLowerCase()}" title="S1 arm ${k}: ${esc(a[k])}">Arm ${k}</span>`).join("");
+  }
   function rowHtml(s) {
     const v = view(s), blind = blindFor(s), cls = LABELS[s.label] || "n";
     let fl = "";
@@ -686,7 +699,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     if (v.live) lastPx[s.symbol] = v.ltp;
     return `<div class="wr${s.symbol === sel ? " sel" : ""}" data-sym="${esc(s.symbol)}" role="option" aria-selected="${s.symbol === sel}">
       <button class="star${pins.has(s.symbol) ? " on" : ""}" type="button" data-pin="${esc(s.symbol)}" aria-label="${pins.has(s.symbol) ? "Unpin" : "Pin"} ${esc(s.symbol)}">★</button>
-      <div class="wn"><b>${esc(s.symbol)}</b><small>${esc(s.name || sectorName(s.sector))}</small></div>
+      <div class="wn"><b>${esc(s.symbol)}</b>${armBadges(s.symbol)}<small>${esc(s.name || sectorName(s.sector))}</small></div>
       <div class="wp"><span class="px${fl}">${fmtPx(v.ltp)}</span><small class="${dirClass(v.pct)}">${pct(v.pct)}</small></div>
       <div class="wm"><span class="mono">${esc(v.time || "")}</span><span>Vol ${compact(v.vol)}${v.vr != null ? " · " + ratio(v.vr) : ""}</span>${blind ? "" : `<span class="lbl"><i class="ld ${cls}"></i>${esc((s.label || "").replace(" setup", ""))}</span>`}</div></div>`;
   }
@@ -725,7 +738,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     const labels = blind ? `<span class="callbtns" role="group" aria-label="Your call"><button type="button" class="b" data-call="bullish">Bull</button><button type="button" class="r" data-call="bearish">Bear</button><button type="button" class="n" data-call="neutral">Neutral</button></span><small>label hidden until you call</small>`
       : `${mine ? `<span class="yours">You: <b>${esc(mine.call)}</b></span>` : ""}<span class="pill ${cls}" title="${esc((s.reasons || []).join(" · "))}">${esc(s.label)}</span>${livePill(s)}`;
     $("#sh").innerHTML = `<div class="sh">
-      <div><h2>${esc(s.symbol)} <small>${esc(s.name || "")}</small></h2>
+      <div><h2>${esc(s.symbol)}${armBadges(s.symbol)} <small>${esc(s.name || "")}</small></h2>
         <div class="sub">${esc(sectorName(s.sector) || "—")} · lot ${s.lot_size ?? "—"}${exp ? " · expiry " + esc(exp) : ""}</div></div>
       <div class="price"><span class="big">${fmtPx(v.ltp)}</span><span class="chg ${dirClass(v.pct)}">${signed(v.chg)} (${pct(v.pct)})</span><div class="tick">${tickLine}</div></div>
       <div class="acts">${labels}
@@ -1408,6 +1421,11 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     if (!(SERVER.orders && SERVER.paper)) return;
     try {
       const sm = await getJson("/api/paper/summary");
+      try {
+        const pos = await getJson("/api/paper/positions"); let n = 0;
+        pos.filter(x => x.rule).forEach(x => x.rule.arms.forEach(a => { if (!(ARMS[x.symbol] || {})[a]) n++; markArms(x.symbol, a, "rule trade in the paper account"); }));
+        if (n) { renderList(); renderHeader(); }
+      } catch (e) { /* badges from the forward test only */ }
       const b = $("#paperbar"); b.hidden = false; b.innerHTML = `<span class="badge paper">PAPER</span> Equity <b>${money(sm.equity)}</b> · day <b class="${dirClass(sm.day_pnl)}">${money(sm.day_pnl)}</b>`;
       b.title = paperSummaryLine(sm).replace(/<[^>]+>/g, "");
       const n = $("#ddnotice"); n.hidden = !sm.drawdown_review; if (sm.drawdown_review) n.innerHTML = `<b>Review labels and sizing.</b> ${esc(sm.drawdown_review_message)}`;

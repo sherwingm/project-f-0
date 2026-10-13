@@ -49,6 +49,9 @@ from server.liquidity import Rules, classify
 log = logging.getLogger(__name__)
 IST = sessions.IST
 MODE_FOR_CLASS = {"accept": "normal", "penalty": "penalty", "lottery": "lottery"}
+# The ledger's epoch: a ledger saved under another epoch is archived inside the new one and the account starts over
+# (2026-10-14: the hand-placed system-test trades end; from here the account takes the S1 rule trades, server/rules.py)
+PAPER_EPOCH = "2026-10-14 S1 rules"
 FOLLOW_MAX = 10                      # closed trades followed after the exit (until their T-2 day), the latest ones
 
 
@@ -137,13 +140,27 @@ class PaperLedger:
         self.lock = threading.RLock()
         self._seq = 0
         self.state = self._load(capital if capital is not None else settings.paper_capital)
+        if self.state.pop("_restarted", False):
+            self._save()                     # the fresh account (with the archive) reaches the durable copy at once
 
     # ------------------------------------------------------------ persistence
     def _load(self, capital: float) -> dict:
-        if self.path.exists():
-            return json.loads(self.path.read_text(encoding="utf-8"))
-        return {"capital": float(capital), "cash": float(capital), "positions": [], "closed": [], "daily": {},
-                "peak_equity": float(capital), "created_at": datetime.now(IST).isoformat(timespec="seconds")}
+        fresh = {"epoch": PAPER_EPOCH, "capital": float(capital), "cash": float(capital), "positions": [], "closed": [],
+                 "daily": {}, "peak_equity": float(capital), "created_at": datetime.now(IST).isoformat(timespec="seconds"),
+                 "archive": []}
+        if not self.path.exists():
+            return fresh
+        st = json.loads(self.path.read_text(encoding="utf-8"))
+        if st.get("epoch") == PAPER_EPOCH:
+            return st
+        fresh["archive"] = st.pop("archive", []) + [{
+            "epoch": st.get("epoch") or "system test", "archived_at": fresh["created_at"],
+            "created_at": st.get("created_at"), "capital": st.get("capital"), "cash": st.get("cash"),
+            "positions": st.get("positions", []), "closed": st.get("closed", [])}]
+        fresh["_restarted"] = True
+        log.warning("paper account restarted for epoch %r; %d open and %d closed trades archived", PAPER_EPOCH,
+                    len(st.get("positions", [])), len(st.get("closed", [])))
+        return fresh
 
     def _save(self) -> None:
         self.state["saved_at"] = datetime.now(IST).isoformat(timespec="seconds")   # the durable copy compares it
@@ -397,7 +414,7 @@ class PaperLedger:
                     continue
                 c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
                 quote = self.quotes.get(c, fresh=False)
-                reason = "stop" if pos.get("stop_triggered_at") else "forced_t2" if self._forced_due(pos, now) else None
+                reason = "stop" if pos.get("stop_triggered_at") else                     "forced_t2" if self._forced_due(pos, now) and not pos.get("rule") else None   # rule trades: T-1
                 if reason and quote and self._auto_exit(pos, quote, now, reason):
                     continue
                 if quote:
@@ -408,6 +425,61 @@ class PaperLedger:
             if self.risk is not None:
                 self.risk.state(self, now)            # latches the daily / weekly halt as soon as it is hit
             self._save()
+
+    # ------------------------------------------------------------ rule trades (server/rules.py)
+    def open_rule(self, contract: dict, price: float, now: datetime, rule: dict) -> dict:
+        """A rule trade: one lot bought at `price` (the rule's fill), outside the manual order limits."""
+        with self.lock:
+            self._ensure_day(now)
+            qty = int(contract["lot_size"])
+            entry_ch = ch.leg(contract["instrument"], "BUY", qty, price)
+            req = _Req(contract["symbol"], contract["instrument"], contract["expiry"], contract["strike"], "BUY", 1)
+            review = {"charges_entry": entry_ch, "max_loss": round(price * qty + entry_ch["total"], 2), "margin": 0.0,
+                      "t2_date": sessions.t_minus(contract["expiry"], 2).isoformat()}
+            f = {"price": price, "levels": [], "mode": "rule_" + rule["entry_mode"], "mid": None, "slippage_vs_mid": None,
+                 "overflow_qty": 0}
+            pos = self._open(req, {"quantity": qty, "lot_size": qty, "tradingsymbol": contract["tradingsymbol"]}, None,
+                             review, f, {"class": "rule"}, now)
+            pos["rule"] = {**rule, "best": price, "stall": 0, "checked": None}
+            track(pos, price, now)
+            self._log_order({"order_id": self._id("RULE"), "placed_at": now.isoformat(timespec="seconds"), "paper": True,
+                             "auto": "rule " + rule["entry_mode"], "symbol": contract["symbol"],
+                             "tradingsymbol": contract["tradingsymbol"], "side": "BUY", "quantity": qty,
+                             "order_type": "RULE", "status": "FILLED", "fill_price": price, "position_id": pos["id"],
+                             "arms": rule.get("arms")})
+            self._touch_day(now)
+            self._save()
+            return pos
+
+    def close_at(self, pid: str, price: float, now: datetime, reason: str) -> dict:
+        """Close a whole position at `price` (a rule exit, or the results page's Close at the best bid)."""
+        with self.lock:
+            pos = self._position_by_id(pid)
+            f = {"price": price, "levels": [], "mode": reason, "mid": None, "slippage_vs_mid": None, "overflow_qty": 0}
+            closed = self._close(pos, pos["qty"], f, "rule" if pos.get("rule") else None, now, reason)
+            if pos.get("rule"):
+                closed["rule"] = pos["rule"]
+            self._log_order({"order_id": self._id("RULE" if pos.get("rule") else "PAPER"), "paper": True,
+                             "placed_at": now.isoformat(timespec="seconds"), "auto": reason, "symbol": pos["symbol"],
+                             "tradingsymbol": pos["tradingsymbol"], "side": "SELL", "quantity": pos["qty"],
+                             "order_type": "MARKET", "status": "FILLED", "fill_price": price, "position_id": pid,
+                             "net_pnl": closed["net_pnl"]})
+            self._touch_day(now)
+            self._save()
+            return closed
+
+    def close_now(self, pid: str, now: datetime | None = None) -> dict:
+        """Close at the best bid now (else the last price less a tick); refuses with no live quote."""
+        now = (now or self.clock()).astimezone(IST)
+        with self.lock:
+            pos = self._position_by_id(pid)
+            c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
+            q = self.quotes.get(c) or {}
+            bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
+            px = bid if bid else (round(q["last_price"] - self.tick, 2) if q.get("last_price") else None)
+            if not px:
+                raise PaperRejected("no live quote for this contract right now; try again when the market is open")
+            return self.close_at(pid, px, now, "manual")
 
     def _follow_closed(self, now: datetime) -> None:
         """After the exit: keep quoting the contract until its T-2 day, so the results page shows whether the
@@ -609,6 +681,12 @@ class PaperLedger:
         if p is None:
             raise PaperRejected("that position is no longer open")
         return p
+
+
+class _Req:
+    """The order fields _open reads, for rule trades (no OrderRequest validation: the rules chose the contract)."""
+    def __init__(self, symbol, instrument, expiry, strike, side, lots):
+        self.symbol, self.instrument, self.expiry, self.strike, self.side, self.lots =             symbol, instrument, expiry, strike, side, lots
 
 
 def track(pos: dict, px: float | None, now: datetime) -> None:

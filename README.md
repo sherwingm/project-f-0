@@ -241,6 +241,7 @@ server/candles.py     intraday chart candles from the live feed's ticks (/api/in
                       last session's candles come from Kotak's historical API (KotakProvider.history)
 server/news.py        recent headlines from Google News RSS (/api/news), cached 15 min
 scanner/financials.py quarterly revenue / net profit / EPS from NSE XBRL filings -> data/financials.json
+server/rules.py       S1 rule trades in the live paper account (open 09:15 and close 15:20 entries, rule exits)
 scanner/forward_s1.py forward paper test of S1 (arms A and B), one session a night -> data/forward/s1_forward.json
 scanner/trade_sheet.py per-trade Excel sheet of a backtest (option peak / dip while held and after the exit)
 docs/index.html       built page (what gets hosted); docs/demo.html = same UI on demo data
