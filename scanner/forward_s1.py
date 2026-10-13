@@ -33,7 +33,7 @@ from .backtest_cheap_options import sessions_to
 from .backtest_s1_v2 import Inputs, Market, day0_index
 from .build import ROOT
 from .option_engine import TICK
-from .trade_sheet import span
+from .option_path import span
 
 log = logging.getLogger("forward_s1")
 

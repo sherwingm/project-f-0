@@ -25,6 +25,7 @@ from . import backtest_s1_v4 as v4
 from .build import ROOT
 from .option_engine import TICK
 from .stats import clustered_t
+from .option_path import pct, span
 
 CACHE = ROOT / "data" / "cache"
 REASONS = {"0_stop": "Stop loss 50%", "1_decay": "No new high", "2_t_minus_1": "T-1", "2_t_minus_2": "T-2",
@@ -32,22 +33,6 @@ REASONS = {"0_stop": "Stop loss 50%", "1_decay": "No new high", "2_t_minus_1": "
 
 
 # ---------------------------------------------------------------- the option's path (pure)
-def pct(x: float | None, ref: float | None) -> float | None:
-    return None if x is None or not ref else round((x / ref - 1) * 100, 2)
-
-
-def span(points: list[tuple[str, float]], entry: float) -> dict:
-    """Upside-only peak and downside-only dip of (date, close) points, % of the entry price. A peak that never got
-    above entry is 0 with no date; a dip that never got below entry is 0 with no date."""
-    if not points:
-        return {"peak": None, "peak_date": None, "dip": None, "dip_date": None, "high": None}
-    dh, hi = max(points, key=lambda p: p[1])
-    dl, lo = min(points, key=lambda p: p[1])
-    up, down = pct(hi, entry), pct(lo, entry)
-    return {"peak": max(up, 0.0), "peak_date": dh if up > 0 else None,
-            "dip": min(down, 0.0), "dip_date": dl if down < 0 else None, "high": hi}
-
-
 def sessions_between(sessions: list[str], a: str | None, b: str | None) -> int | None:
     """Sessions after a up to and including b."""
     if not isinstance(a, str) or not isinstance(b, str):
