@@ -27,6 +27,20 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - Intraday charts exist only for the time the server was polling: Render's free tier sleeps after 15 minutes
   without visits, so keep the page open during market hours (or move to the VM).
 
+- **Forward paper test from 14 Oct** (`scanner/forward_s1.py`, nightly Action, page buttons **Arm A / Arm B**):
+  S1 v7 rules without near-expiry trades, one session at a time from NSE's closing files: yesterday's results beats
+  are bought at the session's average price, marked at each close (50 % stop, 5 sessions without a new high, T-1),
+  and followed after the exit to T-1 (max peak / max dip while held and after). State `data/forward/s1_forward.json`.
+  First signal expected: HCLTECH (results 12 Oct evening, +4.5 % vs its sector on 13 Oct), arm A only.
+- **Data dates fixed:** the scan was stuck on 09 Oct (eod2 stopped at 25 Sep; the NSE fallback refused gaps over
+  15 days, now 60). The events job ran after midnight and fetched the next day, so each session's results and
+  Monday ban lists were missed; it now re-reads the last 3 days and the next ban list, and one failing source (BSE
+  answering with text) no longer stops the run.
+- **Options only:** "Buy CE / Buy PE" replace "Order: future"; the server refuses futures orders; the futures chart
+  leg, futures alerts and the futures price block are gone (OI and PCR stay as information).
+- **Charts:** with no live polls (closed market, restart, Render asleep) 1m/5m/15m show the last session from
+  Kotak's historical API; a late start is filled from 09:15; errors say what happened instead of "Unexpected token".
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace

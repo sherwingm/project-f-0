@@ -345,31 +345,70 @@ def _live_leg(q: dict | None, t: str, row: dict) -> dict:
             f"{t}_bid": (depth.get("bid") or [(None,)])[0][0], f"{t}_ask": (depth.get("ask") or [(None,)])[0][0]}
 
 
+HISTORY_LOOKBACK = 6                              # calendar days searched for the last session with candles
+
+
+def _history(key: str, tf: int, today_only: bool = False) -> tuple[str | None, list[dict], str | None]:
+    """The most recent session's candles of `key` from the provider's historical API (KotakProvider.history):
+    (session, candles, error). Today first, then back over weekdays."""
+    hist = getattr(state.feed.provider, "history", None) if state.feed else None
+    if hist is None:
+        return None, [], None
+    d = datetime.now(IST).date()
+    for _ in range(1 if today_only else HISTORY_LOOKBACK):
+        if d.weekday() < 5:
+            try:
+                bars = hist(key, tf, d.isoformat())
+            except Exception as exc:  # noqa: BLE001 - the chart then says why, the page keeps working
+                log.warning("history %s %s: %s", key, d, exc)
+                return None, [], str(exc)[:160]
+            if bars:
+                return d.isoformat(), bars, None
+        d -= timedelta(days=1)
+    return None, [], None
+
+
 @app.get("/api/intraday/{symbol}")
 def api_intraday(symbol: str, tf: int = 1, leg: str = "stock", _: str = Depends(auth)):
-    """Candles from the live feed's ticks since the server's first poll today (see server/candles.py)."""
+    """Candles from the live feed's ticks since the server's first poll today (see server/candles.py). With no
+    ticks (market closed, a restart, Render asleep) the last session's candles come from the broker's historical
+    API; when the server started polling late today, history fills the morning before the first tick."""
     sym = symbol.upper()
     if tf not in (1, 3, 5, 15, 30):
         raise HTTPException(400, "tf must be 1, 3, 5, 15 or 30 (minutes)")
     if not state.feed:
         return {"symbol": sym, "leg": leg, "tf": tf, "candles": [], "since": None, "note": "live feed is off"}
     if leg == "stock":
-        ticks, cols, key = state.feed.ticks(sym), (1, 2, 3), None
+        ticks, cols, key, hkey = state.feed.ticks(sym), (1, 2, 3), None, "NSE:" + sym
     elif leg == "fut":
-        ticks, cols, key = state.feed.ticks(sym), (4, 6, 7), None
+        ticks, cols, key, hkey = state.feed.ticks(sym), (4, 6, 7), None, None
     else:
         typ, _sep, strike = leg.upper().partition(":")
         s = state.stocks.get(sym)
         exp = ((s or {}).get("chain") or {}).get("expiry")
         if typ not in ("CE", "PE") or not exp:
-            raise HTTPException(400, "leg must be stock, fut, CE:<strike> or PE:<strike> of a stock with a chain")
+            raise HTTPException(400, "leg must be stock, CE:<strike> or PE:<strike> of a stock with an option chain")
         try:
             key = "NFO:" + tradingsymbol(sym, typ, exp, float(strike))
         except ValueError:
             raise HTTPException(400, "bad strike")
+        hkey = key
+        if market_open():                              # keep polling the option while its chart is open
+            w = state.feed.watch.get(sym)
+            state.feed.watch_options(sym, list(dict.fromkeys(((w[1] if w and w[0] > time.time() else []) + [key]))))
         ticks, cols = state.feed.option_ticks(key), (1, 2, 3)
     bars = candles(ticks, tf, *cols)
-    return {"symbol": sym, "leg": leg, "tf": tf, "key": key, "candles": bars,
+    source, session, err = "live", None, None
+    if hkey and not bars:
+        session, bars, err = _history(hkey, tf)
+        source = "history" if bars else "none"
+    elif hkey and bars and datetime.fromtimestamp(bars[0]["time"], IST).strftime("%H:%M") > "09:16":
+        day, hb, err = _history(hkey, tf, today_only=True)
+        if day == datetime.now(IST).date().isoformat() and hb:
+            bars = [b for b in hb if b["time"] < bars[0]["time"]] + bars
+            source = "history+live"
+    return {"symbol": sym, "leg": leg, "tf": tf, "key": key, "candles": bars, "source": source, "session": session,
+            "history_error": err,
             "since": datetime.fromtimestamp(ticks[0][0], IST).strftime("%H:%M") if ticks else None,
             "ticks": len(ticks), "market_open": market_open()}
 
@@ -439,6 +478,8 @@ def _prepare(body: OrderBody) -> tuple[OrderRequest, dict, float | None]:
     if not s:
         raise HTTPException(400, f"{sym} is not in the current F&O scan")
     req = OrderRequest(sym, body.instrument.upper(), body.expiry, body.strike, body.side.upper(), body.lots, body.order_type.upper(), body.price)
+    if req.instrument == "FUT":                      # DECISIONS.md: long options only (CE / PE buys), no futures
+        raise HTTPException(400, "options only: futures orders are off (buy a call or a put)")
     try:
         req.validate(s.get("lot_size"), settings.max_lots_per_order)
         resolved = state.broker.resolve(req, s["lot_size"])

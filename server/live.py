@@ -26,7 +26,7 @@ import time
 import json
 import zlib
 from collections import deque
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 
 from scanner.classify import classify
@@ -112,6 +112,23 @@ class FakeProvider:
                                           "put_oi": self.rng.randint(10_000, 900_000), "pcr_ts": datetime.now(IST).strftime("%H:%M:%S")}
                 elif base:
                     out[k] = self._option(sym, base)
+        return out
+
+    def history(self, key: str, tf: int, day: str) -> list[dict]:
+        """Synthetic candles for a weekday (KotakProvider.history's shape): a gentle walk from the close."""
+        d = date.fromisoformat(day)
+        sym = key.split(":", 1)[1]
+        base = self.closes.get(sym) or (self._option(sym, self._base(sym))["last_price"] if self._base(sym) else None)
+        if not base or d.weekday() >= 5 or d > datetime.now(IST).date():
+            return []
+        rng, out, px = random.Random(f"{key}{tf}{day}"), [], base
+        t = int(datetime(d.year, d.month, d.day, 9, 15, tzinfo=IST).timestamp())
+        end = int(datetime(d.year, d.month, d.day, 15, 30, tzinfo=IST).timestamp())
+        while t < end:
+            o, px = px, round(px * (1 + rng.uniform(-0.003, 0.003)), 2)
+            out.append({"time": t, "open": o, "high": max(o, px), "low": min(o, px), "close": px,
+                        "volume": float(rng.randint(1_000, 90_000)), "atp": None})
+            t += tf * 60
         return out
 
     def quote_one(self, tradingsymbol: str) -> dict:

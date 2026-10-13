@@ -236,9 +236,12 @@ scanner/strikes.py    nearest-expiry option chain, max-OI strikes, max pain
 scanner/build.py      orchestration, scan.json, HTML render
 scanner/demo.py       synthetic OI/PCR/strikes for UI testing (marked as demo)
 templates/index.html  the trading-terminal page, laptop and phone (JSON is injected at /*__SCAN_DATA__*/, server flags at /*__SERVER__*/{})
-server/candles.py     intraday chart candles from the live feed's ticks (/api/intraday)
+server/candles.py     intraday chart candles from the live feed's ticks (/api/intraday); with no ticks the
+                      last session's candles come from Kotak's historical API (KotakProvider.history)
 server/news.py        recent headlines from Google News RSS (/api/news), cached 15 min
 scanner/financials.py quarterly revenue / net profit / EPS from NSE XBRL filings -> data/financials.json
+scanner/forward_s1.py forward paper test of S1 (arms A and B), one session a night -> data/forward/s1_forward.json
+scanner/trade_sheet.py per-trade Excel sheet of a backtest (option peak / dip while held and after the exit)
 docs/index.html       built page (what gets hosted); docs/demo.html = same UI on demo data
 data/scan.json        the same data as JSON, for reuse elsewhere in Quantis
 server/app.py         FastAPI: page, /api/live, /api/chain, /api/commentary, /api/order(+preview), /api/orders

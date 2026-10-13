@@ -1,6 +1,6 @@
 """Data behind the trading-terminal page: Kotak's extra quote fields, the intraday tick buffer and option watch,
 candles, news headlines, and quarterly results numbers (XBRL parsing, QoQ / YoY)."""
-from datetime import datetime
+from datetime import date, datetime
 
 import pytest
 
@@ -208,3 +208,48 @@ def test_intraday_endpoint_returns_candles(monkeypatch):
     assert r["symbol"] == "ABC" and len(r["candles"]) == 1 and r["candles"][0]["close"] == 100.0
     assert c.get("/api/intraday/abc?leg=fut").json()["candles"][0]["close"] == 101.0
     assert c.get("/api/intraday/abc?tf=2").status_code == 400
+
+
+class HistProvider(Provider):
+    """Provider with a historical API: two 5-minute candles on any weekday."""
+    def __init__(self):
+        super().__init__()
+        self.hist_calls = []
+
+    def history(self, key, tf, day):
+        self.hist_calls.append((key, tf, day))
+        d = date.fromisoformat(day)
+        if d.weekday() >= 5:
+            return []
+        t0 = int(datetime(d.year, d.month, d.day, 9, 15, tzinfo=IST).timestamp())
+        return [{"time": t0 + i * tf * 60, "open": 90.0, "high": 91.0, "low": 89.0, "close": 90.5, "volume": 10.0,
+                 "atp": None} for i in range(2)]
+
+
+def _client(monkeypatch, f):
+    from fastapi.testclient import TestClient
+    from server import app as app_mod
+    from server.config import settings
+    monkeypatch.setattr(settings, "public_access", True)
+    monkeypatch.setattr(app_mod.state, "feed", f)
+    return TestClient(app_mod.app)
+
+
+def test_intraday_without_ticks_shows_the_last_session_from_history(monkeypatch):
+    scan = {"stocks": [{"symbol": "ABC", "close": 98.0, "fut_oi": 4800, "avg_volume_20d": 10_000, "pcr": 1.0}]}
+    p = HistProvider()
+    c = _client(monkeypatch, lv.LiveFeed(p, scan, fut_tradingsymbols={"ABC": "ABC26OCTFUT"}))
+    r = c.get("/api/intraday/abc?tf=5").json()
+    assert r["source"] == "history" and len(r["candles"]) == 2 and r["session"] and r["ticks"] == 0
+    assert p.hist_calls[0][:2] == ("NSE:ABC", 5)
+
+
+def test_intraday_late_start_is_filled_from_history(monkeypatch):
+    f = lv.LiveFeed(HistProvider(), {"stocks": [{"symbol": "ABC", "close": 98.0}]},
+                    fut_tradingsymbols={"ABC": "ABC26OCTFUT"})
+    now = datetime.now(IST).replace(hour=11, minute=0, second=0, microsecond=0)
+    if now.weekday() >= 5:
+        pytest.skip("needs a weekday")
+    f.poll_once(now)
+    r = _client(monkeypatch, f).get("/api/intraday/abc?tf=5").json()
+    assert r["source"] == "history+live" and len(r["candles"]) == 3 and r["candles"][-1]["close"] == 100.0

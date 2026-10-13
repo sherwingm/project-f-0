@@ -250,6 +250,11 @@ def _read_csv(url: str) -> pd.DataFrame:
 QUOTE_BATCH = 49
 # option_chain answers "Rate limit exceeded" to calls 0.25 s apart and not to calls 1 s apart (checked 2026-09-28)
 CHAIN_MIN_INTERVAL = 1.0
+# historical_data answers 429 "Rate limit exceeded" to a second call at once and not after a pause (checked
+# 2026-10-13); its candles are [ISO time +0530, open, high, low, close, volume]
+HISTORY_MIN_INTERVAL = 1.5
+HISTORY_INTERVALS = {1: "1min", 3: "3min", 5: "5min", 15: "15min", 30: "30min"}
+HISTORY_TODAY_TTL = 60.0                          # seconds a partial day's candles are reused
 MAX_OI = 1e10                   # shares; Kotak's chain sometimes sends overflow garbage (-5.5e18 seen 2026-09-30)
 
 
@@ -271,6 +276,9 @@ class KotakProvider:
         self._chains: dict[str, dict] = {}
         self._cursor = 0
         self._last_chain = 0.0
+        self._hist: dict[tuple, tuple[float, list]] = {}
+        self._hist_lock = threading.Lock()
+        self._last_hist = 0.0
 
     def quote(self, keys: list[str]) -> dict[str, dict]:
         self.master.load()
@@ -359,6 +367,57 @@ class KotakProvider:
             raise RuntimeError(f"Kotak quotes: no quote returned for {ts}")
         return {**_parse_quote(rows[0], fo=True), "tradingsymbol": rec["tradingsymbol"],
                 "lot_size": rec["lot_size"], "expiry": rec["expiry"]}
+
+    def _token(self, key: str) -> tuple[str, str] | None:
+        """(segment, token) for NSE:<SYMBOL> or NFO:<our tradingsymbol>."""
+        self.master.load()
+        if key.startswith("NSE:"):
+            e = self.master.eq.get(key[4:])
+            return ("nse_cm", e["token"]) if e else None
+        ts = key.split(":", 1)[1] if ":" in key else key
+        rec = self.master.fo_by_symbol.get(ts)
+        if rec is None:
+            m = KEY_RE.match(ts)
+            rec = self.master.resolve_key(m.groupdict()) if m else None
+        return ("nse_fo", rec["token"]) if rec else None
+
+    def history(self, key: str, tf: int, day: str) -> list[dict]:
+        """tf-minute candles of `key` on `day` (ISO) from Kotak's historical API, in server/candles.py's shape:
+        [{time: bucket start, epoch s UTC, open, high, low, close, volume, atp: None}]; [] for no trading. A past
+        day is cached for the process's life, today for HISTORY_TODAY_TTL seconds; calls are spaced
+        HISTORY_MIN_INTERVAL apart."""
+        if tf not in HISTORY_INTERVALS:
+            raise ValueError(f"tf {tf} is not one of {sorted(HISTORY_INTERVALS)}")
+        tok = self._token(key)
+        if tok is None:
+            return []
+        ck = (key, tf, day)
+        hit = self._hist.get(ck)
+        today = datetime.now(IST).date().isoformat()
+        if hit and (day < today or time.monotonic() - hit[0] < HISTORY_TODAY_TTL):
+            return hit[1]
+        with self._hist_lock:
+            wait = HISTORY_MIN_INTERVAL - (time.monotonic() - self._last_hist)
+            if wait > 0:
+                time.sleep(wait)
+            try:
+                resp = self.s.client().historical_data(neosymbol=f"{tok[0]}|{tok[1]}", interval=HISTORY_INTERVALS[tf],
+                                                       from_date=day, to_date=day)
+            finally:
+                self._last_hist = time.monotonic()
+        rows = (resp.get("data") or {}).get("candles") if isinstance(resp, dict) and resp.get("data") is not None             else None
+        if not isinstance(rows, list):
+            raise RuntimeError(redact(f"Kotak history: {str(resp)[:200]}"))
+        out = []
+        for r in rows:
+            if not isinstance(r, (list, tuple)) or len(r) < 5:
+                continue
+            t = datetime.strptime(str(r[0]), "%Y-%m-%dT%H:%M:%S%z")
+            out.append({"time": int(t.timestamp()), "open": float(r[1]), "high": float(r[2]), "low": float(r[3]),
+                        "close": float(r[4]), "volume": float(r[5]) if len(r) > 5 and r[5] is not None else None,
+                        "atp": None})
+        self._hist[ck] = (time.monotonic(), out)
+        return out
 
     def _quotes(self, batch: list[dict]) -> list[dict]:
         self.limiter.wait()

@@ -6,5 +6,5 @@ anthropic>=0.40
 kiteconnect>=5
 growwapi>=0.1
 pyotp>=2.9
-kotakneoapi>=3.0
+kotakneoapi>=3.0.7                 # 3.0.7 has historical_data (the chart when there are no live polls)
 scikit-learn>=1.4
