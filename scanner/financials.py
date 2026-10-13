@@ -143,8 +143,9 @@ class Fetcher:
     def __init__(self, http: EventHttp | None = None):
         self.http = http or EventHttp()
 
-    def stock(self, sym: str, have: dict | None = None) -> dict | None:
-        """The stored record for `sym`, refreshed: new quarters fetched, known ones kept."""
+    def stock(self, sym: str, have: dict | None = None, extra: tuple[str, ...] = ()) -> dict | None:
+        """The stored record for `sym`, refreshed: new quarters fetched, known ones kept. `extra`: more quarter
+        ends (ISO) to fetch, e.g. the quarters a study needs for older trades."""
         have = have or {}
         integ = self.http.get_json(INTEGRATED.format(sym=_q(sym)), REFERER)
         integ = integ.get("data", []) if isinstance(integ, dict) else (integ or [])
@@ -153,7 +154,7 @@ class Fetcher:
             return None
         latest = max(q for q, _ in files)
         basis = "consolidated" if (latest, "consolidated") in files else "standalone"
-        want = needed(latest)
+        want = sorted(set(needed(latest)) | set(extra), reverse=True)
         if any((q, basis) not in files for q in want):         # year-ago quarters before Mar 2025
             try:
                 old = self.http.get_json(OLD.format(sym=_q(sym)), REFERER)
@@ -169,8 +170,7 @@ class Fetcher:
                 quarters[q] = {**parse_xbrl(self.http.get_text(url, REFERER)), "xbrl": url, "filed": None}
             except FetchError as exc:
                 log.warning("%s %s: %s", sym, q, exc)
-        quarters = {q: v for q, v in quarters.items() if q in want}
-        return {"basis": basis, "quarters": quarters, "updated": date.today().isoformat()}
+        return {"basis": basis, "quarters": quarters, "updated": date.today().isoformat()}   # known ones kept
 
 
 def _q(sym: str) -> str:
