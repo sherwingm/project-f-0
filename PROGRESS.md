@@ -41,6 +41,12 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - **Charts:** with no live polls (closed market, restart, Render asleep) 1m/5m/15m show the last session from
   Kotak's historical API; a late start is filled from 09:15; errors say what happened instead of "Unexpected token".
 
+- **Results page is the home page** (`templates/results.html`, `/` on the server; the terminal moved to
+  `/terminal`): paper account, Arm A, Arm B, no chart (35 KB, loads at once). Each open paper position is a card:
+  entry price, now, max up / max dip (traded price, with time), stop, auto-exit (T-2), P&L, Close. Closed trades
+  show max up / dip while held and after the sale (the server keeps quoting the contract until its T-2 day). The
+  terminal's Orders popup is gone (its Orders / Arm buttons open the results page).
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace

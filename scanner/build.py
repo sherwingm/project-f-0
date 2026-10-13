@@ -205,6 +205,14 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
     return scan
 
 
+def render_results(scan: dict, template: Path, out: Path) -> None:
+    """The results page for GitHub Pages: the forward test embedded (the paper account needs the live server)."""
+    html = template.read_text(encoding="utf-8")
+    fwd = json.dumps(scan.get("meta", {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(html.replace("/*__FORWARD__*/null", fwd), encoding="utf-8")
+
+
 def render(scan: dict, template: Path, out: Path) -> None:
     html = template.read_text(encoding="utf-8")
     payload = json.dumps(scan, separators=(",", ":")).replace("</", "<\\/")
@@ -280,6 +288,7 @@ def main() -> None:
     args.json.parent.mkdir(parents=True, exist_ok=True)
     args.json.write_text(json.dumps(scan, indent=1), encoding="utf-8")
     render(scan, args.template, args.out)
+    render_results(scan, ROOT / "templates" / "results.html", args.out.parent / "results.html")
     s, m = scan["summary"], scan["meta"]
     print(f"as of {m['as_of']}: {s['bullish']} bullish, {s['bearish']} bearish, {s['neutral']} neutral, "
           f"{s['unclassified']} unclassified | OI/PCR: {m['fo_status']} | strike tables: {m['chain_status']} | wrote {args.out}")

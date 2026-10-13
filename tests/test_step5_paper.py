@@ -239,3 +239,22 @@ def test_api_preview_place_and_paper_endpoints(tmp_path, monkeypatch):
     assert c.get("/api/paper/trades", auth=("user", "pw")).json()["trades"] == []
     fut = c.post("/api/order/preview", json={**body, "instrument": "FUT", "strike": None}, auth=("user", "pw"))
     assert fut.status_code == 400 and "options only" in fut.json()["error"]
+
+
+def test_max_up_max_dip_while_held_and_after_the_exit(lg):
+    ledger, q = lg
+    q.set(CE, 4.0, 4.1)
+    ledger.submit(order(), resolved(CE), now=at(21))                  # entry 4.15
+    for bid, ask, mm in ((5.0, 5.1, 1), (3.9, 4.0, 2), (4.5, 4.6, 3)):
+        q.set(CE, bid, ask)
+        ledger.on_poll(now=at(21, 11, mm))
+    pos = ledger.positions_view()[0]
+    assert pos["peak"]["price"] == 5.1 and pos["trough"]["price"] == 4.0 and pos["trough"]["at"].startswith("2026-09-21T11:02")
+    ledger.submit(order(side="SELL"), resolved(CE), now=at(21, 12))
+    c = ledger.trades_view()[0]
+    assert c["held_peak"]["price"] == 5.1 and c["held_trough"]["price"] == 4.0 and c["after"]["until"] == "2026-09-25"
+    for bid, ask, day in ((6.0, 6.1, 22), (2.0, 2.1, 24), (9.0, 9.1, 28)):         # the 28th is after T-2
+        q.set(CE, bid, ask)
+        ledger.on_poll(now=at(day, 11))
+    a = ledger.trades_view()[0]["after"]
+    assert a["peak"]["price"] == 6.1 and a["trough"]["price"] == 2.1 and a["last"]["price"] == 2.1

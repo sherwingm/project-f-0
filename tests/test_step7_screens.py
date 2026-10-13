@@ -16,7 +16,8 @@ from tests.test_step5_paper import CE, CLOCK, EXP, StubQuotes
 
 AUTH = ("user", "pw")
 BODY = {"symbol": "RELIANCE", "instrument": "CE", "expiry": EXP, "strike": 1300, "side": "BUY", "lots": 1, "order_type": "MARKET"}
-TEMPLATE = (Path(__file__).resolve().parent.parent / "templates" / "index.html").read_text(encoding="utf-8")
+TEMPLATES = Path(__file__).resolve().parent.parent / "templates"
+TEMPLATE = "\n".join((TEMPLATES / f).read_text(encoding="utf-8") for f in ("index.html", "results.html"))   # terminal + results page
 
 
 @pytest.fixture(autouse=True)

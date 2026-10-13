@@ -270,6 +270,19 @@ def _rebuild() -> dict:
 
 # ---------------------------------------------------------------- page & data
 @app.get("/", response_class=HTMLResponse)
+def results_page(_: str = Depends(auth)):
+    """The home page: paper account and the forward test (templates/results.html), no chart and no scan."""
+    html = (ROOT / "templates" / "results.html").read_text(encoding="utf-8")
+    fwd = json.dumps(((state.scan or {}).get("meta") or {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
+    return html.replace("/*__FORWARD__*/null", fwd).replace("/*__SERVER__*/{}", json.dumps(settings.public()))
+
+
+@app.get("/api/forward")
+def api_forward(_: str = Depends(auth)):
+    return ((state.scan or {}).get("meta") or {}).get("forward")
+
+
+@app.get("/terminal", response_class=HTMLResponse)
 def index(_: str = Depends(auth)):
     html = (ROOT / "templates" / "index.html").read_text(encoding="utf-8")
     scan = state.scan or {"meta": {"as_of": "—", "as_of_label": "no scan yet", "generated_at_ist": "", "universe_size": 0,

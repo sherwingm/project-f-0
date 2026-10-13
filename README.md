@@ -236,6 +236,7 @@ scanner/strikes.py    nearest-expiry option chain, max-OI strikes, max pain
 scanner/build.py      orchestration, scan.json, HTML render
 scanner/demo.py       synthetic OI/PCR/strikes for UI testing (marked as demo)
 templates/index.html  the trading-terminal page, laptop and phone (JSON is injected at /*__SCAN_DATA__*/, server flags at /*__SERVER__*/{})
+templates/results.html the home page (/): paper account + forward test, no chart; the terminal is /terminal
 server/candles.py     intraday chart candles from the live feed's ticks (/api/intraday); with no ticks the
                       last session's candles come from Kotak's historical API (KotakProvider.history)
 server/news.py        recent headlines from Google News RSS (/api/news), cached 15 min

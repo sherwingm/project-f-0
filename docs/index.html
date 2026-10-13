@@ -227,23 +227,6 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .mt td { padding:5px 12px; border-bottom:1px solid var(--line); text-align:right; }
 .mt td:first-child { text-align:left; font-family:Inter,sans-serif; font-weight:600; }
 .mt tr { cursor:pointer; } .mt tr:hover td { background:var(--raise); }
-.fwtiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(128px,1fr)); gap:8px; margin:4px 0 14px; }
-.fwtiles div { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:8px 10px; }
-.fwtiles small { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.04em; }
-.fwtiles b { font:600 16px "JetBrains Mono",monospace; }
-.fwh { font-size:13px; margin:14px 0 6px; display:flex; gap:8px; align-items:baseline; flex-wrap:wrap; }
-.fwh small { font-weight:400; }
-.fwt-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:10px; margin-bottom:6px; background:var(--surface); }
-.fwt { width:100%; border-collapse:collapse; font:12px "JetBrains Mono",monospace; white-space:nowrap; }
-.fwt th { vertical-align:bottom; font:600 10px Inter,sans-serif; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); text-align:right; padding:7px 10px; border-bottom:1px solid var(--line); }
-.fwt th.g { text-align:center; border-left:1px solid var(--line); color:var(--ink); }
-.fwt td { padding:6px 10px; border-bottom:1px solid var(--line); text-align:right; }
-.fwt td.gl { border-left:1px solid var(--line); }
-.fwt th:first-child, .fwt td:first-child { text-align:left; font-family:Inter,sans-serif; }
-.fwt tr[data-go] { cursor:pointer; } .fwt tr[data-go]:hover td { background:var(--raise); }
-.fwt small { color:var(--muted); font-size:10px; }
-.fwnote { font-size:12px; color:var(--muted); margin:10px 0 0; }
-details.fwref summary { cursor:pointer; font-size:12px; color:var(--muted); margin-top:12px; }
 .hm-sec { margin:0 0 12px; }
 .hm-sec h4 { margin:0 0 5px; font-size:12px; display:flex; gap:8px; }
 .hm-tiles { display:flex; flex-wrap:wrap; gap:3px; }
@@ -345,7 +328,7 @@ details.fwref summary { cursor:pointer; font-size:12px; color:var(--muted); marg
 </head>
 <body data-mview="list">
 <header class="top">
-  <div class="brand">F&amp;O <i>Terminal</i></div>
+  <a class="brand" id="homeLink" href="/" style="text-decoration:none;color:inherit" title="Live results">F&amp;O <i>Terminal</i></a>
   <div class="mkt"><span class="dot" id="livedot"></span><span class="lbl" id="mktlbl">—</span><span class="clock" id="clock"></span></div>
   <div class="tsearch"><input id="q" type="search" autocomplete="off" placeholder="Search symbol or company" aria-label="Search symbol or company"><kbd>/</kbd></div>
   <div class="tbtns">
@@ -1103,8 +1086,6 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     board = b; showScore = b === "score";
     if (b) document.body.dataset.board = b; else delete document.body.dataset.board;
     $("#moversBtn").setAttribute("aria-pressed", b === "movers"); $("#heatBtn").setAttribute("aria-pressed", b === "heatmap"); $("#scoreToggle").setAttribute("aria-pressed", b === "score");
-    $("#armABtn").setAttribute("aria-pressed", b === "armA"); $("#armBBtn").setAttribute("aria-pressed", b === "armB");
-    if (b === "armA" || b === "armB") { try { history.replaceState(null, "", "#" + b.toLowerCase()); } catch (e) { /* file:// */ } }
     renderScoreboard(); renderBoard();
     if (b && isPhone()) setMView("main", b);
     if (!b && !quiet && chart) setTimeout(() => chart.timeScale().fitContent(), 0);
@@ -1112,64 +1093,17 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   }
   $("#moversBtn").addEventListener("click", () => setBoard(board === "movers" ? null : "movers"));
   $("#heatBtn").addEventListener("click", () => setBoard(board === "heatmap" ? null : "heatmap"));
-  $("#armABtn").addEventListener("click", () => setBoard(board === "armA" ? null : "armA"));
-  $("#armBBtn").addEventListener("click", () => setBoard(board === "armB" ? null : "armB"));
+  $("#armABtn").addEventListener("click", () => goHome("#arma"));
+  $("#armBBtn").addEventListener("click", () => goHome("#armb"));
   let heatMetric = "pct";
   function renderBoard() {
     const el = $("#boardBody");
     if (board === "movers") el.innerHTML = moversHtml();
     else if (board === "heatmap") el.innerHTML = heatmapHtml();
-    else if (board === "armA" || board === "armB") el.innerHTML = armHtml(board.slice(3));
     else { el.innerHTML = ""; return; }
-    $$("[data-arm]", el).forEach(b => b.addEventListener("click", () => setBoard("arm" + b.dataset.arm)));
     $$("[data-go]", el).forEach(t => t.addEventListener("click", () => select(t.dataset.go)));
     $$("[data-closeboard]", el).forEach(b => b.addEventListener("click", () => setBoard(null)));
     $$("[data-metric]", el).forEach(b => b.addEventListener("click", () => { heatMetric = b.dataset.metric; renderBoard(); }));
-  }
-  // ---- forward paper test (scanner/forward_s1.py, run each night on NSE's closing files): arm A / arm B
-  const FW = meta.forward || null;
-  const ARM_NAME = { A: "Arm A · every results beat", B: "Arm B · results beat in a strong sector" };
-  const EXIT_NAME = { "0_stop": "Stop 50%", "1_decay": "5 days no new high", "2_t_minus_1": "T-1 (before expiry)" };
-  function fmtD(d) { return d ? new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "2-digit", month: "short" }) : "—"; }
-  function pk(v, d) { return v == null ? "—" : `<span class="${dirClass(v)}">${pct(v)}</span>${d ? ` <small>${fmtD(d)}</small>` : ""}`; }
-  function sr(v) { return v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + "₹" + inr(Math.abs(Math.round(v))); }
-  function heldDays(t) { return (t.path || []).filter(p => !t.exit_date || p[0] <= t.exit_date).length; }
-  function armHtml(a) {
-    const sw = `<span class="seg" role="group" aria-label="Arm">${["A", "B"].map(x => `<button type="button" data-arm="${x}" aria-pressed="${x === a}">Arm ${x}</button>`).join("")}</span>`;
-    const head = `<div class="bh"><h2>${ARM_NAME[a]}</h2>${sw}<button class="btn x" type="button" data-closeboard>Close</button></div>`;
-    if (!FW || !FW.arms) return head + `<p class="count">The forward paper test starts with tonight's NSE closing files: the first signals show here tomorrow morning and are bought on the next session (day 1).</p>`;
-    const st = FW.arms[a], sess = (FW.sessions || []).filter(x => x.session > FW.first_session);
-    const closed = st.closed.filter(t => !t.excluded), wins = closed.filter(t => t.net > 0).length;
-    const avg = closed.length ? closed.reduce((x, t) => x + t.net_pct, 0) / closed.length : null;
-    const tot = closed.reduce((x, t) => x + t.net, 0);
-    const openPnl = st.open.reduce((x, t) => x + ((t.stats || {}).last_close != null ? ((t.stats.last_close - t.entry_price) * t.lot) : 0), 0);
-    const tile = (k, v, c = "") => `<div><small>${k}</small><b class="${c}">${v}</b></div>`;
-    let h = head + `<p class="count">Forward paper test of the S1 v7 rules without near-expiry trades · day ${sess.length} (sessions after ${fmtD(FW.first_session)}) · last NSE session processed: <b>${fmtD(FW.last_session)}</b> · updated each night from NSE's closing files. Paper only; these rules failed the 2021–24 backtest.</p>
-      <div class="fwtiles">${tile("Buy next session", st.pending.length)}${tile("Open", st.open.length)}${tile("Closed", closed.length)}${tile("Win rate", closed.length ? Math.round(100 * wins / closed.length) + "%" : "—")}
-      ${tile("Average net", avg == null ? "—" : pct(avg), dirClass(avg))}${tile("Closed net", closed.length ? sr(tot) : "—", dirClass(tot))}${tile("Open P&amp;L (gross)", st.open.length ? sr(openPnl) : "—", dirClass(openPnl))}</div>`;
-    const go = sym => BY[sym] ? ` data-go="${esc(sym)}"` : "";
-    h += `<h3 class="fwh">Buy next session <small>results beats from the last session; bought at the next session's average price</small></h3>`;
-    h += st.pending.length ? `<div class="fwt-wrap"><table class="fwt"><thead><tr><th>Stock</th><th>Results day (day 0)</th><th>Beat vs sector</th><th>Day-0 move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
-      `<tr${go(p.symbol)}><td><b>${esc(p.symbol)}</b> <small>${esc(sectorName(p.sector) || "")}</small></td><td>${fmtD(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dirClass(p.move)}">${pct(p.move)}</td><td>${fmtD(p.expiry)}</td><td>${fmtPx(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="count">None from the last session.</p>`;
-    h += `<h3 class="fwh">Open <small>marked at each session's close · exits: 50% stop, 5 sessions without a new closing high, T-1</small></h3>`;
-    h += st.open.length ? `<div class="fwt-wrap"><table class="fwt"><thead><tr>${["Stock", "Bought", "Call", "1 lot ₹", "Entry", "Last close", "P&amp;L"].map(x => `<th rowspan="2">${x}</th>`).join("")}<th class="g" colspan="2">While held</th><th rowspan="2">Day</th><th rowspan="2">Stop at</th></tr>
-      <tr><th class="g">Max peak</th><th>Max dip</th></tr></thead><tbody>${st.open.map(t => { const x = t.stats || {};
-      return `<tr${go(t.symbol)}><td><b>${esc(t.symbol)}</b></td><td>${fmtD(t.entry_date)}</td><td>${fmtStrike(t.strike)} CE <small>${fmtD(t.expiry)}</small></td><td>${inr(Math.round(t.cost))}</td><td>${fmtPx(t.entry_price)}</td>
-        <td>${fmtPx(x.last_close)} <small>${fmtD(x.last_date)}</small></td><td class="${dirClass(x.mark_pct)}">${x.mark_pct == null ? "—" : pct(x.mark_pct)}</td><td class="gl">${pk(x.h_peak, x.h_peak_date)}</td><td>${pk(x.h_dip, x.h_dip_date)}</td><td>${heldDays(t)}</td><td>${fmtPx(t.entry_price / 2)}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="count">No open trades.</p>`;
-    h += `<h3 class="fwh">Closed <small>after the exit the option is followed to T-1: did it go higher after we sold?</small></h3>`;
-    const cl = st.closed.slice().reverse();
-    h += cl.length ? `<div class="fwt-wrap"><table class="fwt"><thead><tr>${["Stock", "Bought", "Sold", "Reason", "Net ₹", "Net %"].map(x => `<th rowspan="2">${x}</th>`).join("")}<th class="g" colspan="2">While held</th><th class="g" colspan="3">After the exit (to T-1)</th></tr>
-      <tr><th class="g">Max peak</th><th>Max dip</th><th class="g">Max peak</th><th>Max dip</th><th>Above our exit?</th></tr></thead><tbody>${cl.map(t => { const x = t.stats || {};
-      const reason = t.excluded ? (t.excluded === "price_adjusted" ? "Excluded: corporate action" : "Excluded: contract missing in NSE's file") : (EXIT_NAME[t.exit_reason] || t.exit_reason || "");
-      const above = x.above_exit == null ? (t.tracking ? "following…" : "—") : x.above_exit ? `<span class="up">yes</span>` : "no";
-      return `<tr${go(t.symbol)}><td><b>${esc(t.symbol)}</b> <small>${fmtStrike(t.strike)} CE</small></td><td>${fmtD(t.entry_date)}</td><td>${fmtD(t.exit_date)} <small>day ${heldDays(t)}</small></td><td>${esc(reason)}</td>
-        <td class="${dirClass(t.net)}">${t.net == null ? "—" : sr(t.net)}</td><td class="${dirClass(t.net_pct)}">${t.net_pct == null ? "—" : pct(t.net_pct)}</td>
-        <td class="gl">${pk(x.h_peak, x.h_peak_date)}</td><td>${pk(x.h_dip, x.h_dip_date)}</td><td class="gl">${pk(x.a_peak, x.a_peak_date)}</td><td>${pk(x.a_dip, x.a_dip_date)}</td><td>${above}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="count">No closed trades yet.</p>`;
-    const rf = st.refused.slice().reverse();
-    if (rf.length) h += `<details class="fwref"><summary>Signals not taken (${rf.length})</summary><div class="fwt-wrap" style="margin-top:6px"><table class="fwt"><thead><tr><th>Stock</th><th>Results day</th><th>Beat</th><th>Why not</th></tr></thead><tbody>${rf.map(r =>
-      `<tr${go(r.symbol)}><td><b>${esc(r.symbol)}</b></td><td>${fmtD(r.signal_date)}</td><td>${pct(r.beat)}</td><td style="text-align:left">${esc(r.reason)}</td></tr>`).join("")}</tbody></table></div></details>`;
-    h += `<p class="fwnote">Max peak = how far above the price paid the option closed at its highest (0% = never above); max dip = how far below it closed at its lowest. Daily closing prices. Net ₹ is after charges and slippage. ${esc(FW.rules || "")}</p>`;
-    return h;
   }
   function moversHtml() {
     const all = stocks.map(s => ({ s, v: view(s) }));
@@ -1315,12 +1249,12 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       <button class="btn" type="button" data-m="armB">Forward test · Arm B (strong sector)</button>
       <button class="btn" type="button" data-m="score">Scoreboard: your calls vs the system</button>
       <button class="btn" type="button" data-m="alerts">Price alerts</button>
-      ${SERVER.orders ? `<button class="btn" type="button" data-m="orders">Orders & paper account</button>` : ""}
+      ${SERVER.orders ? `<button class="btn" type="button" data-m="orders">Results: paper account</button>` : ""}
       <button class="btn" type="button" data-m="theme">Light / dark theme</button>
       <button class="btn" type="button" data-m="close">Close</button></div>`;
     sheet.addEventListener("click", e => {
       const m = (e.target.closest("[data-m]") || {}).dataset; if (!m) return; bg.remove();
-      if (m.m === "score") setBoard("score"); else if (m.m === "armA" || m.m === "armB") setBoard(m.m); else if (m.m === "alerts") openAlerts(sel); else if (m.m === "orders") openOrders(); else if (m.m === "theme") $("#themeBtn").click();
+      if (m.m === "score") setBoard("score"); else if (m.m === "armA" || m.m === "armB") goHome("#" + m.m.toLowerCase()); else if (m.m === "alerts") openAlerts(sel); else if (m.m === "orders") goHome("#paper"); else if (m.m === "theme") $("#themeBtn").click();
     });
     document.body.appendChild(bg);
   }
@@ -1338,7 +1272,11 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   });
 
   // ---- orders
-  if (SERVER.orders) { $("#ordersBtn").hidden = false; $("#ordersBtn").addEventListener("click", openOrders); }
+  // The paper account and the forward test have their own page (templates/results.html: "/" on the server)
+  const HOME = SERVER.orders || SERVER.live ? "/" : "results.html";
+  const goHome = h => { location.href = HOME + h; };
+  $("#homeLink").href = HOME;
+  if (SERVER.orders) { $("#ordersBtn").hidden = false; $("#ordersBtn").textContent = "Results"; $("#ordersBtn").addEventListener("click", () => goHome("#paper")); }
 
   const LIQ_PILL = { accept: "b", penalty: "u", lottery: "n", refuse: "r" };
   const FILL_RULE = { normal: "book walk + 1 tick", penalty: "book walk + 1 tick + half spread", lottery: "best level ± 1 tick (lottery)" };
@@ -1460,70 +1398,9 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     draw(); document.body.appendChild(bg);
   }
 
-  async function openOrders() {
-    const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
-    const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub">Loading…</p>`; bg.appendChild(sheet); document.body.appendChild(bg);
-    if (SERVER.paper) return paperOrders(sheet, bg);
-    try {
-      const [o, p] = await Promise.all([getJson("/api/orders"), getJson("/api/positions")]);
-      sheet.innerHTML = `<h2>Orders & positions</h2><p class="sub"><span class="badge live">LIVE BROKER</span></p>
-        <h3 class="oh">Open positions</h3><div class="olist">${p.length ? p.map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b></span><span>${x.quantity > 0 ? "+" : ""}${inr(x.quantity)} @ ₹${inr(x.avg_price)}${x.pnl != null ? " · P&L ₹" + inr(x.pnl) : ""}</span></div>`).join("") : "<div class='o'><span>None</span></div>"}</div>
-        <h3 class="oh">Orders</h3><div class="olist">${o.length ? o.slice(0, 50).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.price ? " @ ₹" + inr(x.price) : ""}</span><span>${esc(x.status)}<br>${esc((x.placed_at || "").slice(0, 16))}</span></div>`).join("") : "<div class='o'><span>None yet</span></div>"}</div>
-        <div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`;
-      $("#closeO", sheet).addEventListener("click", () => bg.remove());
-    } catch (e) { sheet.innerHTML = `<h2>Orders & positions</h2><p class="err">${esc(e.message)}</p>`; }
-  }
-
   function paperSummaryLine(sm) {
-    return `Equity <b>${money(sm.equity)}</b> on ${money(sm.capital)} · day <b class="${dirClass(sm.day_pnl)}">${money(sm.day_pnl)}</b> · week <b class="${dirClass(sm.week_pnl)}">${money(sm.week_pnl)}</b> · drawdown ${sm.drawdown_pct}% · open margin ${money(sm.open_margin)}` +
-      (sm.kill_switch ? ` · kill switch ${sm.kill_switch.active ? '<b class="down">ON</b>' : "off"}` : "");
-  }
-
-  async function paperOrders(sheet, bg) {
-    try {
-      const [sm, pos, tr, rf, ords] = await Promise.all([getJson("/api/paper/summary"), getJson("/api/paper/positions"), getJson("/api/paper/trades"), getJson("/api/paper/refusals"), getJson("/api/orders")]);
-      const posHtml = pos.map(p => `<div class="o"><span><b>${esc(p.tradingsymbol)}</b> ${p.side === "BUY" ? "long" : "short"} ${plural(p.lots, "lot")} (${inr(p.qty)})
-          <br>entry ₹${inr(p.entry.price)} · mark ${p.mark ? "₹" + inr(p.mark.price) + (p.mark.stale ? " <small>(no " + (p.side === "BUY" ? "bid" : "ask") + ")</small>" : "") : "—"}${p.mark && p.mark.at ? " <small>at " + esc(p.mark.at.slice(0, 16).replace("T", " ")) + "</small>" : ""}
-          <br>stop ${p.stop != null ? "₹" + inr(p.stop) + (p.stop_triggered_at ? " <b class='down'>triggered</b>, exits at the next poll" : "") : "none"} · expiry ${esc(p.expiry)} · T-2 ${esc(p.t2_date)}</span>
-          <span><b class="${dirClass(p.unrealised)}">${money(p.unrealised)}</b><br><small>MTM, net of charges</small><br><button class="btn" type="button" data-close="${esc(p.id)}">Close…</button></span></div><div class="closebox" id="cl-${esc(p.id)}"></div>`).join("");
-      const trHtml = tr.trades.slice(0, 50).map(t => `<div class="o"><span><b>${esc(t.tradingsymbol)}</b> ${t.side === "BUY" ? "long" : "short"} ${plural(t.lots, "lot")} · ${esc(t.reason)}
-          <br>₹${inr(t.entry.price)} → ₹${inr(t.exit.price)} · charges ${money(t.charges_total)}</span>
-          <span><b class="${dirClass(t.net_pnl)}">${money(t.net_pnl)}</b>${t.return_pct != null ? "<br>" + pct(t.return_pct) : ""}<br><small>${esc((t.closed_at || "").slice(0, 16).replace("T", " "))}</small></span></div>`).join("");
-      const ordHtml = ords.slice(0, 40).map(x => `<div class="o"><span><b>${esc(x.tradingsymbol)}</b><br>${esc(x.side)} ${inr(x.quantity)} ${esc(x.order_type)}${x.auto ? " · auto " + esc(x.auto) : ""}${x.reason ? "<br><small>" + esc(x.reason) + "</small>" : ""}</span>
-          <span>${esc(x.status)}${x.fill_price != null ? " @ ₹" + inr(x.fill_price) : ""}<br>${esc((x.filled_at || x.placed_at || "").slice(0, 16).replace("T", " "))}</span></div>`).join("");
-      const refHtml = rf.refusals.map(x => `<div class="o"><span><b>${esc(x.contract || x.symbol)}</b> ${esc(x.side || "")} ${inr(x.qty)}<br><small>${(x.reasons || []).map(esc).join("; ")}</small></span><span>${esc((x.time || "").slice(0, 16).replace("T", " "))}<br><small>${esc(x.stage || "")}</small></span></div>`).join("");
-      sheet.innerHTML = `<h2>Paper account</h2><p class="sub"><span class="badge paper">PAPER</span> ${paperSummaryLine(sm)}</p>
-        ${sm.kill_switch && sm.kill_switch.active ? `<p class="err">${esc(sm.kill_switch.reason)}</p>` : ""}
-        ${sm.drawdown_review ? `<p class="notice">${esc(sm.drawdown_review_message)}</p>` : ""}
-        ${sm.queued_orders ? `<p class="count">${plural(sm.queued_orders, "order")} queued for the next session's 09:20 poll.</p>` : ""}
-        <h3 class="oh">Open positions (${pos.length})</h3><div class="olist">${posHtml || "<div class='o'><span>None</span></div>"}</div>
-        <h3 class="oh">Closed trades (${tr.trades.length}), net of fills and charges</h3><div class="olist">${trHtml || "<div class='o'><span>None yet</span></div>"}</div>
-        <h3 class="oh">Refusals: ${rf.count}</h3>${rf.count ? `<button class="btn" type="button" id="showRef">Show the reasons</button><div class="olist" id="refList" hidden>${refHtml}</div>` : "<p class='count'>None: every order so far found enough liquidity.</p>"}
-        <h3 class="oh">Order log</h3><div class="olist">${ordHtml || "<div class='o'><span>None yet</span></div>"}</div>
-        <div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`;
-      $("#closeO", sheet).addEventListener("click", () => bg.remove());
-      const sr = $("#showRef", sheet); if (sr) sr.addEventListener("click", () => { const l = $("#refList", sheet); l.hidden = !l.hidden; sr.textContent = l.hidden ? "Show the reasons" : "Hide the reasons"; });
-      sheet.querySelectorAll("[data-close]").forEach(b => b.addEventListener("click", () => closePosition(pos.find(p => p.id === b.dataset.close), sheet, bg)));
-    } catch (e) { sheet.innerHTML = `<h2>Paper account</h2><p class="err">${esc(e.message)}</p><div class="actions"><button class="btn" type="button" id="closeO">Close</button></div>`; $("#closeO", sheet).addEventListener("click", () => bg.remove()); }
-  }
-
-  // Manual exit from the Orders screen: the opposite side of the position's own contract, reviewed first.
-  async function closePosition(p, sheet, bg) {
-    const box = $("#cl-" + CSS.escape(p.id), sheet); if (!box) return;
-    const body = { symbol: p.symbol, instrument: p.instrument, expiry: p.expiry, strike: p.instrument === "FUT" ? null : p.strike,
-                   side: p.side === "BUY" ? "SELL" : "BUY", lots: p.lots, order_type: "MARKET", price: null, stop: null };
-    box.innerHTML = `<p class="count">Reviewing the exit…</p>`;
-    try {
-      const pv = await getJson("/api/order/preview", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-      box.innerHTML = paperReviewHtml(pv) + `<div class="actions">${pv.token ? `<button class="btn primary" type="button" data-go>${pv.review.queued ? "Queue the exit" : "Place the exit"}</button>` : ""}<button class="btn" type="button" data-no>Cancel</button></div>`;
-      box.querySelector("[data-no]").addEventListener("click", () => { box.innerHTML = ""; });
-      const go = box.querySelector("[data-go]");
-      if (go) go.addEventListener("click", async () => {
-        go.disabled = true;
-        try { await getJson("/api/order", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, token: pv.token }) }); refreshPaperBar(); paperOrders(sheet, bg); }
-        catch (e) { box.insertAdjacentHTML("beforeend", `<p class="err">${esc(e.message)}</p>`); go.disabled = false; }
-      });
-    } catch (e) { box.innerHTML = `<p class="err">${esc(e.message)}</p>`; }
+    return `Equity ${money(sm.equity)} on ${money(sm.capital)} · day ${money(sm.day_pnl)} · week ${money(sm.week_pnl)} · drawdown ${sm.drawdown_pct}% · open margin ${money(sm.open_margin)}` +
+      (sm.kill_switch ? ` · kill switch ${sm.kill_switch.active ? "ON" : "off"}` : "");
   }
 
   // The paper account at a glance in the top bar, and the drawdown banner when it applies.
@@ -1561,7 +1438,8 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   function fromHash() {
     const [a, b] = decodeURIComponent(location.hash.slice(1)).split("/");
     if (!a) return false;
-    const bn = { movers: "movers", heatmap: "heatmap", score: "score", arma: "armA", armb: "armB" }[a.toLowerCase()];
+    if (["arma", "armb", "paper"].includes(a.toLowerCase())) { goHome("#" + a.toLowerCase()); return true; }
+    const bn = { movers: "movers", heatmap: "heatmap", score: "score" }[a.toLowerCase()];
     if (bn) { if (sel && !chartKey) _select(sel); setBoard(bn); return true; }
     const sym = a.toUpperCase(); if (!BY[sym]) return false;
     if (b && TABS.some(t => t[0] === b.toLowerCase())) tab = b.toLowerCase();

@@ -49,6 +49,7 @@ from server.liquidity import Rules, classify
 log = logging.getLogger(__name__)
 IST = sessions.IST
 MODE_FOR_CLASS = {"accept": "normal", "penalty": "penalty", "lottery": "lottery"}
+FOLLOW_MAX = 10                      # closed trades followed after the exit (until their T-2 day), the latest ones
 
 
 class PaperRejected(ValueError):
@@ -361,7 +362,10 @@ class PaperLedger:
                        "capital_committed": round(committed, 2),
                        "return_pct": round(net / committed * 100, 2) if committed else None,
                        "max_loss_at_entry": round(ml * frac, 2) if ml else None,
-                       "r_multiple": round(net / (ml * frac), 3) if ml else None})
+                       "r_multiple": round(net / (ml * frac), 3) if ml else None,
+                       "held_peak": pos.get("peak"), "held_trough": pos.get("trough"),
+                       "after": {"until": pos.get("t2_date") or pos["expiry"], "peak": None, "trough": None,
+                                 "last": None}})
         self.state["closed"].append(closed)
         day = self._ensure_day(now)
         day["realised"] = round(day.get("realised", 0.0) + net, 2)
@@ -399,10 +403,30 @@ class PaperLedger:
                 if quote:
                     self._mark(pos, quote, now)
                     self._check_stop(pos, now)
+            self._follow_closed(now)
             self._touch_day(now)
             if self.risk is not None:
                 self.risk.state(self, now)            # latches the daily / weekly halt as soon as it is hit
             self._save()
+
+    def _follow_closed(self, now: datetime) -> None:
+        """After the exit: keep quoting the contract until its T-2 day, so the results page shows whether the
+        option went on rising (or kept falling) after we sold."""
+        live = [c for c in self.state["closed"][-FOLLOW_MAX:]
+                if (c.get("after") or {}).get("until") and now.date() <= sessions._d(c["after"]["until"])]
+        for c in live:
+            q = self.quotes.get({k: c[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
+                                                   "lot_size")}, fresh=False)
+            px = (q or {}).get("last_price")
+            if not px:
+                continue
+            a = c["after"]
+            at = now.isoformat(timespec="seconds")
+            a["last"] = {"price": px, "at": at}
+            if a["peak"] is None or px > a["peak"]["price"]:
+                a["peak"] = {"price": px, "at": at}
+            if a["trough"] is None or px < a["trough"]["price"]:
+                a["trough"] = {"price": px, "at": at}
 
     def process_queue(self, now: datetime) -> list[dict]:
         done, out = set(), []
@@ -477,6 +501,7 @@ class PaperLedger:
             side_px = 0.0 if is_option(pos["instrument"]) and pos["side"] == "BUY" else prev
         pos["mark"] = {"price": side_px, "bid": bid, "ask": ask, "ltp": quote.get("last_price"),
                        "at": now.isoformat(timespec="seconds"), "stale": stale}
+        track(pos, quote.get("last_price") or (None if stale else side_px), now)
         self._revalue(pos)
 
     def _check_stop(self, pos: dict, now: datetime) -> None:
@@ -584,6 +609,21 @@ class PaperLedger:
         if p is None:
             raise PaperRejected("that position is no longer open")
         return p
+
+
+def track(pos: dict, px: float | None, now: datetime) -> None:
+    """The highest and lowest traded price (LTP) seen while the position is open, starting at the entry price."""
+    if not px:
+        return
+    at = now.isoformat(timespec="seconds")
+    entry = pos["entry"]["price"]
+    peak = pos.get("peak") or {"price": entry, "at": pos.get("opened_at")}
+    trough = pos.get("trough") or {"price": entry, "at": pos.get("opened_at")}
+    if px > peak["price"]:
+        peak = {"price": px, "at": at}
+    if px < trough["price"]:
+        trough = {"price": px, "at": at}
+    pos["peak"], pos["trough"] = peak, trough
 
 
 def trade_stats(trades: list[dict]) -> dict:
