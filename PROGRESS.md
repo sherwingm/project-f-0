@@ -57,6 +57,12 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   shows Arm A / Arm B badges. The server pulls the scan at 08:40 and 09:05 for the morning list. Render must be
   awake at 09:15 and 15:20 (keep the page open, or a free uptime pinger every 5 minutes).
 
+- **S1 v8 closed, and the live rules fail on recent data** (holdout used by the user's choice, 2026-10-14; NSE F&O
+  files for 2025-02 → 2026-10 now cached, ban lists back-filled): on Apr 2025 – Sep 2026 calls on any result in a
+  strong sector lost −27.6 % a trade (t −3.4); the live rules: arm A −3.3 % (t −0.25), arm B −14.5 % (t −1.0). Even
+  the stock's own move after results was about zero in this period (20 sessions: A +0.2 %, B +0.1 %), so the
+  2021-24 drift did not carry on. The live paper account keeps running as the only fresh evidence.
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace

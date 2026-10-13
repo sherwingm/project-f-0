@@ -1,4 +1,6 @@
-# S1 v8 · Any result in a strong sector, long calls (with the live rules as reference), on recent data
+# S1 v8 · Any result in a strong sector, long calls (with the live rules as reference), on recent data — CLOSED
+
+**Status: closed, failed the gate** (`DECISIONS.md`, 2026-10-14). Arm S 168 trades, mean −27.6 %, t −3.42; S_miss −37.8 %; the live rules failed on the same data too (A −3.3 %, B −14.5 %). The stock-level drift after results was about zero in Apr 2025 – Sep 2026 (S +0.37 %, B +0.09 % over 20 sessions). Report: `data/results/S1_v8_backtest_report.md`; sheet: `S1_v8_trade_sheet.xlsx`.
 
 S1, version 8. **Pre-registered**: every choice is fixed here before any v8 run. Long options only.
 Backtest: `python -m scanner.backtest_s1_v8`.
