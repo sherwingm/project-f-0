@@ -69,6 +69,13 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   +0.62 % for a 5-session short (t 3.2), positive in 5 of 6 years including 2025 and 2026. Small for options: step 2
   must show a put can keep it after time decay and costs. S1's pages and paper trades are unchanged.
 
+- **Arm A studies (hindsight):** `python -m scanner.peak_study` + `scanner.peak_study_sheet` build the per-trade
+  dataset (option path, 16 alternative exits, stock path, QoQ / YoY from `data/financials.json`, now with the
+  quarters of 2021-2026 trades) and the workbook `S1_armA_peak_study.xlsx`; two reports in `data/results/`. Result:
+  no exit or result-quality rule beats the live rule in both samples; the losses are entries whose stock does not
+  move; the only same-direction rules are "skip ≤ 15 days to expiry" and "sell at a day-1 close ≤ 75 % of entry"
+  (DECISIONS.md). Proposed to the user as an S1 v9 side arm; not written.
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace
