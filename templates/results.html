@@ -74,6 +74,12 @@ h2 small { font-weight:400; font-size:12px; }
 .px .arr { color:var(--muted); font-size:18px; padding-bottom:4px; }
 .pnl { font:700 15px "JetBrains Mono",monospace; display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid var(--line); padding-top:8px; }
 .pnl small { font:400 11px Inter,sans-serif; }
+.val { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.val > div { border:1px solid var(--line); border-radius:9px; padding:7px 10px; }
+.val small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.val b { font:700 16px "JetBrains Mono",monospace; }
+.val em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
+.val .r { text-align:right; }
 .ex { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .ex > div { background:var(--raise); border-radius:9px; padding:7px 10px; }
 .ex small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
@@ -223,6 +229,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       <div class="sub">Expiry ${day(p.expiry)} · ${lots} · bought ${when(p.opened_at)}</div>
       <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
         <div class="now"><small>Now${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}</em></div></div>
+      <div class="val"><div><small>Buy value</small><b>${rs(e * p.qty)}</b><em>${rs(e)} × ${num(p.qty, 0)} qty</em></div>
+        <div class="r"><small>Value now</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
       ${rail(e, now, pk, tr, p.stop)}
@@ -234,14 +242,14 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you" };
   function closedTable(rows) {
-    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
+    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
       <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) <= a.until;
         return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small></td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
-          <td class="entry">${rs(e)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
+          <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
@@ -315,18 +323,20 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         <div class="sub">Expiry ${day(t.expiry)} · 1 lot × ${t.lot} · bought ${day(t.entry_date)} · results ${day(t.signal_date)} (beat ${pct(t.beat)})</div>
         <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
           <div class="now"><small>Last close · ${day(x.last_date)}</small><b>${rs(x.last_close)}</b><em class="${dir(x.mark_pct)}">${pct(x.mark_pct)}</em></div></div>
+        <div class="val"><div><small>Buy value</small><b>${rs(e * t.lot)}</b><em>${rs(e)} × ${num(t.lot, 0)} qty</em></div>
+          <div class="r"><small>Value at last close</small><b class="${dir(x.mark_pct)}">${x.last_close != null ? rs(x.last_close * t.lot) : "—"}</b><em>${x.last_close != null ? rs(x.last_close) + " × " + num(t.lot, 0) + " qty" : ""}</em></div></div>
         <div class="ex"><div><small>Max up</small><b class="${dir(x.h_peak)}">${pct(x.h_peak)}</b><em>${pkp ? rs(pkp) + " · " + day(x.h_peak_date) : "not above entry yet"}</em></div>
           <div><small>Max dip</small><b class="${dir(x.h_dip)}">${pct(x.h_dip)}</b><em>${dpp ? rs(dpp) + " · " + day(x.h_dip_date) : "not below entry yet"}</em></div></div>
         ${rail(e, x.last_close, pkp, dpp, e / 2)}
-        <div class="ft"><span>Stop <b class="mono">${rs(e / 2)}</b></span><span>Cost ${rs(t.cost, 0)}</span><span>Day ${(t.path || []).length}</span></div></article>`; }).join("")}</div>` : `<p class="empty">No open trades.</p>`;
+        <div class="ft"><span>Stop <b class="mono">${rs(e / 2)}</b></span><span>Day ${(t.path || []).length}</span></div></article>`; }).join("")}</div>` : `<p class="empty">No open trades.</p>`;
     h += `<h2>Closed <small>after the exit the option is followed until T-1</small></h2>`;
     const cl = st.closed.slice().reverse();
-    h += cl.length ? `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Exit", "Net ₹", "Net %"].map(x => `<th rowspan="2">${x}</th>`).join("")}
+    h += cl.length ? `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(x => `<th rowspan="2">${x}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="2">After we sold (to T-1)</th><th rowspan="2">Why sold</th></tr>
       <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th></tr></thead><tbody>${cl.map(t => { const x = t.stats || {};
         const why = t.excluded ? (t.excluded === "price_adjusted" ? "Excluded: corporate action" : "Excluded: contract missing") : (EXIT[t.exit_reason] || t.exit_reason || "");
         return `<tr><td><b>${esc(t.symbol)}</b> <small>${num(t.strike, 0)} CE · ${day(t.expiry)}</small></td><td>${day(t.entry_date)}</td><td>${day(t.exit_date)}</td>
-          <td class="entry">${rs(t.entry_price)}</td><td>${rs(t.exit_price)}</td><td class="${dir(t.net)}">${srs(t.net)}</td><td class="${dir(t.net_pct)}">${pct(t.net_pct)}</td>
+          <td class="entry">${rs(t.entry_price)}</td><td>${rs(t.cost, 0)}</td><td>${rs(t.exit_price)}</td><td class="${dir(t.net)}">${srs(t.net)}</td><td class="${dir(t.net_pct)}">${pct(t.net_pct)}</td>
           <td class="gl ${dir(x.h_peak)}">${pct(x.h_peak)} <small>${day(x.h_peak_date)}</small></td><td class="${dir(x.h_dip)}">${pct(x.h_dip)} <small>${day(x.h_dip_date)}</small></td>
           <td class="gl ${dir(x.a_peak)}">${x.a_peak == null ? (t.tracking ? "following…" : "—") : pct(x.a_peak) + ` <small>${day(x.a_peak_date)}</small>`}</td>
           <td class="${dir(x.a_dip)}">${x.a_dip == null ? "—" : pct(x.a_dip) + ` <small>${day(x.a_dip_date)}</small>`}</td><td>${esc(why)}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="empty">No closed trades yet.</p>`;
