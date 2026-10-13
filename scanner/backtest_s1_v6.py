@@ -79,9 +79,10 @@ def fill_at(q: Quote, min_contracts: int) -> tuple[float, str] | None:
     return round(base + TICK, 2), source
 
 
-def walk_strike(strikes, spot: float, quotes: dict[float, Quote], min_contracts: int):
+def walk_strike(strikes, spot: float, quotes: dict[float, Quote], min_contracts: int,
+                band: tuple[float, float] = BAND):
     """From the strike nearest spot (a tie: the lower), upward: the first call that traded >= min_contracts with a
-    fill >= Rs 2 and one lot within Rs 600-8,000. Returns (quote, fill, source, strikes walked past) or the filter
+    fill >= Rs 2 and one lot within `band` (Rs 600-8,000). Returns (quote, fill, source, strikes walked past) or the filter
     that stopped the walk."""
     ks = sorted(set(float(k) for k in strikes))
     k0 = v4.call_strike(ks, spot)
@@ -98,23 +99,25 @@ def walk_strike(strikes, spot: float, quotes: dict[float, Quote], min_contracts:
         if px < MIN_PREMIUM:
             return "lottery_refused"
         cost = px * q.lot
-        if cost < BAND[0]:                                     # the strikes above are cheaper still
+        if cost < band[0]:                                     # the strikes above are cheaper still
             return "walk_below_band"
-        if cost > BAND[1]:
+        if cost > band[1]:
             continue
         return q, px, source, n
     return "walk_no_liquid_strike_in_band"
 
 
-def decay_step(close: float, best: float, stall: int, to_expiry: int, n: int) -> tuple[float, int, str | None]:
-    """One close of an open call: (best close so far, sessions without a new high, exit reason or None)."""
+def decay_step(close: float, best: float, stall: int, to_expiry: int, n: int,
+               t_minus: int = T_MINUS) -> tuple[float, int, str | None]:
+    """One close of an open call: (best close so far, sessions without a new high, exit reason or None); the last
+    exit is `t_minus` sessions before expiry (reason "2_t_minus_2" whatever the value)."""
     if close > best:
         best, stall = close, 0
     else:
         stall += 1
     if stall >= n:
         return best, stall, "1_decay"
-    if to_expiry <= T_MINUS:
+    if to_expiry <= t_minus:
         return best, stall, "2_t_minus_2"
     return best, stall, None
 
