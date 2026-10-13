@@ -27,7 +27,7 @@ log = logging.getLogger("cm_fallback")
 CM_URL = "https://nsearchives.nseindia.com/content/cm/BhavCopy_NSE_CM_0_0_0_{ymd}_F_0000.csv.zip"
 INDEX_URL = "https://nsearchives.nseindia.com/content/indices/ind_close_all_{dmy}.csv"
 IST = timezone(timedelta(hours=5, minutes=30))
-MAX_GAP_DAYS = 15                                    # never try to fill more than this many calendar days
+MAX_GAP_DAYS = 60                                    # never try to fill more than this many calendar days
 
 
 def download_cm(day: date, cache_dir: Path | None = None, get=None) -> pd.DataFrame | None:
@@ -106,18 +106,20 @@ def fill(frames: dict[str, pd.DataFrame], cache_dir: Path | None = None, today: 
     return filled
 
 
-def fill_index(closes: pd.Series, days: list[str], get_close=download_index_close) -> pd.Series:
-    """Append NIFTY 50 closes for the filled days that the index series lacks."""
+def fill_index(closes: pd.Series, days: list[str], get_close=download_index_close,
+               name: str = "nifty 50") -> pd.Series:
+    """Append the index's closes (NSE's index-close file, `name` as listed there) for the filled days that the
+    series lacks."""
     for d in days:
         ts = pd.Timestamp(d)
         if len(closes) and closes.index[-1] >= ts:
             continue
         try:
-            c = get_close(date.fromisoformat(d))
+            c = get_close(date.fromisoformat(d), name)
         except Exception as exc:  # noqa: BLE001
             log.warning("index close %s unavailable (%s)", d, exc)
             continue
         if c:
             closes = pd.concat([closes, pd.Series([c], index=pd.DatetimeIndex([ts]))])
-            log.warning("price fallback: NIFTY 50 close for %s from NSE's index file", d)
+            log.warning("price fallback: %s close for %s from NSE's index file", name.upper(), d)
     return closes

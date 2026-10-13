@@ -93,3 +93,29 @@ def test_daily_loop_schedules_events_before_rebuild():
     from server import app as app_mod
     src = inspect.getsource(app_mod._daily_rebuild_loop)
     assert "19, 45" in src and "_events_run" in src and "20, 30" in src
+
+
+def test_nightly_run_catches_up_on_the_session_weekend_and_next_ban_list(runner, monkeypatch):
+    r, _ = runner
+    calls = []
+    monkeypatch.setattr(r, "run_day", lambda d, budget, sources: calls.append((d.isoformat(), tuple(sources))) or {})
+    r.run_recent(date(2026, 10, 13))                              # Tue 02:00 IST, after Monday's session
+    days = [d for d, _ in calls]
+    assert days == ["2026-10-10", "2026-10-11", "2026-10-12", "2026-10-13", "2026-10-14"]
+    by = dict(calls)
+    assert "nse_ann" in by["2026-10-10"] and "nse_ban" not in by["2026-10-10"]        # Saturday: filings, no ban
+    assert "nse_ann" in by["2026-10-12"] and "nse_ban" in by["2026-10-12"]
+    assert by["2026-10-14"] == ("nse_ban",)                                           # next weekday's ban list only
+    assert "nse_bm" in by["2026-10-13"] and "nse_bm" not in by["2026-10-12"]          # forward-looking: once
+
+
+def test_no_ban_file_marks_nobody_out(runner, monkeypatch):
+    r, store = runner
+    store.upsert([{"id": "nse_ban:2026-09-21:PNB", "symbol": "PNB", "event_date": "2026-09-21", "type": "ban",
+                   "subtype": "in", "tier": 1, "direction": -1, "bucket": "significant", "source": "nse_ban"}])
+
+    def no_file(name, day):
+        raise run_mod.FetchError("404")
+    monkeypatch.setattr(r, "_fetch", no_file)
+    r.run_day(date(2026, 9, 22), sources=["nse_ban"])
+    assert [e for e in store.all_of_type("ban") if e["subtype"] == "out"] == []

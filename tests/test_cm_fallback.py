@@ -47,5 +47,5 @@ def test_a_failed_download_is_skipped():
 
 def test_fill_index():
     s = pd.Series([100.0], index=pd.DatetimeIndex(["2026-09-25"]))
-    out = cm.fill_index(s, ["2026-09-28", "2026-09-29"], get_close=lambda d: None if d.day == 29 else 101.0)
+    out = cm.fill_index(s, ["2026-09-28", "2026-09-29"], get_close=lambda d, name: None if d.day == 29 else 101.0)
     assert list(out.values) == [100.0, 101.0]

@@ -20,7 +20,9 @@ URL = "https://nsearchives.nseindia.com/archives/fo/sec_ban/fo_secban_{d:%d%m%Y}
 SOURCE = "nse_ban"
 
 
-def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None) -> list[dict]:
+def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None, strict: bool = False) -> list[dict]:
+    """The F&O ban list for `day`. No file (holiday, not yet published): [] or, with `strict`, FetchError, so the
+    daily run can tell "nobody in ban" from "no list" and never marks every stock out of the ban."""
     if fixture:
         text = read_fixture(fixture)
     else:
@@ -28,6 +30,8 @@ def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None) 
             text = (http or EventHttp()).get_text(URL.format(d=day), "https://www.nseindia.com/")
         except FetchError as exc:
             log.info("%s: no ban file (%s)", day, exc)
+            if strict:
+                raise
             return []
     out = []
     for line in text.splitlines():

@@ -37,6 +37,8 @@ STATUS_PATH = ROOT / "data" / "cache" / "events_status.json"
 PROGRESS_PATH = ROOT / "data" / "cache" / "events_backfill.json"
 RATING_DROPS_PATH = ROOT / "data" / "cache" / "rating_drops.jsonl"
 NAMES_PATH = ROOT / "data" / "cache" / "equity_names.csv"
+RECENT_DAYS = 3                       # the nightly run re-reads this many calendar days before today
+DATED_SOURCES = ("nse_ann", "bse_ann", "nse_block", "nse_bulk", "nse_pit")
 MAX_ATTACHMENTS_PER_RUN = 40          # PDF page-1 lookups per daily run (backfill chunks budget their own)
 RESULTS_GAP_DAYS = 5                  # another results filing for a stock within this many days is the same results
 
@@ -111,7 +113,7 @@ class Runner:
         if name == "nse_bulk":
             return nse_deals.fetch(day, self.http, fixture=fx, kind="bulk")
         if name == "nse_ban":
-            return nse_ban.fetch(day, self.http, fixture=fx)
+            return nse_ban.fetch(day, self.http, fixture=fx, strict=not self.fixtures)
         if name == "nse_pit":
             return nse_pit.fetch(day, self.http, fixture=fx)
         if name == "bse_ann":
@@ -128,15 +130,18 @@ class Runner:
                [f"rss:{f}" for f in (["et_markets"] if self.fixtures else list(config.RSS_FEEDS))]
 
     # ------------------------------------------------------------ the day
-    def run_day(self, day: date, attachments_budget: int = MAX_ATTACHMENTS_PER_RUN) -> dict:
+    def run_day(self, day: date, attachments_budget: int = MAX_ATTACHMENTS_PER_RUN,
+                sources: list[str] | None = None) -> dict:
         if not self.names:
             self.names = name_index({s: n for s, n in load_names(None if self.fixtures else self.http).items()
                                      if not self.universe or s in self.universe})
         counts: dict[str, int] = {}
         events: list[dict] = []
-        for src in self.sources():
+        ban_ok = False
+        for src in (self.sources() if sources is None else sources):
             try:
                 items = self._fetch(src, day)
+                ban_ok = ban_ok or src == "nse_ban"
                 self.status[src] = {"last_success": datetime.now(IST).isoformat(timespec="seconds"),
                                     "items": len(items), "error": None}
             except FetchError as exc:
@@ -150,7 +155,8 @@ class Runner:
                 if self.universe and e["symbol"] not in self.universe:
                     continue
                 events.append(e)
-        events.extend(self._ban_out_events(day, [e for e in events if e["type"] == "ban"]))
+        if ban_ok:                                      # no list for the day: nobody is marked out of the ban
+            events.extend(self._ban_out_events(day, [e for e in events if e["type"] == "ban"]))
         written = self._settle(events, attachments_budget)
         for e in written:
             counts[e["type"]] = counts.get(e["type"], 0) + 1
@@ -254,6 +260,27 @@ class Runner:
         except FetchError as exc:
             log.info("attachment %s: %s", url, exc)
             return None
+
+    def run_recent(self, today: date, back: int = RECENT_DAYS) -> dict:
+        """The nightly run. It starts after midnight IST, so "today" is the day after the session: fetch the dated
+        sources for the last `back` calendar days through today (the session itself, weekend filings, a missed
+        run; the store replaces by id, so a repeat is harmless), the ban list for every weekday in that range plus
+        the next weekday (published the evening before), and the forward-looking sources once."""
+        days = [today - timedelta(days=k) for k in range(back, -1, -1)]
+        nxt = today + timedelta(days=1)
+        while nxt.weekday() >= 5:
+            nxt += timedelta(days=1)
+        dated = [s for s in self.sources() if s in DATED_SOURCES]
+        once = [s for s in self.sources() if s not in DATED_SOURCES and s != "nse_ban"]
+        budget = max(1, MAX_ATTACHMENTS_PER_RUN // len(days))
+        total: dict[str, int] = {}
+        for d in days + [nxt]:
+            srcs = (dated if d <= today else []) + (["nse_ban"] if d.weekday() < 5 else []) +                    (once if d == today else [])
+            if not srcs:
+                continue
+            for k, v in self.run_day(d, budget, sources=srcs).items():
+                total[k] = total.get(k, 0) + v
+        return total
 
     def _ban_out_events(self, day: date, today_in: list[dict]) -> list[dict]:
         prev = self.store.all_of_type("ban")
@@ -361,7 +388,7 @@ def main() -> None:
     if a.backfill:
         total = r.backfill(*a.backfill, rating_attachments=a.rating_attachments, order_attachments=a.order_attachments)
     else:
-        total = r.run_day(a.day or (date(2026, 9, 22) if a.fixtures else datetime.now(IST).date()))
+        total = r.run_day(a.day or date(2026, 9, 22)) if a.day or a.fixtures else r.run_recent(datetime.now(IST).date())
     print("events by type:", json.dumps(dict(sorted(total.items())), indent=1))
     print("store now holds:", json.dumps(Store().counts_by_type() if r.store is None else r.store.counts_by_type(), indent=1))
 
