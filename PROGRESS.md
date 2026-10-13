@@ -63,6 +63,12 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   the stock's own move after results was about zero in this period (20 sessions: A +0.2 %, B +0.1 %), so the
   2021-24 drift did not carry on. The live paper account keeps running as the only fresh evidence.
 
+- **S2 started (price + futures OI build-up, stock options, 1-5 day holds).** Step 1 screen on the stock, year by
+  year 2021-2026 (`python -m scanner.s2_screen`, all NSE F&O files 2021-2026 now cached): 1 of 48 cells passes —
+  **short build-up** (price −3 % or more, futures OI +10 % or more, volume 1.5× average): the stock keeps falling,
+  +0.62 % for a 5-session short (t 3.2), positive in 5 of 6 years including 2025 and 2026. Small for options: step 2
+  must show a put can keep it after time decay and costs. S1's pages and paper trades are unchanged.
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace
