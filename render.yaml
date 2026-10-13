@@ -20,6 +20,7 @@ services:
         - data/financials.json
         - data/event_patterns.json
         - data/live_snapshots/**
+        - data/forward/**
         - "**/*.md"
     envVars:
       - key: PYTHON_VERSION

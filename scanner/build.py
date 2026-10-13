@@ -45,6 +45,20 @@ def live_snapshot_calls(folder: Path, sessions: list[str]) -> list[dict]:
         out += [{"date": snap["date"], "symbol": r["symbol"], "label": r["label"], "taken_at": snap.get("taken_at")}
                 for r in snap.get("rows", []) if r.get("label") in (BULLISH, BEARISH)]
     return out
+def forward_test(path: Path) -> dict | None:
+    """The S1 forward paper test (scanner/forward_s1.py, data/forward/s1_forward.json) for the page's Arm A / Arm B
+    boards, without the strike lists the engine keeps for its fills."""
+    if not path.exists():
+        return None
+    try:
+        st = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+    for arm in st.get("arms", {}).values():
+        arm["pending"] = [{k: v for k, v in p.items() if k != "strikes"} for p in arm.get("pending", [])]
+    return st
+
+
 IST = timezone(timedelta(hours=5, minutes=30))
 log = logging.getLogger("scanner")
 
@@ -157,6 +171,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
             "thresholds": {"volume_above": 1.0, "pcr_low": 0.7, "pcr_high": 1.3, "volume_window_days": 20},
             "index_closes": index,
             "live_snapshots": live_snapshot_calls(ROOT / "data" / "live_snapshots", (index or {}).get("dates") or []),
+            "forward": forward_test(ROOT / "data" / "forward" / "s1_forward.json"),
             "events_status": ev_status,
             "disclaimer": DISCLAIMER,
         },

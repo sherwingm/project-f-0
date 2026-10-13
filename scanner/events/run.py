@@ -144,9 +144,9 @@ class Runner:
                 ban_ok = ban_ok or src == "nse_ban"
                 self.status[src] = {"last_success": datetime.now(IST).isoformat(timespec="seconds"),
                                     "items": len(items), "error": None}
-            except FetchError as exc:
-                log.warning("%s: %s", src, exc)
-                self.status[src] = {**self.status.get(src, {}), "error": str(exc)[:300]}
+            except Exception as exc:  # noqa: BLE001 - one source failing (FetchError, a changed format) never
+                log.warning("%s: %s", src, exc)  # stops the others or the day's ban and results
+                self.status[src] = {**self.status.get(src, {}), "error": f"{type(exc).__name__}: {exc}"[:300]}
                 continue
             for item in items:
                 e = analyst_view(item, self.names) if src.startswith("rss:") else classify(item)

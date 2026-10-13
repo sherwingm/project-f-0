@@ -79,6 +79,9 @@ def fetch(day: date, http: EventHttp | None = None, fixture: str | None = None,
             except FetchError as exc:
                 log.warning("BSE announcements page %d: %s", page, exc)
                 break
+            if not isinstance(payload, dict):                  # BSE sometimes answers with a text/HTML page
+                log.warning("BSE announcements page %d: not a JSON object (%s)", page, str(payload)[:80])
+                break
             pages.append(payload)
             rows = payload.get("Table") or []
             total = int((payload.get("Table1") or [{}])[0].get("ROWCNT") or 0)
