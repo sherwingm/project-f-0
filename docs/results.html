@@ -80,6 +80,12 @@ h2 small { font-weight:400; font-size:12px; }
 .val b { font:700 16px "JetBrains Mono",monospace; }
 .val em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
 .val .r { text-align:right; }
+.pl2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; border-top:1px solid var(--line); padding-top:8px; }
+.pl2 small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.pl2 b { font:700 16px "JetBrains Mono",monospace; }
+.pl2 em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
+.pl2 .r { text-align:right; }
+.gap { margin:0; font-size:11.5px; color:var(--unc); background:var(--unc-soft); border-radius:8px; padding:6px 9px; }
 .ex { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .ex > div { background:var(--raise); border-radius:9px; padding:7px 10px; }
 .ex small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
@@ -220,7 +226,9 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
   function positionCard(p) {
-    const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price;
+    const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
+    const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
+    const spread = now && bid != null ? (1 - bid / now) * 100 : null;
     const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price;
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
@@ -230,11 +238,14 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
         <div class="now"><small>Now${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}</em></div></div>
       <div class="val"><div><small>Buy value</small><b>${rs(e * p.qty)}</b><em>${rs(e)} × ${num(p.qty, 0)} qty</em></div>
-        <div class="r"><small>Value now</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
+        <div class="r"><small>Value at last price</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
       ${rail(e, now, pk, tr, p.stop)}
-      <div class="pnl"><span class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</span><small>MTM, net of charges (if sold now)</small></div>
+      <div class="pl2">
+        <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
+        <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)}, net of charges</em></div></div>
+      ${spread != null && spread > 3 ? `<p class="gap">Thin option: the best bid ${rs(bid)} is ${spread.toFixed(1)}% below the last traded price ${rs(now)}, so selling now would get less than the last price shows.</p>` : ""}
       <div class="ft"><span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>${p.stop_triggered_at ? `<span class="down">stop hit · exits next poll</span>` : ""}
         <button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button></div>
       <p class="err" data-cerr="${esc(p.id)}" hidden></p>
