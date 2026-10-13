@@ -109,6 +109,7 @@ def rows(trades: pd.DataFrame, last_exit: int, cache: Path = CACHE) -> pd.DataFr
             "arm": r.arm, "variant": r.variant, "symbol": r.symbol, "sector": r.sector or None,
             "results_day": r.signal_date, "beat": r.ar0_pct, "move": r.raw0_pct,
             "near": "Yes" if getattr(r, "near_expiry", False) in (True, "True") else "",
+            "kind": {"beat": "Good", "miss": "Bad"}.get(getattr(r, "kind", ""), ""),
             "entry": r.entry_date, "exit": r.exit_date, "held": r.held,
             "days": (pd.Timestamp(r.exit_date) - pd.Timestamp(r.entry_date)).days,
             "reason": REASONS.get(r.exit_reason if isinstance(r.exit_reason, str) else excluded, excluded),
@@ -126,12 +127,13 @@ def rows(trades: pd.DataFrame, last_exit: int, cache: Path = CACHE) -> pd.DataFr
 
 
 # ---------------------------------------------------------------- the workbook
-def columns(last_exit: int, near: bool) -> list[tuple]:
+def columns(last_exit: int, near: bool, kinds: bool = False) -> list[tuple]:
     """(group, header, field, kind, width)."""
     after, last = f"OPTION AFTER EXIT (to T-{last_exit})", f"IF HELD TO T-{last_exit}"
     return [
         ("TRADE", "Arm", "arm", "text", 5), ("TRADE", "Symbol", "symbol", "bold", 13),
         ("TRADE", "Sector", "sector", "text", 18), ("TRADE", "Results day", "results_day", "date", 10),
+        *([("TRADE", "Result", "kind", "text", 6)] if kinds else []),
         ("TRADE", "Beat vs market", "beat", "pct", 8), ("TRADE", "Results-day move", "move", "pct", 8),
         *([("HOLDING", "Near expiry", "near", "text", 7)] if near else []),
         ("HOLDING", "Entry", "entry", "date", 10), ("HOLDING", "Exit", "exit", "date", 10),
@@ -242,6 +244,14 @@ def measures(g: pd.DataFrame, last_exit: int, near: bool) -> list[tuple]:
         ("Best exit with hindsight: median", ok["best"].astype(float).median(), "pct")]
 
 
+ARM_ORDER = ("S", "S_miss", "A", "B")
+
+
+def arms_of(s: pd.DataFrame) -> list[str]:
+    present = list(dict.fromkeys(s["arm"].astype(str)))
+    return [a for a in ARM_ORDER if a in present] + [a for a in present if a not in ARM_ORDER]
+
+
 def summary_sheet(wb, s: pd.DataFrame, rules: dict, title: str, verdict: str, notes: list[str], last_exit: int,
                   near: bool) -> None:
     ws = wb.active
@@ -251,11 +261,13 @@ def summary_sheet(wb, s: pd.DataFrame, rules: dict, title: str, verdict: str, no
     ws["A1"].font, ws["A2"].font = Font(bold=True, size=14, color="0F172A"), Font(size=10, color="475569")
     ws.column_dimensions["A"].width = 46
     main = next(iter(rules))
-    blocks = [(rule, arm) for rule in rules for arm in ("A", "B")]
+    arms = arms_of(s)
+    blocks = [(rule, arm) for rule in rules for arm in arms]
     for j, (rule, arm) in enumerate(blocks, 2):
         ws.column_dimensions[get_column_letter(j)].width = 15
-        if arm == "A":
-            ws.merge_cells(start_row=4, start_column=j, end_row=4, end_column=j + 1)
+        if arm == arms[0]:
+            if len(arms) > 1:
+                ws.merge_cells(start_row=4, start_column=j, end_row=4, end_column=j + len(arms) - 1)
             top = ws.cell(row=4, column=j, value=rules[rule])
             top.font, top.alignment = Font(bold=True, color="FFFFFF", size=10), CENTER
             top.fill = PatternFill("solid", fgColor="1D4ED8" if rule == main else "64748B")
@@ -303,11 +315,11 @@ def build(trades: pd.DataFrame, out: Path, rules: dict, last_exit: int, title: s
     trades = trades[trades["variant"].isin(rules)]
     s = rows(trades, last_exit)
     near = bool((s["near"] == "Yes").any())
-    cols = columns(last_exit, near)
+    cols = columns(last_exit, near, kinds=bool((s["kind"] != "").any()))
     wb = Workbook()
     summary_sheet(wb, s, rules, title, verdict, notes or default_notes(last_exit), last_exit, near)
     main = s[s["variant"] == next(iter(rules))].sort_values("entry")
-    for arm in ("A", "B"):
+    for arm in arms_of(s):
         trades_sheet(wb, f"Arm {arm} trades", main[main["arm"] == arm], [c for c in cols if c[2] != "arm"])
     order = {k: i for i, k in enumerate(rules)}
     allr = s.assign(rule=s["variant"].map(rules), o=s["variant"].map(order)).sort_values(["o", "arm", "entry"])
