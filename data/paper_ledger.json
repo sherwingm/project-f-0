@@ -1,201 +1,200 @@
 {
+ "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 436624.42,
- "positions": [
+ "cash": 500000.0,
+ "positions": [],
+ "closed": [],
+ "daily": {},
+ "peak_equity": 500000.0,
+ "created_at": "2026-10-13T22:10:45+05:30",
+ "archive": [
   {
-   "id": "P-1790749324684-2",
-   "symbol": "APOLLOHOSP",
-   "instrument": "PE",
-   "expiry": "2026-10-27",
-   "strike": 8200.0,
-   "tradingsymbol": "APOLLOHOSP26OCT8200PE",
-   "lot_size": 125,
-   "side": "BUY",
-   "lots": 1,
-   "qty": 125,
-   "entry": {
-    "price": 228.05,
-    "levels": [
-     {
-      "price": 228.0,
-      "qty": 125
-     }
-    ],
-    "class": "accept",
-    "mode": "normal",
-    "mid": 227.225,
-    "slippage_vs_mid": 0.825,
-    "overflow_qty": 0
-   },
-   "entry_charges": {
-    "instrument": "PE",
-    "side": "BUY",
-    "qty": 125,
-    "price": 228.05,
-    "value": 28506.25,
-    "brokerage": 20.0,
-    "stt": 0.0,
-    "exchange": 10.13,
-    "sebi": 0.03,
-    "stamp": 0.86,
-    "gst": 5.43,
-    "total": 36.45
-   },
-   "entry_charges_open": 36.45,
-   "stop": 114.1,
-   "max_loss_at_entry": 28506.25,
-   "margin": 28506.25,
-   "opened_at": "2026-09-30T11:52:04+05:30",
-   "t2_date": "2026-10-23",
-   "stop_triggered_at": null,
-   "mark": {
-    "price": 357.95,
-    "bid": 357.95,
-    "ask": 366.7,
-    "ltp": 358.45,
-    "at": "2026-10-13T11:39:28+05:30",
-    "stale": false
-   },
-   "unrealised_gross": 16237.5,
-   "exit_charges_est": 109.53,
-   "unrealised": 16091.52,
-   "liquidation_value": 44634.22
-  },
-  {
-   "id": "P-1790749329667-4",
-   "symbol": "MAXHEALTH",
-   "instrument": "PE",
-   "expiry": "2026-10-27",
-   "strike": 940.0,
-   "tradingsymbol": "MAXHEALTH26OCT940PE",
-   "lot_size": 525,
-   "side": "BUY",
-   "lots": 1,
-   "qty": 525,
-   "entry": {
-    "price": 30.8,
-    "levels": [
-     {
-      "price": 30.75,
-      "qty": 525
-     }
-    ],
-    "class": "accept",
-    "mode": "normal",
-    "mid": 30.625,
-    "slippage_vs_mid": 0.175,
-    "overflow_qty": 0
-   },
-   "entry_charges": {
-    "instrument": "PE",
-    "side": "BUY",
-    "qty": 525,
-    "price": 30.8,
-    "value": 16170.0,
-    "brokerage": 20.0,
-    "stt": 0.0,
-    "exchange": 5.75,
-    "sebi": 0.02,
-    "stamp": 0.49,
-    "gst": 4.64,
-    "total": 30.9
-   },
-   "entry_charges_open": 30.9,
-   "stop": 15.4,
-   "max_loss_at_entry": 16170.0,
-   "margin": 16170.0,
-   "opened_at": "2026-09-30T11:52:09+05:30",
-   "t2_date": "2026-10-23",
-   "stop_triggered_at": null,
-   "mark": {
-    "price": 75.3,
-    "bid": 75.3,
-    "ask": 81.45,
-    "ltp": 89.0,
-    "at": "2026-10-13T11:39:28+05:30",
-    "stale": false
-   },
-   "unrealised_gross": 23362.5,
-   "exit_charges_est": 99.53,
-   "unrealised": 23232.07,
-   "liquidation_value": 39432.97
-  },
-  {
-   "id": "P-1790749333284-6",
-   "symbol": "FORTIS",
-   "instrument": "PE",
-   "expiry": "2026-10-27",
-   "strike": 780.0,
-   "tradingsymbol": "FORTIS26OCT780PE",
-   "lot_size": 775,
-   "side": "BUY",
-   "lots": 1,
-   "qty": 775,
-   "entry": {
-    "price": 24.0,
-    "levels": [
-     {
-      "price": 23.95,
-      "qty": 775
-     }
-    ],
-    "class": "accept",
-    "mode": "normal",
-    "mid": 23.825,
-    "slippage_vs_mid": 0.175,
-    "overflow_qty": 0
-   },
-   "entry_charges": {
-    "instrument": "PE",
-    "side": "BUY",
-    "qty": 775,
-    "price": 24.0,
-    "value": 18600.0,
-    "brokerage": 20.0,
-    "stt": 0.0,
-    "exchange": 6.61,
-    "sebi": 0.02,
-    "stamp": 0.56,
-    "gst": 4.79,
-    "total": 31.98
-   },
-   "entry_charges_open": 31.98,
-   "stop": 12.0,
-   "max_loss_at_entry": 18600.0,
-   "margin": 18600.0,
-   "opened_at": "2026-09-30T11:52:13+05:30",
-   "t2_date": "2026-10-23",
-   "stop_triggered_at": null,
-   "mark": {
-    "price": 30.35,
-    "bid": 30.35,
-    "ask": 30.8,
-    "ltp": 30.65,
-    "at": "2026-10-13T11:39:28+05:30",
-    "stale": false
-   },
-   "unrealised_gross": 4921.25,
-   "exit_charges_est": 68.77,
-   "unrealised": 4820.5,
-   "liquidation_value": 23452.48
+   "epoch": "system test",
+   "archived_at": "2026-10-13T22:10:45+05:30",
+   "created_at": "2026-09-30T11:52:00+05:30",
+   "capital": 500000.0,
+   "cash": 436624.42,
+   "positions": [
+    {
+     "id": "P-1790749324684-2",
+     "symbol": "APOLLOHOSP",
+     "instrument": "PE",
+     "expiry": "2026-10-27",
+     "strike": 8200.0,
+     "tradingsymbol": "APOLLOHOSP26OCT8200PE",
+     "lot_size": 125,
+     "side": "BUY",
+     "lots": 1,
+     "qty": 125,
+     "entry": {
+      "price": 228.05,
+      "levels": [
+       {
+        "price": 228.0,
+        "qty": 125
+       }
+      ],
+      "class": "accept",
+      "mode": "normal",
+      "mid": 227.225,
+      "slippage_vs_mid": 0.825,
+      "overflow_qty": 0
+     },
+     "entry_charges": {
+      "instrument": "PE",
+      "side": "BUY",
+      "qty": 125,
+      "price": 228.05,
+      "value": 28506.25,
+      "brokerage": 20.0,
+      "stt": 0.0,
+      "exchange": 10.13,
+      "sebi": 0.03,
+      "stamp": 0.86,
+      "gst": 5.43,
+      "total": 36.45
+     },
+     "entry_charges_open": 36.45,
+     "stop": 114.1,
+     "max_loss_at_entry": 28506.25,
+     "margin": 28506.25,
+     "opened_at": "2026-09-30T11:52:04+05:30",
+     "t2_date": "2026-10-23",
+     "stop_triggered_at": null,
+     "mark": {
+      "price": 357.95,
+      "bid": 357.95,
+      "ask": 366.7,
+      "ltp": 358.45,
+      "at": "2026-10-13T11:39:28+05:30",
+      "stale": false
+     },
+     "unrealised_gross": 16237.5,
+     "exit_charges_est": 109.53,
+     "unrealised": 16091.52,
+     "liquidation_value": 44634.22
+    },
+    {
+     "id": "P-1790749329667-4",
+     "symbol": "MAXHEALTH",
+     "instrument": "PE",
+     "expiry": "2026-10-27",
+     "strike": 940.0,
+     "tradingsymbol": "MAXHEALTH26OCT940PE",
+     "lot_size": 525,
+     "side": "BUY",
+     "lots": 1,
+     "qty": 525,
+     "entry": {
+      "price": 30.8,
+      "levels": [
+       {
+        "price": 30.75,
+        "qty": 525
+       }
+      ],
+      "class": "accept",
+      "mode": "normal",
+      "mid": 30.625,
+      "slippage_vs_mid": 0.175,
+      "overflow_qty": 0
+     },
+     "entry_charges": {
+      "instrument": "PE",
+      "side": "BUY",
+      "qty": 525,
+      "price": 30.8,
+      "value": 16170.0,
+      "brokerage": 20.0,
+      "stt": 0.0,
+      "exchange": 5.75,
+      "sebi": 0.02,
+      "stamp": 0.49,
+      "gst": 4.64,
+      "total": 30.9
+     },
+     "entry_charges_open": 30.9,
+     "stop": 15.4,
+     "max_loss_at_entry": 16170.0,
+     "margin": 16170.0,
+     "opened_at": "2026-09-30T11:52:09+05:30",
+     "t2_date": "2026-10-23",
+     "stop_triggered_at": null,
+     "mark": {
+      "price": 75.3,
+      "bid": 75.3,
+      "ask": 81.45,
+      "ltp": 89.0,
+      "at": "2026-10-13T11:39:28+05:30",
+      "stale": false
+     },
+     "unrealised_gross": 23362.5,
+     "exit_charges_est": 99.53,
+     "unrealised": 23232.07,
+     "liquidation_value": 39432.97
+    },
+    {
+     "id": "P-1790749333284-6",
+     "symbol": "FORTIS",
+     "instrument": "PE",
+     "expiry": "2026-10-27",
+     "strike": 780.0,
+     "tradingsymbol": "FORTIS26OCT780PE",
+     "lot_size": 775,
+     "side": "BUY",
+     "lots": 1,
+     "qty": 775,
+     "entry": {
+      "price": 24.0,
+      "levels": [
+       {
+        "price": 23.95,
+        "qty": 775
+       }
+      ],
+      "class": "accept",
+      "mode": "normal",
+      "mid": 23.825,
+      "slippage_vs_mid": 0.175,
+      "overflow_qty": 0
+     },
+     "entry_charges": {
+      "instrument": "PE",
+      "side": "BUY",
+      "qty": 775,
+      "price": 24.0,
+      "value": 18600.0,
+      "brokerage": 20.0,
+      "stt": 0.0,
+      "exchange": 6.61,
+      "sebi": 0.02,
+      "stamp": 0.56,
+      "gst": 4.79,
+      "total": 31.98
+     },
+     "entry_charges_open": 31.98,
+     "stop": 12.0,
+     "max_loss_at_entry": 18600.0,
+     "margin": 18600.0,
+     "opened_at": "2026-09-30T11:52:13+05:30",
+     "t2_date": "2026-10-23",
+     "stop_triggered_at": null,
+     "mark": {
+      "price": 30.35,
+      "bid": 30.35,
+      "ask": 30.8,
+      "ltp": 30.65,
+      "at": "2026-10-13T11:39:28+05:30",
+      "stale": false
+     },
+     "unrealised_gross": 4921.25,
+     "exit_charges_est": 68.77,
+     "unrealised": 4820.5,
+     "liquidation_value": 23452.48
+    }
+   ],
+   "closed": []
   }
  ],
- "closed": [],
- "daily": {
-  "2026-09-30": {
-   "start_equity": 500000.0,
-   "end_equity": 515590.29,
-   "realised": 0.0
-  },
-  "2026-10-13": {
-   "start_equity": 515590.29,
-   "end_equity": 544144.09,
-   "realised": 0.0
-  }
- },
- "peak_equity": 576009.05,
- "created_at": "2026-09-30T11:52:00+05:30",
- "saved_at": "2026-10-13T11:39:29+05:30",
- "restored_from": "watcher log 13:46:46 IST (Render redeployed 13:47:38 IST)",
- "halts": {}
+ "saved_at": "2026-10-13T22:10:45+05:30"
 }
