@@ -244,7 +244,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       ${rail(e, now, pk, tr, p.stop)}
       <div class="pl2">
         <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
-        <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)}, net of charges</em></div></div>
+        <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)} · MTM, net of charges</em></div></div>
       ${spread != null && spread > 3 ? `<p class="gap">Thin option: the best bid ${rs(bid)} is ${spread.toFixed(1)}% below the last traded price ${rs(now)}, so selling now would get less than the last price shows.</p>` : ""}
       <div class="ft"><span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>${p.stop_triggered_at ? `<span class="down">stop hit · exits next poll</span>` : ""}
         <button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button></div>
