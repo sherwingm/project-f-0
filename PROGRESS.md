@@ -76,6 +76,11 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   move; the only same-direction rules are "skip ≤ 15 days to expiry" and "sell at a day-1 close ≤ 75 % of entry"
   (DECISIONS.md). Proposed to the user as an S1 v9 side arm; not written.
 
+- **Quiet results days skipped from the 14 Oct night list on** (user's decision, 2026-10-14): a signal whose
+  results-day range (high - low) is under 3 % of the previous close is not bought (forward test and the paper rule
+  trades). In the arm A studies these were 48 losers and 5 winners of 53 trades. The expiry and day-1 rules from the
+  loss study were not adopted.
+
 ## Secrets and expiries (never the values)
 - `LEDGER_GITHUB_TOKEN`: fine-grained GitHub token, Contents read/write on `project-f-0` only. Stored in Render →
   Environment (and later the VM `.env`; then deleted from Render). **EXPIRES 2026-10-30**: renew and replace

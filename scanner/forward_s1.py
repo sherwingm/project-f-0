@@ -42,11 +42,15 @@ FIRST_SESSION = "2026-10-13"                      # signals from this session's 
 RULE = v7.Variant("old_expiry", near_expiry=False)
 CONTRACTS, BAND = v7.NORMAL_CONTRACTS, v7.NORMAL_BAND
 LOOKBACK_DAYS = 150                               # calendar days of closes loaded (>= 64 sessions for arm B)
+# 2026-10-14 (the user): skip a "quiet" results day, the stock's high-low range under 3 % of the previous close.
+# In the arm A studies these trades were 48 losers and 5 winners of 53 (2021-24 and 2025-26); the stock rarely moved.
+QUIET_RANGE_PCT = 3.0
 RULES_TEXT = ("S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) "
               "-> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, "
               "first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's "
               "average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. "
-              "Failed the 2021-24 backtest gate (DECISIONS.md); paper only.")
+              "From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous "
+              "close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.")
 
 
 # ---------------------------------------------------------------- state
@@ -200,12 +204,18 @@ def new_signals(state: dict, session: str, m: Market, results: list, day: dict, 
         spot = day["spot"].get(s.symbol)
         ch = v7.choose_expiry(chain["XpryDt"], m.cal_dates, m.cal_dates[i], near_ok=False) \
             if chain is not None else None
+        rng = (getattr(m, "day_range", None) or {}).get(s.symbol)
+        r0 = float(rng[i]) if rng is not None and not math.isnan(rng[i]) else None
         for arm in v4.ARMS:
             if arm == "B" and not v4.strong_sector(s.state):
                 continue
             st = state["arms"][arm]
             base = {"arm": arm, "symbol": s.symbol, "sector": m.sector_of.get(s.symbol, ""), "signal_date": session,
                     "beat": round(s.ar0, 2), "move": round(s.raw, 2)}
+            if r0 is not None and r0 < QUIET_RANGE_PCT:
+                st["refused"].append({**base, "entry_date": None,
+                                      "reason": f"quiet results day: the stock's range was {r0:.1f} % (< 3 %)"})
+                continue
             if blocked(st, s.symbol, i, m.pos):
                 st["refused"].append({**base, "entry_date": None, "reason": "already holding / 10-session cooldown"})
                 continue
@@ -262,8 +272,16 @@ def market(symbols: set[str], eod2_dir: Path, cache_dir: Path, today: date) -> M
     bench = index_closes(BENCHMARK, eod2_dir)
     bench = fill_index(bench[bench.index >= since], days, name=BENCHMARK)
     cal = [d.strftime("%Y-%m-%d") for d in bench.index]
-    return Market(Inputs(cal=cal, bhav=lambda d: None, opens=lambda d: None,
-                         stock={s: f["Close"] for s, f in frames.items()}, sector_of=sector_of, bench=bench))
+    m = Market(Inputs(cal=cal, bhav=lambda d: None, opens=lambda d: None,
+                      stock={s: f["Close"] for s, f in frames.items()}, sector_of=sector_of, bench=bench))
+    m.day_range = {s: day_range(f, cal) for s, f in frames.items()}
+    return m
+
+
+def day_range(f: pd.DataFrame, cal: list[str]):
+    """The day's high-low range in % of the previous close, aligned to `cal` (NaN where unknown)."""
+    from .backtest_s1_v2 import _align
+    return _align((f["High"] - f["Low"]) / f["Close"].shift(1) * 100, cal)
 
 
 def run(today: date | None = None, state_path: Path = STATE_PATH, eod2_dir: Path = ROOT / "data" / "eod2",
@@ -276,6 +294,7 @@ def run(today: date | None = None, state_path: Path = STATE_PATH, eod2_dir: Path
 
     today = today or datetime.now(IST).date()
     state = load_state(state_path)
+    state["rules"] = RULES_TEXT
     start = date.fromisoformat(state["last_session"]) + timedelta(days=1) if state["last_session"] \
         else date.fromisoformat(state["first_session"])
     todo = []

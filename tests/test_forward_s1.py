@@ -124,3 +124,22 @@ def test_new_signals_only_for_the_session(m):
     st = fw.empty_state()
     added = fw.new_signals(st, "2026-10-14", m, RESULTS, day({}), Counter())
     assert added == []                                                            # day 0 was the 13th
+
+
+def test_a_quiet_results_day_is_skipped(m):
+    import numpy as np
+    st = fw.empty_state()
+    m.day_range = {"STK": np.full(len(CAL), 2.5), "OTH": np.full(len(CAL), 6.0)}
+    fw.step(st, "2026-10-13", m, day({}), None, RESULTS, set(), CAT)
+    a = st["arms"]["A"]
+    assert [p["symbol"] for p in a["pending"]] == ["OTH"]
+    assert any(r["symbol"] == "STK" and "quiet results day" in r["reason"] for r in a["refused"])
+    assert st["arms"]["B"]["pending"] == []                      # STK was arm B's only signal
+
+
+def test_day_range_is_in_percent_of_the_previous_close():
+    import pandas as pd
+    f = pd.DataFrame({"High": [101.0, 106.0], "Low": [99.0, 100.0], "Close": [100.0, 104.0]},
+                     index=pd.to_datetime(["2026-10-12", "2026-10-13"]))
+    r = fw.day_range(f, ["2026-10-12", "2026-10-13"])
+    assert r[1] == 6.0 and r[0] != r[0]                          # (106 - 100) / 100; the first day has no previous close
