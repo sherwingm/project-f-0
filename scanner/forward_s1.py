@@ -167,17 +167,21 @@ def mark(arm: dict, session: str, day: dict, stock_close, cal_dates: list[date])
 
 
 def open_pick(p: dict, prices: pd.DataFrame | None) -> dict:
-    """The strike for the next open's entry: the rules' walk on day 0's prices."""
+    """The strike for the next open's entry: the rules' walk on day 0's prices; and the strikes liquid on day 0
+    (>= 50 contracts), which the live entry walks again on live prices (server/rules.py)."""
     if prices is None:
-        return {"open_strike": None, "open_reason": "no option prices for the results day"}
-    w = v6.walk_strike(p["strikes"], p["spot"], v6.day1_quotes(prices, p["symbol"], p["expiry"]), CONTRACTS, band=BAND)
+        return {"open_strike": None, "open_reason": "no option prices for the results day", "liquid_strikes": []}
+    quotes = v6.day1_quotes(prices, p["symbol"], p["expiry"])
+    liquid = sorted(k for k, q in quotes.items() if q.contracts >= CONTRACTS)
+    w = v6.walk_strike(p["strikes"], p["spot"], quotes, CONTRACTS, band=BAND)
     if isinstance(w, str):
-        return {"open_strike": None, "open_reason": {"walk_below_band": "cheapest liquid lot below Rs 600",
-                                                     "walk_no_liquid_strike_in_band": "no strike with >= 50 contracts "
-                                                     "and a lot in Rs 600-8,000 on the results day",
-                                                     "lottery_refused": "premium below Rs 2"}.get(w, w)}
+        return {"open_strike": None, "liquid_strikes": liquid,
+                "open_reason": {"walk_below_band": "cheapest liquid lot below Rs 600",
+                                "walk_no_liquid_strike_in_band": "no strike with >= 50 contracts "
+                                "and a lot in Rs 600-8,000 on the results day",
+                                "lottery_refused": "premium below Rs 2"}.get(w, w)}
     q, px, _src, _walked = w
-    return {"open_strike": q.strike, "open_lot": q.lot, "open_ref": px}
+    return {"open_strike": q.strike, "open_lot": q.lot, "open_ref": px, "liquid_strikes": liquid}
 
 
 def blocked(state_arm: dict, symbol: str, i0: int, pos: dict[str, int]) -> bool:

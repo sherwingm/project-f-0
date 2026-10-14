@@ -111,3 +111,31 @@ def test_old_ledger_is_archived_under_the_new_epoch(tmp_path):
     lg = PaperLedger(tmp_path, Quotes(), capital=500_000)
     assert lg.state["epoch"] == PAPER_EPOCH and lg.state["positions"] == [] and lg.state["cash"] == 500000.0
     assert lg.state["archive"][0]["positions"][0]["symbol"] == "APOLLOHOSP"
+
+
+
+def test_open_window_re_walks_a_gap_up_and_retries(setup):
+    lg, q, rt, box = setup
+    box["fw"]["arms"]["A"]["pending"][0]["liquid_strikes"] = [1300.0, 1350.0, 1400.0]
+    box["fw"]["arms"]["B"]["pending"][0]["liquid_strikes"] = [1300.0, 1350.0, 1400.0]
+    for k in (1300.0, 1350.0, 1400.0):
+        q.set(k, 40.0, ask=40.0)                                    # every lot Rs 14,000: nothing fits at 09:16
+    rt.on_poll(at(14, 9, 16))
+    assert lg.state["positions"] == []
+    q.set(1350.0, 20.0, ask=20.0)                                   # 7,000 a lot
+    rt.on_poll(at(14, 9, 17))                                       # within 2 minutes: not retried yet
+    assert lg.state["positions"] == []
+    rt.on_poll(at(14, 9, 19))
+    (p,) = lg.state["positions"]
+    assert (p["strike"], p["entry"]["price"], p["rule"]["entry_mode"]) == (1350.0, 20.0, "open")
+
+
+def test_open_window_refuses_at_15_20_with_the_reason(setup):
+    lg, q, rt, box = setup
+    box["fw"]["arms"]["A"]["pending"][0]["liquid_strikes"] = [1300.0]
+    box["fw"]["arms"]["B"]["pending"][0]["liquid_strikes"] = [1300.0]
+    q.set(1300.0, 40.0, ask=40.0)
+    rt.on_poll(at(14, 9, 16))
+    rt.on_poll(at(14, 15, 20))
+    r = [x for x in lg.state["rules"]["refused"] if x["mode"] == "open"]
+    assert len(r) == 1 and "more than Rs 8,000" in r[0]["reason"]

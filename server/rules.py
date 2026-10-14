@@ -4,8 +4,10 @@ The nightly forward test (scanner/forward_s1.py, in the scan as meta.forward) li
 as "buy next session", per arm. On that next session this module buys each of them twice, as two separate
 positions, so the two entry times can be compared:
 
-    open   the first poll from 09:15: the strike picked overnight from day 0's prices (the rules' walk: from the
-           at-the-money call upward, >= 50 contracts, one lot Rs 600-8,000), bought at the live best ask
+    open   any poll from 09:15 to 15:20 (retried every 2 minutes): over the strikes that traded >= 50 contracts
+           on day 0, from the one nearest the live stock price upward, the first whose live best ask x lot is
+           Rs 600-8,000, bought at that ask (until 2026-10-14 this used one strike fixed overnight, which a gap-up
+           could price out: HCLTECH's 1330 CE cost Rs 14,440 at the 14 Oct open)
     close  the first poll from 15:20: the walk again on today's live volume and average traded price (ATP),
            bought at ATP + 1 tick (the live version of the backtest's "day's VWAP + 1 tick")
 
@@ -25,7 +27,8 @@ from server.broker import tradingsymbol
 
 log = logging.getLogger("rules")
 
-OPEN_FROM, OPEN_UNTIL, EOD_AT = time(9, 15), time(10, 30), time(15, 20)
+OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
+RETRY_SECONDS = 120                            # the open-window walk is retried at most every 2 minutes per stock
 BAND, CONTRACTS, MIN_PREMIUM, TICK = v7.NORMAL_BAND, v7.NORMAL_CONTRACTS, 2.0, 0.05
 WALK_MAX = 15                                  # strikes tried upward from the at-the-money one at 15:20
 
@@ -77,10 +80,39 @@ def walk_live(strikes: list[float], spot: float, quote: Callable[[float], dict |
     return "no strike with >= 50 contracts today and a lot in Rs 600-8,000"
 
 
+def walk_ask(strikes: list[float], spot: float, quote: Callable[[float], dict | None]):
+    """The open-window walk (2026-10-14: entries are no longer tied to one strike picked overnight): over the
+    strikes that traded >= 50 contracts on day 0, from the one nearest the LIVE stock price (a tie: the lower)
+    upward, the first whose live best ask x lot is within Rs 600-8,000. Returns (strike, ask, lot) or the reason."""
+    ks = sorted(set(float(k) for k in strikes))
+    if not ks or not spot:
+        return "no liquid strikes on the results day"
+    k0 = min(ks, key=lambda k: (abs(k - spot), k))
+    reason = "no liquid strike with a lot in Rs 600-8,000 at the live ask"
+    for k in ks[ks.index(k0):][:WALK_MAX]:
+        q = quote(k)
+        ask = ((q or {}).get("depth") or {}).get("ask") or []
+        lot = (q or {}).get("lot_size") or 0
+        if not ask or not lot:
+            continue
+        px = float(ask[0][0])
+        if px < MIN_PREMIUM:
+            return "premium below Rs 2"
+        if px * lot < BAND[0]:
+            return "cheapest liquid lot below Rs 600"
+        if px * lot > BAND[1]:
+            reason = f"the cheapest liquid lot costs more than Rs 8,000 at the live ask (Rs {px * lot:,.0f} at {k:g})"
+            continue
+        return k, px, lot
+    return reason
+
+
 class RuleTrader:
     def __init__(self, ledger, forward: Callable[[], dict | None], spot: Callable[[str], float | None] | None = None):
         self.ledger, self.forward = ledger, forward
         self.spot = spot or ledger.quotes.spot
+        self._tried: dict[str, float] = {}           # open-window walk: last try per (day, stock), epoch seconds
+        self._last_why: dict[str, str] = {}
 
     def _state(self) -> dict:
         return self.ledger.state.setdefault("rules", {"open": {}, "close": {}, "exits_checked": None, "refused": []})
@@ -110,27 +142,26 @@ class RuleTrader:
         today = now.date().isoformat()
         st = self._state()
         sigs = signals_for(self.forward(), now.date())
-        if now.time() >= OPEN_FROM:
+        if OPEN_FROM <= now.time():
             for sig in sigs:
                 key = f"{today}:{sig['symbol']}"
                 if key in st["open"]:
                     continue
-                strike = sig.get("open_strike")
-                if not strike:
-                    self._refuse(st, sig, "open", today, sig.get("open_reason") or "no strike picked overnight")
+                if now.time() >= EOD_AT:
+                    self._refuse(st, sig, "open", today, self._last_why.get(key) or
+                                 "no affordable liquid strike between 09:15 and 15:20")
                     continue
-                q = self._quote(sig["symbol"], sig["expiry"], strike)
-                ask = ((q or {}).get("depth") or {}).get("ask") or []
-                lot = (q or {}).get("lot_size") or sig.get("open_lot") or 0
-                if not ask or not lot:
-                    if now.time() >= OPEN_UNTIL:
-                        self._refuse(st, sig, "open", today, "no offer in the book by 10:30")
-                    continue                                     # try again at the next poll
-                px = float(ask[0][0])
-                if not BAND[0] <= px * lot <= BAND[1]:
-                    self._refuse(st, sig, "open", today, f"one lot at the open costs Rs {px * lot:,.0f}, outside Rs 600-8,000")
+                if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS:
                     continue
-                self._buy(sig, "open", strike, px, lot, now)
+                self._tried[key] = now.timestamp()
+                spot = self.spot(sig["symbol"]) or sig.get("spot")
+                strikes = sig.get("liquid_strikes") or ([sig["open_strike"]] if sig.get("open_strike") else [])
+                w = walk_ask(strikes, spot, lambda k: self._quote(sig["symbol"], sig["expiry"], k))
+                if isinstance(w, str):
+                    self._last_why[key] = w
+                    continue                                     # try again in 2 minutes, until 15:20
+                k, px, lot = w
+                self._buy(sig, "open", k, px, lot, now)
                 st["open"][key] = "bought"
         if now.time() >= EOD_AT and st.get("exits_checked") != today:
             for sig in sigs:
