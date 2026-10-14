@@ -54,6 +54,10 @@ jobs:
         timeout-minutes: 20
         continue-on-error: true
         run: python -m scanner.forward_s1 || true
+      - name: S2 short build-up signals of the last session (scanner/s2_live.py; never blocks the build)
+        timeout-minutes: 15
+        continue-on-error: true
+        run: python -m scanner.s2_live || true
 
       - name: Opening snapshots recorded by the live server (branch paper-state, server/durable.py)
         run: |
@@ -83,5 +87,6 @@ jobs:
           git add data/financials.json 2>/dev/null || true
           git add data/live_snapshots 2>/dev/null || true
           git add data/forward 2>/dev/null || true
+          git add data/s2 docs/s2.html 2>/dev/null || true
           git diff --cached --quiet || git commit -m "scan: $(python -c "import json;print(json.load(open('data/scan.json'))['meta']['as_of'])")"
           git push

@@ -21,6 +21,7 @@ services:
         - data/event_patterns.json
         - data/live_snapshots/**
         - data/forward/**
+        - data/s2/**
         - "**/*.md"
     envVars:
       - key: PYTHON_VERSION

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F&amp;O S2 Short Build-up</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
+  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
+  --unc:#E0B341; --unc-soft:rgba(224,179,65,.16); --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF;
+  --disc:44px; color-scheme:dark;
+}
+:root[data-theme="light"] {
+  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
+  --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
+  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB; color-scheme:light;
+}
+*, *::before, *::after { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-variant-numeric:tabular-nums; -webkit-text-size-adjust:100%; padding-bottom:calc(var(--disc) + 16px); }
+button { font:inherit; color:inherit; cursor:pointer; }
+a { color:var(--accent); }
+.up { color:var(--bull); } .down { color:var(--bear); } .flat { color:var(--muted); }
+small, .muted { color:var(--muted); }
+.top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
+.brand { font-weight:700; font-size:15px; white-space:nowrap; }
+.brand i { font-style:normal; color:var(--bear); }
+.clock { font-family:"JetBrains Mono",monospace; font-size:12px; }
+.sp { margin-left:auto; }
+.tlink { height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); display:inline-flex; align-items:center; text-decoration:none; color:var(--ink); white-space:nowrap; }
+.tbtn { height:34px; width:34px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); }
+main { max-width:1240px; margin:0 auto; padding:16px; }
+h1 { font-size:19px; margin:2px 0 4px; }
+.lead { color:var(--muted); margin:0 0 14px; font-size:12.5px; }
+h2 { font-size:14px; margin:24px 0 8px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+h2 small { font-weight:400; font-size:12px; }
+.banner { border:1px solid var(--unc); background:var(--unc-soft); border-radius:10px; padding:9px 12px; font-size:12.5px; margin:8px 0 4px; }
+.banner b { color:var(--unc); }
+.rule { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+.rule div small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.rule div b { font:600 15px "JetBrains Mono",monospace; }
+.tw { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:12px; }
+table { width:100%; border-collapse:collapse; font:12.5px "JetBrains Mono",monospace; white-space:nowrap; }
+th { font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:right; padding:8px 10px; border-bottom:1px solid var(--line); }
+td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:right; }
+th:first-child, td:first-child { text-align:left; font-family:Inter,sans-serif; }
+tr:last-child td { border-bottom:0; }
+tr.hl td { background:var(--bull-soft); }
+td small { font-size:10.5px; }
+.empty { color:var(--muted); background:var(--surface); border:1px dashed var(--line-strong); border-radius:12px; padding:14px 16px; }
+.pill { font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; }
+.pill.pass { background:var(--bull-soft); color:var(--bull); } .pill.fail { background:var(--bear-soft); color:var(--bear); }
+.hist { display:flex; flex-wrap:wrap; gap:6px; }
+.hist span { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:4px 8px; font-size:12px; }
+.note { font-size:12px; color:var(--muted); margin-top:16px; }
+.disclaimer { position:fixed; left:0; right:0; bottom:0; min-height:var(--disc); background:var(--panel); border-top:1px solid var(--bear); padding:6px 16px; font-size:11.5px; z-index:6; display:flex; align-items:center; }
+.disclaimer b { color:var(--bear); }
+@media (max-width:760px) { main { padding:12px 10px; } :root { --disc:64px; } .top { padding:8px 10px; } }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">F&amp;O <i>S2 · Short build-up</i></div>
+  <span class="clock" id="clock"></span>
+  <span class="sp"></span>
+  <a class="tlink" href="/" id="homeLink">← Results</a>
+  <a class="tlink" href="/terminal" id="termLink">Terminal →</a>
+  <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
+</header>
+<main id="main"></main>
+<footer class="disclaimer" role="note"><div><b>Read before using.</b> Research and paper testing of a strategy — not trade recommendations, entry/exit signals or predictions. F&amp;O trading carries high risk including potential loss beyond capital invested.</div></footer>
+<script>
+(() => {
+  "use strict";
+  const SERVER = Object.assign({ orders: false }, /*__SERVER__*/{});
+  let S2 = /*__S2__*/null;
+  const $ = s => document.querySelector(s);
+  const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+               set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } } };
+  if (!SERVER.orders) { $("#homeLink").href = "results.html"; $("#termLink").href = "index.html"; }
+  const setTheme = t => { document.documentElement.dataset.theme = t; ls.set("fos_theme", t); };
+  setTheme(ls.get("fos_theme", "dark"));
+  $("#theme").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+  const tick = () => { $("#clock").textContent = new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Kolkata" }) + " IST"; };
+  tick(); setInterval(tick, 1000);
+
+  const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const num = (v, dp = 2) => v == null ? "—" : Number(v).toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  const rs = (v, dp = 2) => v == null ? "—" : "₹" + num(v, dp);
+  const pct = (v, dp = 1) => v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(dp) + "%";
+  const dir = v => v == null || v === 0 ? "flat" : v > 0 ? "up" : "down";
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = d => d ? `${+d.slice(8, 10)} ${MON[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}` : "—";
+  const CLASS = { short_buildup: "Short build-up (price ↓, OI ↑) → short", long_buildup: "Long build-up (price ↑, OI ↑) → long",
+                  short_covering: "Short covering (price ↑, OI ↓) → long", long_unwinding: "Long unwinding (price ↓, OI ↓) → short" };
+  const YEARS = ["2021", "2022", "2023", "2024", "2025", "2026"];
+
+  function render() {
+    const sig = (S2 || {}).signals || null, res = (S2 || {}).research || {};
+    let h = `<h1>S2 · Short build-up</h1>
+      <p class="lead">When a stock falls hard while new short positions pile into its futures, it has tended to keep falling for a few more days. S2 tests whether buying a put on those days pays after option decay and costs.</p>
+      <div class="rule"><div><small>Stock move on the day</small><b>−3% or more</b></div><div><small>Futures OI (all expiries)</small><b>+10% or more</b></div>
+        <div><small>Volume</small><b>1.5× its 20-day avg</b></div><div><small>Skipped</small><b>expiry day + next</b></div><div><small>Trade (if it passes)</small><b>buy a put, hold 5 days</b></div></div>`;
+    const passed = res.put && (res.put.gate || []).some(g => g.test === "OVERALL" && g.result === "PASS");
+    h += `<div class="banner"><b>${passed ? "Passed: paper trading starts next." : "Not traded yet."}</b> ${passed ? "" : "These are put candidates for the next session. Paper trades start only if the put backtest (S2 step 2) passes."}</div>`;
+
+    h += `<h2>Today's signals <small>${sig ? "session " + day(sig.session) + (sig.generated ? " · updated " + esc(sig.generated.replace("T", " ")) : "") : ""}</small></h2>`;
+    if (!sig) h += `<p class="empty">The first list arrives with the next nightly run (after NSE's closing files).</p>`;
+    else if (sig.note) h += `<p class="empty">${esc(sig.note)}</p>`;
+    else if (!sig.signals.length) h += `<p class="empty">No short build-up in the last session.</p>`;
+    else h += `<div class="tw"><table><thead><tr><th>Stock</th><th>Close</th><th>Day move</th><th>Futures OI</th><th>Volume</th><th>Put the rule would start from</th><th>Lot cost</th><th>Below the stock</th></tr></thead><tbody>${sig.signals.map(s => {
+        const p = s.put;
+        return `<tr><td><b><a href="${SERVER.orders ? "/terminal" : "index.html"}#${encodeURIComponent(s.symbol)}">${esc(s.symbol)}</a></b></td><td>${rs(s.close)}</td><td class="down">${pct(s.price_pct, 2)}</td><td class="up">${pct(s.oi_pct)}</td><td>${num(s.vol_ratio, 1)}×</td>
+          <td style="text-align:left">${p ? `${num(p.strike, p.strike % 1 ? 2 : 0)} PE · ${day(p.expiry)} · ${rs(p.premium)} × ${num(p.lot, 0)}` : `<small>${esc(s.put_note || "")}</small>`}</td>
+          <td>${p ? rs(p.lot_cost, 0) : "—"}</td><td>${p ? pct(p.below_spot_pct) : "—"}</td></tr>`; }).join("")}</tbody></table></div>
+      <p class="note">The put shown is the evening's preview from today's prices; the rule picks it with tomorrow's volume and average price (₹600–8,000 a lot, ≥ 50 contracts, walking down from the strike nearest the stock).</p>`;
+    if (sig && (sig.history || []).length > 1)
+      h += `<h2>Recent sessions</h2><div class="hist">${sig.history.slice(1).map(x => `<span><b>${day(x.session)}</b>: ${x.note ? "<small>rollover</small>" : x.symbols.length ? esc(x.symbols.join(", ")) : "<small>none</small>"}</span>`).join("")}</div>`;
+
+    const sc = res.screen;
+    h += `<h2>How the signal did, 2021 – 2026 <small>${sc ? esc(sc.note) : ""}</small></h2>`;
+    if (!sc) h += `<p class="empty">Screen results not available.</p>`;
+    else {
+      const rows = sc.rows.slice().sort((a, b) => (a.class === "short_buildup" ? -1 : 0) - (b.class === "short_buildup" ? -1 : 0) || a.h - b.h);
+      h += `<div class="tw"><table><thead><tr><th>Pattern (price −/+3%, OI ±10%)</th><th>Hold</th><th>Cases</th><th>Average</th><th>Worked</th><th>t</th>${YEARS.map(y => `<th>${y}</th>`).join("")}<th>Pass</th></tr></thead><tbody>${rows.map(r =>
+        `<tr class="${r.PASS ? "hl" : ""}"><td>${esc(CLASS[r.class] || r.class)}</td><td>${r.h} days</td><td>${num(r.n, 0)}</td><td class="${dir(r.mean)}">${pct(r.mean, 2)}</td><td>${num(r.hit, 1)}%</td><td>${num(r.t, 2)}</td>
+         ${YEARS.map(y => `<td class="${dir(r[y])}">${pct(r[y], 2)}</td>`).join("")}<td>${r.PASS ? '<span class="pill pass">PASS</span>' : ""}</td></tr>`).join("")}</tbody></table></div>
+        <p class="note">Average = the stock's move in the trade's direction from the next morning's open, after 0.1% costs. Pass needs t ≥ 3, a big enough average, and a positive result in at least 5 of the 6 years including 2025 and 2026. Only the highlighted row passed.</p>`;
+    }
+
+    const pb = res.put;
+    h += `<h2>Put backtest (S2 step 2) <small>one bought put, ₹600–8,000 a lot, exit after 5 days (50% stop, T-1), net of charges and slippage</small></h2>`;
+    if (!pb) h += `<p class="empty">Running: the numbers appear here when the backtest finishes.</p>`;
+    else {
+      h += `<div class="tw"><table><thead><tr><th>Exit rule</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th><th>Avg lot</th>${YEARS.map(y => `<th>${y}</th>`).join("")}</tr></thead><tbody>${pb.variants.map(v =>
+        `<tr class="${v.variant === "h5" ? "hl" : ""}"><td>${{ h5: "Hold 5 days (main)", h3: "Hold 3 days", h5_nostop: "Hold 5 days, no stop" }[v.variant] || esc(v.variant)}</td><td>${num(v.n, 0)}</td><td>${num(v.win_pct, 1)}%</td>
+         <td class="${dir(v.mean_pct)}">${pct(v.mean_pct)}</td><td class="${dir(v.median_pct)}">${pct(v.median_pct)}</td><td>${num(v.t, 2)}</td><td class="${dir(v.total_rs)}">${rs(v.total_rs, 0)}</td><td>${rs(v.avg_lot_rs, 0)}</td>
+         ${YEARS.map(y => `<td class="${dir(v.years[y])}">${pct(v.years[y])}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+      h += `<h2>Pass test (hold 5 days)</h2><div class="tw"><table><thead><tr><th>Test</th><th>Value</th><th>Result</th></tr></thead><tbody>${pb.gate.map(g =>
+        `<tr><td>${esc(g.test)}</td><td>${esc(g.value)}</td><td><span class="pill ${/pass/i.test(g.result) ? "pass" : "fail"}">${esc(g.result)}</span></td></tr>`).join("")}</tbody></table></div>`;
+    }
+    $("#main").innerHTML = h;
+  }
+  render();
+  if (SERVER.orders) fetch("/api/s2", { credentials: "same-origin" }).then(r => r.ok ? r.json() : null).then(j => { if (j) { S2 = j; render(); } }).catch(() => {});
+})();
+</script>
+</body>
+</html>

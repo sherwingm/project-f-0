@@ -283,6 +283,19 @@ def results_page(_: str = Depends(auth)):
     return html.replace("/*__FORWARD__*/null", fwd).replace("/*__SERVER__*/{}", json.dumps(settings.public()))
 
 
+@app.get("/s2", response_class=HTMLResponse)
+def s2_page(_: str = Depends(auth)):
+    """S2's own page (templates/s2.html): the last session's short build-ups and the S2 research."""
+    html = (ROOT / "templates" / "s2.html").read_text(encoding="utf-8")
+    data = json.dumps(((state.scan or {}).get("meta") or {}).get("s2"), separators=(",", ":")).replace("</", "<\\/")
+    return html.replace("/*__S2__*/null", data).replace("/*__SERVER__*/{}", json.dumps(settings.public()))
+
+
+@app.get("/api/s2")
+def api_s2(_: str = Depends(auth)):
+    return ((state.scan or {}).get("meta") or {}).get("s2")
+
+
 @app.get("/api/forward")
 def api_forward(_: str = Depends(auth)):
     return ((state.scan or {}).get("meta") or {}).get("forward")

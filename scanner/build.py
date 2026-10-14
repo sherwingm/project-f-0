@@ -170,6 +170,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
             "index_closes": index,
             "live_snapshots": live_snapshot_calls(ROOT / "data" / "live_snapshots", (index or {}).get("dates") or []),
             "forward": forward_test(ROOT / "data" / "forward" / "s1_forward.json"),
+            "s2": s2_data(ROOT / "data" / "s2"),
             "events_status": ev_status,
             "disclaimer": DISCLAIMER,
         },
@@ -201,6 +202,27 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
         s["verdict"] = verdict(s)
     scan["meta"]["commentary"] = generate_commentary(scan) if commentary else None
     return scan
+
+
+def s2_data(folder: Path) -> dict | None:
+    """The S2 page's data: the last session's short build-ups (scanner/s2_live.py) and the research numbers
+    (scanner/s2_research.py)."""
+    out = {}
+    for name in ("signals", "research"):
+        f = folder / f"{name}.json"
+        try:
+            out[name] = json.loads(f.read_text(encoding="utf-8")) if f.exists() else None
+        except (OSError, ValueError):
+            out[name] = None
+    return out if any(out.values()) else None
+
+
+def render_s2(scan: dict, template: Path, out: Path) -> None:
+    """The S2 page for GitHub Pages, with its data embedded."""
+    html = template.read_text(encoding="utf-8")
+    data = json.dumps(scan.get("meta", {}).get("s2"), separators=(",", ":")).replace("</", "<\\/")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(html.replace("/*__S2__*/null", data), encoding="utf-8")
 
 
 def render_results(scan: dict, template: Path, out: Path) -> None:
@@ -287,6 +309,7 @@ def main() -> None:
     args.json.write_text(json.dumps(scan, indent=1), encoding="utf-8")
     render(scan, args.template, args.out)
     render_results(scan, ROOT / "templates" / "results.html", args.out.parent / "results.html")
+    render_s2(scan, ROOT / "templates" / "s2.html", args.out.parent / "s2.html")
     s, m = scan["summary"], scan["meta"]
     print(f"as of {m['as_of']}: {s['bullish']} bullish, {s['bearish']} bearish, {s['neutral']} neutral, "
           f"{s['unclassified']} unclassified | OI/PCR: {m['fo_status']} | strike tables: {m['chain_status']} | wrote {args.out}")
