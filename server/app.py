@@ -76,6 +76,7 @@ class State:
         self.broker = make_broker(settings)
         self.ledger: PaperLedger | None = None
         self.rules = None                    # server.rules.RuleTrader: the S1 rule trades in the paper account
+        self.fade = None                     # server.fade.FadeTrader: S1 v10 results-day fade, paper only
         self.mirror = None                   # server.durable.Mirror when LEDGER_GITHUB_TOKEN is set
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
@@ -177,6 +178,9 @@ def startup() -> None:
             state.feed.hooks.append(lambda feed: state.ledger.on_poll(feed))
             state.rules = RuleTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("forward"))
             state.feed.hooks.append(lambda feed: state.rules.on_poll(datetime.now(IST)))
+            from server.fade import FadeTrader                  # S1 v10 results-day fade, paper only
+            state.fade = FadeTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("fade"))
+            state.feed.hooks.append(lambda feed: state.fade.on_poll(datetime.now(IST)))
         log.info("paper engine on: capital Rs %s, fills against %s", f"{state.ledger.state['capital']:,.0f}",
                  "the live book" if state.feed else "nothing (no live feed: paper orders cannot fill)")
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()

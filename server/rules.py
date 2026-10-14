@@ -185,7 +185,7 @@ class RuleTrader:
         today = now.date().isoformat()
         for pos in list(self.ledger.state["positions"]):
             r = pos.get("rule")
-            if not r or r.get("checked") == today:
+            if not r or r.get("strategy") == "fade" or r.get("checked") == today:    # fade: server/fade.py exits
                 continue
             q = self.ledger.quotes.get({k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
                                                             "lot_size")}) or {}

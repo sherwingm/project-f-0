@@ -170,6 +170,7 @@ def build(eod2_dir: Path, cache_dir: Path, skip_fo: bool = False, commentary: bo
             "index_closes": index,
             "live_snapshots": live_snapshot_calls(ROOT / "data" / "live_snapshots", (index or {}).get("dates") or []),
             "forward": forward_test(ROOT / "data" / "forward" / "s1_forward.json"),
+            "fade": forward_test(ROOT / "data" / "forward" / "fade.json"),     # S1 v10, scanner/fade_live.py
             "s2": s2_data(ROOT / "data" / "s2"),
             "events_status": ev_status,
             "disclaimer": DISCLAIMER,

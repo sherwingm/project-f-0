@@ -68,6 +68,10 @@ jobs:
         timeout-minutes: 20
         continue-on-error: true
         run: python -m scanner.financials --limit 40 || true
+      - name: S1 v10 results-day fade signals for the next session (scanner/fade_live.py; never blocks the build)
+        timeout-minutes: 15
+        continue-on-error: true
+        run: python -m scanner.fade_live || true
       - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
         run: python -m scanner.build
       - name: Refuse a scan without F&O data
@@ -85,6 +89,7 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add docs/index.html docs/results.html data/scan.json data/event_patterns.json data/cache/fo_universe.txt data/cache/events_status.json
           git add data/financials.json 2>/dev/null || true
+          git add data/nse_holidays.json 2>/dev/null || true
           git add data/live_snapshots 2>/dev/null || true
           git add data/forward 2>/dev/null || true
           git add data/s2 docs/s2.html 2>/dev/null || true

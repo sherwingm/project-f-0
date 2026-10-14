@@ -7,7 +7,9 @@
 """
 from __future__ import annotations
 
+import json
 from datetime import date, datetime, time, timedelta, timezone
+from pathlib import Path
 
 from server.config import settings
 
@@ -22,8 +24,29 @@ def _d(x) -> date:
     return datetime.strptime(str(x)[:10], "%Y-%m-%d").date()
 
 
+HOLIDAY_FILE = Path(__file__).resolve().parents[1] / "data" / "nse_holidays.json"
+_file_cache: tuple[float, frozenset] = (-1.0, frozenset())
+
+
+def _file_holidays() -> frozenset:
+    """data/nse_holidays.json (NSE's F&O holiday list, refreshed by scanner/fade_live.py); cached by mtime."""
+    global _file_cache
+    try:
+        mt = HOLIDAY_FILE.stat().st_mtime
+    except OSError:
+        return frozenset()
+    if mt != _file_cache[0]:
+        try:
+            days = json.loads(HOLIDAY_FILE.read_text(encoding="utf-8")).get("holidays") or []
+            _file_cache = (mt, frozenset(_d(x) for x in days))
+        except (OSError, ValueError):
+            return _file_cache[1]
+    return _file_cache[1]
+
+
 def holidays() -> set[date]:
-    return {_d(s.strip()) for s in settings.nse_holidays.split(",") if s.strip()}
+    """NSE_HOLIDAYS plus the committed list in data/nse_holidays.json."""
+    return {_d(s.strip()) for s in settings.nse_holidays.split(",") if s.strip()} | set(_file_holidays())
 
 
 def is_session(d, hol: set[date] | None = None) -> bool:

@@ -88,7 +88,7 @@ h2 small { font-weight:400; font-size:12px; }
 .pc .nm { flex:1; min-width:0; }
 .pc .hd .tag { margin-left:0; white-space:nowrap; }
 .arm { white-space:nowrap; font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; background:var(--raise); border:1px solid var(--line-strong); }
-.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; }
+.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; } .arm.f { color:#E0A030; border-color:#E0A030; }
 .mode { font:600 10.5px Inter,sans-serif; color:var(--muted); }
 .sb { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
 .sb .tw table td, .sb .tw table th { padding:7px 10px; }
@@ -235,8 +235,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const open = P.summary && P.summary.market_open;
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
-  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">Arm ${a}</span>`).join(" ");
-  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)" };
+  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">${a === "F" ? "Fade" : "Arm " + a}</span>`).join(" ");
+  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at 15:20" };
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
   function positionCard(p) {
     const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
@@ -246,7 +246,10 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
     const r = p.rule;
-    const exitLine = r
+    const fade = r && r.strategy === "fade";
+    const exitLine = fade
+      ? `<span>Sold at <b>15:20</b> on the results day (no stop)</span>${r.why ? `<span>${esc(r.why)}</span>` : ""}`
+      : r
       ? `<span>Stop <b class="mono">${rs(e / 2)}</b> (50% at a close)</span><span>No new closing high: <b>${r.stall || 0} of 5</b></span><span>Exit by <b>${day(tMinus1(p.expiry))}</b> (T-1)</span>`
       : `<span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>`;
     return `<article class="pc">
@@ -258,7 +261,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         <div class="r"><small>Value at last price</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
-      ${rail(e, now, pk, tr, r ? e / 2 : p.stop)}
+      ${rail(e, now, pk, tr, fade ? null : r ? e / 2 : p.stop)}
       <div class="pl2">
         <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
         <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)} · MTM, net of charges</em></div></div>
@@ -269,7 +272,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     </article>`;
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
-                   rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1" };
+                   rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
+                   fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)" };
   function closedTable(rows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
@@ -277,7 +281,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) <= a.until;
-        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
+        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
           <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
@@ -328,13 +332,15 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
       const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
       const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
-      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
+      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : mode === "fade" ? "Results day, 09:15-15:20" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
         <td class="${dir(avg)}">${avg == null ? "—" : pct(avg)}</td><td class="${dir(net)}">${cl.length ? srs(net) : "—"}</td><td>${op.length}</td><td class="${dir(mtm)}">${op.length ? srs(mtm) : "—"}</td></tr>`;
     };
     const board = (arm, title) => `<div><h3>${armTags([arm])} ${title}</h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
       <tbody>${rows(arm, "open")}${rows(arm, "close")}${rows(arm, null)}</tbody></table></div></div>`;
     return `<h2>Scoreboard <small>rule trades only, 1 lot each, net of charges · a signal in both arms counts in both</small></h2>
-      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>`;
+      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>
+      <div class="sb"><div><h3>${armTags(["F"])} results-day fade, paper only <small>(put on strong numbers, call on weak; sold at 15:20)</small></h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
+      <tbody>${rows("F", "fade")}</tbody></table></div></div></div>`;
   }
   async function closePos(id, btn) {
     const p = P.positions.find(x => x.id === id); if (!p) return;

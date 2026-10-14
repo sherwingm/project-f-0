@@ -77,10 +77,10 @@ def test_market_closed_review_says_when_it_fills_and_place_queues(client, monkey
 
 def test_refusals_endpoint_counts_and_lists_reasons(client):
     c, ledger, q = client
-    ledger.clock = lambda: datetime(2026, 9, 10, 10, 0, tzinfo=IST)   # 13 sessions to the 29 Sep expiry: not lottery
+    ledger.clock = lambda: datetime(2026, 9, 10, 10, 0, tzinfo=IST)   # 12 sessions to the 29 Sep expiry (14 Sep is an NSE holiday): not lottery
     q.set(CE, 10.0, 11.0)                                        # 9.5% spread: refused
     pv = c.post("/api/order/preview", json=BODY, auth=AUTH).json()
-    assert pv["review"]["sessions_to_expiry"] == 13
+    assert pv["review"]["sessions_to_expiry"] == 12
     assert pv["token"] is None and any("liquidity" in b for b in pv["review"]["blocked"])
     rf = c.get("/api/paper/refusals", auth=AUTH).json()
     assert rf["count"] == 1 and rf["refusals"][0]["contract"] == CE and "spread above 8%" in rf["refusals"][0]["reasons"]

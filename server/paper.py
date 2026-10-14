@@ -484,8 +484,11 @@ class PaperLedger:
     def _follow_closed(self, now: datetime) -> None:
         """After the exit: keep quoting the contract until its T-2 day, so the results page shows whether the
         option went on rising (or kept falling) after we sold."""
-        live = [c for c in self.state["closed"][-FOLLOW_MAX:]
-                if (c.get("after") or {}).get("until") and now.date() <= sessions._d(c["after"]["until"])]
+        live = []
+        for fade in (False, True):                  # the fade's many same-day exits never crowd out S1's trades
+            group = [c for c in self.state["closed"] if ((c.get("rule") or {}).get("strategy") == "fade") == fade]
+            live += [c for c in group[-FOLLOW_MAX:]
+                     if (c.get("after") or {}).get("until") and now.date() <= sessions._d(c["after"]["until"])]
         for c in live:
             q = self.quotes.get({k: c[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
                                                    "lot_size")}, fresh=False)
