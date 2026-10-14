@@ -64,3 +64,22 @@ sessions).
 - Daily data: "the open" is the day's official open; a live entry fills later at a worse price on gap days.
 - Result numbers are as filed; restatements are not tracked. Block deals carry no buy/sell side in the store.
 - Sector lists are today's, applied to all dates.
+
+## Addendum (2026-10-14, before any option run): the S1 v9 option backtest, every strong cell
+The user asked for the option result now, so the option step runs for **all four strong cells**, not only the cells
+whose stock screen passes (`python -m scanner.backtest_s1_v9`). A smoke run of the stock screen on partial result
+numbers (~45 % of filings) had been seen before this addendum; no option number had.
+- Signal: §1's strong cells, arms A / B. Entry day = day 0. Expiry, strike and spot from the **previous session's**
+  bhavcopy (what is known at the open). One position per stock at a time (v4's position / cooldown rule), applied once over the widest cell (NP YoY
+  > 10 %, arm A); the narrower cells and arm B are the trades of that run that meet their test.
+- Entry price, two ways: **open** = day 0's option open (`OpnPric`) + 1 tick; **day** = day 0's premium VWAP + 1 tick
+  (the live "any time 09:15-15:20" rule). Liquidity: >= 50 contracts on day 0 (as v7; a known look-ahead on
+  volume).
+- Methods (the user: "consider v7 or v4 for arm B"): **v7** (walk up from at-the-money, 1 lot Rs 600-8,000, exits
+  50 % stop / 5 sessions without a new closing high / T-1, no near-expiry), **v4** (at-the-money, vol budget
+  Rs 2,000-8,000, v4's exits with a 20-session cap), **v5** (at-the-money, 1 lot Rs 10,000-30,000, 20 sessions).
+  Net of charges and AMFI-category slippage.
+- Per group: N, mean net % of premium, median, hit, total Rs, date-clustered t, mean per year 2021-2026.
+  **Pass:** N >= 50, mean > 0, t >= 2, positive in >= 5 of 6 years including 2025 and 2026. Many groups are run
+  (4 cells x 2 arms x 3 methods x 2 entries = 48), so a single pass among them is weak evidence; it goes to
+  paper trading, not money.
