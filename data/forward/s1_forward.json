@@ -1,7 +1,7 @@
 {
- "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
+ "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
- "last_session": "2026-10-13",
+ "last_session": "2026-10-14",
  "sessions": [
   {
    "session": "2026-10-13",
@@ -17,11 +17,86 @@
     "exited": [],
     "signals": []
    }
+  },
+  {
+   "session": "2026-10-14",
+   "A": {
+    "filled": [
+     "HCLTECH"
+    ],
+    "exited": [],
+    "signals": [
+     "TATAELXSI"
+    ]
+   },
+   "B": {
+    "filled": [],
+    "exited": [],
+    "signals": []
+   }
   }
  ],
  "arms": {
   "A": {
    "pending": [
+    {
+     "arm": "A",
+     "symbol": "TATAELXSI",
+     "sector": "nifty it",
+     "signal_date": "2026-10-14",
+     "beat": 4.65,
+     "move": 5.73,
+     "expiry": "2026-11-23",
+     "spot": 3622.59,
+     "strikes": [
+      2500.0,
+      2600.0,
+      2650.0,
+      2700.0,
+      2750.0,
+      2800.0,
+      2850.0,
+      2900.0,
+      2950.0,
+      3000.0,
+      3050.0,
+      3100.0,
+      3150.0,
+      3200.0,
+      3250.0,
+      3300.0,
+      3350.0,
+      3400.0,
+      3450.0,
+      3500.0,
+      3550.0,
+      3600.0,
+      3650.0,
+      3700.0,
+      3750.0,
+      3800.0,
+      3850.0,
+      3900.0,
+      3950.0,
+      4000.0,
+      4050.0,
+      4100.0
+     ],
+     "open_strike": 4000.0,
+     "open_lot": 125,
+     "open_ref": 55.88,
+     "liquid_strikes": [
+      3400.0,
+      3500.0,
+      3600.0,
+      3700.0,
+      3800.0,
+      3900.0,
+      4000.0
+     ]
+    }
+   ],
+   "open": [
     {
      "arm": "A",
      "symbol": "HCLTECH",
@@ -31,58 +106,49 @@
      "move": 8.42,
      "expiry": "2026-10-27",
      "spot": 1325.87,
-     "strikes": [
-      960.0,
-      1000.0,
-      1040.0,
-      1060.0,
-      1080.0,
-      1100.0,
-      1120.0,
-      1130.0,
-      1140.0,
-      1150.0,
-      1160.0,
-      1170.0,
-      1180.0,
-      1190.0,
-      1200.0,
-      1210.0,
-      1220.0,
-      1230.0,
-      1240.0,
-      1250.0,
-      1260.0,
-      1270.0,
-      1280.0,
-      1290.0,
-      1300.0,
-      1310.0,
-      1320.0,
-      1330.0,
-      1340.0,
-      1350.0,
-      1360.0,
-      1370.0,
-      1380.0,
-      1390.0,
-      1400.0,
-      1410.0,
-      1420.0,
-      1430.0,
-      1440.0,
-      1450.0,
-      1460.0,
-      1480.0,
-      1500.0,
-      1520.0
+     "id": "A:HCLTECH:2026-10-14",
+     "entry_date": "2026-10-14",
+     "strike": 1350.0,
+     "strikes_walked": 2,
+     "lot": 400,
+     "contracts_day1": 15590.0,
+     "entry_price": 18.35,
+     "entry_source": "vwap",
+     "cost": 7340.0,
+     "category": "large",
+     "best": 18.35,
+     "stall": 1,
+     "fut0": 1317.4,
+     "stock0": 1327.0,
+     "path": [
+      [
+       "2026-10-14",
+       14.85
+      ]
      ],
-     "open_strike": 1330.0,
-     "open_lot": 400,
-     "open_ref": 14.66
+     "exit_date": null,
+     "exit_reason": null,
+     "exit_price": null,
+     "net": null,
+     "net_pct": null,
+     "excluded": "",
+     "tracking": true,
+     "stats": {
+      "h_peak": 0.0,
+      "h_peak_date": null,
+      "h_dip": -19.07,
+      "h_dip_date": "2026-10-14",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-10-14",
+      "last_close": 14.85,
+      "mark_pct": -19.07
+     }
     }
    ],
-   "open": [],
    "closed": [],
    "refused": []
   },

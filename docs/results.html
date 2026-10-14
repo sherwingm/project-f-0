@@ -88,7 +88,7 @@ h2 small { font-weight:400; font-size:12px; }
 .pc .nm { flex:1; min-width:0; }
 .pc .hd .tag { margin-left:0; white-space:nowrap; }
 .arm { white-space:nowrap; font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; background:var(--raise); border:1px solid var(--line-strong); }
-.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; }
+.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; } .arm.f { color:#E0A030; border-color:#E0A030; }
 .mode { font:600 10.5px Inter,sans-serif; color:var(--muted); }
 .sb { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
 .sb .tw table td, .sb .tw table th { padding:7px 10px; }
@@ -153,6 +153,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     <button type="button" role="tab" data-tab="arma">Arm A</button>
     <button type="button" role="tab" data-tab="armb">Arm B</button>
   </nav>
+  <a class="tlink" href="/s2" id="s2Link">S2 →</a>
   <a class="tlink" href="/terminal" id="termLink">Terminal →</a>
   <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
 </header>
@@ -163,12 +164,12 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
 (() => {
   "use strict";
   const SERVER = Object.assign({ live: false, orders: false, paper: true, poll_seconds: 30 }, /*__SERVER__*/{});
-  let FW = {"rules":"S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. Failed the 2021-24 backtest gate (DECISIONS.md); paper only.","first_session":"2026-10-13","last_session":"2026-10-13","sessions":[{"session":"2026-10-13","A":{"filled":[],"exited":[],"signals":["HCLTECH"]},"B":{"filled":[],"exited":[],"signals":[]}}],"arms":{"A":{"pending":[{"arm":"A","symbol":"HCLTECH","sector":"nifty it","signal_date":"2026-10-13","beat":4.49,"move":8.42,"expiry":"2026-10-27","spot":1325.87,"strikes":[960.0,1000.0,1040.0,1060.0,1080.0,1100.0,1120.0,1130.0,1140.0,1150.0,1160.0,1170.0,1180.0,1190.0,1200.0,1210.0,1220.0,1230.0,1240.0,1250.0,1260.0,1270.0,1280.0,1290.0,1300.0,1310.0,1320.0,1330.0,1340.0,1350.0,1360.0,1370.0,1380.0,1390.0,1400.0,1410.0,1420.0,1430.0,1440.0,1450.0,1460.0,1480.0,1500.0,1520.0],"open_strike":1330.0,"open_lot":400,"open_ref":14.66}],"open":[],"closed":[],"refused":[]},"B":{"pending":[],"open":[],"closed":[],"refused":[]}}};
+  let FW = {"rules":"S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.","first_session":"2026-10-13","last_session":"2026-10-14","sessions":[{"session":"2026-10-13","A":{"filled":[],"exited":[],"signals":["HCLTECH"]},"B":{"filled":[],"exited":[],"signals":[]}},{"session":"2026-10-14","A":{"filled":["HCLTECH"],"exited":[],"signals":["TATAELXSI"]},"B":{"filled":[],"exited":[],"signals":[]}}],"arms":{"A":{"pending":[{"arm":"A","symbol":"TATAELXSI","sector":"nifty it","signal_date":"2026-10-14","beat":4.65,"move":5.73,"expiry":"2026-11-23","spot":3622.59,"strikes":[2500.0,2600.0,2650.0,2700.0,2750.0,2800.0,2850.0,2900.0,2950.0,3000.0,3050.0,3100.0,3150.0,3200.0,3250.0,3300.0,3350.0,3400.0,3450.0,3500.0,3550.0,3600.0,3650.0,3700.0,3750.0,3800.0,3850.0,3900.0,3950.0,4000.0,4050.0,4100.0],"open_strike":4000.0,"open_lot":125,"open_ref":55.88,"liquid_strikes":[3400.0,3500.0,3600.0,3700.0,3800.0,3900.0,4000.0]}],"open":[{"arm":"A","symbol":"HCLTECH","sector":"nifty it","signal_date":"2026-10-13","beat":4.49,"move":8.42,"expiry":"2026-10-27","spot":1325.87,"id":"A:HCLTECH:2026-10-14","entry_date":"2026-10-14","strike":1350.0,"strikes_walked":2,"lot":400,"contracts_day1":15590.0,"entry_price":18.35,"entry_source":"vwap","cost":7340.0,"category":"large","best":18.35,"stall":1,"fut0":1317.4,"stock0":1327.0,"path":[["2026-10-14",14.85]],"exit_date":null,"exit_reason":null,"exit_price":null,"net":null,"net_pct":null,"excluded":"","tracking":true,"stats":{"h_peak":0.0,"h_peak_date":null,"h_dip":-19.07,"h_dip_date":"2026-10-14","a_peak":null,"a_peak_date":null,"a_dip":null,"a_dip_date":null,"above_exit":null,"last_date":"2026-10-14","last_close":14.85,"mark_pct":-19.07}}],"closed":[],"refused":[]},"B":{"pending":[],"open":[],"closed":[],"refused":[]}}};
   const auth = { credentials: "same-origin" };
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
                set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } } };
-  if (!SERVER.orders) $("#termLink").href = "index.html";      // the static GitHub Pages copy
+  if (!SERVER.orders) { $("#termLink").href = "index.html"; $("#s2Link").href = "s2.html"; }      // the static GitHub Pages copy
 
   // ---- theme, clock
   const setTheme = t => { document.documentElement.dataset.theme = t; ls.set("fos_theme", t); };
@@ -234,8 +235,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const open = P.summary && P.summary.market_open;
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
-  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">Arm ${a}</span>`).join(" ");
-  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)" };
+  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">${a === "F" ? "Fade" : "Arm " + a}</span>`).join(" ");
+  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at 15:20" };
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
   function positionCard(p) {
     const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
@@ -245,7 +246,10 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
     const r = p.rule;
-    const exitLine = r
+    const fade = r && r.strategy === "fade";
+    const exitLine = fade
+      ? `<span>Sold at <b>15:20</b> on the results day (no stop)</span>${r.why ? `<span>${esc(r.why)}</span>` : ""}`
+      : r
       ? `<span>Stop <b class="mono">${rs(e / 2)}</b> (50% at a close)</span><span>No new closing high: <b>${r.stall || 0} of 5</b></span><span>Exit by <b>${day(tMinus1(p.expiry))}</b> (T-1)</span>`
       : `<span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>`;
     return `<article class="pc">
@@ -257,7 +261,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         <div class="r"><small>Value at last price</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
-      ${rail(e, now, pk, tr, r ? e / 2 : p.stop)}
+      ${rail(e, now, pk, tr, fade ? null : r ? e / 2 : p.stop)}
       <div class="pl2">
         <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
         <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)} · MTM, net of charges</em></div></div>
@@ -268,7 +272,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     </article>`;
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
-                   rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1" };
+                   rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
+                   fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)" };
   function closedTable(rows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
@@ -276,7 +281,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) <= a.until;
-        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
+        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
           <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
@@ -327,13 +332,15 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
       const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
       const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
-      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
+      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : mode === "fade" ? "Results day, 09:15-15:20" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
         <td class="${dir(avg)}">${avg == null ? "—" : pct(avg)}</td><td class="${dir(net)}">${cl.length ? srs(net) : "—"}</td><td>${op.length}</td><td class="${dir(mtm)}">${op.length ? srs(mtm) : "—"}</td></tr>`;
     };
     const board = (arm, title) => `<div><h3>${armTags([arm])} ${title}</h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
       <tbody>${rows(arm, "open")}${rows(arm, "close")}${rows(arm, null)}</tbody></table></div></div>`;
     return `<h2>Scoreboard <small>rule trades only, 1 lot each, net of charges · a signal in both arms counts in both</small></h2>
-      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>`;
+      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>
+      <div class="sb"><div><h3>${armTags(["F"])} results-day fade, paper only <small>(put on strong numbers, call on weak; sold at 15:20)</small></h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
+      <tbody>${rows("F", "fade")}</tbody></table></div></div></div>`;
   }
   async function closePos(id, btn) {
     const p = P.positions.find(x => x.id === id); if (!p) return;
