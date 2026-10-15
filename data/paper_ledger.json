@@ -1,13 +1,155 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 500000.0,
- "positions": [],
+ "cash": 486809.37,
+ "positions": [
+  {
+   "id": "P-1792057633424-1",
+   "symbol": "TATAELXSI",
+   "instrument": "CE",
+   "expiry": "2026-11-23",
+   "strike": 4000.0,
+   "tradingsymbol": "TATAELXSI26NOV4000CE",
+   "lot_size": 125,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 125,
+   "entry": {
+    "price": 57.85,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_open",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 125,
+    "price": 57.85,
+    "value": 7231.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.57,
+    "sebi": 0.01,
+    "stamp": 0.22,
+    "gst": 4.06,
+    "total": 26.86
+   },
+   "entry_charges_open": 26.86,
+   "stop": null,
+   "max_loss_at_entry": 7258.11,
+   "margin": 0.0,
+   "opened_at": "2026-10-15T15:17:12+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.49,
+   "unrealised": -64.35,
+   "liquidation_value": 7193.76,
+   "rule": {
+    "entry_mode": "open",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-14",
+    "beat": 4.65,
+    "move": 5.73,
+    "best": 57.85,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 57.85,
+    "at": "2026-10-15T15:17:12+05:30"
+   },
+   "trough": {
+    "price": 57.85,
+    "at": "2026-10-15T15:17:12+05:30"
+   }
+  },
+  {
+   "id": "P-1792057635506-3",
+   "symbol": "BHEL",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 410.0,
+   "tradingsymbol": "BHEL26OCT410PE",
+   "lot_size": 2625,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 2625,
+   "entry": {
+    "price": 2.25,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 2625,
+    "price": 2.25,
+    "value": 5906.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.1,
+    "sebi": 0.01,
+    "stamp": 0.18,
+    "gst": 3.98,
+    "total": 26.27
+   },
+   "entry_charges_open": 26.27,
+   "stop": null,
+   "max_loss_at_entry": 5932.52,
+   "margin": 0.0,
+   "opened_at": "2026-10-15T15:17:13+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 34.95,
+   "unrealised": -61.22,
+   "liquidation_value": 5871.3,
+   "rule": {
+    "strategy": "fade",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-15",
+    "filed": "2026-10-14",
+    "why": "net profit YoY +119.0 %, QoQ +117.9 %; revenue YoY +23.8 %",
+    "spot_at_entry": 433.7,
+    "best": 2.25,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 2.25,
+    "at": "2026-10-15T15:17:13+05:30"
+   },
+   "trough": {
+    "price": 2.25,
+    "at": "2026-10-15T15:17:13+05:30"
+   }
+  }
+ ],
  "closed": [],
  "daily": {
   "2026-10-14": {
    "start_equity": 500000.0,
    "end_equity": 500000.0,
+   "realised": 0.0
+  },
+  "2026-10-15": {
+   "start_equity": 500000.0,
+   "end_equity": 499874.43,
    "realised": 0.0
   }
  },
@@ -202,11 +344,12 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-14T13:41:25+05:30",
+ "saved_at": "2026-10-15T15:17:15+05:30",
  "halts": {},
  "rules": {
   "open": {
-   "2026-10-14:HCLTECH": "refused"
+   "2026-10-14:HCLTECH": "refused",
+   "2026-10-15:TATAELXSI": "bought"
   },
   "close": {},
   "exits_checked": null,
@@ -220,6 +363,9 @@
     ],
     "reason": "one lot at the open costs Rs 14,440, outside Rs 600-8,000"
    }
-  ]
+  ],
+  "fade": {
+   "2026-10-15:BHEL": "bought"
+  }
  }
 }
