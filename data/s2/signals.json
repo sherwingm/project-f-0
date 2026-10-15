@@ -1,27 +1,61 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-14",
- "generated": "2026-10-15T00:36+05:30",
+ "session": "2026-10-15",
+ "generated": "2026-10-16T00:20+05:30",
  "signals": [
   {
-   "symbol": "LICHSGFIN",
-   "close": 535.0,
-   "price_pct": -5.14,
-   "oi_pct": 13.64,
-   "vol_ratio": 1.62,
+   "symbol": "NESTLEIND",
+   "close": 1275.8,
+   "price_pct": -7.76,
+   "oi_pct": 11.63,
+   "vol_ratio": 5.0,
    "put": {
     "expiry": "2026-11-23",
-    "strike": 500.0,
-    "premium": 5.01,
-    "lot": 1000,
-    "lot_cost": 5010,
-    "below_spot_pct": 6.54,
-    "contracts": 52.0
+    "strike": 1200.0,
+    "premium": 10.34,
+    "lot": 500,
+    "lot_cost": 5170,
+    "below_spot_pct": 5.94,
+    "contracts": 591.0
+   }
+  },
+  {
+   "symbol": "ENRIN",
+   "close": 2957.0,
+   "price_pct": -6.51,
+   "oi_pct": 13.59,
+   "vol_ratio": 2.15,
+   "put": null,
+   "put_note": "no put with >= 50 contracts and a lot of Rs 600-8,000"
+  },
+  {
+   "symbol": "CGPOWER",
+   "close": 818.0,
+   "price_pct": -5.21,
+   "oi_pct": 11.14,
+   "vol_ratio": 2.32,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 740.0,
+    "premium": 9.03,
+    "lot": 850,
+    "lot_cost": 7675,
+    "below_spot_pct": 9.54,
+    "contracts": 116.0
    }
   }
  ],
  "note": null,
  "history": [
+  {
+   "session": "2026-10-15",
+   "symbols": [
+    "NESTLEIND",
+    "ENRIN",
+    "CGPOWER"
+   ],
+   "note": null
+  },
   {
    "session": "2026-10-14",
    "symbols": [
