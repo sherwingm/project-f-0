@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 486809.37,
+ "cash": 485121.5,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -49,7 +49,7 @@
     "bid": 56.4,
     "ask": 57.85,
     "ltp": 58.0,
-    "at": "2026-10-15T15:19:09+05:30",
+    "at": "2026-10-15T15:20:05+05:30",
     "stale": false
    },
    "unrealised_gross": -181.25,
@@ -64,9 +64,10 @@
     "signal_date": "2026-10-14",
     "beat": 4.65,
     "move": 5.73,
-    "best": 57.85,
+    "best": 58.0,
     "stall": 0,
-    "checked": null
+    "checked": "2026-10-15",
+    "last_close": 58.0
    },
    "peak": {
     "price": 58.0,
@@ -78,6 +79,76 @@
    }
   },
   {
+   "id": "P-1792057808327-5",
+   "symbol": "TATAELXSI",
+   "instrument": "CE",
+   "expiry": "2026-11-23",
+   "strike": 4000.0,
+   "tradingsymbol": "TATAELXSI26NOV4000CE",
+   "lot_size": 125,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 125,
+   "entry": {
+    "price": 59.21,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_close",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 125,
+    "price": 59.21,
+    "value": 7401.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.63,
+    "sebi": 0.01,
+    "stamp": 0.22,
+    "gst": 4.07,
+    "total": 26.93
+   },
+   "entry_charges_open": 26.93,
+   "stop": null,
+   "max_loss_at_entry": 7428.18,
+   "margin": 0.0,
+   "opened_at": "2026-10-15T15:20:06+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.81,
+   "unrealised": -64.74,
+   "liquidation_value": 7363.44,
+   "rule": {
+    "entry_mode": "close",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-14",
+    "beat": 4.65,
+    "move": 5.73,
+    "best": 59.21,
+    "stall": 1,
+    "checked": "2026-10-15",
+    "last_close": 58.0
+   },
+   "peak": {
+    "price": 59.21,
+    "at": "2026-10-15T15:20:06+05:30"
+   },
+   "trough": {
+    "price": 59.21,
+    "at": "2026-10-15T15:20:06+05:30"
+   }
+  }
+ ],
+ "closed": [
+  {
    "id": "P-1792057635506-3",
    "symbol": "BHEL",
    "instrument": "PE",
@@ -86,6 +157,9 @@
    "tradingsymbol": "BHEL26OCT410PE",
    "lot_size": 2625,
    "side": "BUY",
+   "stop": null,
+   "opened_at": "2026-10-15T15:17:13+05:30",
+   "t2_date": "2026-10-23",
    "lots": 1,
    "qty": 2625,
    "entry": {
@@ -97,39 +171,53 @@
     "slippage_vs_mid": null,
     "overflow_qty": 0
    },
-   "entry_charges": {
+   "entry_charges": 26.27,
+   "exit": {
+    "price": 2.2,
+    "levels": [],
+    "class": "rule",
+    "mode": "fade_eod",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "exit_charges": {
     "instrument": "PE",
-    "side": "BUY",
+    "side": "SELL",
     "qty": 2625,
-    "price": 2.25,
-    "value": 5906.25,
+    "price": 2.2,
+    "value": 5775.0,
     "brokerage": 20.0,
-    "stt": 0.0,
-    "exchange": 2.1,
+    "stt": 8.66,
+    "exchange": 2.05,
     "sebi": 0.01,
-    "stamp": 0.18,
-    "gst": 3.98,
-    "total": 26.27
+    "stamp": 0.0,
+    "gst": 3.97,
+    "total": 34.69
    },
-   "entry_charges_open": 26.27,
-   "stop": null,
+   "gross_pnl": -131.25,
+   "charges_total": 60.96,
+   "net_pnl": -192.21,
+   "reason": "fade_eod",
+   "closed_at": "2026-10-15T15:20:08+05:30",
+   "capital_committed": 5906.25,
+   "return_pct": -3.25,
    "max_loss_at_entry": 5932.52,
-   "margin": 0.0,
-   "opened_at": "2026-10-15T15:17:13+05:30",
-   "t2_date": "2026-10-23",
-   "stop_triggered_at": null,
-   "mark": {
-    "price": 2.15,
-    "bid": 2.15,
-    "ask": 2.25,
-    "ltp": 2.2,
-    "at": "2026-10-15T15:19:09+05:30",
-    "stale": false
+   "r_multiple": -0.032,
+   "held_peak": {
+    "price": 2.3,
+    "at": "2026-10-15T15:18:11+05:30"
    },
-   "unrealised_gross": -262.5,
-   "exit_charges_est": 34.45,
-   "unrealised": -323.22,
-   "liquidation_value": 5609.3,
+   "held_trough": {
+    "price": 2.2,
+    "at": "2026-10-15T15:19:09+05:30"
+   },
+   "after": {
+    "until": "2026-10-23",
+    "peak": null,
+    "trough": null,
+    "last": null
+   },
    "rule": {
     "strategy": "fade",
     "entry_mode": "fade",
@@ -142,19 +230,11 @@
     "spot_at_entry": 433.7,
     "best": 2.25,
     "stall": 0,
-    "checked": null
-   },
-   "peak": {
-    "price": 2.3,
-    "at": "2026-10-15T15:18:11+05:30"
-   },
-   "trough": {
-    "price": 2.2,
-    "at": "2026-10-15T15:19:09+05:30"
+    "checked": null,
+    "spot_at_exit": 433.7
    }
   }
  ],
- "closed": [],
  "daily": {
   "2026-10-14": {
    "start_equity": 500000.0,
@@ -163,8 +243,8 @@
   },
   "2026-10-15": {
    "start_equity": 500000.0,
-   "end_equity": 499431.53,
-   "realised": 0.0
+   "end_equity": 499497.8,
+   "realised": -192.21
   }
  },
  "peak_equity": 500000.0,
@@ -358,15 +438,17 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-15T15:19:09+05:30",
+ "saved_at": "2026-10-15T15:20:09+05:30",
  "halts": {},
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
    "2026-10-15:TATAELXSI": "bought"
   },
-  "close": {},
-  "exits_checked": null,
+  "close": {
+   "2026-10-15:TATAELXSI": "bought"
+  },
+  "exits_checked": "2026-10-15",
   "refused": [
    {
     "date": "2026-10-14",
