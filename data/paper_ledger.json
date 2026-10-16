@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 450517.94999999995,
+ "cash": 428829.39999999997,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -497,6 +497,213 @@
     "price": 12.2,
     "at": "2026-10-16T09:15:44+05:30"
    }
+  },
+  {
+   "id": "P-1792122352187-11",
+   "symbol": "ANGELONE",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 300.0,
+   "tradingsymbol": "ANGELONE26OCT300PE",
+   "lot_size": 2500,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 2500,
+   "entry": {
+    "price": 2.6,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 2500,
+    "price": 2.6,
+    "value": 6500.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.31,
+    "sebi": 0.01,
+    "stamp": 0.2,
+    "gst": 4.02,
+    "total": 26.54
+   },
+   "entry_charges_open": 26.54,
+   "stop": null,
+   "max_loss_at_entry": 6526.54,
+   "margin": 0.0,
+   "opened_at": "2026-10-16T09:15:44+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 36.09,
+   "unrealised": -62.63,
+   "liquidation_value": 6463.91,
+   "rule": {
+    "strategy": "fade",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-16",
+    "filed": "2026-10-15",
+    "why": "net profit YoY +58.2 %, QoQ +44.8 %; revenue YoY +18.7 %",
+    "spot_at_entry": 319.65,
+    "best": 2.6,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 2.6,
+    "at": "2026-10-16T09:15:44+05:30"
+   },
+   "trough": {
+    "price": 2.6,
+    "at": "2026-10-16T09:15:44+05:30"
+   }
+  },
+  {
+   "id": "P-1792122353014-13",
+   "symbol": "JIOFIN",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 220.0,
+   "tradingsymbol": "JIOFIN26OCT220CE",
+   "lot_size": 2350,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 2350,
+   "entry": {
+    "price": 3.03,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 2350,
+    "price": 3.03,
+    "value": 7120.5,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.53,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.06,
+    "total": 26.81
+   },
+   "entry_charges_open": 26.81,
+   "stop": null,
+   "max_loss_at_entry": 7147.31,
+   "margin": 0.0,
+   "opened_at": "2026-10-16T09:15:44+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.28,
+   "unrealised": -64.09,
+   "liquidation_value": 7083.22,
+   "rule": {
+    "strategy": "fade",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-16",
+    "filed": "2026-10-15",
+    "why": "net profit YoY -51.0 %, QoQ -59.0 %; revenue YoY +73.2 %",
+    "spot_at_entry": 215.22,
+    "best": 3.03,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 3.03,
+    "at": "2026-10-16T09:15:44+05:30"
+   },
+   "trough": {
+    "price": 3.03,
+    "at": "2026-10-16T09:15:44+05:30"
+   }
+  },
+  {
+   "id": "P-1792122353834-15",
+   "symbol": "LTF",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 245.0,
+   "tradingsymbol": "LTF26OCT245PE",
+   "lot_size": 2250,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 2250,
+   "entry": {
+    "price": 3.55,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 2250,
+    "price": 3.55,
+    "value": 7987.5,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.84,
+    "sebi": 0.01,
+    "stamp": 0.24,
+    "gst": 4.11,
+    "total": 27.2
+   },
+   "entry_charges_open": 27.2,
+   "stop": null,
+   "max_loss_at_entry": 8014.7,
+   "margin": 0.0,
+   "opened_at": "2026-10-16T09:15:44+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 38.94,
+   "unrealised": -66.14,
+   "liquidation_value": 7948.56,
+   "rule": {
+    "strategy": "fade",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-16",
+    "filed": "2026-10-15",
+    "why": "net profit YoY +32.4 %, QoQ +6.2 %; revenue YoY +26.5 %",
+    "spot_at_entry": 253.75,
+    "best": 3.55,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 3.55,
+    "at": "2026-10-16T09:15:44+05:30"
+   },
+   "trough": {
+    "price": 3.55,
+    "at": "2026-10-16T09:15:44+05:30"
+   }
   }
  ],
  "closed": [
@@ -609,7 +816,7 @@
   },
   "2026-10-16": {
    "start_equity": 499271.96,
-   "end_equity": 498642.31,
+   "end_equity": 498449.45,
    "realised": 0.0
   }
  },
@@ -804,7 +1011,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-16T09:15:50+05:30",
+ "saved_at": "2026-10-16T09:15:53+05:30",
  "halts": {},
  "rules": {
   "open": {
@@ -842,7 +1049,10 @@
    "2026-10-16:INDIANB": "bought",
    "2026-10-16:POLYCAB": "bought",
    "2026-10-16:PERSISTENT": "bought",
-   "2026-10-16:TECHM": "bought"
+   "2026-10-16:TECHM": "bought",
+   "2026-10-16:ANGELONE": "bought",
+   "2026-10-16:JIOFIN": "bought",
+   "2026-10-16:LTF": "bought"
   }
  }
 }
