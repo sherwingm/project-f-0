@@ -1,5 +1,5 @@
 {
- "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
+ "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
  "last_session": "2026-10-16",
  "sessions": [
@@ -81,7 +81,7 @@
      "signal_date": "2026-10-16",
      "beat": 2.19,
      "move": 1.71,
-     "expiry": "2026-11-23",
+     "expiry": "2026-10-27",
      "spot": 80.26,
      "strikes": [
       62.0,
@@ -110,17 +110,37 @@
       87.0,
       88.0,
       90.0,
+      91.0,
       92.0,
-      100.0
+      93.0,
+      94.0,
+      95.0,
+      100.0,
+      108.0
      ],
      "open_strike": null,
      "liquid_strikes": [
+      75.0,
+      76.0,
+      77.0,
+      78.0,
+      79.0,
       80.0,
+      81.0,
       82.0,
+      83.0,
+      84.0,
       85.0,
-      90.0
+      86.0,
+      87.0,
+      88.0,
+      90.0,
+      92.0,
+      95.0,
+      100.0
      ],
-     "open_reason": "premium below Rs 2"
+     "open_reason": "premium below Rs 2",
+     "expiry_repicked": "2026-11-23 -> 2026-10-27 (MIN_LEFT 2, 2026-10-17)"
     },
     {
      "arm": "A",
@@ -129,7 +149,7 @@
      "signal_date": "2026-10-16",
      "beat": 6.9,
      "move": 8.48,
-     "expiry": "2026-11-23",
+     "expiry": "2026-10-27",
      "spot": 1789.98,
      "strikes": [
       1240.0,
@@ -169,24 +189,38 @@
       1960.0,
       1980.0
      ],
-     "open_strike": 1960.0,
+     "open_strike": 1840.0,
      "open_lot": 600,
-     "open_ref": 12.84,
+     "open_ref": 10.58,
      "liquid_strikes": [
+      1460.0,
+      1500.0,
+      1520.0,
+      1540.0,
+      1560.0,
+      1580.0,
       1600.0,
+      1620.0,
       1640.0,
+      1660.0,
+      1680.0,
       1700.0,
+      1720.0,
       1740.0,
       1760.0,
+      1780.0,
       1800.0,
       1820.0,
       1840.0,
+      1860.0,
       1880.0,
       1900.0,
       1920.0,
+      1940.0,
       1960.0,
       1980.0
-     ]
+     ],
+     "expiry_repicked": "2026-11-23 -> 2026-10-27 (MIN_LEFT 2, 2026-10-17)"
     },
     {
      "arm": "A",
@@ -195,9 +229,10 @@
      "signal_date": "2026-10-16",
      "beat": 4.26,
      "move": 5.95,
-     "expiry": "2026-11-23",
+     "expiry": "2026-10-27",
      "spot": 184.4,
      "strikes": [
+      130.0,
       135.0,
       140.0,
       142.5,
@@ -227,21 +262,36 @@
       202.5,
       205.0,
       207.5,
-      210.0
+      210.0,
+      220.0
      ],
-     "open_strike": null,
+     "open_strike": 187.5,
+     "open_lot": 3000,
+     "open_ref": 2.11,
      "liquid_strikes": [
+      157.5,
       160.0,
+      162.5,
+      165.0,
+      167.5,
       170.0,
+      172.5,
       175.0,
+      177.5,
       180.0,
+      182.5,
       185.0,
+      187.5,
       190.0,
+      192.5,
       195.0,
+      197.5,
       200.0,
-      210.0
+      205.0,
+      210.0,
+      220.0
      ],
-     "open_reason": "premium below Rs 2"
+     "expiry_repicked": "2026-11-23 -> 2026-10-27 (MIN_LEFT 2, 2026-10-17)"
     }
    ],
    "open": [
@@ -372,7 +422,7 @@
      "signal_date": "2026-10-16",
      "beat": 6.9,
      "move": 8.48,
-     "expiry": "2026-11-23",
+     "expiry": "2026-10-27",
      "spot": 1789.98,
      "strikes": [
       1240.0,
@@ -412,24 +462,38 @@
       1960.0,
       1980.0
      ],
-     "open_strike": 1960.0,
+     "open_strike": 1840.0,
      "open_lot": 600,
-     "open_ref": 12.84,
+     "open_ref": 10.58,
      "liquid_strikes": [
+      1460.0,
+      1500.0,
+      1520.0,
+      1540.0,
+      1560.0,
+      1580.0,
       1600.0,
+      1620.0,
       1640.0,
+      1660.0,
+      1680.0,
       1700.0,
+      1720.0,
       1740.0,
       1760.0,
+      1780.0,
       1800.0,
       1820.0,
       1840.0,
+      1860.0,
       1880.0,
       1900.0,
       1920.0,
+      1940.0,
       1960.0,
       1980.0
-     ]
+     ],
+     "expiry_repicked": "2026-11-23 -> 2026-10-27 (MIN_LEFT 2, 2026-10-17)"
     },
     {
      "arm": "B",
@@ -438,9 +502,10 @@
      "signal_date": "2026-10-16",
      "beat": 4.26,
      "move": 5.95,
-     "expiry": "2026-11-23",
+     "expiry": "2026-10-27",
      "spot": 184.4,
      "strikes": [
+      130.0,
       135.0,
       140.0,
       142.5,
@@ -470,21 +535,36 @@
       202.5,
       205.0,
       207.5,
-      210.0
+      210.0,
+      220.0
      ],
-     "open_strike": null,
+     "open_strike": 187.5,
+     "open_lot": 3000,
+     "open_ref": 2.11,
      "liquid_strikes": [
+      157.5,
       160.0,
+      162.5,
+      165.0,
+      167.5,
       170.0,
+      172.5,
       175.0,
+      177.5,
       180.0,
+      182.5,
       185.0,
+      187.5,
       190.0,
+      192.5,
       195.0,
+      197.5,
       200.0,
-      210.0
+      205.0,
+      210.0,
+      220.0
      ],
-     "open_reason": "premium below Rs 2"
+     "expiry_repicked": "2026-11-23 -> 2026-10-27 (MIN_LEFT 2, 2026-10-17)"
     }
    ],
    "open": [],

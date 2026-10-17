@@ -5,7 +5,8 @@ time, from NSE's end-of-day files. Paper only; nothing is ordered.
 
 Rules (strategies/S1_v7_results_beat_near_expiry.md, variant `old_expiry`): a results beat (day-0 return >= 2 %
 above the leave-one-out sector, raw move < 10 %) is bought next session as one call lot: the current monthly expiry
-if >= 10 sessions remain after day 0, else the next monthly; walking up from the at-the-money strike to the first
+if >= 2 sessions remain after day 0 (NSE holidays counted; 10 until 2026-10-17, see MIN_LEFT), else the next monthly;
+walking up from the at-the-money strike to the first
 call with >= 50 contracts that day and one lot at Rs 600-8,000 (fill = the day's VWAP + 1 tick). Exits on each close
 from the entry day: 50 % stop, 5 sessions without a new closing high, T-1. Arm A takes every beat, arm B only beats
 in a strong sector. One position per stock and arm, 10-session cooldown.
@@ -32,7 +33,7 @@ from . import backtest_s1_v7 as v7
 from .backtest_cheap_options import sessions_to
 from .backtest_s1_v2 import Inputs, Market, day0_index
 from .build import ROOT
-from .option_engine import TICK
+from .option_engine import TICK, monthly
 from .option_path import span
 
 log = logging.getLogger("forward_s1")
@@ -45,8 +46,11 @@ LOOKBACK_DAYS = 150                               # calendar days of closes load
 # 2026-10-14 (the user): skip a "quiet" results day, the stock's high-low range under 3 % of the previous close.
 # In the arm A studies these trades were 48 losers and 5 winners of 53 (2021-24 and 2025-26); the stock rarely moved.
 QUIET_RANGE_PCT = 3.0
+# 2026-10-17 (the user): keep the current monthly expiry while at least 2 sessions remain after day 0, as the S1 v10
+# fade does (S1 v7's rule needed 10). From the signals of 2026-10-16 (bought 2026-10-19); open trades keep their expiry.
+MIN_LEFT = 2
 RULES_TEXT = ("S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) "
-              "-> next session buy 1 call lot, current monthly expiry if >= 10 sessions remain else next monthly, "
+              "-> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, "
               "first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's "
               "average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. "
               "From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous "
@@ -184,6 +188,38 @@ def open_pick(p: dict, prices: pd.DataFrame | None) -> dict:
     return {"open_strike": q.strike, "open_lot": q.lot, "open_ref": px, "liquid_strikes": liquid}
 
 
+def choose_expiry(expiries, d: date, left=None) -> tuple[str, int] | None:
+    """(expiry, sessions left after day d): the current monthly if >= MIN_LEFT sessions remain after d, counted on
+    NSE's trading calendar with its holidays (server/sessions.py), else the next monthly."""
+    if left is None:
+        from server.sessions import sessions_to_expiry as left
+    for e in (x for x in monthly(expiries) if x > d.isoformat()):
+        n = left(d, e)
+        if n >= MIN_LEFT:
+            return e, n
+    return None
+
+
+def repick(state: dict, session: str, day: dict, prices: pd.DataFrame | None) -> list[dict]:
+    """Re-apply the expiry rule (and the open pick) to the pending signals of `session`, after a rule change."""
+    changed = []
+    for arm in state["arms"].values():
+        for p in arm["pending"]:
+            chain = day["chain"].get(p["symbol"]) if p.get("signal_date") == session else None
+            ch = choose_expiry(chain["XpryDt"], date.fromisoformat(session)) if chain is not None else None
+            if ch is None or ch[0] == p["expiry"]:
+                continue
+            old = p["expiry"]
+            for k in ("open_strike", "open_lot", "open_ref", "open_reason", "liquid_strikes"):
+                p.pop(k, None)
+            p["expiry"] = ch[0]
+            p["strikes"] = sorted(float(k) for k in chain.loc[chain["XpryDt"] == ch[0], "StrkPric"].unique())
+            p.update(open_pick(p, prices))
+            p["expiry_repicked"] = f"{old} -> {ch[0]} (MIN_LEFT {MIN_LEFT}, 2026-10-17)"
+            changed.append(p)
+    return changed
+
+
 def blocked(state_arm: dict, symbol: str, i0: int, pos: dict[str, int]) -> bool:
     """One position per stock and arm, and v4's 10-session cooldown after an exit."""
     if any(x["symbol"] == symbol for x in state_arm["pending"] + state_arm["open"]):
@@ -206,8 +242,7 @@ def new_signals(state: dict, session: str, m: Market, results: list, day: dict, 
             continue
         chain = day["chain"].get(s.symbol)
         spot = day["spot"].get(s.symbol)
-        ch = v7.choose_expiry(chain["XpryDt"], m.cal_dates, m.cal_dates[i], near_ok=False) \
-            if chain is not None else None
+        ch = choose_expiry(chain["XpryDt"], m.cal_dates[i]) if chain is not None else None
         rng = (getattr(m, "day_range", None) or {}).get(s.symbol)
         r0 = float(rng[i]) if rng is not None and not math.isnan(rng[i]) else None
         for arm in v4.ARMS:
@@ -345,8 +380,21 @@ def run(today: date | None = None, state_path: Path = STATE_PATH, eod2_dir: Path
 def main() -> None:
     ap = argparse.ArgumentParser(description="S1 forward paper test (night list + night fill)")
     ap.add_argument("--today", type=date.fromisoformat)
+    ap.add_argument("--repick", metavar="SESSION", help="re-apply the expiry rule to that session's pending signals")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    if a.repick:
+        from .nse_fo import download_fo_bhavcopy, download_fo_prices
+        cache = ROOT / "data" / "cache"
+        download_fo_bhavcopy(date.fromisoformat(a.repick), cache)
+        st = load_state(STATE_PATH)
+        st["rules"] = RULES_TEXT
+        changed = repick(st, a.repick, v4.Days(cache, prices=None).bhav(a.repick),
+                         download_fo_prices(date.fromisoformat(a.repick), cache))
+        save_state(st, STATE_PATH)
+        for p in changed:
+            print(p["arm"], p["symbol"], p["expiry_repicked"], "open strike", p.get("open_strike"), p.get("open_reason", ""))
+        return
     st = run(a.today)
     for arm, x in st["arms"].items():
         print(f"arm {arm}: pending {len(x['pending'])}, open {len(x['open'])}, closed {len(x['closed'])}, "

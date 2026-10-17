@@ -69,7 +69,7 @@ def test_signal_then_next_session_fill(m):
     a, b = st["arms"]["A"], st["arms"]["B"]
     assert {p["symbol"] for p in a["pending"]} == {"STK", "OTH"}
     assert [p["symbol"] for p in b["pending"]] == ["STK"]                       # OTH has no sector: not in B
-    assert a["pending"][0]["expiry"] == EXPIRY                                    # >= 10 sessions left
+    assert a["pending"][0]["expiry"] == EXPIRY                                    # >= 2 sessions left
     fw.step(st, "2026-10-14", m, day({"STK": 10.0}), prices(), RESULTS, set(), CAT)
     t = next(x for x in a["open"] if x["symbol"] == "STK")
     assert (t["entry_date"], t["strike"], t["entry_price"], t["cost"]) == ("2026-10-14", 100.0, 10.05, 5025.0)
@@ -143,3 +143,25 @@ def test_day_range_is_in_percent_of_the_previous_close():
                      index=pd.to_datetime(["2026-10-12", "2026-10-13"]))
     r = fw.day_range(f, ["2026-10-12", "2026-10-13"])
     assert r[1] == 6.0 and r[0] != r[0]                          # (106 - 100) / 100; the first day has no previous close
+
+
+# ---------------------------------------------------------------- expiry rule from 2026-10-17: >= 2 sessions left
+def test_current_monthly_kept_while_two_sessions_remain_holidays_counted():
+    exps = ["2026-10-27", "2026-11-23", "2026-12-29"]
+    assert fw.choose_expiry(exps, date(2026, 10, 16)) == ("2026-10-27", 6)     # 19, 21, 22, 23, 26, 27 (20 Oct holiday)
+    assert fw.choose_expiry(exps, date(2026, 10, 23)) == ("2026-10-27", 2)     # 26, 27: still the current monthly
+    assert fw.choose_expiry(exps, date(2026, 10, 26))[0] == "2026-11-23"       # 1 session left: the next monthly
+    assert fw.choose_expiry(["2026-10-27"], date(2026, 10, 26)) is None
+
+
+def test_repick_moves_a_pending_signal_to_the_current_monthly():
+    st = fw.empty_state()
+    chain = pd.DataFrame({"XpryDt": ["2026-10-27"] * 2 + ["2026-11-23"] * 2, "StrkPric": [100.0, 105.0, 110.0, 120.0]})
+    st["arms"]["A"]["pending"].append({"arm": "A", "symbol": "STK", "signal_date": "2026-10-16", "expiry": "2026-11-23",
+                                       "spot": 101.0, "strikes": [110.0, 120.0], "open_strike": 110.0})
+    st["arms"]["A"]["pending"].append({"arm": "A", "symbol": "OLD", "signal_date": "2026-10-15", "expiry": "2026-11-23"})
+    changed = fw.repick(st, "2026-10-16", {"chain": {"STK": chain, "OLD": chain}}, None)
+    p, old = st["arms"]["A"]["pending"]
+    assert [c["symbol"] for c in changed] == ["STK"] and p["expiry"] == "2026-10-27" and p["strikes"] == [100.0, 105.0]
+    assert p["open_strike"] is None and "2026-11-23 -> 2026-10-27" in p["expiry_repicked"]
+    assert old["expiry"] == "2026-11-23"                                       # another session's signal: untouched
