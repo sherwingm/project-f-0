@@ -235,3 +235,18 @@ def test_no_position_follows_the_carry_rule_and_the_eight_sell_at_the_next_first
     q.set("PE", 1220.0, 12.0, 12.4)                               # a losing weekend, far below -20 %
     ft.on_poll(at(19, 9, 15))
     assert lg.state["positions"] == [] and lg.state["closed"][-1]["reason"] == "fade_late"
+
+
+def test_summary_endpoint_reports_the_running_commit(monkeypatch):
+    """/api/paper/summary carries version.commit (Render's RENDER_GIT_COMMIT) so a deploy can be checked from outside."""
+    from fastapi.testclient import TestClient
+    import server.app as app_mod
+    monkeypatch.setenv("RENDER_GIT_COMMIT", "abc1234")
+    monkeypatch.setattr(app_mod, "_ledger", lambda: type("L", (), {"summary": lambda self: {"open_positions": 0}})())
+    monkeypatch.setattr(app_mod.state, "mirror", None, raising=False)
+    app_mod.app.dependency_overrides[app_mod.auth] = lambda: "user"
+    try:
+        body = TestClient(app_mod.app).get("/api/paper/summary").json()
+    finally:
+        app_mod.app.dependency_overrides.clear()
+    assert body["version"] == {"commit": "abc1234", "fade_carry_dates": []}

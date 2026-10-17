@@ -596,8 +596,12 @@ def _ledger() -> PaperLedger:
 
 @app.get("/api/paper/summary")
 def api_paper_summary(_: str = Depends(auth)):
+    import os
+    from server.fade import CARRY_DATES
     m = getattr(state, "mirror", None)
-    return {**_ledger().summary(), "persistence": m.status if m is not None else {"enabled": False}}
+    # which code is running: Render sets RENDER_GIT_COMMIT on every deploy (None when run elsewhere)
+    return {**_ledger().summary(), "persistence": m.status if m is not None else {"enabled": False},
+            "version": {"commit": os.getenv("RENDER_GIT_COMMIT"), "fade_carry_dates": sorted(CARRY_DATES)}}
 
 
 @app.get("/api/paper/positions")
