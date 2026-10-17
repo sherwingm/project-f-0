@@ -2,9 +2,36 @@
 
 Updated at the end of every session. `DECISIONS.md` is authoritative for rules and the strategy record.
 
-**State as of 2026-10-17.**
+**State as of 2026-10-18.**
+
+## Core idea tracker (updated with every step, from 2026-10-18)
+How each piece of work moves the user's core ideas forward. Facts and numbers stay in the sections below and in
+`DECISIONS.md`; this is the thread that connects them.
+
+### S1 core idea: a company's quarterly results move its stock, and an option can ride that move
+| Stage | What it asked | What it found | Where the idea stands |
+|---|---|---|---|
+| v2-v3 (results miss / strength score) | Do weak results in weak sectors keep falling? | No drift (t −0.7); strength score went the wrong way | Direction "miss → fall" not supported |
+| v4-v7 (results-beat continuation, calls) | Does a beat keep rising, and can a call catch it? | The **stock** drifted up after beats in 2021-24 (+1.6 % to +3.7 % over 20 sessions, t 3-4), but **calls lost** after decay and costs | Drift real in the stock, not tradable with cheap calls |
+| v8 (2025-26 holdout) | Does the drift still exist? | Gone in 2025-26 (stock +0.2 %) | Continuation idea fails on recent data |
+| v9 (results-day calls at the open) | Buy strong numbers on results day itself? | The opposite: strong numbers **fall** from the open, weak ones **rise** (t −5.7 / +) | The first reaction tends to **reverse** within day 0 |
+| v10 (results-day fade, paper since 2026-10-15) | Bet on that reversal: strong → put, weak → call, same day | Backtest 2025-26 (descriptive): +5.6 % of premium a trade, t 1.3; stock fades +0.64 % (t 4.2); the result depends on the entry price | **Current form of the idea**, on paper; review at 30 trades / 6 weeks |
+| Stop-loss study 2025-26 | Can a stop or target improve it? | A −20 % stop fires on 71 % of trades that end near −21 % anyway: no gain; early targets cut the winners; dips and peaks cluster in the first 15 minutes | Exits: hold to 15:20, no stop, for now |
+| 2022-24 re-run (running, 2026-10-18) | Did the fade and the exit findings hold in earlier years? | 436 trades backtested; stop-loss study pending | Checks whether the idea is stable across regimes |
+
+**Open questions for the idea:** does the day-0 fade survive a realistic live entry (the ask after 09:15, not the open)?
+Does it hold in 2022-24 as in 2025-26? Can a time-based exit or a smarter stop help once real minute paths of live trades
+are recorded?
+
+### S2 core idea: price plus futures open-interest build-up predicts the next few days
+| Stage | What it found | Where the idea stands |
+|---|---|---|
+| Step 1 screen (48 cells, 2021-26) | Only the **short build-up** (price −3 %+, OI +10 %+, volume 1.5×) kept falling: +0.62 % over 5 sessions, t 3.2 | Real but small edge in the stock |
+| Step 2 bought put | −14.2 % of premium (t −2.7): a ₹600-8,000 put is too far below the stock for a 0.6 % move | Not tradable with cheap puts |
+| Screen B (pre-registered, not run) | The user's other ideas: parent indicators, market backdrop, sector rotation, gap fill, weak results | Waiting |
 
 ## How we work
+- **The core idea tracker above is updated with every step**, alongside the detailed log.
 - **S1 and S2 are kept separate**: their own specs (`strategies/S1_*`, `strategies/S2_*`), modules, pages, paper
   records and sections below. One commit never mixes S1 and S2 changes.
 - **Every step is committed and pushed** to `origin/main` (GitHub is the source of truth across machines), and
