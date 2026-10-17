@@ -66,3 +66,9 @@ proxy and is reported unchanged. Proxy B is added beside it:
 - The timeline (times of the peak and the dip, which came first) is the same under A and B: both follow the stock's own
   low and high. Only the price levels, and so the stop / target results, differ.
 - All twelve exits are reported for both proxies. Conclusions about stop levels are read only where A and B agree.
+
+## Addendum 2026-10-18 · the same study on the 2022-24 trades
+Written before any 2022-24 number is computed. The trades of the 2022-24 fade backtest (addendum in
+`strategies/S1_v10_backtest_2025_26.md`), the same day-0 1-minute stock candles through `/api/history`, the same proxies
+A and B, the same twelve exits, and the exact single stop / target check on real prices. Run:
+`python -m scanner.fade_timeline --tag _2022_24` (with `--fetch` first) → `S1_v10_stoploss_study_2022_24.md` / `.xlsx`.

@@ -58,3 +58,14 @@ removed; the VWAP-entry side report. The report states the caveats above at its 
 - No order book in the data: the walk's liquidity test is a contract count, the fill is the open or VWAP plus a tick.
 - Sector, industry and AMFI category are today's lists / point-in-time AMFI as the other S1 backtests.
 - `financials.json` covers only stocks whose results were fetched; the share of filings without numbers is reported.
+
+## Addendum 2026-10-18 · the same backtest on 2022-01-01 → 2024-12-31 (user's request)
+Written before any 2022-24 number is computed. Every rule above is unchanged; only the window differs. Run:
+`python -m scanner.backtest_s1_v10 --start 2022-01-01 --end 2024-12-31 --tag _2022_24` → `S1_v10_backtest_report_2022_24.md`,
+`S1_v10_trades_2022_24.csv`. Periods are half-years (2022 H1 … 2024 H2).
+- Descriptive only, like the 2025-26 run. 2021-2024 is S1's test window, already used by v2-v7 and v9 (which saw the fade
+  pattern on 2021-2026), so this is not out of sample either.
+- 2022's results filings are back-filled from NSE for this run (the event-store seed on this PC starts in 2023). If the
+  back-fill fails, the window starts 2023-01-01 and the report says so.
+- Option files before 2024-07-05 are NSE's old bhavcopy format: the lot is the greatest common divisor of the day's open
+  interests and the spot is the nearest future's close (as in every earlier S1 backtest).
