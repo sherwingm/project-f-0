@@ -11,7 +11,8 @@ session this module:
     exit   the first poll from 15:20 the same day, at the best bid (else the last price - 1 tick). A position still
            open on a later day (the server was down at 15:20) is sold at the first poll of that day.
 
-Positions carry rule.strategy = "fade" and arm "F"; server/rules.py's S1 exits leave them alone.
+Positions carry rule.strategy = "fade" and arm "F"; server/rules.py's S1 exits leave them alone. The eight trades of
+2026-10-16 that missed their 15:20 exit (CARRY_DATES) follow their own rule instead: _carry_exits.
 """
 from __future__ import annotations
 
@@ -19,6 +20,7 @@ import logging
 from datetime import datetime, time
 from typing import Callable
 
+from server import sessions
 from server.broker import tradingsymbol
 
 log = logging.getLogger("fade")
@@ -26,6 +28,12 @@ log = logging.getLogger("fade")
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 120
 BAND, MIN_PREMIUM, MAX_SPREAD, TICK, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 0.05, 15
+
+# The eight trades opened 2026-10-16 and not sold at 15:20 (the server slept) are kept as a side record outside the
+# v10 review, under their own exit rule (strategies/S1_v10_results_day_fade_paper.md, addendum 2026-10-17): sell at
+# -20 % of the entry premium, at 25 % below the highest close since entry, or at T-1.
+CARRY_DATES = {"2026-10-16"}
+CARRY_STOP, CARRY_TRAIL = 0.80, 0.75
 
 
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None]):
@@ -95,6 +103,7 @@ class FadeTrader:
         st = self._state()
         done = st.setdefault("fade", {})
         self._exits(now)
+        self._carry_exits(now)
         if now.time() < OPEN_FROM:
             return
         for sig in self.signals(today):
@@ -121,11 +130,47 @@ class FadeTrader:
             self.ledger._save()
             log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
 
+    @staticmethod
+    def carried(pos: dict) -> bool:
+        r = pos.get("rule") or {}
+        return r.get("strategy") == "fade" and r.get("signal_date") in CARRY_DATES
+
+    def _carry_exits(self, now: datetime) -> None:
+        """Carried trades, once a session at the first poll from 15:20 on the last traded price as the close: sell at
+        a close <= 0.80 x entry, at a close <= 0.75 x the highest close since entry, or on T-1; at the best bid."""
+        if now.time() < EOD_AT:
+            return
+        today = now.date().isoformat()
+        for pos in list(self.ledger.state["positions"]):
+            if not self.carried(pos):
+                continue
+            c = pos["rule"].setdefault("carry", {"peak": pos["entry"]["price"], "checked": None})
+            if c["checked"] == today:
+                continue
+            ck = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
+            q = self.ledger.quotes.get(ck) or {}
+            close = q.get("last_price")
+            if not close:
+                continue                                         # no price this poll: try the next one
+            entry = pos["entry"]["price"]
+            c["peak"], c["checked"], c["last_close"] = max(c["peak"], close), today, close
+            reason = ("carry_stop" if close <= CARRY_STOP * entry else
+                      "carry_trail" if close <= CARRY_TRAIL * c["peak"] else
+                      "carry_t1" if now.date() >= sessions.t_minus(pos["expiry"], 1) else None)
+            if reason:
+                bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
+                px = bid or max(0.0, round(close - TICK, 2))
+                pos["rule"]["spot_at_exit"] = self.spot(pos["symbol"])
+                self.ledger.close_at(pos["id"], px, now, reason)
+                log.info("fade carry exit %s: %s at %.2f (close %.2f, entry %.2f, peak %.2f)",
+                         reason, pos["tradingsymbol"], px, close, entry, c["peak"])
+            self.ledger._save()
+
     def _exits(self, now: datetime) -> None:
         """Sell every fade position from 15:20 on its entry day, or at the first poll of any later day."""
         for pos in list(self.ledger.state["positions"]):
             r = pos.get("rule") or {}
-            if r.get("strategy") != "fade":
+            if r.get("strategy") != "fade" or self.carried(pos):
                 continue
             opened = datetime.fromisoformat(pos["opened_at"]).date()
             if not (now.date() > opened or now.time() >= EOD_AT):

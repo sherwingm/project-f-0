@@ -157,3 +157,66 @@ def test_fade_closes_do_not_crowd_out_s1_follow(setup):
     q.book["X26OCT100CE"] = {"last_price": 7.0}
     lg._follow_closed(at(16, 10, 0))
     assert lg.state["closed"][0]["after"]["last"]["price"] == 7.0
+
+
+# ---------------------------------------------------------------- the carried trades (addendum 2026-10-17)
+@pytest.fixture
+def carried(setup, monkeypatch):
+    """A fade put bought on the 15th at 18.50 that is treated as a carried trade (its signal date is in CARRY_DATES)."""
+    lg, q, ft, box = setup
+    monkeypatch.setattr(F, "CARRY_DATES", {"2026-10-15"})
+    q.set("PE", 1200.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    box["f"] = None
+    (p,) = lg.state["positions"]
+    assert ft.carried(p) and p["entry"]["price"] == 18.5
+    return lg, q, ft, p
+
+
+def test_carried_trade_is_not_sold_at_the_first_poll_of_the_next_day(carried):
+    lg, q, ft, _ = carried
+    q.set("PE", 1200.0, 17.0, 17.4)
+    ft.on_poll(at(16, 9, 20))
+    ft.on_poll(at(16, 14, 0))
+    assert len(lg.state["positions"]) == 1
+
+
+def test_carried_trade_stops_at_minus_20_percent_on_the_close(carried):
+    lg, q, ft, _ = carried
+    q.set("PE", 1200.0, 14.9, 15.3, ltp=15.0)                    # 15.0 > 0.80 x 18.5 = 14.8: kept
+    ft.on_poll(at(16, 15, 20))
+    assert len(lg.state["positions"]) == 1
+    q.set("PE", 1200.0, 14.5, 14.9, ltp=14.7)                    # 14.7 <= 14.8: sold at the bid
+    ft.on_poll(at(19, 15, 19))
+    assert len(lg.state["positions"]) == 1                       # not before 15:20
+    ft.on_poll(at(19, 15, 20))
+    c = lg.state["closed"][-1]
+    assert lg.state["positions"] == [] and c["reason"] == "carry_stop" and c["exit"]["price"] == 14.5
+
+
+def test_carried_trade_trails_25_percent_below_the_highest_close(carried):
+    lg, q, ft, _ = carried
+    q.set("PE", 1200.0, 24.8, 25.2, ltp=25.0)                    # a new peak of 25.0
+    ft.on_poll(at(16, 15, 20))
+    assert lg.state["positions"][0]["rule"]["carry"]["peak"] == 25.0
+    q.set("PE", 1200.0, 19.0, 19.4, ltp=19.2)                    # 19.2 > 0.75 x 25 = 18.75: kept
+    ft.on_poll(at(19, 15, 20))
+    assert len(lg.state["positions"]) == 1
+    q.set("PE", 1200.0, 18.5, 18.9, ltp=18.7)                    # 18.7 <= 18.75: sold, though still above the entry
+    ft.on_poll(at(21, 15, 20))
+    c = lg.state["closed"][-1]
+    assert lg.state["positions"] == [] and c["reason"] == "carry_trail" and c["exit"]["price"] == 18.5
+
+
+def test_carried_trade_is_checked_once_a_session_and_sold_at_t_minus_1(carried):
+    lg, q, ft, _ = carried
+    q.set("PE", 1200.0, 17.9, 18.3, ltp=18.1)
+    ft.on_poll(at(16, 15, 20))
+    q.set("PE", 1200.0, 10.0, 10.4, ltp=10.2)                    # a later poll the same day is ignored
+    ft.on_poll(at(16, 15, 25))
+    assert len(lg.state["positions"]) == 1
+    q.set("PE", 1200.0, 18.9, 19.3, ltp=19.0)
+    ft.on_poll(at(23, 15, 20))
+    assert len(lg.state["positions"]) == 1                       # 27 Oct expiry: T-1 is Mon 26 Oct
+    ft.on_poll(at(26, 15, 20))
+    assert lg.state["closed"][-1]["reason"] == "carry_t1" and lg.state["positions"] == []
