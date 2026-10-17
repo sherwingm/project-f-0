@@ -169,6 +169,13 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-17 · S1 rule trades: expiry rule changed to ≥ 2 sessions** (DECISIONS `1f6e8a6`; code + data next commit):
+  the current monthly expiry is kept while at least 2 sessions remain after day 0 (NSE holidays counted), as the fade does
+  (was 10, S1 v7). `python -m scanner.forward_s1 --repick 2026-10-16` moved Monday's queue to the 27 Oct expiry: arm A IRFC
+  (no strike ≥ ₹2 at the night pick; the live walk retries), TECHM (1840 CE, ~₹6,350 a lot), WIPRO (187.5 CE, ~₹6,330); arm B
+  TECHM, WIPRO. `data/scan.json` meta.forward patched so the server reads it at 08:40 / 09:05 on 19 Oct. Open trades keep their
+  expiry (TATAELXSI stays on 23 Nov). The rule trades' paper record is split at this date. Check on Monday that the buys use
+  the 27 Oct contracts.
 - **2026-10-17 · keep-awake hardened** (`f9c1e3c`): three overlapping starts (08:17, 11:47, 14:17 IST, odd minutes, no longer
   serialised), each to 15:45 IST or 5 h 45 min; the run **fails** (GitHub e-mails the owner) after 3 missed visits in a row; a
   `test_minutes` input for manual runs. Test run 39053665149: 3 of 3 visits answered. A real trading day (Mon 19 Oct) is the first proof.
