@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__ccd_turn__update_plan",
+      "mcp__ccd_turn__wrap_up",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" run list *)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" run view *)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" repo list *)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" release list *)",
+      "Bash(\"/c/Program Files/GitHub CLI/gh.exe\" auth status)"
+    ]
+  }
+}
