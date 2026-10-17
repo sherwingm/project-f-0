@@ -148,9 +148,17 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   failure (`test_spec12_step7_model::test_infer_for_scan_adds_the_model_block`) fails without this change too. Not
   done: a badge on the results page for carried trades. The positions were already below −20 % at Fri 11:21 for
   INDIANB, TECHM, LTF and POLYCAB, so they are expected to sell on Mon 19 Oct at 15:20.
-- **2026-10-17 · asked, not started**: a backtest of the fade (S1 v10) over 2025–2026 — scope to be confirmed. Caveats
-  to carry into it: 2025-26 is the holdout S1 v8 already used and S1 v9 already saw the fade pattern in 2021-26, and the
-  exit rule was chosen after the eight trades were seen, so any result is descriptive, not a pass.
+- **2026-10-17 · S1 v10 descriptive backtest 2025-26** (pre-registered `d0a4339`, code `1997818`, result `b87037d`;
+  `python -m scanner.backtest_s1_v10`, report `data/results/S1_v10_backtest_report.md`, force-added because
+  `data/results/` is git-ignored; the trade list stays local). 1,259 results filings → 499 signals → 433 trades (322 puts,
+  111 calls), entry day-0 open + 1 tick. **Same-day exit: +5.6 % of premium, median −17 %, hit 40 %, t 1.33, +₹1.24 lakh.
+  Carried-trade rule: −10.8 %, median −36.5 %, hit 24 %, t −2.60, −₹2.86 lakh** (the −20 % stop closed 68 % of trades on
+  their first close; holding the survivors past day 0 lost money). With a VWAP + 1 tick entry both are negative (−14.9 %,
+  −24.9 %), so the result hinges on the entry price and the live fill is later than the open. The stock's day-0 open →
+  close moved against the headline by +0.64 % (t 4.2). Descriptive only; not out of sample (2025-26 is the S1 v8
+  holdout and the window where the fade was seen). Nothing changed in the live rules. Data fetched for it (local, not in
+  git): F&O bhavcopies 2024-12 → 2026-09 in `data/cache`, eod2 in `data/eod2`, the event store from the `state-seed`
+  release (used via `EVENTS_DB`, the local `data/events.sqlite` untouched). The suite's one failing test is unchanged.
 
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
