@@ -449,6 +449,32 @@ def api_intraday(symbol: str, tf: int = 1, leg: str = "stock", _: str = Depends(
             "ticks": len(ticks), "market_open": market_open()}
 
 
+@app.get("/api/history/{symbol}")
+def api_history(symbol: str, day: str, tf: int = 1, _: str = Depends(auth)):
+    """Research (the S1 v10 stop-loss study): a STOCK's tf-minute candles on a past day from the broker's historical
+    API, through this server's own key, so the key never leaves the server. Stocks only; refused while the market
+    is open, so it never competes with the live polls (Kotak's calls are also spaced HISTORY_MIN_INTERVAL apart)."""
+    sym = symbol.upper()
+    try:
+        d = datetime.strptime(day, "%Y-%m-%d").date()
+    except ValueError:
+        raise HTTPException(400, "day must be YYYY-MM-DD")
+    if d >= datetime.now(IST).date():
+        raise HTTPException(400, "past days only")
+    if tf not in (1, 3, 5, 15, 30):
+        raise HTTPException(400, "tf must be 1, 3, 5, 15 or 30 (minutes)")
+    if market_open():
+        raise HTTPException(503, "not during market hours (09:15-15:30 IST): the live feed comes first")
+    hist = getattr(state.feed.provider, "history", None) if state.feed else None
+    if hist is None:
+        raise HTTPException(404, "no broker history on this server")
+    try:
+        bars = hist("NSE:" + sym, tf, d.isoformat())
+    except Exception as exc:  # noqa: BLE001 - say why, do not crash
+        return {"symbol": sym, "day": d.isoformat(), "tf": tf, "candles": [], "error": str(exc)[:200]}
+    return {"symbol": sym, "day": d.isoformat(), "tf": tf, "candles": bars, "error": None}
+
+
 @app.get("/api/news/{symbol}")
 def api_news(symbol: str, _: str = Depends(auth)):
     sym = symbol.upper()

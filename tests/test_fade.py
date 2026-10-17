@@ -250,3 +250,29 @@ def test_summary_endpoint_reports_the_running_commit(monkeypatch):
     finally:
         app_mod.app.dependency_overrides.clear()
     assert body["version"] == {"commit": "abc1234", "fade_carry_dates": []}
+
+
+def test_history_endpoint_serves_a_past_stock_day_and_refuses_market_hours(monkeypatch):
+    """/api/history/<stock>?day= reads the broker's history through the server's key (S1 v10 stop-loss study)."""
+    from fastapi.testclient import TestClient
+    import server.app as app_mod
+    calls = []
+
+    class Prov:
+        def history(self, key, tf, day):
+            calls.append((key, tf, day))
+            return [{"time": 1, "open": 1.0, "high": 2.0, "low": 0.5, "close": 1.5, "volume": 10.0, "atp": None}]
+
+    monkeypatch.setattr(app_mod.state, "feed", type("Feed", (), {"provider": Prov()})(), raising=False)
+    app_mod.app.dependency_overrides[app_mod.auth] = lambda: "user"
+    try:
+        c = TestClient(app_mod.app)
+        monkeypatch.setattr(app_mod, "market_open", lambda: False)
+        body = c.get("/api/history/tcs?day=2025-01-10&tf=1").json()
+        assert calls == [("NSE:TCS", 1, "2025-01-10")] and body["candles"][0]["high"] == 2.0 and body["error"] is None
+        assert c.get("/api/history/TCS?day=2999-01-01").status_code == 400
+        assert c.get("/api/history/TCS?day=10-01-2025").status_code == 400
+        monkeypatch.setattr(app_mod, "market_open", lambda: True)
+        assert c.get("/api/history/TCS?day=2025-01-10").status_code == 503
+    finally:
+        app_mod.app.dependency_overrides.clear()
