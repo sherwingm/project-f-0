@@ -169,6 +169,14 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-18 · stop-loss study 2025-26 done** (pre-registered `863c4f6`, proxy-B addendum `b434787`, results in
+  `data/results/S1_v10_stoploss_study.md` / `.xlsx`, sent to the phone). Minute data: day-0 1-minute stock candles for all 434
+  trades (424 usable) through the new server endpoint `/api/history` (Kotak key stays on Render; refused in market hours).
+  **Exact on real prices:** a −20 % stop fires on 71 % of trades that closed at −20.8 % anyway (+6.2 % vs +5.6 % no stop);
+  wider stops slightly worse; targets +30 / +50 % worse (they cut winners), +100 % about the same. **Timing:** 53 % of dips and
+  42 % of peaks in the first 15 minutes; dip first in 56 %. **Proxies unreliable for levels** (same-day +26-28 % vs +5.6 % real:
+  they miss the post-results fall in option value), so trail / stop-from-09:45 are not judged. No rule changed. Next idea if
+  wanted: record real minute paths of live trades to judge path rules on real option prices.
 - **2026-10-17 · fade timeline, 16 Oct (SL study, with the user)** (`data/results/S1_v10_fade_timeline_2026-10-16.xlsx`,
   force-added): 1-minute option candles for the 8 fade trades from Kotak history via the live server's `/api/intraday`
   (it serves the last session only, for the chain's expiry). All 8 traded above entry at some point; 4 of 8 reached +30 %. Four
