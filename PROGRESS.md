@@ -139,15 +139,18 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   `data/nse_holidays.json` days). Cause found: nothing visited Render during market hours since the opening-snapshot
   workflow was deleted on 2026-09-30; a cold start took 72 s on 17 Oct. First scheduled run: Mon 19 Oct 08:30.
 
-- **2026-10-17 · carried fade trades** (S1; commits `c24e9ef` docs, `832aad9` code): the eight fade trades opened
-  2026-10-16 and not sold at 15:20 are **excluded from the S1 v10 review** and kept open as a side record under their
-  own rule: sell at a close ≤ 0.80 × entry (−20 %), at a close ≤ 0.75 × the highest close since entry (25 % ratcheting
-  trail from the arm A exit study), or on T-1; checked once a session at 15:20, sold at the best bid
-  (`server/fade.py::_carry_exits`, `CARRY_DATES`; reasons `carry_stop`, `carry_trail`, `carry_t1`). v10 itself is
-  unchanged. Rule and limits are in the strategy page's addendum and DECISIONS.md. Four tests added; the suite's one
-  failure (`test_spec12_step7_model::test_infer_for_scan_adds_the_model_block`) fails without this change too. Not
-  done: a badge on the results page for carried trades. The positions were already below −20 % at Fri 11:21 for
-  INDIANB, TECHM, LTF and POLYCAB, so they are expected to sell on Mon 19 Oct at 15:20.
+- **2026-10-17 · carried fade trades: closed, rule retired** (S1; docs `c24e9ef` → `584a045`, code `832aad9` → `33fde93`): the eight
+  fade trades opened 2026-10-16 and not sold at 15:20 (server asleep) are **excluded from the S1 v10 review**. First they were
+  to be kept under a −20 % stop / 25 % trail / T-1 rule (`server/fade.py::_carry_exits`, tested). After the backtest below the
+  user decided (later the same day) to **close them and keep the same-day exit strict for every fade trade from Monday
+  19 Oct**: `CARRY_DATES` is empty, so the eight are sold at the first poll of 19 Oct (reason `fade_late`, 20 Oct is a holiday)
+  and the carry rule never ran live. The code and its tests stay; a guard test pins `CARRY_DATES == set()`. Their result is
+  reported beside the v10 review, never in it. The suite's one failure (`test_spec12_step7_model::test_infer_for_scan_adds_the_model_block`)
+  fails without these changes too. Not done: a results-page badge for carried trades.
+- **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
+  walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
+  `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
+  that pair is not a valid open-versus-close comparison.
 - **2026-10-17 · S1 v10 descriptive backtest 2025-26** (pre-registered `d0a4339`, code `1997818`, result `b87037d`;
   `python -m scanner.backtest_s1_v10`, report `data/results/S1_v10_backtest_report.md`, force-added because
   `data/results/` is git-ignored; the trade list stays local). 1,259 results filings → 499 signals → 433 trades (322 puts,
@@ -165,15 +168,15 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
   of 19 Oct, per `server/fade.py`). Fixed from 19 Oct by the keep-awake workflow; GitHub may start scheduled runs
   late or skip one, so an external pinger (e.g. cron-job.org, every 5 min, 08:30–15:45 IST) or the guide-17 VM is
-  the stronger fix. **Open decision:** whether the eight carried fade trades count in the v10 review.
+  the stronger fix. (Decided 2026-10-17: the eight are closed on Monday and stay out of the v10 review.)
 - `paper-state` gets repeated `live_snapshots/*` commits of the same files on every restart (16 Oct 16:17, 16:53;
   17 Oct 00:10, 09:12).
 - HCLTECH (arm A, 14 Oct): only the open-entry refusal is logged; no close-entry position or refusal — to check.
 
 ## Next
-1. Check on Mon 19 Oct that the keep-awake runs, the 8 carried fade positions sell at the first poll, and the
-   15:20 exits happen; decide whether the carried fade trades count in the v10 review. Then the always-on VM
-   (guide 17) or an external pinger as a second layer.
+1. Check on Mon 19 Oct that the keep-awake runs (08:30), the 8 carried fade positions sell at the first poll (09:15), and the
+   new day's fade trades (FEDERALBNK PE, UJJIVANSFB PE) sell at 15:20. Then the always-on VM (guide 17) or an external
+   pinger as a second layer.
 2. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
 3. S2: run screen B in the pre-registered order (cache parents → freeze financials → recount → screens).
 4. S1: keep the paper runs untouched; review v10 at 30 closed trades / 6 weeks.
