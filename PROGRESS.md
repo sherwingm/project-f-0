@@ -169,6 +169,14 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-17 · fade timeline, 16 Oct (SL study, with the user)** (`data/results/S1_v10_fade_timeline_2026-10-16.xlsx`,
+  force-added): 1-minute option candles for the 8 fade trades from Kotak history via the live server's `/api/intraday`
+  (it serves the last session only, for the chain's expiry). All 8 traded above entry at some point; 4 of 8 reached +30 %. Four
+  peaked in the first 8 minutes (INDIANB, POLYCAB, TECHM, LTF) and then fell 22-77 % by 15:20; 6 of 8 touched −20 % by 10:03.
+  Exits on these paths (mean % of entry, before charges): same-day 15:20 −2.4; stop −20 % +4.9; target +30 % −5.6; stop −20 % +
+  target +30 % −1.2; trail 25 % +3.1 — one day, 8 trades, ANGELONE (+179 %) dominates: not evidence, and no rule changed. The
+  434 backtest trades have no intraday times (daily high/low only), so a stop study needs minute paths of live trades; the
+  user studies the sheet on their side too.
 - **2026-10-17 · S1 rule trades: expiry rule changed to ≥ 2 sessions** (DECISIONS `1f6e8a6`; code + data next commit):
   the current monthly expiry is kept while at least 2 sessions remain after day 0 (NSE holidays counted), as the fade does
   (was 10, S1 v7). `python -m scanner.forward_s1 --repick 2026-10-16` moved Monday's queue to the 27 Oct expiry: arm A IRFC
