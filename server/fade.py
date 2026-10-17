@@ -11,8 +11,8 @@ session this module:
     exit   the first poll from 15:20 the same day, at the best bid (else the last price - 1 tick). A position still
            open on a later day (the server was down at 15:20) is sold at the first poll of that day.
 
-Positions carry rule.strategy = "fade" and arm "F"; server/rules.py's S1 exits leave them alone. The eight trades of
-2026-10-16 that missed their 15:20 exit (CARRY_DATES) follow their own rule instead: _carry_exits.
+Positions carry rule.strategy = "fade" and arm "F"; server/rules.py's S1 exits leave them alone. Positions whose signal
+date is in CARRY_DATES (empty: the eight trades of 2026-10-16 were closed instead) would follow _carry_exits.
 """
 from __future__ import annotations
 
@@ -29,10 +29,11 @@ OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 120
 BAND, MIN_PREMIUM, MAX_SPREAD, TICK, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 0.05, 15
 
-# The eight trades opened 2026-10-16 and not sold at 15:20 (the server slept) are kept as a side record outside the
-# v10 review, under their own exit rule (strategies/S1_v10_results_day_fade_paper.md, addendum 2026-10-17): sell at
-# -20 % of the entry premium, at 25 % below the highest close since entry, or at T-1.
-CARRY_DATES = {"2026-10-16"}
+# Signal dates whose positions follow the carried-trade rule (sell at -20 % of the entry premium, at 25 % below the
+# highest close since entry, or at T-1; strategies/S1_v10_results_day_fade_paper.md, addendum 2026-10-17). EMPTY on
+# purpose: on 2026-10-17 the user closed the eight trades of 2026-10-16 instead (sold at the first poll of 2026-10-19)
+# and kept the same-day exit strict for every fade trade, so no position follows this rule. The code stays, tested.
+CARRY_DATES: set[str] = set()
 CARRY_STOP, CARRY_TRAIL = 0.80, 0.75
 
 

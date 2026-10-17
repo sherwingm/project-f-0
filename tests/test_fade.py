@@ -220,3 +220,18 @@ def test_carried_trade_is_checked_once_a_session_and_sold_at_t_minus_1(carried):
     assert len(lg.state["positions"]) == 1                       # 27 Oct expiry: T-1 is Mon 26 Oct
     ft.on_poll(at(26, 15, 20))
     assert lg.state["closed"][-1]["reason"] == "carry_t1" and lg.state["positions"] == []
+
+
+def test_no_position_follows_the_carry_rule_and_the_eight_sell_at_the_next_first_poll(setup):
+    """2026-10-17: the carried trades were closed, not kept; the same-day exit is strict for every fade trade."""
+    assert F.CARRY_DATES == set()
+    lg, q, ft, box = setup
+    q.set("PE", 1220.0, 20.0, 20.4)
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    p["rule"]["signal_date"] = "2026-10-16"                       # as the eight opened on Friday 16 Oct
+    assert not ft.carried(p)
+    box["f"] = None
+    q.set("PE", 1220.0, 12.0, 12.4)                               # a losing weekend, far below -20 %
+    ft.on_poll(at(19, 9, 15))
+    assert lg.state["positions"] == [] and lg.state["closed"][-1]["reason"] == "fade_late"
