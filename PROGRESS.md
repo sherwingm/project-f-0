@@ -17,10 +17,10 @@ How each piece of work moves the user's core ideas forward. Facts and numbers st
 | v9 (results-day calls at the open) | Buy strong numbers on results day itself? | The opposite: strong numbers **fall** from the open, weak ones **rise** (t −5.7 / +) | The first reaction tends to **reverse** within day 0 |
 | v10 (results-day fade, paper since 2026-10-15) | Bet on that reversal: strong → put, weak → call, same day | Backtest 2025-26 (descriptive): +5.6 % of premium a trade, t 1.3; stock fades +0.64 % (t 4.2); the result depends on the entry price | **Current form of the idea**, on paper; review at 30 trades / 6 weeks |
 | Stop-loss study 2025-26 | Can a stop or target improve it? | A −20 % stop fires on 71 % of trades that end near −21 % anyway: no gain; early targets cut the winners; dips and peaks cluster in the first 15 minutes | Exits: hold to 15:20, no stop, for now |
-| 2022-24 re-run (running, 2026-10-18) | Did the fade and the exit findings hold in earlier years? | 436 trades backtested; stop-loss study pending | Checks whether the idea is stable across regimes |
+| 2022-24 re-run (2026-10-18) | Did the fade and the exit findings hold in earlier years? | Fade weaker: +3.6 % a trade, t 0.9 (2023 H1 −14 %), stock fade +0.37 % (t 2.4); exits repeat exactly: stops neutral, early targets hurt, noise in the first 15 minutes | The exit rule (hold to 15:20, no stop) is stable; the fade's edge is small and regime-dependent, so the live paper run decides |
 
 **Open questions for the idea:** does the day-0 fade survive a realistic live entry (the ask after 09:15, not the open)?
-Does it hold in 2022-24 as in 2025-26? Can a time-based exit or a smarter stop help once real minute paths of live trades
+(2022-24 answered: the exit findings hold, the fade is weaker.) Can a time-based exit or a smarter stop help once real minute paths of live trades
 are recorded?
 
 ### S2 core idea: price plus futures open-interest build-up predicts the next few days
@@ -196,6 +196,12 @@ are recorded?
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-18 · the same tests on 2022-24** (pre-registered `ad913d3`, code `02ded63`): 2022 results back-filled from NSE
+  into the temporary event store (Jul-Nov 2022 thin: ~20 filings a month), F&O files 2021-12 → 2024-12 cached, day-0 minute
+  data for 429 of 436 trades through `/api/history`. Backtest (`S1_v10_backtest_report_2022_24.md`): same-day +3.6 % (t 0.9),
+  VWAP entry −14.2 %, stock fade +0.37 % (t 2.4). Stop-loss study (`S1_v10_stoploss_study_2022_24.md` / `.xlsx`, sent to the
+  phone): stops neutral (−20 %: +3.3 % vs +3.6 %), targets worse, dips and peaks in the first 15 minutes — the 2025-26 exit
+  findings repeat. No rule changed. Core idea tracker updated.
 - **2026-10-18 · stop-loss study 2025-26 done** (pre-registered `863c4f6`, proxy-B addendum `b434787`, results in
   `data/results/S1_v10_stoploss_study.md` / `.xlsx`, sent to the phone). Minute data: day-0 1-minute stock candles for all 434
   trades (424 usable) through the new server endpoint `/api/history` (Kotak key stays on Render; refused in market hours).
