@@ -80,3 +80,6 @@ Limits: the study's report files are not in the repository, so the trail is impl
 move below −20 % is acted on at 15:20, not at once. At the last save (Fri 11:21) INDIANB, TECHM, LTF and POLYCAB were
 already below −20 %, so they are expected to be sold on Monday at whatever the bid is then. The result is reported
 beside the v10 review, never in it. Any later fade trade that is not sold on its day 0 is treated the same way.
+
+### Update 2026-10-17 (later the same day): the carry rule is retired
+After the descriptive backtest (`strategies/S1_v10_backtest_2025_26.md`: same-day exit +5.6 % of premium, carry rule −10.8 %) the user decided to close the eight carried trades and to keep the same-day exit strict for every fade trade from Monday 2026-10-19. The eight are sold at the first poll of that session (`server/fade.py::_exits`, reason `fade_late`), excluded from the v10 review as above. The carry rule above never ran live; `CARRY_DATES` is empty, so no position follows it.
