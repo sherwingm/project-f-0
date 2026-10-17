@@ -133,18 +133,26 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - `APP_PASSWORD`: local `.env` and Render. Render runs `PUBLIC_ACCESS=true` (no login; real orders refused).
 - `KOTAK_CONSUMER_KEY`: Render and local `.env` (regenerated 2026-10-13); market data only.
 
+### Log
+- **2026-10-17**: **Keep-awake workflow** (`.github/workflows/keep-awake.yml`): visits `/api/live` every 4 minutes
+  08:30–15:45 IST on NSE trading days (two starts, 08:30 and 12:00, because a job may run at most 6 hours; skips
+  `data/nse_holidays.json` days). Cause found: nothing visited Render during market hours since the opening-snapshot
+  workflow was deleted on 2026-09-30; a cold start took 72 s on 17 Oct. First scheduled run: Mon 19 Oct 08:30.
+
 ### Known issues
-- **Render free tier sleeps** after 15 minutes without visits and nothing keeps it awake at 09:15 and 15:20: on
-  2026-10-16 the ledger was last saved at 11:21, the server came back only after 16:00, and the eight fade positions
-  were not sold at 15:20. The S1 rule exits at 15:20 are exposed the same way.
+- **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
+  server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
+  of 19 Oct, per `server/fade.py`). Fixed from 19 Oct by the keep-awake workflow; GitHub may start scheduled runs
+  late or skip one, so an external pinger (e.g. cron-job.org, every 5 min, 08:30–15:45 IST) or the guide-17 VM is
+  the stronger fix. **Open decision:** whether the eight carried fade trades count in the v10 review.
 - `paper-state` gets repeated `live_snapshots/*` commits of the same files on every restart (16 Oct 16:17, 16:53;
   17 Oct 00:10, 09:12).
 - HCLTECH (arm A, 14 Oct): only the open-entry refusal is logged; no close-entry position or refusal — to check.
 
 ## Next
-1. **Fix the server gap** (now): make the 09:15 entries and 15:20 exits independent of someone visiting the page
-   (keep-awake pinger for market hours, and/or the always-on VM of guide 17); decide what to do with the 8 fade
-   positions carried past 16 Oct 15:20.
+1. Check on Mon 19 Oct that the keep-awake runs, the 8 carried fade positions sell at the first poll, and the
+   15:20 exits happen; decide whether the carried fade trades count in the v10 review. Then the always-on VM
+   (guide 17) or an external pinger as a second layer.
 2. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
 3. S2: run screen B in the pre-registered order (cache parents → freeze financials → recount → screens).
 4. S1: keep the paper runs untouched; review v10 at 30 closed trades / 6 weeks.

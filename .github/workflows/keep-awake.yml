@@ -1,0 +1,41 @@
+name: Keep the live server awake (market hours)
+# The live server (Render free tier) sleeps after 15 min without visits, and the paper account only acts while it
+# polls: the 08:40 / 09:05 scan pulls, S1 rule and fade entries from 09:15, and the 15:20 exits. On 2026-10-16 it
+# slept from 11:21 to after 16:00 and the eight fade positions were not sold at 15:20 (PROGRESS.md).
+# This job visits /api/live every 4 minutes from 08:30 to 15:45 IST on NSE trading days. A job may run at most
+# 6 hours, so there are two starts (08:30 and 12:00 IST); the concurrency group runs them one after the other, and
+# each stops at 15:45 IST or after 5 h 50 min. Scheduled runs can start late, hence the early starts.
+on:
+  schedule:
+    - cron: "0 3 * * 1-5"       # 03:00 UTC = 08:30 IST
+    - cron: "30 6 * * 1-5"      # 06:30 UTC = 12:00 IST
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: keep-awake
+  cancel-in-progress: false
+env:
+  LIVE_URL: ${{ vars.LIVE_URL || 'https://fo-scanner.onrender.com' }}
+jobs:
+  ping:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          sparse-checkout: data/nse_holidays.json
+          sparse-checkout-cone-mode: false
+      - name: Visit the server every 4 minutes until 15:45 IST
+        run: |
+          d=$(TZ=Asia/Kolkata date +%F)
+          if grep -q "\"$d\"" data/nse_holidays.json; then echo "::notice::$d is an NSE holiday: nothing to keep awake"; exit 0; fi
+          stop=$(TZ=Asia/Kolkata date -d "$d 15:45" +%s)
+          cap=$(( $(date +%s) + 350*60 ))
+          if [ "$cap" -lt "$stop" ]; then stop=$cap; fi
+          ok=0; fail=0
+          while [ "$(date +%s)" -lt "$stop" ]; do
+            if curl -sf -o /dev/null --max-time 90 "$LIVE_URL/api/live"; then ok=$((ok+1)); else fail=$((fail+1)); echo "::warning::$(TZ=Asia/Kolkata date +%T) IST: no answer from $LIVE_URL"; fi
+            sleep 240
+          done
+          echo "visits answered: $ok, failed: $fail"
