@@ -19,6 +19,7 @@ editing this file on purpose, in its own commit, with the reason.
     the at-the-money strike, v4's ₹2,000–8,000 budget left 3 trades and v5's ₹10,000–30,000 band left 57, short of
     the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used
     ₹10,000–30,000.
+- **S1 rule trades' expiry (paper; user's decision 2026-10-17):** the current monthly expiry while **at least 2 sessions** remain after day 0 (NSE holidays counted), else the next monthly — as the S1 v10 fade. S1 v7's rule needed 10 sessions; v7's backtest found its near-expiry calls lost the most, so this is a deliberate change of the live paper rules, applied from the signals of 2026-10-16 (bought 2026-10-19); trades already open keep their expiry. The paper record of the rule trades is split at this date.
 - **`ALLOW_LOTTERY=false`.**
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
 - **Long options only.** No option selling, no spreads, no futures positions: every trade is a bought CE or
