@@ -155,8 +155,9 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - **2026-10-17 · deploy check** (`e420aa1`): `/api/paper/summary` now returns `version.commit` (Render's `RENDER_GIT_COMMIT`) and
   `version.fade_carry_dates`, so a deploy can be verified from outside. Confirmed: Render runs `e420aa1`, `fade_carry_dates` is `[]`,
   10 positions open, no persistence error. The Render connector exists in the registry (`mcp.render.com`) but is not connected here.
-  LibreOffice install started with `winget install TheDocumentFoundation.LibreOffice` (waiting on the PC at the last check; likely an
-  admin prompt); once installed, recalculate `S1_v10_fade_trade_sheet.xlsx` with the xlsx skill's `recalc.py`.
+  LibreOffice install (`winget install TheDocumentFoundation.LibreOffice`) was started and then **abandoned at the user's request**:
+  winget was stopped; one elevated `msiexec` could not be stopped from here (access denied) and `soffice.exe` was not present. The
+  fade sheet stays verified against pandas (formula engine), not recalculated in LibreOffice.
 - **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
   walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
   `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
