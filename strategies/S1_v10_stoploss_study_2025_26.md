@@ -54,3 +54,15 @@ half-year.
   no time decay inside the day); the calibration lines show how far that is from the real day range and close.
 - Touch-at-level fills overstate stops and targets in fast markets.
 - Kotak symbols are today's; a renamed stock may have no history and is excluded and counted.
+
+## Addendum 2026-10-17 (before any exit result): a second proxy, B
+Written after the calibration of proxy A was seen on the first 38 trades fetched (median error: 15:20 value vs the real close
+≈ 32 % of the entry, day high / low ≈ 20 %), and **before** any exit result was computed. Proxy A stays the pre-registered
+proxy and is reported unchanged. Proxy B is added beside it:
+- **B (range-anchored):** P(t) = option low + (option high − option low) × f(t), f = (stock high − S(t)) ÷ (stock high −
+  stock low) for puts, (S(t) − stock low) ÷ (stock high − stock low) for calls. It matches the option's real day high and
+  low exactly (at the times of the stock's low and high); its calibration is reported as the error of its 09:15 value
+  against the real open and of its 15:20 value against the real close.
+- The timeline (times of the peak and the dip, which came first) is the same under A and B: both follow the stock's own
+  low and high. Only the price levels, and so the stop / target results, differ.
+- All twelve exits are reported for both proxies. Conclusions about stop levels are read only where A and B agree.
