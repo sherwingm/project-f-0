@@ -169,6 +169,17 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-17 · keep-awake hardened** (`f9c1e3c`): three overlapping starts (08:17, 11:47, 14:17 IST, odd minutes, no longer
+  serialised), each to 15:45 IST or 5 h 45 min; the run **fails** (GitHub e-mails the owner) after 3 missed visits in a row; a
+  `test_minutes` input for manual runs. Test run 39053665149: 3 of 3 visits answered. A real trading day (Mon 19 Oct) is the first proof.
+- **2026-10-17 · fade sheet fixed for phones**: the earlier file had formulas without stored results (openpyxl cannot store them
+  and LibreOffice is not installed), so phone viewers showed blank columns. Rebuilt with XlsxWriter, which stores each formula's
+  result: 0 empty cells in the 434-row trade sheet when read without calculating.
+- **2026-10-17 · why TATAELXSI bought the Nov call, not the Oct one**: the S1 rule trades use S1 v7's expiry rule without near-expiry
+  trades: the current monthly only if ≥ 10 sessions remain after day 0. Day 0 was 14 Oct and the 27 Oct expiry had 8 sessions left
+  (20 Oct holiday), so the rule took 23 Nov. In hindsight the Oct 4000 CE did better in %: close 10.15 on 15 Oct → 25.10 on 16 Oct
+  (+147 %; ₹1,269 a lot), the Nov 4000 CE 57.85 → 93.80 (+62 %; ₹7,231 a lot, so more rupees per lot). One trade; v7's backtest found
+  near-expiry calls lost the most (arm A −37 %). No rule change.
 - **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
   walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
   `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
