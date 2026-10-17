@@ -236,6 +236,38 @@ def study(t: pd.DataFrame, kind: str = "A", cache: Path = CACHE) -> tuple[pd.Dat
     return pd.DataFrame(rows), excl
 
 
+def exact_levels(t: pd.DataFrame) -> pd.DataFrame:
+    """Added after the proxy results were seen (2026-10-18), with NO proxy: a single stop or a single target depends only
+    on whether the option's REAL day low / high crossed its level, not on when, so it is computed from the bhavcopy's
+    real high / low / close. Fills at the level (optimistic in a fast move); otherwise the real close - 1 tick."""
+    from .backtest_s1_v4 import SLIPPAGE
+    from .backtest_s1_v10 import net_of
+    from .stats import clustered_t
+    o = [option_ohlc(r.day0, r.symbol, r.expiry, float(r.strike), r.side) for r in t.itertuples()]
+    hi, lo = [x[1] for x in o], [x[2] for x in o]
+    entry, close = t["entry_price"].astype(float).tolist(), t["e1_exit_price"].astype(float).tolist()
+
+    def row(label, px, hit):
+        nets = [net_of(r.side, r.entry_price, max(0.0, round(x, 2)), int(r.lot), SLIPPAGE.get(r.category, SLIPPAGE["unknown"]))[2]
+                for r, x in zip(t.itertuples(), px)]
+        pct = pd.Series(nets) / (t["entry_price"] * t["lot"]).values * 100
+        hit = pd.Series(hit)
+        moved = pd.Series([(c / e - 1) * 100 for c, e in zip(close, entry)])
+        return {"exit": label, "n": len(pct), "mean_pct": round(pct.mean(), 2), "median_pct": round(pct.median(), 2),
+                "hit_pct": round((pct > 0).mean() * 100, 1), "t": clustered_t(pct, t["day0"]), "total_rs": round(sum(nets)),
+                "trades the level fired on (%)": round(hit.mean() * 100, 1) if hit.any() else 0.0,
+                "those trades' real 15:20 result (%)": round(moved[hit.values].mean(), 1) if hit.any() else None}
+
+    rows = [row("Same day 15:20, no stop (real close)", close, [False] * len(t))]
+    for sl in (0.80, 0.70, 0.60, 0.50):
+        h = [lo_ <= sl * e for lo_, e in zip(lo, entry)]
+        rows.append(row(f"Stop {round((sl - 1) * 100)} %", [sl * e if x else c for x, e, c in zip(h, entry, close)], h))
+    for tp in (1.30, 1.50, 2.00):
+        h = [hi_ >= tp * e for hi_, e in zip(hi, entry)]
+        rows.append(row(f"Target +{round((tp - 1) * 100)} %", [tp * e if x else c for x, e, c in zip(h, entry, close)], h))
+    return pd.DataFrame(rows)
+
+
 def summarise(s: pd.DataFrame, name: str) -> dict:
     from .stats import clustered_t
     r = s[f"{name}_pct"].astype(float)
@@ -254,11 +286,11 @@ def main() -> None:
     if a.fetch:
         print(fetch(t, a.url))
         return
-    write({k: study(t, k) for k in ("A", "B")}, len(t))
+    write({k: study(t, k) for k in ("A", "B")}, len(t), exact=exact_levels(t))
 
 
 # ---------------------------------------------------------------- report
-def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> None:
+def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exact: pd.DataFrame | None = None) -> None:
     """res = {"A": (trades, exclusions), "B": (...)}: the report (md) and the workbook (xlsx), both proxies side by side."""
     import xlsxwriter
     from .backtest_s1_v2 import md
@@ -306,7 +338,13 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> N
                      "### Price levels touched\n\n" + md(pd.DataFrame([lv])),
                      "### Exits compared (net % of premium after charges and slippage)\n\n" + md(ex_all),
                      "### By side\n\n" + md(ex_side), "### Mean net % by half-year\n\n" + md(ex_per)]
-    text = "\n".join(["# S1 v10 fade · intraday timeline and stop-loss study 2025-2026\n", head + "\n",
+    ex_note = ("Added after the proxy results were seen: computed from the option's REAL day high / low / close, no proxy. "
+               "A single stop or target only depends on whether the real low / high crossed it. Fills at the level "
+               "(optimistic in a fast move). The proxies put the same-day exit far above the real close (both miss the "
+               "fall in option value after results and time decay), so their absolute levels are not reliable.")
+    exact_md = [] if exact is None else ["## Exact check on real prices: single stops and targets (all 434 trades)\n",
+                                         ex_note + "\n", md(exact)]
+    text = "\n".join(["# S1 v10 fade · intraday timeline and stop-loss study 2025-2026\n", head + "\n"] + exact_md + [
                       "## Timeline (the same under both proxies: it follows the stock's own low and high)\n\n"
                       + md(pd.DataFrame([tl])),
                       "### When the peak and the dip happen (share of trades by half-hour)\n\n" + md(tb)] + sections)
@@ -333,6 +371,11 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> N
                     ws.write(r0 + i, c, str(v), F())
         return r0 + len(df) + 2
 
+    if exact is not None:
+        we = wb.add_worksheet("Exact (real prices)")
+        we.write(0, 0, "Single stops and targets on REAL option prices (no proxy), 434 trades", F(bold=True, font_size=13))
+        we.write(1, 0, ex_note, note)
+        table(we, 3, exact, {0: 36, 7: 16, 8: 18})
     ws = wb.add_worksheet("Timeline")
     ws.write(0, 0, "S1 v10 fade 2025-26: when the peak and the dip happen", F(bold=True, font_size=13))
     ws.write(1, 0, head, note)
@@ -359,3 +402,7 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> N
     w.freeze_panes(1, 2)
     wb.close()
     print(text)
+
+
+if __name__ == "__main__":
+    main()
