@@ -147,6 +147,11 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   and the carry rule never ran live. The code and its tests stay; a guard test pins `CARRY_DATES == set()`. Their result is
   reported beside the v10 review, never in it. The suite's one failure (`test_spec12_step7_model::test_infer_for_scan_adds_the_model_block`)
   fails without these changes too. Not done: a results-page badge for carried trades.
+- **2026-10-17 · fade trade sheet** (`data/results/S1_v10_fade_trade_sheet.xlsx`, force-added; `data/results/` is git-ignored): the 434
+  backtest trades under the same-day exit (premium, gross and net P&L, net %, the stock's open → close), the live paper fade trades
+  from the last ledger save (stale marks), a summary on formulas, and the rule notes. Formulas were checked against pandas with a
+  Python formula engine because LibreOffice is not installed here (Excel recalculates on open; a plain-number copy of the summary
+  is on the Summary sheet for phone viewers). It was sent to the user's phone.
 - **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
   walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
   `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
