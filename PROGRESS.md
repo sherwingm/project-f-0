@@ -161,6 +161,14 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
 - **2026-10-17 · sizing question, decided: no change.** The user asked whether trades could be sized by money (as many lots as fit in
   ₹600-8,000, e.g. 7 lots of a ₹1,000 lot instead of 1 lot) in all strategies, then chose to **keep everything as it is**: one lot, ₹600-8,000,
   for the S1 rule trades, the v10 fade, S2 and every backtest. Nothing was changed and the reviews are not restarted.
+- **2026-10-17 · fade trade sheet v2: max peak and max dip of the day** (`data/results/S1_v10_fade_trade_sheet.xlsx`, force-added):
+  each of the 434 same-day-exit backtest trades now carries the option's day open / high / low / close (from the cached bhavcopy
+  price files), MAX PEAK (high vs entry) and MAX DIP (low vs entry) in ₹ per lot and %, the summary adds the average peak / dip and
+  the share of trades whose peak reached +30 % / +50 % and whose dip reached −20 %; the live sheet shows the ledger's peak / trough
+  since entry. Result: average max peak +83.5 %, average max dip −38.0 %; peak ≥ +30 % in 62 % of trades, ≥ +50 % in 49 %, dip ≤ −20 %
+  in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
+  the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
+  install was abandoned), so there was no LibreOffice recalculation.
 - **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
   walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
   `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
