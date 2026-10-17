@@ -77,6 +77,19 @@ def proxy(bars, side: str, o_open: float, o_high: float, o_low: float):
     return [(t, f(op), max(f(h), f(lo)), min(f(h), f(lo)), f(cl)) for t, op, h, lo, cl in bars]
 
 
+def proxy_range(bars, side: str, o_high: float, o_low: float):
+    """Proxy B (addendum): the option's real day range laid onto the stock's: the real high at the stock's low (puts) or
+    high (calls), the real low at the other extreme."""
+    if not bars or o_high is None or o_low is None:
+        return None
+    s_hi, s_lo = max(b[2] for b in bars), min(b[3] for b in bars)
+    if s_hi <= s_lo:
+        return None
+    f = (lambda x: (s_hi - x) / (s_hi - s_lo)) if side == "PE" else (lambda x: (x - s_lo) / (s_hi - s_lo))
+    g = lambda x: max(FLOOR, o_low + (o_high - o_low) * f(x))          # noqa: E731
+    return [(t, g(op), max(g(h), g(lo)), min(g(h), g(lo)), g(cl)) for t, op, h, lo, cl in bars]
+
+
 def sell_value(path) -> tuple[str, float]:
     """The value at 15:20: the open of the 15:20 minute (else the last minute before it)."""
     at = next((p for p in path if p[0] == SELL_AT), None)
@@ -182,7 +195,7 @@ def option_ohlc(day: str, sym: str, expiry: str, strike: float, side: str) -> tu
 
 
 # ---------------------------------------------------------------- the study
-def study(t: pd.DataFrame, cache: Path = CACHE) -> tuple[pd.DataFrame, dict]:
+def study(t: pd.DataFrame, kind: str = "A", cache: Path = CACHE) -> tuple[pd.DataFrame, dict]:
     from .backtest_s1_v4 import SLIPPAGE
     from .backtest_s1_v10 import net_of
     rows, excl = [], {"no_minute_history": 0, "stock_did_not_move": 0, "no_option_prices": 0}
@@ -197,7 +210,8 @@ def study(t: pd.DataFrame, cache: Path = CACHE) -> tuple[pd.DataFrame, dict]:
         if ohlc is None:
             excl["no_option_prices"] += 1
             continue
-        path = proxy(bars, r.side, ohlc[0], ohlc[1], ohlc[2])
+        path = proxy(bars, r.side, ohlc[0], ohlc[1], ohlc[2]) if kind == "A" else \
+            proxy_range(bars, r.side, ohlc[1], ohlc[2])
         if path is None:
             excl["stock_did_not_move"] += 1
             continue
@@ -207,6 +221,7 @@ def study(t: pd.DataFrame, cache: Path = CACHE) -> tuple[pd.DataFrame, dict]:
         row = {"day0": r.day0, "symbol": r.symbol, "side": r.side, "category": r.category, "strike": r.strike,
                "expiry": r.expiry, "lot": lot, "entry": entry, "opt_open": ohlc[0], "opt_high": ohlc[1], "opt_low": ohlc[2],
                "opt_close": ohlc[3], "period": r.period, **tl,
+               "calib_open_err_pct": abs(path[0][1] - ohlc[0]) / entry * 100,
                "calib_close_err_pct": abs(tl["proxy_1520"] - ohlc[3]) / entry * 100,
                "calib_high_err_pct": abs(max(p[2] for p in path) - ohlc[1]) / entry * 100,
                "calib_low_err_pct": abs(min(p[3] for p in path) - ohlc[2]) / entry * 100,
@@ -239,57 +254,66 @@ def main() -> None:
     if a.fetch:
         print(fetch(t, a.url))
         return
-    s, excl = study(t)
-    write(s, excl, len(t))
+    write({k: study(t, k) for k in ("A", "B")}, len(t))
 
 
 # ---------------------------------------------------------------- report
-def write(s: pd.DataFrame, excl: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> None:
+def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results") -> None:
+    """res = {"A": (trades, exclusions), "B": (...)}: the report (md) and the workbook (xlsx), both proxies side by side."""
     import xlsxwriter
     from .backtest_s1_v2 import md
     out_dir.mkdir(parents=True, exist_ok=True)
-    s.to_csv(out_dir / "S1_v10_stoploss_study_trades.csv", index=False)
-    ex_all = pd.DataFrame([{"exit": e.label, **summarise(s, e.name)} for e in EXITS])
-    ex_side = pd.DataFrame([{"side": sd, "exit": e.label, **summarise(s[s.side == sd], e.name)}
-                            for sd in ("PE", "CE") for e in EXITS])
-    periods = sorted(s["period"].unique())
-    ex_per = pd.DataFrame([{"exit": e.label, **{p: round(s[s.period == p][f"{e.name}_pct"].mean(), 1) for p in periods}}
-                           for e in EXITS])
-    real = {"n": len(s), "mean_pct": round(s["real_close_net_pct"].mean(), 2),
-            "median_pct": round(s["real_close_net_pct"].median(), 2)}
-    calib = {k: round(s[k].median(), 1) for k in ("calib_close_err_pct", "calib_high_err_pct", "calib_low_err_pct")}
-    m20 = s["touch_m20"].map(minutes_after_open)
-    p30 = s["touch_p30"].map(minutes_after_open)
-    tl = {"trades": len(s), "peak came before the dip (%)": round(s["peak_first"].mean() * 100, 1),
-          "touched -20 % (%)": round(s["touch_m20"].notna().mean() * 100, 1),
-          "median minutes to -20 %": None if m20.dropna().empty else round(m20.median(), 0),
-          "touched +30 % (%)": round(s["touch_p30"].notna().mean() * 100, 1),
-          "median minutes to +30 %": None if p30.dropna().empty else round(p30.median(), 0),
-          "touched +50 % (%)": round(s["touch_p50"].notna().mean() * 100, 1),
-          "touched +30 % AND later sold below entry at 15:20 (%)":
-              round(((s["touch_p30"].notna()) & (s["same_day_pct"] < 0)).mean() * 100, 1)}
-    buckets = sorted(set(s["peak_time"].map(half_hour)) | set(s["dip_time"].map(half_hour)))
-    tb = pd.DataFrame([{"half-hour": b, "peaks (%)": round((s["peak_time"].map(half_hour) == b).mean() * 100, 1),
-                        "dips (%)": round((s["dip_time"].map(half_hour) == b).mean() * 100, 1)} for b in buckets])
-    head = ("Descriptive only: no rule changes. NOT real option minute prices: a proxy from the stock's 1-minute candles mapped "
-            "onto the option's real day range (strategies/S1_v10_stoploss_study_2025_26.md). Not out of sample, and 12 exits are "
-            "compared, so the best one looks better than it is. Stops and targets fill at their level (optimistic).")
-    text = "\n".join([
-        "# S1 v10 fade · intraday timeline and stop-loss study 2025-2026\n", head + "\n",
-        f"Trades: {len(s)} of {n_all}; excluded: {excl}.\n",
-        f"Calibration (median absolute error, % of entry): proxy 15:20 vs the real close {calib['calib_close_err_pct']}; "
-        f"proxy high vs real high {calib['calib_high_err_pct']}; proxy low vs real low {calib['calib_low_err_pct']}. "
-        f"Same-day exit at the REAL close on these trades: mean {real['mean_pct']} %, median {real['median_pct']} %.\n",
-        "## Timeline\n\n" + md(pd.DataFrame([tl])),
-        "## When the peak and the dip happen (share of trades by half-hour)\n\n" + md(tb),
-        "## Exits compared (net % of premium after charges and slippage)\n\n" + md(ex_all),
-        "## By side\n\n" + md(ex_side),
-        "## Mean net % by half-year\n\n" + md(ex_per),
-    ])
+    names = {"A": "Proxy A (pre-registered)", "B": "Proxy B (range-anchored, addendum)"}
+    head = ("Descriptive only: no rule changes. NOT real option minute prices: proxies from the stock's 1-minute candles "
+            "(strategies/S1_v10_stoploss_study_2025_26.md and its addendum). Not out of sample, and 12 exits are compared, so "
+            "the best one looks better than it is. Stops and targets fill at their level (optimistic). Read a stop level only "
+            "where proxies A and B agree.")
+    sa = res["A"][0]
+    tl = {"trades": len(sa), "peak came before the dip (%)": round(sa["peak_first"].mean() * 100, 1),
+          "median peak time": sa["peak_time"].sort_values().iloc[len(sa) // 2] if len(sa) else None,
+          "median dip time": sa["dip_time"].sort_values().iloc[len(sa) // 2] if len(sa) else None,
+          "peak in the first 30 minutes (%)": round((sa["peak_time"] < "09:45").mean() * 100, 1),
+          "dip in the first 30 minutes (%)": round((sa["dip_time"] < "09:45").mean() * 100, 1)}
+    buckets = sorted(set(sa["peak_time"].map(half_hour)) | set(sa["dip_time"].map(half_hour)))
+    tb = pd.DataFrame([{"half-hour": b, "peaks (%)": round((sa["peak_time"].map(half_hour) == b).mean() * 100, 1),
+                        "dips (%)": round((sa["dip_time"].map(half_hour) == b).mean() * 100, 1)} for b in buckets])
+    sections, tables = [], {}
+    for k, (s_, excl) in res.items():
+        s_.to_csv(out_dir / f"S1_v10_stoploss_study_trades_{k}.csv", index=False)
+        ex_all = pd.DataFrame([{"exit": e.label, **summarise(s_, e.name)} for e in EXITS])
+        ex_side = pd.DataFrame([{"side": sd, "exit": e.label, **summarise(s_[s_.side == sd], e.name)}
+                                for sd in ("PE", "CE") for e in EXITS])
+        periods = sorted(s_["period"].unique())
+        ex_per = pd.DataFrame([{"exit": e.label, **{p: round(s_[s_.period == p][f"{e.name}_pct"].mean(), 1) for p in periods}}
+                               for e in EXITS])
+        calib = {c: round(s_[c].median(), 1) for c in ("calib_open_err_pct", "calib_close_err_pct", "calib_high_err_pct",
+                                                       "calib_low_err_pct")}
+        m20 = s_["touch_m20"].map(minutes_after_open).dropna()
+        p30 = s_["touch_p30"].map(minutes_after_open).dropna()
+        lv = {"touched -20 % (%)": round(s_["touch_m20"].notna().mean() * 100, 1),
+              "median minutes to -20 %": None if m20.empty else round(m20.median(), 0),
+              "touched +30 % (%)": round(s_["touch_p30"].notna().mean() * 100, 1),
+              "median minutes to +30 %": None if p30.empty else round(p30.median(), 0),
+              "touched +50 % (%)": round(s_["touch_p50"].notna().mean() * 100, 1),
+              "touched +30 % and sold below entry at 15:20 (%)":
+                  round((s_["touch_p30"].notna() & (s_["same_day_pct"] < 0)).mean() * 100, 1)}
+        tables[k] = (ex_all, ex_side, ex_per, calib, lv, excl)
+        sections += [f"## {names[k]}\n",
+                     f"Trades {len(s_)} of {n_all}; excluded {excl}. Calibration, median absolute error in % of the entry: "
+                     f"09:15 vs real open {calib['calib_open_err_pct']}, 15:20 vs real close {calib['calib_close_err_pct']}, "
+                     f"high {calib['calib_high_err_pct']}, low {calib['calib_low_err_pct']}. Same-day exit at the REAL close: "
+                     f"mean {round(s_['real_close_net_pct'].mean(), 2)} %.\n",
+                     "### Price levels touched\n\n" + md(pd.DataFrame([lv])),
+                     "### Exits compared (net % of premium after charges and slippage)\n\n" + md(ex_all),
+                     "### By side\n\n" + md(ex_side), "### Mean net % by half-year\n\n" + md(ex_per)]
+    text = "\n".join(["# S1 v10 fade · intraday timeline and stop-loss study 2025-2026\n", head + "\n",
+                      "## Timeline (the same under both proxies: it follows the stock's own low and high)\n\n"
+                      + md(pd.DataFrame([tl])),
+                      "### When the peak and the dip happen (share of trades by half-hour)\n\n" + md(tb)] + sections)
     (out_dir / "S1_v10_stoploss_study.md").write_text(text, encoding="utf-8")
 
     wb = xlsxwriter.Workbook(out_dir / "S1_v10_stoploss_study.xlsx")
-    F = lambda **k: wb.add_format({"font_name": "Arial", "font_size": 10, **k})          # noqa: E731
+    F = lambda **kw: wb.add_format({"font_name": "Arial", "font_size": 10, **kw})        # noqa: E731
     H = F(bold=True, font_color="#FFFFFF", bg_color="#1F3864", text_wrap=True, align="center", valign="vcenter", border=1)
     note = F(italic=True, font_size=9, font_color="#595959")
     num = F(num_format="0.0;[Red]-0.0")
@@ -298,7 +322,7 @@ def write(s: pd.DataFrame, excl: dict, n_all: int, out_dir: Path = ROOT / "data"
         ws.set_row(r0, 40)
         for c, h in enumerate(df.columns):
             ws.write(r0, c, str(h), H)
-            ws.set_column(c, c, (widths or {}).get(c, 14))
+            ws.set_column(c, c, (widths or {}).get(c, 13))
         for i, row in enumerate(df.itertuples(index=False), 1):
             for c, v in enumerate(row):
                 if v is None or (isinstance(v, float) and math.isnan(v)):
@@ -309,29 +333,29 @@ def write(s: pd.DataFrame, excl: dict, n_all: int, out_dir: Path = ROOT / "data"
                     ws.write(r0 + i, c, str(v), F())
         return r0 + len(df) + 2
 
-    ws = wb.add_worksheet("Exits compared")
-    ws.write(0, 0, "S1 v10 fade 2025-26: exits compared on the same trades", F(bold=True, font_size=13))
+    ws = wb.add_worksheet("Timeline")
+    ws.write(0, 0, "S1 v10 fade 2025-26: when the peak and the dip happen", F(bold=True, font_size=13))
     ws.write(1, 0, head, note)
-    ws.write(2, 0, f"Trades {len(s)} of {n_all}; excluded {excl}. Calibration (median abs error, % of entry): close "
-             f"{calib['calib_close_err_pct']}, high {calib['calib_high_err_pct']}, low {calib['calib_low_err_pct']}.", note)
-    r = table(ws, 4, ex_all, {0: 38})
-    ws.write(r, 0, "By side", F(bold=True))
-    r = table(ws, r + 1, ex_side, {1: 38})
-    ws.write(r, 0, "Mean net % by half-year", F(bold=True))
-    table(ws, r + 1, ex_per, {0: 38})
-    ws2 = wb.add_worksheet("Timeline")
-    ws2.write(0, 0, "When the peak and the dip happen", F(bold=True, font_size=13))
-    r = table(ws2, 2, pd.DataFrame([{"measure": k, "value": v} for k, v in tl.items()]), {0: 52})
-    table(ws2, r, tb)
-    ws3 = wb.add_worksheet("Trades")
-    keep = ["day0", "symbol", "side", "lot", "entry", "opt_open", "opt_high", "opt_low", "opt_close", "peak", "peak_time",
-            "peak_pct", "dip", "dip_time", "dip_pct", "peak_first", "touch_m20", "touch_p30", "touch_p50", "proxy_1520",
-            "real_close_net_pct"] + [f"{e.name}_pct" for e in EXITS]
-    table(ws3, 0, s[keep].assign(peak_first=s["peak_first"].map({True: "peak", False: "dip"})), {1: 13})
-    ws3.freeze_panes(1, 2)
+    r = table(ws, 3, pd.DataFrame([{"measure": a_, "value": b_} for a_, b_ in tl.items()]), {0: 40})
+    table(ws, r, tb)
+    for k in res:
+        ex_all, ex_side, ex_per, calib, lv, excl = tables[k]
+        w = wb.add_worksheet(f"Exits {k}")
+        w.write(0, 0, f"{names[k]}: exits compared on the same trades", F(bold=True, font_size=13))
+        w.write(1, 0, f"Calibration (median abs error, % of entry): open {calib['calib_open_err_pct']}, close "
+                f"{calib['calib_close_err_pct']}, high {calib['calib_high_err_pct']}, low {calib['calib_low_err_pct']}. "
+                f"Excluded {excl}.", note)
+        r = table(w, 3, pd.DataFrame([{"measure": a_, "value": b_} for a_, b_ in lv.items()]), {0: 44})
+        r = table(w, r, ex_all, {0: 38})
+        w.write(r, 0, "By side", F(bold=True))
+        r = table(w, r + 1, ex_side, {1: 38})
+        w.write(r, 0, "Mean net % by half-year", F(bold=True))
+        table(w, r + 1, ex_per, {0: 38})
+    s_ = res["B"][0]
+    keep = ["day0", "symbol", "side", "lot", "entry", "opt_open", "opt_high", "opt_low", "opt_close", "peak_time", "dip_time",
+            "peak_first", "touch_m20", "touch_p30", "touch_p50", "real_close_net_pct"] + [f"{e.name}_pct" for e in EXITS]
+    w = wb.add_worksheet("Trades (proxy B)")
+    table(w, 0, s_[keep].assign(peak_first=s_["peak_first"].map({True: "peak", False: "dip"})), {1: 13})
+    w.freeze_panes(1, 2)
     wb.close()
     print(text)
-
-
-if __name__ == "__main__":
-    main()

@@ -38,3 +38,12 @@ def test_timeline_finds_peak_dip_order_and_first_touches():
     assert (tl["peak_time"], tl["dip_time"], tl["peak_first"]) == ("09:16", "10:30", True)
     assert (tl["touch_p30"], tl["touch_m20"], tl["touch_p50"]) == ("09:16", "10:30", None)
     assert T.minutes_after_open("10:30") == 75 and T.half_hour("10:47") == "10:30"
+
+
+def test_proxy_b_matches_the_real_high_and_low_at_the_stock_extremes():
+    b = bars([100, 98, 96, 100, 102])
+    p = T.proxy_range(b, "PE", o_high=13.0, o_low=7.0)
+    assert max(x[2] for x in p) == 13.0 and min(x[3] for x in p) == 7.0
+    assert [x[0] for x in p if x[2] == 13.0] == ["09:17"]          # the put's high at the stock's low
+    c = T.proxy_range(b, "CE", o_high=13.0, o_low=7.0)
+    assert [x[0] for x in c if x[2] == 13.0] == ["09:19"]          # the call's high at the stock's high
