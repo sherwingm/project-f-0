@@ -143,8 +143,8 @@ def half_hour(t: str) -> str:
 
 
 # ---------------------------------------------------------------- data
-def trades() -> pd.DataFrame:
-    t = pd.read_csv(ROOT / "data" / "results" / "S1_v10_trades.csv")
+def trades(tag: str = "") -> pd.DataFrame:
+    t = pd.read_csv(ROOT / "data" / "results" / f"S1_v10_trades{tag}.csv")
     return t[(t["entry"] == "open") & (t["e1_excluded"].fillna("") == "")].sort_values(["day0", "symbol"]).reset_index(drop=True)
 
 
@@ -280,17 +280,19 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="S1 v10 fade: intraday timeline and stop-loss study 2025-26 (descriptive)")
     ap.add_argument("--fetch", action="store_true", help="fetch the day-0 1-minute stock candles through the live server")
     ap.add_argument("--url", default=LIVE_URL)
+    ap.add_argument("--tag", default="", help="the backtest's output suffix, e.g. _2022_24")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-    t = trades()
+    t = trades(a.tag)
     if a.fetch:
         print(fetch(t, a.url))
         return
-    write({k: study(t, k) for k in ("A", "B")}, len(t), exact=exact_levels(t))
+    write({k: study(t, k) for k in ("A", "B")}, len(t), exact=exact_levels(t), tag=a.tag)
 
 
 # ---------------------------------------------------------------- report
-def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exact: pd.DataFrame | None = None) -> None:
+def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exact: pd.DataFrame | None = None,
+          tag: str = "") -> None:
     """res = {"A": (trades, exclusions), "B": (...)}: the report (md) and the workbook (xlsx), both proxies side by side."""
     import xlsxwriter
     from .backtest_s1_v2 import md
@@ -311,7 +313,7 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exac
                         "dips (%)": round((sa["dip_time"].map(half_hour) == b).mean() * 100, 1)} for b in buckets])
     sections, tables = [], {}
     for k, (s_, excl) in res.items():
-        s_.to_csv(out_dir / f"S1_v10_stoploss_study_trades_{k}.csv", index=False)
+        s_.to_csv(out_dir / f"S1_v10_stoploss_study_trades{tag}_{k}.csv", index=False)
         ex_all = pd.DataFrame([{"exit": e.label, **summarise(s_, e.name)} for e in EXITS])
         ex_side = pd.DataFrame([{"side": sd, "exit": e.label, **summarise(s_[s_.side == sd], e.name)}
                                 for sd in ("PE", "CE") for e in EXITS])
@@ -342,15 +344,16 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exac
                "A single stop or target only depends on whether the real low / high crossed it. Fills at the level "
                "(optimistic in a fast move). The proxies put the same-day exit far above the real close (both miss the "
                "fall in option value after results and time decay), so their absolute levels are not reliable.")
-    exact_md = [] if exact is None else ["## Exact check on real prices: single stops and targets (all 434 trades)\n",
+    exact_md = [] if exact is None else [f"## Exact check on real prices: single stops and targets (all {n_all} trades)\n",
                                          ex_note + "\n", md(exact)]
-    text = "\n".join(["# S1 v10 fade · intraday timeline and stop-loss study 2025-2026\n", head + "\n"] + exact_md + [
+    years = f"{s_['day0'].min()[:4]}-{s_['day0'].max()[:4]}" if len(s_) else ""
+    text = "\n".join([f"# S1 v10 fade · intraday timeline and stop-loss study {years}\n", head + "\n"] + exact_md + [
                       "## Timeline (the same under both proxies: it follows the stock's own low and high)\n\n"
                       + md(pd.DataFrame([tl])),
                       "### When the peak and the dip happen (share of trades by half-hour)\n\n" + md(tb)] + sections)
-    (out_dir / "S1_v10_stoploss_study.md").write_text(text, encoding="utf-8")
+    (out_dir / f"S1_v10_stoploss_study{tag}.md").write_text(text, encoding="utf-8")
 
-    wb = xlsxwriter.Workbook(out_dir / "S1_v10_stoploss_study.xlsx")
+    wb = xlsxwriter.Workbook(out_dir / f"S1_v10_stoploss_study{tag}.xlsx")
     F = lambda **kw: wb.add_format({"font_name": "Arial", "font_size": 10, **kw})        # noqa: E731
     H = F(bold=True, font_color="#FFFFFF", bg_color="#1F3864", text_wrap=True, align="center", valign="vcenter", border=1)
     note = F(italic=True, font_size=9, font_color="#595959")
@@ -373,11 +376,11 @@ def write(res: dict, n_all: int, out_dir: Path = ROOT / "data" / "results", exac
 
     if exact is not None:
         we = wb.add_worksheet("Exact (real prices)")
-        we.write(0, 0, "Single stops and targets on REAL option prices (no proxy), 434 trades", F(bold=True, font_size=13))
+        we.write(0, 0, f"Single stops and targets on REAL option prices (no proxy), {n_all} trades", F(bold=True, font_size=13))
         we.write(1, 0, ex_note, note)
         table(we, 3, exact, {0: 36, 7: 16, 8: 18})
     ws = wb.add_worksheet("Timeline")
-    ws.write(0, 0, "S1 v10 fade 2025-26: when the peak and the dip happen", F(bold=True, font_size=13))
+    ws.write(0, 0, f"S1 v10 fade {years}: when the peak and the dip happen", F(bold=True, font_size=13))
     ws.write(1, 0, head, note)
     r = table(ws, 3, pd.DataFrame([{"measure": a_, "value": b_} for a_, b_ in tl.items()]), {0: 40})
     table(ws, r, tb)

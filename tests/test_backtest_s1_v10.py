@@ -72,3 +72,7 @@ def test_path_without_an_exit_is_excluded_and_a_missing_contract_is_counted():
     assert p["e2"]["excluded"] == "no_exit_in_data" and p["e1"]["excluded"] == ""
     p = B._path("X", "PE", "2026-01-29", 100.0, 10.0, 0, s, cal, FakeBhav({s[0]: {"opt": {}, "futs": {}}}), None)
     assert p["e1"]["excluded"] == p["e2"]["excluded"] == "contract_changed"
+
+
+def test_period_of_other_windows_uses_half_years():
+    assert B.period_of("2022-03-15") == "2022 H1" and B.period_of("2024-07-01") == "2024 H2"

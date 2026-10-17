@@ -127,7 +127,7 @@ def period_of(day: str) -> str:
     for name, a, b in PERIODS:
         if a <= day <= b:
             return name
-    return "other"
+    return f"{day[:4]} H{1 if day[5:7] <= '06' else 2}"          # other windows (2022-24 addendum): half-years
 
 
 # ---------------------------------------------------------------- data
@@ -331,12 +331,17 @@ def table(t: pd.DataFrame, by: str | None, groups) -> pd.DataFrame:
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="S1 v10 fade: descriptive backtest 2025-2026 (numbers only)")
+    global START, END
+    ap = argparse.ArgumentParser(description="S1 v10 fade: descriptive backtest (numbers only; default 2025-2026)")
     ap.add_argument("--cache-dir", type=Path, default=ROOT / "data" / "cache")
     ap.add_argument("--eod2-dir", type=Path, default=ROOT / "data" / "eod2")
     ap.add_argument("--out-dir", type=Path, default=ROOT / "data" / "results")
+    ap.add_argument("--start", default=START, help="first day 0 (ISO)")
+    ap.add_argument("--end", default=END, help="last day 0 (ISO)")
+    ap.add_argument("--tag", default="", help="suffix for the output files, e.g. _2022_24")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    START, END = a.start, a.end
     from . import amfi
     from .backtest_s1_v2 import md
     from .equity import load_symbol
@@ -386,11 +391,11 @@ def main() -> None:
         log.info("%s: %s", entry, dict(f))
     trades = pd.concat(frames, ignore_index=True)
     a.out_dir.mkdir(parents=True, exist_ok=True)
-    trades.to_csv(a.out_dir / "S1_v10_trades.csv", index=False)
+    trades.to_csv(a.out_dir / f"S1_v10_trades{a.tag}.csv", index=False)
 
     prim = trades[trades["entry"] == "open"]
     pr = paired(prim)
-    periods = [p[0] for p in PERIODS]
+    periods = sorted(prim["period"].unique())
     excl = pd.DataFrame([{"entry": e, **{f"{ex}_{k}": int(v) for ex in ("e1", "e2")
                                          for k, v in trades[trades["entry"] == e][f"{ex}_excluded"].fillna("")
                                          .replace("", "none").value_counts().items()}} for e in ENTRIES]).fillna(0)
@@ -402,8 +407,10 @@ def main() -> None:
                            [{"side": "all", "n": len(oc), "stock_open_to_close_signed_mean_pct": round(oc.mean(), 3),
                              "t": ct(oc, pr.loc[oc.index, "day0"]) if len(oc) > 1 else None}])
     fun = pd.DataFrame([{"entry": k, **dict(f)} for k, f in funnels.items()]).fillna(0)
-    head = ("Descriptive only: no gate, no promotion, no rule change follows. **Not out of sample**: 2025-01-01 onward is "
-            "the holdout S1 v8 already used, the fade pattern was seen on 2021-2026 in S1 v9, and the E2 exit was chosen "
+    window = ("2025-01-01 onward is the holdout S1 v8 already used" if START >= "2025-01-01" else
+              "2021-2024 is S1's test window, already used by v2-v7 and v9")
+    head = ("Descriptive only: no gate, no promotion, no rule change follows. **Not out of sample**: " + window + ", "
+            "the fade pattern was seen on 2021-2026 in S1 v9, and the E2 exit was chosen "
             "after the eight carried trades were seen. Entry is day 0's open + 1 tick; the live fill is the ask at the "
             "first poll that fits, later and dearer. The live liquidity test (two-sided quote, spread <= 10 %) is a "
             ">= 50 contract count here.")
@@ -421,7 +428,7 @@ def main() -> None:
         "## Exclusions by exit (counted; \"none\" = valid)\n\n" + md(excl),
         "## Signals removed, in order\n\n" + md(fun),
     ])
-    (a.out_dir / "S1_v10_backtest_report.md").write_text(text, encoding="utf-8")
+    (a.out_dir / f"S1_v10_backtest_report{a.tag}.md").write_text(text, encoding="utf-8")
     print(text)
 
 
