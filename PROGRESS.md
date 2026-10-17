@@ -139,6 +139,19 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   `data/nse_holidays.json` days). Cause found: nothing visited Render during market hours since the opening-snapshot
   workflow was deleted on 2026-09-30; a cold start took 72 s on 17 Oct. First scheduled run: Mon 19 Oct 08:30.
 
+- **2026-10-17 · carried fade trades** (S1; commits `c24e9ef` docs, `832aad9` code): the eight fade trades opened
+  2026-10-16 and not sold at 15:20 are **excluded from the S1 v10 review** and kept open as a side record under their
+  own rule: sell at a close ≤ 0.80 × entry (−20 %), at a close ≤ 0.75 × the highest close since entry (25 % ratcheting
+  trail from the arm A exit study), or on T-1; checked once a session at 15:20, sold at the best bid
+  (`server/fade.py::_carry_exits`, `CARRY_DATES`; reasons `carry_stop`, `carry_trail`, `carry_t1`). v10 itself is
+  unchanged. Rule and limits are in the strategy page's addendum and DECISIONS.md. Four tests added; the suite's one
+  failure (`test_spec12_step7_model::test_infer_for_scan_adds_the_model_block`) fails without this change too. Not
+  done: a badge on the results page for carried trades. The positions were already below −20 % at Fri 11:21 for
+  INDIANB, TECHM, LTF and POLYCAB, so they are expected to sell on Mon 19 Oct at 15:20.
+- **2026-10-17 · asked, not started**: a backtest of the fade (S1 v10) over 2025–2026 — scope to be confirmed. Caveats
+  to carry into it: 2025-26 is the holdout S1 v8 already used and S1 v9 already saw the fade pattern in 2021-26, and the
+  exit rule was chosen after the eight trades were seen, so any result is descriptive, not a pass.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
