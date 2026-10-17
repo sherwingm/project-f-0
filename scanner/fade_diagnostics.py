@@ -290,7 +290,8 @@ def market_features(nifty: pd.Series, cal: list[str], i: int, d0: str, base: int
             "n_pre5": pct(nb, c.get(cal[base - 5])), "n_pre20": pct(nb, c.get(cal[base - 20]))}
 
 
-def sector_cc(sym: str, cal: list[str], i: int, daily: Daily, sectors: dict, members: dict) -> float:
+def sector_cc(sym: str, cal: list[str], i: int, daily: Daily, sectors: dict, members: dict, oc: bool = False) -> float:
+    """Leave-one-out equal-weight sector move on day 0: close->close (default) or open->close (oc=True)."""
     k = sectors.get(sym)
     if not k:
         return math.nan
@@ -300,10 +301,25 @@ def sector_cc(sym: str, cal: list[str], i: int, daily: Daily, sectors: dict, mem
         if p == sym:
             continue
         df = daily.get(p)
-        if df is not None and d0 in df.index and prev in df.index:
-            vals.append(pct(df.at[d0, "Close"], df.at[prev, "Close"]))
+        if df is not None and d0 in df.index and (oc or prev in df.index):
+            vals.append(pct(df.at[d0, "Close"], df.at[d0, "Open"] if oc else df.at[prev, "Close"]))
     vals = [v for v in vals if v == v]
     return float(np.mean(vals)) if len(vals) >= 3 else math.nan
+
+
+def add_sector_oc(f: pd.DataFrame) -> pd.DataFrame:
+    """The sector's day-0 open->close and the stock's fade net of it (like for like with the stock's open->close)."""
+    from .sectors import load_map
+    cal = list(nifty_closes().index)
+    pos, daily, sectors = {d: k for k, d in enumerate(cal)}, Daily(), load_map()
+    members: dict[str, list[str]] = {}
+    for s_, k in sectors.items():
+        members.setdefault(k, []).append(s_)
+    f = f.copy()
+    f["sector_oc"] = [sector_cc(r.symbol, cal, pos[r.day0], daily, sectors, members, oc=True) for r in f.itertuples()]
+    sign = f["side"].map({"PE": -1, "CE": 1})
+    f["stock_fade_net_sector_oc"] = sign * (f["oc"] - f["sector_oc"])
+    return f
 
 
 # ---------------------------------------------------------------- building the tables of features
@@ -374,8 +390,11 @@ def trade_rows(name: str, cal: list[str], daily: Daily, nifty: pd.Series, sector
             "oi5": oi.change(r.symbol, cal, base), "otm_pct": otm, "otm_open_pct": otm_open,
             "dte": sum(1 for d in cal[i + 1:] if d <= r.expiry) if r.expiry <= cal[-1] else math.nan,
             "period": r.period})
+        rows[-1]["sector_oc"] = sector_cc(r.symbol, cal, i, daily, sectors, members, oc=True)
         sc = rows[-1]["sector_cc"]
         rows[-1]["stock_fade_net_sector"] = sign * (f["cc"] - sc) if (f["cc"] == f["cc"] and sc == sc) else math.nan
+        so_ = rows[-1]["sector_oc"]
+        rows[-1]["stock_fade_net_sector_oc"] = sign * (f["oc"] - so_) if (fade == fade and so_ == so_) else math.nan
     out = pd.DataFrame(rows)
     g = out.groupby("day0")["net_pct"]
     out["n_same_day"], out["won_same_day"] = g.transform("size"), g.transform(lambda s: int((s > 0).sum()))
@@ -457,7 +476,7 @@ BUCKETS = {
     "Futures OI 5-session change": ("oi5", None, [-5, 5], ["<= -5 %", "-5 to +5 %", "> +5 %"]),
     "Strike distance (% OTM)": ("otm_pct", None, [2, 5], ["< 2 %", "2-5 %", "> 5 %"]),
     "Sessions to expiry": ("dte", None, [5, 15], ["<= 5", "6-15", "> 15"]),
-    "Sector day 0": ("sector_cc", None, [-0.5, 0.5], ["down < -0.5 %", "flat", "up > +0.5 %"]),
+    "Sector day 0": ("sector_cc", None, [-0.5, 0.5], ["down < -0.5 %", "flat", "up > +0.5 %"]),        # as fixed
     "Filing time": ("filing", None, None, SLOTS),
     "Reaction before entry": ("pre_entry", None, [-2, 1.9999], ["<= -2 %", "-2 to +2 %", ">= +2 %"]),
 }
@@ -476,7 +495,8 @@ def compare(f: pd.DataFrame) -> pd.DataFrame:
         q = next(v for k, v in QUESTION_OF.items() if name.startswith(k))
         for side in (("PE", "CE") if only is None else (only,)):
             s = f[f["side"] == side].copy()
-            s["b"] = s[col].where(s[col].isin(labels)) if cuts is None else s[col].map(lambda x: bucket(x, cuts, labels))
+            s["b"] = s[col].where(s[col].isin(labels)) if cuts is None else \
+                pd.to_numeric(s[col], errors="coerce").map(lambda x: bucket(x, cuts, labels))    # "n/m" -> blank
             for lab in labels:
                 row = {"question": q, "measure": name, "side": side, "bucket": lab}
                 ts = {"net_pct": [], "vwap_net_pct": [], "stock_fade_pct": []}
@@ -528,7 +548,7 @@ def coverage(f: pd.DataFrame, fl: pd.DataFrame) -> pd.DataFrame:
         a, b = f[f["window"] == w], fl[fl["window"] == w]
         rows += [
             {"window": w, "item": "fade trades (open entry, same-day exit)", "count": len(a)},
-            {"window": w, "item": "  left out: special session (Muhurat / short)", "count": int((a["excluded"] != "").sum())},
+            {"window": w, "item": "  left out: special session (Muhurat / short)", "count": int((a["excluded"].fillna("") != "").sum())},
             {"window": w, "item": "  kept but flagged: full special session / budget day",
              "count": int(a["day0"].isin(SPECIAL_KEPT).sum())},
             {"window": w, "item": "  no NIFTY day-0 open", "count": int(a["n_oc"].isna().sum())},
@@ -539,7 +559,7 @@ def coverage(f: pd.DataFrame, fl: pd.DataFrame) -> pd.DataFrame:
             *({"window": w, "item": f"  filing slot: {s}", "count": int((a["filing"] == s).sum())}
               for s in SLOTS + ["time unknown"]),
             {"window": w, "item": "results filings of F&O stocks (Q6)", "count": len(b)},
-            {"window": w, "item": "  left out: special session", "count": int((b["excluded"] != "").sum())},
+            {"window": w, "item": "  left out: special session", "count": int((b["excluded"].fillna("") != "").sum())},
             {"window": w, "item": "  with all three numbers (Q4 curves)",
              "count": int(b[["np_yoy", "np_qoq", "rev_yoy"]].notna().all(axis=1).sum())},
             {"window": w, "item": "  filed in session day -1", "count": int((b["filing"] == SLOTS[1]).sum())}]
@@ -599,7 +619,8 @@ def fade_vs_market(f: pd.DataFrame) -> pd.DataFrame:
             for col, lab in (("stock_fade_pct", "stock fade, raw (open->close)"),
                              ("stock_fade_net_nifty", "stock fade net of NIFTY, beta 1 (open->close)"),
                              ("stock_fade_net_beta", "stock fade net of beta x NIFTY (open->close)"),
-                             ("stock_fade_net_sector", "stock fade net of its sector (close->close)"),
+                             ("stock_fade_net_sector_oc", "stock fade net of its sector (open->close)"),
+                             ("stock_fade_net_sector", "stock fade net of its sector (close->close, includes the gap)"),
                              ("net_pct", "option net % of premium (open entry)")):
                 rows.append({"window": w, "side": side, "measure": lab, **stats(s[col], s["day0"])})
             sign = s["side"].map({"PE": -1, "CE": 1})
@@ -728,8 +749,8 @@ def write(f: pd.DataFrame, fl: pd.DataFrame, answers: str | None = None) -> None
     head = ("Descriptive only (strategies/S1_v10_fade_diagnostics.md and its 2026-10-18 addendum). Not out of sample. "
             f"{len(cmp_)} bucket tests were run; by chance alone about {chance_consistent(len(cmp_))} would come out "
             f"'consistent' (N >= 30 and >= 15 dates in both windows, same sign, |t| >= 1 in each, |pooled t| >= 2); "
-            f"STRONG needs |pooled t| >= {z} (Bonferroni 5 % for {len(cmp_)} tests). Found: {n_cons} consistent, "
-            f"{int((cmp_['verdict'] == 'STRONG').sum())} STRONG.")
+            f"STRONG needs |pooled t| >= {z} (Bonferroni 5 % for {len(cmp_)} tests). Found: {n_cons} pass ("
+            f"{int((cmp_['verdict'] == 'STRONG').sum())} of them STRONG).")
     counts = (f"Fade trades: {len(fk)} ({', '.join(f'{w} {int((fk.window == w).sum())}' for w in WINDOWS)}); "
               f"results filings (Q6): {len(flk)} ({', '.join(f'{w} {int((flk.window == w).sum())}' for w in WINDOWS)}).")
     text = ["# S1 v10 fade · diagnostics\n", head + "\n", counts + "\n"]
@@ -793,6 +814,8 @@ def main() -> None:
     if a.reuse:
         f = pd.read_csv(RES / "S1_v10_fade_diag_features.csv")
         fl = pd.read_csv(RES / "S1_v10_fade_diag_filings.csv")
+        if "sector_oc" not in f.columns:
+            f = add_sector_oc(f)
     else:
         f, fl = build()
     write(f, fl, a.answers.read_text(encoding="utf-8") if a.answers else None)
