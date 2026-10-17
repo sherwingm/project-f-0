@@ -71,3 +71,42 @@ do not survive are dropped or reworded, and the report says so.
 - Not out of sample (2021-26 has been used by S1 v2-v10); many tests; descriptive only.
 - eod2 prices are adjusted for splits / bonuses; a corporate action inside a pre-run window is not removed.
 - No analyst consensus, guidance or margins beyond the XBRL: "surprise" cannot be measured, only the reported change.
+
+## Addendum 2026-10-18 (before any table was produced)
+The first full build crashed in the feature step (a missing eod2 close), so no table had been computed. An independent
+design review (one agent, read-only) found real gaps; these changes are fixed **now, before any bucket result is seen**.
+**Disclosure:** while checking the loser thresholds the reviewer computed the Q1 loser-class counts (open entry): losers
+2025-26 260 (puts 191 / calls 69), 2022-24 277 (205 / 72); never up — puts 62 / 69, calls 23 / 26; round trip — puts
+81 / 71, calls 22 / 27 (2025-26 / 2022-24). Nothing for Q2-Q7 was computed.
+1. **Filing slot** (from the event time): pre-open day 0 / in session day −1 (09:15-15:30) / after the close day −1 /
+   non-session day or earlier. For an in-session filing the day −1 close already holds part of the reaction, so **every
+   pre-run, the 52-week place and the volume ratio end at the last close before the filing** (day −2 for in-session
+   filers, else day −1). The filing-time bucket uses these four slots.
+2. **Reaction before entry** (known at 09:15): day 0's open ÷ the last close before the filing − 1, per side,
+   buckets ≤ −2 % / −2 to +2 % / ≥ +2 % (Q7). The day-0 gap stays as fixed.
+3. **Beta-adjusted market benchmark:** beta from 250 daily close→close returns to the pre-run base (≥ 150 needed);
+   Q2 shows the fade raw, net of NIFTY with beta = 1, net of beta × NIFTY, and net of the sector.
+4. **Special sessions:** Muhurat and short special sessions (2022-10-24, 2023-11-12, 2024-03-02, 2024-05-18,
+   2024-11-01, 2025-10-21) are left out of every table and counted; full special sessions (2024-01-20, budget days
+   2025-02-01, 2026-02-01) stay and are flagged.
+5. **Corporate-action guard:** a one-day close→close move > 20 % inside a feature's look-back window sets that feature to
+   blank (listed in a coverage table), since eod2 misses some demergers.
+6. **The guard, sharpened:** per window, the bucket-vs-rest date-clustered t; pooled t = (t₁ + t₂) ÷ √2 (the windows
+   have different means, so they are not simply stacked). **Consistent** = N ≥ 30 and ≥ 15 distinct day-0 dates in
+   each window, the same sign in both, |t| ≥ 1 in each and |pooled t| ≥ 2. **Strong** = consistent and |pooled t| at
+   the Bonferroni 5 % level for the number of tests run. The report prints the number of tests and the number of
+   "consistent" buckets expected by chance. Each bucket also shows the median, the hit rate, the VWAP-entry mean and,
+   as a second outcome with more power, the **stock's own fade** (signed day-0 open→close, + = moved against the
+   headline) with its own pooled t.
+7. **Q4 extension, all filings with numbers (stock level, more power than the trades):** the day-0 open→close net of
+   NIFTY, and the reaction before entry, in bins over the whole range — NP YoY < −50 / −50 to −25 / −25 to −10 / −10 to 0
+   / 0 to 10 / 10 to 25 / 25 to 50 / 50 to 100 / > 100 %; NP QoQ < −30 / −30 to −10 / −10 to 0 / 0 to 10 / 10 to 30 /
+   > 30 %; revenue YoY < 0 / 0 to 10 / 10 to 20 / > 20 % — per window. This shows where a fade starts, including the
+   zones the rule never trades (NP YoY −10 to +10 %).
+8. **Q1 extension:** the stock's best move in the bet's direction on day 0 (puts: open → low; calls: open → high) and
+   its day range, per loser class, separating "the stock never moved" from "it moved but the option did not pay".
+9. **Q5:** each example also shows how many fade trades were taken that day and how many won, and its distance below
+   the 52-week high. The examples were picked with hindsight: illustrations, not evidence.
+10. **Verification** (within this session's small-workflow limit): three independent agents each try to refute every
+    headline claim from the feature CSVs with their own code (a claim survives with at least 2 of 3), one of them also
+    rebuilds about 15 random trades and the examples from the raw files; plus a completeness critic.
