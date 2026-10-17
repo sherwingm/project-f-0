@@ -1,20 +1,25 @@
 name: Keep the live server awake (market hours)
 # The live server (Render free tier) sleeps after 15 min without visits, and the paper account only acts while it
-# polls: the 08:40 / 09:05 scan pulls, S1 rule and fade entries from 09:15, and the 15:20 exits. On 2026-10-16 it
-# slept from 11:21 to after 16:00 and the eight fade positions were not sold at 15:20 (PROGRESS.md).
-# This job visits /api/live every 4 minutes from 08:30 to 15:45 IST on NSE trading days. A job may run at most
-# 6 hours, so there are two starts (08:30 and 12:00 IST); the concurrency group runs them one after the other, and
-# each stops at 15:45 IST or after 5 h 50 min. Scheduled runs can start late, hence the early starts.
+# polls: the 08:40 / 09:05 scan pulls, S1 rule and fade entries from 09:15, and the 15:20 exits. On 2026-10-15 it slept
+# until about 15:17 and on 2026-10-16 from 11:21 to after 16:00 (PROGRESS.md).
+# This job visits /api/live every 4 minutes until 15:45 IST on NSE trading days. A job may run at most 6 hours, and GitHub
+# often starts scheduled runs late or skips one, so there are THREE overlapping starts (08:17, 11:47 and 14:17 IST, at
+# odd minutes because the top of the hour is the busiest). They are not serialised: overlapping visits are harmless and
+# the repository is public, so the minutes are free. Each run stops at 15:45 IST or after 5 h 45 min.
+# If the server does not answer three visits in a row (12 minutes), the run FAILS, which makes GitHub e-mail the owner.
 on:
   schedule:
-    - cron: "0 3 * * 1-5"       # 03:00 UTC = 08:30 IST
-    - cron: "30 6 * * 1-5"      # 06:30 UTC = 12:00 IST
+    - cron: "47 2 * * 1-5"      # 02:47 UTC = 08:17 IST
+    - cron: "17 6 * * 1-5"      # 06:17 UTC = 11:47 IST
+    - cron: "47 8 * * 1-5"      # 08:47 UTC = 14:17 IST
   workflow_dispatch:
+    inputs:
+      test_minutes:
+        description: "Test run: visit for this many minutes, ignoring the clock and the holiday list"
+        required: false
+        default: ""
 permissions:
   contents: read
-concurrency:
-  group: keep-awake
-  cancel-in-progress: false
 env:
   LIVE_URL: ${{ vars.LIVE_URL || 'https://fo-scanner.onrender.com' }}
 jobs:
@@ -27,15 +32,27 @@ jobs:
           sparse-checkout: data/nse_holidays.json
           sparse-checkout-cone-mode: false
       - name: Visit the server every 4 minutes until 15:45 IST
+        env:
+          TEST_MINUTES: ${{ github.event.inputs.test_minutes }}
         run: |
           d=$(TZ=Asia/Kolkata date +%F)
-          if grep -q "\"$d\"" data/nse_holidays.json; then echo "::notice::$d is an NSE holiday: nothing to keep awake"; exit 0; fi
-          stop=$(TZ=Asia/Kolkata date -d "$d 15:45" +%s)
-          cap=$(( $(date +%s) + 350*60 ))
-          if [ "$cap" -lt "$stop" ]; then stop=$cap; fi
-          ok=0; fail=0
+          if [ -n "$TEST_MINUTES" ]; then
+            stop=$(( $(date +%s) + TEST_MINUTES*60 ))
+          else
+            if grep -q "\"$d\"" data/nse_holidays.json; then echo "::notice::$d is an NSE holiday: nothing to keep awake"; exit 0; fi
+            stop=$(TZ=Asia/Kolkata date -d "$d 15:45" +%s)
+            cap=$(( $(date +%s) + 345*60 ))
+            if [ "$cap" -lt "$stop" ]; then stop=$cap; fi
+          fi
+          ok=0; fail=0; streak=0; worst=0
           while [ "$(date +%s)" -lt "$stop" ]; do
-            if curl -sf -o /dev/null --max-time 90 "$LIVE_URL/api/live"; then ok=$((ok+1)); else fail=$((fail+1)); echo "::warning::$(TZ=Asia/Kolkata date +%T) IST: no answer from $LIVE_URL"; fi
+            if curl -sf -o /dev/null --max-time 100 --retry 1 --retry-delay 5 --retry-all-errors "$LIVE_URL/api/live"; then
+              ok=$((ok+1)); streak=0
+            else
+              fail=$((fail+1)); streak=$((streak+1)); [ "$streak" -gt "$worst" ] && worst=$streak
+              echo "::warning::$(TZ=Asia/Kolkata date +%T) IST: no answer from $LIVE_URL ($streak in a row)"
+            fi
             sleep 240
           done
-          echo "visits answered: $ok, failed: $fail"
+          echo "visits answered: $ok, failed: $fail, longest run of failures: $worst"
+          if [ "$worst" -ge 3 ]; then echo "::error::The live server did not answer $worst visits in a row (about $((worst*4)) minutes)"; exit 1; fi
