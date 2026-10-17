@@ -58,3 +58,25 @@
 - Strong / weak use the as-filed XBRL. A filing whose XBRL is late is skipped.
 - One lot within ₹600–8,000 is usually out of the money for large stocks. A ~1 % fade may not move it enough to
   cover the spread and charges. This is a known handicap the user accepted.
+
+## Addendum 2026-10-17 · the eight carried trades (a side record, not part of the review)
+**Written before the rule runs.** On 2026-10-16 the live server (Render free tier) slept from 11:21 to after 16:00, so
+the eight fade trades opened at 09:15 that day were not sold at 15:20: NESTLEIND 1250 PE, INDIANB 810 PE, POLYCAB
+7700 PE, PERSISTENT 5900 CE, TECHM 1620 PE, ANGELONE 300 PE, JIOFIN 220 CE, LTF 245 PE (October expiry, 1 lot each).
+The same-day exit is part of this page's pre-registered rule, so these trades are **excluded from the v10 review**
+(user's decision, 2026-10-17). The user chose to keep them open rather than sell them at Monday's first poll, under
+their own exit rule. v10 itself is unchanged: every other fade trade is still bought and sold on day 0.
+
+Rule for the eight (`server/fade.py`, `CARRY_DATES`), checked once a session at the first poll from 15:20 IST on the
+last traded price as the close (as the S1 rule trades), the sale at the best bid (else last price − 1 tick):
+- `peak` = the highest close since entry, starting at the entry price.
+- Sell if close ≤ 0.80 × entry (**stop, −20 %**), or close ≤ 0.75 × peak (**25 % ratcheting trail**, the candidate
+  exit named in the arm A exit study, DECISIONS.md), or the session is **T-1** of the expiry. There is no fixed
+  profit target. The effective stop is max(0.80 × entry, 0.75 × peak).
+- Exit reasons `carry_stop`, `carry_trail`, `carry_t1`.
+
+Limits: the study's report files are not in the repository, so the trail is implemented as defined here. Friday's
+15:20 close was not recorded, so `peak` starts at the entry price and first updates on Monday's close. An intraday
+move below −20 % is acted on at 15:20, not at once. At the last save (Fri 11:21) INDIANB, TECHM, LTF and POLYCAB were
+already below −20 %, so they are expected to be sold on Monday at whatever the bid is then. The result is reported
+beside the v10 review, never in it. Any later fade trade that is not sold on its day 0 is treated the same way.
