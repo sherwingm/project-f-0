@@ -158,6 +158,9 @@ Updated at the end of every session. `DECISIONS.md` is authoritative for rules a
   LibreOffice install (`winget install TheDocumentFoundation.LibreOffice`) was started and then **abandoned at the user's request**:
   winget was stopped; one elevated `msiexec` could not be stopped from here (access denied) and `soffice.exe` was not present. The
   fade sheet stays verified against pandas (formula engine), not recalculated in LibreOffice.
+- **2026-10-17 · sizing question, decided: no change.** The user asked whether trades could be sized by money (as many lots as fit in
+  ₹600-8,000, e.g. 7 lots of a ₹1,000 lot instead of 1 lot) in all strategies, then chose to **keep everything as it is**: one lot, ₹600-8,000,
+  for the S1 rule trades, the v10 fade, S2 and every backtest. Nothing was changed and the reviews are not restarted.
 - **2026-10-17 · TATAELXSI twice on 15 Oct is by design, but not a clean comparison**: each S1 buy signal is bought twice (open
   walk from 09:15, close walk at 15:20) to compare entry times. On 15 Oct the server was asleep until about 15:17 (first
   `paper-state` write that day was 15:16:58), so the "open" entry filled at 15:17, three minutes before the close entry:
