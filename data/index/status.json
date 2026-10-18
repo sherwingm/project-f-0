@@ -67,5 +67,66 @@
    "runtime_s": 1269.8,
    "failures": 0
   }
- ]
+ ],
+ "spot_backfill": {
+  "window": [
+   "2021-10-20",
+   "2026-10-17"
+  ],
+  "series": {
+   "NIFTY50": {
+    "rows_added": 461682,
+    "runtime_s": 248
+   },
+   "NIFTYBANK": {
+    "rows_added": 461613,
+    "runtime_s": 250
+   },
+   "SENSEX": {
+    "rows_added": 459981,
+    "runtime_s": 250
+   },
+   "INDIAVIX": {
+    "rows_added": 462121,
+    "runtime_s": 239,
+    "vix_fix": {
+     "rows_corrected": 92936,
+     "from": "2021-10-20 09:15:00+05:30",
+     "to": "2023-08-22 15:29:00+05:30"
+    }
+   }
+  },
+  "vix_daily": {
+   "yf_rows": 4563,
+   "yf_first": "2008-03-03",
+   "yf_last": "2026-10-16",
+   "compared_days": 1177,
+   "mismatch_gt_1pct": 0,
+   "worst": []
+  },
+  "calls": 471,
+  "runtime_s": 1006,
+  "coverage": {
+   "NIFTY50": {
+    "first_month": "2021-10",
+    "last_month": "2026-10",
+    "months": 61
+   },
+   "NIFTYBANK": {
+    "first_month": "2021-10",
+    "last_month": "2026-10",
+    "months": 61
+   },
+   "SENSEX": {
+    "first_month": "2021-10",
+    "last_month": "2026-10",
+    "months": 61
+   },
+   "INDIAVIX": {
+    "first_month": "2021-10",
+    "last_month": "2026-10",
+    "months": 61
+   }
+  }
+ }
 }

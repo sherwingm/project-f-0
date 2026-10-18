@@ -32,6 +32,51 @@
    "expiries": 2
   },
   {
+   "dataset": "spot 1-minute",
+   "underlying": "INDIAVIX",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2021-10",
+   "last": "2026-10",
+   "files": 61
+  },
+  {
+   "dataset": "spot 1-minute",
+   "underlying": "NIFTY50",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2021-10",
+   "last": "2026-10",
+   "files": 61
+  },
+  {
+   "dataset": "spot 1-minute",
+   "underlying": "NIFTYBANK",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2021-10",
+   "last": "2026-10",
+   "files": 61
+  },
+  {
+   "dataset": "spot 1-minute",
+   "underlying": "SENSEX",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2021-10",
+   "last": "2026-10",
+   "files": 61
+  },
+  {
+   "dataset": "India VIX daily",
+   "underlying": "INDIAVIX",
+   "resolution": "1 day",
+   "source": "yfinance",
+   "first": "2008-03-03",
+   "last": "2026-10-16",
+   "files": 1
+  },
+  {
    "dataset": "contract list snapshots",
    "underlying": "all",
    "resolution": "daily",
