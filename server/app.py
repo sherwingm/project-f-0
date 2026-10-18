@@ -283,8 +283,11 @@ def _rebuild() -> dict:
 def results_page(_: str = Depends(auth)):
     """The home page: paper account and the forward test (templates/results.html), no chart and no scan."""
     html = (ROOT / "templates" / "results.html").read_text(encoding="utf-8")
-    fwd = json.dumps(((state.scan or {}).get("meta") or {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
-    return html.replace("/*__FORWARD__*/null", fwd).replace("/*__SERVER__*/{}", json.dumps(settings.public()))
+    meta = (state.scan or {}).get("meta") or {}
+    fwd = json.dumps(meta.get("forward"), separators=(",", ":")).replace("</", "<\\/")
+    fade = json.dumps(meta.get("fade"), separators=(",", ":")).replace("</", "<\\/")
+    return (html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade)
+            .replace("/*__SERVER__*/{}", json.dumps(settings.public())))
 
 
 @app.get("/s2", response_class=HTMLResponse)
@@ -303,6 +306,12 @@ def api_s2(_: str = Depends(auth)):
 @app.get("/api/forward")
 def api_forward(_: str = Depends(auth)):
     return ((state.scan or {}).get("meta") or {}).get("forward")
+
+
+@app.get("/api/fade")
+def api_fade(_: str = Depends(auth)):
+    """S1 v10 fade list for the next results session (scanner/fade_live.py): signals, skipped filings, history."""
+    return ((state.scan or {}).get("meta") or {}).get("fade")
 
 
 @app.get("/terminal", response_class=HTMLResponse)

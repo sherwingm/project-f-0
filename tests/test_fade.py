@@ -310,3 +310,27 @@ def test_split_counts_closed_and_open_fade_trades():
     assert s["shadow: calls + puts NP YoY > 25 %"]["closed"] == 2 and s["shadow: calls + puts NP YoY > 25 %"]["open"] == 1
     assert s["left out: puts NP YoY <= 25 %"] == {"closed": 1, "wins": 0, "net_rs": -500.0, "mean_net_pct": -10.0,
                                                   "open": 0, "unrealised_rs": 0.0}
+
+
+# ---------------------------------------------------------------- the results page: Arm F workspace data
+def test_results_page_embeds_the_fade_list_and_api_fade_serves_it(monkeypatch):
+    from fastapi.testclient import TestClient
+    import server.app as app_mod
+    fade = {"session": "2026-10-19", "signals": [{"symbol": "FEDERALBNK", "side": "PE", "np_yoy": 51.1}], "skipped": []}
+    monkeypatch.setattr(app_mod.state, "scan", {"meta": {"forward": None, "fade": fade}}, raising=False)
+    app_mod.app.dependency_overrides[app_mod.auth] = lambda: "user"
+    try:
+        c = TestClient(app_mod.app)
+        page, api = c.get("/").text, c.get("/api/fade").json()
+    finally:
+        app_mod.app.dependency_overrides.clear()
+    assert "/*__FADE__*/" not in page and '"FEDERALBNK"' in page and 'data-tab' in page
+    assert api == fade
+
+
+def test_static_results_copy_embeds_the_fade_list(tmp_path):
+    from scanner.build import ROOT, render_results
+    out = tmp_path / "results.html"
+    render_results({"meta": {"forward": None, "fade": {"session": "2026-10-19", "signals": []}}}, ROOT / "templates" / "results.html", out)
+    html = out.read_text(encoding="utf-8")
+    assert "/*__FADE__*/" not in html and '"session":"2026-10-19"' in html

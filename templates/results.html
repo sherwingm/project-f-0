@@ -8,22 +8,29 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+/* Design tokens: one system for every workspace. A strategy changes what is shown, never how it looks. */
 :root {
   --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
   --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
   --unc:#E0B341; --unc-soft:rgba(224,179,65,.16); --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF;
+  --arm-a:#4C8DFF; --arm-b:#B07CFF; --arm-f:#E0A030; --arm-p:#26A69A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
   --disc:44px; color-scheme:dark;
 }
 :root[data-theme="light"] {
   --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
   --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
-  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB; color-scheme:light;
+  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB;
+  --arm-a:#2563EB; --arm-b:#7C3AED; --arm-f:#B7791F; --arm-p:#0F9D76;
+  --shadow:0 10px 30px rgba(20,26,33,.18); color-scheme:light;
 }
 *, *::before, *::after { box-sizing:border-box; }
+html, body { overflow-x:hidden; }
 body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   font-variant-numeric:tabular-nums; -webkit-text-size-adjust:100%; padding-bottom:calc(var(--disc) + 16px); }
 button { font:inherit; color:inherit; cursor:pointer; }
-button:focus-visible, a:focus-visible { outline:2px solid var(--focus); outline-offset:1px; }
+button:focus-visible, a:focus-visible, input:focus-visible, [tabindex]:focus-visible { outline:2px solid var(--focus); outline-offset:1px; }
 .mono { font-family:"JetBrains Mono",ui-monospace,Consolas,monospace; }
 .up { color:var(--bull); } .down { color:var(--bear); } .flat { color:var(--muted); }
 small, .muted { color:var(--muted); }
@@ -38,33 +45,54 @@ a { color:var(--accent); }
 .dot { width:8px; height:8px; border-radius:50%; background:var(--muted); }
 .dot.on { background:var(--bull); box-shadow:0 0 0 3px var(--bull-soft); }
 .clock { font-family:"JetBrains Mono",monospace; color:var(--ink); }
-.tabs { display:flex; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:9px; padding:3px; margin-left:auto; }
-.tabs button { border:0; background:none; padding:6px 12px; border-radius:7px; font-weight:600; color:var(--muted); white-space:nowrap; }
-.tabs button[aria-selected="true"] { background:var(--accent); color:var(--accent-ink); }
-.tlink { height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); display:inline-flex; align-items:center; text-decoration:none; color:var(--ink); white-space:nowrap; }
-.tbtn { height:34px; width:34px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); }
+.tabs { display:flex; gap:4px; background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:3px; margin-left:auto; }
+.tabs button { border:0; background:none; padding:6px 12px; border-radius:7px; font-weight:600; color:var(--muted); white-space:nowrap; display:flex; align-items:center; gap:6px; }
+.tabs button i { width:7px; height:7px; border-radius:50%; background:var(--c); }
+.tabs button[aria-selected="true"] { background:var(--raise); color:var(--ink); box-shadow:inset 0 -2px 0 var(--c); }
+.tlink { height:34px; padding:0 12px; border-radius:var(--r-sm); border:1px solid var(--line-strong); background:var(--surface); display:inline-flex; align-items:center; text-decoration:none; color:var(--ink); white-space:nowrap; }
+.tbtn { height:34px; min-width:34px; border-radius:var(--r-sm); border:1px solid var(--line-strong); background:var(--surface); display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:0 8px; }
+.tbtn kbd { font:600 10px Inter,sans-serif; color:var(--muted); border:1px solid var(--line-strong); border-radius:4px; padding:0 4px; }
 
 main { max-width:1240px; margin:0 auto; padding:16px; }
-h1 { font-size:19px; margin:2px 0 4px; }
-.lead { color:var(--muted); margin:0 0 14px; font-size:12.5px; }
-h2 { font-size:14px; margin:22px 0 8px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+/* workspace header */
+.ws { display:flex; gap:12px; align-items:flex-start; margin:2px 0 14px; }
+.ws .bar { width:4px; align-self:stretch; border-radius:2px; background:var(--c); }
+.ws h1 { font-size:19px; margin:0 0 2px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.ws p { color:var(--muted); margin:0; font-size:12.5px; max-width:900px; }
+h2 { font-size:14px; margin:0; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
 h2 small { font-weight:400; font-size:12px; }
+
+/* the one panel component */
+.panels { display:flex; flex-direction:column; gap:14px; }
+.panel { background:var(--panel); border:1px solid var(--line); border-radius:var(--r-lg); padding:var(--sp-3) var(--sp-4) var(--sp-4); min-width:0; }
+.panel > header { display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; margin:0 0 10px; }
+.panel > header .rt { margin-left:auto; font-size:12px; color:var(--muted); }
+.panel.flat { background:none; border:0; padding:0; }
+.row2 { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:14px; }
+.skel { height:54px; border-radius:var(--r-md); background:linear-gradient(90deg,var(--surface),var(--raise),var(--surface)); background-size:200% 100%; animation:sk 1.2s infinite linear; }
+@keyframes sk { to { background-position:-200% 0; } }
 
 /* tiles */
 .tiles { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:8px; }
-.tile { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+.tile { background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:10px 12px; }
 .tile small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
 .tile b { font:600 18px "JetBrains Mono",monospace; }
+.spark { display:flex; flex-wrap:wrap; align-items:center; gap:4px 10px; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:8px 12px; margin-top:8px; }
+.spark svg { flex:1 1 160px; height:44px; min-width:0; }
+.spark small { white-space:nowrap; }
 
 /* position cards */
 .cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:12px; }
-.pc { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
-.pc .hd { display:flex; align-items:center; gap:8px; }
-.pc .nm { font-size:16px; font-weight:700; }
+.pc { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; display:flex; flex-direction:column; gap:10px; border-top:3px solid var(--c, var(--line)); }
+.pc .hd { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.pc .nm { font-size:16px; font-weight:700; flex:1; min-width:0; }
 .pc .nm span { font-weight:600; color:var(--muted); }
-.tag { margin-left:auto; font:600 11px Inter,sans-serif; border-radius:999px; padding:2px 9px; }
+.tag { font:600 11px Inter,sans-serif; border-radius:999px; padding:2px 9px; white-space:nowrap; }
 .tag.ce { background:var(--bull-soft); color:var(--bull); } .tag.pe { background:var(--bear-soft); color:var(--bear); }
 .pc .sub { font-size:12px; color:var(--muted); margin-top:-6px; }
+.chips { display:flex; gap:6px; flex-wrap:wrap; }
+.chip { font:600 11px Inter,sans-serif; border-radius:999px; padding:2px 9px; background:var(--raise); border:1px solid var(--line-strong); color:var(--ink); white-space:nowrap; }
+.chip.in { border-color:var(--bull); color:var(--bull); } .chip.out { border-color:var(--unc); color:var(--unc); }
 .px { display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:8px; }
 .px small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
 .px .entry b { font:700 26px "JetBrains Mono",monospace; }
@@ -72,34 +100,22 @@ h2 small { font-weight:400; font-size:12px; }
 .px .now b { font:600 20px "JetBrains Mono",monospace; }
 .px .now em { display:block; font:600 13px "JetBrains Mono",monospace; font-style:normal; }
 .px .arr { color:var(--muted); font-size:18px; padding-bottom:4px; }
-.pnl { font:700 15px "JetBrains Mono",monospace; display:flex; justify-content:space-between; align-items:baseline; border-top:1px solid var(--line); padding-top:8px; }
-.pnl small { font:400 11px Inter,sans-serif; }
-.val { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.val, .pl2, .ex { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .val > div { border:1px solid var(--line); border-radius:9px; padding:7px 10px; }
-.val small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
-.val b { font:700 16px "JetBrains Mono",monospace; }
-.val em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
-.val .r { text-align:right; }
-.pl2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; border-top:1px solid var(--line); padding-top:8px; }
-.pl2 small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
-.pl2 b { font:700 16px "JetBrains Mono",monospace; }
-.pl2 em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
-.pl2 .r { text-align:right; }
-.pc .nm { flex:1; min-width:0; }
-.pc .hd .tag { margin-left:0; white-space:nowrap; }
+.val small, .pl2 small, .ex small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.val b, .pl2 b { font:700 16px "JetBrains Mono",monospace; }
+.val em, .pl2 em, .ex em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
+.val .r, .pl2 .r { text-align:right; }
+.pl2 { border-top:1px solid var(--line); padding-top:8px; }
 .arm { white-space:nowrap; font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; background:var(--raise); border:1px solid var(--line-strong); }
-.arm.a { color:#4C8DFF; border-color:#4C8DFF; } .arm.b { color:#B07CFF; border-color:#B07CFF; } .arm.f { color:#E0A030; border-color:#E0A030; }
+.arm.a { color:var(--arm-a); border-color:var(--arm-a); } .arm.b { color:var(--arm-b); border-color:var(--arm-b); } .arm.f { color:var(--arm-f); border-color:var(--arm-f); }
 .mode { font:600 10.5px Inter,sans-serif; color:var(--muted); }
 .sb { display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:12px; }
 .sb .tw table td, .sb .tw table th { padding:7px 10px; }
-.sb h3 { margin:0 0 6px; font-size:13px; display:flex; gap:8px; align-items:center; }
+.sb h3 { margin:0 0 6px; font-size:13px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .gap { margin:0; font-size:11.5px; color:var(--unc); background:var(--unc-soft); border-radius:8px; padding:6px 9px; }
-.ex { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
 .ex > div { background:var(--raise); border-radius:9px; padding:7px 10px; }
-.ex small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
 .ex b { font:600 15px "JetBrains Mono",monospace; }
-.ex em { display:block; font-style:normal; font-size:11px; color:var(--muted); }
-.ex .after { grid-column:1 / -1; display:flex; justify-content:space-between; gap:8px; }
 .rail { position:relative; height:26px; margin:2px 4px 0; }
 .rail .ln { position:absolute; left:0; right:0; top:11px; height:4px; border-radius:2px; background:linear-gradient(90deg,var(--bear-soft),var(--line),var(--bull-soft)); }
 .rail i { position:absolute; top:5px; width:2px; height:16px; border-radius:1px; transform:translateX(-1px); }
@@ -108,13 +124,16 @@ h2 small { font-weight:400; font-size:12px; }
 .rail span { position:absolute; top:-9px; font-size:9.5px; color:var(--muted); transform:translateX(-50%); white-space:nowrap; }
 .ft { display:flex; align-items:center; gap:10px; font-size:12px; color:var(--muted); flex-wrap:wrap; }
 .ft .btn { margin-left:auto; }
-.btn { height:32px; padding:0 14px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); font-weight:600; }
+.btn { height:32px; padding:0 14px; border-radius:var(--r-sm); border:1px solid var(--line-strong); background:var(--surface); font-weight:600; }
 .btn.sell { border-color:var(--bear); color:var(--bear); }
+.btn.ghost { border-color:var(--line); color:var(--muted); }
 .btn:disabled { opacity:.5; cursor:default; }
 .err { color:var(--bear); font-size:12px; }
+[data-why] { cursor:pointer; }
+.pc[data-why]:hover, tr[data-why]:hover td { background:var(--raise); }
 
 /* tables */
-.tw { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:12px; }
+.tw { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); }
 table { width:100%; border-collapse:collapse; font:12.5px "JetBrains Mono",monospace; white-space:nowrap; }
 th { font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:right; padding:8px 10px; border-bottom:1px solid var(--line); vertical-align:bottom; }
 th.g { text-align:center; color:var(--ink); border-left:1px solid var(--line); }
@@ -123,11 +142,37 @@ td.gl { border-left:1px solid var(--line); }
 th:first-child, td:first-child { text-align:left; font-family:Inter,sans-serif; }
 td:first-child b { font-weight:700; }
 td small { font-size:10.5px; }
+td.l, th.l { text-align:left; white-space:normal; font-family:Inter,sans-serif; }
 tr:last-child td { border-bottom:0; }
 td.entry { font-weight:700; }
-.empty { color:var(--muted); background:var(--surface); border:1px dashed var(--line-strong); border-radius:12px; padding:14px 16px; }
-details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
-.note { font-size:12px; color:var(--muted); margin-top:18px; }
+.empty { color:var(--muted); background:var(--surface); border:1px dashed var(--line-strong); border-radius:var(--r-md); padding:14px 16px; margin:0; }
+details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
+.note { font-size:12px; color:var(--muted); margin:10px 0 0; }
+.prog { height:8px; border-radius:4px; background:var(--raise); overflow:hidden; margin:6px 0 2px; }
+.prog i { display:block; height:100%; background:var(--arm-f); }
+.facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; }
+.facts > div { background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); padding:9px 12px; }
+.facts b { display:block; font:600 15px "JetBrains Mono",monospace; }
+.facts small { display:block; }
+
+/* the "why" drawer and the search palette */
+.scrim { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:20; }
+.sheet { position:fixed; z-index:21; left:50%; transform:translateX(-50%); bottom:0; width:min(560px,100%); max-height:86vh; overflow:auto;
+  background:var(--panel); border:1px solid var(--line-strong); border-bottom:0; border-radius:18px 18px 0 0; box-shadow:var(--shadow); padding:10px 18px 24px; }
+.sheet .grab { width:44px; height:4px; border-radius:2px; background:var(--line-strong); margin:0 auto 10px; }
+.sheet h3 { margin:0 0 4px; font-size:17px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.sheet .kv { display:grid; grid-template-columns:auto 1fr; gap:6px 14px; margin:12px 0; }
+.sheet .kv dt { color:var(--muted); font-size:12px; }
+.sheet .kv dd { margin:0; font:500 13px "JetBrains Mono",monospace; text-align:right; }
+.sheet .why { background:var(--surface); border:1px solid var(--line); border-left:3px solid var(--c, var(--accent)); border-radius:var(--r-sm); padding:9px 12px; font-size:12.5px; }
+.sheet .x { float:right; }
+.pal { position:fixed; z-index:21; left:50%; top:10vh; transform:translateX(-50%); width:min(560px,calc(100% - 24px)); background:var(--panel);
+  border:1px solid var(--line-strong); border-radius:var(--r-lg); box-shadow:var(--shadow); overflow:hidden; }
+.pal input { width:100%; border:0; border-bottom:1px solid var(--line); background:none; color:var(--ink); font:500 15px Inter,sans-serif; padding:14px 16px; outline:none; }
+.pal ul { list-style:none; margin:0; padding:6px; max-height:56vh; overflow:auto; }
+.pal li { padding:8px 10px; border-radius:var(--r-sm); display:flex; gap:8px; align-items:center; cursor:pointer; }
+.pal li[aria-selected="true"], .pal li:hover { background:var(--raise); }
+.pal li small { margin-left:auto; }
 
 .disclaimer { position:fixed; left:0; right:0; bottom:0; min-height:var(--disc); background:var(--panel); border-top:1px solid var(--bear); padding:6px 16px; font-size:11.5px; z-index:6; display:flex; align-items:center; }
 .disclaimer b { color:var(--bear); }
@@ -135,9 +180,10 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
 @media (max-width:760px) {
   .top { padding:8px 10px; }
   .tabs { order:3; width:100%; margin-left:0; justify-content:space-between; }
-  .tabs button { flex:1; padding:7px 4px; }
-  .mkt .lbl { display:none; }
+  .tabs button { flex:1; padding:7px 2px; justify-content:center; }
+  .mkt .lbl, .tbtn kbd, .brand i { display:none; }
   main { padding:12px 10px; }
+  .panel { padding:var(--sp-3); }
   .cards { grid-template-columns:1fr; }
   .px .entry b { font-size:23px; }
   :root { --disc:64px; }
@@ -148,16 +194,14 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
 <header class="top">
   <div class="brand">F&amp;O <i>Live Results</i></div>
   <div class="mkt"><span class="dot" id="dot"></span><span class="lbl" id="mkt">—</span><span class="clock" id="clock"></span></div>
-  <nav class="tabs" role="tablist" aria-label="Results">
-    <button type="button" role="tab" data-tab="paper">Paper account</button>
-    <button type="button" role="tab" data-tab="arma">Arm A</button>
-    <button type="button" role="tab" data-tab="armb">Arm B</button>
-  </nav>
+  <nav class="tabs" role="tablist" aria-label="Workspaces" id="tabs"></nav>
+  <button class="tbtn" type="button" id="find" title="Find a stock (Ctrl+K)" aria-label="Find a stock">🔍<kbd>Ctrl K</kbd></button>
   <a class="tlink" href="/s2" id="s2Link">S2 →</a>
   <a class="tlink" href="/terminal" id="termLink">Terminal →</a>
   <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
 </header>
 <main id="main"></main>
+<div id="overlay"></div>
 <footer class="disclaimer" role="note"><div><b>Read before using.</b> Paper trading results for testing a strategy — not trade recommendations, entry/exit signals or predictions. F&amp;O trading carries high risk including potential loss beyond capital invested.</div></footer>
 
 <script>
@@ -165,6 +209,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
   "use strict";
   const SERVER = Object.assign({ live: false, orders: false, paper: true, poll_seconds: 30 }, /*__SERVER__*/{});
   let FW = /*__FORWARD__*/null;
+  let FD = /*__FADE__*/null;
+  const REPO = "https://github.com/sherwingm/project-f-0/blob/main/";
   const auth = { credentials: "same-origin" };
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
@@ -183,7 +229,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
   const num = (v, dp = 2) => Number(v).toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp });
   const rs = (v, dp = 2) => v == null ? "—" : "₹" + num(v, dp);
   const srs = (v, dp = 0) => v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + "₹" + num(Math.abs(v), dp);
-  const pct = v => v == null ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + "%";
+  const pct = v => v == null || !isFinite(v) ? "—" : (v > 0 ? "+" : v < 0 ? "−" : "") + Math.abs(v).toFixed(1) + "%";
   const dir = v => v == null || v === 0 ? "flat" : v > 0 ? "up" : "down";
   const chg = (px, ref) => px == null || !ref ? null : (px / ref - 1) * 100;
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -191,6 +237,7 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
   const when = t => !t ? "" : t.length > 10 ? `${day(t.slice(0, 10))} ${t.slice(11, 16)}` : day(t);
   const optName = (sym, strike, typ) => `${esc(sym)} <span>${num(strike, Number.isInteger(+strike) ? 0 : 2)} ${typ === "PE" ? "PUT" : "CALL"}</span>`;
   const tile = (k, v, c = "") => `<div class="tile"><small>${k}</small><b class="${c}">${v}</b></div>`;
+  const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
 
   async function getJson(url, opts) {
     const r = await fetch(url, { ...auth, ...(opts || {}) }), txt = await r.text();
@@ -199,6 +246,19 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     if (j === null && txt.trim() !== "null") throw new Error("the server is waking up; try again in a minute");
     return j;
   }
+
+  // ---- the one panel component: same header, loading and empty states everywhere
+  const panel = (title, body, { sub = "", rt = "", cls = "" } = {}) =>
+    `<section class="panel ${cls}"><header><h2>${title}${sub ? ` <small>${sub}</small>` : ""}</h2>${rt ? `<span class="rt">${rt}</span>` : ""}</header>${body}</section>`;
+  const empty = t => `<p class="empty">${t}</p>`;
+  const loading = () => `<div class="skel"></div>`;
+
+  // ---- S1 v10 fade helpers (strategies/S1_v10_np25_shadow_track.md)
+  const npOf = r => r == null ? null : r.np_yoy != null ? +r.np_yoy : (m => m ? +m[1] : null)(/net profit YoY ([+-]?\d+(?:\.\d+)?) %/.exec(r.why || ""));
+  const inShadow = (side, np) => side === "CE" ? true : np == null ? null : np > 25;
+  const shadowChip = (side, np) => { const s = inShadow(side, np);
+    return s == null ? "" : s ? `<span class="chip in" title="In the NP YoY > 25 % shadow track">in shadow</span>` : `<span class="chip out" title="A put with NP YoY of 10-25 %: v10 takes it, the shadow track would not">left out by shadow</span>`; };
+  const numbersChip = r => r && r.why ? `<span class="chip">${esc(String(r.why).replace("net profit", "NP").replace("revenue", "rev"))}</span>` : "";
 
   // the bar under each card: stop · entry · max dip · max up · now, on one scale
   function rail(entry, now, peak, trough, stop) {
@@ -209,17 +269,18 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     return `<div class="rail" aria-hidden="true"><div class="ln"></div>${m(stop, "s", "stop")}${m(trough, "s", "")}${m(peak, "p", "")}${m(entry, "e", "entry")}${m(now, "n", "now")}</div>`;
   }
 
-  // ---- tabs
-  const TABS = ["paper", "arma", "armb"];
-  let tab = (location.hash.slice(1) || "").toLowerCase();
-  if (!TABS.includes(tab)) tab = SERVER.orders ? "paper" : "arma";
-  function setTab(t) {
-    tab = t; try { history.replaceState(null, "", "#" + t); } catch (e) { /* file:// */ }
-    $$(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
-    render();
+  // a small equity line: cumulative booked net ₹ by close date (no intraday, no ticks)
+  function spark(points, label) {
+    if (points.length < 2) return `<div class="spark"><small>${label}</small><small style="margin-left:auto">the line starts after 2 closed trades</small></div>`;
+    let cum = 0; const ys = [0, ...points.map(p => (cum += p))];
+    const lo = Math.min(0, ...ys), hi = Math.max(0, ...ys), span = hi - lo || 1, W = 300, H = 44;
+    const xy = ys.map((y, i) => `${(i * W / (ys.length - 1)).toFixed(1)},${(H - 4 - (y - lo) / span * (H - 8)).toFixed(1)}`).join(" ");
+    const zero = (H - 4 - (0 - lo) / span * (H - 8)).toFixed(1), last = ys[ys.length - 1];
+    return `<div class="spark"><small>${label}</small><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${label}: ${srs(last)} after ${points.length} trades">
+      <line x1="0" y1="${zero}" x2="${W}" y2="${zero}" stroke="var(--line-strong)" stroke-dasharray="3 3" vector-effect="non-scaling-stroke"/>
+      <polyline points="${xy}" fill="none" stroke="${last >= 0 ? "var(--bull)" : "var(--bear)"}" stroke-width="2" vector-effect="non-scaling-stroke"/></svg>
+      <b class="mono ${dir(last)}">${srs(last)}</b></div>`;
   }
-  $(".tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) setTab(b.dataset.tab); });
-  addEventListener("hashchange", () => { const t = location.hash.slice(1).toLowerCase(); if (TABS.includes(t) && t !== tab) setTab(t); });
 
   // ---- paper account (live server)
   let P = { summary: null, positions: [], trades: [], err: "", loaded: false };
@@ -235,9 +296,12 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const open = P.summary && P.summary.market_open;
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
-  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">${a === "F" ? "Fade" : "Arm " + a}</span>`).join(" ");
+  const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">${a === "F" ? "Arm F · fade" : "Arm " + a}</span>`).join(" ");
+  const armColor = r => !r ? "var(--line)" : (r.arms || []).includes("F") ? "var(--arm-f)" : (r.arms || []).includes("A") ? "var(--arm-a)" : "var(--arm-b)";
   const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at 15:20" };
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
+  const ofArm = (rows, arm) => rows.filter(x => x.rule && (x.rule.arms || []).includes(arm));
+
   function positionCard(p) {
     const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
     const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
@@ -245,16 +309,16 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price;
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
-    const r = p.rule;
-    const fade = r && r.strategy === "fade";
+    const r = p.rule, fade = r && r.strategy === "fade";
     const exitLine = fade
-      ? `<span>Sold at <b>15:20</b> on the results day (no stop)</span>${r.why ? `<span>${esc(r.why)}</span>` : ""}`
+      ? `<span>Sold at <b>15:20</b> on the results day (no stop)</span>`
       : r
       ? `<span>Stop <b class="mono">${rs(e / 2)}</b> (50% at a close)</span><span>No new closing high: <b>${r.stall || 0} of 5</b></span><span>Exit by <b>${day(tMinus1(p.expiry))}</b> (T-1)</span>`
       : `<span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>`;
-    return `<article class="pc">
+    return `<article class="pc" style="--c:${armColor(r)}" data-why="pos:${esc(p.id)}" tabindex="0" aria-label="${esc(p.symbol)}: tap for why">
       <div class="hd"><div class="nm">${optName(p.symbol, p.strike, p.instrument)}</div>${r ? armTags(r.arms) : ""}<span class="tag ${p.instrument === "PE" ? "pe" : "ce"}">${p.side === "BUY" ? "Bought" : "Sold"} ${p.instrument}</span></div>
       <div class="sub">Expiry ${day(p.expiry)} · ${lots} · bought ${when(p.opened_at)}${r ? ` · <span class="mode">${MODE[r.entry_mode] || ""}</span>` : ""}</div>
+      ${fade ? `<div class="chips">${numbersChip(r)}${shadowChip(p.instrument, npOf(r))}</div>` : ""}
       <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
         <div class="now"><small>Now${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}</em></div></div>
       <div class="val"><div><small>Buy value</small><b>${rs(e * p.qty)}</b><em>${rs(e)} × ${num(p.qty, 0)} qty</em></div>
@@ -280,8 +344,8 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
       <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
-        const following = a.until && new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" }) <= a.until;
-        return `<tr><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
+        const following = a.until && todayIso() <= a.until;
+        return `<tr data-why="trade:${esc(c.id)}" tabindex="0"><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
           <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
@@ -289,59 +353,336 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>
           <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
-  function paperHtml() {
-    if (!SERVER.orders) return `<h1>Paper account</h1><p class="empty">The paper account lives on the live server: open <a href="https://fo-scanner.onrender.com/">fo-scanner.onrender.com</a>. This copy shows the forward test (Arm A / Arm B).</p>`;
-    if (!P.loaded) return `<h1>Paper account</h1><p class="empty">Loading…</p>`;
-    if (P.err && !P.summary) return `<h1>Paper account</h1><p class="empty">Could not load the paper account: ${esc(P.err)}</p>`;
-    const s = P.summary || {};
-    let h = `<h1>Paper account</h1><p class="lead">Live paper trades, marked at every live poll (${SERVER.poll_seconds}s) while the market is open${s.as_of ? " · updated " + when(s.as_of) : ""}. Max up / max dip are the highest and lowest traded price since the entry.</p>
-      <div class="tiles">${tile("Equity", rs(s.equity, 0))}${tile("Today", srs(s.day_pnl), dir(s.day_pnl))}${tile("This week", srs(s.week_pnl), dir(s.week_pnl))}
-      ${tile("Open P&amp;L", srs(s.unrealised_total), dir(s.unrealised_total))}${tile("Booked P&amp;L", srs(s.realised_total), dir(s.realised_total))}
-      ${tile("Drawdown", (s.drawdown_pct ?? 0).toFixed(2) + "%")}${tile("Open positions", s.open_positions ?? 0)}
-      ${s.kill_switch ? tile("Kill switch", s.kill_switch.active ? "ON" : "off", s.kill_switch.active ? "down" : "") : ""}</div>
-      ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)}</p>` : ""}
-      ${s.drawdown_review ? `<p class="err">${esc(s.drawdown_review_message)}</p>` : ""}
-      ${s.queued_orders ? `<p class="lead">${s.queued_orders} order(s) queued for the next session's 09:20 poll.</p>` : ""}`;
-    h += scoreboards();
-    const rr = ((P.rules || {}).rules || {}).refused || [];
-    const todayIso = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
-    const rToday = rr.filter(x => x.date === todayIso);
-    if (rToday.length) h += `<p class="lead">Rule signals not bought today: ${rToday.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>`;
-    h += `<h2>Open positions <small>${P.positions.length ? "entry price first; the bar shows stop · entry · max dip · max up · now" : ""}</small></h2>`;
-    h += P.positions.length ? `<div class="cards">${P.positions.map(positionCard).join("")}</div>` : `<p class="empty">No open positions. The rule trades of the next session are bought at 09:15 and at 15:20 automatically.</p>`;
-    h += `<h2>Closed trades <small>net of fills and charges · after the sale the option is followed until its T-2 day</small></h2>`;
-    h += P.trades.length ? closedTable(P.trades) : `<p class="empty">None yet.</p>`;
-    const rf = P.refusals || { count: 0, refusals: [] };
-    h += `<h2>Refusals: ${rf.count} <small>orders the paper engine would not fill</small></h2>` + (rf.count
-      ? `<details><summary>Show the reasons</summary><div class="tw"><table><thead><tr><th>Contract</th><th>When</th><th style="text-align:left">Reasons</th></tr></thead><tbody>${rf.refusals.map(x =>
-          `<tr><td><b>${esc(x.contract || x.symbol)}</b> <small>${esc(x.side || "")} ${x.qty ?? ""}</small></td><td>${when(x.time)}</td><td style="text-align:left;white-space:normal">${(x.reasons || []).map(esc).join("; ")}</td></tr>`).join("")}</tbody></table></div></details>`
-      : `<p class="empty">None: every order so far found enough liquidity.</p>`);
-    const ords = (P.orders || []).slice(0, 40);
-    if (ords.length) h += `<details><summary>Order log (${ords.length})</summary><div class="tw"><table><thead><tr><th>Contract</th><th>Side</th><th>Qty</th><th>Status</th><th>Fill</th><th>Time</th></tr></thead><tbody>${ords.map(x =>
-      `<tr><td><b>${esc(x.tradingsymbol)}</b>${x.auto ? ` <small>auto ${esc(x.auto)}</small>` : ""}</td><td>${esc(x.side)}</td><td>${x.quantity ?? ""}</td><td>${esc(x.status)}</td><td>${x.fill_price != null ? rs(x.fill_price) : "—"}</td><td>${when(x.filled_at || x.placed_at)}</td></tr>`).join("")}</tbody></table></div></details>`;
-    const arch = ((P.rules || {}).archive || []);
-    if (arch.length) h += `<p class="note">Earlier test account archived (${arch.map(a => `${esc(a.epoch)}: ${a.open} open, ${a.closed} closed trades, archived ${when(a.archived_at)}`).join("; ")}). This account started ${when((P.rules || {}).started)} with the rule trades only.</p>`;
-    if (P.err) h += `<p class="err">Refresh failed: ${esc(P.err)} (showing the last numbers).</p>`;
-    return h;
+  // scoreboard maths, shared by the paper account and the Arm F tiles
+  function board(arm, mode) {
+    const cl = P.trades.filter(c => c.rule && (c.rule.arms || []).includes(arm) && (!mode || c.rule.entry_mode === mode));
+    const op = P.positions.filter(x => x.rule && (x.rule.arms || []).includes(arm) && (!mode || x.rule.entry_mode === mode));
+    const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
+    const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
+    const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
+    return { cl, op, wins, net, avg, mtm };
   }
-  // One scoreboard per arm: closed trades (net of charges) and open positions, by entry time.
-  function scoreboards() {
-    const rows = (arm, mode) => {
-      const cl = P.trades.filter(c => c.rule && c.rule.arms.includes(arm) && (!mode || c.rule.entry_mode === mode));
-      const op = P.positions.filter(x => x.rule && x.rule.arms.includes(arm) && (!mode || x.rule.entry_mode === mode));
-      const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
-      const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
-      const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
-      return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : mode === "fade" ? "Results day, 09:15-15:20" : "<b>Both</b>"}</td><td>${cl.length}</td><td>${cl.length ? Math.round(100 * wins / cl.length) + "%" : "—"}</td>
-        <td class="${dir(avg)}">${avg == null ? "—" : pct(avg)}</td><td class="${dir(net)}">${cl.length ? srs(net) : "—"}</td><td>${op.length}</td><td class="${dir(mtm)}">${op.length ? srs(mtm) : "—"}</td></tr>`;
-    };
-    const board = (arm, title) => `<div><h3>${armTags([arm])} ${title}</h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
-      <tbody>${rows(arm, "open")}${rows(arm, "close")}${rows(arm, null)}</tbody></table></div></div>`;
-    return `<h2>Scoreboard <small>rule trades only, 1 lot each, net of charges · a signal in both arms counts in both</small></h2>
-      <div class="sb">${board("A", "every results beat")}${board("B", "results beat in a strong sector")}</div>
-      <div class="sb"><div><h3>${armTags(["F"])} results-day fade, paper only <small>(put on strong numbers, call on weak; sold at 15:20)</small></h3><div class="tw"><table><thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>
-      <tbody>${rows("F", "fade")}</tbody></table></div></div></div>`;
+  const byClose = rows => rows.slice().sort((a, b) => (a.closed_at || "").localeCompare(b.closed_at || "")).map(c => c.net_pnl || 0);
+  function scoreRows(arm, mode) {
+    const b = board(arm, mode);
+    return `<tr><td>${mode === "open" ? "Open entry (09:15)" : mode === "close" ? "Close entry (15:20)" : mode === "fade" ? "Results day, 09:15-15:20" : "<b>Both</b>"}</td><td>${b.cl.length}</td><td>${b.cl.length ? Math.round(100 * b.wins / b.cl.length) + "%" : "—"}</td>
+      <td class="${dir(b.avg)}">${b.avg == null ? "—" : pct(b.avg)}</td><td class="${dir(b.net)}">${b.cl.length ? srs(b.net) : "—"}</td><td>${b.op.length}</td><td class="${dir(b.mtm)}">${b.op.length ? srs(b.mtm) : "—"}</td></tr>`;
   }
+  const SB_HEAD = `<thead><tr><th>Entry</th><th>Closed</th><th>Win rate</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead>`;
+  const sbCard = (arm, title, modes) => `<div><h3>${armTags([arm])} ${title}</h3><div class="tw"><table>${SB_HEAD}<tbody>${modes.map(m => scoreRows(arm, m)).join("")}</tbody></table></div>
+    ${spark(byClose(board(arm, null).cl), "Booked net, trade by trade")}</div>`;
+
+  // ---- workspace panels: paper account
+  const live = () => SERVER.orders;
+  const notLive = what => empty(`${what} lives on the live server: open <a href="https://fo-scanner.onrender.com/">fo-scanner.onrender.com</a>.`);
+  const paperWait = what => !live() ? notLive(what) : !P.loaded ? loading() : (P.err && !P.summary) ? empty(`Could not load the paper account: ${esc(P.err)}`) : null;
+  const PANELS = {
+    paperTiles() {
+      const w = paperWait("The paper account"); if (w) return panel("Account", w);
+      const s = P.summary || {};
+      return panel("Account", `<div class="tiles">${tile("Equity", rs(s.equity, 0))}${tile("Today", srs(s.day_pnl), dir(s.day_pnl))}${tile("This week", srs(s.week_pnl), dir(s.week_pnl))}
+        ${tile("Open P&amp;L", srs(s.unrealised_total), dir(s.unrealised_total))}${tile("Booked P&amp;L", srs(s.realised_total), dir(s.realised_total))}
+        ${tile("Drawdown", (s.drawdown_pct ?? 0).toFixed(2) + "%")}${tile("Open positions", s.open_positions ?? 0)}
+        ${s.kill_switch ? tile("Kill switch", s.kill_switch.active ? "ON" : "off", s.kill_switch.active ? "down" : "") : ""}</div>
+        ${spark(byClose(P.trades), "All booked trades")}
+        ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)}</p>` : ""}
+        ${s.drawdown_review ? `<p class="err">${esc(s.drawdown_review_message)}</p>` : ""}
+        ${s.queued_orders ? `<p class="note">${s.queued_orders} order(s) queued for the next session's 09:20 poll.</p>` : ""}`,
+        { sub: `marked every ${SERVER.poll_seconds}s while the market is open`, rt: s.as_of ? "updated " + when(s.as_of) : "" });
+    },
+    scoreboards() {
+      if (paperWait("")) return "";
+      return panel("Scoreboard", `<div class="sb">${sbCard("A", "every results beat", ["open", "close", null])}${sbCard("B", "results beat in a strong sector", ["open", "close", null])}${sbCard("F", "results-day fade", ["fade"])}</div>`,
+        { sub: "rule trades only, 1 lot each, net of charges · a signal in both arms counts in both" });
+    },
+    refusedToday() {
+      if (paperWait("")) return "";
+      const rr = (((P.rules || {}).rules || {}).refused || []).filter(x => x.date === todayIso());
+      return rr.length ? panel("Not bought today", `<p class="note" style="margin:0">${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>`) : "";
+    },
+    openPositions() {
+      const w = paperWait("Open positions"); if (w) return panel("Open positions", w);
+      return panel(`Open positions · ${P.positions.length}`, P.positions.length ? `<div class="cards">${P.positions.map(positionCard).join("")}</div>`
+        : empty("No open positions. The rule trades of the next session are bought at 09:15 and at 15:20 automatically."), { sub: P.positions.length ? "tap a card for why it was bought" : "" });
+    },
+    closedTrades() {
+      const w = paperWait("Closed trades"); if (w) return panel("Closed trades", w);
+      return panel(`Closed trades · ${P.trades.length}`, P.trades.length ? closedTable(P.trades) : empty("None yet."),
+        { sub: "net of fills and charges · after the sale the option is followed until its T-2 day" });
+    },
+    refusals() {
+      if (paperWait("")) return "";
+      const rf = P.refusals || { count: 0, refusals: [] };
+      const ords = (P.orders || []).slice(0, 40);
+      const arch = ((P.rules || {}).archive || []);
+      return panel(`Refusals · ${rf.count}`, (rf.count
+        ? `<details><summary>Show the reasons</summary><div class="tw"><table><thead><tr><th>Contract</th><th>When</th><th class="l">Reasons</th></tr></thead><tbody>${rf.refusals.map(x =>
+            `<tr><td><b>${esc(x.contract || x.symbol)}</b> <small>${esc(x.side || "")} ${x.qty ?? ""}</small></td><td>${when(x.time)}</td><td class="l">${(x.reasons || []).map(esc).join("; ")}</td></tr>`).join("")}</tbody></table></div></details>`
+        : empty("None: every order so far found enough liquidity."))
+        + (ords.length ? `<details><summary>Order log (${ords.length})</summary><div class="tw"><table><thead><tr><th>Contract</th><th>Side</th><th>Qty</th><th>Status</th><th>Fill</th><th>Time</th></tr></thead><tbody>${ords.map(x =>
+          `<tr><td><b>${esc(x.tradingsymbol)}</b>${x.auto ? ` <small>auto ${esc(x.auto)}</small>` : ""}</td><td>${esc(x.side)}</td><td>${x.quantity ?? ""}</td><td>${esc(x.status)}</td><td>${x.fill_price != null ? rs(x.fill_price) : "—"}</td><td>${when(x.filled_at || x.placed_at)}</td></tr>`).join("")}</tbody></table></div></details>` : "")
+        + (arch.length ? `<p class="note">Earlier test account archived (${arch.map(a => `${esc(a.epoch)}: ${a.open} open, ${a.closed} closed trades, archived ${when(a.archived_at)}`).join("; ")}). This account started ${when((P.rules || {}).started)} with the rule trades only.</p>` : "")
+        + (P.err ? `<p class="err">Refresh failed: ${esc(P.err)} (showing the last numbers).</p>` : ""),
+        { sub: "orders the paper engine would not fill" });
+    },
+
+    // ---- Arm F: S1 v10 results-day fade
+    fadeTiles() {
+      const w = paperWait("Arm F's live trades");
+      if (w) return panel("Arm F scoreboard", w);
+      const b = board("F", "fade");
+      return panel("Scoreboard", `<div class="tiles">${tile("Closed", b.cl.length)}${tile("Win rate", b.cl.length ? Math.round(100 * b.wins / b.cl.length) + "%" : "—")}
+        ${tile("Average net", b.avg == null ? "—" : pct(b.avg), dir(b.avg))}${tile("Booked net", b.cl.length ? srs(b.net) : "—", dir(b.net))}
+        ${tile("Open", b.op.length)}${tile("Open MTM", b.op.length ? srs(b.mtm) : "—", dir(b.mtm))}</div>${spark(byClose(b.cl), "Booked net, trade by trade")}`,
+        { sub: "1 lot each, net of charges, bought at the live ask, sold at 15:20" });
+    },
+    fadeShadow() {
+      if (!live()) return panel("Shadow track: puts only above NP YoY 25 %", notLive("The shadow track"));
+      const sp = (P.summary || {}).fade_split;
+      if (!sp) return panel("Shadow track: puts only above NP YoY 25 %", P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
+      const G = [["v10 all fade", "v10, every trade"], ["shadow: calls + puts NP YoY > 25 %", "Shadow: calls + puts above 25 %"], ["left out: puts NP YoY <= 25 %", "Left out: puts at 10-25 %"]];
+      const lo = sp["left out: puts NP YoY <= 25 %"] || {}, n = lo.closed || 0;
+      return panel("Shadow track: puts only above NP YoY 25 %", `<div class="tw"><table><thead><tr><th>Group</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead><tbody>${G.map(([k, lab]) => { const g = sp[k] || {};
+          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "—"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "—"}</td><td>${g.open ?? 0}</td><td class="${dir(g.unrealised_rs)}">${g.open ? srs(g.unrealised_rs) : "—"}</td></tr>`; }).join("")}</tbody></table></div>
+        <div class="prog" aria-label="Left-out puts closed: ${n} of 40"><i style="width:${Math.min(100, n / 40 * 100).toFixed(1)}%"></i></div>
+        <p class="note" style="margin:0">Left-out puts closed: <b>${n} of 40</b> needed before it is judged. v10 still takes every trade; this only tags them. <a href="${REPO}strategies/S1_v10_np25_shadow_track.md">The rule</a></p>`,
+        { sub: "a tag on v10's trades, judged later" });
+    },
+    fadeToday() {
+      if (!FD) return panel("Next fade list", empty("The fade list is made each evening from the day's results filings."));
+      const sig = FD.signals || [], sk = FD.skipped || [];
+      const body = (sig.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buy</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th>Filed</th><th>Expiry</th><th>Stock</th><th>Shadow</th></tr></thead><tbody>${sig.map(s =>
+          `<tr data-why="sig:${esc(s.symbol)}" tabindex="0"><td><b>${esc(s.symbol)}</b></td><td><span class="tag ${s.side === "PE" ? "pe" : "ce"}">${s.side === "PE" ? "PUT" : "CALL"}</span></td>
+            <td class="${dir(s.np_yoy)}">${pct(s.np_yoy)}</td><td class="${dir(s.np_qoq)}">${pct(s.np_qoq)}</td><td class="${dir(s.rev_yoy)}">${pct(s.rev_yoy)}</td>
+            <td>${day(s.filed)} <small>${esc(s.filed_time || "")}</small></td><td>${day(s.expiry)}</td><td>${rs(s.spot)}</td><td>${shadowChip(s.side, s.np_yoy) || "—"}</td></tr>`).join("")}</tbody></table></div>`
+          : empty("No strong or weak results for this session."))
+        + (sk.length ? `<details><summary>Filings not traded (${sk.length})</summary><div class="tw"><table><thead><tr><th>Stock</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th class="l">Why not</th></tr></thead><tbody>${sk.map(s =>
+            `<tr><td><b>${esc(s.symbol)}</b> <small>${day(s.filed)}</small></td><td>${pct(s.np_yoy)}</td><td>${pct(s.np_qoq)}</td><td>${pct(s.rev_yoy)}</td><td class="l">${esc(s.reason)}</td></tr>`).join("")}</tbody></table></div></details>` : "");
+      return panel(`Fade list for ${day(FD.session)}`, body, { sub: "put on strong numbers, call on weak ones · bought 09:15-15:20 at the live ask", rt: FD.made_at ? "made " + when(FD.made_at) : "" });
+    },
+    fadeOpen() {
+      const w = paperWait("Open fade positions"); if (w) return panel("Open fade positions", w);
+      const op = ofArm(P.positions, "F");
+      return panel(`Open fade positions · ${op.length}`, op.length ? `<div class="cards">${op.map(positionCard).join("")}</div>` : empty("None open. Fade trades are sold at 15:20 the same day."),
+        { sub: op.length ? "tap a card for why it was bought" : "" });
+    },
+    fadeClosed() {
+      const w = paperWait("Closed fade trades"); if (w) return panel("Closed fade trades", w);
+      const cl = ofArm(P.trades, "F");
+      return panel(`Closed fade trades · ${cl.length}`, cl.length ? closedTable(cl) : empty("None yet."), { sub: "tap a row for why" });
+    },
+    fadeRefused() {
+      if (paperWait("")) return "";
+      const rr = (((P.rules || {}).rules || {}).refused || []).filter(x => (x.arms || []).includes("F")).slice(-12).reverse();
+      return rr.length ? panel("Fade signals not bought", `<div class="tw"><table><thead><tr><th>Stock</th><th>Day</th><th class="l">Why not</th></tr></thead><tbody>${rr.map(x =>
+        `<tr><td><b>${esc(x.symbol)}</b></td><td>${day(x.date)}</td><td class="l">${esc(x.reason)}</td></tr>`).join("")}</tbody></table></div>`, { sub: "no affordable two-sided strike in the session" }) : "";
+    },
+    fadeHistory() {
+      const h = ((FD || {}).history || []).slice(-30).reverse();
+      return h.length ? panel("Earlier fade lists", `<details><summary>Show ${h.length} earlier signals</summary><div class="tw"><table><thead><tr><th>Stock</th><th>Session</th><th>Buy</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th>Shadow</th></tr></thead><tbody>${h.map(s =>
+        `<tr><td><b>${esc(s.symbol)}</b></td><td>${day(s.session)}</td><td>${s.side === "PE" ? "PUT" : "CALL"}</td><td>${pct(s.np_yoy)}</td><td>${pct(s.np_qoq)}</td><td>${pct(s.rev_yoy)}</td><td>${shadowChip(s.side, s.np_yoy) || "—"}</td></tr>`).join("")}</tbody></table></div></details>`) : "";
+    },
+    fadeBacktest() {
+      const f = (v, k, d) => `<div><small>${k}</small><b>${v}</b><small>${d}</small></div>`;
+      return panel("What the backtest says", `<div class="facts">
+          ${f("+3.6 % / +5.6 %", "Average a trade, entry at the open", "2022-24 (436 trades) / 2025-26 (434)")}
+          ${f("−14.2 % / −14.8 %", "Same trades, entry at the day's VWAP", "the profit needs a fill near the open")}
+          ${f("+0.37 % / +0.65 %", "The stock's own fade, open to close", "its own move, not NIFTY's")}
+          ${f("57-66 % vs 4-5 %", "Option won when the stock faded vs did not", "losers are mostly the stock moving with the numbers")}
+          ${f("No", "Closer strikes better?", "far strikes lose more often but win bigger")}
+          ${f("Watch", "Puts at NP YoY 10-25 %", "weaker in the backtest; tracked live above")}</div>
+        <p class="note">Descriptive backtests on past data, not out of sample. Reports: <a href="${REPO}data/results/S1_v10_fade_diagnostics.md">diagnostics</a> ·
+          <a href="${REPO}data/results/S1_v10_strike_distance.md">strike distance</a> · <a href="${REPO}DECISIONS.md">DECISIONS</a></p>`,
+        { sub: "the past, for context: the live paper run decides" });
+    },
+  };
+
+  // ---- forward test (scanner/forward_s1.py, nightly): Arm A / Arm B
+  const EXIT = { "0_stop": "Stop 50%", "1_decay": "5 days no new high", "2_t_minus_1": "T-1 (day before expiry)" };
+  function forwardPanels(A) {
+    if (!FW || !FW.arms) return [panel("Forward test", empty("The forward test fills in each night from NSE's closing files: signals show here the morning after, and are bought on the next session."))];
+    const st = FW.arms[A], days = (FW.sessions || []).filter(x => x.session > FW.first_session).length;
+    const closed = st.closed.filter(t => !t.excluded), wins = closed.filter(t => t.net > 0).length;
+    const avg = closed.length ? closed.reduce((s, t) => s + t.net_pct, 0) / closed.length : null;
+    const tot = closed.reduce((s, t) => s + t.net, 0);
+    const out = [];
+    out.push(panel("Scoreboard", `<div class="tiles">${tile("Buy next session", st.pending.length)}${tile("Open", st.open.length)}${tile("Closed", closed.length)}
+      ${tile("Win rate", closed.length ? Math.round(100 * wins / closed.length) + "%" : "—")}${tile("Average net", avg == null ? "—" : pct(avg), dir(avg))}${tile("Booked net", closed.length ? srs(tot) : "—", dir(tot))}</div>
+      ${spark(closed.slice().sort((a, b) => (a.exit_date || "").localeCompare(b.exit_date || "")).map(t => t.net), "Booked net, trade by trade")}`,
+      { sub: `forward paper test, day ${days} · last NSE session ${day(FW.last_session)}` }));
+    out.push(panel(`Buy next session · ${st.pending.length}`, st.pending.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Results day</th><th>Beat vs sector</th><th>Day move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
+      `<tr><td><b>${esc(p.symbol)}</b></td><td>${day(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dir(p.move)}">${pct(p.move)}</td><td>${day(p.expiry)}</td><td>${rs(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : empty("None from the last session."),
+      { sub: "results beats from the last session" }));
+    out.push(panel(`Open · ${st.open.length}`, st.open.length ? `<div class="cards">${st.open.map(t => { const x = t.stats || {}, e = t.entry_price;
+      const pkp = x.h_peak_date ? e * (1 + x.h_peak / 100) : null, dpp = x.h_dip_date ? e * (1 + x.h_dip / 100) : null;
+      return `<article class="pc" style="--c:var(--arm-${A.toLowerCase()})"><div class="hd"><div class="nm">${optName(t.symbol, t.strike, "CE")}</div><span class="tag ce">Bought CE</span></div>
+        <div class="sub">Expiry ${day(t.expiry)} · 1 lot × ${t.lot} · bought ${day(t.entry_date)} · results ${day(t.signal_date)} (beat ${pct(t.beat)})</div>
+        <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
+          <div class="now"><small>Last close · ${day(x.last_date)}</small><b>${rs(x.last_close)}</b><em class="${dir(x.mark_pct)}">${pct(x.mark_pct)}</em></div></div>
+        <div class="val"><div><small>Buy value</small><b>${rs(e * t.lot)}</b><em>${rs(e)} × ${num(t.lot, 0)} qty</em></div>
+          <div class="r"><small>Value at last close</small><b class="${dir(x.mark_pct)}">${x.last_close != null ? rs(x.last_close * t.lot) : "—"}</b><em>${x.last_close != null ? rs(x.last_close) + " × " + num(t.lot, 0) + " qty" : ""}</em></div></div>
+        <div class="ex"><div><small>Max up</small><b class="${dir(x.h_peak)}">${pct(x.h_peak)}</b><em>${pkp ? rs(pkp) + " · " + day(x.h_peak_date) : "not above entry yet"}</em></div>
+          <div><small>Max dip</small><b class="${dir(x.h_dip)}">${pct(x.h_dip)}</b><em>${dpp ? rs(dpp) + " · " + day(x.h_dip_date) : "not below entry yet"}</em></div></div>
+        ${rail(e, x.last_close, pkp, dpp, e / 2)}
+        <div class="ft"><span>Stop <b class="mono">${rs(e / 2)}</b></span><span>Day ${(t.path || []).length}</span></div></article>`; }).join("")}</div>` : empty("No open trades.")));
+    const cl = st.closed.slice().reverse();
+    out.push(panel(`Closed · ${cl.length}`, cl.length ? `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(x => `<th rowspan="2">${x}</th>`).join("")}
+      <th class="g" colspan="2">While held</th><th class="g" colspan="2">After we sold (to T-1)</th><th rowspan="2">Why sold</th></tr>
+      <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th></tr></thead><tbody>${cl.map(t => { const x = t.stats || {};
+        const why = t.excluded ? (t.excluded === "price_adjusted" ? "Excluded: corporate action" : "Excluded: contract missing") : (EXIT[t.exit_reason] || t.exit_reason || "");
+        return `<tr><td><b>${esc(t.symbol)}</b> <small>${num(t.strike, 0)} CE · ${day(t.expiry)}</small></td><td>${day(t.entry_date)}</td><td>${day(t.exit_date)}</td>
+          <td class="entry">${rs(t.entry_price)}</td><td>${rs(t.cost, 0)}</td><td>${rs(t.exit_price)}</td><td class="${dir(t.net)}">${srs(t.net)}</td><td class="${dir(t.net_pct)}">${pct(t.net_pct)}</td>
+          <td class="gl ${dir(x.h_peak)}">${pct(x.h_peak)} <small>${day(x.h_peak_date)}</small></td><td class="${dir(x.h_dip)}">${pct(x.h_dip)} <small>${day(x.h_dip_date)}</small></td>
+          <td class="gl ${dir(x.a_peak)}">${x.a_peak == null ? (t.tracking ? "following…" : "—") : pct(x.a_peak) + ` <small>${day(x.a_peak_date)}</small>`}</td>
+          <td class="${dir(x.a_dip)}">${x.a_dip == null ? "—" : pct(x.a_dip) + ` <small>${day(x.a_dip_date)}</small>`}</td><td>${esc(why)}</td></tr>`; }).join("")}</tbody></table></div>` : empty("No closed trades yet."),
+      { sub: "after the exit the option is followed until T-1" }));
+    const rf = st.refused.slice().reverse();
+    if (rf.length) out.push(panel(`Signals not taken · ${rf.length}`, `<details><summary>Show them</summary><div class="tw"><table><thead><tr><th>Stock</th><th>Results day</th><th>Beat</th><th class="l">Why not</th></tr></thead><tbody>${rf.map(r =>
+      `<tr><td><b>${esc(r.symbol)}</b></td><td>${day(r.signal_date)}</td><td>${pct(r.beat)}</td><td class="l">${esc(r.reason)}</td></tr>`).join("")}</tbody></table></div></details>
+      <p class="note">Max up = how far above the entry price the option closed at its highest (0% = never above); max dip = how far below. Daily closing prices from NSE. Net is after charges and slippage.</p>`));
+    return out;
+  }
+
+  // ---- workspaces: each declares its look-up colour, title, description and panels; the shell renders them the same way
+  const WORKSPACES = {
+    paper: { tab: "Paper", color: "var(--arm-p)", title: "Paper account",
+             desc: "Every live paper trade across the arms, marked at each live poll. Max up / max dip are the highest and lowest traded price since the entry.",
+             panels: () => [PANELS.paperTiles(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
+    arma:  { tab: "Arm A", color: "var(--arm-a)", title: "Arm A · every results beat",
+             desc: "Forward paper test: a call after every results beat, bought at the session's average price, marked at each close. Exits: 50% stop, 5 sessions without a new closing high, T-1. These rules failed the 2021-24 backtest; this tests them on new days.",
+             panels: () => forwardPanels("A") },
+    armb:  { tab: "Arm B", color: "var(--arm-b)", title: "Arm B · results beat in a strong sector",
+             desc: "Forward paper test: the same calls, only when the stock's sector is strong. Same exits as Arm A.",
+             panels: () => forwardPanels("B") },
+    armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
+             desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+  };
+  const TABS = Object.keys(WORKSPACES);
+  $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");
+
+  // ---- the "why" drawer (explainable trades)
+  const kv = rows => `<dl class="kv">${rows.filter(r => r && r[1] != null && r[1] !== "").map(([k, v, c]) => `<dt>${k}</dt><dd class="${c || ""}">${v}</dd>`).join("")}</dl>`;
+  function classify(np, qoq, rev, side) {
+    if (side === "PE") return `Strong numbers: net profit YoY ${pct(np)} (> +10 %), QoQ ${pct(qoq)} (> 0), revenue YoY ${pct(rev)} (> 0). The fade bets the stock gives back part of its first jump, so it buys a <b>put</b>.`;
+    return `Weak numbers: net profit YoY ${pct(np)} (< −10 %), QoQ ${pct(qoq)} (< 0). The fade bets the stock recovers part of its first drop, so it buys a <b>call</b>.`;
+  }
+  const otmPct = (spot, k, side) => spot ? (side === "PE" ? (spot - k) : (k - spot)) / spot * 100 : null;
+  const parseNums = why => { const g = re => (m => m ? +m[1] : null)(re.exec(why || ""));
+    return { np: g(/net profit YoY ([+-]?\d+(?:\.\d+)?) %/), qoq: g(/QoQ ([+-]?\d+(?:\.\d+)?) %/), rev: g(/revenue YoY ([+-]?\d+(?:\.\d+)?) %/) }; };
+  function whyHtml(key) {
+    const [kind, id] = [key.slice(0, key.indexOf(":")), key.slice(key.indexOf(":") + 1)];
+    if (kind === "sig") {
+      const s = ((FD || {}).signals || []).find(x => x.symbol === id); if (!s) return null;
+      const k = s.strikes || [];
+      return { c: "var(--arm-f)", h: `<h3>${esc(s.symbol)} <span class="tag ${s.side === "PE" ? "pe" : "ce"}">${s.side === "PE" ? "PUT" : "CALL"}</span> ${armTags(["F"])}</h3>
+        <p class="muted" style="margin:0">On the fade list for ${day(FD.session)} · filed ${day(s.filed)} ${esc(s.filed_time || "")}</p>
+        <div class="why">${classify(s.np_yoy, s.np_qoq, s.rev_yoy, s.side)}</div>
+        ${kv([["Net profit YoY", pct(s.np_yoy), dir(s.np_yoy)], ["Net profit QoQ", pct(s.np_qoq), dir(s.np_qoq)], ["Revenue YoY", pct(s.rev_yoy), dir(s.rev_yoy)],
+              ["Shadow track", inShadow(s.side, s.np_yoy) == null ? "—" : inShadow(s.side, s.np_yoy) ? "in (call, or put above 25 %)" : "left out (put at 10-25 %)"],
+              ["Stock (last close)", rs(s.spot)], ["Expiry", day(s.expiry)], ["Strikes listed", k.length ? `${num(k[0], 0)} … ${num(k[k.length - 1], 0)}` : "—"],
+              ["How it buys", "from the strike nearest the live price, away from the money, the first with a two-sided quote, spread ≤ 10 % and 1 lot within ₹600-8,000"]])}` };
+    }
+    const p = kind === "pos" ? P.positions.find(x => x.id === id) : P.trades.find(x => x.id === id);
+    if (!p) return null;
+    const r = p.rule || {}, fade = r.strategy === "fade", e = p.entry.price, n = parseNums(r.why), np = npOf(r) ?? n.np;
+    const exitPx = p.exit && p.exit.price, now = (p.mark || {}).ltp ?? (p.mark || {}).price;
+    const hp = p.held_peak || p.peak, ht = p.held_trough || p.trough;
+    const se = r.spot_at_entry, sx = r.spot_at_exit, otm = otmPct(se, p.strike, p.instrument);
+    const stockMove = se && sx ? (sx / se - 1) * 100 : null, fadeMove = stockMove == null ? null : (p.instrument === "PE" ? -stockMove : stockMove);
+    return { c: armColor(r), h: `<h3>${optName(p.symbol, p.strike, p.instrument)} ${armTags(r.arms)}</h3>
+      <p class="muted" style="margin:0">${MODE[r.entry_mode] || "manual paper trade"} · bought ${when(p.opened_at)}${p.closed_at ? " · sold " + when(p.closed_at) : ""}</p>
+      ${fade ? `<div class="why">${classify(np, r.np_qoq ?? n.qoq, r.rev_yoy ?? n.rev, p.instrument)}</div>` : r.why ? `<div class="why">${esc(r.why)}</div>` : ""}
+      ${kv([fade ? ["Shadow track", inShadow(p.instrument, np) == null ? "—" : inShadow(p.instrument, np) ? "in (call, or put above 25 %)" : "left out (put at 10-25 %)"] : null,
+            ["Entry price", rs(e)], [p.closed_at ? "Exit price" : "Now", rs(p.closed_at ? exitPx : now)],
+            [p.closed_at ? "Net" : "If sold now (MTM)", p.closed_at ? `${srs(p.net_pnl, 2)} (${pct(p.return_pct)})` : srs(p.unrealised, 2), dir(p.closed_at ? p.net_pnl : p.unrealised)],
+            ["Max up while held", hp ? `${pct(chg(hp.price, e))} · ${when(hp.at)}` : null, dir(hp && chg(hp.price, e))],
+            ["Max dip while held", ht ? `${pct(chg(ht.price, e))} · ${when(ht.at)}` : null, dir(ht && chg(ht.price, e))],
+            ["Stock at entry", se ? rs(se) : null], ["Strike distance at entry", otm != null ? `${otm.toFixed(1)} % ${otm >= 0 ? "out of" : "in"} the money` : null],
+            ["Stock at exit", sx ? rs(sx) : null], fade && fadeMove != null ? ["The stock's fade (entry → exit)", pct(fadeMove), dir(fadeMove)] : null,
+            ["Lot", `${p.lots} × ${p.lot_size} · ${rs(e * p.qty, 0)}`], ["Expiry", day(p.expiry)],
+            ["Why sold", p.reason ? (REASON[p.reason] || p.reason) : null]])}
+      ${fade && fadeMove != null ? `<p class="note">${fadeMove > 0 ? "The stock moved against the headline after entry: what the fade bets on." : "The stock kept moving with the numbers after entry: in the backtest the option then won only 4-5 % of the time."}</p>` : ""}` };
+  }
+  function openWhy(key) {
+    const w = whyHtml(key); if (!w) return false;
+    $("#overlay").innerHTML = `<div class="scrim" data-dismiss></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Why this trade" style="--c:${w.c}">
+      <div class="grab"></div><button class="btn ghost x" type="button" data-dismiss aria-label="Close">✕</button>${w.h}</div>`;
+    $(".sheet .x").focus();
+    return true;
+  }
+  const closeOverlay = () => { $("#overlay").innerHTML = ""; };
+
+  // ---- search palette (Ctrl+K / 🔍): jump to any stock in any workspace
+  function index() {
+    const out = [], add = (sym, tab, label, why) => out.push({ sym, tab, label, why });
+    P.positions.forEach(p => add(p.symbol, (p.rule && (p.rule.arms || []).includes("F")) ? "armf" : "paper", `open ${p.instrument} ${num(p.strike, 0)}`, "pos:" + p.id));
+    P.trades.forEach(c => add(c.symbol, (c.rule && (c.rule.arms || []).includes("F")) ? "armf" : "paper", `closed ${day((c.closed_at || "").slice(0, 10))} · ${srs(c.net_pnl)}`, "trade:" + c.id));
+    ((FD || {}).signals || []).forEach(s => add(s.symbol, "armf", `fade list ${day(FD.session)} · ${s.side === "PE" ? "put" : "call"}`, "sig:" + s.symbol));
+    if (FW && FW.arms) for (const A of ["A", "B"]) { const st = FW.arms[A];
+      (st.pending || []).forEach(t => add(t.symbol, "arm" + A.toLowerCase(), `Arm ${A} · buy next session`, null));
+      (st.open || []).forEach(t => add(t.symbol, "arm" + A.toLowerCase(), `Arm ${A} · open`, null));
+      (st.closed || []).forEach(t => add(t.symbol, "arm" + A.toLowerCase(), `Arm ${A} · closed ${day(t.exit_date)}`, null)); }
+    return out;
+  }
+  function openPalette() {
+    const all = index(); let sel = 0, list = [];
+    $("#overlay").innerHTML = `<div class="scrim" data-dismiss></div><div class="pal" role="dialog" aria-modal="true" aria-label="Find a stock">
+      <input id="q" type="search" placeholder="Find a stock… (e.g. POLYCAB)" autocomplete="off" aria-label="Stock"><ul id="ql" role="listbox"></ul></div>`;
+    const q = $("#q"), ul = $("#ql");
+    const draw = () => { const t = q.value.trim().toUpperCase();
+      list = all.filter(x => !t || x.sym.toUpperCase().includes(t)).slice(0, 40); sel = Math.min(sel, Math.max(0, list.length - 1));
+      ul.innerHTML = list.length ? list.map((x, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><b>${esc(x.sym)}</b> <span class="muted">${esc(x.label)}</span><small>${WORKSPACES[x.tab].tab}</small></li>`).join("")
+        : `<li class="muted">${all.length ? "No match" : "Nothing to search yet"}</li>`; };
+    const go = i => { const x = list[i]; if (!x) return; closeOverlay(); setTab(x.tab, x.why ? null : x.sym);
+      if (x.why) { setHash(x.tab, x.sym); openWhy(x.why); } };
+    q.addEventListener("input", () => { sel = 0; draw(); });
+    q.addEventListener("keydown", e => { if (e.key === "ArrowDown") { sel = Math.min(sel + 1, list.length - 1); draw(); e.preventDefault(); }
+      else if (e.key === "ArrowUp") { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); } else if (e.key === "Enter") go(sel); });
+    ul.addEventListener("click", e => { const li = e.target.closest("[data-i]"); if (li) go(+li.dataset.i); });
+    draw(); q.focus();
+  }
+  $("#find").addEventListener("click", openPalette);
+  addEventListener("keydown", e => {
+    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") { e.preventDefault(); openPalette(); }
+    else if (e.key === "Escape" && $("#overlay").innerHTML) closeOverlay();
+  });
+  $("#overlay").addEventListener("click", e => { if (e.target.closest("[data-dismiss]")) closeOverlay(); });
+
+  // ---- tabs and shareable state in the URL: #armf, #armf/POLYCAB
+  const parseHash = () => { const [t, s] = location.hash.slice(1).split("/"); return { t: (t || "").toLowerCase(), s: s ? decodeURIComponent(s).toUpperCase() : "" }; };
+  const setHash = (t, s) => { try { history.replaceState(null, "", "#" + t + (s ? "/" + encodeURIComponent(s) : "")); } catch (e) { /* file:// */ } };
+  let tab = parseHash().t;
+  if (!TABS.includes(tab)) tab = SERVER.orders ? "paper" : "armf";
+  function setTab(t, focusSym) {
+    tab = t; setHash(t, null);
+    $$("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
+    render();
+    if (focusSym) { const el = $$("#main td:first-child b, #main .nm").find(n => n.textContent.trim().toUpperCase().startsWith(focusSym));
+      if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); (el.closest("tr,article") || el).animate([{ background: "var(--unc-soft)" }, { background: "transparent" }], 1600); } }
+  }
+  $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) setTab(b.dataset.tab); });
+  addEventListener("hashchange", () => { const h = parseHash(); if (TABS.includes(h.t) && h.t !== tab) setTab(h.t); });
+  function openFromHash() {
+    const h = parseHash(); if (!h.s) return;
+    const x = index().find(i => i.tab === tab && i.sym.toUpperCase() === h.s && i.why);
+    if (x) openWhy(x.why); else setTab(tab, h.s);
+  }
+
+  function render() {
+    const w = WORKSPACES[tab];
+    $("#main").innerHTML = `<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
+      <div class="panels">${w.panels().filter(Boolean).join("")}</div>`;
+    $$("[data-close]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); closePos(b.dataset.close, b); }));
+  }
+  $("#main").addEventListener("click", e => {
+    if (e.target.closest("button, a, summary, input")) return;
+    const el = e.target.closest("[data-why]"); if (!el) return;
+    const key = el.dataset.why;
+    if (openWhy(key)) { const sym = key.startsWith("sig:") ? key.slice(4) : ((P.positions.concat(P.trades)).find(x => x.id === key.slice(key.indexOf(":") + 1)) || {}).symbol; setHash(tab, sym); }
+  });
+  $("#main").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("[data-why]")) e.target.click(); });
+
   async function closePos(id, btn) {
     const p = P.positions.find(x => x.id === id); if (!p) return;
     const err = $(`[data-cerr="${CSS.escape(id)}"]`);
@@ -354,73 +695,27 @@ details summary { cursor:pointer; color:var(--muted); margin:16px 0 6px; }
     } catch (e) { err.textContent = "Not closed: " + e.message; err.hidden = false; btn.disabled = false; btn.textContent = "Close"; }
   }
 
-  // ---- forward test (scanner/forward_s1.py, nightly)
-  const ARM = { a: ["A", "Arm A · every results beat"], b: ["B", "Arm B · results beat in a strong sector"] };
-  const EXIT = { "0_stop": "Stop 50%", "1_decay": "5 days no new high", "2_t_minus_1": "T-1 (day before expiry)" };
-  function armHtml(k) {
-    const [A, title] = ARM[k];
-    let h = `<h1>${title}</h1>`;
-    if (!FW || !FW.arms) return h + `<p class="empty">The forward test fills in each night from NSE's closing files: signals show here the morning after, and are bought on the next session.</p>`;
-    const st = FW.arms[A], days = (FW.sessions || []).filter(x => x.session > FW.first_session).length;
-    const closed = st.closed.filter(t => !t.excluded), wins = closed.filter(t => t.net > 0).length;
-    const avg = closed.length ? closed.reduce((s, t) => s + t.net_pct, 0) / closed.length : null;
-    const tot = closed.reduce((s, t) => s + t.net, 0);
-    h += `<p class="lead">Forward paper test, day ${days} · last NSE session ${day(FW.last_session)} · bought at the session's average price, marked at each close · exits: 50% stop, 5 sessions without a new closing high, T-1. These rules failed the 2021–24 backtest; this tests them on new days.</p>
-      <div class="tiles">${tile("Buy next session", st.pending.length)}${tile("Open", st.open.length)}${tile("Closed", closed.length)}
-      ${tile("Win rate", closed.length ? Math.round(100 * wins / closed.length) + "%" : "—")}${tile("Average net", avg == null ? "—" : pct(avg), dir(avg))}${tile("Booked net", closed.length ? srs(tot) : "—", dir(tot))}</div>`;
-    h += `<h2>Buy next session <small>results beats from the last session</small></h2>`;
-    h += st.pending.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Results day</th><th>Beat vs sector</th><th>Day move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
-      `<tr><td><b>${esc(p.symbol)}</b></td><td>${day(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dir(p.move)}">${pct(p.move)}</td><td>${day(p.expiry)}</td><td>${rs(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : `<p class="empty">None from the last session.</p>`;
-    h += `<h2>Open</h2>`;
-    h += st.open.length ? `<div class="cards">${st.open.map(t => { const x = t.stats || {}, e = t.entry_price;
-      const pkp = x.h_peak_date ? e * (1 + x.h_peak / 100) : null, dpp = x.h_dip_date ? e * (1 + x.h_dip / 100) : null;
-      return `<article class="pc"><div class="hd"><div class="nm">${optName(t.symbol, t.strike, "CE")}</div><span class="tag ce">Bought CE</span></div>
-        <div class="sub">Expiry ${day(t.expiry)} · 1 lot × ${t.lot} · bought ${day(t.entry_date)} · results ${day(t.signal_date)} (beat ${pct(t.beat)})</div>
-        <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
-          <div class="now"><small>Last close · ${day(x.last_date)}</small><b>${rs(x.last_close)}</b><em class="${dir(x.mark_pct)}">${pct(x.mark_pct)}</em></div></div>
-        <div class="val"><div><small>Buy value</small><b>${rs(e * t.lot)}</b><em>${rs(e)} × ${num(t.lot, 0)} qty</em></div>
-          <div class="r"><small>Value at last close</small><b class="${dir(x.mark_pct)}">${x.last_close != null ? rs(x.last_close * t.lot) : "—"}</b><em>${x.last_close != null ? rs(x.last_close) + " × " + num(t.lot, 0) + " qty" : ""}</em></div></div>
-        <div class="ex"><div><small>Max up</small><b class="${dir(x.h_peak)}">${pct(x.h_peak)}</b><em>${pkp ? rs(pkp) + " · " + day(x.h_peak_date) : "not above entry yet"}</em></div>
-          <div><small>Max dip</small><b class="${dir(x.h_dip)}">${pct(x.h_dip)}</b><em>${dpp ? rs(dpp) + " · " + day(x.h_dip_date) : "not below entry yet"}</em></div></div>
-        ${rail(e, x.last_close, pkp, dpp, e / 2)}
-        <div class="ft"><span>Stop <b class="mono">${rs(e / 2)}</b></span><span>Day ${(t.path || []).length}</span></div></article>`; }).join("")}</div>` : `<p class="empty">No open trades.</p>`;
-    h += `<h2>Closed <small>after the exit the option is followed until T-1</small></h2>`;
-    const cl = st.closed.slice().reverse();
-    h += cl.length ? `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(x => `<th rowspan="2">${x}</th>`).join("")}
-      <th class="g" colspan="2">While held</th><th class="g" colspan="2">After we sold (to T-1)</th><th rowspan="2">Why sold</th></tr>
-      <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th></tr></thead><tbody>${cl.map(t => { const x = t.stats || {};
-        const why = t.excluded ? (t.excluded === "price_adjusted" ? "Excluded: corporate action" : "Excluded: contract missing") : (EXIT[t.exit_reason] || t.exit_reason || "");
-        return `<tr><td><b>${esc(t.symbol)}</b> <small>${num(t.strike, 0)} CE · ${day(t.expiry)}</small></td><td>${day(t.entry_date)}</td><td>${day(t.exit_date)}</td>
-          <td class="entry">${rs(t.entry_price)}</td><td>${rs(t.cost, 0)}</td><td>${rs(t.exit_price)}</td><td class="${dir(t.net)}">${srs(t.net)}</td><td class="${dir(t.net_pct)}">${pct(t.net_pct)}</td>
-          <td class="gl ${dir(x.h_peak)}">${pct(x.h_peak)} <small>${day(x.h_peak_date)}</small></td><td class="${dir(x.h_dip)}">${pct(x.h_dip)} <small>${day(x.h_dip_date)}</small></td>
-          <td class="gl ${dir(x.a_peak)}">${x.a_peak == null ? (t.tracking ? "following…" : "—") : pct(x.a_peak) + ` <small>${day(x.a_peak_date)}</small>`}</td>
-          <td class="${dir(x.a_dip)}">${x.a_dip == null ? "—" : pct(x.a_dip) + ` <small>${day(x.a_dip_date)}</small>`}</td><td>${esc(why)}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="empty">No closed trades yet.</p>`;
-    const rf = st.refused.slice().reverse();
-    if (rf.length) h += `<details><summary>Signals not taken (${rf.length})</summary><div class="tw"><table><thead><tr><th>Stock</th><th>Results day</th><th>Beat</th><th style="text-align:left">Why not</th></tr></thead><tbody>${rf.map(r =>
-      `<tr><td><b>${esc(r.symbol)}</b></td><td>${day(r.signal_date)}</td><td>${pct(r.beat)}</td><td style="text-align:left">${esc(r.reason)}</td></tr>`).join("")}</tbody></table></div></details>`;
-    h += `<p class="note">Max up = how far above the entry price the option closed at its highest (0% = never above); max dip = how far below. Daily closing prices from NSE. Net is after charges and slippage.</p>`;
-    return h;
-  }
-
-  function render() {
-    $("#main").innerHTML = tab === "paper" ? paperHtml() : armHtml(tab.slice(3));
-    $$("[data-close]").forEach(b => b.addEventListener("click", () => closePos(b.dataset.close, b)));
-  }
-
-  // ---- refresh: paper every poll while the market is open, the forward test every 10 min
+  // ---- refresh: paper every poll while the market is open, the forward test and the fade list every 10 min
+  const busy = () => !!$("#overlay").innerHTML;                    // never redraw under an open drawer or search
+  let firstLoad = true;
   async function refresh() {
     await loadPaper();
-    if (tab === "paper") render();
+    if ((tab === "paper" || tab === "armf") && !busy()) render();
+    if (firstLoad) { firstLoad = false; openFromHash(); }
     const open = P.summary && P.summary.market_open;
     setTimeout(refresh, (open ? SERVER.poll_seconds || 30 : 300) * 1000);
   }
-  async function refreshForward() {
-    if (SERVER.orders) { try { FW = await getJson("/api/forward"); if (tab !== "paper") render(); } catch (e) { /* keep the embedded copy */ } }
-    setTimeout(refreshForward, 600000);
+  async function refreshSlow() {
+    if (SERVER.orders) {
+      try { FW = await getJson("/api/forward"); } catch (e) { /* keep the embedded copy */ }
+      try { FD = await getJson("/api/fade") || FD; } catch (e) { /* keep the embedded copy */ }
+      if (tab !== "paper" && !busy()) render();
+    }
+    setTimeout(refreshSlow, 600000);
   }
   setTab(tab);
   refresh();
-  setTimeout(refreshForward, 600000);
+  setTimeout(refreshSlow, 600000);
 })();
 </script>
 </body>

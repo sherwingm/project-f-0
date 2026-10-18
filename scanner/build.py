@@ -230,8 +230,9 @@ def render_results(scan: dict, template: Path, out: Path) -> None:
     """The results page for GitHub Pages: the forward test embedded (the paper account needs the live server)."""
     html = template.read_text(encoding="utf-8")
     fwd = json.dumps(scan.get("meta", {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
+    fade = json.dumps(scan.get("meta", {}).get("fade"), separators=(",", ":")).replace("</", "<\\/")
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html.replace("/*__FORWARD__*/null", fwd), encoding="utf-8")
+    out.write_text(html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade), encoding="utf-8")
 
 
 def render(scan: dict, template: Path, out: Path) -> None:
