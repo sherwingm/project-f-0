@@ -415,7 +415,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       const rf = P.refusals || { count: 0, refusals: [] };
       const ords = (P.orders || []).slice(0, 40);
       const arch = ((P.rules || {}).archive || []);
-      return panel(`Refusals · ${rf.count}`, (rf.count
+      return panel(`Refusals: ${rf.count}`, (rf.count
         ? `<details><summary>Show the reasons</summary><div class="tw"><table><thead><tr><th>Contract</th><th>When</th><th class="l">Reasons</th></tr></thead><tbody>${rf.refusals.map(x =>
             `<tr><td><b>${esc(x.contract || x.symbol)}</b> <small>${esc(x.side || "")} ${x.qty ?? ""}</small></td><td>${when(x.time)}</td><td class="l">${(x.reasons || []).map(esc).join("; ")}</td></tr>`).join("")}</tbody></table></div></details>`
         : empty("None: every order so far found enough liquidity."))
