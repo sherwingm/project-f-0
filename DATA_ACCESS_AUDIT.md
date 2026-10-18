@@ -159,3 +159,30 @@ Kite and Groww are untested and have no history code. Kite's documentation also 
 **Still open:** whether Kotak keeps serving a token **after** its contract expires. The 19-Oct-2026 weekly (token
 47141) expires tomorrow, so re-probing it on 2026-10-20 would answer that. Only a token learned before expiry can be
 tested this way.
+
+## Addendum 2026-10-18 (evening): Upstox, probed with the free Analytics Token
+
+The token is in the GitHub secret `UPSTOX_ANALYTICS_TOKEN` (also in Render). The probe ran as a manual GitHub Action
+(`.github/workflows/upstox-probe.yml`, `scanner/upstox_probe.py`; run 39143826382), so the token never left GitHub.
+
+| Probe | Call | Rows | First → last | Note |
+|---|---|---|---|---|
+| NIFTY 50 spot, 1-min, 12-16 Oct | `GET /v3/historical-candle/NSE_INDEX\|Nifty 50/minutes/1/2026-10-16/2026-10-12` | 1,875 | 09:15 → 15:29 | — |
+| India VIX, 1-min | `NSE_INDEX\|India VIX` | 1,875 | 09:15 → 15:29 | VIX values look correct (14.38) |
+| SENSEX spot, 1-min | `BSE_INDEX\|SENSEX` | 1,875 | 09:15 → 15:29 | — |
+| NIFTY spot, 1-min, 2022-01-03 | same, one day | 375 | 09:15 → 15:29 | Depth reaches 2022 |
+| NIFTY spot, 1-min, 2020-03-23 | same | 0 | — | Empty, no error |
+| 1-min, 31 or 90 days in one call | — | — | — | `400 UDAPI1148 Invalid date range` |
+| India VIX, daily, 2015 → 2026 in one call | `/days/1/...` | — | — | `UDAPI1148` (range too long for one call) |
+| NIFTY 19-Oct-2026 23150 CE (live weekly) | `NSE_FO\|47169`, 1-min / 5-min | 1,925 / 385 | 10-12 09:15 → 10-16 15:39 | **The 7th value of each candle is OI** (374,790) |
+| BANKNIFTY 27-Oct-2026 55800 CE (monthly) | `NSE_FO\|49463`, 1-min | 1,925 | 09:15 → 15:39 | — |
+| SENSEX 22-Oct-2026 74700 CE (weekly) | `BSE_FO\|1124316`, 1-min | 1,345 | 10-12 11:24 → 10-16 15:39 | Thinly traded early on |
+| **Expired: list of NIFTY expiries** | `GET /v2/expired-instruments/expiries?instrument_key=NSE_INDEX\|Nifty 50` | **107** | **2024-10-03 → 2026-10-13** | Works on the free token |
+| **Expired: contracts of 13-Oct-2026** | `/v2/expired-instruments/option/contract?...&expiry_date=2026-10-13` | 216 | — | Keys look like `NSE_FO\|44443\|13-10-2026` |
+| **Expired: NIFTY 22750 PE 13-Oct-2026, 1-min** | `/v2/expired-instruments/historical-candle/NSE_FO\|44623\|13-10-2026/1minute/2026-10-13/2026-10-09` | **1,155** | 10-09 09:15 → 10-13 15:39 | With OI |
+| **Expired: NIFTY 24050 CE 02-Jan-2025, 1-min** | same endpoint | **1,500** | 2024-12-30 → 2025-01-02 15:29 | With OI |
+| Expired: Jan 2023 | — | — | — | **Not in the list** (it starts at 2024-10-03) |
+
+**What this changes in the verdict:** strike-level 1-minute history for **expired** NIFTY weekly options **is**
+obtainable for free from Upstox, back to **Oct 2024** (about 2 years), with OI. For 2022 → Sep 2024 it is not
+(not listed). The forward recorder (Kotak) plus the Upstox backfill together cover Oct 2024 → onward.
