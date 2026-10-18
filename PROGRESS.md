@@ -18,7 +18,7 @@ How each piece of work moves the user's core ideas forward. Facts and numbers st
 | v10 (results-day fade, paper since 2026-10-15) | Bet on that reversal: strong → put, weak → call, same day | Backtest 2025-26 (descriptive): +5.6 % of premium a trade, t 1.3; stock fades +0.64 % (t 4.2); the result depends on the entry price | **Current form of the idea**, on paper; review at 30 trades / 6 weeks |
 | Stop-loss study 2025-26 | Can a stop or target improve it? | A −20 % stop fires on 71 % of trades that end near −21 % anyway: no gain; early targets cut the winners; dips and peaks cluster in the first 15 minutes | Exits: hold to 15:20, no stop, for now |
 | 2022-24 re-run (2026-10-18) | Did the fade and the exit findings hold in earlier years? | Fade weaker: +3.6 % a trade, t 0.9 (2023 H1 −14 %), stock fade +0.37 % (t 2.4); exits repeat exactly: stops neutral, early targets hurt, noise in the first 15 minutes | The exit rule (hold to 15:20, no stop) is stable; the fade's edge is small and regime-dependent, so the live paper run decides |
-| Diagnostics 2022-26 (2026-10-18) | Why do losers lose? Does a pre-fall, the market or the size of the numbers matter? "Run done → opposite"? | Losers = the stock moving with the numbers (option wins 4-5 % then); pre-run and other pre-entry measures: nothing; NIFTY / sector on day 0 matter but are known only after the close; run done → opposite: no (54-56 %); the fade grows with how extreme NP YoY is, and puts at NP YoY 10-25 % lose in both periods | The core reversal is the stock's own (not the market); the strength of the number is the lever: candidate S1 v11 = puts only above NP YoY 25 % |
+| Diagnostics 2022-26 (2026-10-18) | Why do losers lose? Does a pre-fall, the market or the size of the numbers matter? "Run done → opposite"? | Losers = the stock moving with the numbers (option wins 4-5 % then); pre-run and other pre-entry measures: nothing; NIFTY / sector on day 0 matter but are known only after the close; run done → opposite: no (54-56 %); the fade grows with how extreme NP YoY is, and puts at NP YoY 10-25 % lose in both periods | The core reversal is the stock's own (not the market); the biggest numbers fade most, but no pre-entry filter is proven (the NP YoY 10-25 % lead fails with the VWAP entry in 2025-26): watch item |
 
 **Open questions for the idea:** does the day-0 fade survive a realistic live entry (the ask after 09:15, not the open)?
 (2022-24 answered: the exit findings hold, the fade is weaker.) Can a time-based exit or a smarter stop help once real minute paths of live trades
@@ -204,6 +204,10 @@ are recorded?
   candidate (puts 10-25 % lose), QoQ no, revenue no / unclear; Q4 run done → opposite no; other measures mostly no.
   123 bucket tests, ~3.5 expected by chance, 10 passed (9 same-day market / sector). No rule changed; S1 v11 (puts
   only above NP YoY 25 %) waits for the user's go-ahead. Core idea tracker updated.
+  **Adversarial check (ultracode workflow, 3 refuters + critic):** all 9 claims survive; corrections folded in —
+  the NP YoY lead fails with the VWAP entry in 2025-26 and is chance level (watch item, no v11); "already fell →
+  better" is outlier-driven (no difference); POLYCAB / SONACOMS had faded ~6 % before entry; far strikes lose even
+  when the stock fades. Code: EPS bands now as in the spec, day range per loser class, blanked features listed.
 - **2026-10-18 · the same tests on 2022-24** (pre-registered `ad913d3`, code `02ded63`): 2022 results back-filled from NSE
   into the temporary event store (Jul-Nov 2022 thin: ~20 filings a month), F&O files 2021-12 → 2024-12 cached, day-0 minute
   data for 429 of 436 trades through `/api/history`. Backtest (`S1_v10_backtest_report_2022_24.md`): same-day +3.6 % (t 0.9),
