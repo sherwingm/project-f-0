@@ -58,7 +58,7 @@ jobs:
           cd store
           git add -A data/index 2>/dev/null || true
           git diff --cached --quiet || git commit -q -m "index data: ${{ inputs.job }} $(date -u +%F)"
-          git push origin HEAD:index-data
+          for i in 1 2 3; do git pull -q --rebase origin index-data && git push -q origin HEAD:index-data && break; sleep 10; done
       - name: Commit small JSON to main
         if: always()
         run: |
