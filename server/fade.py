@@ -17,6 +17,7 @@ date is in CARRY_DATES (empty: the eight trades of 2026-10-16 were closed instea
 from __future__ import annotations
 
 import logging
+import re
 from datetime import datetime, time
 from typing import Callable
 
@@ -35,6 +36,61 @@ BAND, MIN_PREMIUM, MAX_SPREAD, TICK, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 0.05
 # and kept the same-day exit strict for every fade trade, so no position follows this rule. The code stays, tested.
 CARRY_DATES: set[str] = set()
 CARRY_STOP, CARRY_TRAIL = 0.80, 0.75
+
+# Shadow track (strategies/S1_v10_np25_shadow_track.md): v10's calls plus its puts with net profit YoY above 25 %. A tag
+# on each fade position only: v10 still takes every trade.
+NP_SHADOW = 25.0
+_NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
+
+
+def np_yoy_of(rule: dict) -> float | None:
+    """The filing's net profit YoY % from the rule (tagged at entry), else from its `why` note (trades before the tag)."""
+    v = rule.get("np_yoy")
+    if v is not None:
+        return float(v)
+    m = _NP_RE.search(str(rule.get("why") or ""))
+    return float(m.group(1)) if m else None
+
+
+def in_shadow(side: str, np_yoy: float | None) -> bool | None:
+    """True if the trade is in the NP YoY > 25 % shadow track; None when a put's number is unknown."""
+    if side == "CE":
+        return True
+    return None if np_yoy is None else np_yoy > NP_SHADOW
+
+
+def split(state: dict) -> dict:
+    """v10's fade trades split into the shadow track and the puts it leaves out: closed trades, wins, net Rs, mean net %
+    of premium, and the open positions' unrealised Rs."""
+    groups = {"v10 all fade": lambda s: True, "shadow: calls + puts NP YoY > 25 %": lambda s: s is True,
+              "left out: puts NP YoY <= 25 %": lambda s: s is False, "unknown numbers": lambda s: s is None}
+    out = {k: {"closed": 0, "wins": 0, "net_rs": 0.0, "mean_net_pct": None, "open": 0, "unrealised_rs": 0.0}
+           for k in groups}
+    pcts: dict[str, list[float]] = {k: [] for k in groups}
+    for kind in ("closed", "positions"):
+        for p in state.get(kind) or []:
+            r = p.get("rule") or {}
+            if r.get("strategy") != "fade":
+                continue
+            tag = r["shadow_np25"] if "shadow_np25" in r else in_shadow(p.get("instrument"), np_yoy_of(r))
+            for k, f in groups.items():
+                if not f(tag):
+                    continue
+                g = out[k]
+                if kind == "closed":
+                    g["closed"] += 1
+                    g["wins"] += int(p.get("net_pnl", 0) > 0)
+                    g["net_rs"] += float(p.get("net_pnl", 0.0))
+                    if p.get("return_pct") is not None:
+                        pcts[k].append(float(p["return_pct"]))
+                else:
+                    g["open"] += 1
+                    g["unrealised_rs"] += float(p.get("unrealised", 0.0) or 0.0)
+    for k, g in out.items():
+        g["net_rs"], g["unrealised_rs"] = round(g["net_rs"], 2), round(g["unrealised_rs"], 2)
+        g["mean_net_pct"] = round(sum(pcts[k]) / len(pcts[k]), 2) if pcts[k] else None
+    out["rule"] = "strategies/S1_v10_np25_shadow_track.md (judged after >= 40 left-out puts have closed)"
+    return out
 
 
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None]):
@@ -125,7 +181,9 @@ class FadeTrader:
                 continue
             k, px, lot = w
             rule = {"strategy": "fade", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
-                    "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot}
+                    "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
+                    "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
+                    "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy"))}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self.ledger._save()

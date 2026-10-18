@@ -250,6 +250,7 @@ def test_summary_endpoint_reports_the_running_commit(monkeypatch):
     finally:
         app_mod.app.dependency_overrides.clear()
     assert body["version"] == {"commit": "abc1234", "fade_carry_dates": []}
+    assert body["fade_split"]["v10 all fade"]["closed"] == 0
 
 
 def test_history_endpoint_serves_a_past_stock_day_and_refuses_market_hours(monkeypatch):
@@ -276,3 +277,36 @@ def test_history_endpoint_serves_a_past_stock_day_and_refuses_market_hours(monke
         assert c.get("/api/history/TCS?day=2025-01-10").status_code == 503
     finally:
         app_mod.app.dependency_overrides.clear()
+
+
+# ---------------------------------------------------------------- NP YoY > 25 % shadow track (tag only)
+def test_entry_tags_the_numbers_and_the_shadow_track(setup):
+    lg, q, ft, box = setup
+    box["f"]["signals"][0].update(np_yoy=21.2, np_qoq=4.0, rev_yoy=9.0)
+    q.set("PE", 1200.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    r = lg.state["positions"][0]["rule"]
+    assert (r["np_yoy"], r["np_qoq"], r["rev_yoy"], r["shadow_np25"]) == (21.2, 4.0, 9.0, False)   # v10 still buys it
+
+
+def test_shadow_rule_and_the_note_fallback():
+    assert F.in_shadow("CE", -40.0) is True and F.in_shadow("CE", None) is True
+    assert F.in_shadow("PE", 25.0) is False and F.in_shadow("PE", 25.1) is True and F.in_shadow("PE", None) is None
+    assert F.np_yoy_of({"why": "net profit YoY +119.0 %, QoQ +117.9 %"}) == 119.0
+    assert F.np_yoy_of({"why": "net profit YoY -25.4 %, QoQ -27.2 %"}) == -25.4
+    assert F.np_yoy_of({"np_yoy": 13.9, "why": "net profit YoY +99 %"}) == 13.9 and F.np_yoy_of({}) is None
+
+
+def test_split_counts_closed_and_open_fade_trades():
+    fade = lambda why, **k: {"strategy": "fade", "why": why, **k}                               # noqa: E731
+    st = {"closed": [{"instrument": "PE", "net_pnl": -192.2, "return_pct": -3.25, "rule": fade("net profit YoY +119.0 %")},
+                     {"instrument": "PE", "net_pnl": -500.0, "return_pct": -10.0, "rule": fade("net profit YoY +13.9 %")},
+                     {"instrument": "CE", "net_pnl": 300.0, "return_pct": 6.0, "rule": fade("net profit YoY -51.0 %")},
+                     {"instrument": "CE", "net_pnl": 999.0, "return_pct": 9.0, "rule": {"strategy": "s1"}}],
+          "positions": [{"instrument": "PE", "unrealised": 50.0, "rule": fade("x", np_yoy=40.0, shadow_np25=True)}]}
+    s = F.split(st)
+    assert s["v10 all fade"] == {"closed": 3, "wins": 1, "net_rs": -392.2, "mean_net_pct": -2.42, "open": 1,
+                                 "unrealised_rs": 50.0}
+    assert s["shadow: calls + puts NP YoY > 25 %"]["closed"] == 2 and s["shadow: calls + puts NP YoY > 25 %"]["open"] == 1
+    assert s["left out: puts NP YoY <= 25 %"] == {"closed": 1, "wins": 0, "net_rs": -500.0, "mean_net_pct": -10.0,
+                                                  "open": 0, "unrealised_rs": 0.0}
