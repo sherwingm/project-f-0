@@ -4,6 +4,9 @@
     python -m scanner.fade_diagnostics --answers FILE   # also put the verified plain-language answers in the report
     python -m scanner.fade_diagnostics --reuse    # rebuild the tables from the feature CSVs
 
+A full build needs the event store with filing times (EVENTS_DB pointing at the seeded store): with the repo's empty
+data/events.sqlite every filing slot becomes "time unknown" and every pre-run ends at day -1.
+
 Why losers lose (Q1), the market vs the stock's own move (Q2), the pre-run (Q3, Q6), the three result numbers (Q4), the
 user's example stocks (Q5) and other measures (Q7), on the 2022-24 and 2025-26 fade trades and on every results filing.
 """
@@ -468,10 +471,11 @@ BUCKETS = {
     "NP YoY (calls)": ("np_yoy", "CE", [-50, -25], ["< -50 %", "-25 to -50 %", "-10 to -25 %"]),
     "NP QoQ (calls)": ("np_qoq", "CE", [-30, -10], ["< -30 %", "-10 to -30 %", "0 to -10 %"]),
     "Revenue YoY (calls)": ("rev_yoy", "CE", [0, 10], ["< 0 %", "0-10 %", "> 10 %"]),
-    "EPS YoY (puts)": ("eps_yoy", "PE", [25, 50], ["<= 25 %", "25-50 %", "> 50 %"]),
-    "EPS YoY (calls)": ("eps_yoy", "CE", [-50, -25], ["< -50 %", "-25 to -50 %", "> -25 %"]),
-    "EPS QoQ (puts)": ("eps_qoq", "PE", [10, 30], ["<= 10 %", "10-30 %", "> 30 %"]),
-    "EPS QoQ (calls)": ("eps_qoq", "CE", [-30, -10], ["< -30 %", "-10 to -30 %", "> -10 %"]),
+    # EPS bands as fixed in the spec; a label starting with "_" is outside the spec's bands and not tested
+    "EPS YoY (puts)": ("eps_yoy", "PE", [10, 25, 50], ["_<= 10 %", "10-25 %", "25-50 %", "> 50 %"]),
+    "EPS YoY (calls)": ("eps_yoy", "CE", [-50, -25, -10], ["< -50 %", "-25 to -50 %", "-10 to -25 %", "_> -10 %"]),
+    "EPS QoQ (puts)": ("eps_qoq", "PE", [0, 10, 30], ["_<= 0 %", "0-10 %", "10-30 %", "> 30 %"]),
+    "EPS QoQ (calls)": ("eps_qoq", "CE", [-30, -10, 0], ["< -30 %", "-10 to -30 %", "0 to -10 %", "_> 0 %"]),
     "Volume ratio day -1": ("vol_ratio", None, [1, 2], ["< 1x", "1-2x", "> 2x"]),
     "Futures OI 5-session change": ("oi5", None, [-5, 5], ["<= -5 %", "-5 to +5 %", "> +5 %"]),
     "Strike distance (% OTM)": ("otm_pct", None, [2, 5], ["< 2 %", "2-5 %", "> 5 %"]),
@@ -498,6 +502,8 @@ def compare(f: pd.DataFrame) -> pd.DataFrame:
             s["b"] = s[col].where(s[col].isin(labels)) if cuts is None else \
                 pd.to_numeric(s[col], errors="coerce").map(lambda x: bucket(x, cuts, labels))    # "n/m" -> blank
             for lab in labels:
+                if lab.startswith("_"):
+                    continue
                 row = {"question": q, "measure": name, "side": side, "bucket": lab}
                 ts = {"net_pct": [], "vwap_net_pct": [], "stock_fade_pct": []}
                 for w in WINDOWS:
@@ -555,6 +561,8 @@ def coverage(f: pd.DataFrame, fl: pd.DataFrame) -> pd.DataFrame:
             {"window": w, "item": "  no stock day-0 prices (eod2)", "count": int(a["oc"].isna().sum())},
             {"window": w, "item": "  a feature blanked by a > 20 % one-day move", "count": int((a["ca_blank"].fillna("") != "").sum())},
             {"window": w, "item": "  no beta", "count": int(a["beta"].isna().sum())},
+            *({"window": w, "item": f"    blanked: {r.symbol} {r.day0} ({r.ca_blank})", "count": 1}
+              for r in a[a["ca_blank"].fillna("") != ""].itertuples()),
             {"window": w, "item": "  no same-contract VWAP", "count": int(a["vwap_net_pct"].isna().sum())},
             *({"window": w, "item": f"  filing slot: {s}", "count": int((a["filing"] == s).sum())}
               for s in SLOTS + ["time unknown"]),
@@ -583,6 +591,7 @@ def loser_anatomy(f: pd.DataFrame) -> pd.DataFrame:
                 row[f"{c}: mean net %"] = round(g["net_pct"].mean(), 1) if len(g) else None
                 row[f"{c}: stock faded %"] = round((g["stock_fade_pct"] > 0).mean() * 100, 1) if len(g) else None
                 row[f"{c}: stock best move % (median)"] = round(g["stock_best_pct"].median(), 2) if len(g) else None
+                row[f"{c}: stock day range % (median)"] = round(g["range_pct"].median(), 2) if len(g) else None
                 row[f"{c}: strike OTM at open % (median)"] = round(g["otm_open_pct"].median(), 2) if len(g) else None
                 row[f"{c}: sessions to expiry (median)"] = g["dte"].median() if len(g) else None
             row["never up: option high <= entry (n)"] = int((losers["peak_pct"] <= 0).sum())

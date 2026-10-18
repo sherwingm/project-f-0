@@ -1,53 +1,55 @@
 # S1 v10 fade · diagnostics
 
-Descriptive only (strategies/S1_v10_fade_diagnostics.md and its 2026-10-18 addendum). Not out of sample. 123 bucket tests were run; by chance alone about 3.5 would come out 'consistent' (N >= 30 and >= 15 dates in both windows, same sign, |t| >= 1 in each, |pooled t| >= 2); STRONG needs |pooled t| >= 3.54 (Bonferroni 5 % for 123 tests). Found: 10 pass (6 of them STRONG).
+Descriptive only (strategies/S1_v10_fade_diagnostics.md and its 2026-10-18 addendum). Not out of sample. 123 bucket tests were run; by chance alone about 3.5 would come out 'consistent' (N >= 30 and >= 15 dates in both windows, same sign, |t| >= 1 in each, |pooled t| >= 2); STRONG needs |pooled t| >= 3.54 (Bonferroni 5 % for 123 tests). Found: 11 pass (6 of them STRONG).
 
 Fade trades: 864 (2022-24 430, 2025-26 434); results filings (Q6): 2489 (2022-24 1340, 2025-26 1149).
 
 ## Answers (verified)
 
-Bottom line: S1 v10 stays as it is. One candidate rule came out of this: puts only when net profit YoY is above 25 %. It goes into a new pre-registered version (S1 v11) only if you say so.
-Every number below was recomputed a second time from the raw files with separate code. All of them matched.
+Bottom line: S1 v10 stays as it is. No new rule is proven. The one lead (puts with profit growth of only 10-25 % do worse) is weak: it fails with the realistic VWAP entry in 2025-26 and is no better than chance across the measures tested. It is a watch item, not a new version yet.
+Checked by 3 independent agents (each rebuilt the numbers from the raw files with their own code and tried to disprove them) plus a completeness critic. All 9 headline claims survived: no claim had a majority against it, and only one agent objected to one claim (C8). The wording below includes their corrections.
 
 Q1 · Do heavy losers fail because the option never moved up? PARTLY: 1 in 3 losers.
-- About 1 in 3 losers never rose even 10 % above the entry price. That holds for calls and puts, in 2022-24 and 2025-26 alike. These are the worst losers: about -52 % on average and 37-46 % of all rupees lost.
-- In about 80 % of those, the stock moved WITH the numbers on day 0 (good results kept rising, bad results kept falling). The option was not the problem; the stock went the wrong way.
-- Another 1 in 3 losers first rose 30 % or more, then gave it all back (round trip).
-- The simple rule: when the stock faded, the option won 57-66 % of the time. When the stock did not fade, the option won only 4-5 % of the time.
-- Strike distance and days to expiry did not separate winners from losers.
+- 32-35 % of losers never rose even 10 % above the entry price. That holds for calls and puts, in 2022-24 and 2025-26 alike. They are the worst losers, about -52 % each and 37-46 % of all rupees lost.
+- In 71-83 % of those, the stock moved WITH the numbers from the day-0 open. The stock went the wrong way; the option did not fail on its own.
+- Another 1 in 3 losers rose 30 % or more first, then gave it all back.
+- When the stock faded, the option won 57-66 % of the time. When it did not, the option won only 4-5 %. That is close to automatic for a bought option. With the realistic VWAP entry, faded trades win only 33-43 %.
+- Strike distance: even when the stock faded, the losing options had farther strikes. Median distance from the stock: puts 7.0 % vs 5.4 % for the winners, calls 8.0 % vs 5.6 %. A far strike needs a bigger fade to pay.
 
 Q2 · Does a stock that already fell make the put worse, better, or is it the market (NIFTY 50)?
-- Already fell: NO effect. Puts on stocks that fell more than 5 % in the 20 sessions before did slightly better (+11 % / +21 % a trade), not worse, but not reliably. The same holds net of NIFTY, over 5 sessions, and by place in the 52-week range.
-- The market on day 0: YES, a big effect.
-  - Puts lost about -21 % / -22 % a trade on days NIFTY rose more than 0.3 % from the open.
-  - They won +17 % / +37 % on days NIFTY fell more than 0.3 %.
-  - Calls show the opposite pattern.
-- But NIFTY's day is only known after the close, so it cannot be a buy rule. Averaged over all trades, the market adds almost nothing (0.01-0.03 %). The fade is the stock's own move.
-- Sector: for puts, about half of the stock's fade is shared with its sector peers on the same day. Calls keep their fade after removing the sector.
+- Already fell: NO difference. The average looked better (+11 % / +21 % a trade), but that comes from a few big winners. Medians, trimmed means and the VWAP entry show no difference. A call on a stock that already rose has too few trades (20 per period) to judge.
+- The market on day 0: YES, a big effect. Puts averaged about -21 % / -22 % on days NIFTY rose more than 0.3 % from the open, against +17 % / +37 % on days it fell. Calls show the opposite pattern.
+  - The gap between up and down days is solid. It holds with medians, trimming, dropping the biggest day and the VWAP entry.
+  - The "won +17 % / +37 %" level rests on a few big winners: the median on NIFTY-down days is about -4 % / +2 %.
+  - NIFTY's day is only known after the close, so it cannot be a buy rule.
+- Market share of the fade: for calls, and for puts in 2025-26, the fade is the stock's own move. For puts in 2022-24, about a third of the small fade was the market. The overall average near zero is partly puts and calls cancelling out.
+- Sector: for puts, about half of the stock's fade is shared with its sector peers that day. Calls keep their fade.
 
 Q3 · Should there be a rule on NP YoY %, NP QoQ % or revenue YoY %?
-- NP YoY: YES, a candidate.
-  - Puts with profit growth of only 10-25 % lost about -12 % (2022-24) and -8 % (2025-26) a trade. Puts above 25 % made about +11 % and +16 %.
-  - The pattern holds in both periods, with the realistic VWAP entry, and on the stock itself.
-  - Across about 2,100 results filings with numbers, the day-0 fade grows with how extreme the number is. Profit up more than 100 %: the stock fell about -1.1 % (net of NIFTY) on day 0. Up 10-25 %: almost no fade.
-  - It is just below the strictest bar (t 3.5, bar 3.54), so it counts as consistent, not proven.
-- NP YoY for calls: profit down more than 50 % looked best (+21 % / +6.5 %), but not consistent enough. UNCLEAR.
+- NP YoY for puts: a WEAK lead, not proven.
+  - Puts with profit growth of only 10-25 % lost about -12 % (2022-24) and -8 % (2025-26) a trade. Puts above 25 % made about +11 % and +16 %. Both periods point the same way (pooled t -3.5), and EPS growth of 10-25 % shows the same.
+  - But with the VWAP entry the gap holds only in 2022-24, not 2025-26 (t -1.0). Trimming the extremes halves the 2025-26 gap.
+  - About 105 tested measures are known before entry. About 3 would pass by chance, and this lead (with its EPS twin) is the only one that passed. So it may be luck.
+- Across about 2,100 results filings with numbers, the biggest numbers fade most on day 0. Profit up more than 100 %: the stock fell about -1.1 % (net of NIFTY) from the open. Profit down more than 50 %: it rose about +1.0 %. Up 10-25 %: almost no fade. The curve is not perfectly smooth; in 2025-26 the 0-10 % band also fell.
+- NP YoY for calls: profit down more than 50 % looked best, but not reliably. UNCLEAR.
 - NP QoQ: NO. No band stands out in either period.
-- Revenue YoY: NO for puts. For calls, revenue falling looked better, but only on the stock's move, not the option's. UNCLEAR.
+- Revenue YoY: NO for puts. For calls, falling revenue helped only the stock's own move, not the option's. UNCLEAR.
 
 Q4 · "If the run is already done, then for sure it does the opposite"? NO.
-- On all 2,489 results filings, after a big run (more than 8 % in 20 sessions), day 0 moved opposite only 54-56 % of the time. The average was 0.1-0.2 %, which is not significant. That is close to a coin flip, not "for sure".
+- After a big run (more than 8 % in 20 sessions), day 0 moved opposite only 54-56 % of the time in the most favourable version. Other versions give 41-55 %. The average was 0.1-0.2 %, not significant. That is a coin flip, not "for sure".
+- What does hold: right after results, the stock first jumps WITH the numbers, before our 09:15 entry. Profit up more than 100 %: about +1.7 % before entry, then -1.1 % from the open. The day-0 fade gives back only part of that first jump.
 
 Q4b · Do we need other measures than the three result numbers? Mostly NO.
-- Tested, known before 09:15, and nothing passed: pre-run (5 / 20 sessions, raw and net of NIFTY), the gap, the reaction already seen before entry, 52-week place, volume, futures OI build-up, filing time, EPS, strike distance and days to expiry.
-- What matters most is NIFTY's and the sector's move on day 0 itself, but that is known only after the fact. It could later inform an exit or hedge idea, not the buy rule.
-- 123 bucket tests were run. About 3.5 would pass by chance; 10 passed. Of those 10, 9 are same-day market or sector moves. The only one known before entry is the NP YoY 10-25 % band.
+- Tested, known before 09:15, and nothing reliable for the option: pre-run, gap, the move already seen before entry, 52-week place, volume, futures OI build-up, filing time, NP QoQ, revenue, EPS QoQ, days to expiry.
+- On the stock's own move (not the option), strike distance, EPS and revenue bands pass, so they are worth watching. NIFTY's own pre-open move was not tested.
 
 Your 9 stocks (picked with hindsight, so illustrations, not proof):
-- The January 2025 puts that lost had weak profit growth, all in the 10-25 % band: POLYCAB +11.5 %, SONACOMS +12.8 %, ADANIPORTS +14 % and BAJFINANCE +18 %. Each stock rose with the numbers that day.
+- The January 2025 puts that lost all had weak profit growth, in the 10-25 % band: POLYCAB +11.5 %, SONACOMS +12.8 %, ADANIPORTS +14 % and BAJFINANCE +18 %.
+- 4 of the 5 losing puts had also fallen 8-10 % in the 20 sessions before.
+- POLYCAB and SONACOMS had already dropped about 6 % before the 09:15 entry, so the fade happened before we bought, and then they bounced from the open.
 - BEL (profit +52 %) lost on 31 Jan 2025, when NIFTY rose +0.9 % and only 2 of the 8 fade trades won.
 - OBEROIRLTY put +292 % (profit +72 %, NIFTY -1.7 % that day). BPCL put +128 % (Aug 2025, profit +141 %).
-- BOSCHLTD call -27 % (profit -11.5 %, only just weak). HCLTECH Jan 2025: no trade (profit +5.6 %).
+- BOSCHLTD call -27 % (profit -11.5 %, only just weak).
 
 
 ## Buckets that pass the guard (option net % or the stock's own fade)
@@ -63,6 +65,7 @@ Your 9 stocks (picked with hindsight, so illustrations, not proof):
 | Q4 | NP YoY (puts) | PE | 10-25 % | 104 | 82 | -12.3 | 11.2 | -27.9 | 27 | -2.387 | 20 | -21.1 | -0.29 | 0.5 | 116 | 83 | -8.2 | 15.6 | -17.5 | 39 | -2.586 | 18 | -14.5 | 0.1 | 0.92 | -3.516 | -3.345 | -3.085 | True | consistent |  | consistent |
 | Q4 | NP YoY (puts) | PE | > 100 % | 44 | 40 | 17.7 | 1.1 | -20.1 | 41 | 0.874 | 38 | -9.2 | 0.9 | 0.14 | 52 | 41 | 29.8 | 2.7 | -10 | 42 | 1.601 | 34 | -14.8 | 1.61 | 0.44 | 1.75 | 0.518 | 2.452 | True |  |  | consistent |
 | Q4 | Revenue YoY (calls) | CE | < 0 % | 35 | 35 | 9.5 | 1.5 | -15.2 | 40 | 0.526 | 30 | -11.5 | 1.3 | 0.48 | 42 | 36 | 27.4 | -14 | 8.2 | 52 | 2.532 | 33 | -12.1 | 1.85 | 0.02 | 2.162 | 1.599 | 2.708 | True |  |  | consistent |
+| Q7 | EPS YoY (puts) | PE | 10-25 % | 103 | 80 | -7 | 8.8 | -27.3 | 29 | -1.647 | 19 | -19.7 | -0.07 | 0.4 | 98 | 71 | -9.8 | 14.7 | -22.2 | 37 | -2.747 | 18 | -15.1 | 0.09 | 0.88 | -3.107 | -3.017 | -2.656 | True | consistent |  | consistent |
 | Q7 | EPS YoY (puts) | PE | > 50 % | 106 | 83 | 12.7 | -1 | -8.4 | 44 | 1.175 | 23 | -9.2 | 0.57 | 0.08 | 105 | 68 | 17.2 | 2.3 | -16.8 | 40 | 1.174 | 25 | -12.7 | 1.12 | 0.4 | 1.661 | 1.696 | 2.068 | True |  |  | consistent |
 | Q7 | Strike distance (% OTM) | PE | < 2 % | 72 | 56 | -3.3 | 5.5 | -34 | 33 | -0.673 | 26 | -19.7 | -0.33 | 0.41 | 78 | 59 | -7.6 | 11.7 | -32.5 | 29 | -1.974 | 20 | -12.6 | -0.41 | 0.96 | -1.872 | -1.235 | -4.112 | True |  |  | STRONG |
 | Q7 | Strike distance (% OTM) | PE | > 5 % | 141 | 92 | 5.6 | 1.7 | -25.2 | 35 | 0.372 | 21 | -13.2 | 0.63 | -0.07 | 125 | 80 | 17.2 | 0.6 | -8.5 | 45 | 1.478 | 22 | -13.1 | 1.33 | 0.18 | 1.308 | -0.017 | 3.174 | True |  |  | consistent |
@@ -83,6 +86,12 @@ Your 9 stocks (picked with hindsight, so illustrations, not proof):
 | 2022-24 |   no stock day-0 prices (eod2) | 1 |
 | 2022-24 |   a feature blanked by a > 20 % one-day move | 6 |
 | 2022-24 |   no beta | 0 |
+| 2022-24 |     blanked: ADANIENT 2023-02-15 (pre5,pre20,pre60,pos52) | 1 |
+| 2022-24 |     blanked: ADANIENT 2023-05-05 (pre60,pos52) | 1 |
+| 2022-24 |     blanked: ADANIENT 2023-11-03 (pos52) | 1 |
+| 2022-24 |     blanked: ADANIENT 2024-02-02 (pos52) | 1 |
+| 2022-24 |     blanked: POLYCAB 2024-05-13 (pos52) | 1 |
+| 2022-24 |     blanked: ADANIPORTS 2024-08-02 (pre60,pos52) | 1 |
 | 2022-24 |   no same-contract VWAP | 8 |
 | 2022-24 |   filing slot: pre-open day 0 | 5 |
 | 2022-24 |   filing slot: in session day -1 | 166 |
@@ -100,6 +109,23 @@ Your 9 stocks (picked with hindsight, so illustrations, not proof):
 | 2025-26 |   no stock day-0 prices (eod2) | 0 |
 | 2025-26 |   a feature blanked by a > 20 % one-day move | 17 |
 | 2025-26 |   no beta | 0 |
+| 2025-26 |     blanked: OFSS 2025-01-16 (pos52) | 1 |
+| 2025-26 |     blanked: ADANIENT 2025-01-31 (pre60,pos52) | 1 |
+| 2025-26 |     blanked: ADANIPORTS 2025-01-31 (pos52) | 1 |
+| 2025-26 |     blanked: RECLTD 2025-02-07 (pos52) | 1 |
+| 2025-26 |     blanked: PFC 2025-02-13 (pos52) | 1 |
+| 2025-26 |     blanked: INDUSINDBK 2025-05-22 (pre60,pos52) | 1 |
+| 2025-26 |     blanked: ADANIENT 2025-08-01 (pos52) | 1 |
+| 2025-26 |     blanked: SIEMENS 2025-08-11 (pos52) | 1 |
+| 2025-26 |     blanked: KEI 2025-10-16 (pos52) | 1 |
+| 2025-26 |     blanked: INDUSINDBK 2025-10-20 (pos52) | 1 |
+| 2025-26 |     blanked: PGEL 2025-11-14 (pos52) | 1 |
+| 2025-26 |     blanked: PGEL 2026-02-03 (pos52) | 1 |
+| 2025-26 |     blanked: TMPV 2026-02-06 (pos52) | 1 |
+| 2025-26 |     blanked: SIEMENS 2026-02-09 (pos52) | 1 |
+| 2025-26 |     blanked: PGEL 2026-08-07 (pos52) | 1 |
+| 2025-26 |     blanked: KAYNES 2026-08-10 (pre60,pos52) | 1 |
+| 2025-26 |     blanked: TMPV 2026-08-14 (pos52) | 1 |
 | 2025-26 |   no same-contract VWAP | 0 |
 | 2025-26 |   filing slot: pre-open day 0 | 2 |
 | 2025-26 |   filing slot: in session day -1 | 155 |
@@ -113,12 +139,12 @@ Your 9 stocks (picked with hindsight, so illustrations, not proof):
 
 ## Q1 · Losers: never up (peak < +10 %), round trip (peak >= +30 %, then a loss), other
 
-| window | side | trades | losers | losers % | never up: n | never up: share of losers % | never up: share of rupees lost % | never up: mean net % | never up: stock faded % | never up: stock best move % (median) | never up: strike OTM at open % (median) | never up: sessions to expiry (median) | round trip: n | round trip: share of losers % | round trip: share of rupees lost % | round trip: mean net % | round trip: stock faded % | round trip: stock best move % (median) | round trip: strike OTM at open % (median) | round trip: sessions to expiry (median) | other: n | other: share of losers % | other: share of rupees lost % | other: mean net % | other: stock faded % | other: stock best move % (median) | other: strike OTM at open % (median) | other: sessions to expiry (median) | never up: option high <= entry (n) | winners: stock best move % (median) |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 2022-24 | PE | 315 | 204 | 64.8 | 69 | 33.8 | 43.8 | -52.3 | 20.3 | 0.65 | 5.34 | 15 | 70 | 34.3 | 26.4 | -34.9 | 50 | 2.06 | 5.02 | 12 | 65 | 31.9 | 29.8 | -38.5 | 44.6 | 1.54 | 6.44 | 15 | 34 | 3.46 |
-| 2022-24 | CE | 115 | 69 | 60 | 24 | 34.8 | 45.9 | -54.5 | 29.2 | 0.77 | 6.37 | 12 | 26 | 37.7 | 21.4 | -25.1 | 53.8 | 2.87 | 5.84 | 15.5 | 19 | 27.5 | 32.7 | -39.8 | 36.8 | 1.65 | 5.27 | 13 | 15 | 3.91 |
-| 2025-26 | PE | 322 | 191 | 59.3 | 62 | 32.5 | 40.7 | -51.6 | 21 | 0.9 | 5.91 | 14 | 81 | 42.4 | 30.7 | -33.2 | 49.4 | 2.43 | 4.5 | 8 | 48 | 25.1 | 28.6 | -46 | 22.9 | 1.46 | 4.52 | 10.5 | 33 | 3.73 |
-| 2025-26 | CE | 112 | 69 | 61.6 | 23 | 33.3 | 36.7 | -51.5 | 17.4 | 0.89 | 6.08 | 14 | 22 | 31.9 | 23.6 | -34.1 | 68.2 | 2.66 | 6.83 | 11 | 24 | 34.8 | 39.7 | -46.8 | 41.7 | 1.46 | 6.56 | 15 | 10 | 4.29 |
+| window | side | trades | losers | losers % | never up: n | never up: share of losers % | never up: share of rupees lost % | never up: mean net % | never up: stock faded % | never up: stock best move % (median) | never up: stock day range % (median) | never up: strike OTM at open % (median) | never up: sessions to expiry (median) | round trip: n | round trip: share of losers % | round trip: share of rupees lost % | round trip: mean net % | round trip: stock faded % | round trip: stock best move % (median) | round trip: stock day range % (median) | round trip: strike OTM at open % (median) | round trip: sessions to expiry (median) | other: n | other: share of losers % | other: share of rupees lost % | other: mean net % | other: stock faded % | other: stock best move % (median) | other: stock day range % (median) | other: strike OTM at open % (median) | other: sessions to expiry (median) | never up: option high <= entry (n) | winners: stock best move % (median) |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| 2022-24 | PE | 315 | 204 | 64.8 | 69 | 33.8 | 43.8 | -52.3 | 20.3 | 0.65 | 4.1 | 5.34 | 15 | 70 | 34.3 | 26.4 | -34.9 | 50 | 2.06 | 3.79 | 5.02 | 12 | 65 | 31.9 | 29.8 | -38.5 | 44.6 | 1.54 | 3.77 | 6.44 | 15 | 34 | 3.46 |
+| 2022-24 | CE | 115 | 69 | 60 | 24 | 34.8 | 45.9 | -54.5 | 29.2 | 0.77 | 3.97 | 6.37 | 12 | 26 | 37.7 | 21.4 | -25.1 | 53.8 | 2.87 | 4.76 | 5.84 | 15.5 | 19 | 27.5 | 32.7 | -39.8 | 36.8 | 1.65 | 3.35 | 5.27 | 13 | 15 | 3.91 |
+| 2025-26 | PE | 322 | 191 | 59.3 | 62 | 32.5 | 40.7 | -51.6 | 21 | 0.9 | 3.96 | 5.91 | 14 | 81 | 42.4 | 30.7 | -33.2 | 49.4 | 2.43 | 4.08 | 4.5 | 8 | 48 | 25.1 | 28.6 | -46 | 22.9 | 1.46 | 4.13 | 4.52 | 10.5 | 33 | 3.73 |
+| 2025-26 | CE | 112 | 69 | 61.6 | 23 | 33.3 | 36.7 | -51.5 | 17.4 | 0.89 | 3.19 | 6.08 | 14 | 22 | 31.9 | 23.6 | -34.1 | 68.2 | 2.66 | 5.3 | 6.83 | 11 | 24 | 34.8 | 39.7 | -46.8 | 41.7 | 1.46 | 4.49 | 6.56 | 15 | 10 | 4.29 |
 
 ## Q1 · Did the stock fade? Did the option win? (2x2)
 
@@ -265,18 +291,18 @@ Your 9 stocks (picked with hindsight, so illustrations, not proof):
 | Q4 | Revenue YoY (calls) | CE | < 0 % | 35 | 35 | 9.5 | 1.5 | -15.2 | 40 | 0.526 | 30 | -11.5 | 1.3 | 0.48 | 42 | 36 | 27.4 | -14 | 8.2 | 52 | 2.532 | 33 | -12.1 | 1.85 | 0.02 | 2.162 | 1.599 | 2.708 | True |  |  | consistent |
 | Q4 | Revenue YoY (calls) | CE | 0-10 % | 39 | 36 | -7.9 | 10 | -7.1 | 36 | -1.601 | 22 | -20.2 | 0.67 | 0.76 | 35 | 33 | -3.7 | 3.9 | -17.6 | 37 | -0.503 | 30 | -17.8 | 0.24 | 0.91 | -1.488 | -1.764 | -0.839 | True |  |  |  |
 | Q4 | Revenue YoY (calls) | CE | > 10 % | 41 | 38 | 10.5 | 0.3 | -10.3 | 44 | 0.702 | 29 | -7.2 | 0.29 | 0.97 | 35 | 30 | -24.3 | 13.3 | -35 | 23 | -3.08 | 24 | -24.9 | -0.2 | 1.11 | -1.681 | -0.517 | -2.063 | True |  |  |  |
-| Q7 | EPS YoY (puts) | PE | <= 25 % | 121 | 92 | -0.7 | 6.4 | -27.1 | 31 | -0.629 | 22 | -19.1 | 0.1 | 0.33 | 144 | 97 | -0.2 | 13.2 | -17.5 | 41 | -1.34 | 20 | -12.5 | 0.4 | 0.83 | -1.392 | -2.094 | -1.252 | True |  |  |  |
+| Q7 | EPS YoY (puts) | PE | 10-25 % | 103 | 80 | -7 | 8.8 | -27.3 | 29 | -1.647 | 19 | -19.7 | -0.07 | 0.4 | 98 | 71 | -9.8 | 14.7 | -22.2 | 37 | -2.747 | 18 | -15.1 | 0.09 | 0.88 | -3.107 | -3.017 | -2.656 | True | consistent |  | consistent |
 | Q7 | EPS YoY (puts) | PE | 25-50 % | 87 | 68 | -1.4 | 5.6 | -28.8 | 31 | -0.625 | 22 | -11.8 | 0.04 | 0.32 | 71 | 56 | 7.4 | 7.1 | -7.3 | 41 | 0.029 | 18 | -11.8 | 0.39 | 0.71 | -0.421 | 0.661 | -1.111 | True |  |  |  |
 | Q7 | EPS YoY (puts) | PE | > 50 % | 106 | 83 | 12.7 | -1 | -8.4 | 44 | 1.175 | 23 | -9.2 | 0.57 | 0.08 | 105 | 68 | 17.2 | 2.3 | -16.8 | 40 | 1.174 | 25 | -12.7 | 1.12 | 0.4 | 1.661 | 1.696 | 2.068 | True |  |  | consistent |
 | Q7 | EPS YoY (calls) | CE | < -50 % | 46 | 40 | 20.8 | -7.3 | -1.8 | 50 | 2.053 | 27 | -8 | 1.37 | 0.3 | 37 | 30 | 6.1 | -0.7 | -30.2 | 38 | 0.384 | 36 | -19.1 | 0.7 | 0.71 | 1.723 | 0.986 | 1.15 | True |  |  |  |
 | Q7 | EPS YoY (calls) | CE | -25 to -50 % | 37 | 37 | -11.1 | 11.1 | -27.5 | 32 | -1.827 | 24 | -16 | 0.1 | 1.02 | 37 | 33 | -5.1 | 4.8 | -19.5 | 38 | -0.666 | 30 | -20.7 | 0.48 | 0.81 | -1.763 | -1.348 | -1.175 | True |  |  |  |
-| Q7 | EPS YoY (calls) | CE | > -25 % | 32 | 31 | -2.9 | 6.6 | -9.1 | 34 | -0.796 | 24 | -16.5 | 0.52 | 0.81 | 38 | 33 | 3.5 | 0.5 | -21.3 | 39 | 0.191 | 32 | -14 | 0.93 | 0.59 | -0.428 | 0.163 | 0.056 | True |  |  |  |
-| Q7 | EPS QoQ (puts) | PE | <= 10 % | 116 | 87 | 9.2 | 0.1 | -19 | 38 | 0.806 | 23 | -12.4 | 0.5 | 0.09 | 106 | 78 | 9.5 | 5.9 | -8.6 | 43 | 0.342 | 21 | -12 | 0.67 | 0.6 | 0.812 | 0.645 | 0.909 | True |  |  |  |
+| Q7 | EPS YoY (calls) | CE | -10 to -25 % | 27 | 26 | -1.7 | 5.7 | -4.5 | 33 | -0.576 | 26 | -18.1 | 0.51 | 0.79 | 34 | 31 | 7.3 | -1 | -21.3 | 41 | 0.507 | 33 | -13.4 | 1.11 | 0.53 | -0.049 | -0.06 | 0.342 | False |  |  |  |
+| Q7 | EPS QoQ (puts) | PE | 0-10 % | 105 | 82 | 6.7 | 1.9 | -18.1 | 39 | 0.463 | 21 | -12.5 | 0.4 | 0.17 | 88 | 66 | 7.1 | 7.1 | -7.1 | 43 | 0.001 | 12 | -12.5 | 0.38 | 0.72 | 0.328 | 0.415 | -0.171 | True |  |  |  |
 | Q7 | EPS QoQ (puts) | PE | 10-30 % | 97 | 79 | -3.4 | 6.5 | -21.3 | 35 | -0.861 | 23 | -13.5 | 0.07 | 0.32 | 105 | 80 | -8.6 | 14.6 | -21.3 | 36 | -2.476 | 19 | -13.5 | 0.38 | 0.74 | -2.36 | -0.243 | -1.09 | True |  |  |  |
 | Q7 | EPS QoQ (puts) | PE | > 30 % | 102 | 80 | 3.4 | 3.5 | -25.2 | 32 | -0.009 | 23 | -15.7 | 0.11 | 0.31 | 111 | 73 | 19.6 | 0.5 | -13 | 42 | 1.457 | 26 | -11.9 | 0.81 | 0.53 | 1.024 | -0.476 | 0.141 | True |  |  |  |
 | Q7 | EPS QoQ (calls) | CE | < -30 % | 62 | 54 | 2.7 | 5.8 | -13.3 | 40 | -0.25 | 25 | -11.3 | 0.64 | 0.82 | 55 | 49 | 1.8 | 3.3 | -30.2 | 38 | -0.094 | 31 | -19.7 | 0.57 | 0.99 | -0.243 | -0.21 | -0.662 | True |  |  |  |
 | Q7 | EPS QoQ (calls) | CE | -10 to -30 % | 35 | 31 | 9 | 1.9 | -3.1 | 43 | 0.511 | 28 | -13.2 | 1.14 | 0.53 | 34 | 32 | 11.7 | -1.5 | -16 | 44 | 0.781 | 34 | -12.3 | 1.25 | 0.57 | 0.914 | 0.967 | 1.213 | True |  |  |  |
-| Q7 | EPS QoQ (calls) | CE | > -10 % | 17 | 17 | -1 | 5 | -14.7 | 35 | -0.386 | 31 | -18.2 | 0.15 | 0.82 | 21 | 21 | -10.4 | 5.6 | -17.6 | 33 | -0.954 | 33 | -18.9 | 0.57 | 0.83 | -0.948 | -1.339 | -0.955 | False |  |  |  |
+| Q7 | EPS QoQ (calls) | CE | 0 to -10 % | 14 | 14 | 8.2 | 3.5 | -10.7 | 43 | 0.278 | 34 | -16.2 | 0.59 | 0.74 | 19 | 19 | -8.1 | 4.8 | -17 | 37 | -0.721 | 36 | -19 | 0.67 | 0.8 | -0.313 | -0.887 | -0.275 | False |  |  |  |
 | Q7 | Volume ratio day -1 | PE | < 1x | 140 | 99 | 18.3 | -8.5 | -15.7 | 38 | 2.254 | 24 | -12.8 | 0.53 | 0.02 | 163 | 99 | 4.8 | 9.4 | -17.1 | 40 | -0.45 | 21 | -13 | 0.55 | 0.7 | 1.276 | 0.203 | 0.717 | True |  |  |  |
 | Q7 | Volume ratio day -1 | PE | 1-2x | 145 | 99 | -5.6 | 11.2 | -25.1 | 34 | -1.578 | 21 | -14.1 | 0.16 | 0.32 | 139 | 89 | 9.4 | 5.3 | -13.9 | 41 | 0.377 | 22 | -12.6 | 0.67 | 0.59 | -0.849 | -0.161 | -0.165 | True |  |  |  |
 | Q7 | Volume ratio day -1 | PE | > 2x | 29 | 28 | -23 | 6.2 | -30 | 31 | -2.726 | 21 | -17.4 | -0.69 | 0.34 | 20 | 18 | 9.5 | 6.9 | -13.5 | 40 | 0.134 | 39 | -7.6 | 0.93 | 0.61 | -1.833 | -0.097 | -0.563 | False |  |  |  |

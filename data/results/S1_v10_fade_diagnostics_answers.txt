@@ -1,42 +1,44 @@
-Bottom line: S1 v10 stays as it is. One candidate rule came out of this: puts only when net profit YoY is above 25 %. It goes into a new pre-registered version (S1 v11) only if you say so.
-Every number below was recomputed a second time from the raw files with separate code. All of them matched.
+Bottom line: S1 v10 stays as it is. No new rule is proven. The one lead (puts with profit growth of only 10-25 % do worse) is weak: it fails with the realistic VWAP entry in 2025-26 and is no better than chance across the measures tested. It is a watch item, not a new version yet.
+Checked by 3 independent agents (each rebuilt the numbers from the raw files with their own code and tried to disprove them) plus a completeness critic. All 9 headline claims survived: no claim had a majority against it, and only one agent objected to one claim (C8). The wording below includes their corrections.
 
 Q1 · Do heavy losers fail because the option never moved up? PARTLY: 1 in 3 losers.
-- About 1 in 3 losers never rose even 10 % above the entry price. That holds for calls and puts, in 2022-24 and 2025-26 alike. These are the worst losers: about -52 % on average and 37-46 % of all rupees lost.
-- In about 80 % of those, the stock moved WITH the numbers on day 0 (good results kept rising, bad results kept falling). The option was not the problem; the stock went the wrong way.
-- Another 1 in 3 losers first rose 30 % or more, then gave it all back (round trip).
-- The simple rule: when the stock faded, the option won 57-66 % of the time. When the stock did not fade, the option won only 4-5 % of the time.
-- Strike distance and days to expiry did not separate winners from losers.
+- 32-35 % of losers never rose even 10 % above the entry price. That holds for calls and puts, in 2022-24 and 2025-26 alike. They are the worst losers, about -52 % each and 37-46 % of all rupees lost.
+- In 71-83 % of those, the stock moved WITH the numbers from the day-0 open. The stock went the wrong way; the option did not fail on its own.
+- Another 1 in 3 losers rose 30 % or more first, then gave it all back.
+- When the stock faded, the option won 57-66 % of the time. When it did not, the option won only 4-5 %. That is close to automatic for a bought option. With the realistic VWAP entry, faded trades win only 33-43 %.
+- Strike distance: even when the stock faded, the losing options had farther strikes. Median distance from the stock: puts 7.0 % vs 5.4 % for the winners, calls 8.0 % vs 5.6 %. A far strike needs a bigger fade to pay.
 
 Q2 · Does a stock that already fell make the put worse, better, or is it the market (NIFTY 50)?
-- Already fell: NO effect. Puts on stocks that fell more than 5 % in the 20 sessions before did slightly better (+11 % / +21 % a trade), not worse, but not reliably. The same holds net of NIFTY, over 5 sessions, and by place in the 52-week range.
-- The market on day 0: YES, a big effect.
-  - Puts lost about -21 % / -22 % a trade on days NIFTY rose more than 0.3 % from the open.
-  - They won +17 % / +37 % on days NIFTY fell more than 0.3 %.
-  - Calls show the opposite pattern.
-- But NIFTY's day is only known after the close, so it cannot be a buy rule. Averaged over all trades, the market adds almost nothing (0.01-0.03 %). The fade is the stock's own move.
-- Sector: for puts, about half of the stock's fade is shared with its sector peers on the same day. Calls keep their fade after removing the sector.
+- Already fell: NO difference. The average looked better (+11 % / +21 % a trade), but that comes from a few big winners. Medians, trimmed means and the VWAP entry show no difference. A call on a stock that already rose has too few trades (20 per period) to judge.
+- The market on day 0: YES, a big effect. Puts averaged about -21 % / -22 % on days NIFTY rose more than 0.3 % from the open, against +17 % / +37 % on days it fell. Calls show the opposite pattern.
+  - The gap between up and down days is solid. It holds with medians, trimming, dropping the biggest day and the VWAP entry.
+  - The "won +17 % / +37 %" level rests on a few big winners: the median on NIFTY-down days is about -4 % / +2 %.
+  - NIFTY's day is only known after the close, so it cannot be a buy rule.
+- Market share of the fade: for calls, and for puts in 2025-26, the fade is the stock's own move. For puts in 2022-24, about a third of the small fade was the market. The overall average near zero is partly puts and calls cancelling out.
+- Sector: for puts, about half of the stock's fade is shared with its sector peers that day. Calls keep their fade.
 
 Q3 · Should there be a rule on NP YoY %, NP QoQ % or revenue YoY %?
-- NP YoY: YES, a candidate.
-  - Puts with profit growth of only 10-25 % lost about -12 % (2022-24) and -8 % (2025-26) a trade. Puts above 25 % made about +11 % and +16 %.
-  - The pattern holds in both periods, with the realistic VWAP entry, and on the stock itself.
-  - Across about 2,100 results filings with numbers, the day-0 fade grows with how extreme the number is. Profit up more than 100 %: the stock fell about -1.1 % (net of NIFTY) on day 0. Up 10-25 %: almost no fade.
-  - It is just below the strictest bar (t 3.5, bar 3.54), so it counts as consistent, not proven.
-- NP YoY for calls: profit down more than 50 % looked best (+21 % / +6.5 %), but not consistent enough. UNCLEAR.
+- NP YoY for puts: a WEAK lead, not proven.
+  - Puts with profit growth of only 10-25 % lost about -12 % (2022-24) and -8 % (2025-26) a trade. Puts above 25 % made about +11 % and +16 %. Both periods point the same way (pooled t -3.5), and EPS growth of 10-25 % shows the same.
+  - But with the VWAP entry the gap holds only in 2022-24, not 2025-26 (t -1.0). Trimming the extremes halves the 2025-26 gap.
+  - About 105 tested measures are known before entry. About 3 would pass by chance, and this lead (with its EPS twin) is the only one that passed. So it may be luck.
+- Across about 2,100 results filings with numbers, the biggest numbers fade most on day 0. Profit up more than 100 %: the stock fell about -1.1 % (net of NIFTY) from the open. Profit down more than 50 %: it rose about +1.0 %. Up 10-25 %: almost no fade. The curve is not perfectly smooth; in 2025-26 the 0-10 % band also fell.
+- NP YoY for calls: profit down more than 50 % looked best, but not reliably. UNCLEAR.
 - NP QoQ: NO. No band stands out in either period.
-- Revenue YoY: NO for puts. For calls, revenue falling looked better, but only on the stock's move, not the option's. UNCLEAR.
+- Revenue YoY: NO for puts. For calls, falling revenue helped only the stock's own move, not the option's. UNCLEAR.
 
 Q4 · "If the run is already done, then for sure it does the opposite"? NO.
-- On all 2,489 results filings, after a big run (more than 8 % in 20 sessions), day 0 moved opposite only 54-56 % of the time. The average was 0.1-0.2 %, which is not significant. That is close to a coin flip, not "for sure".
+- After a big run (more than 8 % in 20 sessions), day 0 moved opposite only 54-56 % of the time in the most favourable version. Other versions give 41-55 %. The average was 0.1-0.2 %, not significant. That is a coin flip, not "for sure".
+- What does hold: right after results, the stock first jumps WITH the numbers, before our 09:15 entry. Profit up more than 100 %: about +1.7 % before entry, then -1.1 % from the open. The day-0 fade gives back only part of that first jump.
 
 Q4b · Do we need other measures than the three result numbers? Mostly NO.
-- Tested, known before 09:15, and nothing passed: pre-run (5 / 20 sessions, raw and net of NIFTY), the gap, the reaction already seen before entry, 52-week place, volume, futures OI build-up, filing time, EPS, strike distance and days to expiry.
-- What matters most is NIFTY's and the sector's move on day 0 itself, but that is known only after the fact. It could later inform an exit or hedge idea, not the buy rule.
-- 123 bucket tests were run. About 3.5 would pass by chance; 10 passed. Of those 10, 9 are same-day market or sector moves. The only one known before entry is the NP YoY 10-25 % band.
+- Tested, known before 09:15, and nothing reliable for the option: pre-run, gap, the move already seen before entry, 52-week place, volume, futures OI build-up, filing time, NP QoQ, revenue, EPS QoQ, days to expiry.
+- On the stock's own move (not the option), strike distance, EPS and revenue bands pass, so they are worth watching. NIFTY's own pre-open move was not tested.
 
 Your 9 stocks (picked with hindsight, so illustrations, not proof):
-- The January 2025 puts that lost had weak profit growth, all in the 10-25 % band: POLYCAB +11.5 %, SONACOMS +12.8 %, ADANIPORTS +14 % and BAJFINANCE +18 %. Each stock rose with the numbers that day.
+- The January 2025 puts that lost all had weak profit growth, in the 10-25 % band: POLYCAB +11.5 %, SONACOMS +12.8 %, ADANIPORTS +14 % and BAJFINANCE +18 %.
+- 4 of the 5 losing puts had also fallen 8-10 % in the 20 sessions before.
+- POLYCAB and SONACOMS had already dropped about 6 % before the 09:15 entry, so the fade happened before we bought, and then they bounced from the open.
 - BEL (profit +52 %) lost on 31 Jan 2025, when NIFTY rose +0.9 % and only 2 of the 8 fade trades won.
 - OBEROIRLTY put +292 % (profit +72 %, NIFTY -1.7 % that day). BPCL put +128 % (Aug 2025, profit +141 %).
-- BOSCHLTD call -27 % (profit -11.5 %, only just weak). HCLTECH Jan 2025: no trade (profit +5.6 %).
+- BOSCHLTD call -27 % (profit -11.5 %, only just weak).
