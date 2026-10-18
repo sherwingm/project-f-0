@@ -484,6 +484,83 @@ def api_history(symbol: str, day: str, tf: int = 1, _: str = Depends(auth)):
     return {"symbol": sym, "day": d.isoformat(), "tf": tf, "candles": bars, "error": None}
 
 
+# ---------------------------------------------------------------- TEMPORARY data-access probes (DATA_ACCESS_AUDIT.md)
+# Read-only; refused during market hours; removed after the audit. They expose the raw Kotak scrip master and
+# historical_data so the audit can test index options, index spot, India VIX and BSE contracts.
+def _kotak_provider():
+    p = getattr(state.feed, "provider", None) if state.feed else None
+    if p is None or not hasattr(p, "master") or not hasattr(p, "s"):
+        raise HTTPException(404, "no Kotak provider on this server")
+    if market_open():
+        raise HTTPException(503, "not during market hours (09:15-15:30 IST)")
+    return p
+
+
+@app.get("/api/research/scrip")
+def api_research_scrip(file: str, q: str = "", inst: str = "", limit: int = 40, _: str = Depends(auth)):
+    """Rows of one Kotak scrip-master file (nse_cm, nse_fo, bse_cm, bse_fo, ...) matching q (in the trading symbol or
+    symbol name) and inst (pInstType), with expiry as an ISO date and strike in rupees."""
+    import pandas as pd
+    from server.kotak import EPOCH_OFFSET, _raise_if_error, _read_csv
+    p = _kotak_provider()
+    listing = p.s.client().scrip_master()
+    _raise_if_error(listing, "scrip_master")
+    paths = listing.get("filesPaths", []) if isinstance(listing, dict) else []
+    path = next((x for x in paths if x.rsplit("/", 1)[-1].startswith(file)), None)
+    if path is None:
+        return {"files": [x.rsplit("/", 1)[-1] for x in paths], "error": f"no file starting {file}"}
+    df = _read_csv(path).rename(columns=lambda c: str(c).strip())
+    m = pd.Series(True, index=df.index)
+    if q:
+        hay = df.get("pTrdSymbol", "").astype(str) + " " + df.get("pSymbolName", "").astype(str)
+        m &= hay.str.upper().str.contains(q.upper(), regex=False)
+    if inst and "pInstType" in df.columns:
+        m &= df["pInstType"].astype(str).str.strip().str.upper() == inst.upper()
+    hit = df[m]
+    strike_col = next((c for c in df.columns if c.startswith("dStrikePrice")), None)
+
+    def row(r):
+        try:
+            exp = datetime.fromtimestamp(int(float(r["pExpiryDate"])) + EPOCH_OFFSET, tz=IST).date().isoformat()
+        except (KeyError, ValueError, TypeError):
+            exp = None
+        return {"token": str(r.get("pSymbol")), "trd": str(r.get("pTrdSymbol")), "name": str(r.get("pSymbolName")),
+                "inst": str(r.get("pInstType")), "opt": str(r.get("pOptionType")), "expiry": exp,
+                "strike": (float(r[strike_col]) / 100.0) if strike_col and pd.notna(r.get(strike_col)) else None,
+                "lot": r.get("lLotSize"), "exch_seg": str(r.get("pExchSeg"))}
+    rows = [row(r) for r in hit.head(max(1, min(limit, 500))).to_dict("records")]
+    exps = sorted({x for x in (row(r)["expiry"] for r in hit.head(5000).to_dict("records")) if x})
+    return {"files": [x.rsplit("/", 1)[-1] for x in paths], "file": path.rsplit("/", 1)[-1], "columns": list(df.columns),
+            "matched": int(m.sum()), "expiries": exps[:60], "rows": rows}
+
+
+@app.get("/api/research/candles")
+def api_research_candles(neosymbol: str, interval: str, from_date: str, to_date: str, _: str = Depends(auth)):
+    """One raw Kotak historical_data call: row count, first / last timestamp and any error text."""
+    from server.kotak import HISTORY_MIN_INTERVAL, redact
+    p = _kotak_provider()
+    with p._hist_lock:
+        wait = HISTORY_MIN_INTERVAL - (time.monotonic() - p._last_hist)
+        if wait > 0:
+            time.sleep(wait)
+        try:
+            resp = p.s.client().historical_data(neosymbol=neosymbol, interval=interval, from_date=from_date,
+                                                to_date=to_date)
+        except Exception as exc:  # noqa: BLE001 - report, do not crash
+            return {"neosymbol": neosymbol, "interval": interval, "from": from_date, "to": to_date, "rows": 0,
+                    "error": redact(str(exc))[:400]}
+        finally:
+            p._last_hist = time.monotonic()
+    rows = (resp.get("data") or {}).get("candles") if isinstance(resp, dict) and isinstance(resp.get("data"), dict) else None
+    out = {"neosymbol": neosymbol, "interval": interval, "from": from_date, "to": to_date,
+           "rows": len(rows) if isinstance(rows, list) else 0}
+    if isinstance(rows, list) and rows:
+        out.update(first=str(rows[0][0]), last=str(rows[-1][0]), sample=rows[0])
+    if not isinstance(rows, list):
+        out["error"] = redact(str(resp))[:400]
+    return out
+
+
 @app.get("/api/news/{symbol}")
 def api_news(symbol: str, _: str = Depends(auth)):
     sym = symbol.upper()
