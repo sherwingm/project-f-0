@@ -1,0 +1,7 @@
+Answer: NO, a closer strike does not make the fade better. Keep v10's strike walk.
+Checked: the baseline reproduces the v10 backtest exactly (436 / 434 trades); 60 sampled trades rebuilt from the bhavcopy price files with no mismatch.
+- Cap 3 % / cap 5 % (inside the Rs 600-8,000 budget): on the trades they keep, the strike is the same; they only drop the far-strike trades. With the open entry those dropped trades made +3 % to +12 %, so the caps cut the winners: worse in both periods.
+- One step closer: about 14-17 points worse a trade with the open entry (t -8.6 / -9.7), and worse in rupees with both entries. Clearly worse.
+- At the money (costs about Rs 19,000-21,000 a lot, over the budget): 7.6-7.8 points worse with the open entry, but 6.9-7.5 points better with the VWAP entry. Still a loss with the VWAP entry (-5.9 % / -6.5 % a trade), so not a fix.
+- Why: far strikes lose more often but their wins are much bigger (the cheap option multiplies a big fade). At the money wins about as often (38-40 % of trades vs 37-40 %) and one step closer less often (30-33 %), and both give up those big wins.
+- What it shows instead: v10's profit depends on buying at the open price. With the realistic VWAP entry every strike rule loses money (-6 % to -20 % a trade). The live paper run (since 15 Oct) decides whether real fills are close to the open.

@@ -238,7 +238,7 @@ def guard(p: pd.DataFrame) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def write(t: pd.DataFrame) -> None:
+def write(t: pd.DataFrame, answer: str | None = None) -> None:
     import xlsxwriter
     from .backtest_s1_v2 import md
     t.to_csv(RES / "S1_v10_strike_distance_trades.csv", index=False)
@@ -247,6 +247,8 @@ def write(t: pd.DataFrame) -> None:
     head = ("Descriptive only (strategies/S1_v10_strike_distance_study.md). Not out of sample. Same signals, expiry, "
             "entry, same-day exit and costs as the v10 backtest; only the strike changes. 'One step closer' and 'at the "
             "money' may break the Rs 600-8,000 lot budget (see 'lots over Rs 8,000').")
+    if answer:
+        head = head + "\n\n" + answer
     tables = [("Guard", "Is a variant better? (the pre-registered guard)", g),
               ("Paired vs baseline", "Same signals: variant minus baseline (same-day exit)", p),
               ("Summary", "Every variant, window, entry and side", s)]
@@ -262,7 +264,11 @@ def write(t: pd.DataFrame) -> None:
     for name, title, df in tables:
         ws = wb.add_worksheet(name)
         ws.write(0, 0, title, F(bold=True, font_size=12))
-        ws.write(1, 0, head, F(italic=True, font_size=9, font_color="#595959"))
+        if name == "Guard" and answer:
+            ws.set_column(0, 0, 16)
+            for k, line in enumerate(answer.splitlines()):
+                ws.write(len(df) + 7 + k, 0, line, F(bold=line.startswith("Answer")))
+        ws.write(1, 0, head.split("\n")[0], F(italic=True, font_size=9, font_color="#595959"))
         ws.set_row(3, 48)
         for c, h in enumerate(df.columns):
             ws.write(3, c, str(h), H)
@@ -288,13 +294,14 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="S1 v10 strike distance study (descriptive)")
     ap.add_argument("--reuse", action="store_true", help="rebuild the tables from the saved trades CSV")
     ap.add_argument("--window", choices=list(WINDOWS), help="run one window only")
+    ap.add_argument("--answer", type=Path, help="a text file with the plain-language answer")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     if a.reuse:
         t = pd.read_csv(RES / "S1_v10_strike_distance_trades.csv")
     else:
         t = pd.concat([run_window(w) for w in ([a.window] if a.window else WINDOWS)], ignore_index=True)
-    write(t)
+    write(t, a.answer.read_text(encoding="utf-8") if a.answer else None)
 
 
 if __name__ == "__main__":
