@@ -197,6 +197,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   <nav class="tabs" role="tablist" aria-label="Workspaces" id="tabs"></nav>
   <button class="tbtn" type="button" id="find" title="Find a stock (Ctrl+K)" aria-label="Find a stock">🔍<kbd>Ctrl K</kbd></button>
   <a class="tlink" href="/s2" id="s2Link">S2 →</a>
+  <a class="tlink" href="/index" id="idxLink">Index →</a>
   <a class="tlink" href="/terminal" id="termLink">Terminal →</a>
   <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
 </header>
@@ -215,7 +216,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   const $ = (s, el = document) => el.querySelector(s), $$ = (s, el = document) => [...el.querySelectorAll(s)];
   const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
                set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } } };
-  if (!SERVER.orders) { $("#termLink").href = "index.html"; $("#s2Link").href = "s2.html"; }      // the static GitHub Pages copy
+  if (!SERVER.orders) { $("#termLink").href = "index.html"; $("#s2Link").href = "s2.html"; $("#idxLink").hidden = true; }      // the static GitHub Pages copy
 
   // ---- theme, clock
   const setTheme = t => { document.documentElement.dataset.theme = t; ls.set("fos_theme", t); };

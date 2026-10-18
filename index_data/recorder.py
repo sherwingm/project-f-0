@@ -67,7 +67,7 @@ def record_contract(k: Kotak, c, day: date, known: set[str], store=STORE) -> int
     n = 0
     for d, g in f.groupby(f["timestamp"].dt.date):
         p = store / "options_1m" / c.underlying / c.expiry / f"{d.isoformat()}.parquet"
-        upsert_parquet(p, g, ["token", "timestamp"])
+        upsert_parquet(p, g, ["source", "token", "timestamp"])
         n += len(g)
     known.add(c.neosymbol)
     return n
@@ -98,6 +98,7 @@ def chain_snapshot(k: Kotak, sel: pd.DataFrame, day: date, store=STORE) -> int:
                          "volume": p.get("volume"), "quote_time": p.get("timestamp")})
     if rows:
         upsert_parquet(store / "chain_eod" / f"{day:%Y%m%d}.parquet", pd.DataFrame(rows), ["token"])
+        write_json(SMALL / "chain_latest.json", {"date": day.isoformat(), "rows": rows})   # the page's EOD chain
     return len(rows)
 
 

@@ -71,6 +71,7 @@ td small { font-size:10.5px; }
   <span class="clock" id="clock"></span>
   <span class="sp"></span>
   <a class="tlink" href="/" id="homeLink">← Results</a>
+  <a class="tlink" href="/index" id="idxLink">Index →</a>
   <a class="tlink" href="/terminal" id="termLink">Terminal →</a>
   <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
 </header>
@@ -84,7 +85,7 @@ td small { font-size:10.5px; }
   const $ = s => document.querySelector(s);
   const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
                set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } } };
-  if (!SERVER.orders) { $("#homeLink").href = "results.html"; $("#termLink").href = "index.html"; }
+  if (!SERVER.orders) { $("#homeLink").href = "results.html"; $("#termLink").href = "index.html"; $("#idxLink").hidden = true; }
   const setTheme = t => { document.documentElement.dataset.theme = t; ls.set("fos_theme", t); };
   setTheme(ls.get("fos_theme", "dark"));
   $("#theme").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));

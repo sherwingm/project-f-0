@@ -1,0 +1,68 @@
+name: Index data jobs
+# Manual jobs of the index data layer (INDEX_DATA_PLAN.md): backfills, the expired-token probe, the Upstox expired
+# backfill and the Kotak-vs-Upstox reconciliation. Parquet -> branch index-data; small JSON -> main (data/index/).
+on:
+  workflow_dispatch:
+    inputs:
+      job:
+        description: "which job"
+        required: true
+        type: choice
+        options: [backfill_spot, probe_expired, upstox_expired, reconcile, expiry_calendar, instruments]
+      args:
+        description: "extra arguments for the job's script (optional)"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: index-data
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements-server.txt pyarrow yfinance==1.7.0
+      - name: Check out the index-data branch into ./store
+        run: |
+          git config --global user.name "fo-scanner-bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin index-data >/dev/null; then
+            git fetch --depth=1 origin index-data
+            git worktree add store FETCH_HEAD
+            git -C store switch -c index-data
+          else
+            git worktree add --orphan -b index-data store
+          fi
+      - name: Run ${{ inputs.job }}
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
+          UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+          INDEX_STORE: store/data/index
+        run: python -m index_data.${{ inputs.job }} ${{ inputs.args }}
+      - name: Coverage summary for the /index page
+        if: always()
+        env:
+          INDEX_STORE: store/data/index
+        run: python -m index_data.coverage || true
+      - name: Commit the Parquet files to index-data
+        if: always()
+        run: |
+          cd store
+          git add -A data/index 2>/dev/null || true
+          git diff --cached --quiet || git commit -q -m "index data: ${{ inputs.job }} $(date -u +%F)"
+          git push origin HEAD:index-data
+      - name: Commit small JSON to main
+        if: always()
+        run: |
+          git add data/index/*.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -q -m "index data: ${{ inputs.job }} summary $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done

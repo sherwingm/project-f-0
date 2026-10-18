@@ -687,3 +687,11 @@ def api_rebuild(_: str = Depends(auth)):
 @app.exception_handler(HTTPException)
 async def http_error(_: Request, exc: HTTPException):
     return JSONResponse({"error": exc.detail}, status_code=exc.status_code, headers=exc.headers)
+
+
+# ---------------------------------------------------------------- index options (INDEX_DATA_PLAN.md §8)
+# Read-only page and data in their own modules; registered here without changing any existing route.
+from server import index_api, index_pages  # noqa: E402
+
+app.include_router(index_api.router, dependencies=[Depends(auth)])
+app.include_router(index_pages.router, dependencies=[Depends(auth)])

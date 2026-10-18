@@ -45,6 +45,11 @@ jobs:
           KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
           INDEX_STORE: store/data/index
         run: python -m index_data.recorder ${{ inputs.day && format('--day {0}', inputs.day) || '' }}
+      - name: Coverage summary for the /index page
+        if: always()
+        env:
+          INDEX_STORE: store/data/index
+        run: python -m index_data.coverage || true
       - name: Commit the Parquet files to index-data
         if: always()
         run: |
@@ -55,7 +60,7 @@ jobs:
       - name: Commit status.json to main
         if: always()
         run: |
-          git add data/index/status.json 2>/dev/null || true
+          git add data/index/*.json 2>/dev/null || true
           git diff --cached --quiet && exit 0
           git commit -q -m "index data: recorder status $(date -u +%F)"
           for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done

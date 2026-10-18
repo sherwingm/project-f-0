@@ -334,3 +334,22 @@ def test_static_results_copy_embeds_the_fade_list(tmp_path):
     render_results({"meta": {"forward": None, "fade": {"session": "2026-10-19", "signals": []}}}, ROOT / "templates" / "results.html", out)
     html = out.read_text(encoding="utf-8")
     assert "/*__FADE__*/" not in html and '"session":"2026-10-19"' in html
+
+
+def test_index_page_and_api_are_read_only_and_reachable(monkeypatch):
+    from fastapi.testclient import TestClient
+    import server.app as app_mod
+    import server.index_api as ia
+    monkeypatch.setattr(ia, "read", lambda name: {"next": {"NIFTY": ["2026-10-19"]}} if name == "expiries_next.json" else None)
+    app_mod.app.dependency_overrides[app_mod.auth] = lambda: "user"
+    try:
+        c = TestClient(app_mod.app)
+        page, sub = c.get("/index"), c.get("/index/coverage")
+        exp, pos = c.get("/api/index/expiries").json(), c.get("/api/index/positions").json()
+        home = c.get("/").text
+    finally:
+        app_mod.app.dependency_overrides.clear()
+    assert page.status_code == 200 and "Index options" in page.text and "/*__SERVER__*/" not in page.text
+    assert sub.status_code == 200 and exp["next"]["NIFTY"] == ["2026-10-19"] and pos["pods"] == []
+    assert 'href="/index"' in home
+    assert "place" not in page.text.lower() or "can place an order" in page.text      # no order controls

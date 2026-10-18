@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>F&amp;O Index options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
+  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
+  --unc:#E0B341; --unc-soft:rgba(224,179,65,.16); --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF;
+  --arm-a:#4C8DFF; --arm-b:#B07CFF; --arm-f:#E0A030; --arm-p:#26A69A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px;
+  --disc:44px; color-scheme:dark;
+}
+:root[data-theme="light"] {
+  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
+  --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
+  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB;
+  --arm-a:#2563EB; --arm-b:#7C3AED; --arm-f:#B7791F; --arm-p:#0F9D76; color-scheme:light;
+}
+*, *::before, *::after { box-sizing:border-box; }
+body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  font-variant-numeric:tabular-nums; -webkit-text-size-adjust:100%; padding-bottom:calc(var(--disc) + 16px); }
+button { font:inherit; color:inherit; cursor:pointer; }
+a { color:var(--accent); }
+.up { color:var(--bull); } .down { color:var(--bear); } .flat { color:var(--muted); }
+small, .muted { color:var(--muted); }
+.top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
+.brand { font-weight:700; font-size:15px; white-space:nowrap; }
+.brand i { font-style:normal; color:var(--bear); }
+.clock { font-family:"JetBrains Mono",monospace; font-size:12px; }
+.sp { margin-left:auto; }
+.tlink { height:34px; padding:0 12px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); display:inline-flex; align-items:center; text-decoration:none; color:var(--ink); white-space:nowrap; }
+.tbtn { height:34px; width:34px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); }
+main { max-width:1240px; margin:0 auto; padding:16px; }
+h1 { font-size:19px; margin:2px 0 4px; }
+.lead { color:var(--muted); margin:0 0 14px; font-size:12.5px; }
+h2 { font-size:14px; margin:24px 0 8px; display:flex; align-items:baseline; gap:8px; flex-wrap:wrap; }
+h2 small { font-weight:400; font-size:12px; }
+.banner { border:1px solid var(--unc); background:var(--unc-soft); border-radius:10px; padding:9px 12px; font-size:12.5px; margin:8px 0 4px; }
+.banner b { color:var(--unc); }
+.rule { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:10px; }
+.rule div small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.rule div b { font:600 15px "JetBrains Mono",monospace; }
+.tw { overflow-x:auto; background:var(--surface); border:1px solid var(--line); border-radius:12px; }
+table { width:100%; border-collapse:collapse; font:12.5px "JetBrains Mono",monospace; white-space:nowrap; }
+th { font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); text-align:right; padding:8px 10px; border-bottom:1px solid var(--line); }
+td { padding:8px 10px; border-bottom:1px solid var(--line); text-align:right; }
+th:first-child, td:first-child { text-align:left; font-family:Inter,sans-serif; }
+tr:last-child td { border-bottom:0; }
+tr.hl td { background:var(--bull-soft); }
+td small { font-size:10.5px; }
+.empty { color:var(--muted); background:var(--surface); border:1px dashed var(--line-strong); border-radius:12px; padding:14px 16px; }
+.pill { font:700 10.5px Inter,sans-serif; border-radius:6px; padding:2px 7px; }
+.pill.pass { background:var(--bull-soft); color:var(--bull); } .pill.fail { background:var(--bear-soft); color:var(--bear); }
+.hist { display:flex; flex-wrap:wrap; gap:6px; }
+.hist span { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:4px 8px; font-size:12px; }
+.note { font-size:12px; color:var(--muted); margin-top:16px; }
+.disclaimer { position:fixed; left:0; right:0; bottom:0; min-height:var(--disc); background:var(--panel); border-top:1px solid var(--bear); padding:6px 16px; font-size:11.5px; z-index:6; display:flex; align-items:center; }
+.disclaimer b { color:var(--bear); }
+@media (max-width:760px) { main { padding:12px 10px; } :root { --disc:64px; } .top { padding:8px 10px; } }
+.kv { display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:10px; background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+.kv div small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+.kv div b { font:600 15px "JetBrains Mono",monospace; }
+.exp { display:flex; flex-wrap:wrap; gap:8px; }
+.exp span { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:12.5px; }
+code { font-family:"JetBrains Mono",monospace; font-size:12px; }
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">F&amp;O <i style="color:var(--arm-f)">Index options</i></div>
+  <span class="clock" id="clock"></span>
+  <span class="sp"></span>
+  <a class="tlink" href="/" id="homeLink">← Results</a>
+  <a class="tlink" href="/s2" id="s2Link">S2 →</a>
+  <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
+</header>
+<main id="main"></main>
+<footer class="disclaimer" role="note"><div><b>Read before using.</b> Data collection and research only — no index strategy is traded here, and nothing on this page can place an order. F&amp;O trading carries high risk including potential loss beyond capital invested.</div></footer>
+<script>
+(() => {
+  "use strict";
+  const SERVER = Object.assign({ orders: false }, /*__SERVER__*/{});
+  const $ = s => document.querySelector(s);
+  const ls = { get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch (e) { return d; } },
+               set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* private mode */ } } };
+  const setTheme = t => { document.documentElement.dataset.theme = t; ls.set("fos_theme", t); };
+  setTheme(ls.get("fos_theme", "dark"));
+  $("#theme").addEventListener("click", () => setTheme(document.documentElement.dataset.theme === "dark" ? "light" : "dark"));
+  const tick = () => { $("#clock").textContent = new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Kolkata" }) + " IST"; };
+  tick(); setInterval(tick, 1000);
+  const esc = t => String(t ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const num = (v, dp = 0) => v == null ? "—" : Number(v).toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp });
+  const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const day = d => !d ? "—" : /^\d{8}$/.test(d) ? `${+d.slice(6, 8)} ${MON[+d.slice(4, 6) - 1]} ${d.slice(0, 4)}`
+    : /^\d{4}-\d{2}$/.test(d) ? `${MON[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}`
+    : /^\d{4}$/.test(d) ? d : `${+d.slice(8, 10)} ${MON[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}`;
+  const get = u => fetch(u, { credentials: "same-origin" }).then(r => r.ok ? r.json() : null).catch(() => null);
+  let D = { loaded: false };
+
+  function render() {
+    const st = (D.status || {}).status || {}, cov = ((D.status || {}).coverage || {}).rows || [], rec = st.recorder;
+    let h = `<h1>Index options · data</h1>
+      <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, collected every trading evening so index strategies ("pods") can be tested later. No strategy runs here yet.</p>
+      <div class="banner"><b>Data layer only.</b> Nothing is traded on this page. Large files live on the repository's <code>index-data</code> branch; this page reads the summaries.</div>`;
+    if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
+    h += `<h2>Recorder health <small>nightly at 19:30 IST, GitHub Actions</small></h2>`;
+    if (!rec) h += `<p class="empty">No recorder run yet.</p>`;
+    else {
+      const u = rec.underlyings || {};
+      h += `<div class="kv"><div><small>Last run</small><b>${esc((rec.run_at || "").replace("T", " ").slice(0, 16))}</b></div><div><small>Session</small><b>${day(rec.session)}</b></div>
+        <div><small>Contracts</small><b>${num(rec.contracts)}</b></div><div><small>API calls</small><b>${num(rec.calls)}</b></div>
+        <div><small>Runtime</small><b>${num((rec.runtime_s || 0) / 60, 1)} min</b></div><div><small>Failures</small><b class="${(rec.failures || []).length ? "down" : "up"}">${(rec.failures || []).length}</b></div></div>
+        <div class="tw" style="margin-top:8px"><table><thead><tr><th>Underlying</th><th>Spot close</th><th>Contracts</th><th>Rows</th><th>Expiries</th></tr></thead><tbody>${Object.entries(u).map(([k, v]) =>
+          `<tr><td><b>${esc(k)}</b></td><td>${num(v.spot, 2)}</td><td>${num(v.contracts)}</td><td>${num(v.rows)}</td><td>${(v.expiries || []).map(day).join(", ") || "—"}</td></tr>`).join("")}</tbody></table></div>
+        ${(rec.failures || []).length ? `<details><summary>Failures (${rec.failures.length})</summary><p class="note">${rec.failures.slice(0, 20).map(esc).join("<br>")}</p></details>` : ""}`;
+    }
+    h += `<h2>Data coverage <small>what is stored, at which resolution, for which dates</small></h2>`;
+    h += cov.length ? `<div class="tw"><table><thead><tr><th>Dataset</th><th>Underlying</th><th>Resolution</th><th>Source</th><th>From</th><th>To</th><th>Files</th></tr></thead><tbody>${cov.map(r =>
+        `<tr><td>${esc(r.dataset)}</td><td><b>${esc(r.underlying)}</b></td><td>${esc(r.resolution)}</td><td>${esc(r.source)}</td><td>${day(r.first)}</td><td>${day(r.last)}</td><td>${num(r.files)}</td></tr>`).join("")}</tbody></table></div>`
+      : `<p class="empty">Coverage appears after the first recorder or backfill run.</p>`;
+    const nx = (D.expiries || {}).next || {};
+    h += `<h2>Next expiries</h2>` + (Object.keys(nx).length ? `<div class="exp">${Object.entries(nx).map(([k, v]) => `<span><b>${esc(k)}</b>: ${v.map(day).join(" · ")}</span>`).join("")}</div>` : `<p class="empty">Not built yet.</p>`);
+    const pr = D.probe || [];
+    h += `<h2>Expired-contract retention (Kotak) <small>NIFTY 19-Oct-2026 22650 CE, re-probed 20 Oct, 27 Oct and 19 Nov</small></h2>`;
+    h += pr.length ? `<div class="tw"><table><thead><tr><th>Probed on</th><th>1-min before expiry</th><th>Expiry day</th><th>5-min</th><th>Daily</th><th>Still listed</th><th>Verdict</th></tr></thead><tbody>${pr.map(p => { const c = p.checks || [];
+        const r = i => c[i] ? (c[i].error ? `<small>${esc(c[i].error).slice(0, 60)}</small>` : num(c[i].rows)) : "—";
+        return `<tr><td>${day(p.run_on)}</td><td>${r(0)}</td><td>${r(1)}</td><td>${r(2)}</td><td>${r(3)}</td><td>${esc(String((c[5] || {}).result ?? "—"))}</td><td><span class="pill ${p.verdict === "retained" ? "pass" : "fail"}">${esc(p.verdict)}</span></td></tr>`; }).join("")}</tbody></table></div>`
+      : `<p class="empty">First probe: 20 Oct 2026, 16:00 IST.</p>`;
+    const rc = D.reconcile;
+    if (rc && !rc.error) h += `<h2>Source reconciliation <small>Kotak vs Upstox on the same minutes</small></h2><div class="kv">
+        <div><small>Matched minutes</small><b>${num(rc.matched_minutes)}</b></div><div><small>Mean |close diff|</small><b>${num(rc.mean_abs_close_diff, 4)}</b></div>
+        <div><small>Max |close diff|</small><b>${num(rc.max_abs_close_diff, 2)}</b></div><div><small>Only in Kotak / Upstox</small><b>${num(rc.only_kotak)} / ${num(rc.only_upstox)}</b></div></div>`;
+    h += `<h2>Pods <small>index strategies; each will report its paper results here</small></h2>
+      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th></tr></thead>
+      <tbody><tr><td colspan="8" style="text-align:left"><span class="muted">No pods yet. The data layer comes first; a pod is added only with its own pre-registered rules.</span></td></tr></tbody></table></div>`;
+    $("#main").innerHTML = h;
+  }
+  render();
+  Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile")])
+    .then(([s, e, p, r]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r }; render(); });
+})();
+</script>
+</body>
+</html>
