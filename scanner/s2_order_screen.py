@@ -75,7 +75,8 @@ def cells(ev: pd.DataFrame) -> list[dict]:
     for name, rule in CELL_RULES.items():
         e = cooldown(ev[rule(ev)])
         for h in HOLDS:
-            role = "pass test" if name.startswith("O") and h in (3, 5) else "descriptive"
+            # gate 4 (2026-10-18): O1 50 and O2 36 events, below N 100 -> descriptive only, dropped before any return
+            role = "descriptive (below N 100 at the recount)" if name.startswith("O") and h in (3, 5) else "descriptive"
             row = C.report(e, f"r{h}", {"screen": "§6 order-book hype", "cell": name, "h": h, "role": role},
                            years=YEARS, need_years=4)
             if role != "pass test":

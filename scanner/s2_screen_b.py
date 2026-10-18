@@ -76,8 +76,18 @@ def run(m: C.Market, evs: list[dict], fin: dict) -> tuple[list[dict], dict]:
     from . import s2_rotation_screen as R
     from . import s2_weak_results_screen as W
     out, info = [], {}
-    log.info("§1 parents"); r, i = Pp.cells(m); out += r; info["§1"] = i
-    log.info("§2 market backdrop"); r, i = F.cells(m); out += r; info["§2"] = i
+    chk = Pp.settlement_check()
+    if any(v is None or v < 95 for v in chk.values()):
+        # the pre-registered external-series check failed: §1 and §2 (both on the checked series) do not run
+        info["§1 and §2"] = {"aborted": "the daily / 1h date check failed (spec: the run aborts)",
+                             "% of days within 0.5 %": chk}
+        for s, c in (("§1 parent indicator", "P1 k=1"), ("§1 parent indicator", "P2 k=5"),
+                     ("§2 market backdrop", "F1-F3")):
+            out.append({"screen": s, "cell": c, "h": None, "role": "pass test", "PASS": "",
+                        "failed": "not run: external-series check failed"})
+    else:
+        log.info("§1 parents"); r, i = Pp.cells(m); out += r; info["§1"] = i
+        log.info("§2 market backdrop"); r, i = F.cells(m); out += r; info["§2"] = i
     log.info("§3 rotation"); r, i = R.cells(m); out += r; info["§3"] = i
     log.info("§4 gap fill")
     gev = G.add_returns(m, G.events(m, G.results_days(m, evs))); out += G.cells(gev); info["§4"] = {"events (G >= 2 %)": len(gev)}
