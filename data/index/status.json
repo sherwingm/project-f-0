@@ -1,6 +1,6 @@
 {
  "recorder": {
-  "run_at": "2026-10-18T21:51:47+05:30",
+  "run_at": "2026-10-18T22:40:50+05:30",
   "session": "2026-10-16",
   "expiry_check": {
    "bse_fo": {
@@ -19,7 +19,7 @@
    "NIFTY": {
     "spot": 23146.15,
     "contracts": 188,
-    "rows": 922908,
+    "rows": 58711,
     "expiries": [
      "2026-10-19",
      "2026-10-27"
@@ -28,7 +28,7 @@
    "SENSEX": {
     "spot": 74729.27,
     "contracts": 300,
-    "rows": 735424,
+    "rows": 86339,
     "expiries": [
      "2026-10-22",
      "2026-10-29"
@@ -37,59 +37,17 @@
    "BANKNIFTY": {
     "spot": 55844.0,
     "contracts": 224,
-    "rows": 648574,
+    "rows": 36645,
     "expiries": [
      "2026-10-27",
      "2026-11-23"
     ]
    }
   },
-  "failures": [
-   "SENSEX26O2277100PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277300PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT76700PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77600PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78200CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77800CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77800PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78100PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2278100PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77900PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277800PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277900PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2276800PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2278200PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78400CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT71200CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT76800PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77100PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2276400PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78400PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77100CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77300PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77700PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2278300PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277700PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2278400PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2276700PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277400PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78300CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT78300PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277600PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77400PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT77600CE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2276300PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26OCT76900PE: Can only use .dt accessor with datetimelike values",
-   "SENSEX26O2277200PE: Can only use .dt accessor with datetimelike values",
-   "BANKNIFTY26NOV58600CE: Can only use .dt accessor with datetimelike values",
-   "BANKNIFTY26NOV58600PE: Can only use .dt accessor with datetimelike values",
-   "BANKNIFTY26NOV58400CE: Can only use .dt accessor with datetimelike values",
-   "BANKNIFTY26NOV58300CE: Can only use .dt accessor with datetimelike values",
-   "BANKNIFTY26OCT58200PE: (0)\nReason: <ConnectionTerminated error_code:0, last_stream_id:1999, additional_data:None>\n"
-  ],
+  "failures": [],
   "chain_eod_rows": 712,
-  "calls": 1348,
-  "runtime_s": 2654.8,
+  "calls": 736,
+  "runtime_s": 1269.8,
   "contracts": 712
  },
  "recent_runs": [
@@ -100,6 +58,14 @@
    "calls": 1348,
    "runtime_s": 2654.8,
    "failures": 41
+  },
+  {
+   "run_at": "2026-10-18T22:40:50+05:30",
+   "session": "2026-10-16",
+   "contracts": 712,
+   "calls": 736,
+   "runtime_s": 1269.8,
+   "failures": 0
   }
  ]
 }
