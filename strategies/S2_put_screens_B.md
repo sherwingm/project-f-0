@@ -312,6 +312,44 @@ Prior evidence against this idea, cited:
 - A put pass → live paper days on the S2 page, bought at 09:15. Paper results are the only clean evidence.
 - DECISIONS.md gets one row per screen with N, G, t and pass/fail, plus the running test count.
 
+## Addendum 2026-10-18: the user's order-book and QIP ideas, added before any return is computed
+The user asked (2026-10-18) to test "order book vs execution (the RVNL example)" and QIP along with screen B. No
+screen-B return had been computed when this was written; only the gates' data (F&O 2021 files, NIFTY 500 calendar,
+corporate actions, QIP list, the yfinance cache) had been fetched.
+
+### 6. Order-book hype (user idea f, the RVNL example), a proxy
+The true order book vs execution capacity is only in investor-presentation PDFs and cannot be tested. The testable part
+of the idea is the **market's reaction to order wins**: when a stock has already run up and keeps announcing orders, the
+price may be ahead of what the company can execute, and it falls back.
+- **Events:** the event store's `order_win` announcements (NSE corporate announcements, 2021-12-01 → 2026-09-15; the
+  store starts in Dec 2021), bucket ≠ `ignore`. Day 0 = `day0_index` (a pre-open filing trades the same day).
+  Universe: OI > 0 on day i−1. One event per stock every 5 sessions (the first counts). Common rules apply
+  (calendar, corporate actions, return, cost 0.1 %).
+- **Features at the close of day i−1** (known before entry): DIST20 = close ÷ mean of the 20 closes − 1;
+  RUN20 = close[i−1] ÷ close[i−21] − 1; N60 = the stock's order-win announcements in the 60 sessions up to and
+  including this filing.
+- **Entry: day 0's open**, short. Exits: close of day 0, +1, +3, +5.
+
+| Cell | Rule | Horizons | Role |
+|---|---|---|---|
+| O1 | order hype: DIST20 ≥ +5 % and RUN20 ≥ +10 % | h3 **and** h5 (both must pass) | pass test |
+| O2 | order pile-up: N60 ≥ 3 and DIST20 ≥ +5 % | h3 **and** h5 (both must pass) | pass test |
+| — | every order win; O1 / O2 at h0, h1; order value ≥ 5 % of annual revenue (`materiality`, where known) | | descriptive |
+| — | per stock for the most frequent announcers (NBCC, LT, RVNL, BEL, HAL, BHEL, SUZLON) | | descriptive |
+
+- **Year rule for §6 only:** the store has almost no 2021 events, so the years are 2022-2026: mean positive in ≥ 4 of
+  the 5, including 2025 and 2026. All other common pass rules apply; the step-1 class for the overlap rule is **long
+  build-up** (2 % / 5 %) on the same stock in d−10 … d.
+- **Limit:** a proxy for the user's idea, not the order book itself; NBCC alone is ~13 % of the announcements.
+
+### 7. QIP, re-run unchanged
+The closed QIP screen (`scanner.event_screens --only qip`, 4 cells, short from day 0's open) is re-run unchanged on the
+freshly fetched `qip_events.csv` and reported beside screen B. With N ≈ 20 it cannot meet the common N ≥ 100 bar, so it
+is descriptive only and cannot pass.
+
+**Test accounting with the addendum:** 13 pass tests (16 pass-eligible cells); the running total of tests on the
+window goes into DECISIONS.md.
+
 ## Known limits
 - **Daily data.** The official open is the pre-open auction price (≈ 09:08). A live short fills later, and a put can only be bought from 09:15 and often trades later still. The official close is the 15:00–15:30 VWAP. §4 applies a latency haircut; the others do not.
 - **External series.**
