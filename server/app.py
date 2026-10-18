@@ -501,7 +501,7 @@ def api_research_scrip(file: str, q: str = "", inst: str = "", limit: int = 40, 
     """Rows of one Kotak scrip-master file (nse_cm, nse_fo, bse_cm, bse_fo, ...) matching q (in the trading symbol or
     symbol name) and inst (pInstType), with expiry as an ISO date and strike in rupees."""
     import pandas as pd
-    from server.kotak import EPOCH_OFFSET, _raise_if_error, _read_csv
+    from server.kotak import EPOCH_OFFSET, _raise_if_error
     p = _kotak_provider()
     listing = p.s.client().scrip_master()
     _raise_if_error(listing, "scrip_master")
@@ -509,15 +509,34 @@ def api_research_scrip(file: str, q: str = "", inst: str = "", limit: int = 40, 
     path = next((x for x in paths if x.rsplit("/", 1)[-1].startswith(file)), None)
     if path is None:
         return {"files": [x.rsplit("/", 1)[-1] for x in paths], "error": f"no file starting {file}"}
-    df = _read_csv(path).rename(columns=lambda c: str(c).strip())
-    m = pd.Series(True, index=df.index)
-    if q:
-        hay = df.get("pTrdSymbol", "").astype(str) + " " + df.get("pSymbolName", "").astype(str)
-        m &= hay.str.upper().str.contains(q.upper(), regex=False)
-    if inst and "pInstType" in df.columns:
-        m &= df["pInstType"].astype(str).str.strip().str.upper() == inst.upper()
-    hit = df[m]
-    strike_col = next((c for c in df.columns if c.startswith("dStrikePrice")), None)
+    import tempfile
+
+    import requests
+    tmp = Path(tempfile.gettempdir()) / "probe_scrip.csv"           # streamed to disk: the free tier has 512 MB
+    with requests.get(path, stream=True, timeout=120) as r:
+        r.raise_for_status()
+        with open(tmp, "wb") as fh:
+            for chunk in r.iter_content(1 << 20):
+                fh.write(chunk)
+    header = [str(c).strip() for c in pd.read_csv(tmp, nrows=0).columns]
+    want = [c for c in header if c in ("pSymbol", "pTrdSymbol", "pSymbolName", "pInstType", "pOptionType",
+                                       "pExpiryDate", "lLotSize", "pExchSeg") or c.startswith("dStrikePrice")]
+    parts, matched = [], 0
+    for ch in pd.read_csv(tmp, chunksize=20000, low_memory=False, usecols=lambda c: str(c).strip() in want):
+        ch = ch.rename(columns=lambda c: str(c).strip())
+        m = pd.Series(True, index=ch.index)
+        if q:
+            hay = ch["pTrdSymbol"].astype(str) + " " + ch["pSymbolName"].astype(str)
+            m &= hay.str.upper().str.contains(q.upper(), regex=False)
+        if inst and "pInstType" in ch.columns:
+            m &= ch["pInstType"].astype(str).str.strip().str.upper() == inst.upper()
+        matched += int(m.sum())
+        if m.any() and sum(len(p) for p in parts) < 5000:
+            parts.append(ch[m])
+    tmp.unlink(missing_ok=True)
+    hit = pd.concat(parts) if parts else pd.DataFrame(columns=want)
+    df, m = hit, pd.Series(True, index=hit.index)
+    strike_col = next((c for c in want if c.startswith("dStrikePrice")), None)
 
     def row(r):
         try:
@@ -530,8 +549,8 @@ def api_research_scrip(file: str, q: str = "", inst: str = "", limit: int = 40, 
                 "lot": r.get("lLotSize"), "exch_seg": str(r.get("pExchSeg"))}
     rows = [row(r) for r in hit.head(max(1, min(limit, 500))).to_dict("records")]
     exps = sorted({x for x in (row(r)["expiry"] for r in hit.head(5000).to_dict("records")) if x})
-    return {"files": [x.rsplit("/", 1)[-1] for x in paths], "file": path.rsplit("/", 1)[-1], "columns": list(df.columns),
-            "matched": int(m.sum()), "expiries": exps[:60], "rows": rows}
+    return {"files": [x.rsplit("/", 1)[-1] for x in paths], "file": path.rsplit("/", 1)[-1], "columns": header,
+            "matched": matched, "expiries": exps[:60], "rows": rows}
 
 
 @app.get("/api/research/candles")
