@@ -77,10 +77,10 @@ def run(m: C.Market, evs: list[dict], fin: dict) -> tuple[list[dict], dict]:
     from . import s2_weak_results_screen as W
     out, info = [], {}
     chk = Pp.settlement_check()
-    if any(v is None or v < 95 for v in chk.values()):
+    if Pp.check_failed(chk):
         # the pre-registered external-series check failed: §1 and §2 (both on the checked series) do not run
         info["§1 and §2"] = {"aborted": "the daily / 1h date check failed (spec: the run aborts)",
-                             "% of days within 0.5 %": chk}
+                             "date check (addendum 2)": chk}
         for s, c in (("§1 parent indicator", "P1 k=1"), ("§1 parent indicator", "P2 k=5"),
                      ("§2 market backdrop", "F1-F3")):
             out.append({"screen": s, "cell": c, "h": None, "role": "pass test", "PASS": "",

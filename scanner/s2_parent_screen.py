@@ -43,21 +43,37 @@ def guarded_returns(ticker: str, guard: bool = True) -> pd.Series:
     return r
 
 
+REQUIRED = ("BZ=F", "HG=F", "INFY")
+
+
+def date_alignment(daily: pd.Series, hourly: pd.Series) -> dict:
+    """Correlation of the daily bars' log returns with the returns of the last 1h close per ET date, at lags 0, −1, +1
+    (addendum 2: a day shift in the daily dates shows up as a lag ±1 peak)."""
+    h = pd.Series(hourly.values, index=hourly.index.str[:10]).groupby(level=0).last()
+    both = pd.concat({"d": np.log(daily).diff(), "h": np.log(h).diff()}, axis=1).dropna()
+    rd, rh = both["d"], both["h"]
+    return {"lag 0": round(rd.corr(rh), 3), "lag -1": round(rd.corr(rh.shift(1)), 3),
+            "lag +1": round(rd.corr(rh.shift(-1)), 3), "days": len(both)}
+
+
+def alignment_ok(a: dict) -> bool:
+    return a["lag 0"] >= 0.80 and a["lag 0"] - max(a["lag -1"], a["lag +1"]) >= 0.50
+
+
 def settlement_check() -> dict:
-    """Date alignment of the daily bars against the 1h bars (ET date): the share of days whose daily Close is within
-    0.5 % of a 1h close on the same ET date. The run aborts below 95 %."""
+    """The external-series check (addendum 2): every required series must have its daily dates aligned with the 1h
+    bars' ET dates. Returns {ticker: alignment dict with 'pass'}; ALI=F is reported, not required."""
     out = {}
     for t in P.HOURLY:
-        d, hr = P.load(t), P.load(t, hourly=True)
-        by_day = pd.Series(hr.values, index=hr.index.str[:10]).groupby(level=0)
-        ok = n = 0
-        for day, g in by_day:
-            if day not in d.index:
-                continue
-            n += 1
-            ok += int((abs(g - d[day]) / d[day]).min() <= 0.005)
-        out[t] = round(ok / n * 100, 1) if n else None
+        a = date_alignment(P.load(t), P.load(t, hourly=True))
+        a["pass"] = bool(alignment_ok(a))
+        a["required"] = t in REQUIRED
+        out[t] = a
     return out
+
+
+def check_failed(chk: dict) -> bool:
+    return any(not v["pass"] for t, v in chk.items() if v["required"])
 
 
 # ---------------------------------------------------------------- measures on the NSE calendar
@@ -216,7 +232,7 @@ def date_cell(e: pd.DataFrame, col: str, cell: dict, pass_rules: bool) -> dict:
 
 def cells(m: C.Market) -> tuple[list[dict], dict]:
     chk = settlement_check()
-    if any(v is None or v < 95 for v in chk.values()):
+    if check_failed(chk):
         raise SystemExit(f"§1 aborted: the daily / 1h date check failed {chk}")
     ev = add_returns(m, events(m))
     ev2 = add_returns(m, events(m, -2.0))
@@ -244,5 +260,5 @@ def cells(m: C.Market) -> tuple[list[dict], dict]:
             if len(eg):
                 out.append(date_cell(eg, "r5", {"screen": "§1 parent indicator", "cell": f"{name}: {g}", "h": 5,
                                                  "role": "descriptive"}, False))
-    return out, {"date check (% of days within 0.5 %)": chk, "events k=1": int((ev["k"] == 1).sum()),
+    return out, {"date check (addendum 2)": chk, "events k=1": int((ev["k"] == 1).sum()),
                  "events k=5": int((ev["k"] == 5).sum())}

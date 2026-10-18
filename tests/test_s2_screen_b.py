@@ -58,3 +58,15 @@ def test_xbrl_date_reads_names_without_the_web_suffix():
     assert W.xbrl_date("https://x/corporate/xbrl/INDAS_97204_918439_14082023051257.xml") == "2023-08-14"
     assert W.xbrl_date("https://x/INTEGRATED_FILING_INDAS_1667963_15052026073307_WEB.xml") == "2026-05-15"
     assert W.xbrl_date(None) is None
+
+
+def test_date_alignment_check_catches_a_one_day_shift():
+    from scanner import s2_parent_screen as S
+    rng = np.random.default_rng(5)
+    days = pd.bdate_range("2025-01-01", periods=300).strftime("%Y-%m-%d")
+    px = pd.Series(100 * np.exp(np.cumsum(rng.normal(0, 0.01, 300))), index=days)
+    hourly = pd.Series(px.values, index=[d + " 16:00" for d in days])
+    a = S.date_alignment(px, hourly)
+    assert S.alignment_ok(a) and a["lag 0"] > 0.99
+    shifted = pd.Series(px.values[1:], index=days[:-1])                        # daily bars dated one day early
+    assert not S.alignment_ok(S.date_alignment(shifted, hourly))
