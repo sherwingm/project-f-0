@@ -199,6 +199,15 @@ are recorded?
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-18 · results site refresh: Arm F workspace** (the user asked; code `e8a6dd5`, `2112408`). `templates/results.html`
+  rebuilt as strategy-aware workspaces on one design system: tabs Paper / Arm A / Arm B / **Arm F**, each a config of
+  panels rendered by one panel component (same header / loading / empty states), design tokens for arm colours and
+  radii (also in `templates/s2.html`). Arm F shows: scoreboard + booked-net line, the next fade list and skipped filings
+  (`meta.fade`, new read-only `GET /api/fade`, also embedded in the GitHub Pages copy), the NP YoY > 25 % shadow split
+  with progress to 40 left-out puts, open / closed / refused fade trades, earlier lists, and the backtest headlines.
+  New everywhere: a 'why' drawer on any trade or signal (numbers, strong / weak, shadow, strike distance, stock
+  entry → exit), search (Ctrl+K / 🔍), shareable links (`#armf/POLYCAB`), small booked-net lines per arm. No trading
+  rule changed. Checked at phone and desktop width with live data, no console errors.
 - **2026-10-18 · NP YoY > 25 % shadow track on live paper** (the user's choice; pre-registered `c01d331`, code
   `23a3d88`). `server/fade.py` tags each fade entry with `np_yoy` / `np_qoq` / `rev_yoy` and `shadow_np25`
   (calls always in; puts only above +25 %); older trades are read from their `why` note. `/api/paper/summary`
