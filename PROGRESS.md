@@ -206,6 +206,9 @@ are recorded?
   prices with no mismatch: §1 / §2 not run (hourly check failed: Brent 92.8 %, copper 82.1 % of days within 0.5 %);
   rotation, gap fill, weak results 0 of 8 pass; weak results rose afterwards (already-fallen ones +1.3 % in 5 days,
   descriptive); order wins and QIP showed no fall. DECISIONS updated. Core idea tracker updated.
+  Then the user chose "fix check": a date-alignment check written down first (`866d56e`) also failed (Brent 0.60,
+  copper 0.53, INFY 0.998); Yahoo's hourly and daily Brent differ by 4-7 % on the same day (different contracts), so
+  the free futures data cannot be verified and §1 / §2 stay not run (not changed a second time).
 - **2026-10-18 · results site refresh: Arm F workspace** (the user asked; code `e8a6dd5`, `2112408`). `templates/results.html`
   rebuilt as strategy-aware workspaces on one design system: tabs Paper / Arm A / Arm B / **Arm F**, each a config of
   panels rendered by one panel component (same header / loading / empty states), design tokens for arm colours and
