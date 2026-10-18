@@ -31,7 +31,7 @@ are recorded?
 |---|---|---|
 | Step 1 screen (48 cells, 2021-26) | Only the **short build-up** (price −3 %+, OI +10 %+, volume 1.5×) kept falling: +0.62 % over 5 sessions, t 3.2 | Real but small edge in the stock |
 | Step 2 bought put | −14.2 % of premium (t −2.7): a ₹600-8,000 put is too far below the stock for a 0.6 % move | Not tradable with cheap puts |
-| Screen B (pre-registered, not run) | The user's other ideas: parent indicators, market backdrop, sector rotation, gap fill, weak results | Waiting |
+| Screen B (run 2026-10-18) + order-book proxy + QIP | Parent indicators and market backdrop: not run (the pinned futures series failed the pre-registered hourly check); sector rotation, gap fill, weak results: 0 of 8 tests pass; order wins and QIP: no fall | No new way to catch a fall; weak results tend to **rise** after day 0 (the fade's call side again), not fall |
 
 ## How we work
 - **The core idea tracker above is updated with every step**, alongside the detailed log.
@@ -199,6 +199,13 @@ are recorded?
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-18 · S2 screen B run** (the user's request, with order-book and QIP added; addendum `bf898a9` before any
+  return; gates: yfinance 1.7.0 cache pinned in `data/parents/`, financials frozen, F&O 2021 files, corp actions and QIP
+  list fetched; recount dropped the order-book cells (50 / 36 events < 100) before returns; an XBRL-date bug found and
+  fixed at the recount). Results `data/results/S2_screen_B.md` / `.xlsx` (sent to the phone), 30 events rebuilt from raw
+  prices with no mismatch: §1 / §2 not run (hourly check failed: Brent 92.8 %, copper 82.1 % of days within 0.5 %);
+  rotation, gap fill, weak results 0 of 8 pass; weak results rose afterwards (already-fallen ones +1.3 % in 5 days,
+  descriptive); order wins and QIP showed no fall. DECISIONS updated. Core idea tracker updated.
 - **2026-10-18 · results site refresh: Arm F workspace** (the user asked; code `e8a6dd5`, `2112408`). `templates/results.html`
   rebuilt as strategy-aware workspaces on one design system: tabs Paper / Arm A / Arm B / **Arm F**, each a config of
   panels rendered by one panel component (same header / loading / empty states), design tokens for arm colours and
