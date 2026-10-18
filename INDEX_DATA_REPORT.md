@@ -29,11 +29,12 @@ piece runs.
 
 | Piece | Run | What it stored | Rows / files | Range | Calls / runtime | Notes |
 |---|---|---|---|---|---|---|
-| §1 instruments + §3 recorder | first run (manual, session 2026-10-16) | — | — | — | — | running |
-| §5 daily OHLC (PC) | 2021-01-01 → 2026-10-16 | — | — | — | — | running |
-| §6 expiry calendar | local build 2026-10-18 | `expiries.parquet`, `expiries_next.json` | NIFTY 334, BANKNIFTY 252, FINNIFTY 240, MIDCPNIFTY 188, NIFTYNXT50 35 expiries | 2021-01-07 → 2031 | — | `nearest_expiry("NIFTY","2023-07-05")` = 2023-07-06; `("NIFTY","2026-10-14")` = 2026-10-19 (the week's Tuesday moved to Monday for the 20-Oct holiday). SENSEX joins with the first scrip-master snapshot. |
-| §4 spot / VIX backfill | not run yet | | | | | |
-| §9 Upstox expired backfill | not run yet | | | | | |
+| §1 instruments + §3 recorder | first run, manual, session 2026-10-16 (run 39144565929) | 1-min options, contract snapshot, EOD chain | **712 contracts; 2,306,906 rows** (NIFTY 922,908; SENSEX 735,424; BANKNIFTY 648,574); 712 chain rows | each contract from its listing date (≤ 120 days) to 2026-10-16 | 1,348 calls, 44 min | Kotak answers GitHub's runners. Expiry check: nse_fo 9,261 / bse_fo 3,275 contracts, **0 mismatches**; SENSEX26O22 → 2026-10-22 (the BSE offset bug is fixed). 41 failures: 40 empty-candle SENSEX contracts (a bug, fixed) and 1 dropped connection (now retried) |
+| §3 recorder re-run | session 2026-10-16 (run 39148299710) | the 41 missing contracts | 712 contracts | — | 736 calls, 21 min | **0 failures**. A normal night: ~712 calls, ~18-21 min |
+| §4 spot / VIX backfill | Action run 39150059647 | `spot_1m/<name>/<YYYY-MM>.parquet`, `vix_daily.parquet` | NIFTY50 461,682; NIFTYBANK 461,613; SENSEX 459,981; INDIAVIX 462,121 one-minute rows; VIX daily 4,563 rows (yfinance) | 1-min **2021-10-20 → 2026-10-16** (61 months each); VIX daily 2008-03-03 → 2026-10-16 | 471 calls, 17 min | See the VIX sections below |
+| §5 daily OHLC (PC) | 2021-01-01 → 2026-10-16 | `options_daily/<underlying>/<YYYY>.parquet` | **8,002,227 rows** (IDO + IDF); 1,425 sessions; 82 weekday holidays; 0 errors; 114 MB | 2021-01-01 → 2026-10-16; NIFTY, BANKNIFTY, FINNIFTY, MIDCPNIFTY, NIFTYNXT50 (+ NIFTYFPI) | 1,507 file downloads, 106 min | Full open / high / low / close / settle / OI / turnover. UndrlygPric and NewBrdLotQty are null before the 2024-07-05 UDiFF switch. Pushed to `index-data` after the running Upstox job (to avoid two writers) |
+| §6 expiry calendar | local 2026-10-18, then Action run 39151451108 | `expiries.parquet`, `expiries_next.json` | NIFTY 334, BANKNIFTY 252, FINNIFTY 240, MIDCPNIFTY 188, NIFTYNXT50 35, SENSEX (from the scrip master) | 2021-01-07 → 2031 | — | `nearest_expiry("NIFTY","2023-07-05")` = 2023-07-06; `("NIFTY","2026-10-14")` = 2026-10-19 (the week's Tuesday moved to Monday for the 20-Oct holiday). Next SENSEX: 22 Oct, 29 Oct, 5 Nov |
+| §9 Upstox expired backfill | NIFTY: running (run 39151549409) | | | | | |
 
 ## Expired-token retention
 NIFTY 19-Oct-2026 22650 CE, Kotak token 47141 (expired 2026-10-19). Probed by `index_data/probe_expired.py` through
@@ -44,10 +45,11 @@ the `index-jobs` Action on 2026-10-20, 10-27 and 11-19 at 16:00 IST (scheduled t
 | before expiry (DATA_ACCESS_AUDIT) | 2026-10-18 | 1,923 | — | 385 | — | yes | 1,807 | — |
 
 ## VIX corrections
-Pending the §4 run (Kotak's older India VIX minutes come ×100).
+Kotak's India VIX minutes with open > 200 were divided by 100: **92,936 rows corrected**, from **2021-10-20 09:15** to
+**2023-08-22 15:29**. Kotak's daily `D` VIX candles show the same scale and are corrected the same way in the cross-check.
 
 ## yfinance vs Kotak India VIX
-Pending the §4 run.
+Daily closes, 2022-01-01 → 2026-10-16: **1,177 days compared, 0 mismatches above 1 %**.
 
 ## Source reconciliation
 Pending: needs Kotak recorder sessions from 2026-10-19 on, then `index-jobs` → `reconcile`.
