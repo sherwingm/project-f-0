@@ -22,3 +22,9 @@ data/cache/rating_drops.jsonl
 data/cache/bhav_cache_status.json
 data/cache/intraday/
 data/cache/index/
+
+# index data layer: large files live on the index-data branch
+data/index/**/*.parquet
+data/index/recorded_tokens.json
+data/index/.upstox_token
+store/

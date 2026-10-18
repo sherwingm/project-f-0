@@ -1,0 +1,61 @@
+name: Index options recorder
+# §3 of INDEX_DATA_PLAN.md: every trading day at 19:30 IST, 1-minute candles of the live NIFTY / SENSEX / BANKNIFTY
+# options near the money (Kotak Neo, consumer key from the KOTAK_CONSUMER_KEY secret; data calls need no login).
+# Large Parquet files go to the orphan branch `index-data` (never merged); data/index/status.json goes to main.
+# render.yaml ignores data/index/**, so these commits never redeploy the live server.
+on:
+  schedule:
+    - cron: "0 14 * * 1-5"      # 14:00 UTC = 19:30 IST
+  workflow_dispatch:
+    inputs:
+      day:
+        description: "record a past session instead of today (YYYY-MM-DD), blank = today"
+        required: false
+        default: ""
+permissions:
+  contents: write
+concurrency:
+  group: index-data
+  cancel-in-progress: false
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements-server.txt pyarrow
+      - name: Check out the index-data branch into ./store
+        run: |
+          git config --global user.name "fo-scanner-bot"
+          git config --global user.email "bot@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin index-data >/dev/null; then
+            git fetch --depth=1 origin index-data
+            git worktree add store FETCH_HEAD
+            git -C store switch -c index-data
+          else
+            git worktree add --orphan -b index-data store
+          fi
+      - name: Record
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
+          INDEX_STORE: store/data/index
+        run: python -m index_data.recorder ${{ inputs.day && format('--day {0}', inputs.day) || '' }}
+      - name: Commit the Parquet files to index-data
+        if: always()
+        run: |
+          cd store
+          git add -A data/index 2>/dev/null || true
+          git diff --cached --quiet || git commit -q -m "index data: recorder $(date -u +%F)"
+          git push origin HEAD:index-data
+      - name: Commit status.json to main
+        if: always()
+        run: |
+          git add data/index/status.json 2>/dev/null || true
+          git diff --cached --quiet && exit 0
+          git commit -q -m "index data: recorder status $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done

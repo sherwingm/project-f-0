@@ -22,6 +22,8 @@ services:
         - data/live_snapshots/**
         - data/forward/**
         - data/s2/**
+        - data/index/**
+        - index_data/**
         - "**/*.md"
     envVars:
       - key: PYTHON_VERSION
