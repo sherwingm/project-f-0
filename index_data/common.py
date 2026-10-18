@@ -57,6 +57,8 @@ class Kotak:
                 try:
                     resp = self.client().historical_data(neosymbol=neosymbol, interval=interval,
                                                          from_date=start, to_date=end)
+                except Exception as exc:  # noqa: BLE001 - dropped connections: retry with a pause
+                    resp = {"error": f"connection: {exc}"}
                 finally:
                     self._last = time.monotonic()
                     self.calls += 1
@@ -64,7 +66,7 @@ class Kotak:
             if isinstance(data, dict) and isinstance(data.get("candles"), list):
                 return data["candles"]
             msg = redact(str(resp))[:300]
-            if "Rate limit" in msg or "429" in msg:
+            if "Rate limit" in msg or "429" in msg or msg.startswith("{'error': 'connection"):
                 time.sleep(5 * (attempt + 1))
                 continue
             if "Invalid neosymbol" in msg or "older than" in msg or "exceeds maximum" in msg:
@@ -89,8 +91,9 @@ class Kotak:
 def candles_frame(rows: list[list]) -> pd.DataFrame:
     """Kotak / Upstox candle rows -> timestamp (IST, tz-aware), open, high, low, close, volume, oi (oi when present)."""
     cols = ["timestamp", "open", "high", "low", "close", "volume", "oi"]
-    if not rows:
-        return pd.DataFrame(columns=cols)
+    if not rows:                                   # typed, so .dt works on an empty frame
+        return pd.DataFrame({"timestamp": pd.Series([], dtype="datetime64[ns, Asia/Kolkata]"),
+                             **{c: pd.Series([], dtype="float64") for c in cols[1:]}})
     df = pd.DataFrame([list(r) + [None] * (7 - len(r)) for r in rows], columns=cols)
     df["timestamp"] = pd.to_datetime(df["timestamp"], utc=True).dt.tz_convert("Asia/Kolkata")
     for c in cols[1:]:
