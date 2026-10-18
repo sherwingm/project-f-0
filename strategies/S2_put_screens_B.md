@@ -350,6 +350,20 @@ is descriptive only and cannot pass.
 **Test accounting with the addendum:** 13 pass tests (16 pass-eligible cells); the running total of tests on the
 window goes into DECISIONS.md.
 
+## Addendum 2026-10-18 (2): the external-series check, corrected before §1 / §2 ever ran
+The first run stopped §1 and §2 at the daily-vs-1h check, implemented as "the daily Close is within 0.5 % of a 1h close
+on the same ET date on ≥ 95 % of days" (BZ=F 92.8 %, HG=F 82.1 %, ALI=F 42.2 %, INFY 100 %). That form tests the
+price level, and a futures **settlement** is not a traded 1h close, so it fails for reasons that do not affect the
+screens. What the screens depend on is the **date**: the strict lookup ("last bar dated before the entry session")
+is wrong only if Yahoo's daily bars are shifted by a day. No §1 / §2 return had been computed when this was written
+(the run stopped before them); the user chose to fix the check on 2026-10-18.
+- **New check (replaces the old one; the run still aborts if it fails):** for BZ=F, HG=F and INFY, build a daily
+  series from the 1h bars (the last 1h close of each ET date) and take its close-to-close log returns. Correlate them
+  with the daily bars' returns at lag 0, −1 and +1 days, over every day the 1h data covers. **Pass:** lag-0
+  correlation ≥ 0.80 and at least 0.50 above both the lag −1 and the lag +1 correlation, for each of the three.
+- ALI=F is a side report only, so it is reported but not required. TIO=F has no 1h bars (as the spec already says).
+- Nothing else changes: §1 and §2 run exactly as pre-registered.
+
 ## Known limits
 - **Daily data.** The official open is the pre-open auction price (≈ 09:08). A live short fills later, and a put can only be bought from 09:15 and often trades later still. The official close is the 15:00–15:30 VWAP. §4 applies a latency haircut; the others do not.
 - **External series.**
