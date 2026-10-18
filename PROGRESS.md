@@ -20,6 +20,7 @@ How each piece of work moves the user's core ideas forward. Facts and numbers st
 | 2022-24 re-run (2026-10-18) | Did the fade and the exit findings hold in earlier years? | Fade weaker: +3.6 % a trade, t 0.9 (2023 H1 −14 %), stock fade +0.37 % (t 2.4); exits repeat exactly: stops neutral, early targets hurt, noise in the first 15 minutes | The exit rule (hold to 15:20, no stop) is stable; the fade's edge is small and regime-dependent, so the live paper run decides |
 | Diagnostics 2022-26 (2026-10-18) | Why do losers lose? Does a pre-fall, the market or the size of the numbers matter? "Run done → opposite"? | Losers = the stock moving with the numbers (option wins 4-5 % then); pre-run and other pre-entry measures: nothing; NIFTY / sector on day 0 matter but are known only after the close; run done → opposite: no (54-56 %); the fade grows with how extreme NP YoY is, and puts at NP YoY 10-25 % lose in both periods | The core reversal is the stock's own (not the market); the biggest numbers fade most, but no pre-entry filter is proven (the NP YoY 10-25 % lead fails with the VWAP entry in 2025-26): watch item |
 | Strike distance study (2026-10-18) | Would a closer strike turn the losers into winners? | No: caps cut the far-strike winners, one step closer is much worse, at the money is worse with the open entry and better only with the VWAP entry, where everything loses | The fade's edge comes from cheap far options multiplying the big fades, and it needs the open price; the live fills decide |
+| NP YoY > 25 % shadow track (live, from 2026-10-18) | Do puts on only modest profit growth (10-25 %) lose on live fills too? | Tagging started; so far 1 of 9 live fade trades is a left-out put (INDIANB, +13.9 %) | Tests the strength-of-number lever on new data; judged after ≥ 40 left-out puts |
 
 **Open questions for the idea:** does the day-0 fade survive a realistic live entry (the ask after 09:15, not the open)?
 (2022-24 answered: the exit findings hold, the fade is weaker.) Can a time-based exit or a smarter stop help once real minute paths of live trades
@@ -198,6 +199,12 @@ are recorded?
   in 71 %. Hindsight numbers (whole-day high / low, order within the day unknown), not exits. 38 trades have a peak slightly below
   the entry (entry is the open + 1 tick). Verified against pandas with a Python formula engine; LibreOffice is NOT installed (the
   install was abandoned), so there was no LibreOffice recalculation.
+- **2026-10-18 · NP YoY > 25 % shadow track on live paper** (the user's choice; pre-registered `c01d331`, code
+  `23a3d88`). `server/fade.py` tags each fade entry with `np_yoy` / `np_qoq` / `rev_yoy` and `shadow_np25`
+  (calls always in; puts only above +25 %); older trades are read from their `why` note. `/api/paper/summary`
+  now has `fade_split`: v10 all / shadow / left-out puts / unknown (closed, wins, net ₹, mean net %, open,
+  unrealised). v10 still takes every trade. Today's ledger: 9 fade trades, 1 left-out put (INDIANB). Judged after
+  ≥ 40 left-out puts have closed. Core idea tracker updated.
 - **2026-10-18 · strike distance study done** (the user chose 'a'; pre-registered `afb5a76`, code `6a8bdd6`,
   results `bb930c2`: `data/results/S1_v10_strike_distance.md` / `.xlsx`, sent to the phone). Same signals in both
   windows; baseline reproduces the backtest exactly; 60 sampled trades rebuilt from the price files, no mismatch. No
