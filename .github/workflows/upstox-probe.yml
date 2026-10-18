@@ -1,0 +1,24 @@
+name: upstox-probe
+# One-off, manual: what history the Upstox Analytics Token gives (DATA_ACCESS_AUDIT.md). Read-only.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Probe
+        env:
+          UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+        run: python -m scanner.upstox_probe
+      - uses: actions/upload-artifact@v4
+        with:
+          name: upstox-probe
+          path: data/results/upstox_probe.json
