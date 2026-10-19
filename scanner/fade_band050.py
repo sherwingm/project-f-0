@@ -68,6 +68,10 @@ def up_tick(x: float) -> float:
     return round(math.ceil(round(x / TICK, 6)) * TICK, 2)
 
 
+def down_tick(x: float) -> float:
+    return round(math.floor(round(x / TICK, 6)) * TICK, 2)
+
+
 def simulate(m: pd.DataFrame, trail: float | None) -> dict | None:
     """One trade on its day-0 minutes (time-sorted rows with t, o, h, l, c). None if there is no entry minute."""
     m = m[(m["t"] >= "09:15") & (m["t"] <= "15:19")]
@@ -82,7 +86,7 @@ def simulate(m: pd.DataFrame, trail: float | None) -> dict | None:
         if trail is not None:
             stop = peak * (1 - trail)
             if r.l <= stop:
-                px = min(stop, r.o) - 2 * TICK
+                px = down_tick(min(stop, r.o)) - 2 * TICK
                 return {"entry": entry, "exit": round(max(TICK, px), 2), "reason": "stop", "at": r.t}
             if r.h >= target + TICK - 1e-9:
                 return {"entry": entry, "exit": target, "reason": "target", "at": r.t}

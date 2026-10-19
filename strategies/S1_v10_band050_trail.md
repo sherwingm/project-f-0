@@ -32,8 +32,9 @@ order of highs and lows is real.
   high ≥ target + 1 tick.
 - **Trailing stop:** the peak is the highest minute high since entry, the entry counting as the first peak. The stop
   is peak × (1 − trail), checked against the minute's low **before** the minute's high updates the peak. It fills at
-  the stop − 2 ticks (a market sell into the bid), not below ₹0.05 and not above that minute's open (a gap down fills
-  at the open − 2 ticks).
+  the stop rounded **down** to the tick − 2 ticks (a market sell into the bid), not below ₹0.05 and not above that
+  minute's open (a gap down fills at the open − 2 ticks). The rounding was added the same day, before any minute
+  candle was read, when a unit test showed a stop can fall between ticks.
 - **Both in one minute:** if a minute touches both the stop and the target, the stop is taken (worst case).
 - **Else** the close of the 15:19 minute − 2 ticks (the 15:20 sale), not below 0.
 - Charges: `server/charges.py` on both orders (₹20 brokerage an order, STT, exchange, SEBI, stamp, GST).

@@ -414,6 +414,19 @@ are recorded?
   `index-data` branch under `data/index/s1_backtest_intraday/` (`ea6f543`).
 - The code was pushed during market hours with `[skip render]`; Render confirmed not redeployed.
 
+### 2026-10-19: Rs 0.50-1 band, +20 % target with a trailing stop on 1-minute data (fails)
+- Pre-registered: `strategies/S1_v10_band050_trail.md`. The sample is every 2025-26 fade signal's strike nearest the
+  money priced Rs 0.50-1, with >= 50 contracts and a lot of Rs 600-8,000: 147 contracts.
+- Minute candles: Upstox expired-instruments covers stock options from the Oct 2024 expiries
+  (`index_data/probe_stock_expired.py`). They are fetched on GitHub by the manual `stock-options-probe` workflow
+  (`script=fetch_band_minutes`), an artifact that is not committed. 142 of 147 fetched. The minute open and high match
+  the bhavcopy on 99 % of contracts.
+- `python -m scanner.fade_band050 run` → `data/results/S1_v10_band050_trail.md`. 124 trades simulated (18 had no trade
+  by 09:20). Chosen on 2025: R10 (10 % trail), the "best" at -Rs 37k. **2026 test: R10 -Rs 36,802 on 58 trades (mean
+  -24.8 %, win 12 %), so it fails.** The 15:20 baseline is worse (-Rs 58k). Every variant loses in both years; stops
+  close 65-88 % of trades. Crossing the spread costs about Rs 0.25 on a Rs 0.89 average entry. Per the
+  pre-registration, the Rs 1-2 step is not run on this rule.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
