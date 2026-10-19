@@ -1,6 +1,16 @@
 {
- "as_of": "2026-10-19",
+ "as_of": "2026-10-20",
  "rows": [
+  {
+   "dataset": "options 1-minute",
+   "underlying": "BANKNIFTY",
+   "resolution": "1 min",
+   "source": "upstox",
+   "first": "2024-08-01",
+   "last": "2026-10-16",
+   "files": 1516,
+   "expiries": 30
+  },
   {
    "dataset": "options 1-minute",
    "underlying": "BANKNIFTY",
@@ -9,17 +19,7 @@
    "first": "2026-07-29",
    "last": "2026-10-16",
    "files": 92,
-   "expiries": 2
-  },
-  {
-   "dataset": "options 1-minute",
-   "underlying": "BANKNIFTY",
-   "resolution": "1 min",
-   "source": "upstox",
-   "first": "2026-10-16",
-   "last": "2026-10-16",
-   "files": 2,
-   "expiries": 2
+   "expiries": 30
   },
   {
    "dataset": "options 1-minute",
@@ -149,6 +149,15 @@
    "first": "2008-03-03",
    "last": "2026-10-16",
    "files": 1
+  },
+  {
+   "dataset": "S1 backtest day-0 stock",
+   "underlying": "fade trades 2022-26",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2022-01-13",
+   "last": "2026-08-17",
+   "files": 870
   },
   {
    "dataset": "contract list snapshots",

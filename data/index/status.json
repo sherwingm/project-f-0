@@ -142,6 +142,19 @@
    "stopped": "time budget reached (restart to continue)",
    "calls": 9966,
    "runtime_s": 18132
+  },
+  "BANKNIFTY": {
+   "underlying": "BANKNIFTY",
+   "expiries": 30,
+   "first": "2024-10-01",
+   "last": "2026-09-29",
+   "estimate_calls": 12126,
+   "contracts_done": 3248,
+   "contracts_skipped": 0,
+   "rows": 31555677,
+   "stopped": null,
+   "calls": 11783,
+   "runtime_s": 11469
   }
  },
  "reconcile": {
