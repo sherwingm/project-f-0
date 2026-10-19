@@ -9,7 +9,7 @@ on:
         required: true
         default: probe_stock_expired
         type: choice
-        options: [probe_stock_expired, fetch_band_minutes]
+        options: [probe_stock_expired, fetch_band_minutes, probe_old_options]
       args:
         description: "arguments for the script (fetch_band_minutes: 050 or 12)"
         required: false
@@ -25,10 +25,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install requests pandas pyarrow
+      - run: pip install -r requirements-server.txt pyarrow
       - name: Probe
         env:
           UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
         run: python -m index_data.${{ inputs.script }} ${{ inputs.args }}
       - if: inputs.script == 'fetch_band_minutes'
         uses: actions/upload-artifact@v4
