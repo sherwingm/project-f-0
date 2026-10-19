@@ -35,7 +35,9 @@ piece runs.
 | §5 daily OHLC (PC) | 2021-01-01 → 2026-10-16 | `options_daily/<underlying>/<YYYY>.parquet` | **8,002,227 rows** (IDO + IDF); 1,425 sessions; 82 weekday holidays; 0 errors; 114 MB | 2021-01-01 → 2026-10-16; NIFTY, BANKNIFTY, FINNIFTY, MIDCPNIFTY, NIFTYNXT50 (+ NIFTYFPI) | 1,507 file downloads, 106 min | Full open / high / low / close / settle / OI / turnover. UndrlygPric and NewBrdLotQty are null before the 2024-07-05 UDiFF switch. Pushed to `index-data` on 2026-10-19 (commit fb18422) |
 | §6 expiry calendar | local 2026-10-18, then Action run 39151451108 | `expiries.parquet`, `expiries_next.json` | NIFTY 334, BANKNIFTY 252, FINNIFTY 240, MIDCPNIFTY 188, NIFTYNXT50 35, SENSEX (from the scrip master) | 2021-01-07 → 2031 | — | `nearest_expiry("NIFTY","2023-07-05")` = 2023-07-06; `("NIFTY","2026-10-14")` = 2026-10-19 (the week's Tuesday moved to Monday for the 20-Oct holiday). Next SENSEX: 22 Oct, 29 Oct, 5 Nov |
 | §9 Upstox expired backfill, NIFTY part 1 | Action run 39151549409 (2026-10-18 17:52 → 23:25 UTC) | expired NIFTY options, 1-min with OI, source `upstox` | **4,448 contracts; 31,486,660 rows** | expiries **2024-10-03 → 2025-08-14** (107 listed in all, 2024-10-03 → 2026-10-13) | 10,882 calls, 5.5 h | Stopped at its 320-minute budget as designed (restart-safe). Full NIFTY estimate ~24,400 calls. No `UDAPI1149`: the free Analytics Token works |
-| §9 NIFTY part 2, BANKNIFTY, SENSEX, reconciliation | running in sequence from 2026-10-19 09:00 IST | | | | | BANKNIFTY / SENSEX start after the 19:30 recorder run |
+| §9 Upstox expired backfill, NIFTY part 2 | Action run 39194783874 (2026-10-19 03:27 → 08:30 UTC) | expired NIFTY options, 1-min with OI | **4,026 more contracts**; 32,302,488 rows in the run | continues after part 1 (4,448 contracts skipped as done) | 9,966 calls, 5.0 h | Stopped at its time budget again: about 8,500 of ~24,400 estimated calls remain → **part 3 needed** (after SENSEX, outside market hours) |
+| §9 reconciliation (Kotak recorder vs Upstox) | Action run 39223454396 (2026-10-19 08:32 UTC) | `reconcile.json` | 120 contracts, 29,126 matched minutes | session 2026-10-16 | 120 Upstox calls | See "Source reconciliation" |
+| §9 BANKNIFTY, SENSEX | queued: start after the 19:30 recorder run (PC job sequence) | | | | | |
 
 ## Expired-token retention
 NIFTY 19-Oct-2026 22650 CE, Kotak token 47141 (expired 2026-10-19). Probed by `index_data/probe_expired.py` through
@@ -53,7 +55,13 @@ Kotak's India VIX minutes with open > 200 were divided by 100: **92,936 rows cor
 Daily closes, 2022-01-01 → 2026-10-16: **1,177 days compared, 0 mismatches above 1 %**.
 
 ## Source reconciliation
-Pending: needs Kotak recorder sessions from 2026-10-19 on, then `index-jobs` → `reconcile`.
+Run 2026-10-19 on the 16 Oct session (Kotak's recorder vs Upstox's history, 120 contracts, 1-min closes):
+- **29,126 minutes on both.** **77.3 %** have the identical close; the mean absolute difference is **Rs 0.35**,
+  and the largest single gap is Rs 93.8 (one outlier, to look at).
+- 0 minutes are Kotak-only, and **16,083 minutes are Upstox-only**: Upstox also lists the minutes without a trade
+  that Kotak leaves out. These need a rule before the two are merged (carry the last close forward or drop them).
+- Verdict: the two sources agree to within a tick most of the time, so they can be combined. Kotak is used where
+  both exist, as the recorder is the forward source.
 
 ## What is available, at which resolution
 Filled in after the first runs (see also the coverage table on `/index`).
