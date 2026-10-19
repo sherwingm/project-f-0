@@ -403,6 +403,14 @@ are recorded?
   the Arm F panel "Shadow entries: sub-₹2 refusals". Judged at 30 closed. The real exit and the +100 % shadow exit
   are untouched. 7 new tests in `tests/test_fade.py`.
 
+### 2026-10-19: nightly 19:30 job saves more data
+- From 2026-10-19 the 19:30 GitHub job also saves: each S1 paper trade's 1-minute stock and option candles (the last 7
+  days each night); index spot / VIX 1-minute and NSE daily OHLC top-ups; and, on Fridays, a weekly Upstox
+  expired-contract top-up.
+- The 870 S1 backtest day-0 stock 1-minute files (`data/cache/intraday/*.json`, git-ignored on main) are now on the
+  `index-data` branch under `data/index/s1_backtest_intraday/` (`ea6f543`).
+- The code was pushed during market hours with `[skip render]`; Render confirmed not redeployed.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
