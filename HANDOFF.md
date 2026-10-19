@@ -1,4 +1,4 @@
-# Handoff (2026-10-19, 09:35 IST)
+# Handoff (2026-10-19, 18:40 IST)
 
 Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The detailed records are in `PROGRESS.md`
 (log and the Core idea tracker), `DECISIONS.md` (rule and result changes), `INDEX_DATA_REPORT.md`,
@@ -46,11 +46,26 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 ## Still running
 | What | Where | Finishes | Needs the PC |
 |---|---|---|---|
-| Upstox NIFTY expired backfill, part 2 (Aug 2025 → Oct 2026) | GitHub run 39194783874 | ~14:00 IST | no |
-| Job sequence script: reconciliation → wait for the 19:30 recorder → Upstox BANKNIFTY → SENSEX (`scratchpad/run_jobs3.sh`, log `run_jobs3.log`) | this PC | overnight into 20 Oct | **yes** (if it dies, re-dispatch the jobs by hand, one at a time) |
-| Scheduled: copy 870 S1 backtest minute files to `index-data` + PROGRESS note | Claude app task | 19 Oct 15:40 IST | Claude app open |
-| Nightly recorder, first run with the additions | GitHub cron | 19 Oct ~20:00 IST | no |
+| Job sequence `scratchpad/run_jobs3.sh` (log `run_jobs3.log`): waits for the 19:30 recorder → Upstox BANKNIFTY → SENSEX (300 min each) | this PC | overnight into 20 Oct | **yes** |
+| `scratchpad/run_jobs4.sh` (log `run_jobs4.log`): after SENSEX, NIFTY part 3 (`--max-minutes 180`, expiries May → Oct 2026) | this PC | ~20 Oct morning | **yes** |
+| Nightly recorder (+ S1 trades' minutes, spot / VIX, OHLC top-ups) | GitHub cron 19:30 IST | ~20:00 IST | no |
+| Upstox-vs-Kotak shadow check on the live server (`/api/data/compare`) | Render, from 20 Oct 09:20 | a few days, then decide the switch | no |
 | Expired-token probes (Kotak token 47141): 1 / 2 / 3 | Claude app tasks → `index-jobs` `probe_expired` | 20 Oct, 27 Oct, 19 Nov at 16:00 IST | Claude app open |
+
+Done on 2026-10-19:
+- Live (deploy `e2b067a` after close; the 15:35 commit was empty, so Render skipped it):
+  - the open-entry waiting reason (`open_wait`);
+  - the lot-size range check (refuses never-fit stocks at once);
+  - one-call pricing;
+  - Upstox as a live source, with the shadow check.
+- Reconciliation of the two sources recorded in INDEX_DATA_REPORT.md, with a merge rule. Upstox's volume-0 candles
+  are fillers.
+
+Open questions to the user:
+- Retry every 30 s instead of 2 min? It changes the fade's written rules, so it needs a DECISIONS.md entry and the
+  user's yes.
+- Switch `DATA_PROVIDER=upstox` after a few days of clean shadow rounds? After market, with a DECISIONS.md entry.
+- Never deploy with an empty commit: Render's `buildFilter` skips it. Touch a watched file (e.g. `DEPLOY_STAMP`).
 
 ## After a context compaction
 - Read this file first, then the tail of `PROGRESS.md` and `INDEX_DATA_REPORT.md`.
@@ -59,10 +74,7 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
   the remaining jobs **one at a time**, never while the 19:30 recorder is pending.
 - `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. The Python venv is `%TEMP%\fo-venv\Scripts\python.exe` (pandas,
   pyarrow, yfinance 1.7.0, requests, xlsxwriter).
-- **Open question to the user** (asked 2026-10-19 ~09:45 IST, not answered yet): "move to GitHub" or "leave it".
-  - **"Move to GitHub":** once the 15:40 copy is done, make the job chain start itself (each `index-jobs` run
-    dispatches the next) and turn the expired-token probes into a GitHub Action, so neither the PC nor the Claude app
-    is needed. Push with `[skip render]` if done during market hours.
+- "Move to GitHub" (self-chaining jobs) was never answered; the PC scripts are still used.
   - **Claude cloud:** advised as **not** needed.
 
 ## Next steps
