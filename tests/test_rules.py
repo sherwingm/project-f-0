@@ -130,6 +130,47 @@ def test_open_window_re_walks_a_gap_up_and_retries(setup):
     assert (p["strike"], p["entry"]["price"], p["rule"]["entry_mode"]) == (1350.0, 20.0, "open")
 
 
+def test_the_open_wait_reason_is_shown_until_it_fills(setup):
+    lg, q, rt, box = setup
+    for a in ("A", "B"):
+        box["fw"]["arms"][a]["pending"][0]["liquid_strikes"] = [1300.0, 1350.0, 1400.0]
+    for k in (1300.0, 1350.0, 1400.0):
+        q.set(k, 40.0, ask=40.0)                                    # Rs 14,000 a lot: nothing fits
+    rt._state()["open_wait"] = {"2026-10-13:OLD": {"reason": "x", "at": "", "arms": ["A"]}}
+    rt.on_poll(at(14, 9, 16))
+    w = lg.state["rules"]["open_wait"]
+    assert list(w) == ["2026-10-14:HCLTECH"]                         # an earlier day's reason is dropped
+    assert "more than Rs 8,000" in w["2026-10-14:HCLTECH"]["reason"] and "at 1400" in w["2026-10-14:HCLTECH"]["reason"]
+    assert w["2026-10-14:HCLTECH"]["at"].startswith("2026-10-14T09:16") and w["2026-10-14:HCLTECH"]["arms"] == ["A", "B"]
+    q.set(1350.0, 20.0, ask=20.0)
+    rt.on_poll(at(14, 9, 19))
+    assert lg.state["positions"] and lg.state["rules"]["open_wait"] == {}
+    saved = json.loads((lg.path).read_text(encoding="utf-8"))["rules"]       # on disk at once: a restart does not re-buy
+    assert saved["open"]["2026-10-14:HCLTECH"] == "bought" and saved["open_wait"] == {}
+
+
+def test_the_open_wait_reason_names_the_strike_and_clears_on_refusal(setup):
+    lg, q, rt, box = setup
+    for a in ("A", "B"):
+        box["fw"]["arms"][a]["pending"][0]["liquid_strikes"] = [1300.0]
+    q.set(1300.0, 1.5, ask=1.5)
+    rt.on_poll(at(14, 9, 16))
+    assert lg.state["rules"]["open_wait"]["2026-10-14:HCLTECH"]["reason"] == "premium below Rs 2 (at 1300: ask 1.5)"
+    rt = R.RuleTrader(lg, lambda: box["fw"])                         # a restart: the in-memory reason is gone
+    rt.on_poll(at(14, 15, 20))
+    r = [x for x in lg.state["rules"]["refused"] if x["mode"] == "open"]
+    assert r[0]["reason"] == "premium below Rs 2 (at 1300: ask 1.5)" and lg.state["rules"]["open_wait"] == {}
+
+
+def test_walk_reasons_name_the_strike_and_price():
+    cheap = lambda k: {"lot_size": 100, "atp": 4.0, "volume": 100 * 100, "depth": {"ask": [(4.0, 1)]}}  # noqa: E731
+    assert R.walk_ask([100.0], 100.0, cheap) == "cheapest liquid lot below Rs 600 (Rs 400 at 100)"
+    assert R.walk_live([100.0], 100.0, cheap) == "cheapest liquid lot below Rs 600 (Rs 405 at 100)"
+    tiny = lambda k: {"lot_size": 4250, "atp": 1.8, "volume": 4250 * 100, "depth": {"ask": [(1.85, 1)]}}  # noqa: E731
+    assert R.walk_ask([80.0, 81.0], 80.2, tiny) == "premium below Rs 2 (at 80: ask 1.85)"
+    assert R.walk_live([80.0, 81.0], 80.2, tiny) == "premium below Rs 2 (at 80: ATP 1.8)"
+
+
 def test_open_window_refuses_at_15_20_with_the_reason(setup):
     lg, q, rt, box = setup
     box["fw"]["arms"]["A"]["pending"][0]["liquid_strikes"] = [1300.0]

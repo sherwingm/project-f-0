@@ -315,6 +315,26 @@ are recorded?
   lose Rs 45-58k.** E2 is worse.
 - No rule change: the live trader stays at Rs 2 (the user decides; DECISIONS.md if it changes).
 
+### 2026-10-19: Arm A / B show why a stock is not bought yet (user's request)
+- IRFC (arm A, 19 Oct) was not bought by mid-morning, and nobody could see why. The open-window walk's reason lived only
+  in memory. `server/rules.py` now keeps it in `rules.open_wait` (served by `/api/paper/rules`), the same way
+  `fade_wait` works. It is cleared on a buy and at the 15:20 refusal. The walk reasons name the strike and price.
+- Results page:
+  - Paper tab: the "Not bought today" box lists "Still trying" stocks, with the reason and the time checked.
+  - Arm A / B: the "Buy next session" table has a "Paper today" column: open entry bought (strike, price), refused or
+    waiting, plus the 15:20 entry. It shows only once the paper's first try of the day is on record, so it stays
+    hidden on weekends, holidays and stale lists.
+  - The page redraws every tab on each paper poll and keeps open sections and the tables' sideways scroll.
+- A 3-agent review found 6 low-severity issues; all are fixed:
+  - the rules edits and the `/api/paper/rules` copy now run under the ledger lock (`fade_wait` too);
+  - the "bought" mark is saved at once, so a restart cannot buy the stock twice (pre-existing gap);
+  - the 15:20 refusal uses the saved reason after a restart;
+  - a leftover "waiting" row reads "not bought" after 15:20;
+  - the column hides when the server is not buying;
+  - the sideways scroll is kept.
+- No rule change: the walk, the Rs 600-8,000 band, the Rs 2 floor and the 2-minute retry are as before. Tests: the full
+  suite passes (the known `test_spec12_step7_model` deselected). Pushed with `[skip render]`; live from the next deploy.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

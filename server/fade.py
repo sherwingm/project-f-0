@@ -144,14 +144,16 @@ class FadeTrader:
                 "tradingsymbol": tradingsymbol(sig["symbol"], sig["side"], sig["expiry"], strike), "lot_size": lot}
 
     def _waiting(self, st: dict, key: str, now: datetime, why: str | None) -> None:
-        """Why a signal of today has not filled yet, for the fade list (/api/paper/rules: rules.fade_wait); None clears it."""
-        w = st.setdefault("fade_wait", {})
-        for k in [k for k in w if not k.startswith(key.split(":")[0])]:
-            del w[k]                                             # an earlier day's reasons
-        if why is None:
-            w.pop(key, None)
-        else:
-            w[key] = {"reason": why, "at": now.isoformat(timespec="seconds")}
+        """Why a signal of today has not filled yet, for the fade list (/api/paper/rules: rules.fade_wait); None clears it.
+        Under the ledger lock: a save or /api/paper/rules may be walking the dict on another thread."""
+        with self.ledger.lock:
+            w = st.setdefault("fade_wait", {})
+            for k in [k for k in w if not k.startswith(key.split(":")[0])]:
+                del w[k]                                         # an earlier day's reasons
+            if why is None:
+                w.pop(key, None)
+            else:
+                w[key] = {"reason": why, "at": now.isoformat(timespec="seconds")}
 
     def _refuse(self, st: dict, sig: dict, today: str, why: str) -> None:
         st.setdefault("fade", {})[f"{today}:{sig['symbol']}"] = "refused"

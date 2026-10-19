@@ -298,6 +298,10 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     $("#dot").className = "dot" + (open ? " on" : ""); $("#mkt").textContent = open ? "Market open" : "Market closed";
   }
   const armTags = arms => (arms || []).map(a => `<span class="arm ${a.toLowerCase()}">${a === "F" ? "Arm F · fade" : "Arm " + a}</span>`).join(" ");
+  const pastEntries = () => new Date().toLocaleTimeString("en-GB", { timeZone: "Asia/Kolkata", hour: "2-digit", minute: "2-digit", hour12: false }) >= "15:20";
+  // today's "still trying" reasons (rules.open_wait / rules.fade_wait, keyed "YYYY-MM-DD:SYMBOL") as rows
+  const waitsToday =(w, today, arms) => Object.entries(w || {}).filter(([k]) => k.startsWith(today + ":"))
+    .map(([k, v]) => ({ symbol: k.slice(today.length + 1), reason: v.reason, at: v.at, arms: arms || v.arms || [] }));
   const armColor = r => !r ? "var(--line)" : (r.arms || []).includes("F") ? "var(--arm-f)" : (r.arms || []).includes("A") ? "var(--arm-a)" : "var(--arm-b)";
   const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at 15:20" };
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
@@ -398,8 +402,13 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     },
     refusedToday() {
       if (paperWait("")) return "";
-      const rr = (((P.rules || {}).rules || {}).refused || []).filter(x => x.date === todayIso());
-      return rr.length ? panel("Not bought today", `<p class="note" style="margin:0">${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>`) : "";
+      const ru = (P.rules || {}).rules || {}, today = todayIso();
+      const rr = (ru.refused || []).filter(x => x.date === today);
+      const ww = [...waitsToday(ru.open_wait, today, null), ...waitsToday(ru.fade_wait, today, ["F"])];
+      const late = pastEntries();                      // a row left after 15:20: the server missed its 15:20 check
+      return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (every 2 minutes until 15:20)"}: ${ww.map(x =>
+          `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${esc(x.reason)} · checked ${esc(String(x.at).slice(11, 16))})`).join(" · ")}</p>` : "")
+        + (rr.length ? `<p class="note" style="margin:0">${rr.length && ww.length ? "<b>Refused:</b> " : ""}${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>` : "")) : "";
     },
     openPositions() {
       const w = paperWait("Open positions"); if (w) return panel("Open positions", w);
@@ -507,8 +516,28 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     },
   };
 
+  // the paper account's two entries of a forward-test signal today (/api/paper/rules + positions + trades)
+  function paperToday(sym, today) {
+    const ru = (P.rules || {}).rules || {}, key = `${today}:${sym}`;
+    const one = (mode, label, later) => {
+      const st = (ru[mode] || {})[key];
+      if (st === "bought") {
+        const p = P.positions.concat(P.trades).find(x => x.symbol === sym && (x.rule || {}).entry_mode === mode && String(x.opened_at || "").startsWith(today));
+        return `${label}: <span class="chip in">bought</span>${p ? ` <small>${num(p.strike, Number.isInteger(+p.strike) ? 0 : 2)} ${p.instrument === "PE" ? "PUT" : "CALL"} at ${rs((p.entry || {}).price)}</small>` : ""}`;
+      }
+      if (st === "refused") {
+        const r = (ru.refused || []).filter(x => x.mode === mode && x.date === today && x.symbol === sym).pop();
+        return `${label}: <span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`;
+      }
+      const w = mode === "open" ? (ru.open_wait || {})[key] : null;
+      if (w) return `${label}: <span class="chip${pastEntries() ? " out" : ""}">${pastEntries() ? "not bought" : "waiting"}</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 16))}</small>`;
+      return `${label}: <small>${later}</small>`;
+    };
+    return `${one("open", "Open", "from 09:15")}<br>${one("close", "15:20", "not yet")}`;
+  }
+
   // ---- forward test (scanner/forward_s1.py, nightly): Arm A / Arm B
-  const EXIT = { "0_stop": "Stop 50%", "1_decay": "5 days no new high", "2_t_minus_1": "T-1 (day before expiry)" };
+  const EXIT ={ "0_stop": "Stop 50%", "1_decay": "5 days no new high", "2_t_minus_1": "T-1 (day before expiry)" };
   function forwardPanels(A) {
     if (!FW || !FW.arms) return [panel("Forward test", empty("The forward test fills in each night from NSE's closing files: signals show here the morning after, and are bought on the next session."))];
     const st = FW.arms[A], days = (FW.sessions || []).filter(x => x.session > FW.first_session).length;
@@ -520,9 +549,14 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       ${tile("Win rate", closed.length ? Math.round(100 * wins / closed.length) + "%" : "—")}${tile("Average net", avg == null ? "—" : pct(avg), dir(avg))}${tile("Booked net", closed.length ? srs(tot) : "—", dir(tot))}</div>
       ${spark(closed.slice().sort((a, b) => (a.exit_date || "").localeCompare(b.exit_date || "")).map(t => t.net), "Booked net, trade by trade")}`,
       { sub: `forward paper test, day ${days} · last NSE session ${day(FW.last_session)}` }));
-    out.push(panel(`Buy next session · ${st.pending.length}`, st.pending.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Results day</th><th>Beat vs sector</th><th>Day move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
-      `<tr><td><b>${esc(p.symbol)}</b></td><td>${day(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dir(p.move)}">${pct(p.move)}</td><td>${day(p.expiry)}</td><td>${rs(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : empty("None from the last session."),
-      { sub: "results beats from the last session" }));
+    // the paper account buys this list on the session after the last NSE session: show how far it got today, once its
+    // first try of the day is on record (none on a weekend, a holiday or a stale list, which the server does not buy)
+    const today = todayIso(), ru = (P.rules || {}).rules || {};
+    const tried = ["open", "close", "open_wait"].some(m => Object.keys(ru[m] || {}).some(k => k.startsWith(today + ":")));
+    const paperCol = live() && P.loaded && !!P.rules && today > (FW.last_session || "") && tried;
+    out.push(panel(`Buy next session · ${st.pending.length}`, st.pending.length ? `<div class="tw"><table><thead><tr><th>Stock</th>${paperCol ? `<th class="l" style="min-width:200px">Paper today</th>` : ""}<th>Results day</th><th>Beat vs sector</th><th>Day move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
+      `<tr><td><b>${esc(p.symbol)}</b></td>${paperCol ? `<td class="l">${paperToday(p.symbol, today)}</td>` : ""}<td>${day(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dir(p.move)}">${pct(p.move)}</td><td>${day(p.expiry)}</td><td>${rs(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : empty("None from the last session."),
+      { sub: paperCol ? "results beats from the last session · the paper account buys each twice: the first affordable strike from 09:15 (retried every 2 minutes) and at 15:20" : "results beats from the last session" }));
     out.push(panel(`Open · ${st.open.length}`, st.open.length ? `<div class="cards">${st.open.map(t => { const x = t.stats || {}, e = t.entry_price;
       const pkp = x.h_peak_date ? e * (1 + x.h_peak / 100) : null, dpp = x.h_dip_date ? e * (1 + x.h_dip / 100) : null;
       return `<article class="pc" style="--c:var(--arm-${A.toLowerCase()})"><div class="hd"><div class="nm">${optName(t.symbol, t.strike, "CE")}</div><span class="tag ce">Bought CE</span></div>
@@ -679,10 +713,16 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     if (x) openWhy(x.why); else setTab(tab, h.s);
   }
 
+  let drawn = "";                                                    // the tab on screen, so a redraw keeps its open <details>
   function render() {
-    const w = WORKSPACES[tab];
+    const w = WORKSPACES[tab], sum = d => ((d.querySelector("summary") || {}).textContent || "").replace(/\d+/g, "#");
+    const keep = drawn === tab ? $$("#main details").filter(d => d.open).map(sum) : [];
+    const sx = drawn === tab ? $$("#main .tw").map(t => t.scrollLeft) : [];   // and each table's sideways scroll
     $("#main").innerHTML = `<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
       <div class="panels">${w.panels().filter(Boolean).join("")}</div>`;
+    drawn = tab;
+    if (keep.length) $$("#main details").forEach(d => { if (keep.includes(sum(d))) d.open = true; });
+    if (sx.some(Boolean)) $$("#main .tw").forEach((t, i) => { if (sx[i]) t.scrollLeft = sx[i]; });
     $$("[data-close]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); closePos(b.dataset.close, b); }));
   }
   $("#main").addEventListener("click", e => {
@@ -710,7 +750,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   let firstLoad = true;
   async function refresh() {
     await loadPaper();
-    if ((tab === "paper" || tab === "armf") && !busy()) render();
+    if (!busy()) render();                                         // every tab shows the paper account's live state
     if (firstLoad) { firstLoad = false; openFromHash(); }
     const open = P.summary && P.summary.market_open;
     setTimeout(refresh, (open ? SERVER.poll_seconds || 30 : 300) * 1000);

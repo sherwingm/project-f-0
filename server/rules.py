@@ -71,9 +71,9 @@ def walk_live(strikes: list[float], spot: float, quote: Callable[[float], dict |
             continue
         px = round(atp + TICK, 2)
         if px < MIN_PREMIUM:
-            return "premium below Rs 2"
+            return f"premium below Rs 2 (at {k:g}: ATP {atp:g})"
         if px * lot < BAND[0]:
-            return "cheapest liquid lot below Rs 600"
+            return f"cheapest liquid lot below Rs 600 (Rs {px * lot:,.0f} at {k:g})"
         if px * lot > BAND[1]:
             continue
         return k, px, lot, q
@@ -97,9 +97,9 @@ def walk_ask(strikes: list[float], spot: float, quote: Callable[[float], dict | 
             continue
         px = float(ask[0][0])
         if px < MIN_PREMIUM:
-            return "premium below Rs 2"
+            return f"premium below Rs 2 (at {k:g}: ask {px:g})"
         if px * lot < BAND[0]:
-            return "cheapest liquid lot below Rs 600"
+            return f"cheapest liquid lot below Rs 600 (Rs {px * lot:,.0f} at {k:g})"
         if px * lot > BAND[1]:
             reason = f"the cheapest liquid lot costs more than Rs 8,000 at the live ask (Rs {px * lot:,.0f} at {k:g})"
             continue
@@ -122,10 +122,23 @@ class RuleTrader:
              "tradingsymbol": tradingsymbol(sym, "CE", expiry, strike), "lot_size": 0}
         return self.ledger.quotes.get(c)
 
+    def _waiting(self, st: dict, key: str, now: datetime, arms: list[str], why: str | None) -> None:
+        """Why today's open entry has not filled yet, for the results page (/api/paper/rules: rules.open_wait);
+        None clears it. Under the ledger lock: a save or /api/paper/rules may be walking the dict on another thread."""
+        with self.ledger.lock:
+            w = st.setdefault("open_wait", {})
+            for k in [k for k in w if not k.startswith(key.split(":")[0])]:
+                del w[k]                                         # an earlier day's reasons
+            if why is None:
+                w.pop(key, None)
+            else:
+                w[key] = {"reason": why, "at": now.isoformat(timespec="seconds"), "arms": arms}
+
     def _refuse(self, st: dict, sig: dict, mode: str, today: str, why: str) -> None:
-        st[mode][f"{today}:{sig['symbol']}"] = "refused"
-        st["refused"] = (st.get("refused") or [])[-99:] + [{"date": today, "symbol": sig["symbol"], "mode": mode,
-                                                            "arms": sig["arms"], "reason": why}]
+        with self.ledger.lock:
+            st[mode][f"{today}:{sig['symbol']}"] = "refused"
+            st["refused"] = (st.get("refused") or [])[-99:] + [{"date": today, "symbol": sig["symbol"], "mode": mode,
+                                                                "arms": sig["arms"], "reason": why}]
         log.info("rule %s entry %s %s refused: %s", mode, today, sig["symbol"], why)
 
     def _buy(self, sig: dict, mode: str, strike: float, price: float, lot: int, now: datetime) -> None:
@@ -147,9 +160,11 @@ class RuleTrader:
                 key = f"{today}:{sig['symbol']}"
                 if key in st["open"]:
                     continue
-                if now.time() >= EOD_AT:
+                if now.time() >= EOD_AT:                         # the saved reason survives a restart
                     self._refuse(st, sig, "open", today, self._last_why.get(key) or
+                                 ((st.get("open_wait") or {}).get(key) or {}).get("reason") or
                                  "no affordable liquid strike between 09:15 and 15:20")
+                    self._waiting(st, key, now, sig["arms"], None)
                     continue
                 if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS:
                     continue
@@ -159,10 +174,14 @@ class RuleTrader:
                 w = walk_ask(strikes, spot, lambda k: self._quote(sig["symbol"], sig["expiry"], k))
                 if isinstance(w, str):
                     self._last_why[key] = w
+                    self._waiting(st, key, now, sig["arms"], w)
                     continue                                     # try again in 2 minutes, until 15:20
                 k, px, lot = w
                 self._buy(sig, "open", k, px, lot, now)
-                st["open"][key] = "bought"
+                with self.ledger.lock:                           # saved now: a restart must not buy it again
+                    st["open"][key] = "bought"
+                    self._waiting(st, key, now, sig["arms"], None)
+                    self.ledger._save()
         if now.time() >= EOD_AT and st.get("exits_checked") != today:
             for sig in sigs:
                 key = f"{today}:{sig['symbol']}"
@@ -177,8 +196,9 @@ class RuleTrader:
                 self._buy(sig, "close", k, px, lot, now)
                 st["close"][key] = "bought"
             self.check_exits(now)
-            st["exits_checked"] = today
-            self.ledger._save()
+            with self.ledger.lock:
+                st["exits_checked"] = today
+                self.ledger._save()
 
     def check_exits(self, now: datetime) -> None:
         """Each rule position's close (the last traded price at 15:20) through the rules: stop, decay, T-1."""

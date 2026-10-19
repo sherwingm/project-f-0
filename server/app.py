@@ -664,10 +664,13 @@ def api_paper_close(pid: str, _: str = Depends(auth)):
 @app.get("/api/paper/rules")
 def api_paper_rules(_: str = Depends(auth)):
     """The rule trader's day (entries made or refused per stock and entry time) and the archived earlier account."""
-    st = _ledger().state
-    arch = [{**{k: a.get(k) for k in ("epoch", "archived_at", "created_at")},
-             "open": len(a.get("positions", [])), "closed": len(a.get("closed", []))} for a in st.get("archive", [])]
-    return {"epoch": st.get("epoch"), "started": st.get("created_at"), "rules": st.get("rules") or {}, "archive": arch}
+    lg = _ledger()
+    with lg.lock:                    # a copy: the feed thread edits rules (open_wait, fade_wait) while this is encoded
+        st = lg.state
+        arch = [{**{k: a.get(k) for k in ("epoch", "archived_at", "created_at")},
+                 "open": len(a.get("positions", [])), "closed": len(a.get("closed", []))} for a in st.get("archive", [])]
+        rules = json.loads(json.dumps(st.get("rules") or {}))
+        return {"epoch": st.get("epoch"), "started": st.get("created_at"), "rules": rules, "archive": arch}
 
 
 @app.get("/api/paper/refusals")
