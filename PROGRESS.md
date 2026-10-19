@@ -389,6 +389,20 @@ are recorded?
 - The switch itself (`DATA_PROVIDER=upstox` on Render) comes after a few days of clean rounds, done after market and
   logged in DECISIONS.md. The live stream (WebSocket) is the next step after that.
 
+### 2026-10-19: sub-Rs 2 entries, backtest + live shadow entry
+- Pre-registered: `strategies/S1_v10_subfloor_entry.md`. `python -m scanner.fade_subfloor` →
+  `data/results/S1_v10_subfloor_entry.md` (+ `S1_v10_subfloor_trades.csv`). The new run: `backtest_s1_v10 --start
+  2022-01-01 --end 2024-12-31 --min-premium 0.05 --tag _2022_24_floor0p05`.
+- **Fails all three pass conditions.** Tick model: entry open + Rs 0.10, exit close - Rs 0.10, real charges. The 140
+  sub-Rs 2 trades lose Rs 52,517 (2022-24: -23k on 81 trades; 2025-26: -29k on 59), win 34 %, t 0.58, and lose
+  Rs 1.01 lakh without KALYANKJIL. With 1 tick each side they make +Rs 29k (t 0.95). Under Rs 1 they lose in every
+  split. For comparison the >= Rs 2 set under the same tick model makes +Rs 67k (2022-24) and +Rs 1.88 lakh (2025-26).
+- Live shadow entry (`server/fade.py`): when a signal is refused only by the Rs 2 floor ("premium below Rs 2" or "never
+  fits"), the same walk runs with the floor at one tick. A strike it finds becomes a shadow entry at its ask, kept in
+  `rules.fade_shadow_entries`, tracked each poll and netted at the 15:20 bid. `/api/paper/summary` → `fade_subfloor`, and
+  the Arm F panel "Shadow entries: sub-₹2 refusals". Judged at 30 closed. The real exit and the +100 % shadow exit
+  are untouched. 7 new tests in `tests/test_fade.py`.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

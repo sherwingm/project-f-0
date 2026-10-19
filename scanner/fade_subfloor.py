@@ -181,6 +181,8 @@ def main() -> None:
         f"Without the single best trade the pooled total is Rs {round(no_top['net'].sum()):,}. "
         + ("All three pass conditions hold. " if passed else
            f"Conditions failed: {', '.join(k.split('.')[0] for k, v in crit.items() if not v)}. ")
+        + f"The result depends on the cost of crossing the spread: with 1 tick each side instead of 2, the same trades make "
+          f"Rs {round(p1['net'].sum()):,} (t {clustered_t(p1['net_pct'], p1['day0'])}), still far from the pass bar. "
         + "This is descriptive and not out of sample. The live floor stays at Rs 2; the live shadow-entry track is the fresh test.")
     text = "\n".join([
         "# S1 v10 fade · sub-Rs 2 entries (the trades the Rs 2 floor refuses)\n",

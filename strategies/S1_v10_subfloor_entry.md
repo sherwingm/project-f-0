@@ -59,6 +59,10 @@ holdout, and the sub-₹2 group was already seen pooled in the sweep), and no li
   quotes with the floor at one tick** (₹0.05). If it finds a strike (two-sided quote, spread ≤ 10 %, one lot at the
   ask within ₹600–8,000), that is the **shadow entry**: strike, the ask at that moment as entry, lot, lot cost and time.
   This is the same strike rule as the backtest above, so the shadow never breaks the lot-cost or liquidity rules.
+- **Also a floor refusal (added 2026-10-19, before any live shadow entry exists):** the "never fits" refusal
+  (`server/rules.never_fits`, added the same day by another change). It refuses a stock at once when ₹2 × the lot is
+  above ₹8,000, i.e. no strike can pass both the ₹2 floor and the lot-cost cap. IRFC (lot 5,425) is one. That
+  refusal is caused by the ₹2 floor too, so it runs the same floor-free walk and can create a shadow entry.
 - If that walk finds nothing (lot below ₹600, nothing in band), there is no shadow entry. Refusals for any other
   reason (lot cost, spread, no quote) never create one.
 - One shadow entry per signal per session, made at the first refusal. If the real trader later buys the same signal

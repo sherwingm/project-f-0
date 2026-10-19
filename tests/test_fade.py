@@ -412,3 +412,74 @@ def test_t100_untouched_target_matches_the_real_exit_and_old_trades_are_untagged
     s = F.t100(lg.state)
     assert s["shadow_t100"]["net_rs"] == s["real_1520"]["net_rs"] and s["untagged_closed"] == 1
     assert F.t100_target(1.23) == 2.5 and F.t100_target(18.5) == 37.0
+
+
+# ---------------------------------------------------------------- sub-Rs 2 shadow entries (S1_v10_subfloor_entry.md)
+def _shadows(lg):
+    return (lg.state.get("rules") or {}).get("fade_shadow_entries") or []
+
+
+def test_a_sub_rs2_refusal_creates_one_shadow_entry_and_no_position(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 1.40, 1.45, lot=1000)                                                   # Rs 1,450 a lot
+    ft.on_poll(at(15, 9, 16))
+    assert lg.state["positions"] == []                                                          # the real rule refuses
+    (s,) = _shadows(lg)
+    assert (s["strike"], s["entry"], s["lot_size"], s["lot_cost"], s["bid_at_entry"]) == (1220.0, 1.45, 1000, 1450.0, 1.40)
+    assert s["refused"].startswith("premium below Rs 2") and s["opened_at"].startswith("2026-10-15T09:16")
+    ft.on_poll(at(15, 9, 20))                                                                   # the retry: still one
+    assert len(_shadows(lg)) == 1
+
+
+def test_the_shadow_entry_is_marked_and_netted_at_15_20(setup):
+    from server import charges as ch
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 1.40, 1.45, lot=1000)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 1.90, 1.95, lot=1000)
+    ft.on_poll(at(15, 11, 0))
+    (s,) = _shadows(lg)
+    assert s["max_bid"] == 1.90 and s["exit"] is None
+    q.set("PE", 1220.0, 1.80, 1.85, lot=1000)
+    ft.on_poll(at(15, 15, 20))
+    want = round((1.80 - 1.45) * 1000 - ch.leg("PE", "BUY", 1000, 1.45)["total"] - ch.leg("PE", "SELL", 1000, 1.80)["total"], 2)
+    assert s["exit"] == 1.80 and s["net"] == want and s["closed_at"].startswith("2026-10-15T15:20") and not s["late"]
+    assert s["net_pct"] == round(want / 1450 * 100, 2)
+    summ = F.shadow_entries(lg.state)
+    assert summ["closed"] == 1 and summ["wins"] == 1 and summ["net_rs"] == want and summ["open"] == 0
+    assert lg.state["positions"] == [] and lg.state["closed"] == []                             # never a real trade
+
+
+@pytest.mark.parametrize("quotes", [
+    {1180.0: (39.0, 40.0, 350), 1200.0: (39.0, 40.0, 350), 1220.0: (39.0, 40.0, 350)},          # lot cost above Rs 8,000
+    {1220.0: (10.0, 20.0, 350)},                                                                # spread above 10 %
+    {1220.0: (1.00, 1.05, 350)},                                                                # sub-Rs 2, lot below Rs 600
+    {1220.0: (1.00, 1.90, 1000)},                                                               # sub-Rs 2, spread too wide
+])
+def test_other_refusals_create_no_shadow_entry(setup, quotes):
+    lg, q, ft, _ = setup
+    for k, (bid, ask, lot) in quotes.items():
+        q.set("PE", k, bid, ask, lot=lot)
+    ft.on_poll(at(15, 9, 16))
+    ft.on_poll(at(15, 15, 21))
+    assert _shadows(lg) == [] and lg.state["positions"] == []
+
+
+def test_a_never_fits_refusal_is_a_floor_refusal_and_a_real_buy_flags_the_shadow(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 1.40, 1.45, lot=5000)                    # Rs 2 x 5,000 > Rs 8,000: refused at once, never fits
+    ft.on_poll(at(15, 9, 16))
+    (s,) = _shadows(lg)
+    assert s["refused"].startswith("never fits") and s["lot_cost"] == 7250.0
+    lg.state["rules"]["fade_shadow_entries"] = []
+    lg.state["rules"]["fade"] = {}
+    q.book.clear()
+    q.set("PE", 1220.0, 1.40, 1.45, lot=1000)
+    ft._tried.clear()
+    ft.on_poll(at(15, 9, 30))                                                                  # sub-Rs 2: shadow
+    q.set("PE", 1220.0, 2.40, 2.45, lot=1000)
+    ft._tried.clear()
+    ft.on_poll(at(15, 9, 40))                                                                  # ask rose: real buy
+    (s,) = _shadows(lg)
+    assert lg.state["positions"] and s["real_bought"] is True
+    assert F.shadow_entries(lg.state)["real_bought"] == 1

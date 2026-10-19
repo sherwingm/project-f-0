@@ -471,6 +471,22 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
         { sub: "a tag on v10's trades, judged later" });
     },
+    fadeSubfloor() {
+      const T = "Shadow entries: sub-₹2 refusals";
+      if (!live()) return panel(T, notLive("The shadow entries"));
+      const s = (P.summary || {}).fade_subfloor;
+      if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
+      const rows = s.rows || [], n = s.closed || 0;
+      const status = r => r.net == null ? `<span class="chip">open</span>` : r.real_bought ? `<span class="chip out" title="Its ask later rose to Rs 2 and the real trader bought it: left out of the judged set">real bought</span>` : `<span class="chip in">closed${r.late ? " late" : ""}</span>`;
+      const table = rows.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Contract</th><th>Day</th><th>Entry (ask)</th><th>Lot</th><th>Lot cost</th><th>Bought</th><th>Bid now / exit</th><th>High bid</th><th>Net</th><th>Net %</th><th class="l">Status</th></tr></thead><tbody>${rows.map(r =>
+          `<tr title="${esc(r.refused || "")}"><td><b>${esc(r.symbol)}</b></td><td>${r.strike} ${r.side === "PE" ? "PUT" : "CALL"} <small>${day(r.expiry)}</small></td><td>${day(r.date)}</td><td>${rs(r.entry)}</td><td>${(r.lot_size || 0).toLocaleString("en-IN")}</td><td>${rs(r.lot_cost)}</td><td>${esc(String(r.opened_at || "").slice(11, 16))}</td>
+            <td>${r.exit != null ? rs(r.exit) : r.last_bid != null ? rs(r.last_bid) : "—"}</td><td>${r.max_bid != null ? rs(r.max_bid) : "—"}</td><td class="${dir(r.net)}">${r.net != null ? srs(r.net) : "—"}</td><td class="${dir(r.net_pct)}">${r.net_pct != null ? pct(r.net_pct) : "—"}</td><td class="l">${status(r)}</td></tr>`).join("")}</tbody></table></div>`
+        : empty("None yet. A shadow entry is made when the fade walk refuses a stock only because its option is under ₹2.");
+      return panel(T, `<div class="tiles">${tile("Closed", n)}${tile("Win rate", n ? Math.round(100 * s.wins / n) + "%" : "—")}${tile("Average net", s.mean_net_pct == null ? "—" : pct(s.mean_net_pct), dir(s.mean_net_pct))}${tile("Booked net", n ? srs(s.net_rs) : "—", dir(s.net_rs))}${tile("t", s.t == null ? "—" : s.t.toFixed(2))}${tile("Open", s.open || 0)}</div>
+        <div class="prog" aria-label="Shadow entries closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
+        <p class="note">Closed: <b>${n} of 30</b> needed before it is judged (net above zero with t ≥ 2, and your agreement)${s.real_bought ? ` · ${s.real_bought} later bought for real, left out` : ""}. No order is placed; the real ₹2 floor is unchanged. <a href="${REPO}strategies/S1_v10_subfloor_entry.md">The rule</a></p>${table}`,
+        { sub: "what the walk would buy with no ₹2 floor, at the live ask, sold at the 15:20 bid" });
+    },
     fadeToday() {
       const ru = (P.rules || {}).rules || {}, key = sym => `${FD.session}:${sym}`;
       const fadeStatus = sym => {                       // bought / refused / still trying, from /api/paper/rules
@@ -613,7 +629,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");

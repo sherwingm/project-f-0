@@ -147,7 +147,27 @@ def t100(state: dict) -> dict:
             "rule": "strategies/S1_v10_t100_shadow_track.md (judged after >= 30 tagged trades have closed)"}
 
 
-def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None]):
+def shadow_entries(state: dict) -> dict:
+    """The sub-Rs 2 shadow entries (strategies/S1_v10_subfloor_entry.md): closed judged entries (not flagged
+    real_bought) with N, wins, mean net % of lot value, total net Rs and date-clustered t; open ones; the latest rows."""
+    rows = list(((state.get("rules") or {}).get("fade_shadow_entries")) or [])
+    judged = [r for r in rows if r.get("net") is not None and not r.get("real_bought")]
+    pcts = [r["net_pct"] for r in judged]
+    t = None
+    if len(judged) > 1:
+        from scanner.stats import clustered_t
+        t = clustered_t(pcts, [r["date"] for r in judged])
+    return {"closed": len(judged), "wins": sum(1 for r in judged if r["net"] > 0),
+            "net_rs": round(sum(r["net"] for r in judged), 2),
+            "mean_net_pct": round(sum(pcts) / len(pcts), 2) if pcts else None, "t": t,
+            "open": sum(1 for r in rows if r.get("net") is None),
+            "real_bought": sum(1 for r in rows if r.get("real_bought")),
+            "rows": rows[-60:][::-1],
+            "rule": "strategies/S1_v10_subfloor_entry.md (judged at 30 closed shadow entries)"}
+
+
+def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None],
+         floor: float = MIN_PREMIUM):
     """From the strike nearest `spot` (a tie: the lower for calls, the higher for puts), away from the money, the first
     strike with a two-sided live quote, spread <= 10 % of the ask, ask >= Rs 2 and ask x lot within Rs 600-8,000.
     Returns (strike, ask, lot) or the reason there is none."""
@@ -162,8 +182,8 @@ def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], 
         if not bid or not ask or not lot:
             continue
         ask = float(ask)
-        if ask < MIN_PREMIUM:
-            return f"premium below Rs 2 (at {k:g}: ask {ask:g})"
+        if ask < floor:
+            return f"premium below Rs {floor:g} (at {k:g}: ask {ask:g})"
         if (ask - float(bid)) > MAX_SPREAD * ask:
             reason = f"spread above 10 % of the ask (at {k:g}: bid {bid}, ask {ask})"
             continue
@@ -231,6 +251,7 @@ class FadeTrader:
         st = self._state()
         done = st.setdefault("fade", {})
         self._track_t100(now)
+        self._track_shadow_entries(now)
         self._exits(now)
         self._carry_exits(now)
         if now.time() < OPEN_FROM:
@@ -252,11 +273,14 @@ class FadeTrader:
             if why:                                              # no strike can ever fit: say so now, not at 15:20
                 self._refuse(st, sig, today, why)
                 self._waiting(st, key, now, None)
+                self._shadow_entry(st, sig, key, now, spot, book.get, why)   # the Rs 2 floor's doing, too
                 continue
             w = walk(sig.get("strikes") or [], spot, sig["side"], book.get)
             if isinstance(w, str):
                 self._last_why[key] = w
                 self._waiting(st, key, now, w)
+                if w.startswith(f"premium below Rs {MIN_PREMIUM:g} "):
+                    self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
             rule = {"strategy": "fade", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
@@ -267,6 +291,9 @@ class FadeTrader:
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self._waiting(st, key, now, None)
+            for r in st.get("fade_shadow_entries") or []:
+                if r["key"] == key:
+                    r["real_bought"] = True                      # its ask rose to Rs 2: not a refused trade after all
             self.ledger._save()
             log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
 
@@ -305,6 +332,57 @@ class FadeTrader:
                 log.info("fade carry exit %s: %s at %.2f (close %.2f, entry %.2f, peak %.2f)",
                          reason, pos["tradingsymbol"], px, close, entry, c["peak"])
             self.ledger._save()
+
+    def _shadow_entry(self, st: dict, sig: dict, key: str, now: datetime, spot: float, look, why: str) -> None:
+        """A premium-floor refusal: the same walk on the same quotes with the floor at one tick. A strike found there
+        (two-sided, spread <= 10 %, lot in Rs 600-8,000) is the shadow entry at its ask; none found, no entry."""
+        rows = st.setdefault("fade_shadow_entries", [])
+        if any(r["key"] == key for r in rows):
+            return
+        w = walk(sig.get("strikes") or [], spot, sig["side"], look, floor=TICK)
+        if isinstance(w, str):
+            log.info("fade shadow entry %s: none (%s)", key, w)
+            return
+        k, ask, lot = w
+        c = self._contract(sig, k, lot)
+        bid = (((look(k) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+        rows.append({"key": key, "date": now.date().isoformat(), "symbol": sig["symbol"], "side": sig["side"],
+                     "expiry": sig["expiry"], "strike": k, "tradingsymbol": c["tradingsymbol"], "lot_size": lot,
+                     "entry": ask, "bid_at_entry": bid, "lot_cost": round(ask * lot, 2),
+                     "opened_at": now.isoformat(timespec="seconds"), "refused": why, "why": sig.get("why"),
+                     "np_yoy": sig.get("np_yoy"), "spot_at_entry": spot, "last_bid": bid, "max_bid": bid,
+                     "exit": None, "closed_at": None, "late": False, "charges": None, "net": None, "net_pct": None,
+                     "real_bought": False})
+        del rows[:-200]
+        self.ledger._save()
+        log.info("fade shadow entry: %s at %.2f x %d (refused: %s)", c["tradingsymbol"], ask, lot, why)
+
+    def _track_shadow_entries(self, now: datetime) -> None:
+        """Each poll: the best bid and the highest bid seen; from 15:20 on the entry day (or the first poll of a later
+        day) the shadow sale at the best bid, else the last price - 1 tick, netted with real charges on both orders."""
+        from server import charges as ch
+        for r in (self.ledger.state.get("rules") or {}).get("fade_shadow_entries") or []:
+            if r.get("exit") is not None:
+                continue
+            c = {"symbol": r["symbol"], "instrument": r["side"], "expiry": r["expiry"], "strike": r["strike"],
+                 "tradingsymbol": r["tradingsymbol"], "lot_size": r["lot_size"]}
+            q = self.ledger.quotes.get(c) or {}
+            bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
+            if bid:
+                r["last_bid"], r["max_bid"] = bid, max(float(bid), r.get("max_bid") or 0.0)
+            opened = datetime.fromisoformat(r["opened_at"]).date()
+            if not (now.date() > opened or now.time() >= EOD_AT):
+                continue
+            px = bid or (max(0.0, round(q["last_price"] - TICK, 2)) if q.get("last_price") else None)
+            if not px:
+                continue                                         # no quote this poll: try the next one
+            lot, cost = r["lot_size"], r["entry"] * r["lot_size"]
+            charges = ch.leg(r["side"], "BUY", lot, r["entry"])["total"] + ch.leg(r["side"], "SELL", lot, px)["total"]
+            net = round((px - r["entry"]) * lot - charges, 2)
+            r.update(exit=px, closed_at=now.isoformat(timespec="seconds"), late=now.date() > opened,
+                     charges=round(charges, 2), net=net, net_pct=round(net / cost * 100, 2) if cost else None)
+            self.ledger._save()
+            log.info("fade shadow entry exit: %s at %.2f, net %.2f", r["tradingsymbol"], px, net)
 
     def _track_t100(self, now: datetime) -> None:
         """The +100 % shadow exit: on the entry day before 15:20, the first poll whose best bid >= the target."""
