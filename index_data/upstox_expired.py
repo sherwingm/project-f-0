@@ -20,7 +20,7 @@ from datetime import date, timedelta
 import pandas as pd
 
 from .common import SMALL, STORE, candles_frame, read_json, upsert_parquet, write_json
-from .upstox_common import UNDERLYING_KEY, PlusPlanRequired, Upstox
+from .upstox_common import UNDERLYING_KEY, PlusPlanRequired, Upstox, caps
 
 log = logging.getLogger("index_data.upstox_expired")
 BAND = 0.05
@@ -93,7 +93,7 @@ def run(under: str, start: str, max_minutes: float, estimate_only: bool, store=S
     est_contracts = {"NIFTY": 92, "BANKNIFTY": 112, "SENSEX": 148}.get(under, 100)
     est_calls = sum(est_contracts * (1 + (b - a).days // WINDOW_DAYS) for _, _, a, b, _ in plan) + len(plan)
     print(f"{under}: {len(exps)} expired expiries {exps[0]} .. {exps[-1]}; estimate ~{est_calls} calls, "
-          f"~{est_calls / 0.53 / 3600:.1f} h at the 1,000-per-30-min limit", flush=True)
+          f"~{est_calls / ((caps()[0] - 20) / 1800) / 3600:.1f} h at {caps()[0]:,} calls per 30 min", flush=True)
     res = {"underlying": under, "expiries": len(exps), "first": exps[0], "last": exps[-1], "estimate_calls": est_calls,
            "contracts_done": 0, "contracts_skipped": 0, "rows": 0, "stopped": None}
     if estimate_only:

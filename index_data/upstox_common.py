@@ -2,13 +2,17 @@
 
 Token, first found wins: env UPSTOX_ANALYTICS_TOKEN (the free 1-year read-only token; it reaches the expired-instruments
 API, see DATA_ACCESS_AUDIT.md), env UPSTOX_ACCESS_TOKEN, data/index/.upstox_token (written by upstox_login.py).
-Limits (Upstox docs): 25/s, 250/min, 1,000 per 30 minutes; the sustained rate is set from the 30-minute cap.
+Limits (Upstox docs, read 2026-10-19): 50/s, 500/min, 2,000 per 30 minutes per user; the sustained rate is set from
+the 30-minute cap. The live server shares the token, so a job takes 1,800 / 30 min (400 / min) outside market hours and
+1,000 / 30 min (250 / min) from 09:00 to 15:45 IST on weekdays, leaving the server its share during a session.
 """
 from __future__ import annotations
 
 import os
 import time
 from collections import deque
+from datetime import datetime, timedelta, timezone
+from datetime import time as dtime
 from urllib.parse import quote
 
 import requests
@@ -17,7 +21,16 @@ from .common import SMALL
 
 BASE = "https://api.upstox.com"
 UNDERLYING_KEY = {"NIFTY": "NSE_INDEX|Nifty 50", "BANKNIFTY": "NSE_INDEX|Nifty Bank", "SENSEX": "BSE_INDEX|SENSEX"}
-PER_30MIN, PER_MIN = 1000, 250
+PER_30MIN, PER_MIN = 1000, 250                    # during market hours
+NIGHT_30MIN, NIGHT_MIN = 1800, 400                # outside them (documented: 2,000 / 500)
+IST = timezone(timedelta(hours=5, minutes=30))
+
+
+def caps(now: datetime | None = None) -> tuple[int, int]:
+    """(per 30 min, per min) for a job right now: the market-hours caps 09:00-15:45 IST on weekdays, else the night caps."""
+    now = now or datetime.now(IST)
+    market = now.weekday() < 5 and dtime(9, 0) <= now.time() <= dtime(15, 45)
+    return (PER_30MIN, PER_MIN) if market else (NIGHT_30MIN, NIGHT_MIN)
 
 
 class PlusPlanRequired(RuntimeError):
@@ -44,7 +57,8 @@ class Upstox:
 
     def _pace(self) -> None:
         now = time.monotonic()
-        for w, span, cap in ((self._win30, 1800, PER_30MIN - 20), (self._win60, 60, PER_MIN - 10)):
+        c30, c60 = caps()
+        for w, span, cap in ((self._win30, 1800, c30 - 20), (self._win60, 60, c60 - 10)):
             while w and now - w[0] > span:
                 w.popleft()
             if len(w) >= cap:
