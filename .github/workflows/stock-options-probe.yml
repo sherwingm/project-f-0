@@ -1,0 +1,21 @@
+name: stock-options-probe
+# One-off, manual, read-only: does Upstox's expired-instruments API cover STOCK options with 1-minute candles?
+# (index_data/probe_stock_expired.py). Prints to the log only; commits nothing; separate from the index-data queue.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - name: Probe
+        env:
+          UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+        run: python -m index_data.probe_stock_expired
