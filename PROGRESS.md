@@ -451,6 +451,17 @@ are recorded?
   - Secondary (the walk passed a dear Rs 2+ strike): 112 trades, +Rs 32k (t 0.98) but -Rs 16k without KALYANKJIL, so
     it **fails**.
 
+### 2026-10-19: Rs 1-2 band minute test with real ticks (fails)
+- Pre-registered: `strategies/S1_v10_band12_trail.md`. The user chose to run it although the Rs 0.50-1 rule failed.
+  Costs a side: Rs 0.10 before the tick change on **2025-11-03**, Rs 0.04 from it. The tick change is confirmed in the
+  option files: all prices on the Rs 0.05 grid to 31 Oct, about 20 % off it from 3 Nov.
+- 212 contracts (107 in 2025, 105 in 2026); 205 got minute candles; 184 simulated. `python -m scanner.fade_band050
+  run12` → `data/results/S1_v10_band12_trail.md`.
+- Chosen on 2025: B30 (hold until +100 %, then a 30 % trail), +Rs 47,775 on 95 trades. The 15:20 baseline also made
+  money in 2025 (+Rs 36,757). **2026 test: B30 -Rs 30,511 on 89 trades (t -1.40), so it fails.** Every exit loses in
+  2026, under every cost model, including the optimistic Rs 0.02 a side (best -Rs 2.5k). Same pattern as Rs 0.50-1:
+  positive in 2025, negative in 2026.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
