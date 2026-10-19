@@ -24,7 +24,9 @@ RES = ROOT / "data" / "results"
 TICK_CHANGE = "2025-11-03"
 
 
-def one(m: pd.DataFrame, r) -> dict | None:
+def one(m: pd.DataFrame | None, r) -> dict | None:
+    if m is None or m.empty:
+        return None                                              # no minute candles for this contract
     m = m[(m["t"] >= "09:15") & (m["t"] <= "15:19")]
     if m.empty:
         return None
@@ -56,7 +58,7 @@ def main() -> None:
     mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
-    rows = [x for r in c.itertuples() if (x := one(by.get((r.symbol, r.day0, r.side, float(r.strike)), pd.DataFrame()), r))]
+    rows = [x for r in c.itertuples() if (x := one(by.get((r.symbol, r.day0, r.side, float(r.strike))), r))]
     t = pd.DataFrame(rows)
     t.to_csv(RES / "S1_v10_s20_minutes_trades.csv", index=False)
     f = t[t["fired"]]

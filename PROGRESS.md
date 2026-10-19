@@ -494,6 +494,18 @@ are recorded?
 - Why the rule itself was not changed earlier: on real day prices the -20 % stop was "no real gain" in both windows
   (+6.2 % vs +5.6 % in 2025-26, +3.3 % vs +3.6 % in 2022-24), with fills at the level, which is optimistic.
 
+### 2026-10-20: the -20 % stop on 1-minute prices (user: "how much it peaks after the stop")
+- The v10 Rs 2+ trades from Oct 2024 to Sep 2026 (486; 468 had minute candles; fetched on GitHub, `fetch_band_minutes
+  v10`). `python -m scanner.fade_s20_minutes` → `data/results/S1_v10_s20_minutes.md`.
+- The stop (0.80 × entry) fires on 338 of 468 (72 %), 140 of them in the 09:15 minute. After it fires: median peak
+  +3.1 % above entry; 56 % get back to entry, 37 % reach +20 %, 22 % +50 %, 10 % +100 %. But only 23 % close above
+  entry (median 15:19 close -31 %).
+- **Money with a real fill** (min(stop, the minute's open) - 1 tick): stop +Rs 2,16,629 (t 2.37) vs 15:20 +Rs 1,70,405
+  (t 1.71). With the stop off in the 09:15 minute (closer to the live entry): **+Rs 2,50,916 (t 2.47), better in each
+  window** (Oct-Nov 2024 +31k vs +29k; 2025 +93k vs +62k; 2026 +127k vs +80k). This disagrees with the daily study's
+  "no real gain"; it is descriptive and not pre-registered. The live shadow stop (`shadow_s20`) is the fresh test; no
+  rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
