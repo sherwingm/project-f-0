@@ -1,8 +1,15 @@
 name: stock-options-probe
-# One-off, manual, read-only: does Upstox's expired-instruments API cover STOCK options with 1-minute candles?
-# (index_data/probe_stock_expired.py). Prints to the log only; commits nothing; separate from the index-data queue.
+# Manual, read-only: Upstox expired stock options. probe_stock_expired prints what exists; fetch_band_minutes pulls the
+# S1 v10 Rs 0.50-1 contracts' day-0 1-minute candles as a run artifact. Commits nothing; separate from the index-data queue.
 on:
   workflow_dispatch:
+    inputs:
+      script:
+        description: "index_data module to run (probe_stock_expired or fetch_band_minutes)"
+        required: true
+        default: probe_stock_expired
+        type: choice
+        options: [probe_stock_expired, fetch_band_minutes]
 permissions:
   contents: read
 jobs:
@@ -18,4 +25,9 @@ jobs:
       - name: Probe
         env:
           UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
-        run: python -m index_data.probe_stock_expired
+        run: python -m index_data.${{ inputs.script }}
+      - if: inputs.script == 'fetch_band_minutes'
+        uses: actions/upload-artifact@v4
+        with:
+          name: band050-minutes
+          path: data/results/S1_v10_band050_minutes.csv
