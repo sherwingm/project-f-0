@@ -83,7 +83,9 @@ def test_call_walk_goes_up_and_tie_rules():
     assert F.walk([100.0, 110.0], 105.0, "CE", look)[0] == 100.0                                # tie: lower call
     assert F.walk([100.0, 110.0], 105.0, "PE", look)[0] == 110.0                                # tie: higher put
     cheap = lambda k: {"lot_size": 100, "depth": {"bid": [(4.9, 1)], "ask": [(5.0, 1)]}}        # noqa: E731
-    assert F.walk([100.0], 100.0, "CE", cheap) == "cheapest liquid lot below Rs 600"
+    assert F.walk([100.0], 100.0, "CE", cheap) == "cheapest liquid lot below Rs 600 (Rs 500 at 100)"
+    tiny = lambda k: {"lot_size": 8000, "depth": {"bid": [(1.38, 1)], "ask": [(1.40, 1)]}}      # noqa: E731
+    assert F.walk([62.0, 63.0], 63.1, "PE", tiny) == "premium below Rs 2 (at 63: ask 1.4)"   # UJJIVANSFB, 19 Oct
 
 
 # ---------------------------------------------------------------- the paper trades
@@ -105,6 +107,17 @@ def test_buys_on_day0_and_sells_at_15_20(setup):
     ft.on_poll(at(15, 15, 20))
     c = lg.state["closed"][-1]
     assert lg.state["positions"] == [] and c["exit"]["price"] == 24.0 and c["reason"] == "fade_eod"
+
+
+def test_the_wait_reason_is_shown_until_it_fills(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 1.0, 1.05)
+    ft.on_poll(at(15, 9, 16))
+    w = lg.state["rules"]["fade_wait"]["2026-10-15:HCLTECH"]
+    assert w["reason"].startswith("premium below Rs 2") and w["at"].startswith("2026-10-15T09:16")
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 20))
+    assert lg.state["positions"] and "2026-10-15:HCLTECH" not in lg.state["rules"]["fade_wait"]
 
 
 def test_refused_at_15_20_with_the_reason(setup):

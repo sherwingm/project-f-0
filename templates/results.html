@@ -450,12 +450,21 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         { sub: "a tag on v10's trades, judged later" });
     },
     fadeToday() {
+      const ru = (P.rules || {}).rules || {}, key = sym => `${FD.session}:${sym}`;
+      const fadeStatus = sym => {                       // bought / refused / still trying, from /api/paper/rules
+        const st = (ru.fade || {})[key(sym)], w = (ru.fade_wait || {})[key(sym)];
+        if (st === "bought") return `<span class="chip in">bought</span>`;
+        if (st === "refused") { const r = (ru.refused || []).filter(x => x.mode === "fade" && x.date === FD.session && x.symbol === sym).pop();
+          return `<span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`; }
+        if (w) return `<span class="chip">waiting</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 16))}</small>`;
+        return P.rules ? "—" : "";
+      };
       if (!FD) return panel("Next fade list", empty("The fade list is made each evening from the day's results filings."));
       const sig = FD.signals || [], sk = FD.skipped || [];
-      const body = (sig.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buy</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th>Filed</th><th>Expiry</th><th>Stock</th><th>Shadow</th></tr></thead><tbody>${sig.map(s =>
+      const body = (sig.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buy</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th>Filed</th><th>Expiry</th><th>Stock</th><th>Shadow</th><th class="l">Today</th></tr></thead><tbody>${sig.map(s =>
           `<tr data-why="sig:${esc(s.symbol)}" tabindex="0"><td><b>${esc(s.symbol)}</b></td><td><span class="tag ${s.side === "PE" ? "pe" : "ce"}">${s.side === "PE" ? "PUT" : "CALL"}</span></td>
             <td class="${dir(s.np_yoy)}">${pct(s.np_yoy)}</td><td class="${dir(s.np_qoq)}">${pct(s.np_qoq)}</td><td class="${dir(s.rev_yoy)}">${pct(s.rev_yoy)}</td>
-            <td>${day(s.filed)} <small>${esc(s.filed_time || "")}</small></td><td>${day(s.expiry)}</td><td>${rs(s.spot)}</td><td>${shadowChip(s.side, s.np_yoy) || "—"}</td></tr>`).join("")}</tbody></table></div>`
+            <td>${day(s.filed)} <small>${esc(s.filed_time || "")}</small></td><td>${day(s.expiry)}</td><td>${rs(s.spot)}</td><td>${shadowChip(s.side, s.np_yoy) || "—"}</td><td class="l">${fadeStatus(s.symbol)}</td></tr>`).join("")}</tbody></table></div>`
           : empty("No strong or weak results for this session."))
         + (sk.length ? `<details><summary>Filings not traded (${sk.length})</summary><div class="tw"><table><thead><tr><th>Stock</th><th>NP YoY</th><th>NP QoQ</th><th>Rev YoY</th><th class="l">Why not</th></tr></thead><tbody>${sk.map(s =>
             `<tr><td><b>${esc(s.symbol)}</b> <small>${day(s.filed)}</small></td><td>${pct(s.np_yoy)}</td><td>${pct(s.np_qoq)}</td><td>${pct(s.rev_yoy)}</td><td class="l">${esc(s.reason)}</td></tr>`).join("")}</tbody></table></div></details>` : "");

@@ -296,6 +296,15 @@ are recorded?
   git): F&O bhavcopies 2024-12 → 2026-09 in `data/cache`, eod2 in `data/eod2`, the event store from the `state-seed`
   release (used via `EVENTS_DB`, the local `data/events.sqlite` untouched). The suite's one failing test is unchanged.
 
+### 2026-10-19: fade list shows why a signal has not filled
+- UJJIVANSFB PE (19 Oct) was not bought because the rule blocks it. At spot ~63 the nearest put asks ~Rs 1.40, under the
+  Rs 2 floor, so `walk` stops there (walking further out of the money only gets cheaper). The trader retries every 2
+  min and refuses it at 15:20. Before this change the reason lived only in memory.
+- `server/fade.py` now keeps today's reason in `rules.fade_wait` (served by `/api/paper/rules`). The walk's
+  premium/band reasons name the strike and price. The fade list on the results page has a "Today" column that shows
+  bought / refused (reason) / waiting (reason, time checked).
+- Pushed with `[skip render]` during market hours. The change goes live on the next deploy.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

@@ -113,13 +113,13 @@ def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], 
             continue
         ask = float(ask)
         if ask < MIN_PREMIUM:
-            return "premium below Rs 2"
+            return f"premium below Rs 2 (at {k:g}: ask {ask:g})"
         if (ask - float(bid)) > MAX_SPREAD * ask:
             reason = f"spread above 10 % of the ask (at {k:g}: bid {bid}, ask {ask})"
             continue
         cost = ask * lot
         if cost < BAND[0]:
-            return "cheapest liquid lot below Rs 600"
+            return f"cheapest liquid lot below Rs 600 (Rs {cost:,.0f} at {k:g})"
         if cost > BAND[1]:
             reason = f"the nearest liquid lot costs more than Rs 8,000 (Rs {cost:,.0f} at {k:g})"
             continue
@@ -142,6 +142,16 @@ class FadeTrader:
     def _contract(self, sig: dict, strike: float, lot: int = 0) -> dict:
         return {"symbol": sig["symbol"], "instrument": sig["side"], "expiry": sig["expiry"], "strike": strike,
                 "tradingsymbol": tradingsymbol(sig["symbol"], sig["side"], sig["expiry"], strike), "lot_size": lot}
+
+    def _waiting(self, st: dict, key: str, now: datetime, why: str | None) -> None:
+        """Why a signal of today has not filled yet, for the fade list (/api/paper/rules: rules.fade_wait); None clears it."""
+        w = st.setdefault("fade_wait", {})
+        for k in [k for k in w if not k.startswith(key.split(":")[0])]:
+            del w[k]                                             # an earlier day's reasons
+        if why is None:
+            w.pop(key, None)
+        else:
+            w[key] = {"reason": why, "at": now.isoformat(timespec="seconds")}
 
     def _refuse(self, st: dict, sig: dict, today: str, why: str) -> None:
         st.setdefault("fade", {})[f"{today}:{sig['symbol']}"] = "refused"
@@ -169,6 +179,7 @@ class FadeTrader:
                 continue
             if now.time() >= EOD_AT:
                 self._refuse(st, sig, today, self._last_why.get(key) or "no affordable two-sided strike 09:15-15:20")
+                self._waiting(st, key, now, None)
                 continue
             if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS:
                 continue
@@ -178,6 +189,7 @@ class FadeTrader:
                      lambda k: self.ledger.quotes.get(self._contract(sig, k)))
             if isinstance(w, str):
                 self._last_why[key] = w
+                self._waiting(st, key, now, w)
                 continue
             k, px, lot = w
             rule = {"strategy": "fade", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
@@ -186,6 +198,7 @@ class FadeTrader:
                     "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy"))}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
+            self._waiting(st, key, now, None)
             self.ledger._save()
             log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
 
