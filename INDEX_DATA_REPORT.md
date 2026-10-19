@@ -58,10 +58,22 @@ Daily closes, 2022-01-01 → 2026-10-16: **1,177 days compared, 0 mismatches abo
 Run 2026-10-19 on the 16 Oct session (Kotak's recorder vs Upstox's history, 120 contracts, 1-min closes):
 - **29,126 minutes on both.** **77.3 %** have the identical close; the mean absolute difference is **Rs 0.35**,
   and the largest single gap is Rs 93.8 (one outlier, to look at).
-- 0 minutes are Kotak-only, and **16,083 minutes are Upstox-only**. The cause is not checked yet: either minutes
-  without a trade that Kotak leaves out, or minutes outside the recorder's window. Settle it before merging.
-- Verdict: the two sources agree to within a tick most of the time, so they can be combined. Kotak is used where
-  both exist, as the recorder is the forward source.
+- 0 minutes are Kotak-only, and **16,083 minutes are Upstox-only**. Checked 2026-10-19 on the files (the 120
+  contracts are BANKNIFTY 27-Oct / 23-Nov): **16,037 of them (99.7 %) have volume 0**. Upstox writes a flat candle
+  for every minute without a trade; Kotak leaves those minutes out. The other 46 fall at 15:30-15:39.
+- **No time offset.** Shifting Upstox by ±1 or ±2 minutes drops the identical closes from 77 % to ≤ 2 %, so both
+  label a candle by the same minute.
+- On minutes with trades on both, the candles still differ somewhat: same volume 63.7 %, same close 77.5 %, same
+  open / high / low / close 41.2 %. The vendors build 1-minute bars from the trade feed slightly differently.
+- The largest gaps (Rs 58-94) are deep in-the-money BANKNIFTY calls in minutes where Kotak shows a few trades
+  (volume 30-90) and Upstox shows none (volume 0, previous close). Upstox's filler candle there is stale, not a
+  price.
+- **Merge rule:** keep `source` on every row, and never mix sources inside one contract-day.
+  - Kotak wins where it has the day.
+  - Upstox's volume-0 rows are fillers: drop them or carry the last close forward, and never treat them as a
+    trade price. A study's fill must use a minute with volume > 0.
+- Verdict: close enough to combine under the merge rule (mean gap Rs 0.35, mostly the same price). They are not
+  identical bar for bar, so a backtest should say which source it used.
 
 ## What is available, at which resolution
 Filled in after the first runs (see also the coverage table on `/index`).
