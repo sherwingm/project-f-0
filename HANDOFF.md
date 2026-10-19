@@ -1,4 +1,4 @@
-# Handoff (2026-10-19, 18:40 IST)
+# Handoff (2026-10-20, 02:50 IST)
 
 Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The detailed records are in `PROGRESS.md`
 (log and the Core idea tracker), `DECISIONS.md` (rule and result changes), `INDEX_DATA_REPORT.md`,
@@ -46,8 +46,7 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 ## Still running
 | What | Where | Finishes | Needs the PC |
 |---|---|---|---|
-| Job sequence `scratchpad/run_jobs3.sh` (log `run_jobs3.log`): waits for the 19:30 recorder → Upstox BANKNIFTY → SENSEX (300 min each) | this PC | overnight into 20 Oct | **yes** |
-| `scratchpad/run_jobs4.sh` (log `run_jobs4.log`): after SENSEX, NIFTY part 3 (`--max-minutes 180`, expiries May → Oct 2026) | this PC | ~20 Oct morning | **yes** |
+| `scratchpad/run_jobs5.sh` (log `run_jobs5.log`): waits until no other job uses the Upstox token, then NIFTY part 3 (`--max-minutes 180`), then SENSEX resume (300 min). BANKNIFTY is complete; SENSEX part 1 stopped on a shared-token 429 (fixed: 429s are waited out) | this PC | ~20 Oct midday | **yes** |
 | Nightly recorder (+ S1 trades' minutes, spot / VIX, OHLC top-ups) | GitHub cron 19:30 IST | ~20:00 IST | no |
 | Upstox-vs-Kotak shadow check on the live server (`/api/data/compare`) | Render, from 20 Oct 09:20 | a few days, then decide the switch | no |
 | Expired-token probes (Kotak token 47141): 1 / 2 / 3 | Claude app tasks → `index-jobs` `probe_expired` | 20 Oct, 27 Oct, 19 Nov at 16:00 IST | Claude app open |
