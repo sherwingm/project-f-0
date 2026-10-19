@@ -45,6 +45,9 @@ NP_SHADOW = 25.0
 # Shadow exit (strategies/S1_v10_t100_shadow_track.md): a sell at 2 x entry, filled when a poll sees the best bid at or
 # above it, else the real 15:20 sale. A tag on each fade position only: the real exit is unchanged.
 T100 = 2.0
+# Shadow stop (strategies/S1_v10_s20_shadow_track.md): sold at the best bid of the first poll with the bid at or below
+# 0.80 x entry, else the real 15:20 sale. A tag only: the real exit is unchanged.
+S20 = 0.80
 _NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
 
 
@@ -164,6 +167,41 @@ def shadow_entries(state: dict) -> dict:
             "real_bought": sum(1 for r in rows if r.get("real_bought")),
             "rows": rows[-60:][::-1],
             "rule": "strategies/S1_v10_subfloor_entry.md (judged at 30 closed shadow entries)"}
+
+
+def s20(state: dict) -> dict:
+    """Tagged closed fade trades under the real 15:20 exit and under the -20 % shadow stop (filled at the bid that
+    fired it): N, wins, mean net % of premium, total net Rs, stops fired and how many of those ended better at 15:20."""
+    from server import charges as ch
+    real, shadow, fired, cut_early, untagged = [], [], 0, 0, 0
+    for p in state.get("closed") or []:
+        r = p.get("rule") or {}
+        if r.get("strategy") != "fade":
+            continue
+        sh = r.get("shadow_s20")
+        if not sh:
+            untagged += 1
+            continue
+        cost = p["entry"]["price"] * p["qty"]
+        net = float(p.get("net_pnl", 0.0))
+        if sh.get("hit_at") and sh.get("fill") is not None:
+            fired += 1
+            snet = round((sh["fill"] - p["entry"]["price"]) * p["qty"] - float(p.get("entry_charges", 0.0))
+                         - ch.leg(p["instrument"], "SELL", p["qty"], sh["fill"])["total"], 2)
+            cut_early += int(net > snet)
+        else:
+            snet = net
+        real.append((net, net / cost * 100 if cost else 0.0))
+        shadow.append((snet, snet / cost * 100 if cost else 0.0))
+
+    def agg(xs):
+        return {"closed": len(xs), "wins": sum(1 for n, _ in xs if n > 0), "net_rs": round(sum(n for n, _ in xs), 2),
+                "mean_net_pct": round(sum(q for _, q in xs) / len(xs), 2) if xs else None}
+    open_ = [p for p in state.get("positions") or [] if ((p.get("rule") or {}).get("shadow_s20"))]
+    return {"real_1520": agg(real), "shadow_s20": {**agg(shadow), "stops_fired": fired, "better_at_1520": cut_early},
+            "open_tagged": len(open_), "open_fired": sum(1 for p in open_ if p["rule"]["shadow_s20"].get("hit_at")),
+            "untagged_closed": untagged,
+            "rule": "strategies/S1_v10_s20_shadow_track.md (judged after >= 30 tagged trades have closed)"}
 
 
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None],
@@ -287,7 +325,8 @@ class FadeTrader:
                     "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
                     "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
                     "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
-                    "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None}}
+                    "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
+                    "shadow_s20": {"stop": round(px * S20, 4), "hit_at": None, "fill": None, "min_bid": None}}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self._waiting(st, key, now, None)
@@ -385,22 +424,33 @@ class FadeTrader:
             log.info("fade shadow entry exit: %s at %.2f, net %.2f", r["tradingsymbol"], px, net)
 
     def _track_t100(self, now: datetime) -> None:
-        """The +100 % shadow exit: on the entry day before 15:20, the first poll whose best bid >= the target."""
+        """The shadow exits on the entry day before 15:20, one bid read a poll for both: +100 % (the first poll whose
+        best bid >= the target) and the -20 % stop (the first poll whose best bid <= the stop, filled at that bid)."""
         if not (OPEN_FROM <= now.time() < EOD_AT):
             return
         for pos in self.ledger.state["positions"]:
-            sh = (pos.get("rule") or {}).get("shadow_t100")
-            if not sh or sh.get("hit_at") or datetime.fromisoformat(pos["opened_at"]).date() != now.date():
+            r = pos.get("rule") or {}
+            t1, s2 = r.get("shadow_t100"), r.get("shadow_s20")
+            if not [x for x in (t1, s2) if x and not x.get("hit_at")]:
+                continue
+            if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
                 continue
             c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
             bid = (((self.ledger.quotes.get(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
             if not bid:
                 continue
-            sh["max_bid"] = max(float(bid), sh.get("max_bid") or 0.0)
-            if bid >= sh["target"]:
-                sh["hit_at"] = now.isoformat(timespec="seconds")
-                log.info("fade shadow t100 hit: %s bid %.2f >= %.2f", pos["tradingsymbol"], bid, sh["target"])
-                self.ledger._save()
+            if t1 and not t1.get("hit_at"):
+                t1["max_bid"] = max(float(bid), t1.get("max_bid") or 0.0)
+                if bid >= t1["target"]:
+                    t1["hit_at"] = now.isoformat(timespec="seconds")
+                    log.info("fade shadow t100 hit: %s bid %.2f >= %.2f", pos["tradingsymbol"], bid, t1["target"])
+                    self.ledger._save()
+            if s2 and not s2.get("hit_at"):
+                s2["min_bid"] = min(float(bid), s2["min_bid"]) if s2.get("min_bid") is not None else float(bid)
+                if bid <= s2["stop"]:
+                    s2["hit_at"], s2["fill"] = now.isoformat(timespec="seconds"), float(bid)
+                    log.info("fade shadow s20 fired: %s bid %.2f <= %.2f", pos["tradingsymbol"], bid, s2["stop"])
+                    self.ledger._save()
 
     def _exits(self, now: datetime) -> None:
         """Sell every fade position from 15:20 on its entry day, or at the first poll of any later day."""

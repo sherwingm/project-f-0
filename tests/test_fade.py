@@ -483,3 +483,42 @@ def test_a_never_fits_refusal_is_a_floor_refusal_and_a_real_buy_flags_the_shadow
     (s,) = _shadows(lg)
     assert lg.state["positions"] and s["real_bought"] is True
     assert F.shadow_entries(lg.state)["real_bought"] == 1
+
+
+# ---------------------------------------------------------------- the -20 % shadow stop (S1_v10_s20_shadow_track.md)
+def test_s20_shadow_stop_fires_at_the_bid_and_leaves_the_real_exit(setup):
+    from server import charges as ch
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_s20"] == {"stop": 14.8, "hit_at": None, "fill": None, "min_bid": None}
+    q.set("PE", 1220.0, 14.85, 15.2)                                                            # a tick above the stop
+    ft.on_poll(at(15, 10, 0))
+    assert p["rule"]["shadow_s20"]["hit_at"] is None and p["rule"]["shadow_s20"]["min_bid"] == 14.85
+    q.set("PE", 1220.0, 13.9, 14.3)                                                             # gapped through it
+    ft.on_poll(at(15, 10, 1))
+    sh = p["rule"]["shadow_s20"]
+    assert sh["fill"] == 13.9 and sh["hit_at"].startswith("2026-10-15T10:01") and lg.state["positions"]
+    q.set("PE", 1220.0, 24.0, 24.4)                                                             # it recovers
+    ft.on_poll(at(15, 15, 20))
+    c = lg.state["closed"][-1]
+    assert c["exit"]["price"] == 24.0 and c["reason"] == "fade_eod"                             # real exit unchanged
+    s = F.s20(lg.state)
+    want = round((13.9 - 18.5) * 350 - c["entry_charges"] - ch.leg("PE", "SELL", 350, 13.9)["total"], 2)
+    assert s["shadow_s20"]["net_rs"] == want and s["shadow_s20"]["stops_fired"] == 1
+    assert s["shadow_s20"]["better_at_1520"] == 1 and s["real_1520"]["net_rs"] == c["net_pnl"]
+
+
+def test_s20_unfired_stop_matches_the_real_exit_and_t100_still_works(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 37.0, 37.5)                                                             # +100 % reached
+    ft.on_poll(at(15, 11, 0))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_t100"]["hit_at"] and p["rule"]["shadow_s20"]["hit_at"] is None
+    q.set("PE", 1220.0, 20.0, 20.5)
+    ft.on_poll(at(15, 15, 20))
+    s = F.s20(lg.state)
+    assert s["shadow_s20"]["net_rs"] == s["real_1520"]["net_rs"] and s["shadow_s20"]["stops_fired"] == 0

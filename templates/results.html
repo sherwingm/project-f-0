@@ -471,6 +471,19 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
         { sub: "a tag on v10's trades, judged later" });
     },
+    fadeS20() {
+      const T = "Shadow exit: \u221220 % stop, else 15:20";
+      if (!live()) return panel(T, notLive("The shadow stop"));
+      const s = (P.summary || {}).fade_s20;
+      if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
+      const R = [["Real exit (15:20)", s.real_1520], ["Shadow: sold at the bid once it is 20 % below entry", s.shadow_s20]];
+      const n = (s.real_1520 || {}).closed || 0, sh = s.shadow_s20 || {};
+      return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Stops fired</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
+          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "\u2014"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "\u2014"}</td><td>${g.stops_fired ?? "\u2014"}</td></tr>`; }).join("")}</tbody></table></div>
+        <div class="prog" aria-label="Tagged trades closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
+        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${sh.stops_fired ? ` \u00b7 of the ${sh.stops_fired} stopped, ${sh.better_at_1520} would have done better held to 15:20` : ""}${s.open_tagged ? ` \u00b7 open: ${s.open_tagged}, stop fired on ${s.open_fired}` : ""}${s.untagged_closed ? ` \u00b7 ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_s20_shadow_track.md">The rule</a></p>`,
+        { sub: "a tag on v10's trades, filled at the real bid, judged later" });
+    },
     fadeSubfloor() {
       const T = "Shadow entries: sub-₹2 refusals";
       if (!live()) return panel(T, notLive("The shadow entries"));
@@ -629,7 +642,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeS20(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");

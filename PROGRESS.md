@@ -484,6 +484,16 @@ are recorded?
   -0.61).** The 15:20 exit: -1.4k / +36.8k / -40.3k = -Rs 4,928. Rs 0.50-1 loses with every exit (best B30 -Rs 34k).
   The verdicts stand.
 
+### 2026-10-20: -20 % stop as a shadow exit on live fade trades
+- Pre-registered: `strategies/S1_v10_s20_shadow_track.md`. The user asked for it after FEDERALBNK lost 91 % on
+  2026-10-19 under the no-stop 15:20 exit. Each new fade position gets `rule.shadow_s20` (stop 0.80 × entry). On the
+  entry day before 15:20, the first poll whose best bid is at or below the stop fires it, **filled at that bid**, not at
+  the level. The real exit stays 15:20.
+- `/api/paper/summary` → `fade_s20` (real vs shadow, stops fired, how many would have done better at 15:20); a new Arm F
+  panel. The bid is read once a poll for both shadow exits (+100 %, -20 %). Judged at 30 tagged trades. 2 new tests.
+- Why the rule itself was not changed earlier: on real day prices the -20 % stop was "no real gain" in both windows
+  (+6.2 % vs +5.6 % in 2025-26, +3.3 % vs +3.6 % in 2022-24), with fills at the level, which is optimistic.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
