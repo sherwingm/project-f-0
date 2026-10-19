@@ -61,9 +61,10 @@ CHOOSE, TEST = ("2025-01-01", "2025-12-31"), ("2026-01-01", "2026-09-25")
 
 
 # ---------------------------------------------------------------- the contracts
-def pick(band: str = "050") -> None:
+def pick(band: str = "050", src: str = "S1_v10_trades_floor0p05.csv", dst=None) -> None:
     contracts, _, lo, hi = FILES[band]
-    sig = pd.read_csv(RES / "S1_v10_trades_floor0p05.csv")
+    contracts = dst or contracts
+    sig = pd.read_csv(RES / src)
     sig = sig[sig["entry"] == "open"].drop_duplicates(["symbol", "day0", "side"])
     rows, fun = [], Counter(signals=len(sig))
     for d0, g in sig.groupby("day0"):

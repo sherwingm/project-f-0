@@ -46,3 +46,22 @@ separate study, not a follow-on pass. Descriptive. **The live v10 rule (₹2 flo
 - The 2026 fade signals were seen in earlier studies, but not this band with these exits.
 - The ₹0.04 cost after Nov 2025 comes from a few live chains on one day; the sensitivity rows bracket it.
 - Minute candles show trades, not quotes.
+
+## Addendum 2026-10-19 (2) · 2022-24, before vs after (user's request: "Make the backtest in 2022 to 2024 and give me before and after result")
+Written before any 2022-24 band number is computed.
+- **No minute data exists for 2022-24.** Upstox's expired stock-option candles start with the Oct 2024 expiries, so
+  this run uses the day-0 option open / high / low / close from the cached NSE files. That window had a ₹0.05 tick,
+  so the cost is ₹0.10 a side throughout.
+- **Trades:** the same pick as the 2025-26 study, on the 2022-24 fade signals (`S1_v10_trades_2022_24_floor0p05.csv`),
+  for both bands: ₹1–2 and ₹0.50–1.
+- **Before:** the 15:20 exit = buy at day 0's open + ₹0.10, sell at day 0's close − ₹0.10, real charges.
+- **After:** B30, the exit chosen on 2025 for ₹1–2 (hold until +100 %, then a 30 % trailing stop). Daily data cannot
+  order the prices inside the day, so it is reported as a range:
+  - armed when the day's high ≥ 2 × entry + 1 tick, else the 15:20 exit;
+  - **optimistic** when armed: max(close, 0.70 × high, rounded down to the tick) − ₹0.10;
+  - **pessimistic** when armed: min(close, 0.70 × the target, rounded down to the tick) − ₹0.10. That is the stop
+    firing right after arming, at the lowest peak it can have.
+- **Check of the method:** the same daily calculation on the 2025 trades, set beside the minute-data results
+  (₹1–2: baseline +₹36,757, B30 +₹47,775), to show how far the daily range is from the real one.
+- Also: v10 as today (₹2+, 2022-24: 436 trades, +₹24,190) alone, and with each band's trades added (before / after).
+- Descriptive; nothing here changes the verdict of the 2026 test or the live rule.

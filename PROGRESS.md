@@ -462,6 +462,19 @@ are recorded?
   2026, under every cost model, including the optimistic Rs 0.02 a side (best -Rs 2.5k). Same pattern as Rs 0.50-1:
   positive in 2025, negative in 2026.
 
+### 2026-10-19: cheap-option bands, 2022-24 before vs after (daily data)
+- Addendum 2 of `strategies/S1_v10_band12_trail.md`. There is no minute data before Oct 2024, so this uses daily
+  option prices; B30 (hold until +100 %, then a 30 % trail) is a range. `python -m scanner.fade_band_daily` →
+  `data/results/S1_v10_band_daily_2022_24.md`. Check on 2025: the real minute result lands near the optimistic end
+  (Rs 1-2: real +47.8k in a range of -63.8k..+87.7k; Rs 0.50-1: real +1.3k, optimistic +0.9k).
+- **Rs 1-2, 221 trades:** before (15:20) -Rs 41,050; after B30 between -Rs 1,47,772 and +Rs 5,242 (likely near the
+  top). By year (optimistic): 2022 -17k, 2023 +12k, 2024 +10k. With v10's Rs 2+ trades (436, +Rs 24,190): before
+  -Rs 16,859, after up to +Rs 29,432.
+- **Rs 0.50-1, 151 trades:** before -Rs 83,822; after between -Rs 1,24,657 and -Rs 59,968. It loses in every year
+  either way.
+- In short: B30 turns Rs 1-2 from a clear loss into about break-even in 2022-24 (+47.8k in 2025 on minute data,
+  -30.5k in 2026). Rs 0.50-1 loses in every window. No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
