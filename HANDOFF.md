@@ -52,6 +52,19 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 | Nightly recorder, first run with the additions | GitHub cron | 19 Oct ~20:00 IST | no |
 | Expired-token probes (Kotak token 47141): 1 / 2 / 3 | Claude app tasks → `index-jobs` `probe_expired` | 20 Oct, 27 Oct, 19 Nov at 16:00 IST | Claude app open |
 
+## After a context compaction
+- Read this file first, then the tail of `PROGRESS.md` and `INDEX_DATA_REPORT.md`.
+- **Job-sequence log:** `C:\Users\sherw\AppData\Local\Temp\claude\C--Users-sherw-project-f-0\5b842267-7121-4684-bc80-f0a9faaaf922\scratchpad\run_jobs3.log`.
+  If its background shell died, check the GitHub runs (`gh run list --repo sherwingm/project-f-0`) and re-dispatch
+  the remaining jobs **one at a time**, never while the 19:30 recorder is pending.
+- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. The Python venv is `%TEMP%\fo-venv\Scripts\python.exe` (pandas,
+  pyarrow, yfinance 1.7.0, requests, xlsxwriter).
+- **Open question to the user** (asked 2026-10-19 ~09:45 IST, not answered yet): "move to GitHub" or "leave it".
+  - **"Move to GitHub":** once the 15:40 copy is done, make the job chain start itself (each `index-jobs` run
+    dispatches the next) and turn the expired-token probes into a GitHub Action, so neither the PC nor the Claude app
+    is needed. Push with `[skip render]` if done during market hours.
+  - **Claude cloud:** advised as **not** needed.
+
 ## Next steps
 1. When the jobs finish:
    - Fill `INDEX_DATA_REPORT.md`: Upstox NIFTY part 2, BANKNIFTY, SENSEX, the reconciliation, the "what is available"
