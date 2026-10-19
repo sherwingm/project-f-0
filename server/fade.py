@@ -47,7 +47,7 @@ NP_SHADOW = 25.0
 T100 = 2.0
 # Shadow stop (strategies/S1_v10_s20_shadow_track.md): sold at the best bid of the first poll with the bid at or below
 # 0.80 x entry, else the real 15:20 sale. A tag only: the real exit is unchanged.
-S20 = 0.80
+S20, S20_FROM = 0.80, time(9, 16)                 # S1 v11 (strategies/S1_v11_fade_stop20.md): active from 09:16:00
 _NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
 
 
@@ -445,7 +445,7 @@ class FadeTrader:
                     t1["hit_at"] = now.isoformat(timespec="seconds")
                     log.info("fade shadow t100 hit: %s bid %.2f >= %.2f", pos["tradingsymbol"], bid, t1["target"])
                     self.ledger._save()
-            if s2 and not s2.get("hit_at"):
+            if s2 and not s2.get("hit_at") and now.time() >= S20_FROM:
                 s2["min_bid"] = min(float(bid), s2["min_bid"]) if s2.get("min_bid") is not None else float(bid)
                 if bid <= s2["stop"]:
                     s2["hit_at"], s2["fill"] = now.isoformat(timespec="seconds"), float(bid)

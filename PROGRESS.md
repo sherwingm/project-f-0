@@ -506,6 +506,13 @@ are recorded?
   "no real gain"; it is descriptive and not pre-registered. The live shadow stop (`shadow_s20`) is the fresh test; no
   rule change.
 
+### 2026-10-20: S1 v11 pre-registered (v10 + -20 % stop), not live
+- `strategies/S1_v11_fade_stop20.md` (user: "Write it"): from 09:16 on the entry day, sell at the best bid once it is
+  ≤ 0.80 × entry; else 15:20. Everything else is v10. Recorded in DECISIONS.md.
+- The live trader stays on v10. v11 is judged only on fresh live trades through `rule.shadow_s20`, now active from
+  09:16 (`server/fade.py` `S20_FROM`; 1 new test). At 30 closed tagged trades: mean (v11 - v10) > 0 with t ≥ 2,
+  v11 total > v10 total and > 0, not carried by one day, and the user agrees, then switch; else v10 stays.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

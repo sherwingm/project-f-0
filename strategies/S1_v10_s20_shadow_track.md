@@ -16,7 +16,9 @@ unchanged. A trade can be tagged by both shadow exits; each is judged on its own
 ## The shadow exit (fixed now)
 - At entry each fade position gets `rule.shadow_s20 = {"stop": entry × 0.80, "hit_at": null, "fill": null,
   "min_bid": null}`.
-- On every poll while it is open, on the entry day from entry until before 15:20, the trader reads the option's
+- **Aligned 2026-10-20 to S1 v11** (`strategies/S1_v11_fade_stop20.md`), before any tagged trade: the stop is active
+  from **09:16:00**, never in the 09:15 minute.
+- On every poll while it is open, on the entry day from entry (and from 09:16) until before 15:20, the trader reads the option's
   **best bid**. It keeps the lowest bid seen (`min_bid`).
 - **The first poll whose best bid ≤ the stop fires the shadow stop, filled at that best bid**, the price a market
   sell would get at that moment, not the stop level. The time and the fill are recorded.

@@ -522,3 +522,15 @@ def test_s20_unfired_stop_matches_the_real_exit_and_t100_still_works(setup):
     ft.on_poll(at(15, 15, 20))
     s = F.s20(lg.state)
     assert s["shadow_s20"]["net_rs"] == s["real_1520"]["net_rs"] and s["shadow_s20"]["stops_fired"] == 0
+
+
+def test_s20_is_not_active_in_the_0915_minute(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(datetime(2026, 10, 15, 9, 15, 20, tzinfo=IST))                                  # bought at 09:15
+    (p,) = lg.state["positions"]
+    q.set("PE", 1220.0, 13.0, 13.5)                                                             # dip in the 09:15 minute
+    ft.on_poll(datetime(2026, 10, 15, 9, 15, 50, tzinfo=IST))
+    assert p["rule"]["shadow_s20"]["hit_at"] is None
+    ft.on_poll(at(15, 9, 16))                                                                   # still below at 09:16
+    assert p["rule"]["shadow_s20"]["fill"] == 13.0
