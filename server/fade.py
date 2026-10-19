@@ -23,6 +23,7 @@ from typing import Callable
 
 from server import sessions
 from server.broker import tradingsymbol
+from server.rules import lot_of, never_fits
 
 log = logging.getLogger("fade")
 
@@ -93,17 +94,24 @@ def split(state: dict) -> dict:
     return out
 
 
+def walk_path(strikes: list[float], spot: float | None, side: str) -> list[float]:
+    """The strikes walk() may visit, nearest the money first, away from it (priced in one quote call)."""
+    ks = sorted(set(float(k) for k in strikes))
+    if not ks or not spot:
+        return []
+    put = side == "PE"
+    k0 = min(ks, key=lambda k: (abs(k - spot), -k if put else k))
+    i = ks.index(k0)
+    return (ks[: i + 1][::-1] if put else ks[i:])[:WALK_MAX]
+
+
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None]):
     """From the strike nearest `spot` (a tie: the lower for calls, the higher for puts), away from the money, the first
     strike with a two-sided live quote, spread <= 10 % of the ask, ask >= Rs 2 and ask x lot within Rs 600-8,000.
     Returns (strike, ask, lot) or the reason there is none."""
-    ks = sorted(set(float(k) for k in strikes))
-    if not ks or not spot:
+    path = walk_path(strikes, spot, side)
+    if not path:
         return "no strikes"
-    put = side == "PE"
-    k0 = min(ks, key=lambda k: (abs(k - spot), -k if put else k))
-    i = ks.index(k0)
-    path = (ks[: i + 1][::-1] if put else ks[i:])[:WALK_MAX]
     reason = "no strike with a two-sided quote and a lot in Rs 600-8,000"
     for k in path:
         q = quote(k) or {}
@@ -142,6 +150,15 @@ class FadeTrader:
     def _contract(self, sig: dict, strike: float, lot: int = 0) -> dict:
         return {"symbol": sig["symbol"], "instrument": sig["side"], "expiry": sig["expiry"], "strike": strike,
                 "tradingsymbol": tradingsymbol(sig["symbol"], sig["side"], sig["expiry"], strike), "lot_size": lot}
+
+    def _book(self, sig: dict, strikes: list[float]) -> dict[float, dict | None]:
+        """{strike: live quote} for the strikes walk() may visit, in one quote call (QuoteSource.get_many)."""
+        cs = {k: self._contract(sig, k) for k in strikes}
+        many = getattr(self.ledger.quotes, "get_many", None)
+        if many:
+            got = many(list(cs.values()))
+            return {k: got.get(c["tradingsymbol"]) for k, c in cs.items()}
+        return {k: self.ledger.quotes.get(c) for k, c in cs.items()}
 
     def _waiting(self, st: dict, key: str, now: datetime, why: str | None) -> None:
         """Why a signal of today has not filled yet, for the fade list (/api/paper/rules: rules.fade_wait); None clears it.
@@ -187,8 +204,13 @@ class FadeTrader:
                 continue
             self._tried[key] = now.timestamp()
             spot = self.spot(sig["symbol"]) or sig.get("spot")
-            w = walk(sig.get("strikes") or [], spot, sig["side"],
-                     lambda k: self.ledger.quotes.get(self._contract(sig, k)))
+            book = self._book(sig, walk_path(sig.get("strikes") or [], spot, sig["side"]))
+            why = never_fits(lot_of(book), BAND, MIN_PREMIUM)
+            if why:                                              # no strike can ever fit: say so now, not at 15:20
+                self._refuse(st, sig, today, why)
+                self._waiting(st, key, now, None)
+                continue
+            w = walk(sig.get("strikes") or [], spot, sig["side"], book.get)
             if isinstance(w, str):
                 self._last_why[key] = w
                 self._waiting(st, key, now, w)

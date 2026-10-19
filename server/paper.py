@@ -115,6 +115,22 @@ class QuoteSource:
             log.warning("paper quote %s: %s", ts, self.last_error)
         return None
 
+    def get_many(self, contracts: list[dict]) -> dict[str, dict | None]:
+        """{tradingsymbol: quote or None} for many options: one provider call (quote_many) when it has one, else
+        get() per contract."""
+        many = getattr(getattr(self.feed, "provider", None), "quote_many", None) if self.feed else None
+        if not many:
+            return {c["tradingsymbol"]: self.get(c) for c in contracts}
+        try:
+            got = many([c["tradingsymbol"] for c in contracts])
+        except Exception as exc:  # noqa: BLE001 - a failed quote means "no fill now", never a crash
+            self.last_error = f"{type(exc).__name__}: {exc}"
+            log.warning("paper quotes (%d contracts): %s", len(contracts), self.last_error)
+            return {c["tradingsymbol"]: None for c in contracts}
+        under = {c["symbol"]: (self.feed.snapshot()["quotes"].get(c["symbol"]) or {}).get("ltp") for c in contracts}
+        return {c["tradingsymbol"]: ({**got[c["tradingsymbol"]], "underlying": under[c["symbol"]]}
+                                     if c["tradingsymbol"] in got else None) for c in contracts}
+
     def spot(self, symbol: str) -> float | None:
         if not self.feed:
             return None

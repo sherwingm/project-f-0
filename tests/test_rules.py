@@ -180,3 +180,61 @@ def test_open_window_refuses_at_15_20_with_the_reason(setup):
     rt.on_poll(at(14, 15, 20))
     r = [x for x in lg.state["rules"]["refused"] if x["mode"] == "open"]
     assert len(r) == 1 and "more than Rs 8,000" in r[0]["reason"]
+
+
+# ---------------------------------------------------------------- the lot-size range (the user's idea, 2026-10-19)
+def test_never_fits_from_the_lot_alone():
+    why = R.never_fits(5425)                                         # IRFC: Rs 8,000 / 5,425 = Rs 1.47 a share
+    assert why == "never fits: 1 lot is 5,425 shares, so Rs 8,000 allows at most Rs 1.47 a share, below the Rs 2 floor"
+    assert R.never_fits(400) is None and R.never_fits(4000) is None   # HCLTECH: Rs 2-20; 4,000: exactly Rs 2
+    assert R.never_fits(0) is None                                   # lot unknown: walk as before
+
+
+def test_a_never_fit_stock_is_refused_at_once_both_entries(setup):
+    lg, q, rt, box = setup
+    for a in ("A", "B"):
+        box["fw"]["arms"][a]["pending"][0]["liquid_strikes"] = [1300.0, 1350.0]
+    for k in (1300.0, 1350.0, 1400.0):
+        q.set(k, 1.2, ask=1.2, lot=5425)
+    rt.on_poll(at(14, 9, 16))
+    r = lg.state["rules"]["refused"]
+    assert [x["mode"] for x in r] == ["open"] and r[0]["reason"].startswith("never fits: 1 lot is 5,425 shares")
+    assert lg.state["rules"]["open"]["2026-10-14:HCLTECH"] == "refused" and lg.state["rules"]["open_wait"] == {}
+    rt.on_poll(at(14, 15, 20))
+    assert [x["mode"] for x in lg.state["rules"]["refused"]] == ["open", "close"]
+    assert lg.state["rules"]["refused"][1]["reason"].startswith("never fits") and lg.state["positions"] == []
+
+
+def test_each_try_prices_all_its_strikes_in_one_call(setup):
+    lg, q, rt, box = setup
+    calls = []
+    q.get_many = lambda cs: calls.append([c["strike"] for c in cs]) or {c["tradingsymbol"]: q.book.get(c["tradingsymbol"]) for c in cs}
+    for a in ("A", "B"):
+        box["fw"]["arms"][a]["pending"][0]["liquid_strikes"] = [1300.0, 1350.0, 1400.0]
+    for k in (1300.0, 1350.0):
+        q.set(k, 40.0, ask=40.0)                                     # dear
+    q.set(1400.0, 20.0, ask=20.0)                                    # Rs 7,000 a lot
+    rt.on_poll(at(14, 9, 16))
+    assert calls == [[1300.0, 1350.0, 1400.0]]
+    (p,) = lg.state["positions"]
+    assert p["strike"] == 1400.0 and p["entry"]["price"] == 20.0
+
+
+def test_quote_source_get_many_uses_one_provider_call():
+    from server.paper import QuoteSource
+
+    class Prov:
+        calls = []
+        def quote_many(self, tss):
+            self.calls.append(list(tss))
+            return {t: {"lot_size": 400, "depth": {"ask": [(10.0, 1)]}} for t in tss if not t.endswith("1400CE")}
+
+    class Feed:
+        provider = Prov()
+        def snapshot(self):
+            return {"quotes": {"HCLTECH": {"ltp": 1301.0}}}
+
+    cs = [{"symbol": "HCLTECH", "instrument": "CE", "tradingsymbol": TS[k]} for k in (1300.0, 1400.0)]
+    got = QuoteSource(Feed()).get_many(cs)
+    assert Feed.provider.calls == [[TS[1300.0], TS[1400.0]]]
+    assert got[TS[1300.0]]["underlying"] == 1301.0 and got[TS[1400.0]] is None

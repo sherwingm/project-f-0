@@ -335,6 +335,19 @@ are recorded?
 - No rule change: the walk, the Rs 600-8,000 band, the Rs 2 floor and the 2-minute retry are as before. Tests: the full
   suite passes (the known `test_spec12_step7_model` deselected). Pushed with `[skip render]`; live from the next deploy.
 
+### 2026-10-19: lot-size range check and one-call pricing (the user's idea)
+- One lot must cost Rs 600-8,000 and the premium must be at least Rs 2, so a share's premium must lie in
+  [max(2, 600 / lot), 8,000 / lot]. Examples: HCLTECH (lot 400) Rs 2-20; WIPRO (3,000) Rs 2-2.67. When the range is
+  empty (lot > 4,000), no strike can ever fit. That is 24 of 213 option stocks in the 16 Oct bhavcopy, e.g. IRFC
+  (5,425 → at most Rs 1.47), UJJIVANSFB, CANBK, PNB, SAIL, NHPC, IDEA.
+- `server/rules.py` `never_fits()`: the open and 15:20 entries (Arm A / B) and the fade entry (`server/fade.py`) now
+  refuse such a stock at the first try, with the reason ("never fits: 1 lot is 5,425 shares ..."). Before, they retried
+  every 2 minutes all day and refused at 15:20.
+- One-call pricing: each try prices every strike its walk may visit (up to 15) in one Kotak `quotes()` call
+  (`KotakProvider.quote_many`, `QuoteSource.get_many`). Before, it made one call per strike.
+- No rule change: the same strike is picked, and a never-fit stock was never bought before either. The 2-minute retry
+  stays (user's choice). Full suite passes. Pushed with `[skip render]`; live from the next deploy.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

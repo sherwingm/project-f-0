@@ -54,6 +54,35 @@ def signals_for(fw: dict | None, today: date) -> list[dict]:
     return list(rows.values())
 
 
+def path_up(strikes: list[float], spot: float | None) -> list[float]:
+    """The strikes a call walk may visit: from the one nearest spot (a tie: the lower) upward, at most WALK_MAX.
+    The entries price them all in one quote call."""
+    ks = sorted(set(float(k) for k in strikes))
+    if not ks or not spot:
+        return []
+    k0 = min(ks, key=lambda k: (abs(k - spot), k))
+    return ks[ks.index(k0):][:WALK_MAX]
+
+
+def never_fits(lot: int, band: tuple[float, float] = BAND, floor: float = MIN_PREMIUM) -> str | None:
+    """The lot-size range check (the user's idea, 2026-10-19): one lot must cost band[0]-band[1] and the premium must
+    be >= floor, so a share's premium must lie in [max(floor, band[0] / lot), band[1] / lot]. When that range is
+    empty no strike can ever fit (IRFC: lot 5,425 -> at most Rs 1.47, below Rs 2), so the entry is refused at once
+    instead of being retried all day. The reason, else None."""
+    if not lot:
+        return None
+    hi = band[1] / lot
+    if hi < max(floor, band[0] / lot):
+        return (f"never fits: 1 lot is {lot:,} shares, so Rs {band[1]:,.0f} allows at most Rs {hi:.2f} a share, "
+                f"below the Rs {floor:g} floor")
+    return None
+
+
+def lot_of(book: dict) -> int:
+    """The lot size from a priced strike set (every strike of one stock and expiry has the same lot)."""
+    return next((int(q["lot_size"]) for q in book.values() if q and q.get("lot_size")), 0)
+
+
 def walk_live(strikes: list[float], spot: float, quote: Callable[[float], dict | None]):
     """The rules' walk on live quotes: from the strike nearest spot (a tie: the lower) upward, the first call that
     traded >= 50 contracts today with ATP >= Rs 2 and one lot at ATP + 1 tick within Rs 600-8,000.
@@ -117,10 +146,15 @@ class RuleTrader:
     def _state(self) -> dict:
         return self.ledger.state.setdefault("rules", {"open": {}, "close": {}, "exits_checked": None, "refused": []})
 
-    def _quote(self, sym: str, expiry: str, strike: float) -> dict | None:
-        c = {"symbol": sym, "instrument": "CE", "expiry": expiry, "strike": strike,
-             "tradingsymbol": tradingsymbol(sym, "CE", expiry, strike), "lot_size": 0}
-        return self.ledger.quotes.get(c)
+    def _book(self, sig: dict, strikes: list[float]) -> dict[float, dict | None]:
+        """{strike: live quote} for the calls a walk may visit, in one quote call (QuoteSource.get_many)."""
+        cs = {k: {"symbol": sig["symbol"], "instrument": "CE", "expiry": sig["expiry"], "strike": k,
+                  "tradingsymbol": tradingsymbol(sig["symbol"], "CE", sig["expiry"], k), "lot_size": 0} for k in strikes}
+        many = getattr(self.ledger.quotes, "get_many", None)
+        if many:
+            got = many(list(cs.values()))
+            return {k: got.get(c["tradingsymbol"]) for k, c in cs.items()}
+        return {k: self.ledger.quotes.get(c) for k, c in cs.items()}
 
     def _waiting(self, st: dict, key: str, now: datetime, arms: list[str], why: str | None) -> None:
         """Why today's open entry has not filled yet, for the results page (/api/paper/rules: rules.open_wait);
@@ -171,7 +205,13 @@ class RuleTrader:
                 self._tried[key] = now.timestamp()
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
                 strikes = sig.get("liquid_strikes") or ([sig["open_strike"]] if sig.get("open_strike") else [])
-                w = walk_ask(strikes, spot, lambda k: self._quote(sig["symbol"], sig["expiry"], k))
+                book = self._book(sig, path_up(strikes, spot))
+                why = never_fits(lot_of(book) or sig.get("open_lot") or 0)
+                if why:                                          # no strike can ever fit: say so now, not at 15:20
+                    self._refuse(st, sig, "open", today, why)
+                    self._waiting(st, key, now, sig["arms"], None)
+                    continue
+                w = walk_ask(strikes, spot, book.get)
                 if isinstance(w, str):
                     self._last_why[key] = w
                     self._waiting(st, key, now, sig["arms"], w)
@@ -188,7 +228,8 @@ class RuleTrader:
                 if key in st["close"]:
                     continue
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
-                w = walk_live(sig.get("strikes") or [], spot, lambda k: self._quote(sig["symbol"], sig["expiry"], k))
+                book = self._book(sig, path_up(sig.get("strikes") or [], spot))
+                w = never_fits(lot_of(book)) or walk_live(sig.get("strikes") or [], spot, book.get)
                 if isinstance(w, str):
                     self._refuse(st, sig, "close", today, w)
                     continue

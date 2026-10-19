@@ -353,12 +353,8 @@ class KotakProvider:
         """One F&O contract on demand (the fill engine's options are not in the polling universe):
         last_price, volume, open_interest, timestamp and 5-level depth, plus the contract's
         lot size and expiry from the scrip master. Accepts RELIANCE26SEP1300CE or NFO:RELIANCE26SEP1300CE."""
-        self.master.load()
         ts = tradingsymbol.split(":", 1)[1] if ":" in tradingsymbol else tradingsymbol
-        rec = self.master.fo_by_symbol.get(ts)
-        if rec is None:
-            m = KEY_RE.match(ts)
-            rec = self.master.resolve_key(m.groupdict()) if m else None
+        rec = self._fo_record(ts)
         if rec is None:
             raise ValueError(f"{ts} is not in Kotak's NSE F&O scrip master")
         rows = [q for q in self._quotes([{"instrument_token": rec["token"], "exchange_segment": "nse_fo"}])
@@ -367,6 +363,34 @@ class KotakProvider:
             raise RuntimeError(f"Kotak quotes: no quote returned for {ts}")
         return {**_parse_quote(rows[0], fo=True), "tradingsymbol": rec["tradingsymbol"],
                 "lot_size": rec["lot_size"], "expiry": rec["expiry"]}
+
+    def quote_many(self, tradingsymbols: list[str]) -> dict[str, dict]:
+        """quote_one for many F&O contracts in one Kotak call per QUOTE_BATCH (the entry walks price every strike they
+        may need at once). {tradingsymbol as asked: quote}; a contract missing from the scrip master or the reply is
+        left out."""
+        recs = {}
+        for t in tradingsymbols:
+            rec = self._fo_record(t.split(":", 1)[1] if ":" in t else t)
+            if rec is not None:
+                recs[rec["token"]] = (t, rec)
+        out: dict[str, dict] = {}
+        items = [{"instrument_token": tok, "exchange_segment": "nse_fo"} for tok in recs]
+        for batch in _chunks(items, QUOTE_BATCH):
+            for q in self._quotes(batch):
+                hit = recs.get(str(q.get("exchange_token", "")))
+                if hit:
+                    t, rec = hit
+                    out[t] = {**_parse_quote(q, fo=True), "tradingsymbol": rec["tradingsymbol"],
+                              "lot_size": rec["lot_size"], "expiry": rec["expiry"]}
+        return out
+
+    def _fo_record(self, ts: str) -> dict | None:
+        self.master.load()
+        rec = self.master.fo_by_symbol.get(ts)
+        if rec is None:
+            m = KEY_RE.match(ts)
+            rec = self.master.resolve_key(m.groupdict()) if m else None
+        return rec
 
     def _token(self, key: str) -> tuple[str, str] | None:
         """(segment, token) for NSE:<SYMBOL> or NFO:<our tradingsymbol>."""

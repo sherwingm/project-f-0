@@ -366,3 +366,13 @@ def test_index_page_and_api_are_read_only_and_reachable(monkeypatch):
     assert sub.status_code == 200 and exp["next"]["NIFTY"] == ["2026-10-19"] and pos["pods"] == []
     assert 'href="/index"' in home
     assert "place" not in page.text.lower() or "can place an order" in page.text      # no order controls
+
+
+def test_a_never_fit_fade_is_refused_at_once(setup):
+    lg, q, ft, _ = setup
+    for k in (1180.0, 1200.0, 1220.0):
+        q.set("PE", k, 1.3, 1.4, lot=8000)                           # UJJIVANSFB-like: Rs 8,000 / 8,000 = Rs 1 a share
+    ft.on_poll(at(15, 9, 16))
+    r = [x for x in lg.state["rules"]["refused"] if x["mode"] == "fade"]
+    assert len(r) == 1 and r[0]["reason"].startswith("never fits: 1 lot is 8,000 shares")
+    assert lg.state["rules"]["fade"]["2026-10-15:HCLTECH"] == "refused" and not lg.state["rules"].get("fade_wait")

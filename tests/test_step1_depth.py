@@ -167,3 +167,12 @@ def test_option_chain_ignores_impossible_open_interest():
     c = provider._fetch_chain("RELIANCE", EXPIRY)
     assert (c["call_oi"], c["put_oi"], c["pcr"]) == (2000000, 1500000, 0.75)      # the garbage leg adds nothing
     assert c["strikes"]["RELIANCE26SEP1250CE"]["open_interest"] == 0 and c["strikes"]["RELIANCE26SEP1250CE"]["last_price"] == 4.5
+
+
+def test_quote_many_prices_several_contracts_in_one_call():
+    provider, fake = kotak_provider()
+    n = len(fake.calls)
+    got = provider.quote_many(["RELIANCE26SEP1300CE", "NFO:RELIANCE26SEPFUT", "RELIANCE26SEP9999CE"])
+    assert len(fake.calls) == n + 1 and len(fake.calls[-1]) == 2          # one call, the unknown strike left out
+    assert got["RELIANCE26SEP1300CE"]["lot_size"] == 500 and got["RELIANCE26SEP1300CE"]["last_price"] == 4.1
+    assert got["NFO:RELIANCE26SEPFUT"]["depth"]["ask"][0] == (1248.2, 500) and "RELIANCE26SEP9999CE" not in got
