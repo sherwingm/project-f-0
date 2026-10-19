@@ -33,6 +33,7 @@ import requests
 
 log = logging.getLogger("durable")
 LEDGER, ORDERS, QUEUE, SNAPSHOTS = "paper_ledger.json", "paper_orders.jsonl", "paper_queue.jsonl", "live_snapshots"
+COMPARE = "provider_compare"
 FAST_CHECK = 10          # seconds between checks
 SNAPSHOT_EVERY = 900     # seconds: the ledger's 15-minute snapshot when only marks changed
 API = "https://api.github.com"
@@ -116,6 +117,9 @@ class Mirror:
         snap = self.dir / SNAPSHOTS
         if snap.is_dir():
             names += sorted(f"{SNAPSHOTS}/{f.name}" for f in snap.glob("*.json"))
+        cmp_dir = self.dir / COMPARE                     # the Upstox-vs-Kotak shadow check's daily files
+        if cmp_dir.is_dir():
+            names += sorted(f"{COMPARE}/{f.name}" for f in cmp_dir.glob("*.json"))
         return names
 
     def restore(self, snapshot_days: list[str] | None = None) -> list[str]:
@@ -140,8 +144,7 @@ class Mirror:
             if not p.exists() or newer(r, p.read_bytes()):
                 p.write_bytes(r)
                 restored.append(name)
-        for d in snapshot_days or []:
-            name = f"{SNAPSHOTS}/{d}.json"
+        for name in [f"{folder}/{d}.json" for d in snapshot_days or [] for folder in (SNAPSHOTS, COMPARE)]:
             r = self.store.get(name)
             if r is None:
                 continue

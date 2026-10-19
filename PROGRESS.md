@@ -366,6 +366,29 @@ are recorded?
   the Arm F tab shows it. Judged after 30 tagged trades have closed (t ≥ 2 and the user's agreement to change the rule).
 - Goes live with the 15:35 deploy today, so the first tagged trades are the next fade session's.
 
+### 2026-10-19: Upstox built as a live source, with a shadow check against Kotak (user's request)
+- `server/upstox.py` can now do everything the paper trader needs from Kotak:
+  - full market quotes (500 contracts a call) with 5-level depth, ATP, OI, circuits and previous close, in Kotak's
+    shape;
+  - `quote_one` / `quote_many` for the fill engine and the entry walks;
+  - `futures()` for every live contract;
+  - `history()` from the v3 candles (intraday for today);
+  - options asked by the feed are priced from full quotes, with the chain only as a fallback.
+- Its limiter follows the documented 50/s, 500/min, 2,000/30 min, kept lower (40 / 400 / 1,500) so the GitHub jobs
+  on the same token keep ~500.
+- The instrument file (40 MB of JSON) is now streamed row by row: peak 27 MB instead of 138 MB, the same result.
+  Checked on the real file: IRFC lot 5,425, HCLTECH 400.
+- **Shadow check, nothing switched:** `server/provider_compare.py` runs while Kotak is live and the Upstox token is
+  set.
+  - Every 5 minutes of a session (09:20-15:25) it prices the same contracts on both providers: open positions, plus 10
+    rotating stocks' near future and near-money call and put.
+  - It records last-price gaps, same best bid / ask, volume ratio (the unit check), OI and quote-time lag in
+    `data/provider_compare/<date>.json`, mirrored to paper-state, and serves them at `GET /api/data/compare`.
+- Tests: `tests/test_upstox.py`; the full suite passes. Pushed with `[skip render]`; live with the 15:35 deploy, so the
+  first rounds run on 20 Oct.
+- The switch itself (`DATA_PROVIDER=upstox` on Render) comes after a few days of clean rounds, done after market and
+  logged in DECISIONS.md. The live stream (WebSocket) is the next step after that.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

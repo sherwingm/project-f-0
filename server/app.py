@@ -78,6 +78,7 @@ class State:
         self.rules = None                    # server.rules.RuleTrader: the S1 rule trades in the paper account
         self.fade = None                     # server.fade.FadeTrader: S1 v10 results-day fade, paper only
         self.mirror = None                   # server.durable.Mirror when LEDGER_GITHUB_TOKEN is set
+        self.compare = None                  # server.provider_compare.ProviderCompare (Kotak live + Upstox token)
         self.commentary = Commentary(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.verdict = Verdict(settings.anthropic_api_key, settings.commentary_model, settings.data_dir / "cache") if settings.commentary_enabled else None
         self.orders_today = Counter()
@@ -130,6 +131,7 @@ def startup() -> None:
     if src == "upstox":
         from server.upstox import UpstoxProvider
         provider = UpstoxProvider(settings.upstox_analytics_token, settings.upstox_chain_calls_per_poll)
+        state.fut_source = provider.futures
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols())
         state.feed.start()
         log.info("live feed on (Upstox, read-only): LTP + futures OI every %ss, PCR/strike OI for %d stocks per poll",
@@ -183,7 +185,24 @@ def startup() -> None:
             state.feed.hooks.append(lambda feed: state.fade.on_poll(datetime.now(IST)))
         log.info("paper engine on: capital Rs %s, fills against %s", f"{state.ledger.state['capital']:,.0f}",
                  "the live book" if state.feed else "nothing (no live feed: paper orders cannot fill)")
+    if src == "kotak" and state.feed and settings.upstox_analytics_token:
+        _start_compare()
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()
+
+
+def _start_compare() -> None:
+    """The Upstox-vs-Kotak shadow check (server/provider_compare.py): reads only, never changes the live feed."""
+    try:
+        from server.provider_compare import ProviderCompare, contract_picker
+        from server.upstox import UpstoxProvider
+        up = UpstoxProvider(settings.upstox_analytics_token, chain_calls_per_poll=0)
+        spot = lambda s: (state.feed.snapshot()["quotes"].get(s) or {}).get("ltp")              # noqa: E731
+        state.compare = ProviderCompare(settings.data_dir, state.feed.provider, up,
+                                        contract_picker(state.ledger, state.stocks, state.fut_symbols, spot, up))
+        state.compare.start()
+        log.info("provider compare on: Upstox vs Kotak every %ss of a session", 300)
+    except Exception as exc:  # noqa: BLE001 - the shadow check is optional
+        log.warning("provider compare could not start: %s", exc)
 
 
 def _daily_rebuild_loop() -> None:
@@ -672,6 +691,16 @@ def api_paper_rules(_: str = Depends(auth)):
                  "open": len(a.get("positions", [])), "closed": len(a.get("closed", []))} for a in st.get("archive", [])]
         rules = json.loads(json.dumps(st.get("rules") or {}))
         return {"epoch": st.get("epoch"), "started": st.get("created_at"), "rules": rules, "archive": arch}
+
+
+@app.get("/api/data/compare")
+def api_data_compare(day: str | None = None, _: str = Depends(auth)):
+    """The Upstox-vs-Kotak shadow check for a day (default today): per-round summaries, day totals, largest gaps."""
+    c = state.compare
+    if c is None:
+        return {"enabled": False, "why": "runs only while Kotak is the live source and UPSTOX_ANALYTICS_TOKEN is set"}
+    d = day or datetime.now(IST).date().isoformat()
+    return {"enabled": True, "status": c.status, **(c.load(d) or {"date": d, "rounds": []})}
 
 
 @app.get("/api/paper/refusals")
