@@ -58,8 +58,8 @@ Daily closes, 2022-01-01 → 2026-10-16: **1,177 days compared, 0 mismatches abo
 Run 2026-10-19 on the 16 Oct session (Kotak's recorder vs Upstox's history, 120 contracts, 1-min closes):
 - **29,126 minutes on both.** **77.3 %** have the identical close; the mean absolute difference is **Rs 0.35**,
   and the largest single gap is Rs 93.8 (one outlier, to look at).
-- 0 minutes are Kotak-only, and **16,083 minutes are Upstox-only**: Upstox also lists the minutes without a trade
-  that Kotak leaves out. These need a rule before the two are merged (carry the last close forward or drop them).
+- 0 minutes are Kotak-only, and **16,083 minutes are Upstox-only**. The cause is not checked yet: either minutes
+  without a trade that Kotak leaves out, or minutes outside the recorder's window. Settle it before merging.
 - Verdict: the two sources agree to within a tick most of the time, so they can be combined. Kotak is used where
   both exist, as the recorder is the forward source.
 
