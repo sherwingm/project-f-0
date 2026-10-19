@@ -243,3 +243,27 @@ Sources: the Upstox docs pages for the Analytics Token, rate limiting, full mark
     and the backfill has pulled 31.5 M rows.
   - Upstox may enforce Plus later, so the backfill should finish while it works. Whether stock (not index)
     underlyings are covered is not stated.
+
+## Addendum 2026-10-19: 1-minute history for stock options expired before Oct 2024 (read-only probe)
+Docs first (read 2026-10-19):
+- Upstox's expired-instruments expiries list covers "up to six months of historical expiries" and is documented as
+  Upstox Plus only (UDAPI1149). On our free token it lists stock expiries from 2024-10-31 (FEDERALBNK).
+- Upstox's v3 historical candles: minutes "available from January, 2022". Nothing is said about expired contracts.
+- Kotak Neo: no official documentation for historical candles was found, and the SDK repo is archived.
+
+Probe (`index_data/probe_old_options.py`, GitHub run 39278246405, FEDERALBNK):
+
+| Check | Result |
+|---|---|
+| Upstox expired option contracts, expiry 2024-09-26 / 2023-01-25 (not in its list) | 0 / 0 contracts |
+| Upstox v3 minutes for an expired key it lists (`NSE_FO\|75653\|31-10-2024`) | HTTP 400 UDAPI1021 "invalid format" |
+| Upstox v3 minutes, bare key `NSE_FO\|75653` | HTTP 400 UDAPI100011 "Invalid Instrument key" |
+| Upstox expired candles, key built from NSE's own token of a Sep 2024 contract (`NSE_FO\|116747\|26-09-2024`) | 0 rows |
+| Upstox v3 minutes, `NSE_FO\|116747` | HTTP 400 "Invalid Instrument key" |
+| Kotak `historical_data` for `nse_fo\|75653` (Oct 2024) and `nse_fo\|116747` (Sep 2024) | 0 rows each (silently empty) |
+| Kotak control (equity, `nse_cm\|FEDERALBNK-EQ`) | 422 "Invalid neosymbol": wrong symbol form in the probe, so the Kotak rows show "no data" but not why |
+
+**Verdict:** neither API gives 1-minute candles for stock options that expired before the Oct 2024 expiries. Upstox's
+v3 "from January 2022" applies to live instruments only; its expired API starts at Oct 2024; a key built from NSE's
+token returns nothing. Kotak returns nothing for expired tokens, as found before. 2022 to Sep 2024 needs a paid
+source.
