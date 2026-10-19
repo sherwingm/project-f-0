@@ -213,3 +213,33 @@ Sources: the Upstox docs pages for the Analytics Token, rate limiting, full mark
   2. a few days of shadow comparison against Kotak on the same contracts (prices, spreads, timestamps);
   3. the switch (`DATA_PROVIDER=upstox`) done after market hours, logged in DECISIONS.md. The fill source changes
      in the middle of the v10 review.
+
+### What the Upstox docs say, page by page (read 2026-10-19)
+- **Analytics Token:** valid 1 year and read-only (GET only). Without a static IP it supports Market Quote,
+  Historical Data, Option Chain, Market Information, Fundamentals, News and **Websocket**. Orders, portfolio and the
+  like need a static IP and are refused with this token anyway.
+- **Rate limits:** 50/s, 500/min, 2,000 per 30 min, per API and per user. The 30-minute cap is the binding one (~67 a
+  minute on average). `server/upstox.py` holds 25/s, 250/min and 1,000/30 min: safe, but half the allowance.
+- **Full market quote (v2):** up to 500 instrument keys per call. Each has 5-level depth (price, quantity, orders),
+  `average_price`, volume, OI and circuit limits. Everything the paper fill engine needs.
+- **Market data feed (v3 WebSocket):**
+  - Protobuf, binary subscribe messages, server pings.
+  - Modes: `ltpc`, `option_greeks`, `full` (5-level depth plus greeks) and `full_d30` (30 levels, Plus only).
+  - `full` takes up to 2,000 keys on its own, or 1,500 when combined with other modes. 2 connections per user.
+  - The authorize endpoint returns a one-use `wss://` URL. Its page names only the "access token" from the Token API;
+    the Analytics Token page lists Websocket as supported. **Not tested by us yet.**
+- **Historical candles (v3):**
+  - Minutes: from Jan 2022, at most 1 month per call for 1-15 minute candles and 1 quarter above that.
+  - Hours: from Jan 2022, 1 quarter per call.
+  - Days: from Jan 2000, 1 decade per call. Weeks and months: no limit.
+  - This matches our probe (2020 empty, 2022 present, UDAPI1148 on longer ranges).
+- **Option chain:** one bid and one ask per strike (price and quantity), plus LTP, volume, OI, previous OI, greeks,
+  IV and PCR. **No 5-level depth**, so fills must use the full market quote.
+- **Expired instruments:**
+  - Endpoints: expiries, option contracts, future contracts and candles (1-min, 30-min, day, week, month).
+  - The docs list error UDAPI1149, "available exclusively with an Upstox Plus plan", and say the expiry list covers
+    up to six months.
+  - **That is not what we saw:** on the free token the expiry list returned 107 NIFTY expiries back to 2024-10-03,
+    and the backfill has pulled 31.5 M rows.
+  - Upstox may enforce Plus later, so the backfill should finish while it works. Whether stock (not index)
+    underlyings are covered is not stated.
