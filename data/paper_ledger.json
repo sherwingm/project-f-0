@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 453568.3099999999,
+ "cash": 439252.60999999987,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -64,10 +64,10 @@
     "signal_date": "2026-10-14",
     "beat": 4.65,
     "move": 5.73,
-    "best": 58.0,
+    "best": 69.75,
     "stall": 0,
-    "checked": "2026-10-15",
-    "last_close": 58.0
+    "checked": "2026-10-19",
+    "last_close": 69.75
    },
    "peak": {
     "price": 99.7,
@@ -139,10 +139,10 @@
     "signal_date": "2026-10-14",
     "beat": 4.65,
     "move": 5.73,
-    "best": 59.21,
-    "stall": 1,
-    "checked": "2026-10-15",
-    "last_close": 58.0
+    "best": 69.75,
+    "stall": 0,
+    "checked": "2026-10-19",
+    "last_close": 69.75
    },
    "peak": {
     "price": 99.7,
@@ -216,8 +216,9 @@
     "beat": 6.9,
     "move": 8.48,
     "best": 11.7,
-    "stall": 0,
-    "checked": null
+    "stall": 1,
+    "checked": "2026-10-19",
+    "last_close": 9.25
    },
    "peak": {
     "price": 17.35,
@@ -291,8 +292,9 @@
     "beat": 4.26,
     "move": 5.95,
     "best": 2.56,
-    "stall": 0,
-    "checked": null
+    "stall": 1,
+    "checked": "2026-10-19",
+    "last_close": 1.32
    },
    "peak": {
     "price": 3.56,
@@ -304,83 +306,141 @@
    }
   },
   {
-   "id": "P-1792381621178-13",
-   "symbol": "FEDERALBNK",
-   "instrument": "PE",
+   "id": "P-1792403425318-15",
+   "symbol": "TECHM",
+   "instrument": "CE",
    "expiry": "2026-10-27",
-   "strike": 315.0,
-   "tradingsymbol": "FEDERALBNK26OCT315PE",
-   "lot_size": 2500,
+   "strike": 1820.0,
+   "tradingsymbol": "TECHM26OCT1820CE",
+   "lot_size": 600,
    "side": "BUY",
    "lots": 1,
-   "qty": 2500,
+   "qty": 600,
    "entry": {
-    "price": 2.6,
+    "price": 13.12,
     "levels": [],
     "class": "rule",
-    "mode": "rule_fade",
+    "mode": "rule_close",
     "mid": null,
     "slippage_vs_mid": null,
     "overflow_qty": 0
    },
    "entry_charges": {
-    "instrument": "PE",
+    "instrument": "CE",
     "side": "BUY",
-    "qty": 2500,
-    "price": 2.6,
-    "value": 6500.0,
+    "qty": 600,
+    "price": 13.12,
+    "value": 7872.0,
     "brokerage": 20.0,
     "stt": 0.0,
-    "exchange": 2.31,
+    "exchange": 2.8,
     "sebi": 0.01,
-    "stamp": 0.2,
-    "gst": 4.02,
-    "total": 26.54
+    "stamp": 0.24,
+    "gst": 4.1,
+    "total": 27.15
    },
-   "entry_charges_open": 26.54,
+   "entry_charges_open": 27.15,
    "stop": null,
-   "max_loss_at_entry": 6526.54,
+   "max_loss_at_entry": 7899.15,
    "margin": 0.0,
-   "opened_at": "2026-10-19T09:16:58+05:30",
+   "opened_at": "2026-10-19T15:20:24+05:30",
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
-   "mark": {
-    "price": 0.25,
-    "bid": 0.25,
-    "ask": 0.3,
-    "ltp": 0.3,
-    "at": "2026-10-19T15:20:20+05:30",
-    "stale": false
-   },
-   "unrealised_gross": -5875.0,
-   "exit_charges_est": 24.8,
-   "unrealised": -5926.34,
-   "liquidation_value": 600.2,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 38.72,
+   "unrealised": -65.87,
+   "liquidation_value": 7833.28,
    "rule": {
-    "strategy": "fade",
-    "entry_mode": "fade",
+    "entry_mode": "close",
     "arms": [
-     "F"
+     "A",
+     "B"
     ],
-    "signal_date": "2026-10-19",
-    "filed": "2026-10-16",
-    "why": "net profit YoY +51.1 %, QoQ +19.3 %; revenue YoY +16.2 %",
-    "spot_at_entry": 326.05,
-    "np_yoy": 51.1,
-    "np_qoq": 19.3,
-    "rev_yoy": 16.2,
-    "shadow_np25": true,
-    "best": 2.6,
-    "stall": 0,
-    "checked": null
+    "signal_date": "2026-10-16",
+    "beat": 6.9,
+    "move": 8.48,
+    "best": 13.12,
+    "stall": 1,
+    "checked": "2026-10-19",
+    "last_close": 9.25
    },
    "peak": {
-    "price": 2.95,
-    "at": "2026-10-19T09:28:18+05:30"
+    "price": 13.12,
+    "at": "2026-10-19T15:20:24+05:30"
    },
    "trough": {
-    "price": 0.25,
-    "at": "2026-10-19T12:00:04+05:30"
+    "price": 13.12,
+    "at": "2026-10-19T15:20:24+05:30"
+   }
+  },
+  {
+   "id": "P-1792403425921-17",
+   "symbol": "WIPRO",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 185.0,
+   "tradingsymbol": "WIPRO26OCT185CE",
+   "lot_size": 3000,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 3000,
+   "entry": {
+    "price": 2.33,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_close",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 3000,
+    "price": 2.33,
+    "value": 6990.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.48,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.05,
+    "total": 26.75
+   },
+   "entry_charges_open": 26.75,
+   "stop": null,
+   "max_loss_at_entry": 7016.75,
+   "margin": 0.0,
+   "opened_at": "2026-10-19T15:20:24+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.02,
+   "unrealised": -63.77,
+   "liquidation_value": 6952.98,
+   "rule": {
+    "entry_mode": "close",
+    "arms": [
+     "A",
+     "B"
+    ],
+    "signal_date": "2026-10-16",
+    "beat": 4.26,
+    "move": 5.95,
+    "best": 2.33,
+    "stall": 1,
+    "checked": "2026-10-19",
+    "last_close": 1.32
+   },
+   "peak": {
+    "price": 2.33,
+    "at": "2026-10-19T15:20:24+05:30"
+   },
+   "trough": {
+    "price": 2.33,
+    "at": "2026-10-19T15:20:24+05:30"
    }
   }
  ],
@@ -1239,6 +1299,96 @@
     "checked": null,
     "spot_at_exit": 252.7
    }
+  },
+  {
+   "id": "P-1792381621178-13",
+   "symbol": "FEDERALBNK",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 315.0,
+   "tradingsymbol": "FEDERALBNK26OCT315PE",
+   "lot_size": 2500,
+   "side": "BUY",
+   "stop": null,
+   "opened_at": "2026-10-19T09:16:58+05:30",
+   "t2_date": "2026-10-23",
+   "lots": 1,
+   "qty": 2500,
+   "entry": {
+    "price": 2.6,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": 26.54,
+   "exit": {
+    "price": 0.25,
+    "levels": [],
+    "class": "rule",
+    "mode": "fade_eod",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "exit_charges": {
+    "instrument": "PE",
+    "side": "SELL",
+    "qty": 2500,
+    "price": 0.25,
+    "value": 625.0,
+    "brokerage": 20.0,
+    "stt": 0.94,
+    "exchange": 0.22,
+    "sebi": 0.0,
+    "stamp": 0.0,
+    "gst": 3.64,
+    "total": 24.8
+   },
+   "gross_pnl": -5875.0,
+   "charges_total": 51.34,
+   "net_pnl": -5926.34,
+   "reason": "fade_eod",
+   "closed_at": "2026-10-19T15:20:27+05:30",
+   "capital_committed": 6500.0,
+   "return_pct": -91.17,
+   "max_loss_at_entry": 6526.54,
+   "r_multiple": -0.908,
+   "held_peak": {
+    "price": 2.95,
+    "at": "2026-10-19T09:28:18+05:30"
+   },
+   "held_trough": {
+    "price": 0.25,
+    "at": "2026-10-19T12:00:04+05:30"
+   },
+   "after": {
+    "until": "2026-10-23",
+    "peak": null,
+    "trough": null,
+    "last": null
+   },
+   "rule": {
+    "strategy": "fade",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-19",
+    "filed": "2026-10-16",
+    "why": "net profit YoY +51.1 %, QoQ +19.3 %; revenue YoY +16.2 %",
+    "spot_at_entry": 326.05,
+    "np_yoy": 51.1,
+    "np_qoq": 19.3,
+    "rev_yoy": 16.2,
+    "shadow_np25": true,
+    "best": 2.6,
+    "stall": 0,
+    "checked": null,
+    "spot_at_exit": 347.9
+   }
   }
  ],
  "daily": {
@@ -1259,8 +1409,8 @@
   },
   "2026-10-19": {
    "start_equity": 500025.69,
-   "end_equity": 480717.84,
-   "realised": -10272.83
+   "end_equity": 480588.2,
+   "realised": -16199.17
   }
  },
  "peak_equity": 505844.75,
@@ -1454,7 +1604,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-19T15:20:24+05:30",
+ "saved_at": "2026-10-19T15:20:27+05:30",
  "halts": {
   "day": "2026-10-19",
   "week": "2026-10-19"
@@ -1464,12 +1614,16 @@
    "2026-10-14:HCLTECH": "refused",
    "2026-10-15:TATAELXSI": "bought",
    "2026-10-19:TECHM": "bought",
-   "2026-10-19:WIPRO": "bought"
+   "2026-10-19:WIPRO": "bought",
+   "2026-10-19:IRFC": "refused"
   },
   "close": {
-   "2026-10-15:TATAELXSI": "bought"
+   "2026-10-15:TATAELXSI": "bought",
+   "2026-10-19:IRFC": "refused",
+   "2026-10-19:TECHM": "bought",
+   "2026-10-19:WIPRO": "bought"
   },
-  "exits_checked": "2026-10-15",
+  "exits_checked": "2026-10-19",
   "refused": [
    {
     "date": "2026-10-14",
@@ -1486,6 +1640,24 @@
     "mode": "fade",
     "arms": [
      "F"
+    ],
+    "reason": "premium below Rs 2"
+   },
+   {
+    "date": "2026-10-19",
+    "symbol": "IRFC",
+    "mode": "open",
+    "arms": [
+     "A"
+    ],
+    "reason": "premium below Rs 2"
+   },
+   {
+    "date": "2026-10-19",
+    "symbol": "IRFC",
+    "mode": "close",
+    "arms": [
+     "A"
     ],
     "reason": "premium below Rs 2"
    }
