@@ -427,6 +427,14 @@ are recorded?
   close 65-88 % of trades. Crossing the spread costs about Rs 0.25 on a Rs 0.89 average entry. Per the
   pre-registration, the Rs 1-2 step is not run on this rule.
 
+### 2026-10-19: Rs 0.50-1 band, +100 % variants (fails)
+- Addendum 2 of `strategies/S1_v10_band050_trail.md`: A = +100 % target with a 10/20/30 % trailing stop before it;
+  B = no stop until +100 %, then a 10/20/30 % trail from the peak. `python -m scanner.fade_band050 run100` →
+  `data/results/S1_v10_band050_t100.md`.
+- Chosen on 2025: B30 (+Rs 1,293 on 66 trades, the only non-negative variant; 20 % of trades reached +100 %).
+  **2026 test: B30 -Rs 56,321 on 58 trades (win 12 %), so it fails.** Only 5 % reached +100 % in 2026. Every A variant
+  loses in both years; their stops close 83-100 % of trades. The +20 % test reproduces exactly after the refactor.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

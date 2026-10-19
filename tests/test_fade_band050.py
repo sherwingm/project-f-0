@@ -35,3 +35,18 @@ def test_a_minute_touching_both_takes_the_stop_and_a_gap_fills_at_the_open():
 
 def test_no_minute_by_0920_is_no_trade():
     assert simulate(mins(("09:25", .7, .7, .7, .7)), None) is None
+
+
+def test_after_mode_holds_until_plus_100_then_trails_from_the_peak():
+    m = mins(("09:15", .70, .70, .70, .70), ("09:16", .8, .9, .30, .5),         # a deep dip: no stop before the target
+             ("09:17", .9, 1.70, .9, 1.6), ("09:18", 1.6, 2.00, 1.6, 1.9),      # 1.65 + tick reached -> armed, peak 1.70
+             ("09:19", 1.9, 1.9, 1.55, 1.6))                                     # peak 2.00 -> 20 % stop 1.60
+    s = simulate(m, 0.20, 1.00, "after")
+    assert (s["reason"], s["exit"], s["at"]) == ("stop", 1.50, "09:19")
+    never = mins(("09:15", .70, .70, .70, .70), ("09:16", .8, 1.0, .3, .4), ("15:19", .4, .4, .4, .4))
+    assert simulate(never, 0.20, 1.00, "after")["reason"] == "15:20"
+
+
+def test_before_mode_with_a_100_pct_target():
+    m = mins(("09:15", .70, .70, .70, .70), ("09:16", .8, 1.70, .8, 1.6))
+    assert simulate(m, 0.30, 1.00, "before") == {"entry": .80, "exit": 1.60, "reason": "target", "at": "09:16"}

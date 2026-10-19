@@ -67,3 +67,17 @@ strike; lot in band; minute candles found.
 - Choosing the strike uses the day's opening price, which is known at 09:15. Entry is the 09:15 minute's close.
 - Not out of sample in the strict sense: the 2025-26 fade trades were seen pooled in earlier studies (not split this
   way, and not with minute prices).
+
+## Addendum 2026-10-19 (2) · +100 % instead of +20 % (user's request: "Try it as above 100% and make trailing method")
+Written before any +100 % number is computed. Same trades, minute candles, entry, costs, fills and choose/test split as
+above. The request can be read two ways, so both are tested:
+- **A10 / A20 / A30, trail before the target:** as R10-R30, but the target is entry × 2.00 (rounded up to the tick).
+- **B10 / B20 / B30, trail after the target:** no stop until the price reaches +100 %. Once a minute's high reaches
+  entry × 2.00 + 1 tick, a trailing stop starts at peak × (1 − trail). The peak is the highest minute high from that
+  minute on, and the stop is checked against later minutes' lows. It fills like the stop above (rounded down to the
+  tick, − 2 ticks, not above the minute's open). Never reached: the 15:20 sale. Still open at 15:20: the 15:20 sale.
+- **Choose on 2025:** of the six, the highest total net ₹; a tie goes to the wider trail, then to A. **Test once on
+  2026** with the same pass criterion (total > 0, mean > 0 with t ≥ 2, beats the 15:20 baseline).
+- **Caveat:** the 2026 window has been looked at once already (the +20 % test and its baseline, −₹58,074), so it is
+  no longer untouched. Six more variants on ~60 trades also make a lucky pass more likely. If one passes, it needs
+  live confirmation before any rule change.
