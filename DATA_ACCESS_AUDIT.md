@@ -186,3 +186,30 @@ The token is in the GitHub secret `UPSTOX_ANALYTICS_TOKEN` (also in Render). The
 **What this changes in the verdict:** strike-level 1-minute history for **expired** NIFTY weekly options **is**
 obtainable for free from Upstox, back to **Oct 2024** (about 2 years), with OI. For 2022 → Sep 2024 it is not
 (not listed). The forward recorder (Kotak) plus the Upstox backfill together cover Oct 2024 → onward.
+
+## Addendum 2026-10-19: Upstox vs Kotak for the live paper trader
+
+Sources: the Upstox docs pages for the Analytics Token, rate limiting, full market quote and the v3 market data feed
+(read 2026-10-19), plus the project's code (`server/kotak.py`, `server/upstox.py`, `server/live.py`).
+
+| Need | Kotak Neo (live today) | Upstox (Analytics Token) |
+|---|---|---|
+| Quotes with 5-level depth (paper fills) | 50 contracts per call | **500 per call** (depth, average price, volume, OI) |
+| One poll of the universe (213 stocks + their futures, ~850 contracts) | ~18 calls | **2 calls** |
+| Rate limits | 25/s published; we hold 200/min (per-minute cap not published) | 50/s, 500/min, **2,000 per 30 min** (~67/min on average) |
+| Streaming (no polling) | not used | WebSocket `full` mode: 5-level depth, up to 2,000 contracts, 2 connections. The Analytics Token lists "Websocket" as supported (not yet tested by us) |
+| Login | consumer key | 1-year token, no daily login, read-only (cannot place orders) |
+| 1-min history of live contracts | 5 years | from about 2022 (probe 2026-10-18) |
+| Expired contracts' history | **no** | **yes**, index options from Oct 2024, with OI |
+| Option chain | yes | yes, with greeks and IV |
+| Code state in this repo | complete: depth, `quote_one`, `quote_many`, history, scrip master | quotes and chains only: **no depth parsing, no `quote_one` / `quote_many`**, so the paper fills cannot run on it yet; its limiter (25/s, 250/min, 1,000/30 min) is stricter than the documented limits |
+
+**Verdict:**
+- Upstox is the better live data source: about a tenth of the calls per poll, an hourly budget that is published,
+  streaming depth as an option, no daily login, and the same exchange prices.
+- Kotak stays as the fallback, and for older 1-minute history.
+- Switching needs:
+  1. depth plus `quote_one` / `quote_many` in `server/upstox.py`;
+  2. a few days of shadow comparison against Kotak on the same contracts (prices, spreads, timestamps);
+  3. the switch (`DATA_PROVIDER=upstox`) done after market hours, logged in DECISIONS.md. The fill source changes
+     in the middle of the v10 review.
