@@ -66,8 +66,13 @@ class Upstox:
                 now = time.monotonic()
         time.sleep(0.05)
 
+    # 429 waits: another job or the live server on the same token can use up the shared 30-minute cap, so a 429 is
+    # waited out (about 35 minutes in all, longer than one 30-minute window) instead of ending a five-hour run
+    RATE_WAITS = (30, 60, 120, 300, 600, 600, 600)
+
     def get(self, path: str, params: dict | None = None, retries: int = 5) -> dict:
-        for attempt in range(retries):
+        attempt = limited = 0
+        while attempt < retries:
             self._pace()
             r = requests.get(BASE + path, headers=self.h, params=params, timeout=60)
             now = time.monotonic()
@@ -75,20 +80,24 @@ class Upstox:
             self._win60.append(now)
             self.calls += 1
             if r.status_code == 429:
-                time.sleep(min(60, 5 * 2 ** attempt))
+                if limited >= len(self.RATE_WAITS):
+                    break
+                time.sleep(self.RATE_WAITS[limited])
+                limited += 1
                 continue
+            attempt += 1
             body = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
             errs = body.get("errors") or [] if isinstance(body, dict) else []
             codes = {e.get("errorCode") or e.get("error_code") for e in errs if isinstance(e, dict)}
             if "UDAPI1149" in codes:
                 raise PlusPlanRequired(str(errs)[:300])
-            if r.status_code >= 500 and attempt < retries - 1:
-                time.sleep(3 * (attempt + 1))
+            if r.status_code >= 500 and attempt < retries:
+                time.sleep(3 * attempt)
                 continue
             if r.status_code != 200:
                 raise RuntimeError(f"HTTP {r.status_code} {path}: {str(errs or r.text)[:300]}".replace(self.tok, "***"))
             return body
-        raise RuntimeError(f"{path}: still rate-limited after {retries} tries")
+        raise RuntimeError(f"{path}: still rate-limited after {limited} waits (~{sum(self.RATE_WAITS) // 60} min) or {retries} server errors")
 
     @staticmethod
     def q(key: str) -> str:
