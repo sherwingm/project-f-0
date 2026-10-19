@@ -1,7 +1,7 @@
 {
  "recorder": {
-  "run_at": "2026-10-18T22:40:50+05:30",
-  "session": "2026-10-16",
+  "run_at": "2026-10-20T02:40:02+05:30",
+  "session": "2026-10-20",
   "expiry_check": {
    "bse_fo": {
     "checked": 3275,
@@ -17,38 +17,26 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 23146.15,
-    "contracts": 188,
-    "rows": 58711,
-    "expiries": [
-     "2026-10-19",
-     "2026-10-27"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "SENSEX": {
-    "spot": 74729.27,
-    "contracts": 300,
-    "rows": 86339,
-    "expiries": [
-     "2026-10-22",
-     "2026-10-29"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "BANKNIFTY": {
-    "spot": 55844.0,
-    "contracts": 224,
-    "rows": 36645,
-    "expiries": [
-     "2026-10-27",
-     "2026-11-23"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    }
   },
   "failures": [],
-  "chain_eod_rows": 712,
-  "calls": 736,
-  "runtime_s": 1269.8,
-  "contracts": 712
+  "chain_eod_rows": 0,
+  "calls": 3,
+  "runtime_s": 14.1,
+  "contracts": 0
  },
  "recent_runs": [
   {
@@ -65,6 +53,14 @@
    "contracts": 712,
    "calls": 736,
    "runtime_s": 1269.8,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-10-20T02:40:02+05:30",
+   "session": "2026-10-20",
+   "contracts": 0,
+   "calls": 3,
+   "runtime_s": 14.1,
    "failures": 0
   }
  ],
@@ -167,5 +163,38 @@
   "share_identical_close_pct": 77.31,
   "only_kotak": 0,
   "only_upstox": 16083
+ },
+ "daily_extras": {
+  "spot_vix_1m": {
+   "NIFTY50": {
+    "rows_added": 375,
+    "runtime_s": 1
+   },
+   "NIFTYBANK": {
+    "rows_added": 375,
+    "runtime_s": 2
+   },
+   "SENSEX": {
+    "rows_added": 375,
+    "runtime_s": 2
+   },
+   "INDIAVIX": {
+    "rows_added": 375,
+    "runtime_s": 2,
+    "vix_fix": {
+     "rows_corrected": 0
+    }
+   }
+  },
+  "options_daily": {
+   "sessions": 0,
+   "skipped_existing": 0,
+   "unavailable": 1,
+   "rows": 0,
+   "errors": [],
+   "runtime_s": 1
+  },
+  "day": "2026-10-20",
+  "runtime_s": 8
  }
 }
