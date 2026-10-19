@@ -348,6 +348,16 @@ are recorded?
 - No rule change: the same strike is picked, and a never-fit stock was never bought before either. The 2-minute retry
   stays (user's choice). Full suite passes. Pushed with `[skip render]`; live from the next deploy.
 
+### 2026-10-19: S1 v10 profit-target exit on day 0 (descriptive, user's request)
+- Pre-registered (addendum 2026-10-19 (2)). `python -m scanner.fade_target_exit` → `data/results/S1_v10_target_exit.md`
+  / `.xlsx`. A sell at entry × (1 + target) if day 0's high ≥ target + 1 tick, else 15:20. The 15:20 baseline reproduces
+  the backtest on all 493 trades.
+- Rs 2 floor, 434 trades. 15:20: +5.6 % mean, +Rs 1.26 lakh. +25 %: -2.0 %, -Rs 70k. **+50 %: +1.8 %, +Rs 22k.**
+  **+100 %: +6.9 %, +Rs 1.37 lakh (t 2.2).** +200 %: +8.5 %, +Rs 1.40 lakh. Small targets win more often (68 % / 55 %)
+  but cap the few big winners that carry the fade. +100 % / +200 % are close to 15:20 and lose in 2025 H1. Optimistic:
+  daily data has no timing, and the live buy is later than the open.
+- Rs 1 floor: the same pattern, about Rs 20-35k lower than the Rs 2 floor at every target. No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

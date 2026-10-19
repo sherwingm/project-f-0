@@ -85,3 +85,27 @@ rule. **The live v10 rule stays at ₹2 until the user decides after reading thi
 - Caveats: the not-out-of-sample caveats above apply. At low premiums the +1 tick fill and the % slippage are large
   relative to the price, and history has no order book, so cheap options are where this backtest is least reliable.
   Five floors on one window is a choice among five, so the best of the five is expected to look better than it is.
+
+## Addendum 2026-10-19 (2) · profit-target exit (user's request)
+Written before any target-exit number is computed. The floor sweep showed day-0 highs far above the 15:20 exit. The user
+asked to test selling at a profit target, "e.g. sell at +50 % or +100 % of entry if the day's high reaches it, else
+15:20". Descriptive only, like the rest of this file; the live v10 exit stays at 15:20 until the user decides, and any
+change goes into DECISIONS.md.
+- **Trades:** the floor sweep's one-tick run (`S1_v10_trades_floor0p05.csv`), entry = day 0's open + 1 tick, E1-valid.
+  It is reported at the **₹2 floor (v10)** and the **₹1 floor**. A trade is at floor f when its fill ≥ f.
+- **Exits (all same day):**
+  - **T50 and T100 (primary):** a resting sell at entry × 1.50 (or × 2.00), rounded up to the tick. Filled at that
+    price if day 0's option high ≥ the target + 1 tick (a high just touching the target is not counted as a fill). Else
+    sold as E1, at day 0's close − 1 tick.
+  - **Side report:** T25 and T200 the same way, and E1 (no target) as the baseline.
+- **Costs:** as E1: charges on both orders plus slippage by AMFI category, both via `backtest_s1_v10.net_of`.
+- **Checks before any result is read:** with no target, the code must reproduce every trade's `e1_net` exactly.
+- **Report:** for each floor × exit: N, hit rate, mean and median net %, total ₹, date-clustered t, and the share of
+  trades that reached the target. Puts and calls separately. By half-year, to see whether one period carries it.
+  Also each row without its single largest ₹ winner, because the floor sweep showed one trade (KALYANKJIL 2025-08-08)
+  can carry a group.
+- **Known limits:** daily data cannot say *when* the high came. It is after the entry (the open is the first trade),
+  but the live trader buys minutes after 09:15 at the ask, so a high set in the first minutes may be gone by then.
+  This makes the result optimistic. The high is a single print, and a resting order might not fill there in size,
+  hence the +1 tick rule. Four targets on one window: the best is expected to look better than it is. Not out of
+  sample (see the top of this file).
