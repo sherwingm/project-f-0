@@ -435,6 +435,22 @@ are recorded?
   **2026 test: B30 -Rs 56,321 on 58 trades (win 12 %), so it fails.** Only 5 % reached +100 % in 2026. Every A variant
   loses in both years; their stops close 83-100 % of trades. The +20 % test reproduces exactly after the refactor.
 
+### 2026-10-19: audit of the "everything fails" sub-Rs 2 results + "never fits" subset
+- **Audit (user: "there is a data or entry problem, check it twice").** The minute data is sound: entry bars all have
+  trades, no-trade minutes repeat the last price, and the open and high match the bhavcopy on 99 %. Two real issues:
+  - **The tick for cheap stock options is Rs 0.01 since about 2025-11-07.** Sub-Rs 2 prices are all on the Rs 0.05
+    grid up to 2025-10-30 and 19-31 % are off it after. The ±2 ticks of Rs 0.05 cost overstates the spread from then
+    on.
+  - **The Rs 0.50-1 minute trades roughly break even before costs** (-Rs 11k on 124 trades, -0.6 % a trade). The
+    assumed Rs 0.10 each side alone makes it about -Rs 81k. The opening-minute spike costs about Rs 3k more than the
+    open. Buying later (09:30 / 10:00 / 11:00) is worse.
+- **"Never fits" subset** (addendum 2 of `strategies/S1_v10_subfloor_entry.md`; user: trade sub-Rs 2 only when no
+  Rs 2+ option fits Rs 600-8,000). `python -m scanner.fade_subfloor_neverfits` → `data/results/S1_v10_subfloor_neverfits.md`.
+  Existing backtest costs:
+  - Primary (2 × lot > 8,000): 105 trades, 2022-24 +Rs 14k, 2025-26 -Rs 62k, together -Rs 48k (t -0.7), so it **fails**.
+  - Secondary (the walk passed a dear Rs 2+ strike): 112 trades, +Rs 32k (t 0.98) but -Rs 16k without KALYANKJIL, so
+    it **fails**.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

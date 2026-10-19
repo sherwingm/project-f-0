@@ -76,3 +76,25 @@ holdout, and the sub-₹2 group was already seen pooled in the sweep), and no li
   per trade > 0 and total net ₹ > 0) with a date-clustered t ≥ 2, the user agrees, and a new pre-registered version
   records it.
 - The +100 % shadow exit and the real exit are not touched.
+
+## Addendum 2026-10-19 (2) · sub-₹2 only when no ₹2+ option can fit the lot band (user's request)
+Written before any number for this subset is computed. Two findings from the audit of the ₹0.50–1 minute tests come
+first:
+- **The tick for cheap stock options became ₹0.01 around early November 2025.** In the cached option files, sub-₹2
+  prices are all on the ₹0.05 grid up to 2025-10-30, and 19–31 % are off it from 2025-11-07 on. The "2 ticks of
+  ₹0.05 each side" cost therefore overstates the spread from Nov 2025.
+- Without any cost, the ₹0.50–1 minute trades roughly break even (−₹11k on 124 trades). Most of the measured loss was
+  the assumed ₹0.10 each side.
+
+The user's rule: *"make the below 2 trade only when … the above 2 have beyond our range of 600–8000, now test it
+with our already having rules"*. Fixed now:
+- **Primary subset ("never fits"):** the sub-₹2 trades of this study (both windows) of stocks whose lot makes every
+  ₹2+ option cost more than ₹8,000, i.e. **₹2 × lot > ₹8,000 (lot > 4,000)**. This is the live `never_fits` test.
+- **Secondary subset ("passed a dear ₹2+ strike"):** sub-₹2 trades whose walk, before reaching the traded strike,
+  passed a liquid (≥ 50 contracts) strike priced ₹2+ whose lot cost more than ₹8,000 (day-0 option file).
+- **"Our already having rules":** v10's walk and costs as in the backtest that gave the ≥ ₹2 line (entry day 0's open
+  + 1 tick, sold at the close − 1 tick, % slippage by AMFI category, real charges, the `e1_net` column of the
+  floor-free runs). The tick model of this study (±2 ticks) is shown beside it.
+- Reported per window and pooled: N, win rate, mean and median net %, total ₹, max drawdown, t, plus each without
+  its largest winner. The same pass test as above: total > 0 in each window, pooled mean > 0 with t ≥ 2, and pooled
+  total > 0 without the largest winner.
