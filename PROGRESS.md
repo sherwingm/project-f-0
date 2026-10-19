@@ -313,7 +313,14 @@ are recorded?
   the stronger fix. (Decided 2026-10-17: the eight are closed on Monday and stay out of the v10 review.)
 - `paper-state` gets repeated `live_snapshots/*` commits of the same files on every restart (16 Oct 16:17, 16:53;
   17 Oct 00:10, 09:12).
-- HCLTECH (arm A, 14 Oct): only the open-entry refusal is logged; no close-entry position or refusal — to check.
+- HCLTECH (arm A, 14 Oct), checked 2026-10-19. The forward test holds it (1350 CE at the day's VWAP ₹18.35 × 400 =
+  ₹7,340, after walking 2 strikes up); the paper account never bought it, for two reasons:
+  1. **Open entry:** refused at 09:15 by the old one-strike rule. The 1330 CE cost ₹14,440 a lot. The strike walk
+     went live at 13:35 that day, but a refusal is final for the day.
+  2. **Close entry:** never ran. The ledger's last save that day was 13:41 and `exits_checked` stayed empty. The
+     server restarted only at 15:37, after the close (Render free-tier sleep, fixed from 19 Oct by keep-awake). The
+     same sleep made the 15 Oct "open" entry of TATAELXSI fill at 15:17, not 09:15.
+  - No back-dated trade is added: the paper account records only what it really did.
 
 ## Next
 1. Check on Mon 19 Oct that the keep-awake runs (08:30), the 8 carried fade positions sell at the first poll (09:15), and the
