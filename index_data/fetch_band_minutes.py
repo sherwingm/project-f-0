@@ -1,10 +1,10 @@
 """Day-0 1-minute candles of the S1 v10 Rs 0.50-1 band contracts (strategies/S1_v10_band050_trail.md), from Upstox's
 expired-instruments API. Runs on GitHub (the token is a secret); the CSV is uploaded as a run artifact.
 
-    UPSTOX_ANALYTICS_TOKEN=... python -m index_data.fetch_band_minutes
+    UPSTOX_ANALYTICS_TOKEN=... python -m index_data.fetch_band_minutes [050|12]
 
-Reads data/results/S1_v10_band050_contracts.csv; writes data/results/S1_v10_band050_minutes.csv (symbol, day0, side,
-strike, ts, o, h, l, c, volume, oi) and prints what was missing.
+Reads data/results/S1_v10_band<band>_contracts.csv; writes data/results/S1_v10_band<band>_minutes.csv (symbol, day0,
+side, strike, ts, o, h, l, c, volume, oi) and prints what was missing. Band 050 by default; 12 = the Rs 1-2 study.
 """
 from __future__ import annotations
 
@@ -12,6 +12,7 @@ import csv
 import gzip
 import io
 import json
+import sys
 from collections import Counter
 from pathlib import Path
 
@@ -20,7 +21,8 @@ import requests
 from .upstox_common import Upstox
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC, OUT = ROOT / "data/results/S1_v10_band050_contracts.csv", ROOT / "data/results/S1_v10_band050_minutes.csv"
+BAND = sys.argv[1] if len(sys.argv) > 1 else "050"
+SRC, OUT = ROOT / f"data/results/S1_v10_band{BAND}_contracts.csv", ROOT / f"data/results/S1_v10_band{BAND}_minutes.csv"
 INSTRUMENTS_URL = "https://assets.upstox.com/market-quote/instruments/exchange/NSE.json.gz"
 
 

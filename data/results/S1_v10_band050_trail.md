@@ -1,6 +1,6 @@
 # S1 v10 fade · Rs 0.50-1 band: +20 % target with a trailing stop, 1-minute prices
 
-Numbers only. Pre-registered: strategies/S1_v10_band050_trail.md. Entry: the 09:15 minute's close + 2 ticks. Target: entry x 1.20, filled at the first minute whose high >= target + 1 tick. Trailing stop: peak x (1 - trail) against each minute's low before the peak updates, filled at min(stop, open) - 2 ticks; stop first when both touch in a minute. Else the 15:19 minute's close - 2 ticks. Real charges. Net % of the lot value at entry. t date-clustered. Trades: data/results/S1_v10_band050_trades.csv.
+Numbers only. Pre-registered: strategies/S1_v10_band050_trail.md. Cost a side: 2 ticks of Rs 0.05. Entry: the 09:15 minute's close + cost. Target: entry x 1.20, filled at the first minute whose high >= target + 1 tick. Trailing stop: peak x (1 - trail) against each minute's low before the peak updates, filled at min(stop, open) rounded down to the tick - cost; stop first when both touch in a minute. Else the 15:19 minute's close - cost. Real charges. Net % of the lot value at entry. t date-clustered. Trades: data/results/S1_v10_band050_trades.csv.
 
 **Verdict: R10 (chosen on 2025) does not pass on 2026.** On the 58 trades of 2026 it made Rs -36,802 (mean -24.8 % a trade, t -10.478, win rate 12.1 %) against Rs -58,074 for the 15:20 exit. Under the pre-registration, the Rs 1-2 step is not run on this rule.
 
