@@ -17,6 +17,7 @@ date is in CARRY_DATES (empty: the eight trades of 2026-10-16 were closed instea
 from __future__ import annotations
 
 import logging
+import math
 import re
 from datetime import datetime, time
 from typing import Callable
@@ -41,6 +42,9 @@ CARRY_STOP, CARRY_TRAIL = 0.80, 0.75
 # Shadow track (strategies/S1_v10_np25_shadow_track.md): v10's calls plus its puts with net profit YoY above 25 %. A tag
 # on each fade position only: v10 still takes every trade.
 NP_SHADOW = 25.0
+# Shadow exit (strategies/S1_v10_t100_shadow_track.md): a sell at 2 x entry, filled when a poll sees the best bid at or
+# above it, else the real 15:20 sale. A tag on each fade position only: the real exit is unchanged.
+T100 = 2.0
 _NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
 
 
@@ -103,6 +107,44 @@ def walk_path(strikes: list[float], spot: float | None, side: str) -> list[float
     k0 = min(ks, key=lambda k: (abs(k - spot), -k if put else k))
     i = ks.index(k0)
     return (ks[: i + 1][::-1] if put else ks[i:])[:WALK_MAX]
+
+
+def t100_target(entry: float) -> float:
+    return round(math.ceil(round(entry * T100 / TICK, 6)) * TICK, 2)
+
+
+def t100(state: dict) -> dict:
+    """Tagged closed fade trades under the real 15:20 exit and under the +100 % shadow exit: N, wins, mean net % of
+    premium, total net Rs, targets hit; open tagged positions with their target hit so far."""
+    from server import charges as ch
+    real, shadow, hits, untagged = [], [], 0, 0
+    for p in state.get("closed") or []:
+        r = p.get("rule") or {}
+        if r.get("strategy") != "fade":
+            continue
+        sh = r.get("shadow_t100")
+        if not sh:
+            untagged += 1
+            continue
+        cost = p["entry"]["price"] * p["qty"]
+        net = float(p.get("net_pnl", 0.0))
+        if sh.get("hit_at"):
+            hits += 1
+            snet = round((sh["target"] - p["entry"]["price"]) * p["qty"] - float(p.get("entry_charges", 0.0))
+                         - ch.leg(p["instrument"], "SELL", p["qty"], sh["target"])["total"], 2)
+        else:
+            snet = net
+        real.append((net, net / cost * 100 if cost else 0.0))
+        shadow.append((snet, snet / cost * 100 if cost else 0.0))
+
+    def agg(xs):
+        return {"closed": len(xs), "wins": sum(1 for n, _ in xs if n > 0), "net_rs": round(sum(n for n, _ in xs), 2),
+                "mean_net_pct": round(sum(q for _, q in xs) / len(xs), 2) if xs else None}
+    open_ = [p for p in state.get("positions") or [] if ((p.get("rule") or {}).get("shadow_t100"))]
+    return {"real_1520": agg(real), "shadow_t100": {**agg(shadow), "targets_hit": hits},
+            "open_tagged": len(open_), "open_hit": sum(1 for p in open_ if p["rule"]["shadow_t100"].get("hit_at")),
+            "untagged_closed": untagged,
+            "rule": "strategies/S1_v10_t100_shadow_track.md (judged after >= 30 tagged trades have closed)"}
 
 
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None]):
@@ -188,6 +230,7 @@ class FadeTrader:
         today = now.date().isoformat()
         st = self._state()
         done = st.setdefault("fade", {})
+        self._track_t100(now)
         self._exits(now)
         self._carry_exits(now)
         if now.time() < OPEN_FROM:
@@ -219,7 +262,8 @@ class FadeTrader:
             rule = {"strategy": "fade", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
                     "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
                     "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
-                    "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy"))}
+                    "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
+                    "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None}}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self._waiting(st, key, now, None)
@@ -261,6 +305,24 @@ class FadeTrader:
                 log.info("fade carry exit %s: %s at %.2f (close %.2f, entry %.2f, peak %.2f)",
                          reason, pos["tradingsymbol"], px, close, entry, c["peak"])
             self.ledger._save()
+
+    def _track_t100(self, now: datetime) -> None:
+        """The +100 % shadow exit: on the entry day before 15:20, the first poll whose best bid >= the target."""
+        if not (OPEN_FROM <= now.time() < EOD_AT):
+            return
+        for pos in self.ledger.state["positions"]:
+            sh = (pos.get("rule") or {}).get("shadow_t100")
+            if not sh or sh.get("hit_at") or datetime.fromisoformat(pos["opened_at"]).date() != now.date():
+                continue
+            c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
+            bid = (((self.ledger.quotes.get(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+            if not bid:
+                continue
+            sh["max_bid"] = max(float(bid), sh.get("max_bid") or 0.0)
+            if bid >= sh["target"]:
+                sh["hit_at"] = now.isoformat(timespec="seconds")
+                log.info("fade shadow t100 hit: %s bid %.2f >= %.2f", pos["tradingsymbol"], bid, sh["target"])
+                self.ledger._save()
 
     def _exits(self, now: datetime) -> None:
         """Sell every fade position from 15:20 on its entry day, or at the first poll of any later day."""

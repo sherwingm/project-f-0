@@ -358,6 +358,14 @@ are recorded?
   daily data has no timing, and the live buy is later than the open.
 - Rs 1 floor: the same pattern, about Rs 20-35k lower than the Rs 2 floor at every target. No rule change.
 
+### 2026-10-19: +100 % target as a shadow exit on live fade trades
+- Pre-registered: `strategies/S1_v10_t100_shadow_track.md`. Each new fade position gets `rule.shadow_t100` with a target
+  of 2 × entry. `server/fade.py` marks it hit the first time a poll before 15:20 on the entry day sees the best bid at or
+  above it. The real exit stays 15:20.
+- `/api/paper/summary` → `fade_t100`: real vs shadow closed, wins, mean net %, booked net, targets hit. A new panel on
+  the Arm F tab shows it. Judged after 30 tagged trades have closed (t ≥ 2 and the user's agreement to change the rule).
+- Goes live with the 15:35 deploy today, so the first tagged trades are the next fade session's.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

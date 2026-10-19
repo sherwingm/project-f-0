@@ -458,6 +458,19 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         <p class="note" style="margin:0">Left-out puts closed: <b>${n} of 40</b> needed before it is judged. v10 still takes every trade; this only tags them. <a href="${REPO}strategies/S1_v10_np25_shadow_track.md">The rule</a></p>`,
         { sub: "a tag on v10's trades, judged later" });
     },
+    fadeT100() {
+      const T = "Shadow exit: +100 % target, else 15:20";
+      if (!live()) return panel(T, notLive("The shadow exit"));
+      const s = (P.summary || {}).fade_t100;
+      if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
+      const R = [["Real exit (15:20)", s.real_1520], ["Shadow: sell at 2x entry if the bid reaches it", s.shadow_t100]];
+      const n = (s.real_1520 || {}).closed || 0;
+      return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Targets hit</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
+          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "—"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "—"}</td><td>${g.targets_hit ?? "—"}</td></tr>`; }).join("")}</tbody></table></div>
+        <div class="prog" aria-label="Tagged trades closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
+        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
+        { sub: "a tag on v10's trades, judged later" });
+    },
     fadeToday() {
       const ru = (P.rules || {}).rules || {}, key = sym => `${FD.session}:${sym}`;
       const fadeStatus = sym => {                       // bought / refused / still trying, from /api/paper/rules
@@ -600,7 +613,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");

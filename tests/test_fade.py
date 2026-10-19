@@ -376,3 +376,39 @@ def test_a_never_fit_fade_is_refused_at_once(setup):
     r = [x for x in lg.state["rules"]["refused"] if x["mode"] == "fade"]
     assert len(r) == 1 and r[0]["reason"].startswith("never fits: 1 lot is 8,000 shares")
     assert lg.state["rules"]["fade"]["2026-10-15:HCLTECH"] == "refused" and not lg.state["rules"].get("fade_wait")
+
+
+# ---------------------------------------------------------------- the +100 % shadow exit (S1_v10_t100_shadow_track.md)
+def test_t100_shadow_tags_the_hit_and_leaves_the_real_exit(setup):
+    from server import charges as ch
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)                                                             # Rs 6,475
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_t100"] == {"target": 37.0, "hit_at": None, "max_bid": None}
+    q.set("PE", 1220.0, 36.95, 37.5)                                                            # bid 1 tick short
+    ft.on_poll(at(15, 10, 0))
+    assert p["rule"]["shadow_t100"]["hit_at"] is None and p["rule"]["shadow_t100"]["max_bid"] == 36.95
+    q.set("PE", 1220.0, 37.0, 37.5)
+    ft.on_poll(at(15, 11, 0))
+    assert p["rule"]["shadow_t100"]["hit_at"].startswith("2026-10-15T11:00") and lg.state["positions"]   # still open
+    q.set("PE", 1220.0, 20.0, 20.5)
+    ft.on_poll(at(15, 15, 20))
+    c = lg.state["closed"][-1]
+    assert c["exit"]["price"] == 20.0 and c["reason"] == "fade_eod"                             # the real exit: 15:20
+    s = F.t100(lg.state)
+    want = round((37.0 - 18.5) * 350 - c["entry_charges"] - ch.leg("PE", "SELL", 350, 37.0)["total"], 2)
+    assert s["real_1520"]["net_rs"] == c["net_pnl"] and s["shadow_t100"]["net_rs"] == want
+    assert s["shadow_t100"]["targets_hit"] == 1 and s["real_1520"]["closed"] == 1
+
+
+def test_t100_untouched_target_matches_the_real_exit_and_old_trades_are_untagged(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 15.0, 15.5)
+    ft.on_poll(at(15, 15, 20))
+    lg.state["closed"].append({"rule": {"strategy": "fade"}, "net_pnl": -100.0})
+    s = F.t100(lg.state)
+    assert s["shadow_t100"]["net_rs"] == s["real_1520"]["net_rs"] and s["untagged_closed"] == 1
+    assert F.t100_target(1.23) == 2.5 and F.t100_target(18.5) == 37.0
