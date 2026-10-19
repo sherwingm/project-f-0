@@ -365,6 +365,9 @@ are recorded?
 - `/api/paper/summary` → `fade_t100`: real vs shadow closed, wins, mean net %, booked net, targets hit. A new panel on
   the Arm F tab shows it. Judged after 30 tagged trades have closed (t ≥ 2 and the user's agreement to change the rule).
 - Goes live with the 15:35 deploy today, so the first tagged trades are the next fade session's.
+- Deployed 2026-10-19 at ~15:56 IST with the fade-list "Today" column (60e8551) and this shadow tag (35175c0). Render
+  skipped the empty 15:35 commit (383bdd5) and built e2b067a. Today: FEDERALBNK 315 PE sold at 15:20 for Rs 0.25 (bought
+  at Rs 2.60, net Rs -5,926). UJJIVANSFB was refused: "premium below Rs 2".
 
 ### 2026-10-19: Upstox built as a live source, with a shadow check against Kotak (user's request)
 - `server/upstox.py` can now do everything the paper trader needs from Kotak:
