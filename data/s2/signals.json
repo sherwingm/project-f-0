@@ -1,36 +1,15 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-16",
- "generated": "2026-10-17T00:06+05:30",
- "signals": [
-  {
-   "symbol": "ANGELONE",
-   "close": 300.0,
-   "price_pct": -4.15,
-   "oi_pct": 12.37,
-   "vol_ratio": 3.9,
-   "put": null,
-   "put_note": "premium below Rs 2"
-  },
-  {
-   "symbol": "LTF",
-   "close": 253.85,
-   "price_pct": -3.11,
-   "oi_pct": 15.9,
-   "vol_ratio": 3.5,
-   "put": {
-    "expiry": "2026-11-23",
-    "strike": 230.0,
-    "premium": 3.47,
-    "lot": 2250,
-    "lot_cost": 7808,
-    "below_spot_pct": 9.4,
-    "contracts": 153.0
-   }
-  }
- ],
+ "session": "2026-10-19",
+ "generated": "2026-10-20T01:53+05:30",
+ "signals": [],
  "note": null,
  "history": [
+  {
+   "session": "2026-10-19",
+   "symbols": [],
+   "note": null
+  },
   {
    "session": "2026-10-16",
    "symbols": [
