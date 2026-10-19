@@ -45,11 +45,21 @@
    "dataset": "options 1-minute",
    "underlying": "SENSEX",
    "resolution": "1 min",
+   "source": "upstox",
+   "first": "2024-09-06",
+   "last": "2025-03-04",
+   "files": 403,
+   "expiries": 24
+  },
+  {
+   "dataset": "options 1-minute",
+   "underlying": "SENSEX",
+   "resolution": "1 min",
    "source": "kotak",
    "first": "2026-09-18",
    "last": "2026-10-16",
    "files": 38,
-   "expiries": 2
+   "expiries": 24
   },
   {
    "dataset": "options daily OHLC",
