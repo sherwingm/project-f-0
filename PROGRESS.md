@@ -475,6 +475,15 @@ are recorded?
 - In short: B30 turns Rs 1-2 from a clear loss into about break-even in 2022-24 (+47.8k in 2025 on minute data,
   -30.5k in 2026). Rs 0.50-1 loses in every window. No rule change.
 
+### 2026-10-19: Oct-Nov 2024 minute candles added (both cheap-option bands)
+- The Oct-Nov 2024 results season is the earliest Upstox covers. Contract lists: `S1_v10_band12q4_contracts.csv` (28)
+  and `S1_v10_band050q4_contracts.csv` (18). Fetched on GitHub (`fetch_band_minutes 12q4 / 050q4`): 24 + 16 had candles.
+- `python -m scanner.fade_band050 all` → `data/results/S1_v10_band_minutes_all.md`: every minute window, both bands,
+  all ten exits, real-tick costs.
+- **Rs 1-2, B30, Oct-Nov 2024 / 2025 / 2026: -Rs 986 / +Rs 47,775 / -Rs 30,511, total +Rs 16,278 on 206 trades (t
+  -0.61).** The 15:20 exit: -1.4k / +36.8k / -40.3k = -Rs 4,928. Rs 0.50-1 loses with every exit (best B30 -Rs 34k).
+  The verdicts stand.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

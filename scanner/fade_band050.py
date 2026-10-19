@@ -27,7 +27,9 @@ from .stats import clustered_t
 RES, CACHE = ROOT / "data" / "results", ROOT / "data" / "cache"
 TARGET = 0.20
 FILES = {"050": (RES / "S1_v10_band050_contracts.csv", RES / "S1_v10_band050_minutes.csv", 0.50, 1.00),
-         "12": (RES / "S1_v10_band12_contracts.csv", RES / "S1_v10_band12_minutes.csv", 1.00, 2.00)}
+         "12": (RES / "S1_v10_band12_contracts.csv", RES / "S1_v10_band12_minutes.csv", 1.00, 2.00),
+         "050q4": (RES / "S1_v10_band050q4_contracts.csv", RES / "S1_v10_band050q4_minutes.csv", 0.50, 1.00),
+         "12q4": (RES / "S1_v10_band12q4_contracts.csv", RES / "S1_v10_band12q4_minutes.csv", 1.00, 2.00)}
 TICK_CHANGE = "2025-11-03"                                       # NSE stock-option tick Rs 0.05 -> Rs 0.01 (audit)
 
 
@@ -55,7 +57,9 @@ OUT = {"run": ("S1_v10_band050_trail.md", "S1_v10_band050_trades.csv", "+20 % ta
                   "+100 % target, trailing stop before it (A) or after it (B)"),
        "run12": ("S1_v10_band12_trail.md", "S1_v10_band12_trades.csv",
                  "+20 % (R) and +100 % (A, B) targets with trailing stops, real ticks")}
-BAND_OF = {"run": "050", "run100": "050", "run12": "12"}
+BAND_OF = {"run": "050", "run100": "050", "run12": "12", "x050": "050", "x050q4": "050q4", "x12q4": "12q4"}
+for _k in ("x050", "x050q4", "x12q4"):
+    VARIANTS[_k] = VARIANTS["run12"]
 COSTS = {"run": costs_old, "run100": costs_old, "run12": costs_real}
 CHOOSE, TEST = ("2025-01-01", "2025-12-31"), ("2026-01-01", "2026-09-25")
 
@@ -180,6 +184,39 @@ def trades(kind: str, costs) -> tuple[pd.DataFrame, Counter]:
     return pd.DataFrame(rows), fun
 
 
+def all_minutes() -> None:
+    """Every minute-data window side by side, both bands, all ten exits, real ticks (costs_real): Oct-Nov 2024 (added
+    2026-10-19, the Upstox history's first season), 2025 and 2026. Descriptive: the choose / test verdicts stand."""
+    windows = (("Oct-Nov 2024", "2024-01-01", "2024-12-31"), ("2025", *CHOOSE), ("2026", *TEST))
+    out, funnels = [], []
+    for band, kinds in (("Rs 1-2", ("x12q4", "run12")), ("Rs 0.50-1", ("x050q4", "x050"))):
+        t = pd.concat([trades(k, costs_real)[0] for k in kinds], ignore_index=True)
+        for k in kinds:
+            funnels.append({"band": band, "set": k, **dict(trades(k, costs_real)[1])})
+        for name, *_ in VARIANTS["run12"]:
+            row = {"band": band, "exit": name}
+            for wname, a, b in windows:
+                g = t[(t["variant"] == name) & (t["day0"] >= a) & (t["day0"] <= b)]
+                row[f"{wname} n"], row[f"{wname} Rs"] = len(g), round(g["net"].sum())
+            g = t[t["variant"] == name]
+            row["all n"], row["all Rs"] = len(g), round(g["net"].sum())
+            row["all win %"] = round((g["net"] > 0).mean() * 100, 1)
+            row["all t"] = clustered_t(g["net_pct"], g["day0"]) if len(g) > 1 else None
+            out.append(row)
+    text = "\n".join([
+        "# S1 v10 fade · cheap-option bands: every minute-data window, all exits (real ticks)\n",
+        "Numbers only. Minute candles from Upstox's expired-instruments API: Oct-Nov 2024 (the first season it covers, "
+        "added 2026-10-19), 2025 and 2026. Cost a side Rs 0.10 before 2025-11-03, Rs 0.04 from it. Exits and fills as "
+        "strategies/S1_v10_band12_trail.md. Descriptive: the pre-registered verdicts (choose on 2025, test on 2026) stand. "
+        "The Rs 0.50-1 rows here use the real-tick costs, so they differ from S1_v10_band050_trail.md (Rs 0.10 a side "
+        "throughout).\n",
+        md(pd.DataFrame(out)),
+        "## Funnel\n\n" + md(pd.DataFrame(funnels).fillna(0)),
+    ])
+    (RES / "S1_v10_band_minutes_all.md").write_text(text, encoding="utf-8")
+    print(text)
+
+
 def run(kind: str = "run") -> None:
     variants = VARIANTS[kind]
     md_name, csv_name, title = OUT[kind]
@@ -239,4 +276,5 @@ def run(kind: str = "run") -> None:
 
 
 if __name__ == "__main__":
-    {"pick": lambda: pick("050"), "pick12": lambda: pick("12")}.get(sys.argv[1], lambda: run(sys.argv[1]))()
+    {"pick": lambda: pick("050"), "pick12": lambda: pick("12"), "all": all_minutes}.get(
+        sys.argv[1], lambda: run(sys.argv[1]))()
