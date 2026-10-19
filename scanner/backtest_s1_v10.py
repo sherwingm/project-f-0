@@ -92,7 +92,7 @@ def walk(strikes, spot: float, side: str, quotes: dict[float, Q], entry: str):
             continue
         px, src = f
         if px < MIN_PREMIUM:
-            return "premium_below_2"
+            return f"premium_below_{MIN_PREMIUM:g}"
         cost = px * q.lot
         if cost < BAND[0]:
             return "walk_below_band"
@@ -331,7 +331,7 @@ def table(t: pd.DataFrame, by: str | None, groups) -> pd.DataFrame:
 
 
 def main() -> None:
-    global START, END
+    global START, END, MIN_PREMIUM
     ap = argparse.ArgumentParser(description="S1 v10 fade: descriptive backtest (numbers only; default 2025-2026)")
     ap.add_argument("--cache-dir", type=Path, default=ROOT / "data" / "cache")
     ap.add_argument("--eod2-dir", type=Path, default=ROOT / "data" / "eod2")
@@ -339,9 +339,10 @@ def main() -> None:
     ap.add_argument("--start", default=START, help="first day 0 (ISO)")
     ap.add_argument("--end", default=END, help="last day 0 (ISO)")
     ap.add_argument("--tag", default="", help="suffix for the output files, e.g. _2022_24")
+    ap.add_argument("--min-premium", type=float, default=MIN_PREMIUM, help="premium floor in Rs (v10: 2)")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-    START, END = a.start, a.end
+    START, END, MIN_PREMIUM = a.start, a.end, a.min_premium
     from . import amfi
     from .backtest_s1_v2 import md
     from .equity import load_symbol

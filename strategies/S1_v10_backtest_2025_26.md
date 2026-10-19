@@ -69,3 +69,19 @@ Written before any 2022-24 number is computed. Every rule above is unchanged; on
   back-fill fails, the window starts 2023-01-01 and the report says so.
 - Option files before 2024-07-05 are NSE's old bhavcopy format: the lot is the greatest common divisor of the day's open
   interests and the spot is the nearest future's close (as in every earlier S1 backtest).
+
+## Addendum 2026-10-19 · premium-floor sweep (user's request)
+Written before any number from this sweep is read. Prompted by UJJIVANSFB on 19 Oct: its nearest put asked ~₹1.40,
+under v10's ₹2 floor, so the live trader did not buy it. The user wants to see a lower floor before changing the live
+rule. **The live v10 rule stays at ₹2 until the user decides after reading this; any change goes into DECISIONS.md.**
+- The same 2025-01-01 → 2026-09-25 backtest with only the floor changed: ₹2 (v10, a check against the original
+  report), ₹1, ₹0.50, ₹0.25 and ₹0.05 (one tick, i.e. no floor). Run:
+  `python -m scanner.backtest_s1_v10 --min-premium <f> --tag _floor<f>` (dot written as `p`) →
+  `S1_v10_backtest_report_floor<f>.md`, `S1_v10_trades_floor<f>.csv`.
+- Every other rule is unchanged, including the ₹600–8,000 lot band. A lower floor matters only where a lot still costs
+  ≥ ₹600, so it mostly adds stocks with large lots and low prices.
+- Reported side by side: N, hit rate, mean / median net %, total ₹, t for E1 (v10's same-day exit), and **the trades
+  each lower floor adds** (the ones with a fill under ₹2) on their own. Pooled means hide that group.
+- Caveats: the not-out-of-sample caveats above apply. At low premiums the +1 tick fill and the % slippage are large
+  relative to the price, and history has no order book, so cheap options are where this backtest is least reliable.
+  Five floors on one window is a choice among five, so the best of the five is expected to look better than it is.

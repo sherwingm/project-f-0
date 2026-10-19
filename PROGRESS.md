@@ -305,6 +305,16 @@ are recorded?
   bought / refused (reason) / waiting (reason, time checked).
 - Pushed with `[skip render]` during market hours. The change goes live on the next deploy.
 
+### 2026-10-19: S1 v10 premium-floor sweep 2025-26 (descriptive, user's request)
+- Pre-registered in `strategies/S1_v10_backtest_2025_26.md` (addendum 2026-10-19). `backtest_s1_v10 --min-premium`
+  at Rs 2 / 1 / 0.50 / 0.25 / 0.05. Table: `data/results/S1_v10_floor_sweep.md` (`python -m scanner.fade_floor_sweep`).
+  The Rs 2 run reproduces the original report exactly.
+- Same-day exit (E1). A lower floor adds 50-59 trades with a fill under Rs 2: hit 31-33 %, median -28 to -30 %. Their
+  mean looks good (+40 to +52 %), but that comes from one trade: KALYANKJIL 560 PE on 2025-08-08, bought at 1.25 and
+  sold at 43.10 (+3,267 %, +Rs 48k). **Without it, the added trades average -13 to -16 % (t about -1.8 to -2.2) and
+  lose Rs 45-58k.** E2 is worse.
+- No rule change: the live trader stays at Rs 2 (the user decides; DECISIONS.md if it changes).
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

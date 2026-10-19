@@ -30,7 +30,7 @@ def test_put_walk_goes_down_call_walk_goes_up_and_skips_dear_lots():
     calls = {100.0: q(100.0, op=90.0), 110.0: q(110.0, op=7.0), 120.0: q(120.0, op=3.0)}
     got = B.walk([100.0, 110.0, 120.0], 105.0, "CE", calls, "open")       # tie: 100 (call: the lower)
     assert got[0].strike == 110.0 and got[3] == 1
-    assert B.walk([100.0], 100.0, "CE", {100.0: q(100.0, op=1.0)}, "open") == "premium_below_2"
+    assert B.walk([100.0], 100.0, "CE", {100.0: q(100.0, op=1.0)}, "open") == "premium_below_2"   # the v10 floor; --min-premium changes it
     assert B.walk([100.0], 100.0, "CE", {100.0: q(100.0, op=5.0, lot=100)}, "open") == "walk_below_band"
     assert B.walk([100.0], 100.0, "CE", {100.0: q(100.0, contracts=10)}, "open") == "walk_no_liquid_strike_in_band"
 
