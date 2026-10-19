@@ -70,3 +70,12 @@ def test_date_alignment_check_catches_a_one_day_shift():
     assert S.alignment_ok(a) and a["lag 0"] > 0.99
     shifted = pd.Series(px.values[1:], index=days[:-1])                        # daily bars dated one day early
     assert not S.alignment_ok(S.date_alignment(shifted, hourly))
+
+
+def test_s1_trades_positions_open_on_a_day():
+    from index_data.s1_trades_1m import positions_on
+    led = {"positions": [{"tradingsymbol": "A", "opened_at": "2026-10-15T15:17:00+05:30", "closed_at": None}],
+           "closed": [{"tradingsymbol": "B", "opened_at": "2026-10-15T09:20:00+05:30", "closed_at": "2026-10-15T15:20:00+05:30"}]}
+    assert [p["tradingsymbol"] for p in positions_on(led, "2026-10-15")] == ["A", "B"]
+    assert [p["tradingsymbol"] for p in positions_on(led, "2026-10-16")] == ["A"]
+    assert positions_on(led, "2026-10-14") == []

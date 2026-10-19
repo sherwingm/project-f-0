@@ -28,7 +28,7 @@ jobs:
           python-version: "3.12"
           cache: pip
       - name: Install
-        run: pip install -r requirements-server.txt pyarrow
+        run: pip install -r requirements-server.txt pyarrow yfinance==1.7.0
       - name: Check out the index-data branch into ./store
         run: |
           git config --global user.name "fo-scanner-bot"
@@ -45,6 +45,23 @@ jobs:
           KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
           INDEX_STORE: store/data/index
         run: python -m index_data.recorder ${{ inputs.day && format('--day {0}', inputs.day) || '' }}
+      - name: S1 trades - 1-minute stock and option candles (last 7 days, from the paper ledger)
+        if: always()
+        continue-on-error: true
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
+          INDEX_STORE: store/data/index
+        run: |
+          git fetch --depth=1 origin paper-state && git show FETCH_HEAD:data/paper_ledger.json > /tmp/paper_ledger.json
+          python -m index_data.s1_trades_1m --ledger /tmp/paper_ledger.json --since "$(date -d '-7 days' +%F)"
+      - name: Daily extras - index spot/VIX, daily OHLC; weekly Upstox top-up (Fridays)
+        if: always()
+        continue-on-error: true
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
+          UPSTOX_ANALYTICS_TOKEN: ${{ secrets.UPSTOX_ANALYTICS_TOKEN }}
+          INDEX_STORE: store/data/index
+        run: python -m index_data.daily_extras
       - name: Coverage summary for the /index page
         if: always()
         env:

@@ -44,6 +44,16 @@ def scan(store=STORE) -> list[dict]:
         v = pd.read_parquet(store / "vix_daily.parquet", columns=["date"])
         rows.append({"dataset": "India VIX daily", "underlying": "INDIAVIX", "resolution": "1 day", "source": "yfinance",
                      "first": v["date"].min(), "last": v["date"].max(), "files": 1})
+    days = sorted(p.name for p in (store / "s1_trades_1m").glob("*") if p.is_dir())
+    if days:
+        rows.append({"dataset": "S1 trades: stock + option", "underlying": "S1 positions", "resolution": "1 min",
+                     "source": "kotak", "first": days[0], "last": days[-1], "files": len(days)})
+    for name in ("s1_backtest_intraday",):
+        files = sorted((store / name).glob("*.json"))
+        if files:
+            rows.append({"dataset": "S1 backtest day-0 stock", "underlying": "fade trades 2022-26", "resolution": "1 min",
+                         "source": "kotak", "first": min(f.stem.rsplit("_", 1)[-1] for f in files),
+                         "last": max(f.stem.rsplit("_", 1)[-1] for f in files), "files": len(files)})
     snaps = sorted((store / "instruments").glob("*.parquet"))
     if snaps:
         rows.append({"dataset": "contract list snapshots", "underlying": "all", "resolution": "daily", "source": "kotak",
