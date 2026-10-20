@@ -363,6 +363,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   // Arm F counts from S1 v11's day 0 (2026-10-21, the user's decision): rule.version "v11". The v10 fade trades before it
   // are a side record (board("F", "fade", "v10")).
   const fadeEra = (x, era) => (x.rule.version === "v11") === (era !== "v10");
+  const oldFade = x => !!(x.rule && x.rule.strategy === "fade" && x.rule.version !== "v11");     // v10, before 21 Oct
   function board(arm, mode, era) {
     const keep = x => x.rule && (x.rule.arms || []).includes(arm) && (!mode || x.rule.entry_mode === mode) && (arm !== "F" || fadeEra(x, era));
     const cl = P.trades.filter(keep);
@@ -394,7 +395,8 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         ${tile("Open P&amp;L", srs(s.unrealised_total), dir(s.unrealised_total))}${tile("Booked P&amp;L", srs(s.realised_total), dir(s.realised_total))}
         ${tile("Drawdown", (s.drawdown_pct ?? 0).toFixed(2) + "%")}${tile("Open positions", s.open_positions ?? 0)}
         ${s.kill_switch ? tile("Kill switch", s.kill_switch.active ? "ON" : "off", s.kill_switch.active ? "down" : "") : ""}</div>
-        ${spark(byClose(P.trades), "All booked trades")}
+        ${spark(byClose(P.trades.filter(x => !oldFade(x))), "Booked trades (fade from v11's day 0)")}
+        ${P.trades.some(oldFade) ? `<p class="note">Equity and booked P&amp;L include the ${P.trades.filter(oldFade).length} v10 fade trades before 21 Oct (side record, ${srs(P.trades.filter(oldFade).reduce((a, c) => a + (c.net_pnl || 0), 0))}); the account's cash cannot be split.</p>` : ""}
         ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)}</p>` : ""}
         ${s.drawdown_review ? `<p class="err">${esc(s.drawdown_review_message)}</p>` : ""}
         ${s.queued_orders ? `<p class="note">${s.queued_orders} order(s) queued for the next session's 09:20 poll.</p>` : ""}`,
@@ -422,8 +424,10 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     },
     closedTrades() {
       const w = paperWait("Closed trades"); if (w) return panel("Closed trades", w);
-      return panel(`Closed trades · ${P.trades.length}`, P.trades.length ? closedTable(P.trades) : empty("None yet."),
-        { sub: "net of fills and charges · after the sale the option is followed until its T-2 day" });
+      const main = P.trades.filter(x => !oldFade(x)), old = P.trades.filter(oldFade);
+      const side = old.length ? `<details><summary>Side record: ${old.length} v10 fade trades before 21 Oct (old 15:20 exit), booked ${srs(old.reduce((a, c) => a + (c.net_pnl || 0), 0))}</summary>${closedTable(old)}</details>` : "";
+      return panel(`Closed trades \u00b7 ${main.length}`, (main.length ? closedTable(main) : empty("None yet. Fade trades count from v11's day 0 (21 Oct)."))
+        + side, { sub: "net of fills and charges \u00b7 after the sale the option is followed until its T-2 day" });
     },
     refusals() {
       if (paperWait("")) return "";
