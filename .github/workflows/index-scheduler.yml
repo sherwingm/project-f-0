@@ -1,0 +1,61 @@
+name: Index job scheduler
+# Runs the index-data job queue (data/index/job_queue.json on main) on GitHub, so no PC has to start the jobs.
+# Every hour: if no index-data run is active (index-jobs.yml or the recorder; they share a concurrency group, where a
+# second waiting run would cancel the first), pop one job and dispatch it to index-jobs.yml. On weekdays from 19:15 IST
+# until that day's recorder run has started, it waits, so the recorder (whose cron can start hours late) never queues
+# behind a five-hour backfill or gets cancelled. A backfill that stops on its time budget re-queues itself (index-jobs.yml).
+on:
+  schedule:
+    - cron: "20 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: write
+concurrency:
+  group: index-scheduler
+  cancel-in-progress: false
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Is the index-data group free?
+        id: free
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          active=0
+          for wf in index-jobs.yml index-recorder.yml; do
+            for st in queued in_progress waiting pending requested; do
+              n=$(gh run list --workflow "$wf" --status "$st" --limit 5 --json databaseId -q 'length')
+              active=$((active + n))
+            done
+          done
+          # weekdays from 13:45 UTC (19:15 IST): wait until today's scheduled recorder run has started
+          dow=$(date -u +%u); hm=$(date -u +%H%M)
+          if [ "$dow" -le 5 ] && [ "$hm" -ge 1345 ]; then
+            started=$(gh run list --workflow index-recorder.yml --event schedule --limit 1 --json createdAt \
+                      -q "[.[] | select(.createdAt >= \"$(date -u +%F)T13:00:00Z\")] | length")
+            [ "$started" = "0" ] && { echo "waiting for today's recorder run"; active=$((active + 1)); }
+          fi
+          echo "active=$active" >> "$GITHUB_OUTPUT"
+          echo "active index-data runs (or recorder wait): $active"
+      - name: Pop the next job
+        id: next
+        if: steps.free.outputs.active == '0'
+        run: python -m index_data.job_queue next | tee -a "$GITHUB_OUTPUT"
+      - name: Dispatch it
+        if: steps.free.outputs.active == '0' && steps.next.outputs.job != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh workflow run index-jobs.yml -f job="${{ steps.next.outputs.job }}" -f args="${{ steps.next.outputs.args }}"
+          git config user.name "fo-scanner-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/index/job_queue.json
+          git commit -q -m "index jobs: dispatched ${{ steps.next.outputs.job }} ${{ steps.next.outputs.args }}"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done

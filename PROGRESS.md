@@ -513,6 +513,24 @@ are recorded?
   09:16 (`server/fade.py` `S20_FROM`; 1 new test). At 30 closed tagged trades: mean (v11 - v10) > 0 with t ≥ 2,
   v11 total > v10 total and > 0, not carried by one day, and the user agrees, then switch; else v10 stays.
 
+### 2026-10-20: index jobs moved to GitHub (user: "if moving to GitHub doesn't degrade anything then move")
+- **Job queue:** `data/index/job_queue.json` on main (`index_data/job_queue.py`). The hourly
+  `.github/workflows/index-scheduler.yml` dispatches the next job to `index-jobs.yml` only when no index-data run is
+  queued or running. Two waiting runs in that concurrency group would cancel one, which this avoids.
+  - On weekdays from 19:15 IST it also waits until that day's recorder has started; the recorder's cron ran 6.7 h late
+    on 19 Oct.
+  - An `upstox_expired` run that stops on its time budget puts itself back at the front of the queue, so a backfill
+    continues by itself until it is complete.
+- **Kotak expired-token probes:** `.github/workflows/kotak-probes.yml`, 16:00 IST on weekdays, with its own
+  concurrency group. It probes only on a due date without a result (20 Oct, 27 Oct, 19 Nov), so a late or skipped
+  cron is caught up the next day. `index_data/probe_report.py` rewrites the report's table from the results.
+- The PC scripts and the three Claude app probe tasks are retired: no PC or app is needed. Seeded queue: the rest of
+  SENSEX after part 3.
+- Nothing is degraded:
+  - the repo is public, so Actions minutes are free;
+  - the same jobs and limits run, with only up to an hour's wait between them (the scheduler's period);
+  - the probe report row is now written by a script, not by Claude.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

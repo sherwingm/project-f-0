@@ -1,0 +1,41 @@
+name: Kotak expired-token probes
+# §2 of INDEX_DATA_PLAN.md: does Kotak still serve an expired contract's candles (NIFTY 19-Oct-2026 22650 CE, token
+# 47141)? Runs on GitHub at 16:00 IST on weekdays; probes only on a due date that has no result yet (GitHub's cron can
+# start late or skip a day, so a missed date is caught up on the next run). Writes data/index/probe_expired.json and
+# rewrites the "Expired-token retention" table of INDEX_DATA_REPORT.md; both are ignored by Render.
+# Its own concurrency group: it never waits in, or cancels, the index-data queue.
+on:
+  schedule:
+    - cron: "30 10 * * 1-5"      # 10:30 UTC = 16:00 IST
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: kotak-probes
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install
+        run: pip install -r requirements-server.txt pyarrow
+      - name: Probe (when due)
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}
+        run: python -m index_data.probe_expired --due 2026-10-20,2026-10-27,2026-11-19
+      - name: Report table
+        run: python -m index_data.probe_report
+      - name: Commit to main
+        run: |
+          git config user.name "fo-scanner-bot"
+          git config user.email "bot@users.noreply.github.com"
+          git add data/index/probe_expired.json INDEX_DATA_REPORT.md
+          git diff --cached --quiet && exit 0
+          git commit -q -m "index data: Kotak expired-token probe $(date -u +%F)"
+          for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done

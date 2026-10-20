@@ -59,6 +59,9 @@ jobs:
           git add -A data/index 2>/dev/null || true
           git diff --cached --quiet || git commit -q -m "index data: ${{ inputs.job }} $(date -u +%F)"
           for i in 1 2 3; do git pull -q --rebase origin index-data && git push -q origin HEAD:index-data && break; sleep 10; done
+      - name: Re-queue a backfill that stopped on its time budget
+        if: always() && inputs.job == 'upstox_expired'
+        run: python -m index_data.job_queue requeue-if-stopped --job upstox_expired --args "${{ inputs.args }}" || true
       - name: Commit small JSON to main
         if: always()
         run: |

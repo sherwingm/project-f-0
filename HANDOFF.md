@@ -1,4 +1,4 @@
-# Handoff (2026-10-20, 02:50 IST)
+# Handoff (2026-10-20, 11:00 IST)
 
 Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The detailed records are in `PROGRESS.md`
 (log and the Core idea tracker), `DECISIONS.md` (rule and result changes), `INDEX_DATA_REPORT.md`,
@@ -46,10 +46,10 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 ## Still running
 | What | Where | Finishes | Needs the PC |
 |---|---|---|---|
-| `scratchpad/run_jobs5.sh` (log `run_jobs5.log`): waits until no other job uses the Upstox token, then NIFTY part 3 (`--max-minutes 180`), then SENSEX resume (300 min). BANKNIFTY is complete; SENSEX part 1 stopped on a shared-token 429 (fixed: 429s are waited out) | this PC | ~20 Oct midday | **yes** |
+| **Index job queue on GitHub** (`data/index/job_queue.json`, hourly `index-scheduler.yml`): next is the rest of SENSEX; backfills re-queue themselves until complete | GitHub | SENSEX ~20 Oct evening | no |
 | Nightly recorder (+ S1 trades' minutes, spot / VIX, OHLC top-ups) | GitHub cron 19:30 IST | ~20:00 IST | no |
 | Upstox-vs-Kotak shadow check on the live server (`/api/data/compare`) | Render, from 20 Oct 09:20 | a few days, then decide the switch | no |
-| Expired-token probes (Kotak token 47141): 1 / 2 / 3 | Claude app tasks → `index-jobs` `probe_expired` | 20 Oct, 27 Oct, 19 Nov at 16:00 IST | Claude app open |
+| Kotak expired-token probes (`kotak-probes.yml`, 16:00 IST weekdays; due 20 Oct, 27 Oct, 19 Nov) | GitHub | 19 Nov | no |
 
 Done on 2026-10-19:
 - Live (deploy `e2b067a` after close; the 15:35 commit was empty, so Render skipped it):
@@ -73,7 +73,7 @@ Open questions to the user:
   the remaining jobs **one at a time**, never while the 19:30 recorder is pending.
 - `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. The Python venv is `%TEMP%\fo-venv\Scripts\python.exe` (pandas,
   pyarrow, yfinance 1.7.0, requests, xlsxwriter).
-- "Move to GitHub" (self-chaining jobs) was never answered; the PC scripts are still used.
+- Moved to GitHub on 2026-10-20 (job queue + scheduler + probe workflow); no PC scripts or app tasks remain.
   - **Claude cloud:** advised as **not** needed.
 
 ## Next steps

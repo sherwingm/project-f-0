@@ -48,10 +48,20 @@ def main() -> None:
     ap.add_argument("--start", default="2026-10-12")
     ap.add_argument("--end", default="2026-10-16")
     ap.add_argument("--expiry", default="2026-10-19")
+    ap.add_argument("--due", default="", help="comma-separated probe dates: run once for each date on or before today "
+                    "that has no result yet (the scheduled GitHub workflow; GitHub's cron may start it late)")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-    res = probe(Kotak(), a.token, a.start, a.end, a.expiry)
     hist = read_json(SMALL / "probe_expired.json", []) or []
+    label = None
+    if a.due:
+        done = {h.get("label") for h in hist}
+        due = [d for d in (x.strip() for x in a.due.split(",")) if d and d <= today_ist().isoformat() and d not in done]
+        if not due:
+            print("no probe due today")
+            return
+        label = due[-1]                                   # one run answers every missed date: label it the latest
+    res = {**probe(Kotak(), a.token, a.start, a.end, a.expiry), "label": label or today_ist().isoformat()}
     write_json(SMALL / "probe_expired.json", hist + [res])
     print(pd.DataFrame(res["checks"]).to_string())
     print("verdict:", res["verdict"])
