@@ -21,6 +21,11 @@ editing this file on purpose, in its own commit, with the reason.
     trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
     weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
     manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
+  - **Shadow tag fd2 on fade puts (the user, 2026-10-20: "add it as a shadow tag on live fade puts only ... no change to
+    the trades. Review at 20 tagged trades").** A put is tagged when its results were filed 09:15-14:50 on the session
+    before day 0 and the stock already fell >= 2 % (market-adjusted) by that day's close. Tag only; every put is still
+    traded by v11. Basis: `data/results/S1_fade_filing_day_skip.md` (passes on the v10 exit, worth little under v11).
+    Track: `strategies/S1_v11_fd2_shadow_track.md`.
   - **Live rule trades follow two written rules they had missed (fixes, not rule changes; the user, 2026-10-20: "fix it
     now"), from 2026-10-21:**
     1. **Tick ₹0.01.** NSE's stock-option tick has been ₹0.01 since 2025-11-03; `server/rules.py` and
