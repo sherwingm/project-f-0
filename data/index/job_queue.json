@@ -1,17 +1,19 @@
 {
  "queue": [
   {
-   "job": "upstox_expired",
-   "args": "--underlying SENSEX --max-minutes 300",
-   "added": "2026-10-20T10:50:39+05:30",
-   "why": "rest of SENSEX after part 3 (run 39372515324); moved from the PC queue to GitHub 2026-10-20"
-  },
-  {
    "job": "bhavcopy_ohlc",
    "args": "--split-yearly",
    "added": "2026-10-20T11:20:33+05:30",
    "why": "one-off: yearly daily-OHLC files -> monthly (user: 'monthly + clean later', 2026-10-20)"
   }
  ],
- "history": []
+ "history": [
+  {
+   "job": "upstox_expired",
+   "args": "--underlying SENSEX --max-minutes 300",
+   "added": "2026-10-20T10:50:39+05:30",
+   "why": "rest of SENSEX after part 3 (run 39372515324); moved from the PC queue to GitHub 2026-10-20",
+   "dispatched": "2026-10-20T19:19:06+05:30"
+  }
+ ]
 }
