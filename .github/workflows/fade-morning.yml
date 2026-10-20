@@ -59,7 +59,7 @@ jobs:
         run: |
           now=$(TZ=Asia/Kolkata date +%H%M)
           if [ "$now" -ge 0835 ]; then echo "IST $now: too close to the open, fd2 skipped"; exit 0; fi
-          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow || exit 0
+          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow requests || exit 0
           /tmp/fd2/bin/python -m scanner.fade_live --fd2 --patch-scan || true
 
       - name: Commit and push (only before 08:50 IST)

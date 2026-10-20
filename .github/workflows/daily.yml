@@ -78,7 +78,7 @@ jobs:
         env:
           KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # data calls only: the filing day's 1-minute history
         run: |
-          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow || exit 0
+          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow requests || exit 0
           /tmp/fd2/bin/python -m scanner.fade_live --fd2 || true
       - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
         run: python -m scanner.build
