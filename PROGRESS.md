@@ -620,6 +620,15 @@ are recorded?
   (2022-24 -5.6 %, 2025-26 +0.2 %). From other filings they made +Rs 2.02 L on 608 (+7.5 % / +8.0 %, t 2.10). A lead
   only: needs its own pre-registration.
 
+### 2026-10-20: the stock after an entry at a market-hours announcement (descriptive)
+- Addendum in `strategies/S1_intraday_results_reaction.md`. `python -m scanner.results_intraday_path --nifty-dir ...`
+  writes `data/results/S1_intraday_results_path.md`. 644 cases; entry = close of the minute after the announcement.
+- **The same day:** nothing. From the entry to +5 min / +60 min / 15:20 the mean is about 0 % (all |t| < 1.2 pooled).
+  The quick jump happens inside the first minute: mean |move| 0.6 %, missed by any entry.
+- **The next open:** strong results go up overnight, +0.79 % (t 4.0). Both windows agree: 2022-24 +0.82 %, 2025-26
+  +0.76 %. By the next close +0.54 % (t 1.9), so part fades during that day. Weak results: -0.65 % at the next open
+  (66 cases, t -1.3). A lead only (descriptive): an overnight trade needs its own pre-registration.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
