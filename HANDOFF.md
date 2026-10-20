@@ -81,6 +81,7 @@ the page banner says so. It clears on Monday 26 Oct.
 | −20 % stop on minutes (`S1_v10_s20_minutes.md`) | Basis for v11 (above) |
 | Arms A/B with −20 % stop (`S1_arms_ab_stop20.md`) | No (above) |
 | Fade without the Arm A days (`S1_v10_armA_overlap_filter.md`) | Fails. The close version is hindsight; the 09:15 open version is t −0.07. With v11's stop (from 09:16) even hindsight adds only +₹32k |
+| Market-hours filings, fade or continue (`S1_intraday_results_reaction.md`) | Fails (no pattern). Extra lead: fade trades from market-hours filings lose; others carry all the profit |
 
 - **Audit facts:**
   - The NSE tick for stock options is **₹0.01 since 2025-11-03** (₹0.05 before).

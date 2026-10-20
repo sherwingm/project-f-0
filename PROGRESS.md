@@ -609,6 +609,17 @@ are recorded?
   banned stock in both entries. 3 new tests; the suite: 492 passed, the one known failure.
 - DECISIONS.md records the tick and ban fixes. Deployed after market (holiday).
 
+### 2026-10-20: results filed during market hours: fade or keep going? (step 1, stock only)
+- Pre-registered: `strategies/S1_intraday_results_reaction.md`. Steps:
+  - 669 F&O filings timed 09:15-14:50 (2022-26): `scanner.results_intraday_cases`;
+  - their stock 1-minute candles from Kotak on GitHub (`fetch_results_minutes`, 668 fetched);
+  - `python -m scanner.results_intraday --nifty-dir <NIFTY50 parquets>`, giving `data/results/S1_intraday_results_reaction.md` / `.xlsx`.
+- **Fails:** no first-15-minute bucket keeps the same direction in 2022-24 and 2025-26 (all |t| < 1). After the
+  first 15 minutes the stock does neither, fading nor continuing in any steady way. No option test (step 2).
+- Extra (descriptive, found after the test): fade backtest trades from market-hours filings lost -Rs 51.9k on 262
+  (2022-24 -5.6 %, 2025-26 +0.2 %). From other filings they made +Rs 2.02 L on 608 (+7.5 % / +8.0 %, t 2.10). A lead
+  only: needs its own pre-registration.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
