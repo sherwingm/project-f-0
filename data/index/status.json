@@ -1,7 +1,7 @@
 {
  "recorder": {
-  "run_at": "2026-10-20T09:37:43+05:30",
-  "session": "2026-10-19",
+  "run_at": "2026-10-20T23:56:29+05:30",
+  "session": "2026-10-20",
   "expiry_check": {
    "bse_fo": {
     "checked": 3283,
@@ -17,38 +17,26 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 22888.95,
-    "contracts": 184,
-    "rows": 171539,
-    "expiries": [
-     "2026-10-27",
-     "2026-11-03"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "SENSEX": {
-    "spot": 73852.9,
-    "contracts": 296,
-    "rows": 133038,
-    "expiries": [
-     "2026-10-22",
-     "2026-10-29"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "BANKNIFTY": {
-    "spot": 55488.1,
-    "contracts": 220,
-    "rows": 61719,
-    "expiries": [
-     "2026-10-27",
-     "2026-11-23"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    }
   },
   "failures": [],
-  "chain_eod_rows": 700,
-  "calls": 756,
-  "runtime_s": 1353.8,
-  "contracts": 700
+  "chain_eod_rows": 0,
+  "calls": 3,
+  "runtime_s": 20.1,
+  "contracts": 0
  },
  "recent_runs": [
   {
@@ -81,6 +69,14 @@
    "contracts": 700,
    "calls": 756,
    "runtime_s": 1353.8,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-10-20T23:56:29+05:30",
+   "session": "2026-10-20",
+   "contracts": 0,
+   "calls": 3,
+   "runtime_s": 20.1,
    "failures": 0
   }
  ],
@@ -200,19 +196,19 @@
  "daily_extras": {
   "spot_vix_1m": {
    "NIFTY50": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 361,
+    "rows_added": 0,
     "runtime_s": 2
    },
    "SENSEX": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 2
    },
    "INDIAVIX": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 2,
     "vix_fix": {
      "rows_corrected": 0
@@ -220,15 +216,15 @@
    }
   },
   "options_daily": {
-   "sessions": 1,
+   "sessions": 0,
    "skipped_existing": 0,
-   "unavailable": 0,
-   "rows": 5879,
+   "unavailable": 1,
+   "rows": 0,
    "errors": [],
-   "runtime_s": 2
+   "runtime_s": 1
   },
-  "day": "2026-10-19",
-  "runtime_s": 9
+  "day": "2026-10-20",
+  "runtime_s": 8
  },
  "s1_trades_1m": {
   "run_on": "2026-10-20",
