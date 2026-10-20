@@ -660,6 +660,18 @@ are recorded?
 - **It is puts only:** 24 puts at -27.8 %, t -3.5; 13 calls, too few. 14 trades lack full minutes (Aug 2026 minutes
   end at 15:14). No rule change. The judge suggests a shadow tag at most, which is the user's decision.
 
+### 2026-10-20 evening: queue hand-off, SENSEX restarted, Kotak probe 1
+- The hourly scheduler fired once in 8 hours (GitHub cron), and that run died on `No module named pandas`, so SENSEX
+  did not continue after part 3. Fixes (dce97fd):
+  - `index_data/job_queue.py` uses the standard library only;
+  - every index-jobs and recorder run ends with `scripts/index_handoff.sh`, which starts the next queued job when
+    nothing else is queued or running, after pulling the latest queue;
+  - the scheduler is now only a backup.
+- SENSEX's last part was started by hand (run 39433699241). The 16:00 Kotak probe did not fire either; it was
+  started by hand.
+- **Probe 1: Kotak retains an expired contract's minute data one day after expiry** (1-min 1,923, expiry day 384,
+  5-min 462 rows; daily 0; the token is gone from the scrip master). See INDEX_DATA_REPORT.md.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

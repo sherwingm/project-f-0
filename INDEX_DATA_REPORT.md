@@ -45,7 +45,13 @@ piece runs.
 
 ## Expired-token retention
 NIFTY 19-Oct-2026 22650 CE, Kotak token 47141 (expired 2026-10-19). Probed by `index_data/probe_expired.py` through
-the `index-jobs` Action on 2026-10-20, 10-27 and 11-19 at 16:00 IST (scheduled tasks).
+`.github/workflows/kotak-probes.yml` on 2026-10-20, 10-27 and 11-19 (its cron did not fire on 20 Oct; that run was started
+by hand at 19:19 IST). The rows below are written by `index_data/probe_report.py`.
+
+**Probe 1 (one day after expiry): retained.** Kotak still serves the expired contract's 1-minute (1,923 rows, the same
+as before expiry), expiry-day (384) and 5-minute candles, although the token is gone from the scrip master. Daily
+candles return 0 rows. So a contract's history can be fetched by its token after expiry, as long as the token was
+saved beforehand (the recorder keeps `recorded_tokens.json`).
 
 | Probe | Date | 1-min 10-12 → 10-16 | Expiry day | 5-min | Daily | Still listed | NIFTY control | Verdict |
 |---|---|---|---|---|---|---|---|---|
