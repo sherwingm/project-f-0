@@ -629,6 +629,16 @@ are recorded?
   +0.76 %. By the next close +0.54 % (t 1.9), so part fades during that day. Weak results: -0.65 % at the next open
   (66 cases, t -1.3). A lead only (descriptive): an overnight trade needs its own pre-registration.
 
+### 2026-10-20: call one minute after a strong market-hours result, sold at the next open (option backtest)
+- Pre-registered: `strategies/S1_intraday_strong_call_overnight.md`. Steps:
+  - 118 strong cases, Oct 2024 → Sep 2026: `scanner.intraday_call_contracts`, 1,056 strikes;
+  - Upstox minutes fetched on GitHub (`fetch_band_minutes intra`, 1,019 fetched);
+  - `python -m scanner.intraday_call_overnight`, giving `data/results/S1_intraday_call_overnight.md`.
+- **Fails:** 64 trades, 30 % won, mean -13.2 % of premium, -Rs 55k (t -1.5). 2024-25 -19.5 %, 2026 -3.3 %.
+- The stock did rise (+0.54 % to the next open), but the cheap call lost anyway. On losers the stock fell only 0.4 %
+  while the call lost 48 %: an overnight hold, out of the money, after the news is out (the option's price loses its
+  results premium). Closed with its numbers; no rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
