@@ -50,6 +50,7 @@ the `index-jobs` Action on 2026-10-20, 10-27 and 11-19 at 16:00 IST (scheduled t
 | Probe | Date | 1-min 10-12 → 10-16 | Expiry day | 5-min | Daily | Still listed | NIFTY control | Verdict |
 |---|---|---|---|---|---|---|---|---|
 | before expiry (DATA_ACCESS_AUDIT) | 2026-10-18 | 1,923 | — | 385 | — | yes | 1,807 | — |
+| probe 1 | 2026-10-20 (run 2026-10-20) | 1923 | 384 | 462 | 0 | no | 376 | retained |
 
 ## VIX corrections
 Kotak's India VIX minutes with open > 200 were divided by 100: **92,936 rows corrected**, from **2021-10-20 09:15** to
