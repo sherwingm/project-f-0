@@ -21,6 +21,17 @@ editing this file on purpose, in its own commit, with the reason.
     trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
     weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
     manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
+  - **Live rule trades follow two written rules they had missed (fixes, not rule changes; the user, 2026-10-20: "fix it
+    now"), from 2026-10-21:**
+    1. **Tick ₹0.01.** NSE's stock-option tick has been ₹0.01 since 2025-11-03; `server/rules.py` and
+       `server/fade.py` still used ₹0.05. The A/B close entry is now the ATP + ₹0.01, and the fallback sale when there
+       is no bid is the last price − ₹0.01. The +100 % shadow target rounds up to ₹0.01. The sub-₹2 shadow walk keeps
+       its pre-registered ₹0.05 floor. Manual paper orders keep `FILL_TICK` ₹0.05, because it also prices futures,
+       whose tick is not ₹0.01.
+    2. **F&O ban list for arms A / B.** S1 v4–v7 skip a stock in the F&O ban on the entry day, and the forward test
+       did, but the live trader did not. Both A/B entries now refuse it ("in the F&O ban today"). The list is the
+       session's NSE ban list from the fade signal file (`meta.fade.ban`, written nightly and before the open). A file
+       for another session blocks nothing. The fade already skipped banned stocks.
   - Backtests size **one lot costing ₹600–8,000** (lot size × entry fill), from S1 v6 on (2026-10-12). Reason: at
     the at-the-money strike, v4's ₹2,000–8,000 budget left 3 trades and v5's ₹10,000–30,000 band left 57, short of
     the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used
