@@ -14,9 +14,9 @@ from __future__ import annotations
 import argparse
 import logging
 import time
-from datetime import timedelta
+from datetime import date, timedelta
 
-from .common import SMALL, STORE, Kotak, read_json, today_ist, write_json
+from .common import SMALL, STORE, Kotak, read_json, session_day, today_ist, write_json
 
 log = logging.getLogger("index_data.daily_extras")
 
@@ -24,9 +24,10 @@ log = logging.getLogger("index_data.daily_extras")
 def main() -> None:
     ap = argparse.ArgumentParser(description="nightly top-ups: spot/VIX, daily OHLC, weekly Upstox")
     ap.add_argument("--weekly", action="store_true", help="run the weekly part now")
+    ap.add_argument("--day", default=None, help="the session to top up (YYYY-MM-DD); default: session_day()")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
-    day, t0, out = today_ist(), time.monotonic(), {}
+    day, t0, out = (date.fromisoformat(a.day) if a.day else session_day()), time.monotonic(), {}
     k = None
     try:
         from .backfill_spot import backfill

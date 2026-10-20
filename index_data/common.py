@@ -30,6 +30,13 @@ def today_ist() -> date:
     return datetime.now(IST).date()
 
 
+def session_day(now: datetime | None = None) -> date:
+    """The session a nightly job records: today, or yesterday when the job starts before 08:00 IST (GitHub's 19:30
+    cron can start hours late: on 2026-10-20 it began at 02:40 and recorded the wrong, empty day)."""
+    now = now or datetime.now(IST)
+    return now.date() - timedelta(days=1) if now.hour < 8 else now.date()
+
+
 class Kotak:
     """The Kotak Neo client with the consumer key only (data calls need no login), and spaced history calls."""
 

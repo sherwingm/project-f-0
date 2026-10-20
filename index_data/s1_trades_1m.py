@@ -19,7 +19,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .common import SMALL, STORE, Kotak, candles_frame, read_json, today_ist, upsert_parquet, write_json
+from .common import SMALL, STORE, Kotak, candles_frame, read_json, session_day, today_ist, upsert_parquet, write_json
 
 log = logging.getLogger("index_data.s1_trades_1m")
 
@@ -60,11 +60,13 @@ def tokens(k: Kotak) -> tuple[dict, dict, dict]:
         want = {"pSymbol", "pTrdSymbol", "pSymbolName", "pInstType", "pOptionType", "pExpiryDate", sc}
         for ch in pd.read_csv(f, chunksize=50000, low_memory=False, usecols=lambda c: str(c).strip() in want):
             ch = ch.rename(columns=lambda c: str(c).strip())
+            if sc:                                       # "dStrikePrice;" is no attribute name for itertuples
+                ch = ch.rename(columns={sc: "strike_raw"})
             ch = ch[ch["pInstType"].astype(str).str.strip() == "OPTSTK"]
             for r in ch.itertuples(index=False):
                 tok = str(r.pSymbol).strip()
                 fo_trd[str(r.pTrdSymbol).strip()] = tok
-                strike = float(getattr(r, sc)) / 100.0 if sc and pd.notna(getattr(r, sc)) else None
+                strike = float(r.strike_raw) / 100.0 if sc and pd.notna(r.strike_raw) else None
                 fo_key[(str(r.pSymbolName).strip(), str(r.pOptionType).strip().upper(), nse_expiry(r.pExpiryDate), strike)] = tok
     finally:
         f.unlink(missing_ok=True)
@@ -123,7 +125,7 @@ def main() -> None:
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     ledger = json.loads(Path(a.ledger).read_text(encoding="utf-8"))
-    day = a.day or today_ist().isoformat()
+    day = a.day or session_day().isoformat()
     days = session_days(a.since, day) if a.since else [day]
     res = run(ledger, days, Kotak())
     st = read_json(SMALL / "status.json", {}) or {}

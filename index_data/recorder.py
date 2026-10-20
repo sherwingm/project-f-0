@@ -19,7 +19,7 @@ from datetime import date, timedelta
 import pandas as pd
 
 from . import instruments as I
-from .common import SMALL, STORE, Kotak, candles_frame, read_json, today_ist, upsert_parquet, write_json
+from .common import SMALL, STORE, Kotak, candles_frame, read_json, session_day, today_ist, upsert_parquet, write_json
 
 log = logging.getLogger("index_data.recorder")
 
@@ -104,7 +104,7 @@ def chain_snapshot(k: Kotak, sel: pd.DataFrame, day: date, store=STORE) -> int:
 
 def run(day: date | None = None) -> dict:
     t0 = time.monotonic()
-    day = day or today_ist()
+    day = day or session_day()
     k = Kotak()
     contracts = I.load(k)
     chk = I.check_expiries(contracts)
