@@ -3,7 +3,8 @@ expired-instruments API. Runs on GitHub (the token is a secret); the CSV is uplo
 
     UPSTOX_ANALYTICS_TOKEN=... python -m index_data.fetch_band_minutes [050|12]
 
-Reads data/results/S1_v10_band<band>_contracts.csv; writes data/results/S1_v10_band<band>_minutes.csv (symbol, day0,
+Reads data/results/S1_v10_band<band>_contracts.csv (optional "from" / "to" columns: a span of sessions, fetched in
+pieces of 7 days; else day 0 only); writes data/results/S1_v10_band<band>_minutes.csv (symbol, day0,
 side, strike, ts, o, h, l, c, volume, oi) and prints what was missing. Band 050 by default; 12 = the Rs 1-2 study.
 """
 from __future__ import annotations
@@ -33,6 +34,17 @@ def isins() -> dict[str, str]:
             if r.get("segment") == "NSE_EQ" and r.get("instrument_type") == "EQ" and r.get("isin")}
 
 
+def spans(a: str, z: str, days: int = 7) -> list[tuple[str, str]]:
+    """[a, z] in pieces of at most `days` calendar days (one candle call each)."""
+    from datetime import date, timedelta
+    lo, end, out = date.fromisoformat(a), date.fromisoformat(z), []
+    while lo <= end:
+        hi = min(end, lo + timedelta(days=days - 1))
+        out.append((lo.isoformat(), hi.isoformat()))
+        lo = hi + timedelta(days=1)
+    return out
+
+
 def main() -> None:
     u, isin, fun = Upstox(), isins(), Counter()
     contracts: dict[tuple, list] = {}
@@ -60,14 +72,18 @@ def main() -> None:
                 fun["no_contract"] += 1
                 print("no contract:", sym, exp, side, k, f"({len(contracts[key])} listed)")
                 continue
-            try:
-                body = u.get(f"/v2/expired-instruments/historical-candle/{u.q(c['instrument_key'])}/1minute/"
-                             f"{r['day0']}/{r['day0']}")
-            except Exception as exc:                             # noqa: BLE001
+            a, z = r.get("from") or r["day0"], r.get("to") or r["day0"]     # a holding span (arms A / B), else day 0
+            rows, err = [], None
+            for lo, hi in spans(a, z):
+                try:
+                    body = u.get(f"/v2/expired-instruments/historical-candle/{u.q(c['instrument_key'])}/1minute/{hi}/{lo}")
+                    rows += (body.get("data") or {}).get("candles") or []
+                except Exception as exc:                         # noqa: BLE001
+                    err = exc
+            if err is not None and not rows:
                 fun["candle_error"] += 1
-                print("candles error:", c.get("trading_symbol"), str(exc)[:200])
+                print("candles error:", c.get("trading_symbol"), str(err)[:200])
                 continue
-            rows = (body.get("data") or {}).get("candles") or []
             if not rows:
                 fun["no_candles"] += 1
                 print("no candles:", c.get("trading_symbol"), r["day0"])
