@@ -56,3 +56,17 @@ No passing bucket: step 1 closes with its numbers, and no option test follows.
   B15.
 - Stock moves only: an option trade adds spread, charges and theta (step 2).
 - 1-minute closes, not quotes.
+
+## Addendum 2026-10-20 · the path after an entry at the announcement (descriptive only)
+Written before it is computed. The user asked how the stock moves if the entry is taken on seeing the announcement.
+- **Same 644 cases with usable minutes.**
+- **Entry** = the close of the minute after the announcement's minute (t0 + 1), the earliest realistic fill. The
+  move missed by that minute is reported: `pre` → entry.
+- **Moves from the entry**, market-adjusted (minus NIFTY 50) and raw:
+  - at +5, +15, +30 and +60 minutes, and at 15:20;
+  - the next session's open and close (stock: eod2 daily; NIFTY: its 1-minute file, 09:15 open and the last close).
+  - A horizon after 15:20 on the day is cut at 15:20.
+- **Groups:** the result's numbers class (strong / weak / neither, as above), and the direction of the missed jump
+  (up / down).
+- **Report per group and horizon:** N, mean, median, share up, date-clustered t; for 2022-24, 2025-26 and pooled.
+- **No pass test.** This is a look at the path. Any trade from it needs its own pre-registration.
