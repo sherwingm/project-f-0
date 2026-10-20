@@ -11,21 +11,36 @@ dispatches it to index-jobs.yml. An upstox_expired run that stopped on its time 
 from __future__ import annotations
 
 import argparse
-from datetime import datetime
+import json
+from datetime import datetime, timedelta, timezone
+from pathlib import Path
 
-from .common import IST, SMALL, read_json, write_json
-
+# standard library only (no pandas): the scheduler and the hand-off steps run it without installing anything
+IST = timezone(timedelta(hours=5, minutes=30))
+SMALL = Path(__file__).resolve().parents[1] / "data" / "index"
 PATH = SMALL / "job_queue.json"
 
 
+def read_json(path: Path, default=None):
+    try:
+        return json.loads(Path(path).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return default
+
+
+def write_json(path: Path, obj) -> None:
+    Path(path).parent.mkdir(parents=True, exist_ok=True)
+    Path(path).write_text(json.dumps(obj, indent=1, default=str), encoding="utf-8")
+
+
 def load() -> dict:
-    q = read_json(PATH, {}) or {}
+    q = read_json(SMALL / "job_queue.json", {}) or {}
     return {"queue": list(q.get("queue") or []), "history": list(q.get("history") or [])}
 
 
 def save(q: dict) -> None:
     q["history"] = q["history"][-40:]
-    write_json(PATH, q)
+    write_json(SMALL / "job_queue.json", q)
 
 
 def now() -> str:

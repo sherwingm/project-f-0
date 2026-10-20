@@ -14,6 +14,7 @@ on:
         default: ""
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: index-data
   cancel-in-progress: false
@@ -81,3 +82,8 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -q -m "index data: recorder status $(date -u +%F)"
           for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done
+      - name: Start the next queued job (hand-off; safe if anything else is waiting)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/index_handoff.sh ${{ github.run_id }} recorder || true

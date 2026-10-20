@@ -15,6 +15,7 @@ on:
         default: ""
 permissions:
   contents: write
+  actions: write
 concurrency:
   group: index-data
   cancel-in-progress: false
@@ -61,7 +62,9 @@ jobs:
           for i in 1 2 3; do git pull -q --rebase origin index-data && git push -q origin HEAD:index-data && break; sleep 10; done
       - name: Re-queue a backfill that stopped on its time budget
         if: always() && inputs.job == 'upstox_expired'
-        run: python -m index_data.job_queue requeue-if-stopped --job upstox_expired --args "${{ inputs.args }}" || true
+        run: |
+          git -c user.name=fo-scanner-bot -c user.email=bot@users.noreply.github.com pull -q --rebase --autostash origin main || true
+          python -m index_data.job_queue requeue-if-stopped --job upstox_expired --args "${{ inputs.args }}" || true
       - name: Commit small JSON to main
         if: always()
         run: |
@@ -69,3 +72,8 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -q -m "index data: ${{ inputs.job }} summary $(date -u +%F)"
           for i in 1 2 3; do git pull --rebase -q origin main && git push -q && break; sleep 5; done
+      - name: Start the next queued job (hand-off; safe if anything else is waiting)
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bash scripts/index_handoff.sh ${{ github.run_id }} || true
