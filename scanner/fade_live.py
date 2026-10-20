@@ -107,9 +107,15 @@ def _close_at(closes: dict, t: str, tol: int = 5) -> float | None:
     return None
 
 
-def market_hours_filing(filed: str | None, filed_time: str | None, target: str) -> bool:
-    """A results filing published 09:15-14:50 IST on a session before the target session (day 0)."""
-    return bool(filed and filed_time and filed < target and FD_FROM <= str(filed_time)[:5] <= FD_TO)
+def market_hours_filing(filed: str | None, filed_time: str | None, target: str, is_session=None) -> bool:
+    """A results filing published 09:15-14:50 IST on a session day before the target session (day 0). A weekend or
+    holiday filing is not one (as in the study)."""
+    if not (filed and filed_time and filed < target and FD_FROM <= str(filed_time)[:5] <= FD_TO):
+        return False
+    if is_session is None:
+        from server import sessions
+        is_session = sessions.is_session
+    return bool(is_session(date.fromisoformat(filed)))
 
 
 def filing_day_move(stock: dict, nifty: dict, filed_time: str) -> dict:
@@ -130,8 +136,10 @@ class FilingDayMoves:
     """Kotak 1-minute history of the filing day (consumer key only: GitHub secret KOTAK_CONSUMER_KEY). Any failure
     gives an 'unknown' tag; it never stops the signal run."""
 
+    BUDGET_S = 120                                       # stop measuring after this long (the morning push waits)
+
     def __init__(self):
-        self.k, self.eq, self.nifty, self.error = None, None, {}, None
+        self.k, self.eq, self.nifty, self.error, self.t0 = None, None, {}, None, None
 
     def _closes(self, neosymbol: str, day: str) -> dict:
         from index_data.common import candles_frame
@@ -139,25 +147,32 @@ class FilingDayMoves:
         return dict(zip(f["timestamp"].dt.strftime("%H:%M"), f["close"]))
 
     def tag(self, sym: str, filed: str, filed_time: str) -> dict:
+        import time as _time
         unknown = {"market_hours": True, "D": None, "D_raw": None, "tagged": None}
         if self.error:
             return {**unknown, "error": self.error}
-        try:
+        self.t0 = self.t0 or _time.monotonic()
+        if _time.monotonic() - self.t0 > self.BUDGET_S:
+            return {**unknown, "error": "time budget used up"}
+        try:                                             # setup and the day's NIFTY: a failure here stops the run's tags
             if self.k is None:
                 from index_data.common import Kotak
                 from index_data.s1_trades_1m import eq_tokens
                 self.k = Kotak()
                 self.eq = eq_tokens(self.k)
-            tok = self.eq.get(sym)
-            if not tok:
-                return {**unknown, "error": "no Kotak token"}
             if filed not in self.nifty:
                 self.nifty[filed] = self._closes("nse_cm|Nifty 50", filed)
-            return filing_day_move(self._closes(f"nse_cm|{tok}", filed), self.nifty[filed], filed_time)
-        except (Exception, SystemExit) as exc:  # noqa: BLE001 - no key, no network: the tag is unknown, never fatal
+        except (Exception, SystemExit) as exc:  # noqa: BLE001 - no key, no network: unknown, never fatal
             self.error = str(exc)[:120]
             log.warning("fd2 tag unavailable: %s", self.error)
             return {**unknown, "error": self.error}
+        tok = self.eq.get(sym)
+        if not tok:
+            return {**unknown, "error": "no Kotak token"}
+        try:                                             # one stock's failure leaves the others measurable
+            return filing_day_move(self._closes(f"nse_cm|{tok}", filed), self.nifty[filed], filed_time)
+        except Exception as exc:  # noqa: BLE001
+            return {**unknown, "error": str(exc)[:120]}
 
 
 def add_filing_day(signals: list[dict], target: str, moves=None) -> list[dict]:
@@ -281,8 +296,6 @@ def run(now: datetime | None = None, state_path: Path = STATE_PATH, cache_dir: P
         for s in signals:
             if s["symbol"] in had and (s.get("filing_day") or {}).get("D") is None:
                 s["filing_day"] = had[s["symbol"]]
-    if fetch:
-        add_filing_day(signals, target.isoformat())               # shadow tag fd2 on puts (tag only)
     if fin.pop("__changed__", False):
         FIN_PATH.write_text(json.dumps(fin, indent=0, sort_keys=True), encoding="utf-8")
     state.update({"rules": RULES_TEXT, "session": target.isoformat(), "made_at": now.isoformat(timespec="seconds"),
@@ -339,10 +352,32 @@ def patch_scan(scan_path: Path = ROOT / "data" / "scan.json", state_path: Path =
     return True
 
 
+def fd2_pass(state_path: Path = STATE_PATH, moves=None) -> int:
+    """The fd2 shadow tag on the signal file's puts (a separate step, run in its own venv with the Kotak SDK). Returns
+    the number of puts measured; the file is rewritten only when something changed."""
+    if not state_path.exists():
+        return 0
+    state = json.loads(state_path.read_text(encoding="utf-8"))
+    before = json.dumps(state.get("signals"), sort_keys=True)
+    add_filing_day(state.get("signals") or [], state.get("session") or "", moves)
+    if json.dumps(state.get("signals"), sort_keys=True) != before:
+        state_path.write_text(json.dumps(state, indent=1), encoding="utf-8")
+    n = sum(1 for s in state.get("signals") or [] if (s.get("filing_day") or {}).get("market_hours"))
+    log.info("fd2: %s", [(s["symbol"], s.get("filing_day")) for s in state.get("signals") or [] if s.get("side") == "PE"])
+    return n
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description="S1 v10 results-day fade signals for the next session (paper only)")
     ap.add_argument("--patch-scan", action="store_true", help="also write them into data/scan.json (morning run)")
+    ap.add_argument("--fd2", action="store_true", help="only add the fd2 shadow tag to the existing signal file")
     a = ap.parse_args()
+    if a.fd2:
+        logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+        print(f"fd2: {fd2_pass()} market-hours puts")
+        if a.patch_scan:
+            print("scan patched" if patch_scan() else "no scan to patch")
+        return
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     st = run()
     print(f"fade: {st['session']}: {len(st['signals'])} signals, {len(st['skipped'])} skipped")

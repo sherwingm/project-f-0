@@ -584,6 +584,22 @@ def test_fd2_market_hours_window():
     assert not fl.market_hours_filing("2026-10-19", "09:14", "2026-10-21")
     assert not fl.market_hours_filing("2026-10-21", "08:30", "2026-10-21")      # filed the morning of day 0
     assert not fl.market_hours_filing("2026-10-19", None, "2026-10-21")
+    assert not fl.market_hours_filing("2026-10-20", "11:00", "2026-10-21")      # a holiday filing (20 Oct 2026)
+    assert not fl.market_hours_filing("2026-10-17", "12:30", "2026-10-19")      # a Saturday filing
+
+
+def test_fd2_one_stocks_error_does_not_blank_the_others():
+    class K:
+        def history(self, neo, interval, a, b):
+            if neo == "nse_cm|1":
+                raise ValueError("Invalid neosymbol")
+            close = 95.0 if neo != "nse_cm|Nifty 50" else 100.0
+            return [[f"{a}T12:02:00+05:30", 100, 100, 100, 100, 1], [f"{a}T15:29:00+05:30", close, close, close, close, 1]]
+    m = fl.FilingDayMoves()
+    m.k, m.eq = K(), {"AAA": "1", "BBB": "2"}
+    assert m.tag("AAA", "2026-10-19", "12:03")["tagged"] is None
+    b = m.tag("BBB", "2026-10-19", "12:03")
+    assert b["tagged"] is True and b["D"] == -5.0 and m.error is None
 
 
 def test_fd2_add_filing_day_tags_market_hours_puts_only():
@@ -637,5 +653,19 @@ def test_fd2_summary_groups_v11_puts():
                      closed({"market_hours": True, "tagged": True}, 5.0, version=None)], "positions": []}
     s = F.fd2(st)
     assert s["tagged"] == {"closed": 1, "wins": 0, "net_rs": -200.0, "mean_net_pct": -20.0}
-    assert s["market_hours_other"]["closed"] == 2 and s["unknown"] == 1
+    assert s["market_hours_other"]["closed"] == 1 and s["unknown"] == 1 and s["unmeasured"]["net_rs"] == 50.0
     assert s["other_puts"]["closed"] == 1 and s["untagged_closed"] == 1 and s["review_at"] == 20
+
+
+def test_fd2_pass_rewrites_the_signal_file(tmp_path):
+    import json
+    class Moves:
+        def tag(self, sym, filed, t):
+            return {"market_hours": True, "D": -2.2, "D_raw": -2.0, "tagged": True}
+    f = tmp_path / "fade.json"
+    f.write_text(json.dumps({"session": "2026-10-21", "signals": [
+        {"symbol": "A", "side": "PE", "filed": "2026-10-19", "filed_time": "12:03"},
+        {"symbol": "B", "side": "CE", "filed": "2026-10-19", "filed_time": "12:03"}]}), encoding="utf-8")
+    assert fl.fd2_pass(f, Moves()) == 1
+    out = {s["symbol"]: s.get("filing_day") for s in json.loads(f.read_text(encoding="utf-8"))["signals"]}
+    assert out["A"]["tagged"] is True and out["B"] is None

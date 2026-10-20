@@ -33,3 +33,11 @@ skipping them would have saved only about ₹2-7k over two years. The tag measur
   tag is dropped. 20 trades is a small sample, so it is a look, not proof.
 - The backtest had 24 such puts in 2022-26, about 5 a year, so 20 tagged trades may take several years. The count is
   shown on the Arm F panel.
+
+## Addendum 2026-10-20 (same evening, before any tag was made) · fixes from the code review
+- **A filing on a weekend or holiday** (e.g. Saturday, or 20 Oct 2026) is not a market-hours filing, as in the study.
+- **Unmeasured puts** (no minutes, a Kotak error, a 09:15 filing with no 09:14 candle) are a separate "not measured"
+  group. They are no longer in "other market-hours puts", the group the review compares against.
+- **One stock's Kotak error** no longer blanks the rest of the run.
+- **Runs in its own step and venv** (`fade_live --fd2`), so the nightly job's pandas version is untouched. The tag
+  never delays the signals: in the morning it is skipped after 08:35 IST, and it has a 2-minute budget.

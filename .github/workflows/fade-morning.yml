@@ -50,11 +50,17 @@ jobs:
 
       - name: Fade signals for today, written into data/scan.json
         timeout-minutes: 10
+        run: python -m scanner.fade_live --patch-scan
+      - name: Fade shadow tag fd2 (own venv; skipped after 08:35 IST; never blocks the push)
+        timeout-minutes: 5
+        continue-on-error: true
         env:
-          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # fd2 shadow tag: the filing day's 1-minute history
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # data calls only: the filing day's 1-minute history
         run: |
-          pip install -q "kotakneoapi>=3.0.7" || true
-          python -m scanner.fade_live --patch-scan
+          now=$(TZ=Asia/Kolkata date +%H%M)
+          if [ "$now" -ge 0835 ]; then echo "IST $now: too close to the open, fd2 skipped"; exit 0; fi
+          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow || exit 0
+          /tmp/fd2/bin/python -m scanner.fade_live --fd2 --patch-scan || true
 
       - name: Commit and push (only before 08:50 IST)
         run: |

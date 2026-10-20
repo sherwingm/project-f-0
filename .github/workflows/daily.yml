@@ -71,11 +71,15 @@ jobs:
       - name: S1 v10 results-day fade signals for the next session (scanner/fade_live.py; never blocks the build)
         timeout-minutes: 15
         continue-on-error: true
+        run: python -m scanner.fade_live || true
+      - name: Fade shadow tag fd2 (own venv, so the job's pandas is untouched; never blocks the build)
+        timeout-minutes: 8
+        continue-on-error: true
         env:
-          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # fd2 shadow tag: the filing day's 1-minute history
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # data calls only: the filing day's 1-minute history
         run: |
-          pip install -q "kotakneoapi>=3.0.7" || true
-          python -m scanner.fade_live || true
+          python -m venv /tmp/fd2 && /tmp/fd2/bin/pip install -q "kotakneoapi>=3.0.7" pyarrow || exit 0
+          /tmp/fd2/bin/python -m scanner.fade_live --fd2 || true
       - name: Build scan (universe + eod2 prices + NSE F&O bhavcopy)
         run: python -m scanner.build
       - name: Refuse a scan without F&O data

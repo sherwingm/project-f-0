@@ -160,7 +160,7 @@ def t100(state: dict) -> dict:
 def fd2(state: dict) -> dict:
     """Shadow tag fd2 (strategies/S1_v11_fd2_shadow_track.md): v11 fade puts whose market-hours filing day already fell
     >= 2 % (tagged) against the other market-hours puts and all other puts, on the real results; judged at 20."""
-    groups = {"tagged": [], "market_hours_other": [], "other_puts": []}
+    groups = {"tagged": [], "market_hours_other": [], "unmeasured": [], "other_puts": []}
     unknown = untagged = 0
     for p in state.get("closed") or []:
         r = p.get("rule") or {}
@@ -175,7 +175,7 @@ def fd2(state: dict) -> dict:
         x = (net, net / cost * 100 if cost else 0.0)
         if fd.get("market_hours") and fd.get("tagged") is None:
             unknown += 1
-            groups["market_hours_other"].append(x)
+            groups["unmeasured"].append(x)                          # not measured: kept out of both comparisons
         elif fd.get("tagged"):
             groups["tagged"].append(x)
         elif fd.get("market_hours"):

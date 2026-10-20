@@ -501,7 +501,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       if (!live()) return panel(T, notLive("The fd2 tag"));
       const s = (P.summary || {}).fade_fd2;
       if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
-      const R = [["Tagged: filed in market hours, already fell ≥ 2 % that day", s.tagged], ["Other market-hours puts", s.market_hours_other], ["All other puts", s.other_puts]];
+      const R = [["Tagged: filed in market hours, already fell ≥ 2 % that day", s.tagged], ["Other market-hours puts", s.market_hours_other], ["Market-hours puts not measured", s.unmeasured], ["All other puts", s.other_puts]];
       const n = (s.tagged || {}).closed || 0;
       const today = ((FD && FD.signals) || []).filter(x => x.side === "PE" && x.filing_day && x.filing_day.market_hours)
         .map(x => `${esc(x.symbol)} ${x.filing_day.D == null ? "(unknown)" : (x.filing_day.D > 0 ? "+" : "") + x.filing_day.D.toFixed(1) + " %"}${x.filing_day.tagged ? " <b>tagged</b>" : ""}`);
