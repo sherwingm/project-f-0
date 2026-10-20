@@ -78,6 +78,7 @@ the page banner says so. It clears on Monday 26 Oct.
 | All minute windows (`S1_v10_band_minutes_all.md`) | ₹1–2 B30 +₹16k on 206 (t −0.6); ₹0.50–1 loses |
 | −20 % stop on minutes (`S1_v10_s20_minutes.md`) | Basis for v11 (above) |
 | Arms A/B with −20 % stop (`S1_arms_ab_stop20.md`) | No (above) |
+| Fade without the Arm A days (`S1_v10_armA_overlap_filter.md`) | Fails. The close version is hindsight; the 09:15 open version is t −0.07. With v11's stop even hindsight adds only +₹4k |
 
 - **Audit facts:**
   - The NSE tick for stock options is **₹0.01 since 2025-11-03** (₹0.05 before).

@@ -579,6 +579,15 @@ are recorded?
 - The stop fires on 93 % / 90 % of trades, most on the first session after entry. Neither arm passes (t < 2), and both
   lose either way: the arms' problem is the entry, as the 2026-10-14 arm A study found. No rule change.
 
+### 2026-10-20: fade without the Arm A days (user: "remove the Arm A also fired ... only keep the Arm A did not fire")
+- Pre-registered: `strategies/S1_v10_armA_overlap_filter.md`. `python -m scanner.fade_armA_filter` →
+  `data/results/S1_v10_armA_overlap_filter.md`. Both sides were filtered, as asked.
+- Arm A fires on the day-0 **close**, after the fade has sold, so the plain filter (**H**) is hindsight only. With the
+  v10 exit, H keeps 635 trades for +Rs 4.30 L vs +Rs 1.50 L for all 870 (2022-26). With v11's stop (minutes, Oct 2024 →)
+  it is +Rs 2.21 L vs +Rs 2.17 L: the -20 % stop already removes most of that damage.
+- The usable version (**O**: the same test on the 09:15 open) **fails**. Its dropped trades made +12.4 % in 2022-24 and
+  -15.4 % in 2025-26; pooled t -0.07; +4.7 % under v11. The open shows only 95 of the 233 Arm A days. No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
