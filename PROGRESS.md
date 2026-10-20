@@ -648,6 +648,18 @@ are recorded?
 - Verified by an independent three-way check (workflow: recompute, bias audit, robustness). It found one calendar
   slip (special sessions missing from the NIFTY minutes), now fixed; no trade number changed. No rule change.
 
+### 2026-10-20: skip fade trades whose market-hours filing day already moved >= 2 % the fade's way (both sides)
+- Pre-registered with a count gate first: `strategies/S1_fade_filing_day_skip.md`. `python -m
+  scanner.fade_filing_day_skip --nifty-dir ...` writes `data/results/S1_fade_filing_day_skip.md`.
+- **Gate passed** (37 skips: 16 / 21). **Test passed on the v10 exit:** skipping saves Rs 19k in 2022-24 and 29k in
+  2025-26 (mean -22 %, t -2.77).
+- **Independently verified** by a workflow (recompute, bias audit, adversarial robustness, judge): correct, no
+  look-ahead.
+- **But it barely helps the live v11 exit:** 18 trades, -1.8 %, about Rs 2-7k over two years, because v11's -20 %
+  stop already cuts these losers.
+- **It is puts only:** 24 puts at -27.8 %, t -3.5; 13 calls, too few. 14 trades lack full minutes (Aug 2026 minutes
+  end at 15:14). No rule change. The judge suggests a shadow tag at most, which is the user's decision.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

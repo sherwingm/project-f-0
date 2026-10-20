@@ -84,6 +84,7 @@ the page banner says so. It clears on Monday 26 Oct.
 | Market-hours filings, fade or continue (`S1_intraday_results_reaction.md`) | Fails (no pattern). Extra lead: fade trades from market-hours filings lose; others carry all the profit |
 | Strong market-hours result: call held to the next open (`S1_intraday_call_overnight.md`) | Fails: -13 % a trade on 64 (t -1.5), though the stock rose +0.5 % |
 | Weak market-hours result, 'already corrected' → next-day call (`S1_weak_day_reversal.md`) | Fails (13 trades; 2022-24 +50 %, 2025-26 −16 %); corrected stocks keep falling overnight |
+| Skip fade trades whose market-hours filing day already moved ≥ 2 % its way (`S1_fade_filing_day_skip.md`) | Passes on v10 (saves ₹48k, t −2.8, puts only); worth only ~₹2-7k under live v11; verified; no rule change |
 
 - **Audit facts:**
   - The NSE tick for stock options is **₹0.01 since 2025-11-03** (₹0.05 before).
