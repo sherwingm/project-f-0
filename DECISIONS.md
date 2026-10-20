@@ -15,6 +15,12 @@ editing this file on purpose, in its own commit, with the reason.
   - at most **3 open positions**;
   - **daily loss halt at 2 %** of capital (no new entries until the next session); the other defaults in guide 12
     are unchanged.
+  - **The loss halts (kill switch) block manual paper orders only, never the rule trades** (Arms A, B and F buy through
+    `PaperLedger.open_rule`, which does not consult `server/risk.py`). Checked 2026-10-20: with the weekly halt latched,
+    a fade entry is still bought. **Decision 2026-10-20 (the user):** "lift the weekly-loss halt for this week so v11 can
+    trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
+    weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
+    manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
   - Backtests size **one lot costing ₹600–8,000** (lot size × entry fill), from S1 v6 on (2026-10-12). Reason: at
     the at-the-money strike, v4's ₹2,000–8,000 budget left 3 trades and v5's ₹10,000–30,000 band left 57, short of
     the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used

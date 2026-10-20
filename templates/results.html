@@ -397,7 +397,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         ${s.kill_switch ? tile("Kill switch", s.kill_switch.active ? "ON" : "off", s.kill_switch.active ? "down" : "") : ""}</div>
         ${spark(byClose(P.trades.filter(x => !oldFade(x))), "Booked trades (fade from v11's day 0)")}
         ${P.trades.some(oldFade) ? `<p class="note">Equity and booked P&amp;L include the ${P.trades.filter(oldFade).length} v10 fade trades before 21 Oct (side record, ${srs(P.trades.filter(oldFade).reduce((a, c) => a + (c.net_pnl || 0), 0))}); the account's cash cannot be split.</p>` : ""}
-        ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)}</p>` : ""}
+        ${s.kill_switch && s.kill_switch.active ? `<p class="err">${esc(s.kill_switch.reason)} \u2014 manual orders only: the rule trades (Arms A, B and F) keep trading.</p>` : ""}
         ${s.drawdown_review ? `<p class="err">${esc(s.drawdown_review_message)}</p>` : ""}
         ${s.queued_orders ? `<p class="note">${s.queued_orders} order(s) queued for the next session's 09:20 poll.</p>` : ""}`,
         { sub: `marked every ${SERVER.poll_seconds}s while the market is open`, rt: s.as_of ? "updated " + when(s.as_of) : "" });
