@@ -682,6 +682,15 @@ are recorded?
 - Review at 20 closed tagged puts. That is about 5 a year in the backtest, so it may take years.
 - 7 new tests; the suite: 499 passed, the one known failure.
 
+### 2026-10-20: the reverse trade on the fd2 days (user: "do the reverse and get our profit")
+- Pre-registered: `strategies/S1_fade_fd2_reverse.md`. `python -m scanner.fade_fd2_reverse` writes
+  `data/results/S1_fade_fd2_reverse.md`.
+- **Fails:** the 24 losing puts reversed to calls (23 traded) make +0.8 % a trade, -Rs 4.4k, t 0.06. 2022-24 +7.8 %,
+  2025-26 -3.7 %.
+- The 13 calls reversed to puts lose -16.6 %.
+- Both sides lose on these days: the stock does not move enough to beat the spread, charges and the day's time decay.
+  No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
