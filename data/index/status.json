@@ -1,14 +1,14 @@
 {
  "recorder": {
-  "run_at": "2026-10-20T02:40:02+05:30",
-  "session": "2026-10-20",
+  "run_at": "2026-10-20T09:37:43+05:30",
+  "session": "2026-10-19",
   "expiry_check": {
    "bse_fo": {
-    "checked": 3275,
+    "checked": 3283,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9261,
+    "checked": 9213,
     "mismatch": 0
    },
    "SENSEX26O22 expiry": [
@@ -17,26 +17,38 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 22888.95,
+    "contracts": 184,
+    "rows": 171539,
+    "expiries": [
+     "2026-10-27",
+     "2026-11-03"
+    ]
    },
    "SENSEX": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 73852.9,
+    "contracts": 296,
+    "rows": 133038,
+    "expiries": [
+     "2026-10-22",
+     "2026-10-29"
+    ]
    },
    "BANKNIFTY": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 55488.1,
+    "contracts": 220,
+    "rows": 61719,
+    "expiries": [
+     "2026-10-27",
+     "2026-11-23"
+    ]
    }
   },
   "failures": [],
-  "chain_eod_rows": 0,
-  "calls": 3,
-  "runtime_s": 14.1,
-  "contracts": 0
+  "chain_eod_rows": 700,
+  "calls": 756,
+  "runtime_s": 1353.8,
+  "contracts": 700
  },
  "recent_runs": [
   {
@@ -61,6 +73,14 @@
    "contracts": 0,
    "calls": 3,
    "runtime_s": 14.1,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-10-20T09:37:43+05:30",
+   "session": "2026-10-19",
+   "contracts": 700,
+   "calls": 756,
+   "runtime_s": 1353.8,
    "failures": 0
   }
  ],
@@ -180,19 +200,19 @@
  "daily_extras": {
   "spot_vix_1m": {
    "NIFTY50": {
-    "rows_added": 375,
+    "rows_added": 376,
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 375,
+    "rows_added": 361,
     "runtime_s": 2
    },
    "SENSEX": {
-    "rows_added": 375,
+    "rows_added": 376,
     "runtime_s": 2
    },
    "INDIAVIX": {
-    "rows_added": 375,
+    "rows_added": 376,
     "runtime_s": 2,
     "vix_fix": {
      "rows_corrected": 0
@@ -200,14 +220,51 @@
    }
   },
   "options_daily": {
-   "sessions": 0,
+   "sessions": 1,
    "skipped_existing": 0,
-   "unavailable": 1,
-   "rows": 0,
+   "unavailable": 0,
+   "rows": 5879,
    "errors": [],
-   "runtime_s": 1
+   "runtime_s": 2
   },
-  "day": "2026-10-20",
-  "runtime_s": 8
+  "day": "2026-10-19",
+  "runtime_s": 9
+ },
+ "s1_trades_1m": {
+  "run_on": "2026-10-20",
+  "days": {
+   "2026-10-13": {
+    "positions": 0,
+    "stock_rows": 0,
+    "option_rows": 0
+   },
+   "2026-10-14": {
+    "positions": 0,
+    "stock_rows": 0,
+    "option_rows": 0
+   },
+   "2026-10-15": {
+    "positions": 3,
+    "stock_rows": 720,
+    "option_rows": 301
+   },
+   "2026-10-16": {
+    "positions": 10,
+    "stock_rows": 3240,
+    "option_rows": 2503
+   },
+   "2026-10-19": {
+    "positions": 15,
+    "stock_rows": 3970,
+    "option_rows": 2787
+   },
+   "2026-10-20": {
+    "positions": 6,
+    "stock_rows": 0,
+    "option_rows": 0
+   }
+  },
+  "missing_tokens": [],
+  "calls": 51
  }
 }

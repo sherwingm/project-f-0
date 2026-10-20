@@ -17,8 +17,8 @@
    "resolution": "1 min",
    "source": "kotak",
    "first": "2026-07-29",
-   "last": "2026-10-16",
-   "files": 92,
+   "last": "2026-10-19",
+   "files": 94,
    "expiries": 30
   },
   {
@@ -29,7 +29,7 @@
    "first": "2024-08-02",
    "last": "2026-10-13",
    "files": 3104,
-   "expiries": 109
+   "expiries": 110
   },
   {
    "dataset": "options 1-minute",
@@ -37,9 +37,9 @@
    "resolution": "1 min",
    "source": "kotak",
    "first": "2026-07-29",
-   "last": "2026-10-16",
-   "files": 78,
-   "expiries": 109
+   "last": "2026-10-19",
+   "files": 97,
+   "expiries": 110
   },
   {
    "dataset": "options 1-minute",
@@ -57,8 +57,8 @@
    "resolution": "1 min",
    "source": "kotak",
    "first": "2026-09-18",
-   "last": "2026-10-16",
-   "files": 38,
+   "last": "2026-10-19",
+   "files": 40,
    "expiries": 67
   },
   {
@@ -67,7 +67,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2021-01-01",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 6
   },
   {
@@ -76,7 +76,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2021-01-11",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 6
   },
   {
@@ -85,7 +85,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2022-01-24",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 5
   },
   {
@@ -94,7 +94,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2021-01-01",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 6
   },
   {
@@ -103,7 +103,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2026-08-12",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 1
   },
   {
@@ -112,7 +112,7 @@
    "resolution": "1 day",
    "source": "nse_bhavcopy",
    "first": "2024-04-24",
-   "last": "2026-10-16",
+   "last": "2026-10-19",
    "files": 3
   },
   {
@@ -161,6 +161,15 @@
    "files": 1
   },
   {
+   "dataset": "S1 trades: stock + option",
+   "underlying": "S1 positions",
+   "resolution": "1 min",
+   "source": "kotak",
+   "first": "2026-10-15",
+   "last": "2026-10-19",
+   "files": 3
+  },
+  {
    "dataset": "S1 backtest day-0 stock",
    "underlying": "fade trades 2022-26",
    "resolution": "1 min",
@@ -176,7 +185,7 @@
    "source": "kotak",
    "first": "20261016",
    "last": "20261020",
-   "files": 2
+   "files": 3
   },
   {
    "dataset": "EOD chain snapshot",
@@ -184,8 +193,8 @@
    "resolution": "daily",
    "source": "kotak",
    "first": "20261016",
-   "last": "20261016",
-   "files": 1
+   "last": "20261019",
+   "files": 2
   }
  ]
 }
