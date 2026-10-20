@@ -534,3 +534,14 @@ def test_s20_is_not_active_in_the_0915_minute(setup):
     assert p["rule"]["shadow_s20"]["hit_at"] is None
     ft.on_poll(at(15, 9, 16))                                                                   # still below at 09:16
     assert p["rule"]["shadow_s20"]["fill"] == 13.0
+
+
+def test_a_failed_entry_is_retried_at_the_next_poll(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 1.0, 1.05)                                                              # under Rs 2: waits
+    ft.on_poll(datetime(2026, 10, 15, 9, 16, 0, tzinfo=IST))
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(datetime(2026, 10, 15, 9, 16, 10, tzinfo=IST))                                   # 10 s: too soon
+    assert lg.state["positions"] == []
+    ft.on_poll(datetime(2026, 10, 15, 9, 16, 29, tzinfo=IST))                                   # next poll (~30 s)
+    assert lg.state["positions"][0]["entry"]["price"] == 18.5

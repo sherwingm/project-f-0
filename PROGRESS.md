@@ -531,6 +531,14 @@ are recorded?
   - the same jobs and limits run, with only up to an hour's wait between them (the scheduler's period);
   - the probe report row is now written by a script, not by Claude.
 
+### 2026-10-20: entry retry every 30 s (user: "30s")
+- `server/rules.py` and `server/fade.py`: `RETRY_SECONDS` 120 → 30, i.e. every live poll, with 5 s of slack for a
+  poll that lands early. It applies to the open entry of arms A / B and the fade (arm F). The results page text is
+  updated, and there are 2 tests (rule and fade retry at the next poll).
+- Decision and v10 addendum: DECISIONS.md (c3ec414). The v10 review also splits trades before and after
+  2026-10-21.
+- Deployed on 2026-10-20 (an NSE holiday, so no session was disturbed); live from 21 Oct's open.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

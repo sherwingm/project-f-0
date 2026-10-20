@@ -13,8 +13,8 @@ EXP = "2026-10-27"
 TS = {k: f"HCLTECH26OCT{int(k)}CE" for k in (1300.0, 1350.0, 1400.0)}
 
 
-def at(d, h, m=0):
-    return datetime(2026, 10, d, h, m, tzinfo=IST)
+def at(d, h, m=0, s=0):
+    return datetime(2026, 10, d, h, m, s, tzinfo=IST)
 
 
 class Quotes:
@@ -123,9 +123,9 @@ def test_open_window_re_walks_a_gap_up_and_retries(setup):
     rt.on_poll(at(14, 9, 16))
     assert lg.state["positions"] == []
     q.set(1350.0, 20.0, ask=20.0)                                   # 7,000 a lot
-    rt.on_poll(at(14, 9, 17))                                       # within 2 minutes: not retried yet
+    rt.on_poll(at(14, 9, 16, 10))                                   # 10 s later: not retried yet
     assert lg.state["positions"] == []
-    rt.on_poll(at(14, 9, 19))
+    rt.on_poll(at(14, 9, 16, 38))                                   # the next poll, 28 s on: retried
     (p,) = lg.state["positions"]
     assert (p["strike"], p["entry"]["price"], p["rule"]["entry_mode"]) == (1350.0, 20.0, "open")
 

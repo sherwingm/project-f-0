@@ -4,7 +4,7 @@ The nightly forward test (scanner/forward_s1.py, in the scan as meta.forward) li
 as "buy next session", per arm. On that next session this module buys each of them twice, as two separate
 positions, so the two entry times can be compared:
 
-    open   any poll from 09:15 to 15:20 (retried every 2 minutes): over the strikes that traded >= 50 contracts
+    open   any poll from 09:15 to 15:20 (retried every 30 seconds, i.e. every poll; every 2 minutes until 2026-10-20): over the strikes that traded >= 50 contracts
            on day 0, from the one nearest the live stock price upward, the first whose live best ask x lot is
            Rs 600-8,000, bought at that ask (until 2026-10-14 this used one strike fixed overnight, which a gap-up
            could price out: HCLTECH's 1330 CE cost Rs 14,440 at the 14 Oct open)
@@ -28,7 +28,8 @@ from server.broker import tradingsymbol
 log = logging.getLogger("rules")
 
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
-RETRY_SECONDS = 120                            # the open-window walk is retried at most every 2 minutes per stock
+RETRY_SECONDS = 30                             # the open-window walk is retried every poll (DECISIONS.md, 2026-10-20)
+RETRY_SLACK = 5                                # a poll landing a few seconds early still counts
 BAND, CONTRACTS, MIN_PREMIUM, TICK = v7.NORMAL_BAND, v7.NORMAL_CONTRACTS, 2.0, 0.05
 WALK_MAX = 15                                  # strikes tried upward from the at-the-money one at 15:20
 
@@ -200,7 +201,7 @@ class RuleTrader:
                                  "no affordable liquid strike between 09:15 and 15:20")
                     self._waiting(st, key, now, sig["arms"], None)
                     continue
-                if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS:
+                if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS - RETRY_SLACK:
                     continue
                 self._tried[key] = now.timestamp()
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
@@ -215,7 +216,7 @@ class RuleTrader:
                 if isinstance(w, str):
                     self._last_why[key] = w
                     self._waiting(st, key, now, sig["arms"], w)
-                    continue                                     # try again in 2 minutes, until 15:20
+                    continue                                     # try again next poll, until 15:20
                 k, px, lot = w
                 self._buy(sig, "open", k, px, lot, now)
                 with self.ledger.lock:                           # saved now: a restart must not buy it again

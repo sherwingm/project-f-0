@@ -4,7 +4,7 @@ The scan carries scanner/fade_live.py's list as meta.fade: for one session (`ses
 day it is, with the side to buy (a put on strong numbers, a call on weak ones), the expiry and its strikes. On that
 session this module:
 
-    entry  any poll from 09:15 to 15:20, retried every 2 minutes per stock until it fills: from the strike nearest
+    entry  any poll from 09:15 to 15:20, retried every 30 seconds per stock (every poll; 2 minutes until 2026-10-20) until it fills: from the strike nearest
            the live stock price, walking away from the money (down for puts, up for calls), the first strike with a
            live bid and ask, a spread <= 10 % of the ask, ask >= Rs 2 and one lot at the ask within Rs 600-8,000;
            bought at the ask. Nothing by 15:20 -> refused with the reason.
@@ -29,7 +29,8 @@ from server.rules import lot_of, never_fits
 log = logging.getLogger("fade")
 
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
-RETRY_SECONDS = 120
+RETRY_SECONDS = 30                                       # DECISIONS.md, 2026-10-20 (was 120)
+RETRY_SLACK = 5                                          # a poll landing a few seconds early still counts
 BAND, MIN_PREMIUM, MAX_SPREAD, TICK, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 0.05, 15
 
 # Signal dates whose positions follow the carried-trade rule (sell at -20 % of the entry premium, at 25 % below the
@@ -302,7 +303,7 @@ class FadeTrader:
                 self._refuse(st, sig, today, self._last_why.get(key) or "no affordable two-sided strike 09:15-15:20")
                 self._waiting(st, key, now, None)
                 continue
-            if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS:
+            if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS - RETRY_SLACK:
                 continue
             self._tried[key] = now.timestamp()
             spot = self.spot(sig["symbol"]) or sig.get("spot")

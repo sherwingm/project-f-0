@@ -406,7 +406,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       const rr = (ru.refused || []).filter(x => x.date === today);
       const ww = [...waitsToday(ru.open_wait, today, null), ...waitsToday(ru.fade_wait, today, ["F"])];
       const late = pastEntries();                      // a row left after 15:20: the server missed its 15:20 check
-      return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (every 2 minutes until 15:20)"}: ${ww.map(x =>
+      return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (every 30 seconds until 15:20)"}: ${ww.map(x =>
           `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${esc(x.reason)} · checked ${esc(String(x.at).slice(11, 16))})`).join(" · ")}</p>` : "")
         + (rr.length ? `<p class="note" style="margin:0">${rr.length && ww.length ? "<b>Refused:</b> " : ""}${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>` : "")) : "";
     },
@@ -598,7 +598,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     const paperCol = live() && P.loaded && !!P.rules && today > (FW.last_session || "") && tried;
     out.push(panel(`Buy next session · ${st.pending.length}`, st.pending.length ? `<div class="tw"><table><thead><tr><th>Stock</th>${paperCol ? `<th class="l" style="min-width:200px">Paper today</th>` : ""}<th>Results day</th><th>Beat vs sector</th><th>Day move</th><th>Expiry</th><th>Stock price</th></tr></thead><tbody>${st.pending.map(p =>
       `<tr><td><b>${esc(p.symbol)}</b></td>${paperCol ? `<td class="l">${paperToday(p.symbol, today)}</td>` : ""}<td>${day(p.signal_date)}</td><td class="up">${pct(p.beat)}</td><td class="${dir(p.move)}">${pct(p.move)}</td><td>${day(p.expiry)}</td><td>${rs(p.spot)}</td></tr>`).join("")}</tbody></table></div>` : empty("None from the last session."),
-      { sub: paperCol ? "results beats from the last session · the paper account buys each twice: the first affordable strike from 09:15 (retried every 2 minutes) and at 15:20" : "results beats from the last session" }));
+      { sub: paperCol ? "results beats from the last session · the paper account buys each twice: the first affordable strike from 09:15 (retried every 30 seconds) and at 15:20" : "results beats from the last session" }));
     out.push(panel(`Open · ${st.open.length}`, st.open.length ? `<div class="cards">${st.open.map(t => { const x = t.stats || {}, e = t.entry_price;
       const pkp = x.h_peak_date ? e * (1 + x.h_peak / 100) : null, dpp = x.h_dip_date ? e * (1 + x.h_dip / 100) : null;
       return `<article class="pc" style="--c:var(--arm-${A.toLowerCase()})"><div class="hd"><div class="nm">${optName(t.symbol, t.strike, "CE")}</div><span class="tag ce">Bought CE</span></div>
