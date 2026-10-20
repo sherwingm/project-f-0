@@ -342,7 +342,8 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
                    rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
-                   fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)" };
+                   fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)",
+                   fade_stop: "Fade v11: \u221220 % stop" };
   function closedTable(rows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
@@ -359,9 +360,13 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
           <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; }).join("")}</tbody></table></div>`;
   }
   // scoreboard maths, shared by the paper account and the Arm F tiles
-  function board(arm, mode) {
-    const cl = P.trades.filter(c => c.rule && (c.rule.arms || []).includes(arm) && (!mode || c.rule.entry_mode === mode));
-    const op = P.positions.filter(x => x.rule && (x.rule.arms || []).includes(arm) && (!mode || x.rule.entry_mode === mode));
+  // Arm F counts from S1 v11's day 0 (2026-10-21, the user's decision): rule.version "v11". The v10 fade trades before it
+  // are a side record (board("F", "fade", "v10")).
+  const fadeEra = (x, era) => (x.rule.version === "v11") === (era !== "v10");
+  function board(arm, mode, era) {
+    const keep = x => x.rule && (x.rule.arms || []).includes(arm) && (!mode || x.rule.entry_mode === mode) && (arm !== "F" || fadeEra(x, era));
+    const cl = P.trades.filter(keep);
+    const op = P.positions.filter(keep);
     const wins = cl.filter(c => c.net_pnl > 0).length, net = cl.reduce((a, c) => a + c.net_pnl, 0);
     const avg = cl.length ? cl.reduce((a, c) => a + (c.return_pct || 0), 0) / cl.length : null;
     const mtm = op.reduce((a, x) => a + (x.unrealised || 0), 0);
@@ -440,11 +445,12 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     fadeTiles() {
       const w = paperWait("Arm F's live trades");
       if (w) return panel("Arm F scoreboard", w);
-      const b = board("F", "fade");
-      return panel("Scoreboard", `<div class="tiles">${tile("Closed", b.cl.length)}${tile("Win rate", b.cl.length ? Math.round(100 * b.wins / b.cl.length) + "%" : "—")}
+      const b = board("F", "fade"), o = board("F", "fade", "v10");
+      const side = o.cl.length ? `<p class="note">Side record, v10 (sold at 15:20, before 21 Oct): ${o.cl.length} closed, ${o.wins} won, booked <b class="${dir(o.net)}">${srs(o.net)}</b>. Not counted above.</p>` : "";
+      return panel("Scoreboard \u00b7 v11 from 21 Oct", `<div class="tiles">${tile("Closed", b.cl.length)}${tile("Win rate", b.cl.length ? Math.round(100 * b.wins / b.cl.length) + "%" : "—")}
         ${tile("Average net", b.avg == null ? "—" : pct(b.avg), dir(b.avg))}${tile("Booked net", b.cl.length ? srs(b.net) : "—", dir(b.net))}
-        ${tile("Open", b.op.length)}${tile("Open MTM", b.op.length ? srs(b.mtm) : "—", dir(b.mtm))}</div>${spark(byClose(b.cl), "Booked net, trade by trade")}`,
-        { sub: "1 lot each, net of charges, bought at the live ask, sold at 15:20" });
+        ${tile("Open", b.op.length)}${tile("Open MTM", b.op.length ? srs(b.mtm) : "—", dir(b.mtm))}</div>${spark(byClose(b.cl), "Booked net, trade by trade")}${side}`,
+        { sub: "1 lot each, net of charges, bought at the live ask; \u221220 % stop from 09:16, else 15:20" });
     },
     fadeShadow() {
       if (!live()) return panel("Shadow track: puts only above NP YoY 25 %", notLive("The shadow track"));
@@ -471,18 +477,18 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
         { sub: "a tag on v10's trades, judged later" });
     },
-    fadeS20() {
-      const T = "Shadow exit: \u221220 % stop, else 15:20";
-      if (!live()) return panel(T, notLive("The shadow stop"));
-      const s = (P.summary || {}).fade_s20;
+    fadeV10() {
+      const T = "Live v11 (\u221220 % stop) vs the old 15:20 exit";
+      if (!live()) return panel(T, notLive("The v10 shadow"));
+      const s = (P.summary || {}).fade_v10_shadow;
       if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
-      const R = [["Real exit (15:20)", s.real_1520], ["Shadow: sold at the bid once it is 20 % below entry", s.shadow_s20]];
-      const n = (s.real_1520 || {}).closed || 0, sh = s.shadow_s20 || {};
-      return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Stops fired</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
-          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "\u2014"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "\u2014"}</td><td>${g.stops_fired ?? "\u2014"}</td></tr>`; }).join("")}</tbody></table></div>
-        <div class="prog" aria-label="Tagged trades closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
-        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${sh.stops_fired ? ` \u00b7 of the ${sh.stops_fired} stopped, ${sh.better_at_1520} would have done better held to 15:20` : ""}${s.open_tagged ? ` \u00b7 open: ${s.open_tagged}, stop fired on ${s.open_fired}` : ""}${s.untagged_closed ? ` \u00b7 ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_s20_shadow_track.md">The rule</a></p>`,
-        { sub: "a tag on v10's trades, filled at the real bid, judged later" });
+      const R = [["Live v11: \u221220 % stop from 09:16, else 15:20", s.real_v11], ["Shadow v10: held to 15:20", s.shadow_v10]];
+      const n = (s.real_v11 || {}).closed || 0;
+      return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
+          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "\u2014"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "\u2014"}</td></tr>`; }).join("")}</tbody></table></div>
+        <div class="prog" aria-label="Fade trades closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
+        <p class="note" style="margin:0">Closed under v11: <b>${n} of 30</b> before the review${s.stops ? ` \u00b7 stopped ${s.stops}, of which ${s.stopped_but_v10_better} would have done better held to 15:20` : ""}${s.pending ? ` \u00b7 ${s.pending} waiting for their 15:20 price` : ""}${s.t_v10_minus_v11 != null ? ` \u00b7 t (v10 \u2212 v11) ${s.t_v10_minus_v11.toFixed(2)}` : ""}${s.untagged_closed ? ` \u00b7 ${s.untagged_closed} earlier v10 trades untagged` : ""}. <a href="${REPO}strategies/S1_v11_fade_stop20.md">The rule</a></p>`,
+        { sub: "the live exit since 21 Oct, with v10's 15:20 exit tracked on the same trades" });
     },
     fadeSubfloor() {
       const T = "Shadow entries: sub-₹2 refusals";
@@ -529,8 +535,9 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     },
     fadeClosed() {
       const w = paperWait("Closed fade trades"); if (w) return panel("Closed fade trades", w);
-      const cl = ofArm(P.trades, "F");
-      return panel(`Closed fade trades · ${cl.length}`, cl.length ? closedTable(cl) : empty("None yet."), { sub: "tap a row for why" });
+      const all = ofArm(P.trades, "F"), cl = all.filter(x => fadeEra(x)), old = all.filter(x => fadeEra(x, "v10"));
+      return panel(`Closed fade trades \u00b7 v11 \u00b7 ${cl.length}`, (cl.length ? closedTable(cl) : empty("None yet under v11 (from 21 Oct)."))
+        + (old.length ? `<details><summary>Side record: ${old.length} v10 trades before 21 Oct</summary>${closedTable(old)}</details>` : ""), { sub: "tap a row for why" });
     },
     fadeRefused() {
       if (paperWait("")) return "";
@@ -642,7 +649,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeT100(), PANELS.fadeS20(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV10(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");

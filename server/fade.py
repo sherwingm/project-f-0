@@ -1,4 +1,5 @@
-"""S1 v10 results-day fade in the live paper account (paper only, 1 lot each; strategies/S1_v10_results_day_fade_paper.md).
+"""S1 v11 results-day fade in the live paper account (paper only, 1 lot each): v10's entry
+(strategies/S1_v10_results_day_fade_paper.md) with v11's exit (strategies/S1_v11_fade_stop20.md, live from 2026-10-21).
 
 The scan carries scanner/fade_live.py's list as meta.fade: for one session (`session`), the stocks whose results
 day it is, with the side to buy (a put on strong numbers, a call on weak ones), the expiry and its strikes. On that
@@ -8,8 +9,11 @@ session this module:
            the live stock price, walking away from the money (down for puts, up for calls), the first strike with a
            live bid and ask, a spread <= 10 % of the ask, ask >= Rs 2 and one lot at the ask within Rs 600-8,000;
            bought at the ask. Nothing by 15:20 -> refused with the reason.
-    exit   the first poll from 15:20 the same day, at the best bid (else the last price - 1 tick). A position still
-           open on a later day (the server was down at 15:20) is sold at the first poll of that day.
+    exit   v11: from 09:16 on the entry day, the first poll whose best bid <= 0.80 x entry sells at that bid
+           ("fade_stop"); else the first poll from 15:20 the same day, at the best bid (else the last price - 1 tick).
+           A position still open on a later day (the server was down at 15:20) is sold at the first poll of that day.
+    shadow v10's exit (held to 15:20) on every fade trade, rule.shadow_v10: for a stopped trade, the contract's bid at
+           the first poll from 15:20 that day; else the same as the real result.
 
 Positions carry rule.strategy = "fade" and arm "F"; server/rules.py's S1 exits leave them alone. Positions whose signal
 date is in CARRY_DATES (empty: the eight trades of 2026-10-16 were closed instead) would follow _carry_exits.
@@ -46,9 +50,9 @@ NP_SHADOW = 25.0
 # Shadow exit (strategies/S1_v10_t100_shadow_track.md): a sell at 2 x entry, filled when a poll sees the best bid at or
 # above it, else the real 15:20 sale. A tag on each fade position only: the real exit is unchanged.
 T100 = 2.0
-# Shadow stop (strategies/S1_v10_s20_shadow_track.md): sold at the best bid of the first poll with the bid at or below
-# 0.80 x entry, else the real 15:20 sale. A tag only: the real exit is unchanged.
-S20, S20_FROM = 0.80, time(9, 16)                 # S1 v11 (strategies/S1_v11_fade_stop20.md): active from 09:16:00
+# S1 v11's stop (strategies/S1_v11_fade_stop20.md; live from 2026-10-21): from 09:16:00 on the entry day, sold at the
+# best bid of the first poll with the bid at or below 0.80 x entry. The v10 exit is tracked as rule.shadow_v10.
+S20, S20_FROM = 0.80, time(9, 16)
 _NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
 
 
@@ -170,39 +174,42 @@ def shadow_entries(state: dict) -> dict:
             "rule": "strategies/S1_v10_subfloor_entry.md (judged at 30 closed shadow entries)"}
 
 
-def s20(state: dict) -> dict:
-    """Tagged closed fade trades under the real 15:20 exit and under the -20 % shadow stop (filled at the bid that
-    fired it): N, wins, mean net % of premium, total net Rs, stops fired and how many of those ended better at 15:20."""
-    from server import charges as ch
-    real, shadow, fired, cut_early, untagged = [], [], 0, 0, 0
+def v10_shadow(state: dict) -> dict:
+    """S1 v11 live vs the v10 exit as a shadow (strategies/S1_v11_fade_stop20.md): closed fade trades tagged
+    rule.shadow_v10. Real = v11 (the -20 % stop at the bid, else 15:20); shadow = v10 (held to 15:20: for a stopped
+    trade the bid at the first poll from 15:20 that day, else the real result). N, wins, mean net %, total net Rs."""
+    real, shadow, stops, held_better, pending, untagged, days = [], [], 0, 0, 0, 0, []
     for p in state.get("closed") or []:
         r = p.get("rule") or {}
         if r.get("strategy") != "fade":
             continue
-        sh = r.get("shadow_s20")
+        sh = r.get("shadow_v10")
         if not sh:
             untagged += 1
             continue
+        if sh.get("status") == "pending":
+            pending += 1
+            continue
         cost = p["entry"]["price"] * p["qty"]
         net = float(p.get("net_pnl", 0.0))
-        if sh.get("hit_at") and sh.get("fill") is not None:
-            fired += 1
-            snet = round((sh["fill"] - p["entry"]["price"]) * p["qty"] - float(p.get("entry_charges", 0.0))
-                         - ch.leg(p["instrument"], "SELL", p["qty"], sh["fill"])["total"], 2)
-            cut_early += int(net > snet)
-        else:
-            snet = net
+        snet = float(sh["net"]) if sh.get("status") == "done" else net
+        if p.get("reason") == "fade_stop":
+            stops += 1
+            held_better += int(snet > net)
         real.append((net, net / cost * 100 if cost else 0.0))
         shadow.append((snet, snet / cost * 100 if cost else 0.0))
+        days.append(str(p.get("closed_at", ""))[:10])
 
     def agg(xs):
         return {"closed": len(xs), "wins": sum(1 for n, _ in xs if n > 0), "net_rs": round(sum(n for n, _ in xs), 2),
                 "mean_net_pct": round(sum(q for _, q in xs) / len(xs), 2) if xs else None}
-    open_ = [p for p in state.get("positions") or [] if ((p.get("rule") or {}).get("shadow_s20"))]
-    return {"real_1520": agg(real), "shadow_s20": {**agg(shadow), "stops_fired": fired, "better_at_1520": cut_early},
-            "open_tagged": len(open_), "open_fired": sum(1 for p in open_ if p["rule"]["shadow_s20"].get("hit_at")),
-            "untagged_closed": untagged,
-            "rule": "strategies/S1_v10_s20_shadow_track.md (judged after >= 30 tagged trades have closed)"}
+    t = None
+    if len(real) > 1:
+        from scanner.stats import clustered_t
+        t = clustered_t([s_[1] - r_[1] for r_, s_ in zip(real, shadow)], days)       # v10 minus v11, per trade
+    return {"real_v11": agg(real), "shadow_v10": agg(shadow), "stops": stops, "stopped_but_v10_better": held_better,
+            "t_v10_minus_v11": t, "pending": pending, "untagged_closed": untagged,
+            "rule": "strategies/S1_v11_fade_stop20.md (reviewed at 30 closed fade trades)"}
 
 
 def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None],
@@ -290,6 +297,7 @@ class FadeTrader:
         st = self._state()
         done = st.setdefault("fade", {})
         self._track_t100(now)
+        self._track_v10_shadow(now)
         self._track_shadow_entries(now)
         self._exits(now)
         self._carry_exits(now)
@@ -322,12 +330,13 @@ class FadeTrader:
                     self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
-            rule = {"strategy": "fade", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
+            rule = {"strategy": "fade", "version": "v11", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
                     "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
                     "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
                     "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
                     "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
-                    "shadow_s20": {"stop": round(px * S20, 4), "hit_at": None, "fill": None, "min_bid": None}}
+                    "stop": {"level": round(px * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
+                    "shadow_v10": {"status": "open"}}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self._waiting(st, key, now, None)
@@ -425,14 +434,15 @@ class FadeTrader:
             log.info("fade shadow entry exit: %s at %.2f, net %.2f", r["tradingsymbol"], px, net)
 
     def _track_t100(self, now: datetime) -> None:
-        """The shadow exits on the entry day before 15:20, one bid read a poll for both: +100 % (the first poll whose
-        best bid >= the target) and the -20 % stop (the first poll whose best bid <= the stop, filled at that bid)."""
+        """On the entry day before 15:20, one bid read a poll for both: the +100 % shadow exit (the first poll whose best
+        bid >= the target) and v11's real stop (from 09:16, the first poll whose best bid <= the stop: sold at it)."""
         if not (OPEN_FROM <= now.time() < EOD_AT):
             return
+        stopped = []
         for pos in self.ledger.state["positions"]:
             r = pos.get("rule") or {}
-            t1, s2 = r.get("shadow_t100"), r.get("shadow_s20")
-            if not [x for x in (t1, s2) if x and not x.get("hit_at")]:
+            t1, stop = r.get("shadow_t100"), r.get("stop")
+            if not ((t1 and not t1.get("hit_at")) or (stop and r.get("strategy") == "fade" and not self.carried(pos))):
                 continue
             if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
                 continue
@@ -446,12 +456,42 @@ class FadeTrader:
                     t1["hit_at"] = now.isoformat(timespec="seconds")
                     log.info("fade shadow t100 hit: %s bid %.2f >= %.2f", pos["tradingsymbol"], bid, t1["target"])
                     self.ledger._save()
-            if s2 and not s2.get("hit_at") and now.time() >= S20_FROM:
-                s2["min_bid"] = min(float(bid), s2["min_bid"]) if s2.get("min_bid") is not None else float(bid)
-                if bid <= s2["stop"]:
-                    s2["hit_at"], s2["fill"] = now.isoformat(timespec="seconds"), float(bid)
-                    log.info("fade shadow s20 fired: %s bid %.2f <= %.2f", pos["tradingsymbol"], bid, s2["stop"])
-                    self.ledger._save()
+            if stop and r.get("strategy") == "fade" and not self.carried(pos) and now.time() >= S20_FROM:
+                stop["min_bid"] = min(float(bid), stop["min_bid"]) if stop.get("min_bid") is not None else float(bid)
+                if bid <= stop["level"]:
+                    stopped.append((pos, float(bid)))
+        for pos, bid in stopped:                                 # v11's real exit: the -20 % stop at the bid
+            r = pos["rule"]
+            r["spot_at_exit"] = self.spot(pos["symbol"])
+            if "shadow_v10" in r:
+                r["shadow_v10"] = {"status": "pending", "stopped_at": now.isoformat(timespec="seconds")}
+            self.ledger.close_at(pos["id"], bid, now, "fade_stop")
+            log.info("fade stop: %s at %.2f (stop %.2f)", pos["tradingsymbol"], bid, r["stop"]["level"])
+
+    def _track_v10_shadow(self, now: datetime) -> None:
+        """v10's exit for the trades v11 stopped: the contract's best bid (else the last price - 1 tick) at the first
+        poll from 15:20 on the day it was stopped (a later day's first poll if that one was missed, flagged late),
+        netted with real charges on both orders."""
+        from server import charges as ch
+        for p in self.ledger.state.get("closed") or []:
+            r = p.get("rule") or {}
+            sh = r.get("shadow_v10")
+            if r.get("strategy") != "fade" or not sh or sh.get("status") != "pending":
+                continue
+            day = datetime.fromisoformat(p["closed_at"]).date()
+            if now.date() == day and now.time() < EOD_AT:
+                continue
+            c = {k: p[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
+            q = self.ledger.quotes.get(c) or {}
+            bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
+            px = bid or (max(0.0, round(q["last_price"] - TICK, 2)) if q.get("last_price") else None)
+            if not px:
+                continue                                         # no quote this poll: try the next one
+            net = round((px - p["entry"]["price"]) * p["qty"] - float(p.get("entry_charges", 0.0))
+                        - ch.leg(p["instrument"], "SELL", p["qty"], px)["total"], 2)
+            sh.update(status="done", fill=px, net=net, at=now.isoformat(timespec="seconds"), late=now.date() > day)
+            self.ledger._save()
+            log.info("fade v10 shadow: %s at %.2f, net %.2f (real %.2f)", p["tradingsymbol"], px, net, p["net_pnl"])
 
     def _exits(self, now: datetime) -> None:
         """Sell every fade position from 15:20 on its entry day, or at the first poll of any later day."""
@@ -469,5 +509,7 @@ class FadeTrader:
             if not px:
                 continue                                         # no quote this poll: try the next one
             r["spot_at_exit"] = self.spot(pos["symbol"])
+            if "shadow_v10" in r:
+                r["shadow_v10"] = {"status": "same"}             # not stopped: v10 and v11 sold together
             self.ledger.close_at(pos["id"], px, now, "fade_eod" if now.date() == opened else "fade_late")
             log.info("fade exit: %s at %.2f", pos["tradingsymbol"], px)

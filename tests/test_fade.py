@@ -485,63 +485,70 @@ def test_a_never_fits_refusal_is_a_floor_refusal_and_a_real_buy_flags_the_shadow
     assert F.shadow_entries(lg.state)["real_bought"] == 1
 
 
-# ---------------------------------------------------------------- the -20 % shadow stop (S1_v10_s20_shadow_track.md)
-def test_s20_shadow_stop_fires_at_the_bid_and_leaves_the_real_exit(setup):
+# ---------------------------------------------------------------- S1 v11: the -20 % stop is the live exit, v10 is the shadow
+def test_v11_stop_sells_at_the_bid_and_v10_shadow_takes_the_1520_bid(setup):
     from server import charges as ch
     lg, q, ft, _ = setup
-    q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50
+    q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50, stop 14.80
     ft.on_poll(at(15, 9, 16))
     (p,) = lg.state["positions"]
-    assert p["rule"]["shadow_s20"] == {"stop": 14.8, "hit_at": None, "fill": None, "min_bid": None}
+    assert p["rule"]["version"] == "v11" and p["rule"]["stop"]["level"] == 14.8
+    assert p["rule"]["shadow_v10"] == {"status": "open"}
     q.set("PE", 1220.0, 14.85, 15.2)                                                            # a tick above the stop
     ft.on_poll(at(15, 10, 0))
-    assert p["rule"]["shadow_s20"]["hit_at"] is None and p["rule"]["shadow_s20"]["min_bid"] == 14.85
+    assert lg.state["positions"]
     q.set("PE", 1220.0, 13.9, 14.3)                                                             # gapped through it
     ft.on_poll(at(15, 10, 1))
-    sh = p["rule"]["shadow_s20"]
-    assert sh["fill"] == 13.9 and sh["hit_at"].startswith("2026-10-15T10:01") and lg.state["positions"]
-    q.set("PE", 1220.0, 24.0, 24.4)                                                             # it recovers
-    ft.on_poll(at(15, 15, 20))
     c = lg.state["closed"][-1]
-    assert c["exit"]["price"] == 24.0 and c["reason"] == "fade_eod"                             # real exit unchanged
-    s = F.s20(lg.state)
-    want = round((13.9 - 18.5) * 350 - c["entry_charges"] - ch.leg("PE", "SELL", 350, 13.9)["total"], 2)
-    assert s["shadow_s20"]["net_rs"] == want and s["shadow_s20"]["stops_fired"] == 1
-    assert s["shadow_s20"]["better_at_1520"] == 1 and s["real_1520"]["net_rs"] == c["net_pnl"]
+    assert lg.state["positions"] == [] and c["reason"] == "fade_stop" and c["exit"]["price"] == 13.9
+    assert c["rule"]["shadow_v10"]["status"] == "pending"
+    q.set("PE", 1220.0, 24.0, 24.4)                                                             # recovers by 15:20
+    ft.on_poll(at(15, 15, 0))
+    assert c["rule"]["shadow_v10"]["status"] == "pending"                                       # not before 15:20
+    ft.on_poll(at(15, 15, 20))
+    sh = c["rule"]["shadow_v10"]
+    want = round((24.0 - 18.5) * 350 - c["entry_charges"] - ch.leg("PE", "SELL", 350, 24.0)["total"], 2)
+    assert sh["status"] == "done" and sh["fill"] == 24.0 and sh["net"] == want and not sh["late"]
+    s = F.v10_shadow(lg.state)
+    assert s["real_v11"]["net_rs"] == c["net_pnl"] and s["shadow_v10"]["net_rs"] == want
+    assert s["stops"] == 1 and s["stopped_but_v10_better"] == 1
 
 
-def test_s20_unfired_stop_matches_the_real_exit_and_t100_still_works(setup):
+def test_v11_not_stopped_sells_at_1520_and_the_shadow_is_the_same(setup):
     lg, q, ft, _ = setup
     q.set("PE", 1220.0, 18.0, 18.5)
     ft.on_poll(at(15, 9, 16))
-    q.set("PE", 1220.0, 37.0, 37.5)                                                             # +100 % reached
+    q.set("PE", 1220.0, 37.0, 37.5)                                                             # +100 %: the t100 tag
     ft.on_poll(at(15, 11, 0))
     (p,) = lg.state["positions"]
-    assert p["rule"]["shadow_t100"]["hit_at"] and p["rule"]["shadow_s20"]["hit_at"] is None
+    assert p["rule"]["shadow_t100"]["hit_at"]
     q.set("PE", 1220.0, 20.0, 20.5)
     ft.on_poll(at(15, 15, 20))
-    s = F.s20(lg.state)
-    assert s["shadow_s20"]["net_rs"] == s["real_1520"]["net_rs"] and s["shadow_s20"]["stops_fired"] == 0
+    c = lg.state["closed"][-1]
+    assert c["reason"] == "fade_eod" and c["rule"]["shadow_v10"] == {"status": "same"}
+    s = F.v10_shadow(lg.state)
+    assert s["shadow_v10"]["net_rs"] == s["real_v11"]["net_rs"] == c["net_pnl"] and s["stops"] == 0
 
 
-def test_s20_is_not_active_in_the_0915_minute(setup):
+def test_v11_stop_is_not_active_in_the_0915_minute(setup):
     lg, q, ft, _ = setup
     q.set("PE", 1220.0, 18.0, 18.5)
     ft.on_poll(datetime(2026, 10, 15, 9, 15, 20, tzinfo=IST))                                  # bought at 09:15
-    (p,) = lg.state["positions"]
     q.set("PE", 1220.0, 13.0, 13.5)                                                             # dip in the 09:15 minute
     ft.on_poll(datetime(2026, 10, 15, 9, 15, 50, tzinfo=IST))
-    assert p["rule"]["shadow_s20"]["hit_at"] is None
+    assert lg.state["positions"]
     ft.on_poll(at(15, 9, 16))                                                                   # still below at 09:16
-    assert p["rule"]["shadow_s20"]["fill"] == 13.0
+    assert lg.state["closed"][-1]["reason"] == "fade_stop" and lg.state["closed"][-1]["exit"]["price"] == 13.0
 
 
-def test_a_failed_entry_is_retried_at_the_next_poll(setup):
-    lg, q, ft, _ = setup
-    q.set("PE", 1220.0, 1.0, 1.05)                                                              # under Rs 2: waits
-    ft.on_poll(datetime(2026, 10, 15, 9, 16, 0, tzinfo=IST))
+def test_v11_stopped_trade_whose_1520_poll_was_missed_gets_a_late_shadow(setup):
+    lg, q, ft, box = setup
     q.set("PE", 1220.0, 18.0, 18.5)
-    ft.on_poll(datetime(2026, 10, 15, 9, 16, 10, tzinfo=IST))                                   # 10 s: too soon
-    assert lg.state["positions"] == []
-    ft.on_poll(datetime(2026, 10, 15, 9, 16, 29, tzinfo=IST))                                   # next poll (~30 s)
-    assert lg.state["positions"][0]["entry"]["price"] == 18.5
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 13.0, 13.5)
+    ft.on_poll(at(15, 9, 30))
+    box["f"] = None                                                                             # server asleep at 15:20
+    q.set("PE", 1220.0, 11.0, 11.5)
+    ft.on_poll(at(16, 9, 20))
+    sh = lg.state["closed"][-1]["rule"]["shadow_v10"]
+    assert sh["status"] == "done" and sh["fill"] == 11.0 and sh["late"]

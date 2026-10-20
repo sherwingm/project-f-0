@@ -1,5 +1,9 @@
 # S1 v10 fade · shadow exit "−20 % stop-loss, else 15:20" (live paper)
 
+> **Superseded 2026-10-20 before any tagged trade:** the −20 % stop became the live exit (S1 v11,
+> `strategies/S1_v11_fade_stop20.md`), and the 15:20 exit became the shadow (`rule.shadow_v10`). No trade was ever
+> tagged under this page.
+
 **Pre-registered 2026-10-20** at the user's request ("add the -20% stop loss to fade as shadow tag"), before any live
 trade is tagged. Paper only. **S1 v10 is not changed**: every fade trade is still bought as before and sold at 15:20.
 No extra order is placed. The +100 % shadow exit (`S1_v10_t100_shadow_track.md`) and the sub-₹2 shadow entries are

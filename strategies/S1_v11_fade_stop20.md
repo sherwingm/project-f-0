@@ -1,4 +1,12 @@
-# S1 v11 · results-day fade with a −20 % stop (paper, pre-registered; not live yet)
+# S1 v11 · results-day fade with a −20 % stop (paper; **live from 2026-10-21**)
+
+> **Switched live on 2026-10-20 by the user's decision** ("make this strategy as main, and the old 15:20 exit as
+> shadow"), before the 30-trade test below was run. From 2026-10-21 the live fade exit is the −20 % stop (from 09:16,
+> at the best bid), else 15:20. The v10 exit (hold to 15:20) is tracked on every fade trade as a shadow tag
+> (`rule.shadow_v10`): for a stopped trade, the contract's best bid at the first poll from 15:20 that day (else the
+> last price − 1 tick), netted with real charges; for a trade not stopped, the same as the real result. The test
+> below now runs in reverse: at 30 closed fade trades, if the v10 shadow beats v11 (mean (v10 − v11) net % > 0 with a
+> date-clustered t ≥ 2), the user is asked whether to switch back. Otherwise v11 stays.
 
 **Pre-registered 2026-10-20**, at the user's request ("Write it"), before any live trade is judged under it. v11 is
 **v10 with one change, the exit**. **The live paper trader stays on v10** (sold at 15:20) until the user agrees to

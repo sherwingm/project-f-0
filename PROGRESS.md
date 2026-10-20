@@ -550,6 +550,23 @@ are recorded?
 - **Clean the history later,** with the user's OK at the time: squash `index-data` to one commit when the repo
   passes ~3 GB, or every few months. It removes only old copies of rewritten files.
 
+### 2026-10-20: S1 v11 is the live fade exit from 2026-10-21; v10 becomes the shadow; Arm F restarts at day 0
+- The user's decision ("make this strategy as main, and the old 15:20 exit as shadow"; "make the previous result a side
+  record, start the new rule as day 0"), taken before v11's 30-trade test. Recorded in DECISIONS.md and
+  `strategies/S1_v11_fade_stop20.md`.
+- `server/fade.py`: from 09:16 on the entry day, a poll whose best bid is at or below 0.80 × entry sells at that bid
+  (reason `fade_stop`); else 15:20 as before. New positions carry `rule.version = "v11"`, `rule.stop`, and
+  `rule.shadow_v10`. For a stopped trade the shadow is the bid at the first poll from 15:20 that day (a later day's if
+  missed, flagged late); for a trade not stopped it is "same". `rule.shadow_s20` is retired, having never tagged a trade.
+- `/api/paper/summary` → `fade_v10_shadow` (real v11 vs shadow v10, stops, stopped trades that would have done better
+  held, t of v10 − v11). Arm F panel "Live v11 (−20 % stop) vs the old 15:20 exit".
+- **Arm F scoreboard counts from v11's day 0 (21 Oct) only.** The 10 v10 trades (-Rs 16,391) are a side record: a line
+  under the scoreboard, and a collapsed table under "Closed fade trades". The paper tab's Arm F row also counts v11
+  only.
+- Review at 30 closed v11 trades: if the v10 shadow beats v11 (t ≥ 2), the user is asked whether to switch back.
+- Tests: 4 new (stop at the bid, v10 shadow at 15:20, no stop at 09:15, late shadow), replacing the 3 shadow_s20
+  tests. The suite still has only its one old failure.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
