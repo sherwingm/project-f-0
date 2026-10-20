@@ -48,6 +48,8 @@ data layer). Pull before editing, and rebase before pushing (`git fetch origin m
   - **Sub-₹2 shadow entries** (`rules.fade_shadow_entries`, `/api/paper/summary` → `fade_subfloor`, Arm F panel).
     A refusal caused only by the ₹2 floor ("premium below Rs 2" or "never fits") reruns the walk with no floor. A
     strike it finds is tracked at its ask and netted at the 15:20 bid. Judged at 30.
+  - `shadow_fd2` (puts only): the filing came in market hours and the stock already fell ≥ 2 % that day
+    (market-adjusted, Kotak minutes in `fade_live`). Judged at 20 closed tagged puts (`S1_v11_fd2_shadow_track.md`).
   - The fade list's "Today" column shows why a signal has not filled yet (`rules.fade_wait`).
 - The retired `shadow_s20` never tagged a trade (`strategies/S1_v10_s20_shadow_track.md`, marked superseded).
 

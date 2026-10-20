@@ -88,6 +88,92 @@ def day0_signals(results: list[tuple[str, str, str | None]], cal: list[str]) -> 
     return list(out.values())
 
 
+# ---------------------------------------------------------------- shadow tag fd2 (strategies/S1_v11_fd2_shadow_track.md)
+FD_FROM, FD_TO, FD_CUT, FD_CLOSE = "09:15", "14:50", -2.0, "15:29"
+
+
+def _hm(t: str, add: int) -> str:
+    h, m = map(int, t[:5].split(":"))
+    x = h * 60 + m + add
+    return f"{x // 60:02d}:{x % 60:02d}"
+
+
+def _close_at(closes: dict, t: str, tol: int = 5) -> float | None:
+    """The close of the minute starting at t, else the last close up to `tol` minutes before; None if none."""
+    for k in range(tol + 1):
+        v = closes.get(_hm(t, -k))
+        if v and v > 0:
+            return float(v)
+    return None
+
+
+def market_hours_filing(filed: str | None, filed_time: str | None, target: str) -> bool:
+    """A results filing published 09:15-14:50 IST on a session before the target session (day 0)."""
+    return bool(filed and filed_time and filed < target and FD_FROM <= str(filed_time)[:5] <= FD_TO)
+
+
+def filing_day_move(stock: dict, nifty: dict, filed_time: str) -> dict:
+    """D = the stock's % move from the close of the minute before the filing minute to the 15:29 close, minus NIFTY
+    50's over the same minutes; tagged = D <= -2 % (the put's way already moved). None values when a price is
+    missing."""
+    pre = _hm(filed_time, -1)
+    s0, s1 = _close_at(stock, pre), _close_at(stock, FD_CLOSE)
+    n0, n1 = _close_at(nifty, pre), _close_at(nifty, FD_CLOSE)
+    if not (s0 and s1 and n0 and n1):
+        return {"market_hours": True, "D": None, "D_raw": None, "tagged": None, "error": "missing minute prices"}
+    raw = (s1 / s0 - 1) * 100
+    d = raw - (n1 / n0 - 1) * 100
+    return {"market_hours": True, "D": round(d, 3), "D_raw": round(raw, 3), "tagged": d <= FD_CUT}
+
+
+class FilingDayMoves:
+    """Kotak 1-minute history of the filing day (consumer key only: GitHub secret KOTAK_CONSUMER_KEY). Any failure
+    gives an 'unknown' tag; it never stops the signal run."""
+
+    def __init__(self):
+        self.k, self.eq, self.nifty, self.error = None, None, {}, None
+
+    def _closes(self, neosymbol: str, day: str) -> dict:
+        from index_data.common import candles_frame
+        f = candles_frame(self.k.history(neosymbol, "1min", day, day))
+        return dict(zip(f["timestamp"].dt.strftime("%H:%M"), f["close"]))
+
+    def tag(self, sym: str, filed: str, filed_time: str) -> dict:
+        unknown = {"market_hours": True, "D": None, "D_raw": None, "tagged": None}
+        if self.error:
+            return {**unknown, "error": self.error}
+        try:
+            if self.k is None:
+                from index_data.common import Kotak
+                from index_data.s1_trades_1m import eq_tokens
+                self.k = Kotak()
+                self.eq = eq_tokens(self.k)
+            tok = self.eq.get(sym)
+            if not tok:
+                return {**unknown, "error": "no Kotak token"}
+            if filed not in self.nifty:
+                self.nifty[filed] = self._closes("nse_cm|Nifty 50", filed)
+            return filing_day_move(self._closes(f"nse_cm|{tok}", filed), self.nifty[filed], filed_time)
+        except (Exception, SystemExit) as exc:  # noqa: BLE001 - no key, no network: the tag is unknown, never fatal
+            self.error = str(exc)[:120]
+            log.warning("fd2 tag unavailable: %s", self.error)
+            return {**unknown, "error": self.error}
+
+
+def add_filing_day(signals: list[dict], target: str, moves=None) -> list[dict]:
+    """Each put carries `filing_day`: measured when its filing came in market hours (kept if an earlier run already
+    measured it), else {market_hours: False}. Calls carry nothing (the tag is for puts only)."""
+    moves = moves or FilingDayMoves()
+    for s in signals:
+        if s.get("side") != "PE" or (s.get("filing_day") or {}).get("D") is not None:
+            continue
+        if market_hours_filing(s.get("filed"), s.get("filed_time"), target):
+            s["filing_day"] = moves.tag(s["symbol"], s["filed"], s["filed_time"])
+        else:
+            s["filing_day"] = {"market_hours": False, "tagged": False}
+    return signals
+
+
 # ---------------------------------------------------------------- the run
 def chain_of(bhav: pd.DataFrame, sym: str, side: str) -> pd.DataFrame:
     b = bhav[(bhav["TckrSymb"] == sym) & (bhav["FinInstrmTp"] == "STO") & (bhav["OptnTp"] == side)].copy()
@@ -190,6 +276,13 @@ def run(now: datetime | None = None, state_path: Path = STATE_PATH, cache_dir: P
         signals.append({**info, "side": side, "expiry": exp, "spot": round(spot, 2), "strikes": strikes,
                         "chain_from": last})
     signals, skipped = keep_earlier(prior, target.isoformat(), signals, skipped)
+    if prior.get("session") == target.isoformat():                # the morning run keeps the nightly measurement
+        had = {s["symbol"]: s["filing_day"] for s in prior.get("signals") or [] if (s.get("filing_day") or {}).get("D") is not None}
+        for s in signals:
+            if s["symbol"] in had and (s.get("filing_day") or {}).get("D") is None:
+                s["filing_day"] = had[s["symbol"]]
+    if fetch:
+        add_filing_day(signals, target.isoformat())               # shadow tag fd2 on puts (tag only)
     if fin.pop("__changed__", False):
         FIN_PATH.write_text(json.dumps(fin, indent=0, sort_keys=True), encoding="utf-8")
     state.update({"rules": RULES_TEXT, "session": target.isoformat(), "made_at": now.isoformat(timespec="seconds"),

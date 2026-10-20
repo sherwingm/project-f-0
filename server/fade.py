@@ -157,6 +157,41 @@ def t100(state: dict) -> dict:
             "rule": "strategies/S1_v10_t100_shadow_track.md (judged after >= 30 tagged trades have closed)"}
 
 
+def fd2(state: dict) -> dict:
+    """Shadow tag fd2 (strategies/S1_v11_fd2_shadow_track.md): v11 fade puts whose market-hours filing day already fell
+    >= 2 % (tagged) against the other market-hours puts and all other puts, on the real results; judged at 20."""
+    groups = {"tagged": [], "market_hours_other": [], "other_puts": []}
+    unknown = untagged = 0
+    for p in state.get("closed") or []:
+        r = p.get("rule") or {}
+        if r.get("strategy") != "fade" or r.get("version") != "v11" or p.get("instrument") != "PE":
+            continue
+        fd = r.get("shadow_fd2")
+        if fd is None:
+            untagged += 1
+            continue
+        cost = p["entry"]["price"] * p["qty"]
+        net = float(p.get("net_pnl", 0.0))
+        x = (net, net / cost * 100 if cost else 0.0)
+        if fd.get("market_hours") and fd.get("tagged") is None:
+            unknown += 1
+            groups["market_hours_other"].append(x)
+        elif fd.get("tagged"):
+            groups["tagged"].append(x)
+        elif fd.get("market_hours"):
+            groups["market_hours_other"].append(x)
+        else:
+            groups["other_puts"].append(x)
+
+    def agg(xs):
+        return {"closed": len(xs), "wins": sum(1 for n, _ in xs if n > 0), "net_rs": round(sum(n for n, _ in xs), 2),
+                "mean_net_pct": round(sum(q for _, q in xs) / len(xs), 2) if xs else None}
+    open_ = [p for p in state.get("positions") or [] if ((p.get("rule") or {}).get("shadow_fd2") or {}).get("tagged")]
+    return {**{k: agg(v) for k, v in groups.items()}, "open_tagged": len(open_), "unknown": unknown,
+            "untagged_closed": untagged, "review_at": 20,
+            "rule": "strategies/S1_v11_fd2_shadow_track.md (judged at 20 closed tagged puts)"}
+
+
 def shadow_entries(state: dict) -> dict:
     """The sub-Rs 2 shadow entries (strategies/S1_v10_subfloor_entry.md): closed judged entries (not flagged
     real_bought) with N, wins, mean net % of lot value, total net Rs and date-clustered t; open ones; the latest rows."""
@@ -338,7 +373,8 @@ class FadeTrader:
                     "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
                     "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
                     "stop": {"level": round(px * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
-                    "shadow_v10": {"status": "open"}}
+                    "shadow_v10": {"status": "open"},
+                    "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
             pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
             done[key] = "bought"
             self._waiting(st, key, now, None)

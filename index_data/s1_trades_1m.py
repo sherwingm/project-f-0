@@ -33,14 +33,18 @@ def positions_on(ledger: dict, day: str) -> list[dict]:
     return out
 
 
-def tokens(k: Kotak) -> tuple[dict, dict, dict]:
-    """(equity SYMBOL -> token, F&O trading symbol -> token, (SYMBOL, CE/PE, expiry, strike) -> token)."""
+def master_paths(k: Kotak) -> list[str]:
     from server.kotak import _raise_if_error
-    from .instruments import _stream, nse_expiry
     listing = k.client().scrip_master()
     _raise_if_error(listing, "scrip_master")
-    paths = listing.get("filesPaths", []) if isinstance(listing, dict) else []
-    eq, fo_trd, fo_key = {}, {}, {}
+    return listing.get("filesPaths", []) if isinstance(listing, dict) else []
+
+
+def eq_tokens(k: Kotak, paths: list[str] | None = None) -> dict:
+    """Equity SYMBOL -> Kotak token (the nse_cm scrip master only)."""
+    from .instruments import _stream
+    paths = paths if paths is not None else master_paths(k)
+    eq = {}
     cm = next(p for p in paths if p.rsplit("/", 1)[-1].startswith("nse_cm"))
     f = _stream(cm)
     try:
@@ -52,6 +56,14 @@ def tokens(k: Kotak) -> tuple[dict, dict, dict]:
             eq.update(dict(zip(t[m].str[:-3], ch.loc[m, "pSymbol"].astype(str).str.strip())))
     finally:
         f.unlink(missing_ok=True)
+    return eq
+
+
+def tokens(k: Kotak) -> tuple[dict, dict, dict]:
+    """(equity SYMBOL -> token, F&O trading symbol -> token, (SYMBOL, CE/PE, expiry, strike) -> token)."""
+    from .instruments import _stream, nse_expiry
+    paths = master_paths(k)
+    eq, fo_trd, fo_key = eq_tokens(k, paths), {}, {}
     fo = next(p for p in paths if p.rsplit("/", 1)[-1].startswith("nse_fo"))
     f = _stream(fo)
     try:

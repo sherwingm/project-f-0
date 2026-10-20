@@ -50,7 +50,11 @@ jobs:
 
       - name: Fade signals for today, written into data/scan.json
         timeout-minutes: 10
-        run: python -m scanner.fade_live --patch-scan
+        env:
+          KOTAK_CONSUMER_KEY: ${{ secrets.KOTAK_CONSUMER_KEY }}     # fd2 shadow tag: the filing day's 1-minute history
+        run: |
+          pip install -q "kotakneoapi>=3.0.7" || true
+          python -m scanner.fade_live --patch-scan
 
       - name: Commit and push (only before 08:50 IST)
         run: |

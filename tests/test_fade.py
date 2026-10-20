@@ -552,3 +552,90 @@ def test_v11_stopped_trade_whose_1520_poll_was_missed_gets_a_late_shadow(setup):
     ft.on_poll(at(16, 9, 20))
     sh = lg.state["closed"][-1]["rule"]["shadow_v10"]
     assert sh["status"] == "done" and sh["fill"] == 11.0 and sh["late"]
+
+
+# ---------------------------------------------------------------- shadow tag fd2 (S1_v11_fd2_shadow_track.md)
+def _mins(base: float, pre_t: str, pre: float, close: float) -> dict:
+    return {"09:15": base, pre_t: pre, "15:29": close}
+
+
+def test_fd2_filing_day_move_is_market_adjusted_and_tags_a_2pct_fall():
+    stock = _mins(100.0, "12:02", 100.0, 97.0)                       # -3 % from the minute before 12:03
+    nifty = _mins(20000.0, "12:02", 20000.0, 19900.0)                # -0.5 %
+    m = fl.filing_day_move(stock, nifty, "12:03")
+    assert m["D_raw"] == -3.0 and m["D"] == -2.5 and m["tagged"] is True and m["market_hours"]
+    m = fl.filing_day_move(_mins(100.0, "12:02", 100.0, 98.5), nifty, "12:03:41")   # -1.5 - (-0.5) = -1.0
+    assert m["D"] == -1.0 and m["tagged"] is False
+    m = fl.filing_day_move({"09:15": 100.0}, nifty, "12:03")         # no price before the filing: unknown
+    assert m["D"] is None and m["tagged"] is None
+
+
+def test_fd2_close_falls_back_at_most_five_minutes():
+    stock = {"12:02": 100.0, "15:25": 97.0}                          # 15:29 missing: 15:25 is within 5 minutes
+    nifty = {"12:02": 1.0, "15:29": 1.0}
+    assert fl.filing_day_move(stock, nifty, "12:03")["D"] == -3.0
+    assert fl.filing_day_move({"12:02": 100.0, "15:20": 97.0}, nifty, "12:03")["D"] is None
+
+
+def test_fd2_market_hours_window():
+    assert fl.market_hours_filing("2026-10-19", "12:03:22", "2026-10-21")
+    assert fl.market_hours_filing("2026-10-19", "14:50", "2026-10-21")
+    assert not fl.market_hours_filing("2026-10-19", "14:51", "2026-10-21")      # too late in the day
+    assert not fl.market_hours_filing("2026-10-19", "09:14", "2026-10-21")
+    assert not fl.market_hours_filing("2026-10-21", "08:30", "2026-10-21")      # filed the morning of day 0
+    assert not fl.market_hours_filing("2026-10-19", None, "2026-10-21")
+
+
+def test_fd2_add_filing_day_tags_market_hours_puts_only():
+    class Moves:
+        calls = 0
+
+        def tag(self, sym, filed, t):
+            Moves.calls += 1
+            return {"market_hours": True, "D": -2.4, "D_raw": -2.9, "tagged": True}
+    sigs = [{"symbol": "A", "side": "PE", "filed": "2026-10-19", "filed_time": "12:03"},
+            {"symbol": "B", "side": "PE", "filed": "2026-10-19", "filed_time": "18:30"},
+            {"symbol": "C", "side": "CE", "filed": "2026-10-19", "filed_time": "12:03"},
+            {"symbol": "D", "side": "PE", "filed": "2026-10-19", "filed_time": "13:00",
+             "filing_day": {"market_hours": True, "D": -0.4, "tagged": False}}]       # measured by the nightly run
+    out = {s["symbol"]: s.get("filing_day") for s in fl.add_filing_day(sigs, "2026-10-21", Moves())}
+    assert out["A"]["tagged"] is True and out["B"] == {"market_hours": False, "tagged": False}
+    assert out["C"] is None and out["D"]["D"] == -0.4 and Moves.calls == 1
+
+
+def test_fd2_tag_is_copied_to_puts_and_the_trade_is_unchanged(setup):
+    lg, q, ft, box = setup
+    fd = {"market_hours": True, "D": -3.1, "D_raw": -3.4, "tagged": True}
+    box["f"]["signals"][0].update({"filed_time": "12:03", "filing_day": fd})
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_fd2"] == fd and p["entry"]["price"] == 18.5            # bought exactly as before
+    assert F.fd2(lg.state)["open_tagged"] == 1
+
+
+def test_fd2_calls_carry_no_tag(setup):
+    lg, q, ft, box = setup
+    box["f"] = sig("CE")
+    box["f"]["signals"][0]["filing_day"] = {"market_hours": True, "D": 3.0, "tagged": False}
+    q.set("CE", 1240.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_fd2"] is None
+
+
+def test_fd2_summary_groups_v11_puts():
+    def closed(fd, net, inst="PE", version="v11"):
+        return {"rule": {"strategy": "fade", "version": version, "shadow_fd2": fd}, "instrument": inst,
+                "entry": {"price": 10.0}, "qty": 100, "net_pnl": net}
+    st = {"closed": [closed({"market_hours": True, "D": -2.5, "tagged": True}, -200.0),
+                     closed({"market_hours": True, "D": -0.5, "tagged": False}, 300.0),
+                     closed({"market_hours": True, "D": None, "tagged": None}, 50.0),
+                     closed({"market_hours": False, "tagged": False}, 100.0),
+                     closed(None, 999.0),                                          # before the tag existed
+                     closed({"market_hours": True, "tagged": True}, 5.0, inst="CE"),
+                     closed({"market_hours": True, "tagged": True}, 5.0, version=None)], "positions": []}
+    s = F.fd2(st)
+    assert s["tagged"] == {"closed": 1, "wins": 0, "net_rs": -200.0, "mean_net_pct": -20.0}
+    assert s["market_hours_other"]["closed"] == 2 and s["unknown"] == 1
+    assert s["other_puts"]["closed"] == 1 and s["untagged_closed"] == 1 and s["review_at"] == 20

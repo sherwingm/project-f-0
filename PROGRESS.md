@@ -672,6 +672,16 @@ are recorded?
 - **Probe 1: Kotak retains an expired contract's minute data one day after expiry** (1-min 1,923, expiry day 384,
   5-min 462 rows; daily 0; the token is gone from the scrip master). See INDEX_DATA_REPORT.md.
 
+### 2026-10-20: shadow tag fd2 on live fade puts (user: "add it as a shadow tag on live fade puts only")
+- Pre-registered: `strategies/S1_v11_fd2_shadow_track.md`. No change to any trade.
+- `scanner/fade_live.py` measures D for each put whose filing came 09:15-14:50 on the session before day 0: the
+  stock's filing-day move from the minute before the filing to 15:29, minus NIFTY 50's. It uses Kotak 1-minute
+  history, through the consumer key added to `daily.yml` / `fade-morning.yml`. D goes on the signal as `filing_day`.
+- `server/fade.py` copies it to the position (`rule.shadow_fd2`, puts only); `fd2()` gives `/api/paper/summary` →
+  `fade_fd2`, shown in the Arm F panel "Shadow tag: puts whose market-hours filing day already fell ≥ 2 %".
+- Review at 20 closed tagged puts. That is about 5 a year in the backtest, so it may take years.
+- 7 new tests; the suite: 499 passed, the one known failure.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

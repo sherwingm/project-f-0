@@ -652,7 +652,7 @@ def _ledger() -> PaperLedger:
 @app.get("/api/paper/summary")
 def api_paper_summary(_: str = Depends(auth)):
     import os
-    from server.fade import CARRY_DATES, shadow_entries, split, t100, v10_shadow
+    from server.fade import CARRY_DATES, fd2, shadow_entries, split, t100, v10_shadow
     m = getattr(state, "mirror", None)
     lg = _ledger()
     # which code is running: Render sets RENDER_GIT_COMMIT on every deploy (None when run elsewhere)
@@ -661,7 +661,8 @@ def api_paper_summary(_: str = Depends(auth)):
             "fade_split": split(getattr(lg, "state", {})),            # strategies/S1_v10_np25_shadow_track.md
             "fade_t100": t100(getattr(lg, "state", {})),              # strategies/S1_v10_t100_shadow_track.md
             "fade_v10_shadow": v10_shadow(getattr(lg, "state", {})),  # strategies/S1_v11_fade_stop20.md
-            "fade_subfloor": shadow_entries(getattr(lg, "state", {}))}  # strategies/S1_v10_subfloor_entry.md
+            "fade_subfloor": shadow_entries(getattr(lg, "state", {})),  # strategies/S1_v10_subfloor_entry.md
+            "fade_fd2": fd2(getattr(lg, "state", {}))}                 # strategies/S1_v11_fd2_shadow_track.md
 
 
 @app.get("/api/paper/positions")
