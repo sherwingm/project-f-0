@@ -639,6 +639,15 @@ are recorded?
   while the call lost 48 %: an overnight hold, out of the money, after the news is out (the option's price loses its
   results premium). Closed with its numbers; no rule change.
 
+### 2026-10-20: weak results in market hours, "already corrected" filing day → next-day call? (user's idea)
+- Pre-registered: `strategies/S1_weak_result_day_reversal.md`. `python -m scanner.weak_day_reversal --nifty-dir ...`
+  writes `data/results/S1_weak_day_reversal.md`.
+- **Fails:** only 13 corrected calls (D ≤ −2 %). They made +49.8 % in 2022-24 (7) but −15.8 % in 2025-26 (6); pooled
+  t 0.96. Not corrected: −8.3 % (46).
+- The corrected stocks **keep falling** overnight (gap −1.4 %, t −3.2), and the next day shows no bounce.
+- Verified by an independent three-way check (workflow: recompute, bias audit, robustness). It found one calendar
+  slip (special sessions missing from the NIFTY minutes), now fixed; no trade number changed. No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

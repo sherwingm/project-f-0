@@ -83,6 +83,7 @@ the page banner says so. It clears on Monday 26 Oct.
 | Fade without the Arm A days (`S1_v10_armA_overlap_filter.md`) | Fails. The close version is hindsight; the 09:15 open version is t −0.07. With v11's stop (from 09:16) even hindsight adds only +₹32k |
 | Market-hours filings, fade or continue (`S1_intraday_results_reaction.md`) | Fails (no pattern). Extra lead: fade trades from market-hours filings lose; others carry all the profit |
 | Strong market-hours result: call held to the next open (`S1_intraday_call_overnight.md`) | Fails: -13 % a trade on 64 (t -1.5), though the stock rose +0.5 % |
+| Weak market-hours result, 'already corrected' → next-day call (`S1_weak_day_reversal.md`) | Fails (13 trades; 2022-24 +50 %, 2025-26 −16 %); corrected stocks keep falling overnight |
 
 - **Audit facts:**
   - The NSE tick for stock options is **₹0.01 since 2025-11-03** (₹0.05 before).
