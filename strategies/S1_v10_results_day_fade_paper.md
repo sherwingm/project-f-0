@@ -83,3 +83,10 @@ beside the v10 review, never in it. Any later fade trade that is not sold on its
 
 ### Update 2026-10-17 (later the same day): the carry rule is retired
 After the descriptive backtest (`strategies/S1_v10_backtest_2025_26.md`: same-day exit +5.6 % of premium, carry rule −10.8 %) the user decided to close the eight carried trades and to keep the same-day exit strict for every fade trade from Monday 2026-10-19. The eight are sold at the first poll of that session (`server/fade.py::_exits`, reason `fade_late`), excluded from the v10 review as above. The carry rule above never ran live; `CARRY_DATES` is empty, so no position follows it.
+
+## Addendum 2026-10-20 · entry retry every 30 s (user's decision)
+- From the session of 2026-10-21, an entry with no affordable strike is retried at most every 30 seconds (every
+  live poll) instead of every 2 minutes, until 15:20. Nothing else changes: signals, strike walk, band, floor and
+  the 15:20 sale. See DECISIONS.md.
+- At the review, trades entered before and after 2026-10-21 are also reported separately. A trade bought on the
+  first try is unaffected.

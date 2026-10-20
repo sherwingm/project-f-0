@@ -20,6 +20,15 @@ editing this file on purpose, in its own commit, with the reason.
     the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used
     ₹10,000–30,000.
 - **S1 rule trades' expiry (paper; user's decision 2026-10-17):** the current monthly expiry while **at least 2 sessions** remain after day 0 (NSE holidays counted), else the next monthly — as the S1 v10 fade. S1 v7's rule needed 10 sessions; v7's backtest found its near-expiry calls lost the most, so this is a deliberate change of the live paper rules, applied from the signals of 2026-10-16 (bought 2026-10-19); trades already open keep their expiry. The paper record of the rule trades is split at this date.
+- **Entry retry every 30 s (paper; user's decision 2026-10-20, "30s"):** an entry that finds no affordable strike
+  is retried at most every 30 seconds (every live poll) until 15:20, not every 2 minutes. This applies to the S1
+  rule trades' open entry (arms A / B) and the S1 v10 fade (arm F), **from the session of 2026-10-21**.
+  - It changes only the timing of retries. The signals, the strike walk, the Rs 600-8,000 band, the Rs 2 floor, the
+    15:20 refusal and every exit stay the same.
+  - Why: an entry fills up to 90 s sooner once a strike becomes affordable, and the v10 backtest's edge depends on
+    a fill near the open. The cost is small since 2026-10-19: one quote call per try (`quote_many`).
+  - v10 is pre-registered with "no rule changes during the run". The review reports trades before and after
+    2026-10-21 separately as well as pooled (addendum in `strategies/S1_v10_results_day_fade_paper.md`).
 - **`ALLOW_LOTTERY=false`.**
 - **No buckets.** Paper trades are one group; no A/B/C/D or other tags on trades anywhere.
 - **Long options only.** No option selling, no spreads, no futures positions: every trade is a bought CE or
