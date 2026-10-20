@@ -724,3 +724,10 @@ are recorded?
 2. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
 3. S2: run screen B in the pre-registered order (cache parents → freeze financials → recount → screens).
 4. S1: keep the paper runs untouched; review v10 at 30 closed trades / 6 weeks.
+
+
+## 2026-10-20 · S1 fade re-run with a realistic entry (09:16 candle open + 1 tick)
+Pre-registered `strategies/S1_fade_realistic_entry.md` and `_studies.md`. Oct 2024 – Sep 2026, contracts with day-0 minute
+candles. v11 on the ₹2+ set (409): +13.8 % → +2.5 % a trade (₹3.23 L → ₹0.66 L, t 3.0 → 0.9). Floors ₹2/₹1/₹0.5: +2.2 / +0.6 /
+−2.2 %. Band ₹0.5–1: −17 % (t −4.1). Targets: ≈ 0. Arm-A filter: fails. The old edge came mostly from the stale opening print.
+Nothing live changed. Reports: `data/results/S1_fade_realistic_entry.md`, `S1_fade_realistic_studies.md`.

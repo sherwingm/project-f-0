@@ -39,19 +39,22 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 change needs the user's decision and a DECISIONS.md entry; reports are numbers only. Big results were checked by an
 independent verification workflow (recompute, bias audit, robustness), which caught real slips each time.
 
-### Top open item: the backtest entry price is unreliable (found at the very end, nothing changed yet)
-- The fade backtests buy at the option's **day-0 opening print** (bhavcopy open + 1 tick). On 1-minute data that print
-  is often stale: the **median swing inside the 09:15 minute is 51 %**. Example: BAJFINANCE 2024-10-23 bought at 54.45,
-  the 09:15 candle opened 54.40, low 7.15, closed 8.19.
-- Result: in the v11 column, 55 of 316 stopped trades lost −30 % to −85 % (49 of them stopped at 09:16, the first
-  minute the stop is allowed). The stop code is right (234 of 316 stops sold at about −21 %). In 104 of 383 trades the
-  first candle closed ≥ 20 % **above** the entry, so some big winners (+690 %) may be the same artefact.
-- The live bot buys at the live ask on a poll (needs a bid and ask, spread ≤ 10 %), not at the opening print. So the
-  backtest totals (v10 +₹1.70 L, v11 +₹2.51 L; floor, band, target, stop and filter studies) may be wrong in **both**
-  directions. **Proposed next step (the user was asked, no answer yet):** pre-register, then re-run v10 / v11 with a
-  realistic entry (the 09:16 candle's open + 1 tick) and compare. Scripts: `scanner/fade_s20_minutes.py`
-  (`one(..., stop_from)`), `scanner/fade_armA_filter.py` (`v11_minutes()`), minutes in
-  `data/results/S1_v10_bandv10_*.csv` (gitignored: re-fetch with the `stock-options-probe` workflow if missing).
+### Done 20 Oct: the backtest entry price was stale; re-run with a realistic entry (nothing live changed)
+- The fade backtests bought at the day-0 opening print (bhavcopy open + 1 tick), often stale (median swing inside the
+  09:15 minute 51 %; BAJFINANCE 2024-10-23: bought 54.45, 09:15 low 7.15). The live bot buys at the live ask, so it is
+  not exposed.
+- Re-run with **entry B = the 09:16 candle's open + 1 tick** (pre-registered: `strategies/S1_fade_realistic_entry.md`,
+  `S1_fade_realistic_entry_studies.md`; scripts `scanner/fade_realistic_entry.py`, `fade_realistic_studies.py`; reports
+  `data/results/S1_fade_realistic_entry.md`, `S1_fade_realistic_studies.md`). Oct 2024 – Sep 2026 only (no option minutes
+  before that; 2022-24 daily-data parts cannot be re-priced).
+- **v11, ₹2+ set, 409 trades:** old +13.8 % a trade (+₹3.23 L, t 3.0) → new **+2.5 % (+₹0.66 L, t 0.9)**. v10: +12.7 % →
+  +3.2 %. The −30 %…−85 % losers and the +690 % winners were mostly the stale-print artefact.
+- **Floor ₹2 / ₹1 / ₹0.5 (v11):** +2.2 % / +0.6 % / −2.2 %, all t < 1. **Band ₹0.5–1:** −17 % a trade (t −4.1), the one
+  clear signal (the live floor is already ₹2). **Targets** (+25…+200 %, with/without stop): all ≈ 0, none beats plain v11.
+  **Arm-A filter:** still fails (dropped trades +19 % then −6 %, t 0.6).
+- So the fade's backtest edge is **not established**; every earlier backtest total/study built on the old entry is
+  unreliable. The live paper run (real asks) and the shadow reviews are the real test. No rule change was made; any
+  change is the user's decision.
 
 ### The live fade (S1 v11, from 21 Oct, `strategies/S1_v11_fade_stop20.md`)
 - v10's entry unchanged (strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live ask 09:15–15:20; retried
@@ -79,7 +82,7 @@ independent verification workflow (recompute, bias audit, robustness), which cau
 6 open (TATAELXSI, TECHM, WIPRO × 2 arms). The fade's −20 % stop does not help them (`S1_arms_ab_stop20.md`). Known gaps:
 no catch-up if the server misses a 15:20 check; the "close" entry books the day's average price + 1 tick (not tradable).
 
-### Studies finished 19–20 Oct (all descriptive; none changed a rule except v11). **Re-read them after the entry-price re-run.**
+### Studies finished 19–20 Oct (all descriptive; none changed a rule except v11). **Their backtest numbers used the stale entry; the floor/band/target/filter ones were re-run (see above): nothing survives.**
 | Study | Result |
 |---|---|
 | Premium floor, bands ₹0.5–1 and ₹1–2, targets, sub-₹2 entries (`S1_v10_*`) | Nothing passes; ₹2 floor stays |
@@ -134,7 +137,7 @@ no catch-up if the server misses a 15:20 check; the "close" entry books the day'
   session.
 
 ## Open (ask the user before doing)
-- **Re-run the fade backtest with a realistic entry** (see the top S1 item): the user has not answered.
+- Fade backtest re-run with the realistic entry is done (see the S1 section); decide whether the fade stays on at all once the shadow reviews have data.
 - **A/B catch-up** for a missed 15:20 check; **A/B "close" entry at the 15:20 ask** instead of the day's average (rule change).
 - **Switch to Upstox** after a few clean shadow days: read `/api/data/compare` from 21 Oct.
 - **Clean the `index-data` history:** squash to one commit when the repo passes ~3 GB or every few months. It is ~1.4 GB
