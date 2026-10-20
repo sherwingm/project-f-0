@@ -691,6 +691,15 @@ are recorded?
 - Both sides lose on these days: the stock does not move enough to beat the spread, charges and the day's time decay.
   No rule change.
 
+### 2026-10-20: why some v11 stops lose far more than 20 % (user's screenshot of the peak / dip sheet)
+- The stop works: 234 of 316 stops sold at about -19 % to -25 %. 55 lost -30 % to -85 %; 49 of those stopped at 09:16
+  (the first minute the stop may run) because the option had already collapsed inside the 09:15 minute.
+- Cause: the backtest buys at the option's day-0 opening print (bhavcopy open + 1 tick), often stale; the median swing
+  inside the first minute is 51 %. BAJFINANCE 2024-10-23: bought 54.45, the 09:15 candle low 7.15, close 8.19.
+- 104 of 383 first candles close >= 20 % above the entry, so some big winners may be the same artefact. The live bot buys at
+  the live ask, not the opening print. The backtest totals (v10, v11 and the studies built on them) are unreliable in both
+  directions until re-run with a realistic entry (the 09:16 candle's open + 1 tick). The user has not yet answered.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
