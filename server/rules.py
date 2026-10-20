@@ -11,6 +11,10 @@ positions, so the two entry times can be compared:
     close  the first poll from 15:20: the walk again on today's live volume and average traded price (ATP),
            bought at ATP + 1 tick (the live version of the backtest's "day's VWAP + 1 tick")
 
+A stock in the F&O ban list that session is refused by both entries ("in the F&O ban today"), as the backtest and
+the forward test skip it. The list comes from the fade signal file (meta.fade.ban, written by scanner/fade_live.py
+nightly and before the open for its `session`); a file for another session blocks nothing.
+
 Exits, checked once a session at the first poll from 15:20 with the last traded price as the close: 50 % stop,
 5 sessions without a new closing high, T-1 (the session before expiry); the sale fills at the best bid. Each
 position carries the arms whose signal it is (A, B or both), so the results page scores each arm on its own.
@@ -30,8 +34,10 @@ log = logging.getLogger("rules")
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 30                             # the open-window walk is retried every poll (DECISIONS.md, 2026-10-20)
 RETRY_SLACK = 5                                # a poll landing a few seconds early still counts
-BAND, CONTRACTS, MIN_PREMIUM, TICK = v7.NORMAL_BAND, v7.NORMAL_CONTRACTS, 2.0, 0.05
+BAND, CONTRACTS, MIN_PREMIUM = v7.NORMAL_BAND, v7.NORMAL_CONTRACTS, 2.0
+TICK = 0.01                                    # NSE stock-option tick since 2025-11-03 (Rs 0.05 before)
 WALK_MAX = 15                                  # strikes tried upward from the at-the-money one at 15:20
+BAN_WHY = "in the F&O ban today"
 
 
 def signals_for(fw: dict | None, today: date) -> list[dict]:
@@ -53,6 +59,14 @@ def signals_for(fw: dict | None, today: date) -> list[dict]:
             r = rows.setdefault(p["symbol"], {**p, "arms": []})
             r["arms"] = sorted(set(r["arms"]) | {arm})
     return list(rows.values())
+
+
+def banned_today(fade: dict | None, today: date) -> set[str]:
+    """The F&O ban list for today from the fade signal file (scanner/fade_live.py writes the ban list of its
+    `session`); empty when the file is for another session or has no list."""
+    if not fade or fade.get("session") != today.isoformat():
+        return set()
+    return set(fade.get("ban") or [])
 
 
 def path_up(strikes: list[float], spot: float | None) -> list[float]:
@@ -138,8 +152,10 @@ def walk_ask(strikes: list[float], spot: float, quote: Callable[[float], dict | 
 
 
 class RuleTrader:
-    def __init__(self, ledger, forward: Callable[[], dict | None], spot: Callable[[str], float | None] | None = None):
+    def __init__(self, ledger, forward: Callable[[], dict | None], spot: Callable[[str], float | None] | None = None,
+                 fade: Callable[[], dict | None] | None = None):
         self.ledger, self.forward = ledger, forward
+        self.fade = fade or (lambda: None)           # the fade signal file: today's F&O ban list
         self.spot = spot or ledger.quotes.spot
         self._tried: dict[str, float] = {}           # open-window walk: last try per (day, stock), epoch seconds
         self._last_why: dict[str, str] = {}
@@ -190,10 +206,15 @@ class RuleTrader:
         today = now.date().isoformat()
         st = self._state()
         sigs = signals_for(self.forward(), now.date())
+        banned = banned_today(self.fade(), now.date()) if sigs else set()
         if OPEN_FROM <= now.time():
             for sig in sigs:
                 key = f"{today}:{sig['symbol']}"
                 if key in st["open"]:
+                    continue
+                if sig["symbol"] in banned:
+                    self._refuse(st, sig, "open", today, BAN_WHY)
+                    self._waiting(st, key, now, sig["arms"], None)
                     continue
                 if now.time() >= EOD_AT:                         # the saved reason survives a restart
                     self._refuse(st, sig, "open", today, self._last_why.get(key) or
@@ -227,6 +248,9 @@ class RuleTrader:
             for sig in sigs:
                 key = f"{today}:{sig['symbol']}"
                 if key in st["close"]:
+                    continue
+                if sig["symbol"] in banned:
+                    self._refuse(st, sig, "close", today, BAN_WHY)
                     continue
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
                 book = self._book(sig, path_up(sig.get("strikes") or [], spot))

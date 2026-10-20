@@ -303,7 +303,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   const waitsToday =(w, today, arms) => Object.entries(w || {}).filter(([k]) => k.startsWith(today + ":"))
     .map(([k, v]) => ({ symbol: k.slice(today.length + 1), reason: v.reason, at: v.at, arms: arms || v.arms || [] }));
   const armColor = r => !r ? "var(--line)" : (r.arms || []).includes("F") ? "var(--arm-f)" : (r.arms || []).includes("A") ? "var(--arm-a)" : "var(--arm-b)";
-  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at 15:20" };
+  const MODE = { open: "bought at the open (09:15)", close: "bought at the close (15:20, day's average price)", fade: "results-day fade: bought on the results day, sold at the −20 % stop or at 15:20" };
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
   const ofArm = (rows, arm) => rows.filter(x => x.rule && (x.rule.arms || []).includes(arm));
 
@@ -315,8 +315,10 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
     const r = p.rule, fade = r && r.strategy === "fade";
-    const exitLine = fade
-      ? `<span>Sold at <b>15:20</b> on the results day (no stop)</span>`
+    const exitLine = fade && r.version === "v11" && r.stop
+      ? `<span>Stop <b class="mono">${rs(r.stop.level)}</b> (−20 % at the bid, from 09:16)</span><span>Else sold at <b>15:20</b> on the results day</span>`
+      : fade
+      ? `<span>Sold at <b>15:20</b> on the results day (v10, no stop)</span>`
       : r
       ? `<span>Stop <b class="mono">${rs(e / 2)}</b> (50% at a close)</span><span>No new closing high: <b>${r.stall || 0} of 5</b></span><span>Exit by <b>${day(tMinus1(p.expiry))}</b> (T-1)</span>`
       : `<span>Stop <b class="mono">${rs(p.stop)}</b></span><span>Auto-exit <b>${day(p.t2_date)}</b> (T-2)</span>`;
@@ -465,21 +467,21 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       return panel("Shadow track: puts only above NP YoY 25 %", `<div class="tw"><table><thead><tr><th>Group</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Open</th><th>Open MTM</th></tr></thead><tbody>${G.map(([k, lab]) => { const g = sp[k] || {};
           return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "—"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "—"}</td><td>${g.open ?? 0}</td><td class="${dir(g.unrealised_rs)}">${g.open ? srs(g.unrealised_rs) : "—"}</td></tr>`; }).join("")}</tbody></table></div>
         <div class="prog" aria-label="Left-out puts closed: ${n} of 40"><i style="width:${Math.min(100, n / 40 * 100).toFixed(1)}%"></i></div>
-        <p class="note" style="margin:0">Left-out puts closed: <b>${n} of 40</b> needed before it is judged. v10 still takes every trade; this only tags them. <a href="${REPO}strategies/S1_v10_np25_shadow_track.md">The rule</a></p>`,
+        <p class="note" style="margin:0">Left-out puts closed: <b>${n} of 40</b> needed before it is judged. The fade still takes every trade; this only tags them. <a href="${REPO}strategies/S1_v10_np25_shadow_track.md">The rule</a></p>`,
         { sub: "a tag on v10's trades, judged later" });
     },
     fadeT100() {
-      const T = "Shadow exit: +100 % target, else 15:20";
+      const T = "Shadow exit: +100 % target, else the real exit";
       if (!live()) return panel(T, notLive("The shadow exit"));
       const s = (P.summary || {}).fade_t100;
       if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
-      const R = [["Real exit (15:20)", s.real_1520], ["Shadow: sell at 2x entry if the bid reaches it", s.shadow_t100]];
+      const R = [["Real exit (v11: −20 % stop, else 15:20; v10 before 21 Oct: 15:20)", s.real_1520], ["Shadow: sell at 2x entry if the bid reaches it", s.shadow_t100]];
       const n = (s.real_1520 || {}).closed || 0;
       return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th><th>Targets hit</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
           return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "—"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "—"}</td><td>${g.targets_hit ?? "—"}</td></tr>`; }).join("")}</tbody></table></div>
         <div class="prog" aria-label="Tagged trades closed: ${n} of 30"><i style="width:${Math.min(100, n / 30 * 100).toFixed(1)}%"></i></div>
-        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit stays 15:20; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
-        { sub: "a tag on v10's trades, judged later" });
+        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of 30</b> needed before it is judged${s.open_tagged ? ` · open: ${s.open_tagged}, target hit on ${s.open_hit}` : ""}${s.untagged_closed ? ` · ${s.untagged_closed} earlier trades untagged` : ""}. The real exit is unchanged by it; this only tags. <a href="${REPO}strategies/S1_v10_t100_shadow_track.md">The rule</a></p>`,
+        { sub: "a tag on every fade trade, judged later" });
     },
     fadeV10() {
       const T = "Live v11 (\u221220 % stop) vs the old 15:20 exit";
@@ -534,7 +536,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     fadeOpen() {
       const w = paperWait("Open fade positions"); if (w) return panel("Open fade positions", w);
       const op = ofArm(P.positions, "F");
-      return panel(`Open fade positions · ${op.length}`, op.length ? `<div class="cards">${op.map(positionCard).join("")}</div>` : empty("None open. Fade trades are sold at 15:20 the same day."),
+      return panel(`Open fade positions · ${op.length}`, op.length ? `<div class="cards">${op.map(positionCard).join("")}</div>` : empty("None open. Fade trades are sold the same day: at the −20 % stop, else at 15:20."),
         { sub: op.length ? "tap a card for why it was bought" : "" });
     },
     fadeClosed() {
@@ -651,8 +653,8 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     armb:  { tab: "Arm B", color: "var(--arm-b)", title: "Arm B · results beat in a strong sector",
              desc: "Forward paper test: the same calls, only when the stock's sector is strong. Same exits as Arm A.",
              panels: () => forwardPanels("B") },
-    armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v10)",
-             desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000, sold at 15:20 the same day. Paper only.",
+    armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v11)",
+             desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000. Sold at the best bid once it is 20 % below the entry (from 09:16), else at 15:20 the same day (v11, from 21 Oct; v10 sold at 15:20). Paper only.",
              panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV10(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);

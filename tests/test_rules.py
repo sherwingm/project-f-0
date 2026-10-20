@@ -66,7 +66,7 @@ def test_open_and_close_entries_are_two_tagged_positions(setup):
     modes = sorted(p["rule"]["entry_mode"] for p in lg.state["positions"])
     assert modes == ["close", "open"]
     close = next(p for p in lg.state["positions"] if p["rule"]["entry_mode"] == "close")
-    assert close["entry"]["price"] == 20.05 and close["strike"] == 1300.0
+    assert close["entry"]["price"] == 20.01 and close["strike"] == 1300.0         # ATP + 1 tick (Rs 0.01)
     assert all(p["rule"]["checked"] == "2026-10-14" for p in lg.state["positions"])   # first close counted
 
 
@@ -165,7 +165,7 @@ def test_the_open_wait_reason_names_the_strike_and_clears_on_refusal(setup):
 def test_walk_reasons_name_the_strike_and_price():
     cheap = lambda k: {"lot_size": 100, "atp": 4.0, "volume": 100 * 100, "depth": {"ask": [(4.0, 1)]}}  # noqa: E731
     assert R.walk_ask([100.0], 100.0, cheap) == "cheapest liquid lot below Rs 600 (Rs 400 at 100)"
-    assert R.walk_live([100.0], 100.0, cheap) == "cheapest liquid lot below Rs 600 (Rs 405 at 100)"
+    assert R.walk_live([100.0], 100.0, cheap) == "cheapest liquid lot below Rs 600 (Rs 401 at 100)"    # ATP + Rs 0.01
     tiny = lambda k: {"lot_size": 4250, "atp": 1.8, "volume": 4250 * 100, "depth": {"ask": [(1.85, 1)]}}  # noqa: E731
     assert R.walk_ask([80.0, 81.0], 80.2, tiny) == "premium below Rs 2 (at 80: ask 1.85)"
     assert R.walk_live([80.0, 81.0], 80.2, tiny) == "premium below Rs 2 (at 80: ATP 1.8)"
@@ -183,6 +183,39 @@ def test_open_window_refuses_at_15_20_with_the_reason(setup):
 
 
 # ---------------------------------------------------------------- the lot-size range (the user's idea, 2026-10-19)
+def test_banned_today_only_reads_a_list_for_today():
+    f = {"session": "2026-10-14", "ban": ["HCLTECH", "RBLBANK"]}
+    assert R.banned_today(f, date(2026, 10, 14)) == {"HCLTECH", "RBLBANK"}
+    assert R.banned_today(f, date(2026, 10, 15)) == set()            # yesterday's list blocks nothing
+    assert R.banned_today({"session": "2026-10-14"}, date(2026, 10, 14)) == set()
+    assert R.banned_today(None, date(2026, 10, 14)) == set()
+
+
+def test_a_stock_in_the_fo_ban_is_refused_by_both_entries(tmp_path):
+    q = Quotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(14, 9, 16))
+    fade = {"session": "2026-10-14", "ban": ["HCLTECH"]}
+    rt = R.RuleTrader(lg, lambda: fw(), fade=lambda: fade)
+    q.set(1300.0, 19.0, ask=19.2)                                    # it would fit
+    rt.on_poll(at(14, 9, 16))
+    r = lg.state["rules"]["refused"]
+    assert [(x["mode"], x["reason"]) for x in r] == [("open", "in the F&O ban today")] and lg.state["positions"] == []
+    assert lg.state["rules"]["open"]["2026-10-14:HCLTECH"] == "refused" and lg.state["rules"]["open_wait"] == {}
+    rt.on_poll(at(14, 15, 20))
+    assert [(x["mode"], x["reason"]) for x in lg.state["rules"]["refused"]] == [
+        ("open", "in the F&O ban today"), ("close", "in the F&O ban today")]
+    assert lg.state["positions"] == []
+
+
+def test_a_ban_list_for_another_session_blocks_nothing(tmp_path):
+    q = Quotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(14, 9, 16))
+    rt = R.RuleTrader(lg, lambda: fw(), fade=lambda: {"session": "2026-10-13", "ban": ["HCLTECH"]})
+    q.set(1300.0, 19.0, ask=19.2)
+    rt.on_poll(at(14, 9, 16))
+    assert len(lg.state["positions"]) == 1
+
+
 def test_never_fits_from_the_lot_alone():
     why = R.never_fits(5425)                                         # IRFC: Rs 8,000 / 5,425 = Rs 1.47 a share
     assert why == "never fits: 1 lot is 5,425 shares, so Rs 8,000 allows at most Rs 1.47 a share, below the Rs 2 floor"

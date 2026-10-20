@@ -22,7 +22,8 @@
   - **Strong → buy a put:** net profit YoY > +10 % AND net profit QoQ > 0 AND revenue YoY > 0.
   - **Weak → buy a call:** net profit YoY < −10 % AND net profit QoQ < 0.
   - Anything else, or numbers not yet published: no trade, recorded with the reason.
-- Signals are made by `scanner/fade_live.py`, nightly (≈ 20:30 IST) and again before the open (≈ 07:20 IST) for
+- Signals are made by `scanner/fade_live.py`, nightly (`daily.yml`, 20:30 IST) and again before the open
+  (`fade-morning.yml`, scheduled 07:17 IST; GitHub can start it late, and it pushes only before 08:50) for
   filings made overnight; the morning run keeps every signal the nightly made. Sessions follow NSE's F&O holiday list
   (`data/nse_holidays.json`). Filings after the morning run are missed (recorded as a limit, not traded).
 

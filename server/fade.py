@@ -35,7 +35,9 @@ log = logging.getLogger("fade")
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 30                                       # DECISIONS.md, 2026-10-20 (was 120)
 RETRY_SLACK = 5                                          # a poll landing a few seconds early still counts
-BAND, MIN_PREMIUM, MAX_SPREAD, TICK, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 0.05, 15
+BAND, MIN_PREMIUM, MAX_SPREAD, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 15
+TICK = 0.01                                              # NSE stock-option tick since 2025-11-03 (Rs 0.05 before)
+SHADOW_FLOOR = 0.05                                      # the sub-Rs 2 shadow walk's floor, as pre-registered
 
 # Signal dates whose positions follow the carried-trade rule (sell at -20 % of the entry premium, at 25 % below the
 # highest close since entry, or at T-1; strategies/S1_v10_results_day_fade_paper.md, addendum 2026-10-17). EMPTY on
@@ -388,7 +390,7 @@ class FadeTrader:
         rows = st.setdefault("fade_shadow_entries", [])
         if any(r["key"] == key for r in rows):
             return
-        w = walk(sig.get("strikes") or [], spot, sig["side"], look, floor=TICK)
+        w = walk(sig.get("strikes") or [], spot, sig["side"], look, floor=SHADOW_FLOOR)
         if isinstance(w, str):
             log.info("fade shadow entry %s: none (%s)", key, w)
             return

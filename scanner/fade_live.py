@@ -1,11 +1,13 @@
-"""S1 v10 results-day fade, paper only: the signals for the next session (strategies/S1_v10_results_day_fade_paper.md).
+"""S1 results-day fade, paper only: the signals for the next session (strategies/S1_v10_results_day_fade_paper.md;
+the exit is S1 v11's from 2026-10-21, strategies/S1_v11_fade_stop20.md).
 
-    python -m scanner.fade_live            # nightly (~20:30 IST) and before the open (~07:45 IST)
+    python -m scanner.fade_live            # nightly (daily.yml, 20:30 IST) and before the open (fade-morning.yml, 07:17 IST)
 
 For every results filing whose day 0 (the first full session after it) is the next session: strong numbers (net
 profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a
 call. Writes data/forward/fade.json, which the scan carries as meta.fade; the live server's server/fade.py buys them
-on day 0 between 09:15 and 15:20 and sells at 15:20.
+on day 0 between 09:15 and 15:20 and sells at the -20 % stop (from 09:16, at the best bid) or else at 15:20. The file
+also carries the session's F&O ban list (`ban`), which server/rules.py uses to skip arms A / B.
 """
 from __future__ import annotations
 
@@ -28,10 +30,11 @@ STATE_PATH = ROOT / "data" / "forward" / "fade.json"
 OPEN = time(9, 15)
 MIN_LEFT = 2                                   # sessions after day 0 for the current monthly; fewer -> next monthly
 HISTORY_MAX = 400
-RULES_TEXT = ("S1 v10 results-day fade, paper only: on the first full session after a results filing, strong numbers "
+RULES_TEXT = ("S1 v11 results-day fade, paper only: on the first full session after a results filing, strong numbers "
               "(net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, "
               "QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the "
-              "strike nearest the live price, any time 09:15-15:20; sold at 15:20 the same day.")
+              "strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below "
+              "0.80 x entry from 09:16 (-20 % stop), else at 15:20 the same day.")
 
 
 # ---------------------------------------------------------------- pure rules
@@ -190,7 +193,8 @@ def run(now: datetime | None = None, state_path: Path = STATE_PATH, cache_dir: P
     if fin.pop("__changed__", False):
         FIN_PATH.write_text(json.dumps(fin, indent=0, sort_keys=True), encoding="utf-8")
     state.update({"rules": RULES_TEXT, "session": target.isoformat(), "made_at": now.isoformat(timespec="seconds"),
-                  "signals": signals, "skipped": skipped})
+                  "signals": signals, "skipped": skipped,
+                  "ban": sorted(ban)})                     # the session's F&O ban list: server/rules.py skips A / B in it
     state_path.parent.mkdir(parents=True, exist_ok=True)
     state_path.write_text(json.dumps(state, indent=1), encoding="utf-8")
     log.info("fade signals for %s: %s; skipped %s", target, [(s["symbol"], s["side"]) for s in signals],

@@ -9,8 +9,9 @@
 > date-clustered t ≥ 2), the user is asked whether to switch back. Otherwise v11 stays.
 
 **Pre-registered 2026-10-20**, at the user's request ("Write it"), before any live trade is judged under it. v11 is
-**v10 with one change, the exit**. **The live paper trader stays on v10** (sold at 15:20) until the user agrees to
-switch. Switching needs this file's pass test, the user's yes, and an entry in DECISIONS.md, in its own commit.
+**v10 with one change, the exit**. When this was written, the live paper trader ran v10 (sold at 15:20), and the plan
+was to switch only after this file's pass test, the user's yes and a DECISIONS.md entry. The user switched it
+earlier: **v11 is the live exit from 2026-10-21** (note above; DECISIONS.md, S1 v11 row).
 
 ## The rule
 Everything in `strategies/S1_v10_results_day_fade_paper.md` is unchanged: signals, day 0, put on strong numbers,

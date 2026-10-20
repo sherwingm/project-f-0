@@ -60,6 +60,8 @@ the page banner says so. It clears on Monday 26 Oct.
 - 6 open positions: TATAELXSI ×2, TECHM ×2, WIPRO ×2. TECHM and WIPRO are near the 50 % stop.
 - **The −20 % stop does not fix them** (`data/results/S1_arms_ab_stop20.md`): A −₹88k → −₹1.32 L (worse), B −₹70k →
   −₹32k (still a loss); t < 1. No rule change. The losses come from the entry.
+- From 21 Oct both A/B entries refuse a stock in the F&O ban (list = `meta.fade.ban`, written by `fade_live`), and
+  the live tick is ₹0.01 (close entry ATP + ₹0.01). DECISIONS.md records both.
 - Known gaps, not fixed:
   1. If the server is down at 15:20, that day's A/B exit check is skipped, with no catch-up.
   2. The "close" entry books the day's average price + 1 tick, which is not tradable at 15:20 (TECHM was booked at

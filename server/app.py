@@ -178,7 +178,8 @@ def startup() -> None:
         if state.feed:
             from server.rules import RuleTrader
             state.feed.hooks.append(lambda feed: state.ledger.on_poll(feed))
-            state.rules = RuleTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("forward"))
+            state.rules = RuleTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("forward"),
+                                     fade=lambda: ((state.scan or {}).get("meta") or {}).get("fade"))   # the ban list
             state.feed.hooks.append(lambda feed: state.rules.on_poll(datetime.now(IST)))
             from server.fade import FadeTrader                  # S1 v10 results-day fade, paper only
             state.fade = FadeTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("fade"))

@@ -411,7 +411,7 @@ def test_t100_untouched_target_matches_the_real_exit_and_old_trades_are_untagged
     lg.state["closed"].append({"rule": {"strategy": "fade"}, "net_pnl": -100.0})
     s = F.t100(lg.state)
     assert s["shadow_t100"]["net_rs"] == s["real_1520"]["net_rs"] and s["untagged_closed"] == 1
-    assert F.t100_target(1.23) == 2.5 and F.t100_target(18.5) == 37.0
+    assert F.t100_target(1.23) == 2.46 and F.t100_target(18.5) == 37.0 and F.t100_target(1.235) == 2.47   # Rs 0.01 tick
 
 
 # ---------------------------------------------------------------- sub-Rs 2 shadow entries (S1_v10_subfloor_entry.md)

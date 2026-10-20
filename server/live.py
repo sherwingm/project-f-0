@@ -83,7 +83,7 @@ class FakeProvider:
     """Random-walk quotes around the EOD closes, with synthetic 5-level depth, for local testing
     without a broker. Option premiums are stable per contract (seeded from the trading symbol)
     and wobble a few percent per call, so paper positions mark to something plausible."""
-    TICK = 0.05
+    TICK = 0.01                          # NSE stock-option tick since 2025-11-03
 
     def __init__(self, closes: dict[str, float], fut_oi: dict[str, int], lot_sizes: dict[str, int] | None = None):
         self.closes, self.fut_oi, self.rng = closes, fut_oi, random.Random(1)

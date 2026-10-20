@@ -588,6 +588,17 @@ are recorded?
 - The usable version (**O**: the same test on the 09:15 open) **fails**. Its dropped trades made +12.4 % in 2022-24 and
   -15.4 % in 2025-26; pooled t -0.07; +4.7 % under v11. The open shows only 95 of the 233 Arm A days. No rule change.
 
+### 2026-10-20: four fixes (user: "fix it now")
+- **v11 texts:** the Arm F tab (title, description, position cards, the +100 % and NP > 25 % panels), the signal
+  file's `rules` text (`scanner/fade_live.py`) and the v11 page's main text now describe the −20 % stop, else 15:20.
+- **Morning signal time:** the docs said 07:20 / 07:45; `fade-morning.yml` is scheduled at 07:17 IST.
+- **Tick ₹0.01** in `server/rules.py` (A/B close entry ATP + 1 tick; fallback sale) and `server/fade.py` (fallback
+  sale; +100 % target rounding). The sub-₹2 shadow floor stays ₹0.05, as pre-registered; manual orders keep
+  `FILL_TICK` ₹0.05 (it also prices futures).
+- **F&O ban for live A/B:** `fade_live` writes the session's ban list into `fade.json` (`ban`); `RuleTrader` refuses a
+  banned stock in both entries. 3 new tests; the suite: 492 passed, the one known failure.
+- DECISIONS.md records the tick and ban fixes. Deployed after market (holiday).
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
