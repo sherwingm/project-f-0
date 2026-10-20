@@ -8,7 +8,7 @@ on:
         description: "which job"
         required: true
         type: choice
-        options: [backfill_spot, probe_expired, upstox_expired, reconcile, expiry_calendar, instruments]
+        options: [backfill_spot, probe_expired, upstox_expired, reconcile, expiry_calendar, instruments, bhavcopy_ohlc]
       args:
         description: "extra arguments for the job's script (optional)"
         required: false

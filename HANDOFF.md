@@ -60,6 +60,10 @@ Done on 2026-10-19:
 - Reconciliation of the two sources recorded in INDEX_DATA_REPORT.md, with a merge rule. Upstox's volume-0 candles
   are fillers.
 
+- Daily option prices are now monthly files. The one-off `bhavcopy_ohlc --split-yearly` is queued after SENSEX.
+  Clean the `index-data` history later (squash to one commit, only with the user's OK), when the repo passes ~3 GB
+  or every few months.
+
 Open questions to the user:
 - Retry every 30 s instead of 2 min? It changes the fade's written rules, so it needs a DECISIONS.md entry and the
   user's yes.

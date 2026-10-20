@@ -539,6 +539,17 @@ are recorded?
   2026-10-21.
 - Deployed on 2026-10-20 (an NSE holiday, so no session was disturbed); live from 21 Oct's open.
 
+### 2026-10-20: daily option prices stored per month; history cleaned later (user: "monthly + clean later")
+- Measured on the data branch: the current data is 1.76 GB (7,436 files). Each trading night rewrites 15 files,
+  about 19 MB of old copies kept by git: ~17 MB of it is the 2026 daily option-price files, plus spot / VIX for the
+  month and the status lists. That is ~400 MB a month, ~5 GB a year.
+- `index_data/bhavcopy_ohlc.py` now writes `options_daily/<underlying>/<YYYY-MM>.parquet`, so a night rewrites
+  ~1.5 MB. `--split-yearly` splits the old yearly files, merging into any monthly file already written; it is safe to
+  re-run. Queued on GitHub after SENSEX. Readers list files by glob and need no change. Test:
+  `tests/test_bhavcopy_monthly.py`.
+- **Clean the history later,** with the user's OK at the time: squash `index-data` to one commit when the repo
+  passes ~3 GB, or every few months. It removes only old copies of rewritten files.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll

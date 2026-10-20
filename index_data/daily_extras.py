@@ -3,7 +3,7 @@
     KOTAK_CONSUMER_KEY=... UPSTOX_ANALYTICS_TOKEN=... INDEX_STORE=... python -m index_data.daily_extras [--weekly]
 
 1. Index spot + India VIX, today's 1-minute candles (Kotak; VIX x100 fix applied) -> spot_1m/<name>/<YYYY-MM>.parquet.
-2. Today's NSE daily OHLC of every index option and future (raw F&O bhavcopy) -> options_daily/<underlying>/<YYYY>.parquet.
+2. Today's NSE daily OHLC of every index option and future (raw F&O bhavcopy) -> options_daily/<underlying>/<YYYY-MM>.parquet.
    NSE may refuse a cloud runner on some nights; the next night's run tries again (restart-safe).
 3. Weekly (Fridays, or --weekly): the Upstox expired-contract top-up for the expiries of the last 14 days (NIFTY,
    BANKNIFTY, SENSEX; contracts already on disk are skipped) and the India VIX daily file from yfinance.

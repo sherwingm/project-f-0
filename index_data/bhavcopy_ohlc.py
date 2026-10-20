@@ -6,7 +6,9 @@ The stock cache (data/cache/fo_bhavcopy_*.csv) keeps no open / high / low (scann
 This re-downloads each session's raw file and keeps the IDO / IDF rows with TradDt, TckrSymb, XpryDt, StrkPric,
 OptnTp, OpnPric, HghPric, LwPric, ClsPric, SttlmPric, UndrlygPric, OpnIntrst, ChngInOpnIntrst, TtlTradgVol,
 TtlTrfVal, NewBrdLotQty (old-format files before 2024-07-05 are mapped; UndrlygPric and NewBrdLotQty are null there,
-TtlTrfVal is VAL_INLAKH x 1e5). Stored as STORE/options_daily/<underlying>/<YYYY>.parquet (FinInstrmTp kept).
+TtlTrfVal is VAL_INLAKH x 1e5). Stored as STORE/options_daily/<underlying>/<YYYY-MM>.parquet (FinInstrmTp kept): one file per month, so the nightly
+top-up rewrites ~1.5 MB, not a whole year (~17 MB of old copies a night in git; yearly files until 2026-10-20,
+split by --split-yearly).
 Restart-safe: sessions already in the year's file are skipped. Raw files are not kept.
 BSE (SENSEX): see bse_status() - no stable public URL is used here; documented in INDEX_DATA_REPORT.md.
 """
@@ -57,6 +59,26 @@ def to_index_rows(raw: pd.DataFrame, old_format: bool) -> pd.DataFrame:
     return d[KEEP].reset_index(drop=True)
 
 
+KEYS = ["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp"]
+
+
+def split_yearly(store=STORE) -> dict:
+    """One-off (2026-10-20): options_daily/<underlying>/<YYYY>.parquet -> <YYYY-MM>.parquet, then the yearly file is
+    removed. Merges into a monthly file that already exists (upsert on KEYS), so a re-run or a partial run is safe."""
+    out = {"yearly_files": 0, "monthly_files": 0, "rows": 0}
+    for f in sorted((store / "options_daily").glob("*/*.parquet")):
+        if len(f.stem) != 4 or not f.stem.isdigit():
+            continue
+        d = pd.read_parquet(f)
+        for m, g in d.groupby(d["TradDt"].astype(str).str[:7]):
+            upsert_parquet(f.parent / f"{m}.parquet", g, KEYS)
+            out["monthly_files"] += 1
+        out["yearly_files"] += 1
+        out["rows"] += len(d)
+        f.unlink()
+    return out
+
+
 def done_days(store=STORE) -> set[str]:
     out = set()
     for f in (store / "options_daily").glob("*/*.parquet"):
@@ -81,9 +103,8 @@ def run(start: date, end: date, store=STORE) -> dict:
             try:
                 raw, old = _download_raw(d)
                 rows = to_index_rows(raw, old)
-                for (u, y), g in rows.groupby([rows["TckrSymb"], rows["TradDt"].str[:4]]):
-                    upsert_parquet(store / "options_daily" / u / f"{y}.parquet", g,
-                                   ["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp"])
+                for (u, m), g in rows.groupby([rows["TckrSymb"], rows["TradDt"].str[:7]]):
+                    upsert_parquet(store / "options_daily" / u / f"{m}.parquet", g, KEYS)
                 stats["sessions"] += 1
                 stats["rows"] += len(rows)
                 break
@@ -112,8 +133,12 @@ def main() -> None:
     ap = argparse.ArgumentParser(description="full-OHLC daily index options from NSE's raw F&O bhavcopy")
     ap.add_argument("--from", dest="start", default="2021-01-01")
     ap.add_argument("--to", dest="end", default=date.today().isoformat())
+    ap.add_argument("--split-yearly", action="store_true", help="one-off: split the yearly files into monthly ones")
     a = ap.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    if a.split_yearly:
+        print(split_yearly())
+        return
     st = run(date.fromisoformat(a.start), date.fromisoformat(a.end))
     print(st)
 
