@@ -1,7 +1,7 @@
 {
- "rules": "S1 v10 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20; sold at 15:20 the same day.",
+ "rules": "S1 v11 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below 0.80 x entry from 09:16 (-20 % stop), else at 15:20 the same day.",
  "session": "2026-10-21",
- "made_at": "2026-10-20T01:54:27+05:30",
+ "made_at": "2026-10-20T20:24:07+05:30",
  "signals": [
   {
    "symbol": "UNIONBANK",
@@ -44,7 +44,13 @@
     205.0,
     215.0
    ],
-   "chain_from": "2026-10-19"
+   "chain_from": "2026-10-19",
+   "filing_day": {
+    "market_hours": true,
+    "D": 2.777,
+    "D_raw": 2.368,
+    "tagged": false
+   }
   },
   {
    "symbol": "HINDZINC",
@@ -85,7 +91,11 @@
     680.0,
     700.0
    ],
-   "chain_from": "2026-10-19"
+   "chain_from": "2026-10-19",
+   "filing_day": {
+    "market_hours": false,
+    "tagged": false
+   }
   },
   {
    "symbol": "BAJFINANCE",
@@ -140,7 +150,11 @@
     1200.0,
     1220.0
    ],
-   "chain_from": "2026-10-19"
+   "chain_from": "2026-10-19",
+   "filing_day": {
+    "market_hours": false,
+    "tagged": false
+   }
   }
  ],
  "skipped": [
@@ -750,5 +764,10 @@
    "chain_from": "2026-10-16",
    "session": "2026-10-19"
   }
+ ],
+ "ban": [
+  "AMBUJACEM",
+  "KAYNES",
+  "SAIL"
  ]
 }

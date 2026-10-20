@@ -8,7 +8,7 @@
    "2026-10-19"
   ],
   "as_of_label": "Mon 19 Oct 2026",
-  "generated_at_ist": "2026-10-20 01:54 IST",
+  "generated_at_ist": "2026-10-20 20:24 IST",
   "universe_size": 213,
   "stocks_with_data": 213,
   "missing_symbols": [],
@@ -3120,9 +3120,9 @@
    }
   },
   "fade": {
-   "rules": "S1 v10 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20; sold at 15:20 the same day.",
+   "rules": "S1 v11 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below 0.80 x entry from 09:16 (-20 % stop), else at 15:20 the same day.",
    "session": "2026-10-21",
-   "made_at": "2026-10-20T01:54:27+05:30",
+   "made_at": "2026-10-20T20:24:07+05:30",
    "signals": [
     {
      "symbol": "UNIONBANK",
@@ -3165,7 +3165,13 @@
       205.0,
       215.0
      ],
-     "chain_from": "2026-10-19"
+     "chain_from": "2026-10-19",
+     "filing_day": {
+      "market_hours": true,
+      "D": 2.777,
+      "D_raw": 2.368,
+      "tagged": false
+     }
     },
     {
      "symbol": "HINDZINC",
@@ -3206,7 +3212,11 @@
       680.0,
       700.0
      ],
-     "chain_from": "2026-10-19"
+     "chain_from": "2026-10-19",
+     "filing_day": {
+      "market_hours": false,
+      "tagged": false
+     }
     },
     {
      "symbol": "BAJFINANCE",
@@ -3261,7 +3271,11 @@
       1200.0,
       1220.0
      ],
-     "chain_from": "2026-10-19"
+     "chain_from": "2026-10-19",
+     "filing_day": {
+      "market_hours": false,
+      "tagged": false
+     }
     }
    ],
    "skipped": [
@@ -3871,13 +3885,18 @@
      "chain_from": "2026-10-16",
      "session": "2026-10-19"
     }
+   ],
+   "ban": [
+    "AMBUJACEM",
+    "KAYNES",
+    "SAIL"
    ]
   },
   "s2": {
    "signals": {
     "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
     "session": "2026-10-19",
-    "generated": "2026-10-20T01:53+05:30",
+    "generated": "2026-10-20T20:22+05:30",
     "signals": [],
     "note": null,
     "history": [
@@ -4209,54 +4228,54 @@
    "counts": {
     "insider": 14265,
     "block_deal": 3056,
-    "results_date": 3014,
+    "results_date": 3016,
     "results": 2898,
     "capacity": 2502,
     "ban": 1759,
     "bulk_deal": 1571,
     "order_win": 1158,
-    "rating": 1155,
+    "rating": 1156,
     "analyst_view": 23
    },
    "sources": {
     "nse_ann": {
-     "last_success": "2026-10-20T01:49:35+05:30",
+     "last_success": "2026-10-20T20:21:09+05:30",
      "error": null
     },
     "bse_ann": {
-     "last_success": "2026-10-20T01:50:39+05:30",
+     "last_success": "2026-10-20T20:22:12+05:30",
      "error": null
     },
     "nse_block": {
-     "last_success": "2026-10-20T01:50:39+05:30",
+     "last_success": "2026-10-20T20:22:13+05:30",
      "error": null
     },
     "nse_bulk": {
-     "last_success": "2026-10-20T01:50:40+05:30",
+     "last_success": "2026-10-20T20:22:14+05:30",
      "error": null
     },
     "nse_ban": {
-     "last_success": "2026-10-20T01:51:49+05:30",
+     "last_success": "2026-10-20T20:22:22+05:30",
      "error": null
     },
     "nse_pit": {
-     "last_success": "2026-10-20T01:50:41+05:30",
+     "last_success": "2026-10-20T20:22:15+05:30",
      "error": null
     },
     "rss:et_markets": {
-     "last_success": "2026-10-20T01:50:44+05:30",
+     "last_success": "2026-10-20T20:22:18+05:30",
      "error": null
     },
     "nse_bm": {
-     "last_success": "2026-10-20T01:50:43+05:30",
+     "last_success": "2026-10-20T20:22:17+05:30",
      "error": null
     },
     "rss:moneycontrol": {
-     "last_success": "2026-10-20T01:51:47+05:30",
+     "last_success": "2026-10-20T20:22:18+05:30",
      "error": null
     },
     "rss:business_standard": {
-     "last_success": "2026-10-20T01:51:48+05:30",
+     "last_success": "2026-10-20T20:22:19+05:30",
      "error": null
     }
    }
@@ -5236,7 +5255,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 5395500,
    "fut_oi_prev": 4749000,
@@ -19140,7 +19159,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 46017500,
    "fut_oi_prev": 45755000,
@@ -29358,7 +29377,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 100978125,
    "fut_oi_prev": 99436875,
@@ -33954,7 +33973,7 @@
       "eps_yoy": -87.9
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 73514250,
    "fut_oi_prev": 72392250,
@@ -63748,7 +63767,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 82198800,
    "fut_oi_prev": 82347150,
@@ -70531,7 +70550,7 @@
       "eps_yoy": -1.2
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 38410400,
    "fut_oi_prev": 38152950,
@@ -77379,7 +77398,7 @@
       "eps_yoy": 22.5
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 96340000,
    "fut_oi_prev": 91907500,
@@ -93327,7 +93346,7 @@
       "eps_yoy": -51.3
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 7720800,
    "fut_oi_prev": 7666800,
@@ -94487,7 +94506,7 @@
       "eps_yoy": -46.3
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 390434850,
    "fut_oi_prev": 382983900,
@@ -95648,7 +95667,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 42649200,
    "fut_oi_prev": 42724000,
@@ -101359,7 +101378,7 @@
       "eps_yoy": 67.5
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 27057800,
    "fut_oi_prev": 26017775,
@@ -103681,7 +103700,7 @@
       "eps_yoy": 7.9
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 126660100,
    "fut_oi_prev": 129231200,
@@ -111679,7 +111698,7 @@
       "eps_yoy": 6.4
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 9480000,
    "fut_oi_prev": 9230000,
@@ -119662,7 +119681,7 @@
       "eps_yoy": -5.9
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 106409900,
    "fut_oi_prev": 98527350,
@@ -120853,7 +120872,7 @@
       "eps_yoy": 0.0
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 134594250,
    "fut_oi_prev": 127813000,
@@ -124293,7 +124312,7 @@
       "eps_yoy": -14.0
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 244132100,
    "fut_oi_prev": 242080550,
@@ -141504,7 +141523,7 @@
       "eps_yoy": 26.3
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 80511750,
    "fut_oi_prev": 74688750,
@@ -142664,7 +142683,7 @@
       "eps_yoy": 23.3
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 5792250,
    "fut_oi_prev": 5663250,
@@ -165312,7 +165331,7 @@
       "eps_yoy": -36.4
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 13426000,
    "fut_oi_prev": 13569500,
@@ -170997,7 +171016,7 @@
       "eps_yoy": 62.4
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 4727450,
    "fut_oi_prev": 4498900,
@@ -178977,7 +178996,7 @@
       "eps_yoy": 31.9
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 4512125,
    "fut_oi_prev": 4644750,
@@ -182627,14 +182646,23 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "results",
+      "date": "2026-10-27",
+      "sessions": 6,
+      "subject": "To consider and approve the financial results for the period ended September 30, 2026 and other business matters"
+     }
+    ],
     "analyst_view": [],
-    "flags": {}
+    "flags": {
+     "results_soon": 6
+    }
    },
    "model": {
-    "p_down": 0.275,
-    "p_flat": 0.385,
-    "p_up": 0.341,
+    "p_down": 0.279,
+    "p_flat": 0.371,
+    "p_up": 0.351,
     "trained_through": "2026-09-15",
     "oos_brier": 0.673,
     "base_brier": 0.6672
@@ -186974,7 +187002,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 272624000,
    "fut_oi_prev": 272400000,
@@ -190421,7 +190449,7 @@
       "eps_yoy": 8.0
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 2118750,
    "fut_oi_prev": 2084000,
@@ -224816,7 +224844,7 @@
       "eps_yoy": 15.9
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 18766200,
    "fut_oi_prev": 18863400,
@@ -231848,6 +231876,12 @@
     "last_10": [],
     "upcoming": [
      {
+      "type": "rating",
+      "date": "2026-10-20",
+      "sessions": 1,
+      "subject": "TVS Motor Company Limited has informed the Exchange about Credit Rating"
+     },
+     {
       "type": "results",
       "date": "2026-10-28",
       "sessions": 7,
@@ -232767,7 +232801,7 @@
       "eps_yoy": 237.2
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 51704000,
    "fut_oi_prev": 53856000,
@@ -233927,7 +233961,7 @@
       "eps_yoy": 20.2
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 2071700,
    "fut_oi_prev": 1943850,
@@ -235119,7 +235153,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 112810950,
    "fut_oi_prev": 110952450,
@@ -245374,7 +245408,7 @@
       "eps_yoy": -2.1
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 237315000,
    "fut_oi_prev": 224562000,
@@ -246566,7 +246600,7 @@
       "eps_yoy": 41.7
      }
     ],
-    "updated": "2026-10-19"
+    "updated": "2026-10-20"
    },
    "fut_oi": 1366720600,
    "fut_oi_prev": 1322527500,
