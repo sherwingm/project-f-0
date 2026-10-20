@@ -52,3 +52,16 @@ H is never judged; it is the ceiling.
   option's official open.
 - The open is the pre-open auction price; the stock may move in the first minutes before the fill.
 - 2025-26 has been read many times for the fade (floor, target, stop studies), so its result is not fresh.
+
+## Addendum 2026-10-20 (later) · correction: v11's stop starts at 09:16
+Written before the corrected split is computed. The "v11 exit" above pointed at `s20_net` in
+`S1_v10_s20_minutes_trades.csv`, which lets the stop fire in the **09:15** minute (that report's own definition).
+S1 v11's live stop starts at **09:16**. From now on, the v11 column of this study is the stop from 09:16:
+- the first minute from 09:16 to 15:19 whose low ≤ 0.80 × entry;
+- filled at min(stop, that minute's open) − 1 tick (₹0.05 before 2025-11-03, ₹0.01 from it), real charges;
+- else the backtest's 15:20 result.
+
+It is computed from the same minute candles by `scanner.fade_s20_minutes.one(..., stop_from="09:16")`. Over all 468
+trades this gives +₹2,50,916, 316 stops: the figure S1 v11 was switched on. Test 3 is judged on this column. The v10
+(E1) columns, tests 1–2, H and O are unchanged. Nothing else is touched: the arms A / B study, the 09:15 report
+`S1_v10_s20_minutes.md` and the live code stay as they are.
