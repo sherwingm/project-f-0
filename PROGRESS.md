@@ -567,6 +567,18 @@ are recorded?
 - Tests: 4 new (stop at the bid, v10 shadow at 15:20, no stop at 09:15, late shadow), replacing the 3 shadow_s20
   tests. The suite still has only its one old failure.
 
+### 2026-10-20: arms A / B with the fade's -20 % stop (prev vs new; descriptive)
+- Pre-registered: `strategies/S1_arms_ab_stop20_study.md`. The live rules' A / B trades were re-run (`scanner.backtest_s1_v8`,
+  day 0 2025-04-01 to 2026-09-25). Arm B matches the record (74 trades, -14.5 %); arm A gives 175 trades, -5.4 %, vs
+  172 and -3.3 % recorded on 2026-10-14, because the data has grown.
+- 1-minute candles of each trade's holding days were fetched on GitHub (`fetch_band_minutes ab`, multi-day spans now
+  supported): 174 of 175 contracts. `python -m scanner.arms_ab_stop20` → `data/results/S1_arms_ab_stop20.md`.
+- **Arm A:** prev -Rs 87,902 vs new -Rs 1,32,357 (173 trades; mean diff -4.2 points, t -0.44). The stop cuts arm A's
+  2026 winners (2026: prev +1.32 L, new -23k).
+- **Arm B:** prev -Rs 70,163 vs new -Rs 32,478 (73 trades; +7.7 points, t 0.74). Better, but still a loss.
+- The stop fires on 93 % / 90 % of trades, most on the first session after entry. Neither arm passes (t < 2), and both
+  lose either way: the arms' problem is the entry, as the 2026-10-14 arm A study found. No rule change.
+
 ### Known issues
 - **Render free tier sleeps** after 15 minutes without visits: on 2026-10-16 the ledger was last saved at 11:21, the
   server came back only after 16:00, and the eight fade positions were not sold at 15:20 (they sell at the first poll
