@@ -3,7 +3,8 @@
     python -m scanner.fade_armA_filter
 
 strategies/S1_v10_armA_overlap_filter.md fixes every choice. Reads the v10 backtest trades (entry = open, E1 exit,
-2022-24 and 2025-26), the v11 minute trades (S1_v10_s20_minutes_trades.csv), eod2 opens / closes and the sector map.
+2022-24 and 2025-26), the v11 exit on 1-minute candles (stop from 09:16, as live: S1_v10_bandv10_contracts.csv /
+_minutes.csv via scanner.fade_s20_minutes.one; addendum 2026-10-20), eod2 opens / closes and the sector map.
 Writes data/results/S1_v10_armA_overlap_filter.md and S1_v10_armA_overlap_filter_trades.csv.
 """
 from __future__ import annotations
@@ -102,12 +103,23 @@ def groups(t: pd.DataFrame, net: str, prem: str, label: str) -> list[dict]:
     return rows
 
 
+def v11_minutes() -> pd.DataFrame:
+    """The minute trades with S1 v11's exit as live: the -20 % stop from 09:16 (v11_net), else the 15:20 result."""
+    from .fade_s20_minutes import one
+    c = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
+    mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+    mins["t"] = mins["ts"].str[11:16]
+    by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
+    rows = [x for r in c.itertuples() if (x := one(by.get((r.symbol, r.day0, r.side, float(r.strike))), r, "09:16"))]
+    return pd.DataFrame(rows).rename(columns={"s20_net": "v11_net"})
+
+
 def main() -> None:
     a = pd.read_csv(RES / "S1_v10_trades_2022_24.csv").assign(window="2022-24")
     b = pd.read_csv(RES / "S1_v10_trades.csv").assign(window="2025-26")
     t = pd.concat([a, b], ignore_index=True)
     t = t[(t["entry"] == "open") & (t["e1_excluded"].fillna("") == "")].reset_index(drop=True)
-    m = pd.read_csv(RES / "S1_v10_s20_minutes_trades.csv")
+    m = v11_minutes()
     m["premium_rs"] = m["entry"] * m["lot"]
     px = Prices(set(t["symbol"]) | set(m["symbol"]))
     key = {k: px.ar(*k) for k in {(s, d) for s, d in zip(t["symbol"], t["day0"])} | {(s, d) for s, d in zip(m["symbol"], m["day0"])}}
@@ -127,7 +139,8 @@ def main() -> None:
     main_rows = groups(t[t["window"] == "2022-24"], "e1_net", "premium_rs", "2022-24")
     main_rows += groups(t[t["window"] == "2025-26"], "e1_net", "premium_rs", "2025-26")
     main_rows += groups(t, "e1_net", "premium_rs", "2022-26")
-    mins = groups(m, "s20_net", "premium_rs", "v11 exit (minutes)") + groups(m, "e1_net", "premium_rs", "v10 exit (minutes)")
+    mins = groups(m, "v11_net", "premium_rs", "v11 exit (minutes, stop from 09:16)") + \
+        groups(m, "e1_net", "premium_rs", "v10 exit (minutes)")
 
     # the test (O, both sides)
     def od(w):
@@ -138,7 +151,7 @@ def main() -> None:
     g2, p2 = od("2025-26")
     g3, p3 = od("all")
     mo = m[m["O"] == "drop"]
-    p4 = mo["s20_net"] / mo["premium_rs"] * 100
+    p4 = mo["v11_net"] / mo["premium_rs"] * 100
     t3 = clustered_t(p3, g3["day0"]) if len(g3) > 1 else None
     test = pd.DataFrame([
         {"test": "1a O-dropped lose in 2022-24 (mean < 0)", "n": len(g1), "value": round(p1.mean(), 2) if len(g1) else None,
@@ -146,7 +159,7 @@ def main() -> None:
         {"test": "1b O-dropped lose in 2025-26 (mean < 0)", "n": len(g2), "value": round(p2.mean(), 2) if len(g2) else None,
          "pass": bool(len(g2) and p2.mean() < 0)},
         {"test": "2 pooled O-dropped t <= -2", "n": len(g3), "value": t3, "pass": bool(t3 is not None and t3 <= -2)},
-        {"test": "3 O-dropped lose under v11 (minutes, mean < 0)", "n": len(mo), "value": round(p4.mean(), 2) if len(mo) else None,
+        {"test": "3 O-dropped lose under v11 (minutes, stop from 09:16, mean < 0)", "n": len(mo), "value": round(p4.mean(), 2) if len(mo) else None,
          "pass": bool(len(mo) and p4.mean() < 0)},
     ])
     verdict = "PASS (candidate for the user's decision)" if test["pass"].all() else "FAIL (nothing changes)"
@@ -173,7 +186,8 @@ def main() -> None:
         "Numbers only. Pre-registered: strategies/S1_v10_armA_overlap_filter.md. v10 backtest trades, entry at the "
         "option's day-0 open, E1 same-day exit, net after charges. A trade is dropped when its stock is up >= 2 % "
         "more than its sector (and < 10 % raw): H at the day-0 close (Arm A's own signal, known only after the "
-        "fade's sale), O at the day-0 open (known at 09:15). t is date-clustered.\n",
+        "fade's sale), O at the day-0 open (known at 09:15). t is date-clustered. v11 = the -20 % stop "
+        "from 09:16, as live (addendum 2026-10-20; the first run used the 09:15 column).\n",
         f"## Test (O, both sides): **{verdict}**\n\n" + md(test),
         "## All groups, v10 exit (E1)\n\n" + md(pd.DataFrame(main_rows)),
         "## Minute trades (Oct 2024 to Sep 2026): v11 exit and v10 exit\n\n" + md(pd.DataFrame(mins)),

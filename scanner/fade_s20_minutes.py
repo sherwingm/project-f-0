@@ -24,7 +24,8 @@ RES = ROOT / "data" / "results"
 TICK_CHANGE = "2025-11-03"
 
 
-def one(m: pd.DataFrame | None, r) -> dict | None:
+def one(m: pd.DataFrame | None, r, stop_from: str = "09:15") -> dict | None:
+    """stop_from: the first minute the stop may fire ("09:15": this report; "09:16": S1 v11's live rule)."""
     if m is None or m.empty:
         return None                                              # no minute candles for this contract
     m = m[(m["t"] >= "09:15") & (m["t"] <= "15:19")]
@@ -32,7 +33,7 @@ def one(m: pd.DataFrame | None, r) -> dict | None:
         return None
     entry, stop = float(r.entry_price), 0.80 * float(r.entry_price)
     tick = 0.05 if r.day0 < TICK_CHANGE else 0.01
-    hit = m[m["l"] <= stop + 1e-9]
+    hit = m[(m["l"] <= stop + 1e-9) & (m["t"] >= stop_from)]
     out = {"symbol": r.symbol, "day0": r.day0, "side": r.side, "lot": int(r.lot), "entry": entry,
            "close_pct": round((float(m["c"].iloc[-1]) / entry - 1) * 100, 1), "e1_net": float(r.e1_net),
            "day_high_pct": round((float(m["h"].max()) / entry - 1) * 100, 1), "fired": not hit.empty}

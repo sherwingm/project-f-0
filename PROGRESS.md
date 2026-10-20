@@ -583,10 +583,20 @@ are recorded?
 - Pre-registered: `strategies/S1_v10_armA_overlap_filter.md`. `python -m scanner.fade_armA_filter` →
   `data/results/S1_v10_armA_overlap_filter.md`. Both sides were filtered, as asked.
 - Arm A fires on the day-0 **close**, after the fade has sold, so the plain filter (**H**) is hindsight only. With the
-  v10 exit, H keeps 635 trades for +Rs 4.30 L vs +Rs 1.50 L for all 870 (2022-26). With v11's stop (minutes, Oct 2024 →)
-  it is +Rs 2.21 L vs +Rs 2.17 L: the -20 % stop already removes most of that damage.
+  v10 exit, H keeps 635 trades for +Rs 4.30 L vs +Rs 1.50 L for all 870 (2022-26). With v11's stop from 09:16
+  (minutes, Oct 2024 →) it is +Rs 2.83 L vs +Rs 2.51 L: the -20 % stop already removes most of that damage.
 - The usable version (**O**: the same test on the 09:15 open) **fails**. Its dropped trades made +12.4 % in 2022-24 and
-  -15.4 % in 2025-26; pooled t -0.07; +4.7 % under v11. The open shows only 95 of the 233 Arm A days. No rule change.
+  -15.4 % in 2025-26; pooled t -0.07; +5.0 % under v11. The open shows only 95 of the 233 Arm A days. No rule change.
+- **Correction (later the same day):** the first run's v11 column was `s20_net` of `S1_v10_s20_minutes_trades.csv`,
+  where the stop may fire in the 09:15 minute. v11's live stop starts at 09:16 (addendum in the pre-registration). The
+  study now computes it from the minute candles: `fade_s20_minutes.one(..., stop_from="09:16")`, whose default keeps
+  the 09:15 report as it was. All 468 trades: +Rs 2,50,916, 316 stops, as in the v11 page. The first run said +Rs 2.21 L
+  vs +Rs 2.17 L and +4.7 %. The verdict is unchanged.
+  - Arm A clash (real Arm A trades, 2025-04 → 2026-09), v11 from 09:16:
+    - fade puts with Arm A also firing (61): -Rs 84k (said -Rs 69k);
+    - fade puts without it (205): +Rs 2.25 L (said +Rs 1.88 L);
+    - fade calls with Arm A firing (16): +Rs 68k.
+  - The arms A / B study and the live code are not touched.
 
 ### 2026-10-20: four fixes (user: "fix it now")
 - **v11 texts:** the Arm F tab (title, description, position cards, the +100 % and NP > 25 % panels), the signal

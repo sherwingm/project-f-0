@@ -1,6 +1,6 @@
 # S1 fade · drop the trades where Arm A also fires (H = hindsight close, O = the 09:15 open)
 
-Numbers only. Pre-registered: strategies/S1_v10_armA_overlap_filter.md. v10 backtest trades, entry at the option's day-0 open, E1 same-day exit, net after charges. A trade is dropped when its stock is up >= 2 % more than its sector (and < 10 % raw): H at the day-0 close (Arm A's own signal, known only after the fade's sale), O at the day-0 open (known at 09:15). t is date-clustered.
+Numbers only. Pre-registered: strategies/S1_v10_armA_overlap_filter.md. v10 backtest trades, entry at the option's day-0 open, E1 same-day exit, net after charges. A trade is dropped when its stock is up >= 2 % more than its sector (and < 10 % raw): H at the day-0 close (Arm A's own signal, known only after the fade's sale), O at the day-0 open (known at 09:15). t is date-clustered. v11 = the -20 % stop from 09:16, as live (addendum 2026-10-20; the first run used the 09:15 column).
 
 ## Test (O, both sides): **FAIL (nothing changes)**
 
@@ -9,7 +9,7 @@ Numbers only. Pre-registered: strategies/S1_v10_armA_overlap_filter.md. v10 back
 | 1a O-dropped lose in 2022-24 (mean < 0) | 79 | 12.41 | False |
 | 1b O-dropped lose in 2025-26 (mean < 0) | 69 | -15.35 | True |
 | 2 pooled O-dropped t <= -2 | 148 | -0.07 | False |
-| 3 O-dropped lose under v11 (minutes, mean < 0) | 78 | 4.69 | False |
+| 3 O-dropped lose under v11 (minutes, stop from 09:16, mean < 0) | 78 | 5.02 | False |
 
 ## All groups, v10 exit (E1)
 
@@ -73,21 +73,21 @@ Numbers only. Pre-registered: strategies/S1_v10_armA_overlap_filter.md. v10 back
 
 | window | side | group | n | win_pct | mean_pct | median_pct | total_rs | t |
 |---|---|---|---|---|---|---|---|---|
-| v11 exit (minutes) | all | all trades | 468 | 24.6 | 8.83 | -21.07 | 216629 | 2.373 |
-| v11 exit (minutes) | all | H keep | 333 | 27 | 11.9 | -21.07 | 221029 | 2.446 |
-| v11 exit (minutes) | all | H drop | 135 | 18.5 | 1.27 | -21.07 | -4400 | 0.257 |
-| v11 exit (minutes) | all | O keep | 390 | 25.6 | 9.66 | -21.06 | 198880 | 2.466 |
-| v11 exit (minutes) | all | O drop | 78 | 19.2 | 4.69 | -21.08 | 17749 | 0.475 |
-| v11 exit (minutes) | PE | all trades | 342 | 25.1 | 10.45 | -21.04 | 189475 | 2.106 |
-| v11 exit (minutes) | PE | H keep | 232 | 33.6 | 22.84 | -20.95 | 316057 | 3.296 |
-| v11 exit (minutes) | PE | H drop | 110 | 7.3 | -15.69 | -21.14 | -126582 | -6.242 |
-| v11 exit (minutes) | PE | O keep | 269 | 26.8 | 11.75 | -21.02 | 168294 | 2.215 |
-| v11 exit (minutes) | PE | O drop | 73 | 19.2 | 5.66 | -21.08 | 21181 | 0.534 |
-| v11 exit (minutes) | CE | all trades | 126 | 23 | 4.44 | -21.14 | 27155 | 0.821 |
-| v11 exit (minutes) | CE | H keep | 101 | 11.9 | -13.24 | -21.26 | -95027 | -4.159 |
-| v11 exit (minutes) | CE | H drop | 25 | 68 | 75.85 | 50.36 | 122182 | 3.846 |
-| v11 exit (minutes) | CE | O keep | 121 | 23.1 | 5.01 | -21.14 | 30586 | 0.897 |
-| v11 exit (minutes) | CE | O drop | 5 | 20 | -9.47 | -21.45 | -3432 | -0.793 |
+| v11 exit (minutes, stop from 09:16) | all | all trades | 468 | 29.1 | 9.7 | -21.1 | 250916 | 2.468 |
+| v11 exit (minutes, stop from 09:16) | all | H keep | 333 | 33.3 | 14.48 | -21.07 | 283376 | 2.877 |
+| v11 exit (minutes, stop from 09:16) | all | H drop | 135 | 18.5 | -2.07 | -21.35 | -32460 | -0.408 |
+| v11 exit (minutes, stop from 09:16) | all | O keep | 390 | 30.5 | 10.64 | -21.09 | 230628 | 2.534 |
+| v11 exit (minutes, stop from 09:16) | all | O drop | 78 | 21.8 | 5.02 | -21.18 | 20288 | 0.495 |
+| v11 exit (minutes, stop from 09:16) | PE | all trades | 342 | 29.5 | 12.2 | -21.07 | 232132 | 2.325 |
+| v11 exit (minutes, stop from 09:16) | PE | H keep | 232 | 40.1 | 27.26 | -20.93 | 384992 | 3.761 |
+| v11 exit (minutes, stop from 09:16) | PE | H drop | 110 | 7.3 | -19.57 | -21.54 | -152860 | -7.036 |
+| v11 exit (minutes, stop from 09:16) | PE | O keep | 269 | 31.6 | 13.85 | -21.06 | 208044 | 2.46 |
+| v11 exit (minutes, stop from 09:16) | PE | O drop | 73 | 21.9 | 6.1 | -21.17 | 24088 | 0.559 |
+| v11 exit (minutes, stop from 09:16) | CE | all trades | 126 | 27.8 | 2.94 | -21.36 | 18784 | 0.466 |
+| v11 exit (minutes, stop from 09:16) | CE | H keep | 101 | 17.8 | -14.88 | -21.59 | -101616 | -3.72 |
+| v11 exit (minutes, stop from 09:16) | CE | H drop | 25 | 68 | 74.9 | 50.36 | 120400 | 3.758 |
+| v11 exit (minutes, stop from 09:16) | CE | O keep | 121 | 28.1 | 3.5 | -21.35 | 22584 | 0.535 |
+| v11 exit (minutes, stop from 09:16) | CE | O drop | 5 | 20 | -10.64 | -21.59 | -3800 | -0.866 |
 | v10 exit (minutes) | all | all trades | 468 | 40.4 | 7.3 | -16.92 | 170405 | 1.711 |
 | v10 exit (minutes) | all | H keep | 333 | 47.4 | 17.17 | -3.98 | 329999 | 3.166 |
 | v10 exit (minutes) | all | H drop | 135 | 23 | -17.03 | -42.36 | -159594 | -2.82 |
