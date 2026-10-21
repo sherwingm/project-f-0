@@ -200,6 +200,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -24.0
+  },
+  {
+   "at": "10:46:29",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.389,
+   "same_best_bid_pct": 38.2,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.5
   }
  ],
  "top_gaps": [
@@ -274,6 +288,13 @@
    "at": "09:20"
   },
   {
+   "contract": "HINDALCO26OCT900CE",
+   "gap_pct": 1.389,
+   "kotak": 10.8,
+   "upstox": 10.95,
+   "at": "10:46"
+  },
+  {
    "contract": "TECHM26OCT1820CE",
    "gap_pct": 1.325,
    "kotak": 15.1,
@@ -335,23 +356,16 @@
    "kotak": 191.35,
    "upstox": 190.05,
    "at": "10:31"
-  },
-  {
-   "contract": "BAJFINANCE26OCT920PE",
-   "gap_pct": 0.621,
-   "kotak": 8.05,
-   "upstox": 8.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 438,
+  "rounds": 15,
+  "contract_quotes": 472,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 31.35,
-  "same_best_ask_pct": 33.85,
+  "same_best_bid_pct": 33.3,
+  "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.55,
+  "oi_same_pct": 100.0,
   "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
