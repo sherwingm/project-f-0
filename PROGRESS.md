@@ -749,3 +749,12 @@ Pre-registered `strategies/S1_fade_cheap_dte.md`; report `data/results/S1_fade_c
 same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1.05 % a trade (260, t -0.46); Rule-10:
 -1.48 % (185). Baseline (B >= Rs 2): +2.86 % (339, t 1.79). The sub-Rs 2 options lose under every expiry gap
 (-3.8 % a trade, 252). Nothing live changes; the Rs 2 floor stays.
+
+
+## 2026-10-22 · S1 fade · widening trail and the peak-pattern study: v12 stays best
+- Widening trail (gap widens past +40 %, `strategies/S1_fade_trail_tiered.md`): FAIL; verified by an independent
+  recompute. Most +40 % moves are one-minute spikes that reverse, so a wider gap gives more back (29 trades hurt, 10 helped).
+- Peak-pattern study (`strategies/S1_fade_peak_patterns.md`, learn on train, test once): big winners climb slowly with
+  deep pullbacks (median 38 % from the high; half touch -20 % first), small winners spike in minutes, and nothing in the
+  candles, volume, time or the stock marks the top. The frozen rule (R2 stall 20) and four others all lost to v12 on the
+  test half (v12 +3.20 % a trade). Reports: `data/results/S1_fade_peak_patterns.md`, `S1_fade_peak_rules_test.md`.
