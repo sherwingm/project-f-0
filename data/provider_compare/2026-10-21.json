@@ -680,6 +680,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -13.5
+  },
+  {
+   "at": "14:38:50",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.333,
+   "same_best_bid_pct": 52.9,
+   "same_best_ask_pct": 29.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -18.5
   }
  ],
  "top_gaps": [
@@ -803,6 +817,13 @@
    "at": "10:46"
   },
   {
+   "contract": "TATACONSUM26OCT970CE",
+   "gap_pct": 1.333,
+   "kotak": 11.25,
+   "upstox": 11.1,
+   "at": "14:38"
+  },
+  {
    "contract": "TECHM26OCT1820CE",
    "gap_pct": 1.325,
    "kotak": 15.1,
@@ -815,23 +836,16 @@
    "kotak": 19.1,
    "upstox": 18.85,
    "at": "13:13"
-  },
-  {
-   "contract": "SBIN26OCT960PE",
-   "gap_pct": 1.307,
-   "kotak": 7.65,
-   "upstox": 7.75,
-   "at": "14:33"
   }
  ],
  "day": {
-  "rounds": 48,
-  "contract_quotes": 1572,
+  "rounds": 49,
+  "contract_quotes": 1606,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 42.05,
+  "same_best_bid_pct": 42.9,
   "same_best_ask_pct": 41.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.55,
-  "upstox_minus_kotak_quote_time_s_median": -22.75
+  "oi_same_pct": 97.1,
+  "upstox_minus_kotak_quote_time_s_median": -22.5
  }
 }
