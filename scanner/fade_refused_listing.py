@@ -14,9 +14,34 @@ import pandas as pd
 
 from .backtest_s1_v2 import md
 from .build import ROOT
+from .fade_cheap_dte import V12, _R
+from .fade_stop_trail import one
 from .stats import clustered_t
 
 RES, CACHE = ROOT / "data" / "results", ROOT / "data" / "cache"
+CAP = 8000.0                                                      # as many lots as fit under Rs 8,000 (the user, 2026-10-21)
+
+
+def max_lots(t: pd.DataFrame) -> pd.DataFrame:
+    """Re-run v12 with qty = lots x lot, lots = as many as cost <= Rs 8,000 at the 09:16 entry (at least 1)."""
+    t = t.copy()
+    t["lots"] = [max(1, int(CAP // (r.entry_B * r.lot))) for r in t.itertuples()]
+    by = {}
+    for s in sorted(set(t["set"])):
+        m = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        m["t"] = m["ts"].str[11:16]
+        for k, g in m.groupby(["symbol", "day0", "side", "strike"]):
+            by[k] = g.sort_values("ts")
+    pct, net = [], []
+    for r in t.itertuples():
+        m = by[(r.symbol, r.day0, r.side, float(r.strike))]
+        m = m[(m["t"] >= "09:16") & (m["t"] <= "15:19")].reset_index(drop=True)
+        q = r.lots * r.lot
+        x = one(m, _R(lot=q, side=r.side, day0=r.day0, entry_B=r.entry_B), V12)
+        pct.append(x)
+        net.append(round(x / 100 * r.entry_B * q, 2))
+    t["v12_net_pct"], t["v12_net"], t["cost"] = pct, net, (t["entry_B"] * t["lot"] * t["lots"]).round(2)
+    return t
 
 
 def listing_close(t: pd.DataFrame) -> dict:
@@ -46,7 +71,7 @@ def stats(g: pd.DataFrame, **lab) -> dict:
 
 def main() -> None:
     t = pd.read_csv(RES / "S1_fade_cheap_dte_trades.csv")
-    t = t[t["entry_B"] < 2].copy()                                 # refused by the Rs 2 floor today
+    t = max_lots(t[t["entry_B"] < 2])                             # refused by the Rs 2 floor today
     first = listing_close(t)
     t["listing_day"] = [first.get((r.symbol, r.expiry, float(r.strike), r.side), (None, None))[0] for r in t.itertuples()]
     t["listing_close"] = [first.get((r.symbol, r.expiry, float(r.strike), r.side), (None, None))[1] for r in t.itertuples()]
@@ -68,19 +93,21 @@ def main() -> None:
     text = "\n".join([
         "# S1 fade · refused sub-Rs 2 signals bought anyway if the listing-day price was < Rs 10 / < Rs 7 (v12 exit)\n",
         f"Pre-registered: strategies/S1_refused_listing_price.md. {len(t)} refused contracts (realistic entry under Rs 2, "
-        f"Oct 2024 - Aug 2026, no lot cap), listing price found for {len(known)}. Same-day v12 exit, real charges.\n",
+        f"Oct 2024 - Aug 2026), listing price found for {len(known)}. As many lots as cost <= Rs 8,000 (at least 1). Same-day v12 exit, real charges.\n",
         "## The test\n\n" + md(pd.DataFrame(tests)), "## Groups\n\n" + md(pd.DataFrame(rows))])
     (RES / "S1_refused_listing_price.md").write_text(text, encoding="utf-8")
-    cols = ["symbol", "side", "strike", "expiry", "day0", "listing_day", "listing_close", "entry_B", "lot", "lot_value",
-            "v12_net", "v12_net_pct"]
+    cols = ["symbol", "side", "strike", "expiry", "day0", "listing_day", "listing_close", "entry_B", "lot", "lots",
+            "cost", "v12_net", "v12_net_pct"]
     with pd.ExcelWriter(RES / "S1_refused_listing_price.xlsx") as xw:
         pd.DataFrame(tests).to_excel(xw, sheet_name="Test", index=False)
         pd.DataFrame(rows).to_excel(xw, sheet_name="Groups", index=False)
-        t.sort_values("day0", ascending=False)[cols].rename(columns={
+        ren = {
             "symbol": "Stock", "side": "Side", "strike": "Strike", "expiry": "Expiry", "day0": "Signal day",
             "listing_day": "Listing day", "listing_close": "Listing-day price Rs", "entry_B": "Buy Rs (09:16)",
-            "lot": "Lot", "lot_value": "Lot cost Rs", "v12_net": "Net Rs (v12)", "v12_net_pct": "Net % (v12)"}).to_excel(
-            xw, sheet_name="Trades", index=False)
+            "lot": "Lot size", "lots": "Lots bought", "cost": "Total cost Rs", "v12_net": "Net Rs (v12)", "v12_net_pct": "Net % (v12)"}
+        for thr in (10, 7):                                      # only the trades that pass the listing-price check
+            k = known[known.listing_close < thr].sort_values("day0", ascending=False)[cols].rename(columns=ren)
+            k.to_excel(xw, sheet_name=f"Listing under Rs {thr}", index=False)
     print(text)
 
 
