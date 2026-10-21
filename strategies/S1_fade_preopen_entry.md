@@ -71,3 +71,7 @@ buy at the price, from the pre bidding it can be bought, go through the research
 - Test 1 is compared with B on the same filled trades: the question is whether a fair-price limit beats buying at
   09:16. Test 2 is compared with zero.
 - Reported in full, including if nothing is left.
+
+## Addendum 2026-10-21 (before any number): one wording fix
+- "T + 1 day" for the previous-close IV means the actual calendar days from the previous session to expiry (a weekend
+  counts its days), / 365. Nothing else changes.
