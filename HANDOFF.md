@@ -61,7 +61,7 @@ independent verification workflow (recompute, bias audit, robustness), which cau
   current-month stock/index futures (since 8 Dec 2025) have the call auction. Option AMOs go to NSE at 09:15.
 - Option limit at a fair (Black-Scholes) price: fails. The stock at the auction price, fade side, to the close: +0.40 % a
   trade after real costs (t 3.7), but 2022-24 t 1.72, ~half is generic gap reversal, and nearly all of it is the first
-  minute after the auction (gone at 09:16). Futures auction opens (Dec 2025+) not yet fetched: the open check.
+  minute after the auction (gone at 09:16). Futures auction opens (Dec 2025+) not fetched: the user chose (21 Oct) to stop here, keep v11 as it is and wait for the live results.
 
 ### The live fade (S1 v11, from 21 Oct, `strategies/S1_v11_fade_stop20.md`)
 - v10's entry unchanged (strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live ask 09:15–15:20; retried
