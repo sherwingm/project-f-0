@@ -56,6 +56,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -3.5
+  },
+  {
+   "at": "09:54:09",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.325,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 32.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -4.5
   }
  ],
  "top_gaps": [
@@ -79,6 +93,13 @@
    "kotak": 137.0,
    "upstox": 135.0,
    "at": "09:20"
+  },
+  {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 1.325,
+   "kotak": 15.1,
+   "upstox": 15.3,
+   "at": "09:54"
   },
   {
    "contract": "BAJFINANCE26OCT920PE",
@@ -191,23 +212,16 @@
    "kotak": 32.5,
    "upstox": 32.5,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26OCT1360PE",
-   "gap_pct": 0.0,
-   "kotak": 28.5,
-   "upstox": 28.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 119,
+  "rounds": 5,
+  "contract_quotes": 153,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 21.75,
-  "same_best_ask_pct": 24.3,
+  "same_best_bid_pct": 22.9,
+  "same_best_ask_pct": 25.7,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "oi_same_pct": 97.1,
+  "upstox_minus_kotak_quote_time_s_median": -4.5
  }
 }
