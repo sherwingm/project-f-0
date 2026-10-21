@@ -742,3 +742,10 @@ Pre-registered `strategies/S1_fade_preopen_entry.md`; report `data/results/S1_fa
 - Test 2, the stock in the pre-open auction, fade side, to the close: +0.46 % (t 4.2) at the pre-registered 0.05 % cost;
   with real costs (0.104 %) +0.40 %, t 3.7, but 2022-24 t 1.72. Almost all of it is the first minute after the auction;
   half is generic gap reversal; futures auction prices (Dec 2025+) are untested. Nothing live changed.
+
+
+## 2026-10-21 · S1 fade · cheap options (< Rs 10) with an expiry-gap cut-off, v12 exit: FAIL
+Pre-registered `strategies/S1_fade_cheap_dte.md`; report `data/results/S1_fade_cheap_dte.md`. Realistic entry, v12
+same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1.05 % a trade (260, t -0.46); Rule-10:
+-1.48 % (185). Baseline (B >= Rs 2): +2.86 % (339, t 1.79). The sub-Rs 2 options lose under every expiry gap
+(-3.8 % a trade, 252). Nothing live changes; the Rs 2 floor stays.
