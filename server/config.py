@@ -20,6 +20,7 @@ no live feed, no commentary, and password-protected access.
     GROWW_ACCESS_TOKEN                    a token pasted from the Groww Cloud API Keys page
     GROWW_OI_CALLS_PER_POLL               single-contract quote calls per poll for futures OI (default 60)
     POLL_SECONDS          live quote poll interval during market hours (default 30)
+    FADE_FAST_SECONDS     the fade exit check on open fade contracts only (default 1 s; 0 = off)
     ANTHROPIC_API_KEY     enables the plain-language commentary endpoint
     COMMENTARY_MODEL      default claude-sonnet-4-6
     MAX_LOTS_PER_ORDER    default 5
@@ -89,6 +90,7 @@ class Settings:
     groww_access_token: str = os.getenv("GROWW_ACCESS_TOKEN", "")
     groww_oi_calls_per_poll: int = int(os.getenv("GROWW_OI_CALLS_PER_POLL", "60"))
     poll_seconds: int = int(os.getenv("POLL_SECONDS", "30"))
+    fade_fast_seconds: float = float(os.getenv("FADE_FAST_SECONDS", "1"))   # 0 = off
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")
     scan_url: str = os.getenv("SCAN_URL", "").strip()

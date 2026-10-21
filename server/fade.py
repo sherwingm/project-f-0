@@ -14,6 +14,8 @@ session this module:
            first bid >= 1.10 x entry switches a trail on, and once on the first bid <= 0.98 x the highest bid since sells
            ("fade_trail"); else the first poll from 15:20 the same day, at the best bid (else the last price - 1 tick).
            (v11, 2026-10-21 only, had the stop without the trail.)
+    speed  the stop and both trails are checked by fast_tick() about every second (FADE_FAST_SECONDS, server/app.py) on
+           one quote call for the open fade contracts only; the 30 s poll checks them too.
     shadow v11's exit (rule.shadow_v11): the same as the real one unless the trail sold; then the stop or the 15:20 bid,
            tracked after the sale.
            A position still open on a later day (the server was down at 15:20) is sold at the first poll of that day.
@@ -30,6 +32,7 @@ from __future__ import annotations
 import logging
 import math
 import re
+import threading
 from datetime import datetime, time
 from typing import Callable
 
@@ -376,6 +379,8 @@ class FadeTrader:
         self.spot = spot or ledger.quotes.spot
         self._tried: dict[str, float] = {}
         self._last_why: dict[str, str] = {}
+        self._lock = threading.RLock()                   # on_poll (feed thread) and fast_tick (fast-exit thread)
+        self._cache: dict[str, dict | None] | None = None  # fast_tick's quotes, by tradingsymbol
 
     def _state(self) -> dict:
         st = self.ledger.state.setdefault("rules", {"open": {}, "close": {}, "exits_checked": None, "refused": []})
@@ -417,7 +422,44 @@ class FadeTrader:
         f = self.fade() or {}
         return list(f.get("signals") or []) if f.get("session") == today else []
 
+    def _quote(self, c: dict) -> dict | None:
+        """The contract's quote: fast_tick's one-call cache while it runs (no extra broker calls), else a live quote."""
+        if self._cache is not None:
+            return self._cache.get(c["tradingsymbol"])
+        return self.ledger.quotes.get(c)
+
+    def fast_tick(self, now: datetime) -> int:
+        """About every second (server/app.py): one quote call for today's open fade contracts, then the live exit checks
+        on those bids (v11/v12's stop, v12's trail, the 5 % trail and +100 % shadows). Returns the contracts quoted."""
+        if not self.ledger.is_open(now) or not (S20_FROM <= now.time() < EOD_AT):
+            return 0
+        with self.ledger.lock, self._lock:
+            cs = {}
+            for pos in self.ledger.state["positions"]:
+                r = pos.get("rule") or {}
+                if r.get("strategy") != "fade" or self.carried(pos):
+                    continue
+                if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
+                    continue
+                cs[pos["tradingsymbol"]] = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
+                                                                "lot_size")}
+            if not cs:
+                return 0
+            many = getattr(self.ledger.quotes, "get_many", None)
+            self._cache = many(list(cs.values())) if many else {k: self.ledger.quotes.get(c) for k, c in cs.items()}
+            try:
+                self._track_trail(now)
+                self._track_v12(now)
+                self._track_t100(now)
+            finally:
+                self._cache = None
+            return len(cs)
+
     def on_poll(self, now: datetime) -> None:
+        with self.ledger.lock, self._lock:
+            self._on_poll(now)
+
+    def _on_poll(self, now: datetime) -> None:
         if not self.ledger.is_open(now):
             return
         today = now.date().isoformat()
@@ -581,7 +623,7 @@ class FadeTrader:
             if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
                 continue
             c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
-            bid = (((self.ledger.quotes.get(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+            bid = (((self._quote(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
             if not bid:
                 continue
             if t1 and not t1.get("hit_at"):
@@ -620,7 +662,7 @@ class FadeTrader:
             if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
                 continue
             c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
-            bid = (((self.ledger.quotes.get(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+            bid = (((self._quote(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
             if not bid:
                 continue
             bid = float(bid)
@@ -653,7 +695,7 @@ class FadeTrader:
             if datetime.fromisoformat(pos["opened_at"]).date() != now.date():
                 continue
             c = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}
-            bid = (((self.ledger.quotes.get(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+            bid = (((self._quote(c) or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
             if not bid:
                 continue
             bid = float(bid)

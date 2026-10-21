@@ -184,11 +184,26 @@ def startup() -> None:
             from server.fade import FadeTrader                  # S1 v10 results-day fade, paper only
             state.fade = FadeTrader(state.ledger, lambda: ((state.scan or {}).get("meta") or {}).get("fade"))
             state.feed.hooks.append(lambda feed: state.fade.on_poll(datetime.now(IST)))
+            if settings.fade_fast_seconds > 0:
+                threading.Thread(target=_fade_fast_loop, name="fade-fast-exit", daemon=True).start()
         log.info("paper engine on: capital Rs %s, fills against %s", f"{state.ledger.state['capital']:,.0f}",
                  "the live book" if state.feed else "nothing (no live feed: paper orders cannot fill)")
     if src == "kotak" and state.feed and settings.upstox_analytics_token:
         _start_compare()
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()
+
+
+def _fade_fast_loop() -> None:
+    """The fade's live exits about every FADE_FAST_SECONDS (default 1 s): one quote call for the open fade contracts
+    only (Kotak: well inside 25/s; the shared limiter keeps the whole server under 200/min), then the stop and trail
+    checks (server/fade.py fast_tick). Idle outside 09:16-15:20 or with no open fade position."""
+    while True:
+        try:
+            if state.fade is not None:
+                state.fade.fast_tick(datetime.now(IST))
+        except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits
+            log.warning("fade fast exit: %s", exc)
+        time.sleep(settings.fade_fast_seconds)
 
 
 def _start_compare() -> None:

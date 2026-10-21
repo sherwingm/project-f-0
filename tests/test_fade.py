@@ -765,3 +765,60 @@ def test_fd2_pass_rewrites_the_signal_file(tmp_path):
     assert fl.fd2_pass(f, Moves()) == 1
     out = {s["symbol"]: s.get("filing_day") for s in json.loads(f.read_text(encoding="utf-8"))["signals"]}
     assert out["A"]["tagged"] is True and out["B"] is None
+
+
+# ---------------------------------------------------------------- the 1-second exit check (fast_tick)
+class CountingQuotes(Quotes):
+    def __init__(self):
+        super().__init__()
+        self.many_calls, self.one_calls = 0, 0
+
+    def get(self, c, fresh=True):
+        self.one_calls += 1
+        return super().get(c, fresh)
+
+    def get_many(self, cs):
+        self.many_calls += 1
+        return {c["tradingsymbol"]: self.book.get(c["tradingsymbol"]) for c in cs}
+
+
+@pytest.fixture
+def fast(tmp_path):
+    q = CountingQuotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(15, 9, 16))
+    return lg, q, F.FadeTrader(lg, lambda: sig())
+
+
+def test_fast_tick_sells_at_the_stop_on_one_quote_call(fast):
+    lg, q, ft = fast
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))                                                                   # bought 18.50, stop 14.80
+    assert lg.state["positions"]
+    q.one_calls = q.many_calls = 0                                                              # the entry walk's calls
+    q.set("PE", 1220.0, 14.7, 15.0)
+    n = ft.fast_tick(datetime(2026, 10, 15, 9, 20, 7, tzinfo=IST))
+    c = lg.state["closed"][-1]
+    assert n == 1 and q.many_calls == 1 and q.one_calls == 0                                    # one call, no others
+    assert c["reason"] == "fade_stop" and c["exit"]["price"] == 14.7
+
+
+def test_fast_tick_runs_the_v12_trail(fast):
+    lg, q, ft = fast
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.many_calls = 0
+    for sec, bid in ((1, 22.0), (2, 24.0), (3, 23.6), (4, 23.5)):                               # 0.98 x 24 = 23.52
+        q.set("PE", 1220.0, bid, bid + 0.3)
+        ft.fast_tick(datetime(2026, 10, 15, 10, 0, sec, tzinfo=IST))
+    c = lg.state["closed"][-1]
+    assert c["reason"] == "fade_trail" and c["exit"]["price"] == 23.5 and q.many_calls == 4
+
+
+def test_fast_tick_is_idle_outside_hours_and_with_nothing_open(fast):
+    lg, q, ft = fast
+    assert ft.fast_tick(at(15, 9, 30)) == 0 and q.many_calls == 0                               # nothing open
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 10.0, 10.3)
+    assert ft.fast_tick(at(15, 15, 20)) == 0 and lg.state["positions"]                          # 15:20: the poll sells
+    assert ft.fast_tick(datetime(2026, 10, 15, 9, 15, 30, tzinfo=IST)) == 0                     # before 09:16

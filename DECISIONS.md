@@ -21,6 +21,12 @@ editing this file on purpose, in its own commit, with the reason.
     trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
     weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
     manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
+  - **The fade's exits are checked about every second (the user, 2026-10-21: "build the 1-second exit loop for open
+    fade positions").** A separate thread (`FADE_FAST_SECONDS`, default 1; 0 = off) makes one quote call for today's
+    open fade contracts only and runs the stop, the v12 trail and the trail/+100 % shadows on those bids
+    (`server/fade.py` `fast_tick`). The 30 s universe poll is unchanged and still checks them too. Kotak: one call a
+    second sits well inside 25/s; the shared limiter keeps the server under its 200/min hold. Shadows of already
+    sold trades (v11/v10 after a trail sale) stay on the 30 s poll.
   - **S1 v12 is the live fade exit from 2026-10-22 (the user, 2026-10-21: "make the Trail (-20 % stop, trail on at
     +10 %, gap 2 %) as v12 and make it live").** v11's -20 % stop stays; on the entry day from 09:16, a bid >= 1.10 x
     entry switches a trail on, and the first bid <= 0.98 x the highest bid since sells (`fade_trail`); else 15:20.
