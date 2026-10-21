@@ -722,6 +722,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -13.5
+  },
+  {
+   "at": "14:53:57",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.402,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -18.5
   }
  ],
  "top_gaps": [
@@ -782,6 +796,13 @@
    "at": "10:36"
   },
   {
+   "contract": "ADANIGREEN26OCT1260CE",
+   "gap_pct": 2.402,
+   "kotak": 22.9,
+   "upstox": 23.45,
+   "at": "14:53"
+  },
+  {
    "contract": "BAJAJ-AUTO26OCT10200PE",
    "gap_pct": 2.383,
    "kotak": 128.0,
@@ -831,6 +852,13 @@
    "at": "11:41"
   },
   {
+   "contract": "ADANIGREEN26OCT1260PE",
+   "gap_pct": 1.51,
+   "kotak": 29.8,
+   "upstox": 29.35,
+   "at": "14:53"
+  },
+  {
    "contract": "ABB26OCT6700PE",
    "gap_pct": 1.46,
    "kotak": 137.0,
@@ -850,25 +878,11 @@
    "kotak": 11.25,
    "upstox": 11.1,
    "at": "14:38"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 1.325,
-   "kotak": 15.1,
-   "upstox": 15.3,
-   "at": "09:54"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 1.309,
-   "kotak": 19.1,
-   "upstox": 18.85,
-   "at": "13:13"
   }
  ],
  "day": {
-  "rounds": 51,
-  "contract_quotes": 1673,
+  "rounds": 52,
+  "contract_quotes": 1707,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 44.1,
   "same_best_ask_pct": 41.2,
