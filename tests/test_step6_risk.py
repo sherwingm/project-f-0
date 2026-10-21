@@ -7,7 +7,7 @@ from server.paper import PaperLedger, PaperRejected
 from server.risk import RiskGate
 from tests.test_step5_paper import CE, CLOCK, FUT, StubQuotes, allow_lottery, at, order, resolved  # noqa: F401 (autouse fixture)
 
-DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, weekly_loss_halt_pct=3.0, drawdown_review_pct=10,
+DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, drawdown_review_pct=10,
                 margin_cap_pct=30, max_new_positions_per_day=3, max_new_positions_per_month=20, block_expiry_day_entries=True,
                 max_open_positions=99)
 
@@ -77,19 +77,20 @@ def test_exits_are_allowed_while_halted(tmp_path):
     assert rec["intent"] == "exit" and rec["status"] == "FILLED"
 
 
-def test_weekly_halt(tmp_path):
-    ledger, q = make(tmp_path, daily_loss_halt_pct=50, weekly_loss_halt_pct=0.2)    # Rs 1,000 a week
+def test_no_weekly_halt(tmp_path):
+    ledger, q = make(tmp_path, daily_loss_halt_pct=0.2)                             # Rs 1,000 a day
+    ledger.state["halts"] = {"week": "2026-09-21"}                                  # an old weekly latch is ignored
     q.set(CE, 4.0, 4.1)
     ledger.submit(order(), resolved(CE), now=at(21))
     q.set(CE, 2.0, 2.1)
-    ledger.on_poll(now=at(21, 11))
+    ledger.on_poll(now=at(21, 11))                                                  # day halt latches on the 21st
     q.set("RELIANCE26SEP1320CE", 1.0, 1.05)
-    with pytest.raises(PaperRejected, match="weekly loss halt"):
-        ledger.submit(order(strike=1320.0), resolved("RELIANCE26SEP1320CE"), now=at(22))
+    assert ledger.submit(order(strike=1320.0), resolved("RELIANCE26SEP1320CE"), now=at(22))["status"] == "FILLED"
+    assert "week" not in ledger.state["halts"]
 
 
 def test_drawdown_review_banner_is_not_a_block(tmp_path):
-    ledger, q = make(tmp_path, drawdown_review_pct=0.1, daily_loss_halt_pct=50, weekly_loss_halt_pct=50)
+    ledger, q = make(tmp_path, drawdown_review_pct=0.1, daily_loss_halt_pct=50)
     q.set(CE, 4.0, 4.1)
     ledger.submit(order(), resolved(CE), now=at(21))
     q.set(CE, 1.0, 1.1)
@@ -148,6 +149,5 @@ def test_no_entries_on_expiry_day(tmp_path):
 def test_summary_carries_kill_switch_and_limits(tmp_path):
     ledger, _ = make(tmp_path)
     s = ledger.summary(now=at(21))
-    assert s["kill_switch"] == {"active": False, "reason": None, "day_halt": False, "week_halt": False,
-                                "day_limit": -5000.0, "week_limit": -15000.0}
+    assert s["kill_switch"] == {"active": False, "reason": None, "day_halt": False, "day_limit": -5000.0}
     assert s["limits"]["risk_per_trade"] == 2500 and s["limits"]["margin_cap"] == 150_000

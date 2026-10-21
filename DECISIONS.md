@@ -21,6 +21,14 @@ editing this file on purpose, in its own commit, with the reason.
     trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
     weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
     manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
+  - **The weekly loss halt is removed (the user, 2026-10-21: "remove this rule").** `WEEKLY_LOSS_HALT_PCT` and the
+    weekly latch are gone from `server/risk.py`; an old weekly latch is dropped on the next check. The daily loss halt
+    (2 %) stays, and like before it blocks manual paper orders only, never the rule trades.
+  - **Shadow tag "trail" on every fade trade (the user, 2026-10-21: "add a shadow tag ... -20 % stop + trailing stop
+    (start +10 %, gap 5 %) ... no change to the trades; review at 30 closed trades").** `rule.shadow_trail`, from 09:16
+    on the entry day on the best bid: on at a bid >= 1.10 x entry, then sold (shadow) at a bid <= 0.95 x the highest
+    bid since; else the same as v11. `strategies/S1_v11_trail_shadow_track.md`; backtest
+    `data/results/S1_fade_trail20_grid.md` (failed its test vs v11: +2.0 points, t 0.8).
   - **Shadow tag fd2 on fade puts (the user, 2026-10-20: "add it as a shadow tag on live fade puts only ... no change to
     the trades. Review at 20 tagged trades").** A put is tagged when its results were filed 09:15-14:50 on the session
     before day 0 and the stock already fell >= 2 % (market-adjusted) by that day's close. Tag only; every put is still

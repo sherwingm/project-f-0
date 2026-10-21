@@ -47,7 +47,6 @@ no live feed, no commentary, and password-protected access.
     MARGIN_ESTIMATE_PCT   18       margin estimate: % of notional for futures / short options (long options: the premium)
     RISK_PER_TRADE_PCT    6        max loss per trade as % of capital; a long option's is its premium (DECISIONS.md)
     DAILY_LOSS_HALT_PCT   2.0      day P&L <= -this % of capital: no new entries until the next session
-    WEEKLY_LOSS_HALT_PCT  3.0      the same for the week
     DRAWDOWN_REVIEW_PCT   10       drawdown from peak at which the page shows "review labels and sizing"
     MARGIN_CAP_PCT        30       open margin + new order <= this % of capital
     MAX_NEW_POSITIONS_PER_DAY 3    MAX_NEW_POSITIONS_PER_MONTH 20    MAX_OPEN_POSITIONS 3
@@ -121,7 +120,6 @@ class Settings:
     # ---- paper engine: risk controls (server/risk.py)
     risk_per_trade_pct: float = float(os.getenv("RISK_PER_TRADE_PCT", "6"))
     daily_loss_halt_pct: float = float(os.getenv("DAILY_LOSS_HALT_PCT", "2.0"))
-    weekly_loss_halt_pct: float = float(os.getenv("WEEKLY_LOSS_HALT_PCT", "3.0"))
     drawdown_review_pct: float = float(os.getenv("DRAWDOWN_REVIEW_PCT", "10"))
     margin_cap_pct: float = float(os.getenv("MARGIN_CAP_PCT", "30"))
     max_new_positions_per_day: int = int(os.getenv("MAX_NEW_POSITIONS_PER_DAY", "3"))

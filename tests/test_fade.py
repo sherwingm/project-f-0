@@ -554,6 +554,77 @@ def test_v11_stopped_trade_whose_1520_poll_was_missed_gets_a_late_shadow(setup):
     assert sh["status"] == "done" and sh["fill"] == 11.0 and sh["late"]
 
 
+# ---------------------------------------------------------------- shadow tag trail (S1_v11_trail_shadow_track.md)
+def test_trail_shadow_starts_at_plus_10_and_sells_5_below_the_peak_bid(setup):
+    from server import charges as ch
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50, start 20.35
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["rule"]["shadow_trail"] == {"status": "open", "start": 20.35, "peak": None}
+    q.set("PE", 1220.0, 20.3, 20.6)
+    ft.on_poll(at(15, 10, 0))
+    assert p["rule"]["shadow_trail"]["status"] == "open"                                        # a tick short of the start
+    q.set("PE", 1220.0, 22.0, 22.3)
+    ft.on_poll(at(15, 10, 30))
+    assert p["rule"]["shadow_trail"]["status"] == "active" and p["rule"]["shadow_trail"]["peak"] == 22.0
+    q.set("PE", 1220.0, 24.0, 24.3)
+    ft.on_poll(at(15, 11, 0))
+    q.set("PE", 1220.0, 22.81, 23.1)                                                            # above 0.95 x 24 = 22.80
+    ft.on_poll(at(15, 11, 1))
+    assert p["rule"]["shadow_trail"]["status"] == "active"
+    q.set("PE", 1220.0, 22.8, 23.1)
+    ft.on_poll(at(15, 11, 2))
+    sh = p["rule"]["shadow_trail"]
+    want = round((22.8 - 18.5) * 350 - p["entry_charges_open"] - ch.leg("PE", "SELL", 350, 22.8)["total"], 2)
+    assert sh["status"] == "done" and sh["fill"] == 22.8 and sh["net"] == want
+    assert lg.state["positions"]                                                                # the real trade is untouched
+    q.set("PE", 1220.0, 19.0, 19.3)
+    ft.on_poll(at(15, 15, 20))
+    c = lg.state["closed"][-1]
+    assert c["reason"] == "fade_eod" and c["rule"]["shadow_trail"]["status"] == "done"
+    s = F.trail_shadow(lg.state)
+    assert s["trail_exits"] == 1 and s["shadow_trail"]["net_rs"] == want and s["real_v11"]["net_rs"] == c["net_pnl"]
+
+
+def test_trail_shadow_is_the_same_when_v11_stops_first_or_it_never_starts(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 14.0, 14.3)                                                             # stopped before the start
+    ft.on_poll(at(15, 10, 0))
+    c = lg.state["closed"][-1]
+    assert c["reason"] == "fade_stop" and c["rule"]["shadow_trail"]["status"] == "same"
+    q.set("PE", 1220.0, 30.0, 30.3)                                                             # later rally: ignored
+    ft.on_poll(at(15, 11, 0))
+    assert c["rule"]["shadow_trail"]["status"] == "same"
+    s = F.trail_shadow(lg.state)
+    assert s["trail_exits"] == 0 and s["shadow_trail"]["net_rs"] == s["real_v11"]["net_rs"] == c["net_pnl"]
+
+
+def test_trail_shadow_active_but_not_hit_by_1520_is_the_same(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 21.0, 21.3)
+    ft.on_poll(at(15, 10, 0))
+    q.set("PE", 1220.0, 20.5, 20.8)                                                             # above 0.95 x 21 = 19.95
+    ft.on_poll(at(15, 15, 20))
+    c = lg.state["closed"][-1]
+    assert c["reason"] == "fade_eod" and c["rule"]["shadow_trail"]["status"] == "same"
+
+
+def test_trail_shadow_does_not_start_in_the_0915_minute(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(datetime(2026, 10, 15, 9, 15, 20, tzinfo=IST))
+    q.set("PE", 1220.0, 25.0, 25.3)
+    ft.on_poll(datetime(2026, 10, 15, 9, 15, 50, tzinfo=IST))
+    assert lg.state["positions"][0]["rule"]["shadow_trail"]["status"] == "open"
+    ft.on_poll(at(15, 9, 16))
+    assert lg.state["positions"][0]["rule"]["shadow_trail"]["status"] == "active"
+
+
 # ---------------------------------------------------------------- shadow tag fd2 (S1_v11_fd2_shadow_track.md)
 def _mins(base: float, pre_t: str, pre: float, close: float) -> dict:
     return {"09:15": base, pre_t: pre, "15:29": close}

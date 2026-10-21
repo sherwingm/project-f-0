@@ -6,7 +6,7 @@ when a queued order comes due. Exits are never blocked here.
                                  Lots are capped to fit; the review shows the cap.
     DAILY_LOSS_HALT_PCT     1.0  day P&L (realised + unrealised) <= -1% of capital: no new entries until the
                                  next session (latched for the day even if P&L recovers)
-    WEEKLY_LOSS_HALT_PCT    3.0  the same for the week (Monday to Friday)
+    (no weekly loss halt: removed by the user on 2026-10-21, DECISIONS.md)
     DRAWDOWN_REVIEW_PCT     10   drawdown from peak equity >= 10%: "review labels and sizing" banner, not a block
     MARGIN_CAP_PCT          30   margin of open positions + this order <= 30% of capital. Margin: Kotak's
                                  margin_required when a Kotak trade session already exists, else
@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import logging
 import math
-from datetime import date, datetime, timedelta
+from datetime import date, datetime
 
 from server.config import settings
 
@@ -39,35 +39,30 @@ class RiskGate:
         """Kill-switch and banner state for the summary; latches a halt once it is hit."""
         cap = ledger.state["capital"]
         halts = ledger.state.setdefault("halts", {})
-        today, monday = now.date().isoformat(), (now.date() - timedelta(days=now.weekday())).isoformat()
-        day_pnl, week_pnl = ledger.day_pnl(now), ledger.week_pnl(now)
+        today = now.date().isoformat()
+        day_pnl = ledger.day_pnl(now)
         day_limit = -self.s.daily_loss_halt_pct / 100 * cap
-        week_limit = -self.s.weekly_loss_halt_pct / 100 * cap
         if day_pnl <= day_limit and halts.get("day") != today:
             halts["day"] = today
             log.warning("paper kill switch: day P&L Rs %.2f <= Rs %.2f; no new entries until the next session", day_pnl, day_limit)
-        if week_pnl <= week_limit and halts.get("week") != monday:
-            halts["week"] = monday
-            log.warning("paper kill switch: week P&L Rs %.2f <= Rs %.2f; no new entries until next week", week_pnl, week_limit)
-        day_halt, week_halt = halts.get("day") == today, halts.get("week") == monday
+        halts.pop("week", None)                  # the weekly halt was removed (2026-10-21): drop an old latch
+        day_halt = halts.get("day") == today
         eq = ledger.equity()
         peak = max(ledger.state.get("peak_equity", cap), eq)
         dd = (peak - eq) / peak * 100 if peak else 0.0
         reason = None
-        if week_halt:
-            reason = f"weekly loss halt: week P&L reached {self.s.weekly_loss_halt_pct:g}% of capital; no new entries until next week"
-        elif day_halt:
+        if day_halt:
             reason = f"daily loss halt: day P&L reached {self.s.daily_loss_halt_pct:g}% of capital; no new entries until the next session"
         month_start = now.date().replace(day=1)
-        return {"kill_switch": {"active": day_halt or week_halt, "reason": reason, "day_halt": day_halt, "week_halt": week_halt,
-                                "day_limit": round(day_limit, 2), "week_limit": round(week_limit, 2)},
+        return {"kill_switch": {"active": day_halt, "reason": reason, "day_halt": day_halt,
+                                "day_limit": round(day_limit, 2)},
                 "drawdown_review": dd >= self.s.drawdown_review_pct,
                 "drawdown_review_message": "Drawdown from peak is {:.1f}%: review labels and sizing.".format(dd)
                 if dd >= self.s.drawdown_review_pct else None,
                 "limits": {"risk_per_trade": self.per_trade_cap(cap), "risk_per_trade_pct": self.s.risk_per_trade_pct,
                            "margin_cap": round(self.s.margin_cap_pct / 100 * cap, 2), "margin_cap_pct": self.s.margin_cap_pct,
                            "max_new_per_day": self.s.max_new_positions_per_day, "max_open": self.s.max_open_positions, "max_new_per_month": self.s.max_new_positions_per_month,
-                           "daily_loss_halt_pct": self.s.daily_loss_halt_pct, "weekly_loss_halt_pct": self.s.weekly_loss_halt_pct,
+                           "daily_loss_halt_pct": self.s.daily_loss_halt_pct,
                            "drawdown_review_pct": self.s.drawdown_review_pct},
                 "new_positions_today": ledger.new_positions(now.date()),
                 "new_positions_month": ledger.new_positions(month_start)}

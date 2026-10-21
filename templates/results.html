@@ -496,6 +496,19 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         <p class="note" style="margin:0">Closed under v11: <b>${n} of 30</b> before the review${s.stops ? ` \u00b7 stopped ${s.stops}, of which ${s.stopped_but_v10_better} would have done better held to 15:20` : ""}${s.pending ? ` \u00b7 ${s.pending} waiting for their 15:20 price` : ""}${s.t_v10_minus_v11 != null ? ` \u00b7 t (v10 \u2212 v11) ${s.t_v10_minus_v11.toFixed(2)}` : ""}${s.untagged_closed ? ` \u00b7 ${s.untagged_closed} earlier v10 trades untagged` : ""}. <a href="${REPO}strategies/S1_v11_fade_stop20.md">The rule</a></p>`,
         { sub: "the live exit since 21 Oct, with v10's 15:20 exit tracked on the same trades" });
     },
+    fadeTrail() {
+      const T = "Shadow tag: \u221220 % stop + trailing stop (start +10 %, gap 5 %)";
+      if (!live()) return panel(T, notLive("The trail tag"));
+      const s = (P.summary || {}).fade_trail;
+      if (!s) return panel(T, P.loaded ? empty("Not reported by the server yet (it updates on the next deploy).") : loading());
+      const R = [["Live v11: \u221220 % stop, else 15:20", s.real_v11], ["Shadow: v11 + trail (on at +10 %, sells 5 % below the peak bid)", s.shadow_trail]];
+      const n = (s.real_v11 || {}).closed || 0;
+      return panel(T, `<div class="tw"><table><thead><tr><th>Exit</th><th>Closed</th><th>Wins</th><th>Average net</th><th>Booked net</th></tr></thead><tbody>${R.map(([lab, g]) => { g = g || {};
+          return `<tr><td>${lab}</td><td>${g.closed ?? 0}</td><td>${g.closed ? g.wins : "\u2014"}</td><td class="${dir(g.mean_net_pct)}">${pct(g.mean_net_pct)}</td><td class="${dir(g.net_rs)}">${g.closed ? srs(g.net_rs) : "\u2014"}</td></tr>`; }).join("")}</tbody></table></div>
+        <div class="prog" aria-label="Tagged trades closed: ${n} of ${s.review_at || 30}"><i style="width:${Math.min(100, n / (s.review_at || 30) * 100).toFixed(1)}%"></i></div>
+        <p class="note" style="margin:0">Tagged trades closed: <b>${n} of ${s.review_at || 30}</b> before the review \u00b7 trail exits: ${s.trail_exits || 0}${s.open_tagged ? ` \u00b7 open: ${s.open_tagged} (trail on: ${s.open_active || 0}, trail sold: ${s.open_done || 0})` : ""}${s.t_trail_minus_v11 != null ? ` \u00b7 t (trail \u2212 v11) ${s.t_trail_minus_v11.toFixed(2)}` : ""}. The real exit is unchanged; this only tags. <a href="${REPO}strategies/S1_v11_trail_shadow_track.md">The rule</a></p>`,
+        { sub: "would a trailing stop on winners have paid? judged at 30 closed trades" });
+    },
     fadeFd2() {
       const T = "Shadow tag: puts whose market-hours filing day already fell ≥ 2 %";
       if (!live()) return panel(T, notLive("The fd2 tag"));
@@ -670,7 +683,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v11)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000. Sold at the best bid once it is 20 % below the entry (from 09:16), else at 15:20 the same day (v11, from 21 Oct; v10 sold at 15:20). Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV10(), PANELS.fadeFd2(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV10(), PANELS.fadeTrail(), PANELS.fadeFd2(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");
