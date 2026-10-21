@@ -354,6 +354,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -6.0
+  },
+  {
+   "at": "11:41:51",
+   "contracts": 33,
+   "on_both": 33,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.597,
+   "same_best_bid_pct": 30.3,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -8.0
   }
  ],
  "top_gaps": [
@@ -435,6 +449,13 @@
    "at": "10:11"
   },
   {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 1.597,
+   "kotak": 15.65,
+   "upstox": 15.9,
+   "at": "11:41"
+  },
+  {
    "contract": "ABB26OCT6700PE",
    "gap_pct": 1.46,
    "kotak": 137.0,
@@ -489,23 +510,16 @@
    "kotak": 134.55,
    "upstox": 136.05,
    "at": "09:20"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 1.105,
-   "kotak": 18.1,
-   "upstox": 17.9,
-   "at": "10:26"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 812,
+  "rounds": 26,
+  "contract_quotes": 845,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 39.4,
+  "same_best_bid_pct": 38.8,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -15.5
+  "upstox_minus_kotak_quote_time_s_median": -15.25
  }
 }
