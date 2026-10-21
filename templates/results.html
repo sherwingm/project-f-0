@@ -307,6 +307,25 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   function tMinus1(exp) { const d = new Date(exp + "T00:00:00"); do { d.setDate(d.getDate() - 1); } while (d.getDay() === 0 || d.getDay() === 6); return d.toLocaleDateString("en-CA"); }
   const ofArm = (rows, arm) => rows.filter(x => x.rule && (x.rule.arms || []).includes(arm));
 
+  // per-trade shadow exits (S1 v11): v10 = held to 15:20; trail = -20 % stop + trail (on at +10 %, sells 5 % below the peak bid)
+  function trailText(r, e, net) {
+    const t = r && r.shadow_trail; if (!t) return null;
+    if (t.status === "open") return `waiting: switches on at a bid of ${rs(t.start)} (+10 %)`;
+    if (t.status === "active") return `on since ${when(t.started_at)} · peak bid ${rs(t.peak)} · would sell at ${rs(t.peak * 0.95)} or below`;
+    if (t.status === "done") return `sold at ${rs(t.fill)} · ${when(t.at)} · ${srs(t.net, 2)}${net != null ? ` (real ${srs(net, 2)})` : ""}`;
+    if (t.status === "same") return "same as the real exit (never sold by the trail)";
+    return null;
+  }
+  function v10Text(r, net) {
+    const v = r && r.shadow_v10; if (!v || !r.version) return null;
+    if (v.status === "open") return "held to 15:20 (same as real unless the stop fires)";
+    if (v.status === "pending") return "stopped: waiting for the 15:20 bid";
+    if (v.status === "done") return `${rs(v.fill)} at 15:20 · ${srs(v.net, 2)}${v.late ? " (late)" : ""}${net != null ? ` (real ${srs(net, 2)})` : ""}`;
+    if (v.status === "same") return "same as the real exit (sold together at 15:20)";
+    return null;
+  }
+  const shadowNet = (sh, net) => !sh ? null : sh.status === "done" ? sh.net : sh.status === "same" ? net : null;
+
   function positionCard(p) {
     const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
     const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
@@ -316,7 +335,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
     const r = p.rule, fade = r && r.strategy === "fade";
     const exitLine = fade && r.version === "v11" && r.stop
-      ? `<span>Stop <b class="mono">${rs(r.stop.level)}</b> (−20 % at the bid, from 09:16)</span><span>Else sold at <b>15:20</b> on the results day</span>`
+      ? `<span>Stop <b class="mono">${rs(r.stop.level)}</b> (−20 % at the bid, from 09:16)</span><span>Else sold at <b>15:20</b> on the results day</span>${trailText(r, e) ? `<span>Trail shadow: ${trailText(r, e)}</span>` : ""}`
       : fade
       ? `<span>Sold at <b>15:20</b> on the results day (v10, no stop)</span>`
       : r
@@ -346,15 +365,16 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
                    rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
                    fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)",
                    fade_stop: "Fade v11: \u221220 % stop" };
-  function closedTable(rows) {
-    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].map(h => `<th rowspan="2">${h}</th>`).join("")}
+  function closedTable(rows, shadows) {
+    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].concat(shadows ? ["v10 shadow ₹", "Trail shadow ₹"] : []).map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
       <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && todayIso() <= a.until;
         return `<tr data-why="trade:${esc(c.id)}" tabindex="0"><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
-          <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>
+          <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>${shadows ? (() => { const r = c.rule || {}, v = shadowNet(r.shadow_v10, c.net_pnl), t = shadowNet(r.shadow_trail, c.net_pnl);
+            return `<td class="${dir(v)}" title="${esc(v10Text(r) || "")}">${v != null ? srs(v, 2) : r.shadow_v10 ? "pending" : "—"}</td><td class="${dir(t)}" title="${esc(trailText(r, c.entry.price) || "")}">${t != null ? srs(t, 2) + (r.shadow_trail.status === "done" ? " <small>trail</small>" : "") : r.shadow_trail ? "—" : "not tagged"}</td>`; })() : ""}
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
@@ -570,7 +590,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     fadeClosed() {
       const w = paperWait("Closed fade trades"); if (w) return panel("Closed fade trades", w);
       const all = ofArm(P.trades, "F"), cl = all.filter(x => fadeEra(x)), old = all.filter(x => fadeEra(x, "v10"));
-      return panel(`Closed fade trades \u00b7 v11 \u00b7 ${cl.length}`, (cl.length ? closedTable(cl) : empty("None yet under v11 (from 21 Oct)."))
+      return panel(`Closed fade trades \u00b7 v11 \u00b7 ${cl.length}`, (cl.length ? closedTable(cl, true) : empty("None yet under v11 (from 21 Oct)."))
         + (old.length ? `<details><summary>Side record: ${old.length} v10 trades before 21 Oct</summary>${closedTable(old)}</details>` : ""), { sub: "tap a row for why" });
     },
     fadeRefused() {
@@ -728,7 +748,9 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
             ["Stock at entry", se ? rs(se) : null], ["Strike distance at entry", otm != null ? `${otm.toFixed(1)} % ${otm >= 0 ? "out of" : "in"} the money` : null],
             ["Stock at exit", sx ? rs(sx) : null], fade && fadeMove != null ? ["The stock's fade (entry → exit)", pct(fadeMove), dir(fadeMove)] : null,
             ["Lot", `${p.lots} × ${p.lot_size} · ${rs(e * p.qty, 0)}`], ["Expiry", day(p.expiry)],
-            ["Why sold", p.reason ? (REASON[p.reason] || p.reason) : null]])}
+            ["Why sold", p.reason ? (REASON[p.reason] || p.reason) : null],
+            fade ? ["v10 shadow (held to 15:20)", v10Text(r, p.closed_at ? p.net_pnl : null)] : null,
+            fade ? ["Trail shadow (−20 % stop + trail, +10 % / 5 %)", trailText(r, e, p.closed_at ? p.net_pnl : null)] : null])}
       ${fade && fadeMove != null ? `<p class="note">${fadeMove > 0 ? "The stock moved against the headline after entry: what the fade bets on." : "The stock kept moving with the numbers after entry: in the backtest the option then won only 4-5 % of the time."}</p>` : ""}` };
   }
   function openWhy(key) {
