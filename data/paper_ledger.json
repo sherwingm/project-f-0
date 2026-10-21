@@ -47,9 +47,9 @@
    "mark": {
     "price": 78.55,
     "bid": 78.55,
-    "ask": 79.6,
+    "ask": 80.0,
     "ltp": 81.1,
-    "at": "2026-10-21T15:20:32+05:30",
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
    "unrealised_gross": 2587.5,
@@ -122,9 +122,9 @@
    "mark": {
     "price": 78.55,
     "bid": 78.55,
-    "ask": 79.95,
+    "ask": 80.0,
     "ltp": 81.1,
-    "at": "2026-10-21T15:20:32+05:30",
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
    "unrealised_gross": 2417.5,
@@ -195,17 +195,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 17.0,
-    "bid": 17.0,
-    "ask": 17.3,
-    "ltp": 17.2,
-    "at": "2026-10-21T15:20:32+05:30",
+    "price": 17.45,
+    "bid": 17.45,
+    "ask": 17.7,
+    "ltp": 17.55,
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
-   "unrealised_gross": 3180.0,
-   "exit_charges_est": 43.18,
-   "unrealised": 3110.06,
-   "liquidation_value": 10156.82,
+   "unrealised_gross": 3450.0,
+   "exit_charges_est": 43.71,
+   "unrealised": 3379.53,
+   "liquidation_value": 10426.29,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -271,17 +271,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 4.73,
-    "bid": 4.73,
-    "ask": 4.8,
-    "ltp": 4.8,
-    "at": "2026-10-21T15:20:32+05:30",
+    "price": 4.74,
+    "bid": 4.74,
+    "ask": 4.79,
+    "ltp": 4.77,
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
-   "unrealised_gross": 6510.0,
-   "exit_charges_est": 50.85,
-   "unrealised": 6432.09,
-   "liquidation_value": 14139.15,
+   "unrealised_gross": 6540.0,
+   "exit_charges_est": 50.9,
+   "unrealised": 6462.04,
+   "liquidation_value": 14169.1,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -347,17 +347,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 16.95,
-    "bid": 16.95,
-    "ask": 17.25,
-    "ltp": 17.2,
-    "at": "2026-10-21T15:20:32+05:30",
+    "price": 17.45,
+    "bid": 17.45,
+    "ask": 17.7,
+    "ltp": 17.55,
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
-   "unrealised_gross": 2298.0,
-   "exit_charges_est": 43.13,
-   "unrealised": 2227.72,
-   "liquidation_value": 10126.87,
+   "unrealised_gross": 2598.0,
+   "exit_charges_est": 43.71,
+   "unrealised": 2527.14,
+   "liquidation_value": 10426.29,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -423,17 +423,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 4.73,
-    "bid": 4.73,
-    "ask": 4.8,
-    "ltp": 4.8,
-    "at": "2026-10-21T15:20:32+05:30",
+    "price": 4.74,
+    "bid": 4.74,
+    "ask": 4.79,
+    "ltp": 4.77,
+    "at": "2026-10-21T15:21:38+05:30",
     "stale": false
    },
-   "unrealised_gross": 7200.0,
-   "exit_charges_est": 50.85,
-   "unrealised": 7122.4,
-   "liquidation_value": 14139.15,
+   "unrealised_gross": 7230.0,
+   "exit_charges_est": 50.9,
+   "unrealised": 7152.35,
+   "liquidation_value": 14169.1,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -498,11 +498,18 @@
    "opened_at": "2026-10-21T15:20:37+05:30",
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
-   "mark": null,
-   "unrealised_gross": 0.0,
-   "exit_charges_est": 34.94,
-   "unrealised": -61.21,
-   "liquidation_value": 5865.06,
+   "mark": {
+    "price": 1.65,
+    "bid": 1.65,
+    "ask": 1.75,
+    "ltp": 1.75,
+    "at": "2026-10-21T15:21:38+05:30",
+    "stale": false
+   },
+   "unrealised_gross": -1775.0,
+   "exit_charges_est": 31.52,
+   "unrealised": -1832.79,
+   "liquidation_value": 4093.48,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -521,8 +528,8 @@
     "at": "2026-10-21T15:20:37+05:30"
    },
    "trough": {
-    "price": 2.36,
-    "at": "2026-10-21T15:20:37+05:30"
+    "price": 1.75,
+    "at": "2026-10-21T15:21:38+05:30"
    }
   }
  ],
@@ -793,7 +800,7 @@
     },
     "last": {
      "price": 1.55,
-     "at": "2026-10-21T15:20:32+05:30"
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -887,8 +894,8 @@
      "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 88.65,
-     "at": "2026-10-21T15:20:32+05:30"
+     "price": 89.9,
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -982,8 +989,8 @@
      "at": "2026-10-19T15:20:20+05:30"
     },
     "last": {
-     "price": 77.4,
-     "at": "2026-10-21T15:20:32+05:30"
+     "price": 77.65,
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1078,7 +1085,7 @@
     },
     "last": {
      "price": 0.85,
-     "at": "2026-10-21T15:20:32+05:30"
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1173,7 +1180,7 @@
     },
     "last": {
      "price": 10.15,
-     "at": "2026-10-21T15:20:32+05:30"
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1267,8 +1274,8 @@
      "at": "2026-10-21T14:47:13+05:30"
     },
     "last": {
-     "price": 0.68,
-     "at": "2026-10-21T15:20:32+05:30"
+     "price": 0.7,
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1362,8 +1369,8 @@
      "at": "2026-10-19T09:55:04+05:30"
     },
     "last": {
-     "price": 4.2,
-     "at": "2026-10-21T15:20:32+05:30"
+     "price": 4.15,
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1458,7 +1465,7 @@
     },
     "last": {
      "price": 0.15,
-     "at": "2026-10-21T15:20:32+05:30"
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1557,7 +1564,7 @@
     },
     "last": {
      "price": 19.1,
-     "at": "2026-10-21T15:20:32+05:30"
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1678,8 +1685,8 @@
      "at": "2026-10-21T09:45:27+05:30"
     },
     "last": {
-     "price": 10.1,
-     "at": "2026-10-21T15:20:32+05:30"
+     "price": 10.15,
+     "at": "2026-10-21T15:21:38+05:30"
     }
    },
    "rule": {
@@ -1791,9 +1798,18 @@
    },
    "after": {
     "until": "2026-10-23",
-    "peak": null,
-    "trough": null,
-    "last": null
+    "peak": {
+     "price": 0.9,
+     "at": "2026-10-21T15:21:38+05:30"
+    },
+    "trough": {
+     "price": 0.9,
+     "at": "2026-10-21T15:21:38+05:30"
+    },
+    "last": {
+     "price": 0.9,
+     "at": "2026-10-21T15:21:38+05:30"
+    }
    },
    "rule": {
     "entry_mode": "open",
@@ -1833,7 +1849,7 @@
   },
   "2026-10-21": {
    "start_equity": 476928.24,
-   "end_equity": 498535.77,
+   "end_equity": 497392.98,
    "realised": -8770.2
   }
  },
@@ -2028,7 +2044,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-21T15:20:41+05:30",
+ "saved_at": "2026-10-21T15:21:43+05:30",
  "halts": {
   "day": "2026-10-19",
   "week": "2026-10-19"
