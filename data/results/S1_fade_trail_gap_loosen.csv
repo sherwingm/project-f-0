@@ -1,0 +1,34 @@
+set,exit,n,win %,mean %,total Rs,t,Oct24-Oct25 mean %,Nov25-Sep26 mean %
+fade B >= Rs 2 (live rule),v11 (no trail),339,24.8,2.24,62475,0.668,4.92,0.01
+fade B >= Rs 2 (live rule),v12 gap 2 % (live),339,55.2,2.86,68160,1.79,2.46,3.2
+fade B >= Rs 2 (live rule),v12 gap 3 %,339,54.9,2.76,64739,1.728,2.56,2.92
+fade B >= Rs 2 (live rule),v12 gap 5 %,339,54.6,2.78,63609,1.759,2.57,2.96
+fade B >= Rs 2 (live rule),v12 gap 7 %,339,53.7,2.79,61736,1.765,2.55,2.99
+fade B >= Rs 2 (live rule),v12 gap 10 %,339,49.9,2.7,62107,1.619,2.9,2.53
+fade B >= Rs 2 (live rule),v12 gap 15 %,339,44.5,2.73,67996,1.287,3.77,1.87
+fade B >= Rs 2 (live rule),v12 gap 20 %,339,40.7,1.85,53636,0.863,2.07,1.66
+fade B >= Rs 2 (live rule),v12 gap 30 %,339,32.2,-1.28,376,-0.605,-0.41,-2.0
+fade B >= Rs 2 (live rule),"start +20 %, gap 10 %",339,49.0,2.36,54665,1.334,1.92,2.73
+fade B >= Rs 2 (live rule),"start +30 %, gap 15 %",339,44.5,2.35,62413,1.055,2.82,1.95
+"refused, listing Rs 2-7",v11 (no trail),109,25.7,5.82,51760,0.54,9.89,1.96
+"refused, listing Rs 2-7",v12 gap 2 % (live),109,49.5,2.3,22250,0.552,-1.16,5.58
+"refused, listing Rs 2-7",v12 gap 3 %,109,49.5,1.96,19504,0.473,-1.69,5.41
+"refused, listing Rs 2-7",v12 gap 5 %,109,48.6,1.76,17641,0.426,-2.09,5.4
+"refused, listing Rs 2-7",v12 gap 7 %,109,47.7,1.81,17828,0.447,-1.05,4.5
+"refused, listing Rs 2-7",v12 gap 10 %,109,46.8,0.14,4886,0.036,-2.84,2.96
+"refused, listing Rs 2-7",v12 gap 15 %,109,41.3,0.96,10745,0.218,-4.65,6.28
+"refused, listing Rs 2-7",v12 gap 20 %,109,39.4,0.73,9151,0.143,-6.46,7.54
+"refused, listing Rs 2-7",v12 gap 30 %,109,33.0,1.21,7991,0.244,-3.65,5.81
+"refused, listing Rs 2-7","start +20 %, gap 10 %",109,53.2,1.63,15115,0.428,0.19,3.0
+"refused, listing Rs 2-7","start +30 %, gap 15 %",109,51.4,3.27,27851,0.754,-0.93,7.24
+"refused, listing Rs 2-10",v11 (no trail),136,23.5,0.54,13003,0.062,2.17,-0.9
+"refused, listing Rs 2-10",v12 gap 2 % (live),136,47.1,0.22,6471,0.06,-5.16,4.99
+"refused, listing Rs 2-10",v12 gap 3 %,136,47.1,-0.06,3682,-0.017,-5.59,4.85
+"refused, listing Rs 2-10",v12 gap 5 %,136,45.6,-0.37,614,-0.104,-6.16,4.77
+"refused, listing Rs 2-10",v12 gap 7 %,136,44.9,-0.44,-154,-0.123,-5.43,4.0
+"refused, listing Rs 2-10",v12 gap 10 %,136,43.4,-1.88,-14242,-0.547,-6.97,2.65
+"refused, listing Rs 2-10",v12 gap 15 %,136,38.2,-1.75,-13454,-0.456,-8.65,4.38
+"refused, listing Rs 2-10",v12 gap 20 %,136,36.0,-2.39,-19255,-0.541,-10.45,4.76
+"refused, listing Rs 2-10",v12 gap 30 %,136,30.1,-2.7,-26592,-0.622,-8.91,2.83
+"refused, listing Rs 2-10","start +20 %, gap 10 %",136,47.8,-1.39,-9860,-0.416,-5.29,2.07
+"refused, listing Rs 2-10","start +30 %, gap 15 %",136,46.3,-0.18,1689,-0.047,-6.3,5.27
