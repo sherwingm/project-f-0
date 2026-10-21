@@ -666,6 +666,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -28.5
+  },
+  {
+   "at": "14:33:48",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.307,
+   "same_best_bid_pct": 52.9,
+   "same_best_ask_pct": 52.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -13.5
   }
  ],
  "top_gaps": [
@@ -803,21 +817,21 @@
    "at": "13:13"
   },
   {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 1.285,
-   "kotak": 19.45,
-   "upstox": 19.2,
-   "at": "10:51"
+   "contract": "SBIN26OCT960PE",
+   "gap_pct": 1.307,
+   "kotak": 7.65,
+   "upstox": 7.75,
+   "at": "14:33"
   }
  ],
  "day": {
-  "rounds": 47,
-  "contract_quotes": 1538,
+  "rounds": 48,
+  "contract_quotes": 1572,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.2,
+  "same_best_bid_pct": 42.05,
   "same_best_ask_pct": 41.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -23.0
+  "oi_same_pct": 98.55,
+  "upstox_minus_kotak_quote_time_s_median": -22.75
  }
 }
