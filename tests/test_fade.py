@@ -492,7 +492,7 @@ def test_v11_stop_sells_at_the_bid_and_v10_shadow_takes_the_1520_bid(setup):
     q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50, stop 14.80
     ft.on_poll(at(15, 9, 16))
     (p,) = lg.state["positions"]
-    assert p["rule"]["version"] == "v11" and p["rule"]["stop"]["level"] == 14.8
+    assert p["rule"]["version"] == "v12" and p["rule"]["stop"]["level"] == 14.8
     assert p["rule"]["shadow_v10"] == {"status": "open"}
     q.set("PE", 1220.0, 14.85, 15.2)                                                            # a tick above the stop
     ft.on_poll(at(15, 10, 0))
@@ -555,36 +555,61 @@ def test_v11_stopped_trade_whose_1520_poll_was_missed_gets_a_late_shadow(setup):
 
 
 # ---------------------------------------------------------------- shadow tag trail (S1_v11_trail_shadow_track.md)
-def test_trail_shadow_starts_at_plus_10_and_sells_5_below_the_peak_bid(setup):
+def test_v12_trail_sells_2pct_below_the_peak_bid_and_the_shadows_follow(setup):
     from server import charges as ch
     lg, q, ft, _ = setup
     q.set("PE", 1220.0, 18.0, 18.5)                                                             # entry 18.50, start 20.35
     ft.on_poll(at(15, 9, 16))
     (p,) = lg.state["positions"]
+    assert p["rule"]["trail"] == {"status": "open", "start": 20.35, "gap": 0.02, "peak": None}
     assert p["rule"]["shadow_trail"] == {"status": "open", "start": 20.35, "peak": None}
+    assert p["rule"]["shadow_v11"] == {"status": "open"}
     q.set("PE", 1220.0, 20.3, 20.6)
     ft.on_poll(at(15, 10, 0))
-    assert p["rule"]["shadow_trail"]["status"] == "open"                                        # a tick short of the start
+    assert p["rule"]["trail"]["status"] == "open"                                               # a tick short of the start
     q.set("PE", 1220.0, 22.0, 22.3)
     ft.on_poll(at(15, 10, 30))
-    assert p["rule"]["shadow_trail"]["status"] == "active" and p["rule"]["shadow_trail"]["peak"] == 22.0
+    assert p["rule"]["trail"]["status"] == "active" and p["rule"]["trail"]["peak"] == 22.0
     q.set("PE", 1220.0, 24.0, 24.3)
     ft.on_poll(at(15, 11, 0))
-    q.set("PE", 1220.0, 22.81, 23.1)                                                            # above 0.95 x 24 = 22.80
+    q.set("PE", 1220.0, 23.53, 23.8)                                                            # above 0.98 x 24 = 23.52
     ft.on_poll(at(15, 11, 1))
-    assert p["rule"]["shadow_trail"]["status"] == "active"
-    q.set("PE", 1220.0, 22.8, 23.1)
+    assert lg.state["positions"]
+    q.set("PE", 1220.0, 23.4, 23.7)                                                             # through it: v12 sells
     ft.on_poll(at(15, 11, 2))
-    sh = p["rule"]["shadow_trail"]
-    want = round((22.8 - 18.5) * 350 - p["entry_charges_open"] - ch.leg("PE", "SELL", 350, 22.8)["total"], 2)
-    assert sh["status"] == "done" and sh["fill"] == 22.8 and sh["net"] == want
-    assert lg.state["positions"]                                                                # the real trade is untouched
+    c = lg.state["closed"][-1]
+    assert lg.state["positions"] == [] and c["reason"] == "fade_trail" and c["exit"]["price"] == 23.4
+    r = c["rule"]
+    assert r["shadow_v11"]["status"] == "tracking" and r["shadow_v10"]["status"] == "pending"
+    assert r["shadow_trail"]["status"] == "active"                                              # 0.95 x 24 = 22.80: holding
+    q.set("PE", 1220.0, 22.8, 23.1)                                                             # the 5 % trail sells now
+    ft.on_poll(at(15, 11, 3))
+    net = lambda x: round((x - 18.5) * 350 - c["entry_charges"] - ch.leg("PE", "SELL", 350, x)["total"], 2)  # noqa: E731
+    assert r["shadow_trail"]["status"] == "done" and r["shadow_trail"]["net"] == net(22.8)
+    assert r["shadow_v11"]["status"] == "tracking"                                              # v11 holds to 15:20
     q.set("PE", 1220.0, 19.0, 19.3)
     ft.on_poll(at(15, 15, 20))
-    c = lg.state["closed"][-1]
-    assert c["reason"] == "fade_eod" and c["rule"]["shadow_trail"]["status"] == "done"
-    s = F.trail_shadow(lg.state)
-    assert s["trail_exits"] == 1 and s["shadow_trail"]["net_rs"] == want and s["real_v11"]["net_rs"] == c["net_pnl"]
+    assert r["shadow_v11"]["status"] == "done" and r["shadow_v11"]["fill"] == 19.0 and r["shadow_v11"]["why"] == "15:20"
+    assert r["shadow_v10"]["status"] == "done" and r["shadow_v10"]["net"] == net(19.0)
+    s = F.v12_compare(lg.state)
+    assert s["real_v12"]["net_rs"] == c["net_pnl"] and s["shadow_v11"]["net_rs"] == net(19.0)
+    assert s["trail_exits"] == 1 and s["pending"] == 0
+    assert F.trail_shadow(lg.state)["shadow_trail"]["net_rs"] == net(22.8)
+
+
+def test_v12_after_a_trail_sale_v11_shadow_takes_its_stop(setup):
+    lg, q, ft, _ = setup
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(at(15, 9, 16))
+    q.set("PE", 1220.0, 21.0, 21.3)
+    ft.on_poll(at(15, 9, 30))
+    q.set("PE", 1220.0, 20.0, 20.3)                                                             # 0.98 x 21 = 20.58: sold
+    ft.on_poll(at(15, 9, 31))
+    r = lg.state["closed"][-1]["rule"]
+    q.set("PE", 1220.0, 14.5, 14.8)                                                             # v11's stop 14.80
+    ft.on_poll(at(15, 10, 0))
+    assert r["shadow_v11"]["status"] == "done" and r["shadow_v11"]["fill"] == 14.5 and r["shadow_v11"]["why"] == "stop"
+    assert r["shadow_trail"]["status"] == "done" and r["shadow_trail"]["fill"] == 14.5              # its 5 % trail too
 
 
 def test_trail_shadow_is_the_same_when_v11_stops_first_or_it_never_starts(setup):

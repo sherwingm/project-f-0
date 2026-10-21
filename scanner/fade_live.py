@@ -30,11 +30,12 @@ STATE_PATH = ROOT / "data" / "forward" / "fade.json"
 OPEN = time(9, 15)
 MIN_LEFT = 2                                   # sessions after day 0 for the current monthly; fewer -> next monthly
 HISTORY_MAX = 400
-RULES_TEXT = ("S1 v11 results-day fade, paper only: on the first full session after a results filing, strong numbers "
+RULES_TEXT = ("S1 v12 results-day fade, paper only: on the first full session after a results filing, strong numbers "
               "(net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, "
               "QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the "
               "strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below "
-              "0.80 x entry from 09:16 (-20 % stop), else at 15:20 the same day.")
+              "0.80 x entry from 09:16 (-20 % stop); once the bid reaches 1.10 x entry a trailing stop sells at the "
+              "first bid 2 % below the highest bid since; else at 15:20 the same day.")
 
 
 # ---------------------------------------------------------------- pure rules

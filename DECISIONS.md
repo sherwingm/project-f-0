@@ -21,6 +21,13 @@ editing this file on purpose, in its own commit, with the reason.
     trade from 21 Oct". Nothing has to be lifted for that: v11 (Arm F) trades this week whatever the halt says. The
     weekly halt latched on 2026-10-19 (week P&L −₹23,097, mostly the v10 side-record trades sold that day) stays on for
     manual orders until Monday 2026-10-26. The page now says the halt covers manual orders only.
+  - **S1 v12 is the live fade exit from 2026-10-22 (the user, 2026-10-21: "make the Trail (-20 % stop, trail on at
+    +10 %, gap 2 %) as v12 and make it live").** v11's -20 % stop stays; on the entry day from 09:16, a bid >= 1.10 x
+    entry switches a trail on, and the first bid <= 0.98 x the highest bid since sells (`fade_trail`); else 15:20.
+    v11 (stop only) and v10 (15:20) are tracked as shadows on every v12 trade; the 5 % trail tag stays. Backtest
+    (realistic entry, 2025-26, 362 trades): +3.25 % a trade, t 2.18, vs v11 +0.23 %; not proven better than v11
+    (t 1.55), the 2 % gap was picked after seeing results, and live bids/spreads may be worse than the backtest.
+    Reviewed at 30 closed v12 trades. `strategies/S1_v12_fade_trail2.md`.
   - **The weekly loss halt is removed (the user, 2026-10-21: "remove this rule").** `WEEKLY_LOSS_HALT_PCT` and the
     weekly latch are gone from `server/risk.py`; an old weekly latch is dropped on the next check. The daily loss halt
     (2 %) stays, and like before it blocks manual paper orders only, never the rule trades.

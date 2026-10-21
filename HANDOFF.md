@@ -56,6 +56,14 @@ independent verification workflow (recompute, bias audit, robustness), which cau
   unreliable. The live paper run (real asks) and the shadow reviews are the real test. No rule change was made; any
   change is the user's decision.
 
+### Live from 22 Oct: S1 v12 fade exit (`strategies/S1_v12_fade_trail2.md`, user decision 21 Oct)
+- v11's −20 % stop plus a trail: on at a bid ≥ 1.10 × entry, sells at the first bid ≤ 0.98 × the highest bid since
+  (`fade_trail`); else 15:20. Shadows on every v12 trade: v11 (stop only), v10 (15:20), the 5 % trail tag. Review at 30
+  closed v12 trades (`/api/paper/summary` `fade_v12`, Arm F panel). Weekly loss halt removed 21 Oct.
+- Backtest (realistic entry, 2025-26): v12 +3.25 % a trade (t 2.18) vs v11 +0.23 %; not proven better than v11 (t 1.55);
+  live bids/spreads on a 2 % gap may do worse. Every other exit idea (wider stops, wait, re-entry, negative trails)
+  failed: `data/results/S1_fade_stop_trail.md`, `S1_fade_trail20_grid.md`, `S1_fade_negative_trail.md`.
+
 ### Done 21 Oct: can the fade buy at the opening price? (`strategies/S1_fade_preopen_entry.md`, report in `data/results/`)
 - **No pre-open for options** (NSE/FAOP/71092; still true after the 7 Sep 2026 revision). Only the cash market and
   current-month stock/index futures (since 8 Dec 2025) have the call auction. Option AMOs go to NSE at 09:15.
