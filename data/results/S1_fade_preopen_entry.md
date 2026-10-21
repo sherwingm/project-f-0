@@ -68,3 +68,34 @@ c (day-0 close IV / previous close IV, median) = **0.922** from 384 of 384 2022-
 
 
 2 trades without eod2 prices. Proxy: the stock's own open and close.
+
+## Independent verification (4 agents, 2026-10-21; checks after the result, not pre-registered)
+
+**Test 1 (option limit):** no code bug; 8 hand-checked trades match to the paisa; BS/IV match a textbook to 1e-12;
+c = 0.922 reproduced. The sign is fragile (a less pessimistic fill price gives +3.6 %, t 1.05), but no variant reaches
+t 2. Unfilled trades did better under B (+9.4 % vs −1.4 %), mostly from 3 big winners. **Verdict: no edge.**
+
+**Test 2 (stock at the pre-open auction price, fade side, to the close):** the arithmetic reproduces exactly
+(+0.456 %, t 4.23). By the pre-registered rule (0.05 % cost) it passes. But:
+- **Real costs are about double.** Futures charges at today's rates are 0.064 % of value (STT 0.05 % on the sell leg),
+  plus slippage 0.04 % → 0.104 %. Net +0.40 %, t 3.7 overall, but **2022-24 t 1.72** (fails the both-windows rule);
+  2025-26 +0.54 %, t 3.6.
+- **Market-adjusted** (minus signed NIFTY 500 open→close), with real costs: 2022-24 t 1.37; 2025-26 t 3.42. The short-heavy
+  book (638 of 868 are puts) picks up intraday market drift.
+- **Almost all of it is the first minute after the auction:** auction price → 09:16 open +0.39 % (t 7.6); 09:16 → 15:19
+  +0.11 % (t 1.1). Entering at the 09:16 open: +0.06 % net (t 0.6). So it exists **only** for an order filled in the
+  pre-open call auction. The exit (15:20 sell vs official close) changes nothing.
+- **Half of it is generic gap reversal.** Gap-matched non-results days give +0.18 % gross for the same side. Excess over
+  that: +0.33 % (t 3.0) raw, +0.21 % (t 2.0) market-adjusted, and not significant in 2022-24 (t 1.15 / 0.29). On the 76 %
+  of trades where the side agrees with the gap (strong → gap up → short) the excess is ≈ 0; it comes from the 24 % where
+  the side goes with the gap.
+- **The instrument:** stock futures have had a pre-open auction only since 2025-12-08 (220 trades: +0.56 %, t 2.5 with
+  real costs). Before that the only route is a cash intraday short/long placed in the cash pre-open. The futures'
+  own auction prices are not in the local data, so the futures route itself is untested. The cash auctions are thin
+  (2022 H1 median 32 lots matched), so a 1-lot order can move the price.
+- 2023 lost money (−0.16 % net, 156 trades). All 1,053 signals (before the option filter): +0.50 %, t 5.2 (0.05 % cost).
+
+**Verdict:** a real but fragile effect: the cash auction price overshoots on results mornings and pulls back within a
+minute. Capturing it needs a fill **in the auction itself**, in the stock (cash) or, since Dec 2025, the current-month
+stock future, with linear risk (one futures lot ≈ ₹6.9 L of stock vs a ₹600-8,000 option premium). Not established
+for 2022-24 after real costs; about half is not specific to results. No rule changes.

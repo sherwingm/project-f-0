@@ -56,6 +56,13 @@ independent verification workflow (recompute, bias audit, robustness), which cau
   unreliable. The live paper run (real asks) and the shadow reviews are the real test. No rule change was made; any
   change is the user's decision.
 
+### Done 21 Oct: can the fade buy at the opening price? (`strategies/S1_fade_preopen_entry.md`, report in `data/results/`)
+- **No pre-open for options** (NSE/FAOP/71092; still true after the 7 Sep 2026 revision). Only the cash market and
+  current-month stock/index futures (since 8 Dec 2025) have the call auction. Option AMOs go to NSE at 09:15.
+- Option limit at a fair (Black-Scholes) price: fails. The stock at the auction price, fade side, to the close: +0.40 % a
+  trade after real costs (t 3.7), but 2022-24 t 1.72, ~half is generic gap reversal, and nearly all of it is the first
+  minute after the auction (gone at 09:16). Futures auction opens (Dec 2025+) not yet fetched: the open check.
+
 ### The live fade (S1 v11, from 21 Oct, `strategies/S1_v11_fade_stop20.md`)
 - v10's entry unchanged (strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live ask 09:15–15:20; retried
   every 30 s). **Exit:** from **09:16** the first poll whose best bid ≤ 0.80 × entry sells at that bid (`fade_stop`),

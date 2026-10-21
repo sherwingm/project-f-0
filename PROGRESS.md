@@ -731,3 +731,14 @@ Pre-registered `strategies/S1_fade_realistic_entry.md` and `_studies.md`. Oct 20
 candles. v11 on the ₹2+ set (409): +13.8 % → +2.5 % a trade (₹3.23 L → ₹0.66 L, t 3.0 → 0.9). Floors ₹2/₹1/₹0.5: +2.2 / +0.6 /
 −2.2 %. Band ₹0.5–1: −17 % (t −4.1). Targets: ≈ 0. Arm-A filter: fails. The old edge came mostly from the stale opening print.
 Nothing live changed. Reports: `data/results/S1_fade_realistic_entry.md`, `S1_fade_realistic_studies.md`.
+
+
+## 2026-10-21 · S1 fade · can the opening price be bought? Research + two pre-registered tests
+Pre-registered `strategies/S1_fade_preopen_entry.md`; report `data/results/S1_fade_preopen_entry.md` (verified by 4 agents).
+- Research (official circulars, checked by a refuting agent): **stock options have no pre-open** (NSE/FAOP/71092 excludes
+  options; only current-month futures since 8 Dec 2025, plus the cash market). Option orders queue at the broker and reach
+  NSE at 09:15 seconds late; the opening print is limit vs limit, first come. A limit gives a price cap, not the print.
+- Test 1, option limit at a Black-Scholes price from the cash pre-open price: fails (−1.7 %, 262 of 409 filled; no bug).
+- Test 2, the stock in the pre-open auction, fade side, to the close: +0.46 % (t 4.2) at the pre-registered 0.05 % cost;
+  with real costs (0.104 %) +0.40 %, t 3.7, but 2022-24 t 1.72. Almost all of it is the first minute after the auction;
+  half is generic gap reversal; futures auction prices (Dec 2025+) are untested. Nothing live changed.
