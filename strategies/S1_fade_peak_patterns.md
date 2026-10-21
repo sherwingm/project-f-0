@@ -31,3 +31,20 @@ The frozen rule vs v12 on the test half. **Pass:** on the live set, test mean > 
 level or open − 1 tick as in `scanner/fade_stop_trail.py`. A pass would only justify a paper shadow tag (the user's
 decision). Note: the test half has been seen by earlier exit studies (aggregate numbers only), so a pass is weaker than
 a fully clean one.
+
+## Addendum 2026-10-22 · phase B result and the frozen rule (written before phase C)
+- Phase A/B ran on the train pack only (284 trades); a skeptic re-ran everything and found no look-ahead.
+- **Frozen by the pre-registered criterion (highest train mean, live set): R2 "stall 20".** Exact text: after the
+  trail switches on (a candle high ≥ 1.10 × entry), count consecutive candles whose high is not above the running high
+  (the running high starts as the arming candle's high; a higher high resets the count to 0). When the count reaches
+  20 at a candle's close, sell at the next candle's open − 1 tick. The −20 % stop (checked first in each candle) and
+  the 15:19 close − 1 tick as in v12. Train: +6.06 % vs v12 +2.46 % (t 0.55).
+- **The skeptic advised against freezing it:** N = 20 was the best of 5 N values tried on the same data in phase A
+  (a departure from a descriptive phase A), the whole lead comes from one trade (JSWSTEEL 2024-10-28), and on typical
+  trades it keeps less of the peak than v12. It is frozen anyway because the rule says so; the warning is part of the
+  record.
+- **Secondary, declared now (descriptive, not a pass):** R4 "half-profit floor + wick top" (L = entry + 0.5 × (H −
+  entry), plus: a new-high candle closing ≤ 0.90 × its own high sells at the next open − 1 tick), the only rule whose
+  train lead survived dropping JSWSTEEL. R1, R3, R5 are reported beside them.
+- Phase C uses the same code (`scanner/fade_peak_rules.py`, a copy of phase B's `rules.py` walker) with the tick at
+  ₹0.01 for test dates.
