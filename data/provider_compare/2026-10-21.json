@@ -396,6 +396,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -21.5
+  },
+  {
+   "at": "11:56:58",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.358,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.2,
+   "upstox_minus_kotak_quote_time_s_median": -15.5
   }
  ],
  "top_gaps": [
@@ -412,6 +426,13 @@
    "kotak": 5.3,
    "upstox": 4.95,
    "at": "11:21"
+  },
+  {
+   "contract": "APOLLOHOSP26OCT7600PE",
+   "gap_pct": 4.358,
+   "kotak": 82.6,
+   "upstox": 86.2,
+   "at": "11:56"
   },
   {
    "contract": "BSE26OCT3300CE",
@@ -531,23 +552,16 @@
    "kotak": 30.25,
    "upstox": 29.9,
    "at": "10:51"
-  },
-  {
-   "contract": "ABB26OCT6700CE",
-   "gap_pct": 1.115,
-   "kotak": 134.55,
-   "upstox": 136.05,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 28,
-  "contract_quotes": 913,
+  "rounds": 29,
+  "contract_quotes": 947,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 40.3,
+  "same_best_bid_pct": 41.2,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -16.25
+  "upstox_minus_kotak_quote_time_s_median": -15.5
  }
 }
