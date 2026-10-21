@@ -284,6 +284,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -33.5
+  },
+  {
+   "at": "11:16:42",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.897,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 58.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -30.0
   }
  ],
  "top_gaps": [
@@ -335,6 +349,13 @@
    "kotak": 5.1,
    "upstox": 5.0,
    "at": "09:44"
+  },
+  {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 1.897,
+   "kotak": 18.45,
+   "upstox": 18.1,
+   "at": "11:16"
   },
   {
    "contract": "APOLLOHOSP26OCT7700CE",
@@ -419,23 +440,16 @@
    "kotak": 5.61,
    "upstox": 5.66,
    "at": "09:20"
-  },
-  {
-   "contract": "WIPRO26OCT185CE",
-   "gap_pct": 0.852,
-   "kotak": 5.87,
-   "upstox": 5.82,
-   "at": "10:06"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 642,
+  "rounds": 21,
+  "contract_quotes": 676,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 36.75,
+  "same_best_bid_pct": 38.2,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -14.5
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
