@@ -168,9 +168,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "10:36:23",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 7.084,
+   "same_best_bid_pct": 29.4,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.2,
+   "upstox_minus_kotak_quote_time_s_median": -40.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "EICHERMOT26OCT7200PE",
+   "gap_pct": 7.084,
+   "kotak": 108.7,
+   "upstox": 116.4,
+   "at": "10:36"
+  },
   {
    "contract": "BSE26OCT3300CE",
    "gap_pct": 3.893,
@@ -184,6 +205,13 @@
    "kotak": 55.55,
    "upstox": 57.15,
    "at": "10:21"
+  },
+  {
+   "contract": "EICHERMOT26OCT7200CE",
+   "gap_pct": 2.703,
+   "kotak": 74.0,
+   "upstox": 72.0,
+   "at": "10:36"
   },
   {
    "contract": "BAJAJ-AUTO26OCT10200PE",
@@ -296,30 +324,16 @@
    "kotak": 8.05,
    "upstox": 8.0,
    "at": "09:20"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 0.524,
-   "kotak": 19.1,
-   "upstox": 19.0,
-   "at": "09:49"
-  },
-  {
-   "contract": "DIXON26OCT12000PE",
-   "gap_pct": 0.474,
-   "kotak": 221.45,
-   "upstox": 222.5,
-   "at": "10:31"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 371,
+  "rounds": 13,
+  "contract_quotes": 405,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 31.35,
+  "same_best_bid_pct": 29.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.55,
-  "upstox_minus_kotak_quote_time_s_median": -8.5
+  "oi_same_pct": 97.1,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
