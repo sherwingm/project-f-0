@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 439252.60999999987,
+ "cash": 419629.2499999999,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -45,17 +45,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 72.0,
-    "bid": 72.0,
-    "ask": 72.9,
-    "ltp": 69.75,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 93.65,
+    "bid": 93.65,
+    "ask": 96.4,
+    "ltp": 90.0,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": 1768.75,
-   "exit_charges_est": 40.89,
-   "unrealised": 1701.0,
-   "liquidation_value": 8959.11,
+   "unrealised_gross": 4475.0,
+   "exit_charges_est": 46.08,
+   "unrealised": 4402.06,
+   "liquidation_value": 11660.17,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -120,17 +120,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 72.0,
-    "bid": 72.0,
-    "ask": 72.9,
-    "ltp": 69.75,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 93.65,
+    "bid": 93.65,
+    "ask": 96.4,
+    "ltp": 90.0,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": 1598.75,
-   "exit_charges_est": 40.89,
-   "unrealised": 1530.93,
-   "liquidation_value": 8959.11,
+   "unrealised_gross": 4305.0,
+   "exit_charges_est": 46.08,
+   "unrealised": 4231.99,
+   "liquidation_value": 11660.17,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -195,17 +195,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 9.4,
-    "bid": 9.4,
-    "ask": 9.6,
-    "ltp": 9.75,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 13.45,
+    "bid": 13.45,
+    "ask": 13.75,
+    "ltp": 13.45,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": -1380.0,
-   "exit_charges_est": 34.43,
-   "unrealised": -1441.19,
-   "liquidation_value": 5605.57,
+   "unrealised_gross": 1050.0,
+   "exit_charges_est": 39.11,
+   "unrealised": 984.13,
+   "liquidation_value": 8030.89,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -271,17 +271,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 1.44,
-    "bid": 1.44,
-    "ask": 1.46,
-    "ltp": 1.45,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 4.12,
+    "bid": 4.12,
+    "ask": 4.18,
+    "ltp": 4.17,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": -3360.0,
-   "exit_charges_est": 31.89,
-   "unrealised": -3418.95,
-   "liquidation_value": 4288.11,
+   "unrealised_gross": 4680.0,
+   "exit_charges_est": 47.33,
+   "unrealised": 4605.61,
+   "liquidation_value": 12312.67,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -297,8 +297,8 @@
     "last_close": 1.32
    },
    "peak": {
-    "price": 3.56,
-    "at": "2026-10-19T09:45:48+05:30"
+    "price": 4.17,
+    "at": "2026-10-21T09:15:41+05:30"
    },
    "trough": {
     "price": 1.32,
@@ -347,17 +347,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 9.4,
-    "bid": 9.4,
-    "ask": 9.5,
-    "ltp": 9.75,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 13.6,
+    "bid": 13.6,
+    "ask": 13.9,
+    "ltp": 13.6,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": -2232.0,
-   "exit_charges_est": 34.43,
-   "unrealised": -2293.58,
-   "liquidation_value": 5605.57,
+   "unrealised_gross": 288.0,
+   "exit_charges_est": 39.27,
+   "unrealised": 221.58,
+   "liquidation_value": 8120.73,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -373,8 +373,8 @@
     "last_close": 9.25
    },
    "peak": {
-    "price": 13.12,
-    "at": "2026-10-19T15:20:24+05:30"
+    "price": 13.6,
+    "at": "2026-10-21T09:15:41+05:30"
    },
    "trough": {
     "price": 9.15,
@@ -423,17 +423,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 1.43,
-    "bid": 1.43,
-    "ask": 1.46,
-    "ltp": 1.45,
-    "at": "2026-10-19T15:29:45+05:30",
+    "price": 4.25,
+    "bid": 4.25,
+    "ask": 4.19,
+    "ltp": 4.26,
+    "at": "2026-10-21T09:15:41+05:30",
     "stale": false
    },
-   "unrealised_gross": -2700.0,
-   "exit_charges_est": 31.84,
-   "unrealised": -2758.59,
-   "liquidation_value": 4258.16,
+   "unrealised_gross": 5760.0,
+   "exit_charges_est": 48.08,
+   "unrealised": 5685.17,
+   "liquidation_value": 12701.92,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -449,12 +449,261 @@
     "last_close": 1.32
    },
    "peak": {
-    "price": 2.33,
-    "at": "2026-10-19T15:20:24+05:30"
+    "price": 4.26,
+    "at": "2026-10-21T09:15:41+05:30"
    },
    "trough": {
     "price": 1.32,
     "at": "2026-10-19T15:22:28+05:30"
+   }
+  },
+  {
+   "id": "P-1792554346762-1",
+   "symbol": "FEDERALBNK",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 355.0,
+   "tradingsymbol": "FEDERALBNK26OCT355CE",
+   "lot_size": 2500,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 2500,
+   "entry": {
+    "price": 2.8,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_open",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 2500,
+    "price": 2.8,
+    "value": 7000.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.49,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.05,
+    "total": 26.76
+   },
+   "entry_charges_open": 26.76,
+   "stop": null,
+   "max_loss_at_entry": 7026.76,
+   "margin": 0.0,
+   "opened_at": "2026-10-21T09:15:46+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.05,
+   "unrealised": -63.81,
+   "liquidation_value": 6962.95,
+   "rule": {
+    "entry_mode": "open",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-19",
+    "beat": 5.32,
+    "move": 3.21,
+    "best": 2.8,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 2.8,
+    "at": "2026-10-21T09:15:46+05:30"
+   },
+   "trough": {
+    "price": 2.8,
+    "at": "2026-10-21T09:15:46+05:30"
+   }
+  },
+  {
+   "id": "P-1792554347629-3",
+   "symbol": "HINDZINC",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 540.0,
+   "tradingsymbol": "HINDZINC26OCT540PE",
+   "lot_size": 1225,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1225,
+   "entry": {
+    "price": 5.25,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 1225,
+    "price": 5.25,
+    "value": 6431.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.29,
+    "sebi": 0.01,
+    "stamp": 0.19,
+    "gst": 4.01,
+    "total": 26.5
+   },
+   "entry_charges_open": 26.5,
+   "stop": null,
+   "max_loss_at_entry": 6457.75,
+   "margin": 0.0,
+   "opened_at": "2026-10-21T09:15:47+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 35.96,
+   "unrealised": -62.46,
+   "liquidation_value": 6395.29,
+   "rule": {
+    "strategy": "fade",
+    "version": "v11",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-21",
+    "filed": "2026-10-19",
+    "why": "net profit YoY +142.1 %, QoQ +17.2 %; revenue YoY +76.5 %",
+    "spot_at_entry": 552.55,
+    "np_yoy": 142.1,
+    "np_qoq": 17.2,
+    "rev_yoy": 76.5,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 10.5,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 4.2,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 5.25,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 5.25,
+    "at": "2026-10-21T09:15:47+05:30"
+   },
+   "trough": {
+    "price": 5.25,
+    "at": "2026-10-21T09:15:47+05:30"
+   }
+  },
+  {
+   "id": "P-1792554347920-5",
+   "symbol": "BAJFINANCE",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 920.0,
+   "tradingsymbol": "BAJFINANCE26OCT920PE",
+   "lot_size": 750,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 750,
+   "entry": {
+    "price": 8.15,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 750,
+    "price": 8.15,
+    "value": 6112.5,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.17,
+    "sebi": 0.01,
+    "stamp": 0.18,
+    "gst": 3.99,
+    "total": 26.35
+   },
+   "entry_charges_open": 26.35,
+   "stop": null,
+   "max_loss_at_entry": 6138.85,
+   "margin": 0.0,
+   "opened_at": "2026-10-21T09:15:47+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 35.34,
+   "unrealised": -61.69,
+   "liquidation_value": 6077.16,
+   "rule": {
+    "strategy": "fade",
+    "version": "v11",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-21",
+    "filed": "2026-10-19",
+    "why": "net profit YoY +28.7 %, QoQ +4.7 %; revenue YoY +21.6 %",
+    "spot_at_entry": 945.15,
+    "np_yoy": 28.7,
+    "np_qoq": 4.7,
+    "rev_yoy": 21.6,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 16.3,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 6.52,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 8.15,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 8.15,
+    "at": "2026-10-21T09:15:47+05:30"
+   },
+   "trough": {
+    "price": 8.15,
+    "at": "2026-10-21T09:15:47+05:30"
    }
   }
  ],
@@ -534,8 +783,8 @@
      "at": "2026-10-19T10:30:31+05:30"
     },
     "last": {
-     "price": 2.05,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 1.9,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -629,8 +878,8 @@
      "at": "2026-10-19T09:21:04+05:30"
     },
     "last": {
-     "price": 21.0,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 19.5,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -725,7 +974,7 @@
     },
     "last": {
      "price": 1.65,
-     "at": "2026-10-19T15:29:45+05:30"
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -815,12 +1064,12 @@
      "at": "2026-10-19T10:16:55+05:30"
     },
     "trough": {
-     "price": 45.3,
-     "at": "2026-10-19T09:20:02+05:30"
+     "price": 42.05,
+     "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 55.4,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 42.05,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -914,8 +1163,8 @@
      "at": "2026-10-19T15:20:20+05:30"
     },
     "last": {
-     "price": 37.95,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 46.85,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1005,12 +1254,12 @@
      "at": "2026-10-19T09:29:20+05:30"
     },
     "trough": {
-     "price": 1.45,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 0.85,
+     "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 1.45,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 0.85,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1100,12 +1349,12 @@
      "at": "2026-10-19T12:15:33+05:30"
     },
     "trough": {
-     "price": 4.3,
-     "at": "2026-10-19T14:47:15+05:30"
+     "price": 3.95,
+     "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 4.6,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 3.95,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1200,7 +1449,7 @@
     },
     "last": {
      "price": 1.46,
-     "at": "2026-10-19T15:29:45+05:30"
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1294,8 +1543,8 @@
      "at": "2026-10-19T09:55:04+05:30"
     },
     "last": {
-     "price": 2.35,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 2.25,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1385,12 +1634,12 @@
      "at": "2026-10-19T15:21:25+05:30"
     },
     "trough": {
-     "price": 0.3,
-     "at": "2026-10-19T15:21:25+05:30"
+     "price": 0.25,
+     "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 0.3,
-     "at": "2026-10-19T15:29:45+05:30"
+     "price": 0.25,
+     "at": "2026-10-21T09:15:41+05:30"
     }
    },
    "rule": {
@@ -1434,6 +1683,11 @@
    "start_equity": 500025.69,
    "end_equity": 476928.24,
    "realised": -16199.17
+  },
+  "2026-10-21": {
+   "start_equity": 476928.24,
+   "end_equity": 503551.2,
+   "realised": 0.0
   }
  },
  "peak_equity": 505844.75,
@@ -1627,7 +1881,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-19T15:29:50+05:30",
+ "saved_at": "2026-10-21T09:15:47+05:30",
  "halts": {
   "day": "2026-10-19",
   "week": "2026-10-19"
@@ -1638,7 +1892,9 @@
    "2026-10-15:TATAELXSI": "bought",
    "2026-10-19:TECHM": "bought",
    "2026-10-19:WIPRO": "bought",
-   "2026-10-19:IRFC": "refused"
+   "2026-10-19:IRFC": "refused",
+   "2026-10-21:FEDERALBNK": "bought",
+   "2026-10-21:PNB": "refused"
   },
   "close": {
    "2026-10-15:TATAELXSI": "bought",
@@ -1692,6 +1948,24 @@
      "F"
     ],
     "reason": "premium below Rs 2"
+   },
+   {
+    "date": "2026-10-21",
+    "symbol": "PNB",
+    "mode": "open",
+    "arms": [
+     "A"
+    ],
+    "reason": "never fits: 1 lot is 8,000 shares, so Rs 8,000 allows at most Rs 1.00 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-10-21",
+    "symbol": "UNIONBANK",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 4,425 shares, so Rs 8,000 allows at most Rs 1.81 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -1706,7 +1980,41 @@
    "2026-10-16:JIOFIN": "bought",
    "2026-10-16:LTF": "bought",
    "2026-10-19:FEDERALBNK": "bought",
-   "2026-10-19:UJJIVANSFB": "refused"
-  }
+   "2026-10-19:UJJIVANSFB": "refused",
+   "2026-10-21:UNIONBANK": "refused",
+   "2026-10-21:HINDZINC": "bought",
+   "2026-10-21:BAJFINANCE": "bought"
+  },
+  "open_wait": {},
+  "fade_wait": {},
+  "fade_shadow_entries": [
+   {
+    "key": "2026-10-21:UNIONBANK",
+    "date": "2026-10-21",
+    "symbol": "UNIONBANK",
+    "side": "PE",
+    "expiry": "2026-10-27",
+    "strike": 180.0,
+    "tradingsymbol": "UNIONBANK26OCT180PE",
+    "lot_size": 4425,
+    "entry": 1.63,
+    "bid_at_entry": 1.61,
+    "lot_cost": 7212.75,
+    "opened_at": "2026-10-21T09:15:47+05:30",
+    "refused": "never fits: 1 lot is 4,425 shares, so Rs 8,000 allows at most Rs 1.81 a share, below the Rs 2 floor",
+    "why": "net profit YoY +30.6 %, QoQ +2.5 %; revenue YoY +6.4 %",
+    "np_yoy": 30.6,
+    "spot_at_entry": 181.83,
+    "last_bid": 1.61,
+    "max_bid": 1.61,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
+   }
+  ]
  }
 }
