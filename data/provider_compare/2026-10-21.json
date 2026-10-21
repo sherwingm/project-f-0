@@ -298,6 +298,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -30.0
+  },
+  {
+   "at": "11:21:43",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 6.604,
+   "same_best_bid_pct": 41.2,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -22.5
   }
  ],
  "top_gaps": [
@@ -307,6 +321,13 @@
    "kotak": 108.7,
    "upstox": 116.4,
    "at": "10:36"
+  },
+  {
+   "contract": "PATANJALI26OCT355PE",
+   "gap_pct": 6.604,
+   "kotak": 5.3,
+   "upstox": 4.95,
+   "at": "11:21"
   },
   {
    "contract": "BSE26OCT3300CE",
@@ -400,6 +421,13 @@
    "at": "10:51"
   },
   {
+   "contract": "PERSISTENT26OCT5800CE",
+   "gap_pct": 1.242,
+   "kotak": 84.55,
+   "upstox": 83.5,
+   "at": "11:21"
+  },
+  {
    "contract": "BAJFINANCE26OCT920PE",
    "gap_pct": 1.212,
    "kotak": 8.25,
@@ -426,30 +454,16 @@
    "kotak": 18.1,
    "upstox": 17.9,
    "at": "10:26"
-  },
-  {
-   "contract": "BAJAJ-AUTO26OCT10200CE",
-   "gap_pct": 1.042,
-   "kotak": 110.4,
-   "upstox": 111.55,
-   "at": "10:16"
-  },
-  {
-   "contract": "WIPRO26OCT185CE",
-   "gap_pct": 0.891,
-   "kotak": 5.61,
-   "upstox": 5.66,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 676,
+  "rounds": 22,
+  "contract_quotes": 710,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.2,
+  "same_best_bid_pct": 38.8,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -15.0
+  "upstox_minus_kotak_quote_time_s_median": -15.25
  }
 }
