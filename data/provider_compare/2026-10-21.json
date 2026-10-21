@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "10:31:22",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.679,
+   "same_best_bid_pct": 29.4,
+   "same_best_ask_pct": 32.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -270,6 +284,13 @@
    "at": "10:06"
   },
   {
+   "contract": "DIXON26OCT12000CE",
+   "gap_pct": 0.679,
+   "kotak": 191.35,
+   "upstox": 190.05,
+   "at": "10:31"
+  },
+  {
    "contract": "BAJFINANCE26OCT920PE",
    "gap_pct": 0.621,
    "kotak": 8.05,
@@ -284,28 +305,21 @@
    "at": "09:49"
   },
   {
-   "contract": "ABB26OCTFUT",
-   "gap_pct": 0.135,
-   "kotak": 6691.0,
-   "upstox": 6700.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26OCTFUT",
-   "gap_pct": 0.105,
-   "kotak": 1050.9,
-   "upstox": 1052.0,
-   "at": "09:20"
+   "contract": "DIXON26OCT12000PE",
+   "gap_pct": 0.474,
+   "kotak": 221.45,
+   "upstox": 222.5,
+   "at": "10:31"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 337,
+  "rounds": 12,
+  "contract_quotes": 371,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 33.3,
+  "same_best_bid_pct": 31.35,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -8.0
+  "oi_same_pct": 98.55,
+  "upstox_minus_kotak_quote_time_s_median": -8.5
  }
 }
