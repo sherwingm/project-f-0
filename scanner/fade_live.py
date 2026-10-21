@@ -259,6 +259,12 @@ def run(now: datetime | None = None, state_path: Path = STATE_PATH, cache_dir: P
             break
         except (BhavcopyUnavailable, requests.RequestException, zipfile.BadZipFile, OSError, ValueError) as exc:
             log.info("%s: no F&O bhavcopy (%s)", d, exc)
+    if bhav is not None:                                          # listing-day prices (S1 v12 below-Rs 2 rule)
+        try:
+            from .listing_prices import update as listing_update
+            log.info("listing prices: %d contracts first traded on %s", listing_update(bhav, last), last)
+        except Exception as exc:  # noqa: BLE001 - the signals must not depend on it
+            log.warning("listing prices not updated: %s", exc)
     fin = load_fin()
     signals, skipped = [], []
     for sym, d, t in day0_signals(results, cal):
@@ -289,8 +295,13 @@ def run(now: datetime | None = None, state_path: Path = STATE_PATH, cache_dir: P
             skipped.append({**info, "side": side, "reason": "no option chain or expiry"})
             continue
         strikes = sorted(float(k) for k in ch.loc[ch["XpryDt"] == exp, "StrkPric"].unique())
+        try:
+            from .listing_prices import lookup as listing_lookup
+            listing = listing_lookup(sym, side, exp)
+        except Exception:  # noqa: BLE001
+            listing = {}
         signals.append({**info, "side": side, "expiry": exp, "spot": round(spot, 2), "strikes": strikes,
-                        "chain_from": last})
+                        "chain_from": last, "listing": listing})
     signals, skipped = keep_earlier(prior, target.isoformat(), signals, skipped)
     if prior.get("session") == target.isoformat():                # the morning run keeps the nightly measurement
         had = {s["symbol"]: s["filing_day"] for s in prior.get("signals") or [] if (s.get("filing_day") or {}).get("D") is not None}

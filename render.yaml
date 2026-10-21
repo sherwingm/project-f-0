@@ -21,6 +21,7 @@ services:
         - data/event_patterns.json
         - data/live_snapshots/**
         - data/forward/**
+        - data/listing/**
         - data/s2/**
         - data/index/**
         - index_data/**

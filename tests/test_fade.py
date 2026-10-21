@@ -822,3 +822,61 @@ def test_fast_tick_is_idle_outside_hours_and_with_nothing_open(fast):
     q.set("PE", 1220.0, 10.0, 10.3)
     assert ft.fast_tick(at(15, 15, 20)) == 0 and lg.state["positions"]                          # 15:20: the poll sells
     assert ft.fast_tick(datetime(2026, 10, 15, 9, 15, 30, tzinfo=IST)) == 0                     # before 09:16
+
+
+# ---------------------------------------------------------------- the below-Rs 2 rule (S1_v12_sub2_listing.md)
+@pytest.fixture
+def sub2(tmp_path):
+    q = Quotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(15, 9, 16))
+    s = sig()
+    s["signals"][0]["listing"] = {"1220": 3.0, "1200": 8.0}
+    return lg, q, F.FadeTrader(lg, lambda: s)
+
+
+def test_sub2_buys_max_lots_when_listing_price_is_2_to_7(sub2):
+    lg, q, ft = sub2
+    q.set("PE", 1220.0, 1.40, 1.45, lot=1000)                    # premium below Rs 2 at the first strike
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["strike"] == 1220.0 and p["qty"] == 5000 and p["lots"] == 5                    # 5 x Rs 1,450 <= 8,000
+    assert p["rule"]["sub2"]["listing_close"] == 3.0 and p["rule"]["version"] == "v12"
+    assert lg.state["rules"]["fade"]["2026-10-15:HCLTECH"].startswith("bought (below Rs 2")
+
+
+def test_sub2_also_takes_never_fits_refusals(sub2):
+    lg, q, ft = sub2
+    q.set("PE", 1220.0, 1.40, 1.45, lot=5000)                    # Rs 2 x 5,000 > 8,000: never fits
+    ft.on_poll(at(15, 9, 16))
+    (p,) = lg.state["positions"]
+    assert p["qty"] == 5000 and p["rule"]["sub2"]["lots"] == 1
+
+
+def test_sub2_refuses_outside_2_to_7_and_without_a_listing_price(tmp_path):
+    q = Quotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(15, 9, 16))
+    s = sig()
+    s["signals"][0]["listing"] = {"1220": 9.5}
+    ft = F.FadeTrader(lg, lambda: s)
+    q.set("PE", 1220.0, 1.40, 1.45, lot=1000)
+    ft.on_poll(at(15, 9, 16))
+    assert lg.state["positions"] == []
+    assert "outside Rs 2-7" in lg.state["rules"]["fade_sub2_why"]["2026-10-15:HCLTECH"]
+    s["signals"][0]["listing"] = {}
+    ft._tried.clear()
+    ft.on_poll(at(15, 9, 30))
+    assert lg.state["positions"] == [] and "no listing price" in lg.state["rules"]["fade_sub2_why"]["2026-10-15:HCLTECH"]
+
+
+def test_listing_store_update_and_lookup(tmp_path):
+    import pandas as pd
+    from scanner import listing_prices as L
+    b = pd.DataFrame([{"TckrSymb": "X", "FinInstrmTp": "STO", "XpryDt": "2026-10-27", "StrkPric": 66.0, "OptnTp": "PE",
+                       "ClsPric": 2.22, "TtlTradgVol": 1},
+                      {"TckrSymb": "X", "FinInstrmTp": "STO", "XpryDt": "2026-10-27", "StrkPric": 63.0, "OptnTp": "PE",
+                       "ClsPric": 0.99, "TtlTradgVol": 0}])
+    assert L.update(b, "2026-10-05", tmp_path, today="2026-10-22") == 1
+    b.loc[1, "TtlTradgVol"] = 5
+    b.loc[0, "ClsPric"] = 9.0                                     # a later day does not overwrite the first
+    assert L.update(b, "2026-10-06", tmp_path, today="2026-10-22") == 1
+    assert L.lookup("X", "PE", "2026-10-27", tmp_path) == {"63": 0.99, "66": 2.22}

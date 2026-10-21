@@ -27,6 +27,11 @@ editing this file on purpose, in its own commit, with the reason.
     (`server/fade.py` `fast_tick`). The 30 s universe poll is unchanged and still checks them too. Kotak: one call a
     second sits well inside 25/s; the shared limiter keeps the server under its 200/min hold. Shadows of already
     sold trades (v11/v10 after a trail sale) stay on the 30 s poll.
+  - **Below-Rs 2 rule, live paper from 2026-10-23 (the user, 2026-10-22: "keep that 2-7 to the live", v12, real paper).**
+    A fade signal refused only by the Rs 2 floor is bought at the first two-sided strike (spread <= 10 %) when its
+    listing-day price was Rs 2-7, with as many lots as cost <= Rs 8,000; exit v12. Listing prices: `data/listing/`,
+    updated by the nightly job. Not proven (backtest +2.3 % a trade, t 0.55, years disagree).
+    `strategies/S1_v12_sub2_listing.md`.
   - **S1 v12 is the live fade exit from 2026-10-22 (the user, 2026-10-21: "make the Trail (-20 % stop, trail on at
     +10 %, gap 2 %) as v12 and make it live").** v11's -20 % stop stays; on the entry day from 09:16, a bid >= 1.10 x
     entry switches a trail on, and the first bid <= 0.98 x the highest bid since sells (`fade_trail`); else 15:20.

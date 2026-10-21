@@ -443,18 +443,18 @@ class PaperLedger:
             self._save()
 
     # ------------------------------------------------------------ rule trades (server/rules.py)
-    def open_rule(self, contract: dict, price: float, now: datetime, rule: dict) -> dict:
-        """A rule trade: one lot bought at `price` (the rule's fill), outside the manual order limits."""
+    def open_rule(self, contract: dict, price: float, now: datetime, rule: dict, lots: int = 1) -> dict:
+        """A rule trade: `lots` lots (default one) bought at `price` (the rule's fill), outside the manual order limits."""
         with self.lock:
             self._ensure_day(now)
-            qty = int(contract["lot_size"])
+            qty = int(contract["lot_size"]) * max(1, int(lots))
             entry_ch = ch.leg(contract["instrument"], "BUY", qty, price)
-            req = _Req(contract["symbol"], contract["instrument"], contract["expiry"], contract["strike"], "BUY", 1)
+            req = _Req(contract["symbol"], contract["instrument"], contract["expiry"], contract["strike"], "BUY", max(1, int(lots)))
             review = {"charges_entry": entry_ch, "max_loss": round(price * qty + entry_ch["total"], 2), "margin": 0.0,
                       "t2_date": sessions.t_minus(contract["expiry"], 2).isoformat()}
             f = {"price": price, "levels": [], "mode": "rule_" + rule["entry_mode"], "mid": None, "slippage_vs_mid": None,
                  "overflow_qty": 0}
-            pos = self._open(req, {"quantity": qty, "lot_size": qty, "tradingsymbol": contract["tradingsymbol"]}, None,
+            pos = self._open(req, {"quantity": qty, "lot_size": int(contract["lot_size"]), "tradingsymbol": contract["tradingsymbol"]}, None,
                              review, f, {"class": "rule"}, now)
             pos["rule"] = {**rule, "best": price, "stall": 0, "checked": None}
             track(pos, price, now)

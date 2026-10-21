@@ -71,6 +71,10 @@ TRAIL_START, TRAIL_GAP = 1.10, 0.05
 # S1 v12's trail (strategies/S1_v12_fade_trail2.md; live from 2026-10-22): on at a bid >= 1.10 x entry, sells at a bid
 # <= 0.98 x the highest bid since.
 V12_START, V12_GAP = 1.10, 0.02
+# S1 v12 below-Rs 2 rule (strategies/S1_v12_sub2_listing.md; live from 2026-10-23): a fade signal refused only by the
+# Rs 2 floor is bought anyway when its first liquid strike's listing-day price was Rs 2-7, with as many lots as cost
+# <= Rs 8,000; exit v12.
+SUB2_LISTING, SUB2_CAP = (2.0, 7.0), 8000.0
 LIVE_VERSIONS = ("v11", "v12")                           # the fade's live era (from 2026-10-21)
 _NP_RE = re.compile(r"net profit YoY ([+-]?\d+(?:\.\d+)?) %")
 
@@ -373,6 +377,29 @@ def walk(strikes: list[float], spot: float, side: str, quote: Callable[[float], 
     return reason
 
 
+def sub2_pick(strikes: list[float], spot: float, side: str, quote: Callable[[float], dict | None], listing: dict):
+    """The below-Rs 2 rule's contract: the first strike on the walk with a two-sided quote and a spread <= 10 % of the
+    ask; bought if its listing-day price is Rs 2-7, with as many lots as cost <= Rs 8,000 (at least one must fit).
+    Returns (strike, ask, lot, lots, listing price) or the reason there is none."""
+    for k in walk_path(strikes, spot, side):
+        q = quote(k) or {}
+        depth = q.get("depth") or {}
+        bid, ask, lot = (depth.get("bid") or [[None]])[0][0], (depth.get("ask") or [[None]])[0][0], q.get("lot_size") or 0
+        if not bid or not ask or not lot or (float(ask) - float(bid)) > MAX_SPREAD * float(ask):
+            continue
+        ask = float(ask)
+        lots = int(SUB2_CAP // (ask * lot))
+        if lots < 1:
+            return f"below-Rs 2 rule: 1 lot at {k:g} costs more than Rs 8,000"
+        lc = (listing or {}).get(f"{k:g}")
+        if lc is None:
+            return f"below-Rs 2 rule: no listing price for {k:g}"
+        if not SUB2_LISTING[0] <= lc < SUB2_LISTING[1]:
+            return f"below-Rs 2 rule: listing price Rs {lc:g} at {k:g} is outside Rs 2-7"
+        return k, ask, lot, lots, lc
+    return "below-Rs 2 rule: no two-sided strike"
+
+
 class FadeTrader:
     def __init__(self, ledger, fade: Callable[[], dict | None], spot: Callable[[str], float | None] | None = None):
         self.ledger, self.fade = ledger, fade
@@ -489,12 +516,16 @@ class FadeTrader:
             spot = self.spot(sig["symbol"]) or sig.get("spot")
             book = self._book(sig, walk_path(sig.get("strikes") or [], spot, sig["side"]))
             why = never_fits(lot_of(book), BAND, MIN_PREMIUM)
+            if why and self._sub2(st, sig, key, today, now, spot, book):
+                continue
             if why:                                              # no strike can ever fit: say so now, not at 15:20
                 self._refuse(st, sig, today, why)
                 self._waiting(st, key, now, None)
                 self._shadow_entry(st, sig, key, now, spot, book.get, why)   # the Rs 2 floor's doing, too
                 continue
             w = walk(sig.get("strikes") or [], spot, sig["side"], book.get)
+            if isinstance(w, str) and w.startswith(f"premium below Rs {MIN_PREMIUM:g} ") and                     self._sub2(st, sig, key, today, now, spot, book):
+                continue
             if isinstance(w, str):
                 self._last_why[key] = w
                 self._waiting(st, key, now, w)
@@ -502,25 +533,42 @@ class FadeTrader:
                     self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
-            rule = {"strategy": "fade", "version": "v12", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
-                    "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
-                    "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
-                    "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
-                    "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
-                    "stop": {"level": round(px * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
-                    "trail": {"status": "open", "start": round(px * V12_START, 4), "gap": V12_GAP, "peak": None},
-                    "shadow_v10": {"status": "open"},
-                    "shadow_v11": {"status": "open"},
-                    "shadow_trail": {"status": "open", "start": round(px * TRAIL_START, 4), "peak": None},
-                    "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
-            pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule)
-            done[key] = "bought"
-            self._waiting(st, key, now, None)
-            for r in st.get("fade_shadow_entries") or []:
-                if r["key"] == key:
-                    r["real_bought"] = True                      # its ask rose to Rs 2: not a refused trade after all
-            self.ledger._save()
-            log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
+            self._buy(st, sig, key, today, now, spot, k, px, lot)
+
+    def _sub2(self, st, sig, key, today, now, spot, book) -> bool:
+        """The below-Rs 2 rule: buy now if sub2_pick finds a contract; the reason is kept when it does not."""
+        p = sub2_pick(sig.get("strikes") or [], spot, sig["side"], book.get, sig.get("listing") or {})
+        if isinstance(p, str):
+            st.setdefault("fade_sub2_why", {})[key] = p
+            return False
+        k, px, lot, lots, lc = p
+        self._buy(st, sig, key, today, now, spot, k, px, lot, lots=lots,
+                  sub2={"listing_close": lc, "lots": lots, "rule": "strategies/S1_v12_sub2_listing.md"})
+        return True
+
+    def _buy(self, st, sig, key, today, now, spot, k, px, lot, lots: int = 1, sub2: dict | None = None) -> None:
+        done = st.setdefault("fade", {})
+        rule = {"strategy": "fade", "version": "v12", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
+                "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
+                "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
+                "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
+                "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
+                "stop": {"level": round(px * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
+                "trail": {"status": "open", "start": round(px * V12_START, 4), "gap": V12_GAP, "peak": None},
+                "shadow_v10": {"status": "open"},
+                "shadow_v11": {"status": "open"},
+                "shadow_trail": {"status": "open", "start": round(px * TRAIL_START, 4), "peak": None},
+                "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
+        if sub2:
+            rule["sub2"] = sub2
+        pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule, lots=lots)
+        done[key] = "bought" if not sub2 else "bought (below Rs 2, listing Rs 2-7)"
+        self._waiting(st, key, now, None)
+        for r in st.get("fade_shadow_entries") or []:
+            if r["key"] == key:
+                r["real_bought"] = True                      # its ask rose to Rs 2: not a refused trade after all
+        self.ledger._save()
+        log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
 
     @staticmethod
     def carried(pos: dict) -> bool:
