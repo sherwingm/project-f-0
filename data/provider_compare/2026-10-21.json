@@ -806,6 +806,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -21.5
+  },
+  {
+   "at": "15:24:09",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.605,
+   "same_best_bid_pct": 52.9,
+   "same_best_ask_pct": 52.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -17.5
   }
  ],
  "top_gaps": [
@@ -829,6 +843,13 @@
    "kotak": 13.7,
    "upstox": 12.85,
    "at": "13:28"
+  },
+  {
+   "contract": "ETERNAL26OCT310CE",
+   "gap_pct": 4.605,
+   "kotak": 7.6,
+   "upstox": 7.25,
+   "at": "15:24"
   },
   {
    "contract": "APOLLOHOSP26OCT7600PE",
@@ -941,18 +962,11 @@
    "kotak": 10.8,
    "upstox": 10.95,
    "at": "10:46"
-  },
-  {
-   "contract": "TATACONSUM26OCT970CE",
-   "gap_pct": 1.333,
-   "kotak": 11.25,
-   "upstox": 11.1,
-   "at": "14:38"
   }
  ],
  "day": {
-  "rounds": 57,
-  "contract_quotes": 1877,
+  "rounds": 58,
+  "contract_quotes": 1911,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 44.1,
   "same_best_ask_pct": 41.2,
