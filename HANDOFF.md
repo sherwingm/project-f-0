@@ -74,7 +74,7 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 - Option minutes (gitignored, local): `data/results/S1_v10_{bandv10,band12,band12q4,band050,band050q4}_minutes.csv`;
   re-fetch with the `stock-options-probe` workflow. Daily NSE option prices: `data/cache/fo_prices_*.csv` (fetched Apr–Oct
   2026), `fo_bhavcopy_*.csv` (to 2026-09-25).
-- Python with openpyxl / pytest: `%TEMP%o-venv\Scripts\python.exe`. Tests: all pass except the known
+- Python with openpyxl / pytest: `%TEMP%\fo-venv\Scripts\python.exe`. Tests: all pass except the known
   `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`.
 - Backtests need `EVENTS_DB=$TEMP/fo-seed/events.sqlite`. Print ASCII on the Windows console (`PYTHONIOENCODING=utf-8`).
 
