@@ -115,6 +115,12 @@ class QuoteSource:
             log.warning("paper quote %s: %s", ts, self.last_error)
         return None
 
+    def streaming(self) -> bool:
+        """True while the prices are pushed by the Upstox stream (server/upstox_stream.py): retries can run every
+        poll, which is then every second, without any broker call."""
+        f = getattr(getattr(self.feed, "provider", None), "streaming", None) if self.feed else None
+        return bool(f and f())
+
     def get_many(self, contracts: list[dict]) -> dict[str, dict | None]:
         """{tradingsymbol: quote or None} for many options: one provider call (quote_many) when it has one, else
         get() per contract."""

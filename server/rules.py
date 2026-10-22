@@ -34,6 +34,12 @@ log = logging.getLogger("rules")
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 30                             # the open-window walk is retried every poll (DECISIONS.md, 2026-10-20)
 RETRY_SLACK = 5                                # a poll landing a few seconds early still counts
+
+
+def streaming(ledger) -> bool:
+    """The live prices come from the Upstox stream: retry at every poll (DECISIONS.md, 2026-10-22)."""
+    f = getattr(getattr(ledger, "quotes", None), "streaming", None)
+    return bool(f and f())
 BAND, CONTRACTS, MIN_PREMIUM = v7.NORMAL_BAND, v7.NORMAL_CONTRACTS, 2.0
 TICK = 0.01                                    # NSE stock-option tick since 2025-11-03 (Rs 0.05 before)
 WALK_MAX = 15                                  # strikes tried upward from the at-the-money one at 15:20
@@ -222,7 +228,8 @@ class RuleTrader:
                                  "no affordable liquid strike between 09:15 and 15:20")
                     self._waiting(st, key, now, sig["arms"], None)
                     continue
-                if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS - RETRY_SLACK:
+                every = 0 if streaming(self.ledger) else RETRY_SECONDS - RETRY_SLACK    # streaming: every poll (1 s)
+                if every and now.timestamp() - self._tried.get(key, 0) < every:
                     continue
                 self._tried[key] = now.timestamp()
                 spot = self.spot(sig["symbol"]) or sig.get("spot")

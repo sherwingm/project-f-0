@@ -31,6 +31,9 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 - Login: themed `/login` page, 1-year cookie (Tailscale **Funnel** = public HTTPS, no VPN needed). Updates: Claude runs
   `git pull && sudo systemctl restart fo-scanner` in the Lightsail browser SSH via Claude in Chrome (after market only).
 - **Daily loss halt removed** 22 Oct (DECISIONS.md): no loss halts at all now.
+- **Upstox stream live** (from 23 Oct, DECISIONS.md): `server/upstox_stream.py`, prices pushed by the Upstox WebSocket,
+  Kotak fallback when it is down; feed + A/B + fade retries every 1 s while streaming, 30 s on Kotak only.
+  Check: `/api/live` -> `stream` (healthy, keys, streamed, served stream vs kotak) and `interval_s` = 1 in market hours.
 - **Fade entry every second from 09:15:00** (from 23 Oct, user decision, DECISIONS.md): `entry_tick` in the 1-s loop, one
   quote call a second for all waiting signals; still buys at the ask with the same walk. Check on 23 Oct: fills near 09:15:0x.
 - **Entry probe** (record only, from 23 Oct, `strategies/S1_v11_entry_probe.md`): asks every second 09:14:50-09:20 for the

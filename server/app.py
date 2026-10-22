@@ -131,6 +131,8 @@ class State:
         self.orders_today = Counter()
         self.news = News()
         self.fut_source = None              # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
+        self.upstox = None                  # server.upstox.UpstoxProvider (instrument keys) when the stream is on
+        self.stream = None                  # server.upstox_stream.UpstoxStream
 
     def load_scan(self, path: Path) -> None:
         scan = json.loads(path.read_text())
@@ -187,10 +189,25 @@ def startup() -> None:
         from server.kotak import KotakProvider, shared_session
         provider = KotakProvider(shared_session(settings), settings.kotak_chain_calls_per_poll)
         state.fut_source = provider.futures
-        state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols())
+        if settings.upstox_analytics_token and settings.upstox_stream:
+            # prices pushed by the Upstox WebSocket, Kotak as the automatic fallback (DECISIONS.md 2026-10-22)
+            from server.upstox import UpstoxProvider
+            from server.upstox_stream import StreamingProvider, UpstoxStream
+            state.upstox = UpstoxProvider(settings.upstox_analytics_token, chain_calls_per_poll=0)
+            threading.Thread(target=state.upstox.load_instruments, name="upstox-instruments", daemon=True).start()
+            state.stream = UpstoxStream(settings.upstox_analytics_token)
+            state.stream.start()
+            provider = StreamingProvider(provider, state.upstox, state.stream)
+        state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols(),
+                              fast_seconds=settings.live_fast_seconds)
         state.feed.start()
-        log.info("live feed on (Kotak Neo, consumer key only): LTP + futures OI every %ss, PCR/strike OI for %d stocks per poll",
-                 settings.poll_seconds, settings.kotak_chain_calls_per_poll)
+        if state.stream is not None:
+            threading.Thread(target=lambda: log.info("upstox stream: %d universe keys subscribed",
+                                                     provider.prime(list(state.feed.keys))),
+                             name="upstox-prime", daemon=True).start()
+        log.info("live feed on (%s): every %ss while the stream is up, else every %ss from Kotak",
+                 "Upstox stream + Kotak fallback" if state.stream else "Kotak Neo, consumer key only",
+                 settings.live_fast_seconds, settings.poll_seconds)
     elif src == "kite":
         provider = KiteProvider(settings.kite_api_key, settings.kite_access_token)
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols())
@@ -261,9 +278,10 @@ def _start_compare() -> None:
     try:
         from server.provider_compare import ProviderCompare, contract_picker
         from server.upstox import UpstoxProvider
-        up = UpstoxProvider(settings.upstox_analytics_token, chain_calls_per_poll=0)
+        up = state.upstox or UpstoxProvider(settings.upstox_analytics_token, chain_calls_per_poll=0)
         spot = lambda s: (state.feed.snapshot()["quotes"].get(s) or {}).get("ltp")              # noqa: E731
-        state.compare = ProviderCompare(settings.data_dir, state.feed.provider, up,
+        kotak = getattr(state.feed.provider, "kotak", state.feed.provider)      # Kotak's own quotes, not the stream's
+        state.compare = ProviderCompare(settings.data_dir, kotak, up,
                                         contract_picker(state.ledger, state.stocks, state.fut_symbols, spot, up))
         state.compare.start()
         log.info("provider compare on: Upstox vs Kotak every %ss of a session", 300)
@@ -419,7 +437,10 @@ def api_scan(_: str = Depends(auth)):
 def api_live(_: str = Depends(auth)):
     if not state.feed:
         return {"enabled": False, "market_open": market_open(), "quotes": {}}
-    return {"enabled": True, **state.feed.snapshot()}
+    snap = {"enabled": True, **state.feed.snapshot(), "interval_s": state.feed.interval()}
+    if state.stream is not None:
+        snap["stream"] = {**state.stream.status(), "served": dict(state.feed.provider.served)}
+    return snap
 
 
 @app.get("/api/live/snapshot")

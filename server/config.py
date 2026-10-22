@@ -19,7 +19,10 @@ no live feed, no commentary, and password-protected access.
     GROWW_TOTP_TOKEN, GROWW_TOTP_SECRET   Groww TOTP-flow key (headless daily login), or
     GROWW_ACCESS_TOKEN                    a token pasted from the Groww Cloud API Keys page
     GROWW_OI_CALLS_PER_POLL               single-contract quote calls per poll for futures OI (default 60)
-    POLL_SECONDS          live quote poll interval during market hours (default 30)
+    POLL_SECONDS          live quote poll interval during market hours without the stream (default 30)
+    UPSTOX_STREAM         true | false (default true): with UPSTOX_ANALYTICS_TOKEN, prices come from the Upstox
+                          WebSocket (server/upstox_stream.py) and the feed runs every LIVE_FAST_SECONDS (default 1);
+                          Kotak answers whatever the stream does not have, and everything while it is down
     FADE_FAST_SECONDS     the fade exit check on open fade contracts only (default 1 s; 0 = off)
     ANTHROPIC_API_KEY     enables the plain-language commentary endpoint
     COMMENTARY_MODEL      default claude-sonnet-4-6
@@ -90,6 +93,8 @@ class Settings:
     groww_oi_calls_per_poll: int = int(os.getenv("GROWW_OI_CALLS_PER_POLL", "60"))
     poll_seconds: int = int(os.getenv("POLL_SECONDS", "30"))
     fade_fast_seconds: float = float(os.getenv("FADE_FAST_SECONDS", "1"))   # 0 = off
+    upstox_stream: bool = _bool("UPSTOX_STREAM", True)      # Upstox WebSocket prices when the token is set
+    live_fast_seconds: float = float(os.getenv("LIVE_FAST_SECONDS", "1"))   # the feed's interval while streaming
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")
     scan_url: str = os.getenv("SCAN_URL", "").strip()

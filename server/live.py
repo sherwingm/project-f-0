@@ -37,7 +37,8 @@ MARKET_OPEN, MARKET_CLOSE = (9, 15), (15, 30)
 SESSION_MINUTES = 375                 # 09:15 -> 15:30
 MIN_ELAPSED_MINUTES = 15              # pro-rata volume floor, so 09:16 does not give absurd ratios
 SNAPSHOT_FROM, SNAPSHOT_UNTIL = (9, 30), (10, 30)
-HISTORY_TICKS = 1200                  # per instrument; a 30-45 s poll fills ~500-750 in a session
+HISTORY_TICKS = 2400                  # per instrument; one tick at most every HISTORY_EVERY s fills ~2,250 a session
+HISTORY_EVERY = 10                    # seconds between chart ticks (the feed itself runs every second when streaming)
 WATCH_MINUTES, WATCH_MAX = 30, 3      # options of an opened stock are polled for 30 min, at most 3 stocks at once
 # fields of a quote passed through to /api/live (equity as is, the near future with a fut_ prefix)
 QUOTE_FIELDS = ("atp", "ltq", "buy_qty", "sell_qty", "wk52_high", "wk52_low", "lower_circuit", "upper_circuit")
@@ -176,8 +177,11 @@ def _now() -> str:
 
 class LiveFeed:
     def __init__(self, provider, scan: dict, poll_seconds: int = 30, fut_tradingsymbols: dict[str, str] | None = None,
+                 fast_seconds: float | None = None,
                  poll_always: bool = False):
         self.provider, self.poll_seconds, self.poll_always = provider, poll_seconds, poll_always
+        self.fast_seconds = fast_seconds
+        self._last_tick = 0.0
         self.lock = threading.Lock()
         self.quotes: dict[str, dict] = {}
         self.updated_at: str | None = None
@@ -219,7 +223,14 @@ class LiveFeed:
                 except Exception as exc:  # noqa: BLE001 - keep polling; surface the error on the page
                     self.error = f"{type(exc).__name__}: {exc}"
                     log.warning("live poll failed: %s", exc)
-            self._stop.wait(self.poll_seconds)
+            self._stop.wait(self.interval())
+
+    def interval(self) -> float:
+        """fast_seconds while the provider streams (server/upstox_stream.py), else poll_seconds."""
+        streaming = getattr(self.provider, "streaming", None)
+        if self.fast_seconds and streaming is not None and streaming():
+            return self.fast_seconds
+        return self.poll_seconds
 
     def watch_options(self, symbol: str, keys: list[str], now: float | None = None) -> None:
         """Poll these option keys (NFO:<tradingsymbol>) with every poll for WATCH_MINUTES, so their intraday chart
@@ -309,8 +320,12 @@ class LiveFeed:
         """Append this poll to the intraday buffers (caller holds the lock); a new day starts them empty."""
         day = now.date().isoformat()
         if day != self._day:
-            self._day, self.history, self.opt_history = day, {}, {}
+            self._day, self.history, self.opt_history, self._last_tick = day, {}, {}, 0.0
+        self.opt_quotes.update(opts)
         t = int(now.timestamp())
+        if t - self._last_tick < HISTORY_EVERY:
+            return
+        self._last_tick = t
         for sym, r in fresh.items():
             if r.get("ltp"):
                 self.history.setdefault(sym, deque(maxlen=HISTORY_TICKS)).append(
@@ -320,7 +335,6 @@ class LiveFeed:
             if q.get("last_price"):
                 self.opt_history.setdefault(k, deque(maxlen=HISTORY_TICKS)).append(
                     (t, q["last_price"], q.get("volume"), q.get("atp"), q.get("open_interest")))
-        self.opt_quotes.update(opts)
 
     def ticks(self, symbol: str) -> list[tuple]:
         with self.lock:

@@ -40,7 +40,7 @@ from typing import Callable
 
 from server import sessions
 from server.broker import tradingsymbol
-from server.rules import lot_of, never_fits
+from server.rules import lot_of, never_fits, streaming
 
 log = logging.getLogger("fade")
 
@@ -578,7 +578,7 @@ class FadeTrader:
         self._carry_exits(now)
         if now.time() < OPEN_FROM:
             return
-        self._entries(now)
+        self._entries(now, every=0 if streaming(self.ledger) else RETRY_SECONDS - RETRY_SLACK)
 
     def entry_tick(self, now: datetime) -> int:
         """About every second (server/app.py) from 09:15:00 to 15:20: one quote call for every waiting signal's strikes,

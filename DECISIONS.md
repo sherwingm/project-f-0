@@ -149,3 +149,14 @@ The live fade entry was tried at each 30 s poll, so it usually filled around 09:
 waiting signals' strikes, then runs the same walk and buys at the ask, unchanged. The 30 s poll still runs too. The entry
 probe (`strategies/S1_v11_entry_probe.md`) reuses that call. Arms A/B keep the 30 s retry. This does not reproduce v11's
 backtest entry (the 09:15:00 opening print); the probe measures how close a 1-second buy gets.
+
+## 2026-10-22 · Live prices from the Upstox stream, Kotak as fallback; no 30 s polls while streaming (user decision)
+The server is always on (AWS), so prices are pushed instead of polled. `server/upstox_stream.py` keeps one Upstox v3
+WebSocket open (`full` mode: last price, 5-level depth, ATP, volume, OI) using the read-only Analytics Token (tested
+from the VM 22 Oct: authorized, connected, data received). The live feed, paper fills, rule trades and fade read from
+it. Anything it does not have, and everything while it is down (no message for 15 s), comes from Kotak as before.
+While it streams, the feed runs every second (`LIVE_FAST_SECONDS=1`), and Arms A/B and fade entries retry at every poll.
+With Kotak only, the 30 s poll and retries come back automatically (the Kotak rate limits need them). The PCR still
+comes from the Kotak chain sweep, now 4 stocks every 10 s. Chart ticks are kept every 10 s.
+This switches the fill source mid-review (v12 and the below-Rs 2 rule): each quote carries `source`. The Upstox-vs-Kotak
+compare keeps comparing Kotak's own quotes.
