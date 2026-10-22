@@ -406,6 +406,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "13:34:55",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.351,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 52.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -49.5
   }
  ],
  "top_gaps": [
@@ -501,6 +515,13 @@
    "at": "10:15"
   },
   {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 1.351,
+   "kotak": 3.7,
+   "upstox": 3.65,
+   "at": "13:34"
+  },
+  {
    "contract": "DRREDDY26OCT1220PE",
    "gap_pct": 1.272,
    "kotak": 19.65,
@@ -541,21 +562,14 @@
    "kotak": 11.35,
    "upstox": 11.25,
    "at": "09:30"
-  },
-  {
-   "contract": "BHARTIARTL26OCT1920CE",
-   "gap_pct": 0.722,
-   "kotak": 13.85,
-   "upstox": 13.75,
-   "at": "11:20"
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 965,
+  "rounds": 30,
+  "contract_quotes": 999,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.4,
-  "same_best_ask_pct": 29.4,
+  "same_best_bid_pct": 30.9,
+  "same_best_ask_pct": 30.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -13.0
