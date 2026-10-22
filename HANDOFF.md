@@ -1,4 +1,4 @@
-# Handoff (2026-10-20, 22:30 IST)
+# Handoff (2026-10-22, 22:15 IST)
 
 Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The detailed records are in `PROGRESS.md`
 (log and the Core idea tracker), `DECISIONS.md` (rule and result changes), `INDEX_DATA_REPORT.md`,
@@ -20,108 +20,63 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 - **Another Claude session works in the same folder** (S1 v10 / v11 studies, `stock-options-probe`). Commit only your own
   files (`git add <paths>`) and pull with `--autostash`.
 
-## Live system (Render, fo-scanner.onrender.com), deployed `e0788d9` or later
-- **S1 v11 fade (arm F), live from 21 Oct:** the v10 entry with a −20 % stop (details in "S1 strategy work" below).
-- **Arms A / B:** rule trades, each bought at the open walk and at 15:20. From 21 Oct they skip an F&O-ban stock.
-- **Entry walk** (Arm A/B open entry and the fade):
-  - retried every **30 s**: DECISIONS.md 2026-10-20, from 21 Oct; the v10 review splits trades before and after;
-  - the **lot-range check** refuses a never-fit stock at once (lot > 4,000 shares → no strike can cost ≤ ₹8,000 at ≥ ₹2);
-  - all strikes are priced in **one quote call**;
-  - the waiting reason is shown (`rules.open_wait`, the Paper tab's "Not bought today", the Arm A/B "Paper today"
-    column).
-- **Data source:** Kotak. **Upstox is built in** (`server/upstox.py`: full quotes with depth, `quote_one` / `quote_many`,
-  futures, history). A shadow check (`server/provider_compare.py`, `/api/data/compare`) compares the two every 5
-  minutes of a session, 09:20-15:25. **First rounds: 21 Oct.** Switch (`DATA_PROVIDER=upstox`) only after a few clean
-  days, after market, with a DECISIONS.md entry.
+## Live system (Render, fo-scanner.onrender.com), deployed `3e7a469` (22 Oct, after market)
+- **S1 fade (arm F) exit = v12** (from 22 Oct, `strategies/S1_v12_fade_trail2.md`): on the entry day, on the best bid:
+  −20 % stop from 09:16; once the bid ≥ 1.10 × entry a trail sells at the first bid ≤ 0.98 × the highest bid since
+  (`fade_trail`); else 15:20. Entry unchanged (v10: strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live
+  ask from 09:15, retried every 30 s).
+- **Below-₹2 rule** (from 23 Oct, `strategies/S1_v12_sub2_listing.md`, user decision 22 Oct): a fade signal refused only
+  by the ₹2 floor ("premium below Rs 2" / "never fits") is bought at the first two-sided strike (spread ≤ 10 %) if its
+  **listing-day price** was **₹2 to < ₹7**, with **as many lots as cost ≤ ₹8,000**; exit v12; `rule.sub2` on the
+  position; refusal reasons in `rules.fade_sub2_why`. Listing prices: `data/listing/<expiry>.csv` (`scanner/listing_prices.py`;
+  backfilled 22 Oct for the 27 Oct / 23 Nov / 29 Dec series; `fade_live` adds each night's new contracts and attaches
+  `signal.listing`; `daily.yml` commits `data/listing`). Fade only, not Arm A refusals.
+- **1-second exit check** (`server/fade.py` `fast_tick`, `FADE_FAST_SECONDS=1`, thread in `server/app.py`): one quote call
+  for today's open fade contracts, then stop / v12 trail / shadow checks. The 30 s universe poll is unchanged.
+- **Shadows on every v12 trade (no orders):** `shadow_v11` (stop only), `shadow_v10` (15:20), `shadow_trail` (5 % gap),
+  plus `shadow_t100`, `shadow_np25`, `shadow_fd2` (puts; review at 20). Reviews: **v12 vs v11/v10 at 30 closed v12 trades**
+  (`/api/paper/summary` → `fade_v12`, Arm F panel "Live v12 vs v11 and v10"); trail tag at 30.
+- **Weekly loss halt removed** (21 Oct). Daily halt 2 % stays; halts block manual orders only, never rule trades.
+- **Arms A / B:** rule trades (open walk and 15:20), skip F&O-ban stocks. Known gaps: no catch-up for a missed 15:20
+  check; the "close" entry books the day's average price.
+- **Data:** Kotak. Upstox built in; shadow comparison `/api/data/compare` (from 21 Oct). Switch only after clean days.
+- **Render free tier sleeps:** GitHub's keep-awake cron runs hours late (21 Oct: started 13:30 IST). **The user is setting
+  up an external pinger** (`/api/live` every ≤ 5 min, 08:30–15:45 IST weekdays). Better host: Oracle Always Free VM
+  (`guides/17-always-on-host.md`), not done.
+- Page: each fade position card shows the stop / trail level; closed trades show v10 and trail shadow ₹; the why drawer
+  shows both shadows.
 
-## S1 strategy work (this session; records in PROGRESS.md, DECISIONS.md, `strategies/`, `data/results/`)
-**Rules of the practice:** write the rule in `strategies/*.md` and commit it **before** any number is computed; a rule
-change needs the user's decision and a DECISIONS.md entry; reports are numbers only. Big results were checked by an
-independent verification workflow (recompute, bias audit, robustness), which caught real slips each time.
+## S1 strategy work (records: PROGRESS.md, DECISIONS.md, `strategies/`, `data/results/`)
+**Practice:** write the rule in `strategies/*.md` and commit **before** any number; rule changes need the user's
+decision + a DECISIONS.md entry. **Do not run multi-agent workflows unless the user explicitly asks by name** (the user
+was unhappy about the token cost of the 21–22 Oct workflows). Keep replies short and plain.
 
-### Done 20 Oct: the backtest entry price was stale; re-run with a realistic entry (nothing live changed)
-- The fade backtests bought at the day-0 opening print (bhavcopy open + 1 tick), often stale (median swing inside the
-  09:15 minute 51 %; BAJFINANCE 2024-10-23: bought 54.45, 09:15 low 7.15). The live bot buys at the live ask, so it is
-  not exposed.
-- Re-run with **entry B = the 09:16 candle's open + 1 tick** (pre-registered: `strategies/S1_fade_realistic_entry.md`,
-  `S1_fade_realistic_entry_studies.md`; scripts `scanner/fade_realistic_entry.py`, `fade_realistic_studies.py`; reports
-  `data/results/S1_fade_realistic_entry.md`, `S1_fade_realistic_studies.md`). Oct 2024 – Sep 2026 only (no option minutes
-  before that; 2022-24 daily-data parts cannot be re-priced).
-- **v11, ₹2+ set, 409 trades:** old +13.8 % a trade (+₹3.23 L, t 3.0) → new **+2.5 % (+₹0.66 L, t 0.9)**. v10: +12.7 % →
-  +3.2 %. The −30 %…−85 % losers and the +690 % winners were mostly the stale-print artefact.
-- **Floor ₹2 / ₹1 / ₹0.5 (v11):** +2.2 % / +0.6 % / −2.2 %, all t < 1. **Band ₹0.5–1:** −17 % a trade (t −4.1), the one
-  clear signal (the live floor is already ₹2). **Targets** (+25…+200 %, with/without stop): all ≈ 0, none beats plain v11.
-  **Arm-A filter:** still fails (dropped trades +19 % then −6 %, t 0.6).
-- So the fade's backtest edge is **not established**; every earlier backtest total/study built on the old entry is
-  unreliable. The live paper run (real asks) and the shadow reviews are the real test. No rule change was made; any
-  change is the user's decision.
-
-### Live from 22 Oct: S1 v12 fade exit (`strategies/S1_v12_fade_trail2.md`, user decision 21 Oct)
-- v11's −20 % stop plus a trail: on at a bid ≥ 1.10 × entry, sells at the first bid ≤ 0.98 × the highest bid since
-  (`fade_trail`); else 15:20. Shadows on every v12 trade: v11 (stop only), v10 (15:20), the 5 % trail tag. Review at 30
-  closed v12 trades (`/api/paper/summary` `fade_v12`, Arm F panel). Weekly loss halt removed 21 Oct.
-- Backtest (realistic entry, 2025-26): v12 +3.25 % a trade (t 2.18) vs v11 +0.23 %; not proven better than v11 (t 1.55);
-  live bids/spreads on a 2 % gap may do worse. Every other exit idea (wider stops, wait, re-entry, negative trails)
-  failed: `data/results/S1_fade_stop_trail.md`, `S1_fade_trail20_grid.md`, `S1_fade_negative_trail.md`.
-
-### Done 21 Oct: can the fade buy at the opening price? (`strategies/S1_fade_preopen_entry.md`, report in `data/results/`)
-- **No pre-open for options** (NSE/FAOP/71092; still true after the 7 Sep 2026 revision). Only the cash market and
-  current-month stock/index futures (since 8 Dec 2025) have the call auction. Option AMOs go to NSE at 09:15.
-- Option limit at a fair (Black-Scholes) price: fails. The stock at the auction price, fade side, to the close: +0.40 % a
-  trade after real costs (t 3.7), but 2022-24 t 1.72, ~half is generic gap reversal, and nearly all of it is the first
-  minute after the auction (gone at 09:16). Futures auction opens (Dec 2025+) not fetched: the user chose (21 Oct) to stop here, keep v11 as it is and wait for the live results.
-
-### The live fade (S1 v11, from 21 Oct, `strategies/S1_v11_fade_stop20.md`)
-- v10's entry unchanged (strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live ask 09:15–15:20; retried
-  every 30 s). **Exit:** from **09:16** the first poll whose best bid ≤ 0.80 × entry sells at that bid (`fade_stop`),
-  else the 15:20 bid. v10 (hold to 15:20) is the shadow (`rule.shadow_v10`). Review at 30 closed v11 trades: if v10 beats
-  v11 (mean difference > 0, t ≥ 2) ask the user whether to switch back.
-- **Day 0 = 21 Oct.** The Arm F scoreboard and Paper tab count v11 only; the 10 v10 trades (15–19 Oct, −₹16k) are a
-  collapsed side record (equity still includes them). **21 Oct list:** UNIONBANK, HINDZINC, BAJFINANCE (all puts).
-- **Shadow tags (never change a trade):**
-  - `shadow_np25` (judged at 40 left-out puts); `shadow_t100` (+100 % target, 30); sub-₹2 shadow entries (30);
-  - **`shadow_fd2` (new, puts only):** the results were filed 09:15–14:50 on the session before day 0 and the stock already
-    fell ≥ 2 % (market-adjusted) by that day's 15:29 close. The user chose a tag, not a skip. **Review at 20 closed tagged
-    puts** (about 5 a year in the backtest, so years). Rule: `strategies/S1_v11_fd2_shadow_track.md`. D is measured by
-    `python -m scanner.fade_live --fd2`, run as its own step in **its own venv** (`kotakneoapi` needs pandas < 3) in
-    `daily.yml` and `fade-morning.yml` (skipped after 08:35 IST), using the Kotak consumer key. It writes `filing_day` onto
-    each signal in `data/forward/fade.json`; `server/fade.py` copies it to the position; `/api/paper/summary` →
-    `fade_fd2`; the Arm F panel shows it. First run (manual, 20 Oct): UNIONBANK D +2.8 %, not tagged; HINDZINC and
-    BAJFINANCE filed after the close.
-  - `fade.json` also carries the session's F&O **ban list** (`ban`), which `server/rules.py` uses to refuse A/B entries.
-- **Fixes shipped 20 Oct** (DECISIONS.md): tick ₹0.01 in `server/rules.py` and `server/fade.py` (NSE stock-option tick
-  since 2025-11-03; manual orders keep `FILL_TICK` 0.05); A/B ban check; v11 texts on the page; the morning job is 07:17 IST.
-- **Kill switch** blocks manual paper orders only, never rule trades (A, B, F). The weekly halt clears Mon 26 Oct.
-
-### Arms A / B
-6 open (TATAELXSI, TECHM, WIPRO × 2 arms). The fade's −20 % stop does not help them (`S1_arms_ab_stop20.md`). Known gaps:
-no catch-up if the server misses a 15:20 check; the "close" entry books the day's average price + 1 tick (not tradable).
-
-### Studies finished 19–20 Oct (all descriptive; none changed a rule except v11). **Their backtest numbers used the stale entry; the floor/band/target/filter ones were re-run (see above): nothing survives.**
-| Study | Result |
-|---|---|
-| Premium floor, bands ₹0.5–1 and ₹1–2, targets, sub-₹2 entries (`S1_v10_*`) | Nothing passes; ₹2 floor stays |
-| −20 % stop on minutes (`S1_v10_s20_minutes.md`) | Basis of v11 (+₹2.51 L vs +₹1.70 L; see the entry-price caveat) |
-| Drop trades where Arm A also fires (`S1_v10_armA_overlap_filter.md`) | Fails (only hindsight works; the 09:15-open version t −0.07) |
-| Market-hours filings: stock after the first 15 min (`S1_intraday_results_reaction.md`) | Fails; no pattern. The stock is flat after entry; strong results +0.79 % by the next open (t 4.0) |
-| Strong market-hours result, call to next open (`S1_intraday_call_overnight.md`) | Fails: −13 % on 64 |
-| Weak market-hours result already down ≥ 2 % → next-day call (`S1_weak_day_reversal.md`) | Fails (13 trades; windows disagree) |
-| Skip fade trades whose market-hours filing day already moved ≥ 2 % the fade's way (`S1_fade_filing_day_skip.md`) | Passes on v10 (₹48k, puts only), worth ~₹2–7k under v11 → became the fd2 shadow tag |
-| Reverse trade on those days (`S1_fade_fd2_reverse.md`) | Fails: +0.8 %, both sides lose |
-| Which comes first (`S1_results_source_timing.md`, 6–19 Oct, 12 cases) | NSE first in 10; BSE ~4.5 min later; news 0–10 min after; stock moves within 0–2 min; 2 leaked early |
-
-- Facts: tick ₹0.01 since 2025-11-03; stock 1-minute from Kotak back 5 years; expired **option** minutes only from Oct
-  2024 (Upstox); no free option minutes before that. Stock minutes for 3–14 Aug 2026 end at 15:14 (14 cases unmeasured).
-  R = premium paid (v10: +0.046 R a trade, t 1.6 on the backtest entry).
-- Profit comes from filings **outside** market hours (+₹2.0 L on 608; market-hours filings −₹52k on 262): a lead only.
-- The sheet `data/results/S1_fade_peak_dip.xlsx` (peak / dip of every fade trade) shares the entry-price caveat.
+### Key findings (all realistic entry = 09:16 candle open + 1 tick; Oct 2024 – Aug 2026)
+- **The old backtest entry (09:15:00 opening print) was unrealistic** (often a stale print; a third never traded again
+  that day). v11 +₹3.23 L → **+₹0.66 L** (t 0.9) on the realistic entry. Live bot buys ~09:15:45 at the ask (checked on
+  16 Oct trades: half within 7 % of the open print, half 18–41 % off).
+- **Exits (live set B ≥ ₹2, 339 trades):** v12 +2.86 % a trade (t 1.79, win 55 %) is the best. v11 +2.2 %, v10 +3.2 % /
+  +3.9 % on other cuts but neither proven. Failed: wider stops, 1-min wait, re-entry, negative/step-down trails, looser
+  gaps (3–30 %), a gap that widens past +40 % (verified), and the **peak-pattern study** (learn on train, freeze, test
+  once: all 5 rules lost to v12 on Nov 2025 – Aug 2026; v12 +3.20 %). Peaks are real (winners ~+100 %) but cannot be
+  recognised live. Reports: `S1_fade_stop_trail.md`, `S1_fade_trail20_grid.md`, `S1_fade_negative_trail.md`,
+  `S1_fade_trail_gap_loosen.csv`, `S1_fade_trail_tiered.md`, `S1_fade_peak_patterns.md`, `S1_fade_peak_rules_test.md`.
+- **Pre-open:** stock options have no pre-open (NSE/FAOP/71092); a fair-price limit fails; the stock in its auction is a
+  first-minute effect only. `S1_fade_preopen_entry.md`.
+- **Below ₹2:** buying refused signals anyway loses (−4.4 %); expiry-gap filters don't fix it; **listing price ₹2–7 with
+  max lots** is the best cut (+2.3 % v12, +5.8 % v11; 71 % of trades reach +20 %), now live; **listed under ₹2 loses with
+  every exit**. `S1_refused_listing_price.md/.xlsx`, `S1_fade_cheap_dte.md`, `S1_refused_below_floor_all.xlsx`,
+  `S1_refused_below_floor_3months.xlsx`, `S1_fade_oct27_contract_history.xlsx`.
+- Explanation doc for the user: https://claude.ai/artifact/57eiLHEierozKUxdFdSxkE ("S1 Fade Study: What We Learned"; not
+  yet updated with the exit / peak / below-₹2 work).
 
 ### Tools
-- `stock-options-probe` workflow (manual): `fetch_band_minutes <band|v10|ab|intra>`, `fetch_results_minutes`,
-  `probe_*`. Artifact `band050-minutes` (`gh run download <id> -n band050-minutes -D <dir>`). Minute CSVs are not committed.
-- NIFTY 50 minutes: branch `index-data`, `data/index/spot_1m/NIFTY50/<YYYY-MM>.parquet` (`git show origin/index-data:<path>`).
-- Backtests need `EVENTS_DB=$TEMP/fo-seed/events.sqlite`. Print ASCII only on the Windows console.
-- Test suite: 501 pass, 1 known failure (`test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`).
+- Option minutes (gitignored, local): `data/results/S1_v10_{bandv10,band12,band12q4,band050,band050q4}_minutes.csv`;
+  re-fetch with the `stock-options-probe` workflow. Daily NSE option prices: `data/cache/fo_prices_*.csv` (fetched Apr–Oct
+  2026), `fo_bhavcopy_*.csv` (to 2026-09-25).
+- Python with openpyxl / pytest: `%TEMP%o-venv\Scripts\python.exe`. Tests: all pass except the known
+  `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`.
+- Backtests need `EVENTS_DB=$TEMP/fo-seed/events.sqlite`. Print ASCII on the Windows console (`PYTHONIOENCODING=utf-8`).
 
 ## Index data (all on GitHub; no PC or Claude app needed)
 - **Complete:** expired 1-minute option candles from Upstox, with OI, Oct 2024 → Oct 2026.
@@ -152,21 +107,18 @@ no catch-up if the server misses a 15:20 check; the "close" entry books the day'
   session.
 
 ## Open (ask the user before doing)
-- Fade backtest re-run with the realistic entry is done (see the S1 section); decide whether the fade stays on at all once the shadow reviews have data.
-- **A/B catch-up** for a missed 15:20 check; **A/B "close" entry at the 15:20 ask** instead of the day's average (rule change).
-- **Switch to Upstox** after a few clean shadow days: read `/api/data/compare` from 21 Oct.
-- **Clean the `index-data` history:** squash to one commit when the repo passes ~3 GB or every few months. It is ~1.4 GB
-  now, with old copies growing ~2 MB a night since the monthly files.
-- The NSE-holiday-aware daytime cap for Upstox jobs: nice to have.
+- Review v12 vs v11/v10 at 30 closed v12 trades; review the below-₹2 rule's live trades as they come.
+- Update the explanation doc with the newer findings (if the user wants).
+- **A/B catch-up** for a missed 15:20 check; **A/B "close" entry at the 15:20 ask** (rule change).
+- **Switch to Upstox** after clean shadow days (`/api/data/compare`).
+- Always-on host (Oracle VM, guide 17) if the pinger is not enough.
+- `LEDGER_GITHUB_TOKEN` renewal before 2026-10-30.
+- Clean the `index-data` history when the repo passes ~3 GB.
 
 ## After a context compaction
-- Read this file first, then the tail of `PROGRESS.md` and `INDEX_DATA_REPORT.md`.
-- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. The Python venv is `%TEMP%\fo-venv\Scripts\python.exe`.
-- There are no background shells or PC scripts. The three Claude-app probe tasks are disabled (moved to GitHub).
-- Check after 21 Oct's session:
-  - **v11 day 0:** after 09:16 the positions carry `rule.version`, `stop`, `shadow_v10`, `shadow_fd2`; after 15:20
-    `shadow_v10` resolves (`done` / `same`) and the Arm F panels show both columns; whether a `fade_stop` fires at a sensible bid;
-  - the A/B refusals "in the F&O ban today" (AMBUJACEM, KAYNES, SAIL are banned on 21 Oct);
-  - `/api/data/compare` (shadow rounds);
-  - the 30-s retries working (`rules.open_wait`, refusals with "never fits");
-  - the 21 Oct recorder run in `data/index/status.json`.
+- Read this file first, then the tail of `PROGRESS.md`.
+- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`.
+- Check after 23 Oct's session: fade positions carry `trail`, `shadow_v11`, `shadow_v10`; any `fade_trail` / `fade_stop`
+  exits fire within seconds (fast_tick); a below-₹2 refusal either buys with `rule.sub2` (lots > 1) or logs a reason in
+  `rules.fade_sub2_why`; `data/forward/fade.json` signals carry `listing`; the nightly job committed `data/listing`.
+- Stray untracked files from verification agents in the repo root (`calib_cash.csv`, `fills_mech.csv`): not ours to commit.
