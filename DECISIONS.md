@@ -4,8 +4,11 @@ Standing decisions for this repository. Code, specs and prompts follow this file
 editing this file on purpose, in its own commit, with the reason.
 
 ## Scope
-- **Stock F&O only.** No index derivatives (NIFTY, BANKNIFTY or any other index), ever, unless this file is
-  changed on purpose. The universe loader already drops index rows (`scanner/universe.py`).
+- **Stock F&O only** for S1, S2 and everything that trades (paper or live). The universe loader drops index rows
+  (`scanner/universe.py`).
+- **Exception, 2026-10-22 (the user: "This chat is fully for building the index", plan approved):** **S3, index
+  options, NIFTY first**, may be researched and backtested. No S3 paper or live trade until a pod passes its gate and
+  holdout and the user agrees, in a separate entry here. See "S3 · index options" below.
 
 ## Orders
 - **Paper before real.** Real orders need a deliberate configuration change (`PAPER=false` plus a configured
@@ -160,3 +163,25 @@ With Kotak only, the 30 s poll and retries come back automatically (the Kotak ra
 comes from the Kotak chain sweep, now 4 stocks every 10 s. Chart ticks are kept every 10 s.
 This switches the fill source mid-review (v12 and the below-Rs 2 rule): each quote carries `source`. The Upstox-vs-Kotak
 compare keeps comparing Kotak's own quotes.
+
+## 2026-10-22 · S3 · index options, research and backtest only (user decision)
+Source: the user's research note "Options Algo Research: Indian Index Markets (2026)" (pasted 2026-10-22). Its claims
+are hypotheses until our data confirms them. S3 is separate from S1 and S2; nothing in S1/S2 changes.
+- **Data:** `index-data` branch. NIFTY 1-min options with OI from Oct 2024 (Upstox expired + Kotak recorder, merge rule
+  in `INDEX_DATA_REPORT.md`); spot / VIX 1-min from Oct 2021; daily option OHLC from 2021.
+- **Split (minute data starts Oct 2024):** test 2024-10-01 → 2025-09-30; holdout 2025-10-01 → latest session,
+  evaluated **once** per pod and only after the test gate passes. Spot / VIX diagnostics may use 2021 → latest.
+- **Structures:** backtests may use short legs, spreads, straddles, iron flies and condors. The "Long options only" rule
+  still governs every paper and live trade; changing it is a separate decision.
+- **Each pod** is defined on its own page (`strategies/S3_<pod>.md`) with no open parameters, committed before its run.
+  A parameter grid (heatmap) is allowed only if the page fixes the grid and names the primary cell in advance.
+- **Costs:** `server/charges.py` (2026 rates: STT 0.15 % on sells, ₹20 an order, exchange charges, GST). A long ITM leg
+  is squared off before the close (no exercise STT). Slippage 0.5 % of premium a fill; 1 % for legs ≥ 2 strikes from the
+  money and for fills 09:15-09:30 or 15:00-15:30.
+- **Gate (test window), all of:** net mean per trade > 0 after costs, and still > 0 at 2× costs; date-clustered t ≥ 2;
+  positive in each half of the test year; worst day smaller than the average month's profit; the primary cell's
+  neighbours (±20 % on each parameter) also net positive. Minimum trades per pod are fixed on its page (an expiry-day pod
+  takes every expiry in the window, ~50).
+- **Holdout:** net mean > 0 and Sharpe within 30 % of the test window's.
+- **Results** go into a "S3 pods" table in this file, passed or closed with their numbers.
+
