@@ -5,7 +5,9 @@ written into the recorder's layout (STORE/options_1m/<underlying>/<expiry>/<date
         [--from 2022-01-01] [--max-minutes 320] [--estimate-only]
 
 Per underlying: the expired expiries from 2022-01-01 (the API lists NIFTY from 2024-10-03) to the last one; per expiry,
-the expired option contracts; strikes within ±5 % of the underlying's close at the fetch window's start (the
+the expired option contracts; strikes within ±5 % of the underlying's lowest / highest daily close over the fetch
+window (the path band, 2026-10-22: a band around the window's first close alone missed the at-the-money strikes on
+21 of 107 NIFTY expiry days after a > 5 % move; contracts already in upstox_done.json are not fetched again). The
 contract's first listed day is not given by the API: the window starts 28 days before a weekly's expiry and 90 days
 before a monthly's, and candles before listing come back empty); 1-minute candles over that window in 28-day calls.
 Restart-safe: STORE/upstox_done.json lists the instrument keys already fetched. 429 -> backoff; UDAPI1149 -> stop.
@@ -58,9 +60,19 @@ def window(expiry: str, monthly: bool) -> tuple[date, date]:
     return e - timedelta(days=90 if monthly else WINDOW_DAYS), e
 
 
-def pick(cons: list[dict], ref: float) -> list[dict]:
+def pick(cons: list[dict], lo: float, hi: float | None = None) -> list[dict]:
+    """Contracts with a strike within ±BAND of the closes' range [lo, hi] (hi defaults to lo)."""
+    hi = lo if hi is None else hi
     return [c for c in cons if c.get("instrument_type") in ("CE", "PE")
-            and abs(float(c.get("strike_price") or 0) - ref) <= BAND * ref]
+            and lo * (1 - BAND) <= float(c.get("strike_price") or 0) <= hi * (1 + BAND)]
+
+
+def path_range(closes: pd.Series, a: date, b: date) -> tuple[float, float]:
+    """Lowest and highest daily close from the last close on or before `a` to `b`."""
+    before = closes[closes.index <= a.isoformat()]
+    first = before.index[-1] if len(before) else closes.index[0]
+    inside = closes[(closes.index >= first) & (closes.index <= b.isoformat())]
+    return float(inside.min()), float(inside.max())
 
 
 def fetch(u: Upstox, c: dict, a: date, b: date) -> pd.DataFrame:
@@ -87,9 +99,7 @@ def run(under: str, start: str, max_minutes: float, estimate_only: bool, store=S
     for e in exps:
         mon = is_monthly(e, exps)
         a, b = window(e, mon)
-        ref = closes[closes.index <= a.isoformat()]
-        ref = float(ref.iloc[-1]) if len(ref) else float(closes.iloc[0])
-        plan.append((e, mon, a, b, ref))
+        plan.append((e, mon, a, b, path_range(closes, a, b)))
     est_contracts = {"NIFTY": 92, "BANKNIFTY": 112, "SENSEX": 148}.get(under, 100)
     est_calls = sum(est_contracts * (1 + (b - a).days // WINDOW_DAYS) for _, _, a, b, _ in plan) + len(plan)
     print(f"{under}: {len(exps)} expired expiries {exps[0]} .. {exps[-1]}; estimate ~{est_calls} calls, "
@@ -99,11 +109,11 @@ def run(under: str, start: str, max_minutes: float, estimate_only: bool, store=S
     if estimate_only:
         return res
     try:
-        for e, mon, a, b, ref in plan:
+        for e, mon, a, b, (lo, hi) in plan:
             if time.monotonic() - t0 > max_minutes * 60:
                 res["stopped"] = "time budget reached (restart to continue)"
                 break
-            for c in pick(contracts(u, under, e), ref):
+            for c in pick(contracts(u, under, e), lo, hi):
                 key = c["instrument_key"]
                 if key in done:
                     res["contracts_skipped"] += 1

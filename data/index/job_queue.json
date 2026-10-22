@@ -1,5 +1,12 @@
 {
- "queue": [],
+ "queue": [
+  {
+   "job": "upstox_expired",
+   "args": "--underlying NIFTY --max-minutes 300",
+   "added": "2026-10-22T22:55:29+05:30",
+   "why": "S3: path band fills the at-the-money strikes missing on 21 of 107 NIFTY expiry days (2026-10-22)"
+  }
+ ],
  "history": [
   {
    "job": "upstox_expired",
