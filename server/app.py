@@ -2,7 +2,8 @@
 
     uvicorn server.app:app --host 0.0.0.0 --port 8000
 
-Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
+Login: GET/POST /login (a page; sets a cookie for a year), GET /logout. Every other route needs that cookie or
+HTTP Basic auth (user "user", password APP_PASSWORD):
     GET  /                         the page, with the latest scan and server capabilities embedded
     GET  /api/scan                 scan.json
     GET  /api/live                 latest intraday quotes (empty when the feed is off or market closed)
@@ -24,6 +25,9 @@ Routes (all behind HTTP Basic auth, user "user", password APP_PASSWORD):
 """
 from __future__ import annotations
 
+import asyncio
+import hashlib
+import hmac
 import json
 import logging
 import secrets
@@ -32,9 +36,10 @@ import time
 from collections import Counter
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
+from urllib.parse import parse_qs, quote
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 
@@ -56,14 +61,56 @@ app = FastAPI(title="F&O scanner", docs_url=None, redoc_url=None, openapi_url=No
 security = HTTPBasic(auto_error=False)
 
 
-def auth(c: HTTPBasicCredentials | None = Depends(security)) -> str:
+COOKIE = "fo_login"
+COOKIE_DAYS = 365
+
+
+def _cookie_value() -> str:
+    """The login cookie: an HMAC of the password, so changing APP_PASSWORD signs every browser out."""
+    return hmac.new(settings.app_password.encode(), b"fo-login-v1", hashlib.sha256).hexdigest()
+
+
+def auth(request: Request, c: HTTPBasicCredentials | None = Depends(security)) -> str:
+    """The login page's cookie (browsers, remembered a year) or HTTP Basic (scripts, the watchdog). Pages without
+    either go to /login; the API answers 401 without a Basic challenge, so the browser shows no popup."""
     if settings.public_access:                      # PUBLIC_ACCESS=true: no login (paper orders only, see config)
         return "public"
     if not settings.app_password:
         raise HTTPException(503, "APP_PASSWORD is not set on the server")
-    if c is None or not (secrets.compare_digest(c.username, "user") and secrets.compare_digest(c.password, settings.app_password)):
-        raise HTTPException(401, "Unauthorized", headers={"WWW-Authenticate": "Basic"})
-    return c.username
+    if secrets.compare_digest(request.cookies.get(COOKIE, ""), _cookie_value()):
+        return "user"
+    if c is not None and secrets.compare_digest(c.username, "user") and secrets.compare_digest(c.password, settings.app_password):
+        return c.username
+    if request.method == "GET" and not request.url.path.startswith("/api/"):
+        raise HTTPException(303, headers={"Location": "/login?next=" + quote(request.url.path)})
+    raise HTTPException(401, "Unauthorized")
+
+
+@app.get("/login", response_class=HTMLResponse)
+def login_page():
+    if settings.public_access:
+        return RedirectResponse("/", 303)
+    return (ROOT / "templates" / "login.html").read_text(encoding="utf-8")
+
+
+@app.post("/login")
+async def login(request: Request):
+    form = parse_qs((await request.body()).decode())
+    nxt = (form.get("next") or ["/"])[0]
+    nxt = nxt if nxt.startswith("/") and not nxt.startswith("//") else "/"
+    if settings.app_password and secrets.compare_digest((form.get("password") or [""])[0], settings.app_password):
+        r = RedirectResponse(nxt, 303)
+        r.set_cookie(COOKIE, _cookie_value(), max_age=COOKIE_DAYS * 86400, httponly=True, samesite="lax")
+        return r
+    await asyncio.sleep(1.5)                        # slows guessing; the site is on the open internet (Funnel)
+    return RedirectResponse("/login?bad=1&next=" + quote(nxt), 303)
+
+
+@app.get("/logout")
+def logout():
+    r = RedirectResponse("/login", 303)
+    r.delete_cookie(COOKIE)
+    return r
 
 
 # ---------------------------------------------------------------- state

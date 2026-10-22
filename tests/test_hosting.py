@@ -101,3 +101,23 @@ def test_public_access_needs_no_login_and_never_allows_real_orders(monkeypatch):
     assert settings.orders_enabled is False                                           # no real orders without a login
     monkeypatch.setattr(settings, "paper", True)
     assert settings.orders_enabled is True                                            # paper orders still work
+
+
+def test_login_page_sets_a_year_long_cookie_and_pages_redirect_to_it(monkeypatch):
+    from fastapi.testclient import TestClient
+    c = TestClient(app_mod.app, follow_redirects=False)
+    monkeypatch.setattr(settings, "public_access", False)
+    monkeypatch.setattr(settings, "app_password", "pw")
+    r = c.get("/")
+    assert r.status_code == 303 and r.headers["location"] == "/login?next=/"           # a page: to the login page
+    r = c.get("/api/scan")
+    assert r.status_code == 401 and "www-authenticate" not in r.headers               # the API: no browser popup
+    assert "Buy the dip" in c.get("/login").text
+    r = c.post("/login", data={"password": "nope", "next": "/s2"})
+    assert r.status_code == 303 and r.headers["location"].startswith("/login?bad=1") and "set-cookie" not in r.headers
+    r = c.post("/login", data={"password": "pw", "next": "//evil.example"})
+    assert r.headers["location"] == "/" and "Max-Age=31536000" in r.headers["set-cookie"]   # no open redirect
+    assert c.get("/api/scan").status_code == 200                                      # the cookie now logs in
+    monkeypatch.setattr(settings, "app_password", "new")
+    assert c.get("/api/scan").status_code == 401                                      # a new password signs out
+    assert c.get("/api/scan", auth=("user", "new")).status_code == 200                # Basic still works (watchdog)

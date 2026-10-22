@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0f1115">
+<title>F&amp;O Desk · Sign in</title>
+<style>
+  :root {
+    --bg: #f4f1ea; --card: #fffdf8; --ink: #1d1f24; --muted: #6b6f78; --line: #e3ddd0;
+    --up: #1f9d61; --down: #d6453d; --accent: #f2a516; --accent-ink: #1d1f24;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1115; --card: #181b21; --ink: #eceef2; --muted: #9096a1; --line: #2a2f38;
+      --up: #33c47f; --down: #ff6b5f; --accent: #ffbe3d; --accent-ink: #15171b;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1115; --card: #181b21; --ink: #eceef2; --muted: #9096a1; --line: #2a2f38;
+    --up: #33c47f; --down: #ff6b5f; --accent: #ffbe3d; --accent-ink: #15171b;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--ink); overflow: hidden;
+    font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    display: grid; grid-template-columns: minmax(0, 380px); place-content: center; padding: 16px;
+  }
+  /* candles drifting up behind the card */
+  .sky { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .c { position: absolute; bottom: -120px; width: 12px; border-radius: 3px; opacity: .22;
+       animation: rise linear infinite; }
+  .c::before { content: ""; position: absolute; left: 5px; width: 2px; top: -18px; bottom: -18px;
+               background: inherit; border-radius: 1px; }
+  .c.u { background: var(--up); } .c.d { background: var(--down); }
+  @keyframes rise { to { transform: translateY(-120vh) rotate(12deg); } }
+
+  .card {
+    position: relative; width: 100%; max-width: 380px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 22px; padding: 28px 24px 22px;
+    box-shadow: 0 18px 50px rgba(0,0,0,.18);
+  }
+  .bull { font-size: 64px; line-height: 1; text-align: center; display: block;
+          animation: bob 2.4s ease-in-out infinite; user-select: none; cursor: pointer; }
+  @keyframes bob { 50% { transform: translateY(-6px) rotate(-4deg); } }
+  h1 { margin: 10px 0 2px; font-size: 24px; text-align: center; letter-spacing: -.01em; }
+  .tag { margin: 0 0 20px; text-align: center; color: var(--muted); font-size: 14px; }
+  label { display: block; font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .row { position: relative; }
+  input[type=password], input[type=text] {
+    width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+    border: 1.5px solid var(--line); border-radius: 12px; padding: 13px 48px 13px 14px; outline: none;
+  }
+  input:focus { border-color: var(--accent); }
+  .peek { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); border: 0; background: none;
+          font-size: 20px; padding: 6px; cursor: pointer; }
+  button.go {
+    width: 100%; margin-top: 14px; padding: 13px; font: inherit; font-weight: 700;
+    color: var(--accent-ink); background: var(--accent); border: 0; border-radius: 12px; cursor: pointer;
+    transition: transform .08s;
+  }
+  button.go:active { transform: scale(.98); }
+  .bad { display: none; margin: 14px 0 0; padding: 10px 12px; border-radius: 10px; font-size: 14px;
+         background: color-mix(in srgb, var(--down) 14%, transparent); color: var(--down); }
+  .bad.on { display: block; animation: shake .35s; }
+  @keyframes shake { 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+  .tape { margin-top: 18px; border-top: 1px dashed var(--line); padding-top: 12px; overflow: hidden;
+          white-space: nowrap; font: 12px/1 ui-monospace, Consolas, monospace; color: var(--muted); }
+  .tape span { display: inline-block; padding-left: 100%; animation: tape 26s linear infinite; }
+  @keyframes tape { to { transform: translateX(-100%); } }
+  .up { color: var(--up); } .dn { color: var(--down); }
+  .foot { margin-top: 12px; text-align: center; font-size: 12px; color: var(--muted); }
+  @media (prefers-reduced-motion: reduce) { .c, .bull, .tape span { animation: none; } .c { display: none; } }
+</style>
+</head>
+<body>
+<div class="sky" id="sky"></div>
+
+<form class="card" method="post" action="/login" autocomplete="on">
+  <span class="bull" id="bull" title="moo">🐂</span>
+  <h1>F&amp;O Desk</h1>
+  <p class="tag" id="tag">Theta never sleeps. Neither does this server.</p>
+
+  <input type="text" name="username" value="user" autocomplete="username" hidden>
+  <label for="pw">Secret strike price</label>
+  <div class="row">
+    <input id="pw" type="password" name="password" autocomplete="current-password" required autofocus
+           placeholder="your password">
+    <button class="peek" type="button" id="peek" aria-label="Show password">🙈</button>
+  </div>
+  <input type="hidden" name="next" id="next" value="/">
+  <button class="go" type="submit">Buy the dip →</button>
+  <p class="bad" id="bad">Stopped out at −20 %. Wrong password, try again.</p>
+
+  <div class="tape"><span>
+    FADE v12 <b class="up">▲ trail +10 %</b> · STOP <b class="dn">▼ −20 %</b> · LISTING ₹2–7 <b class="up">▲ max lots</b> ·
+    EXIT CHECK every 1 s · PAPER ONLY, no real rupees were harmed · 09:15 the bell rings · 15:20 everybody out ·
+  </span></div>
+  <p class="foot">Remembered on this device for a year.</p>
+</form>
+
+<script>
+  const q = new URLSearchParams(location.search);
+  document.getElementById("next").value = q.get("next") || "/";
+  if (q.get("bad")) document.getElementById("bad").classList.add("on");
+
+  const pw = document.getElementById("pw"), peek = document.getElementById("peek");
+  peek.onclick = () => { const s = pw.type === "password"; pw.type = s ? "text" : "password"; peek.textContent = s ? "🐵" : "🙈"; };
+
+  const lines = [
+    "Theta never sleeps. Neither does this server.",
+    "Strong results? We buy the put. Obviously.",
+    "Our stop-loss has trust issues (−20 %).",
+    "Trailing 2 % behind the peak like a loyal dog.",
+    "Bulls, bears, and one very tired paper account.",
+    "IV crush? Never heard of her.",
+  ];
+  let i = 0;
+  document.getElementById("bull").onclick = () => {
+    i = (i + 1) % lines.length;
+    document.getElementById("tag").textContent = lines[i];
+    const b = document.getElementById("bull");
+    b.textContent = b.textContent === "🐂" ? "🐻" : "🐂";
+  };
+
+  const sky = document.getElementById("sky");
+  for (let k = 0; k < 18; k++) {
+    const c = document.createElement("div");
+    c.className = "c " + (Math.random() < .55 ? "u" : "d");
+    c.style.left = (Math.random() * 100) + "vw";
+    c.style.height = (24 + Math.random() * 70) + "px";
+    c.style.animationDuration = (9 + Math.random() * 12) + "s";
+    c.style.animationDelay = (-Math.random() * 20) + "s";
+    sky.appendChild(c);
+  }
+</script>
+</body>
+</html>

@@ -758,3 +758,5 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   deep pullbacks (median 38 % from the high; half touch -20 % first), small winners spike in minutes, and nothing in the
   candles, volume, time or the stock marks the top. The frozen rule (R2 stall 20) and four others all lost to v12 on the
   test half (v12 +3.20 % a trade). Reports: `data/results/S1_fade_peak_patterns.md`, `S1_fade_peak_rules_test.md`.
+
+- 2026-10-22 (evening): live server moved to AWS Lightsail (Tailscale Funnel, public HTTPS); the browser Basic-auth popup replaced by a themed login page (`templates/login.html`, `/login`, a 1-year cookie signed from APP_PASSWORD; Basic auth still works for scripts and the watchdog).
