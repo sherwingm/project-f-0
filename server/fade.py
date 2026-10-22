@@ -29,6 +29,7 @@ date is in CARRY_DATES (empty: the eight trades of 2026-10-16 were closed instea
 """
 from __future__ import annotations
 
+import json
 import logging
 import math
 import re
@@ -46,6 +47,11 @@ OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
 RETRY_SECONDS = 30                                       # DECISIONS.md, 2026-10-20 (was 120)
 RETRY_SLACK = 5                                          # a poll landing a few seconds early still counts
 BAND, MIN_PREMIUM, MAX_SPREAD, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 15
+# the entry probe (record only, strategies/S1_v11_entry_probe.md)
+PROBE_FROM, PROBE_FAST_TO, PROBE_TO = time(9, 14, 50), time(9, 20), time(10, 0)
+PROBE_SLOW, PROBE_SAVE, PROBE_STRIKES = 10, 60, 8
+PROBE_COLS = ["t", "symbol", "side", "strike", "ask", "ask_qty", "bid", "bid_qty", "ltp", "ltt", "volume", "open",
+              "atp", "underlying"]
 TICK = 0.01                                              # NSE stock-option tick since 2025-11-03 (Rs 0.05 before)
 SHADOW_FLOOR = 0.05                                      # the sub-Rs 2 shadow walk's floor, as pre-registered
 
@@ -408,6 +414,9 @@ class FadeTrader:
         self._last_why: dict[str, str] = {}
         self._lock = threading.RLock()                   # on_poll (feed thread) and fast_tick (fast-exit thread)
         self._cache: dict[str, dict | None] | None = None  # fast_tick's quotes, by tradingsymbol
+        self._probe: dict = {}                           # entry_probe's day: signals and changed quotes
+        self._probe_seen: dict[str, tuple] = {}
+        self._probe_last = self._probe_saved = 0.0
 
     def _state(self) -> dict:
         st = self.ledger.state.setdefault("rules", {"open": {}, "close": {}, "exits_checked": None, "refused": []})
@@ -481,6 +490,66 @@ class FadeTrader:
             finally:
                 self._cache = None
             return len(cs)
+
+    def entry_probe(self, now: datetime) -> int:
+        """Record only (strategies/S1_v11_entry_probe.md): the live book of today's fade signals' strikes, every second
+        09:14:50-09:20 and every PROBE_SLOW s to 10:00, so the day can show which entry would have paid v11's backtest
+        price (the 09:15:00 opening print). One quote call; trades nothing. Saved to data/entry_probe/<date>.json
+        (mirrored to paper-state) each minute. Returns the contracts quoted."""
+        t = now.time()
+        if not sessions.is_session(now.date()) or not (PROBE_FROM <= t < PROBE_TO):
+            if self._probe.get("rows") and now.timestamp() - self._probe_saved > 0:
+                self._probe_save(now, force=True)
+            return 0
+        if t >= PROBE_FAST_TO and now.timestamp() - self._probe_last < PROBE_SLOW - 0.5:
+            return 0
+        today = now.date().isoformat()
+        sigs = self.signals(today)
+        if not sigs:
+            return 0
+        if self._probe.get("date") != today:
+            self._probe = {"date": today, "rule": "strategies/S1_v11_entry_probe.md", "signals": [],
+                           "cols": PROBE_COLS, "rows": []}
+            self._probe_seen, self._probe_saved = {}, 0.0
+        cs, meta = {}, {}
+        for sig in sigs:
+            spot = self.spot(sig["symbol"]) or sig.get("spot")
+            for k in walk_path(sig.get("strikes") or [], spot, sig["side"])[:PROBE_STRIKES]:
+                c = self._contract(sig, k)
+                cs[c["tradingsymbol"]], meta[c["tradingsymbol"]] = c, (sig["symbol"], sig["side"], k)
+            if not any(s["symbol"] == sig["symbol"] for s in self._probe["signals"]):
+                self._probe["signals"].append({k: sig.get(k) for k in ("symbol", "side", "expiry", "why", "np_yoy",
+                                                                        "spot", "strikes", "listing")})
+        if not cs:
+            return 0
+        many = getattr(self.ledger.quotes, "get_many", None)
+        got = many(list(cs.values())) if many else {k: self.ledger.quotes.get(c) for k, c in cs.items()}
+        self._probe_last = now.timestamp()
+        stamp = now.strftime("%H:%M:%S.%f")[:-3]
+        for ts, q in got.items():
+            if not q:
+                continue
+            d = q.get("depth") or {}
+            bid, ask = (d.get("bid") or [(None, None)])[0], (d.get("ask") or [(None, None)])[0]
+            ltt = q.get("timestamp")
+            ltt = ltt.strftime("%H:%M:%S") if hasattr(ltt, "strftime") else ltt
+            vals = (ask[0], ask[1], bid[0], bid[1], q.get("last_price"), ltt, q.get("volume"),
+                    (q.get("ohlc") or {}).get("open"), q.get("atp"), q.get("underlying"))
+            if self._probe_seen.get(ts) == vals:                  # unchanged since the last second: not stored again
+                continue
+            self._probe_seen[ts] = vals
+            sym, side, k = meta[ts]
+            self._probe["rows"].append([stamp, sym, side, k, *vals])
+        self._probe_save(now)
+        return len(cs)
+
+    def _probe_save(self, now: datetime, force: bool = False) -> None:
+        if not force and now.timestamp() - self._probe_saved < PROBE_SAVE:
+            return
+        p = self.ledger.dir / "entry_probe" / f"{self._probe['date']}.json"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text(json.dumps(self._probe, separators=(",", ":"), default=str))
+        self._probe_saved = now.timestamp() if not force else float("inf")
 
     def on_poll(self, now: datetime) -> None:
         with self.ledger.lock, self._lock:

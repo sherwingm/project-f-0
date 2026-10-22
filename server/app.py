@@ -247,7 +247,9 @@ def _fade_fast_loop() -> None:
     while True:
         try:
             if state.fade is not None:
-                state.fade.fast_tick(datetime.now(IST))
+                now = datetime.now(IST)
+                state.fade.fast_tick(now)
+                state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits
             log.warning("fade fast exit: %s", exc)
         time.sleep(settings.fade_fast_seconds)

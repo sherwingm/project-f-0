@@ -34,6 +34,7 @@ import requests
 log = logging.getLogger("durable")
 LEDGER, ORDERS, QUEUE, SNAPSHOTS = "paper_ledger.json", "paper_orders.jsonl", "paper_queue.jsonl", "live_snapshots"
 COMPARE = "provider_compare"
+PROBE = "entry_probe"                                    # the fade entry probe's daily files (record only)
 FAST_CHECK = 10          # seconds between checks
 SNAPSHOT_EVERY = 900     # seconds: the ledger's 15-minute snapshot when only marks changed
 API = "https://api.github.com"
@@ -120,6 +121,8 @@ class Mirror:
         cmp_dir = self.dir / COMPARE                     # the Upstox-vs-Kotak shadow check's daily files
         if cmp_dir.is_dir():
             names += sorted(f"{COMPARE}/{f.name}" for f in cmp_dir.glob("*.json"))
+        if (self.dir / PROBE).is_dir():
+            names += sorted(f"{PROBE}/{f.name}" for f in (self.dir / PROBE).glob("*.json"))
         return names
 
     def restore(self, snapshot_days: list[str] | None = None) -> list[str]:

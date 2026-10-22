@@ -880,3 +880,26 @@ def test_listing_store_update_and_lookup(tmp_path):
     b.loc[0, "ClsPric"] = 9.0                                     # a later day does not overwrite the first
     assert L.update(b, "2026-10-06", tmp_path, today="2026-10-22") == 1
     assert L.lookup("X", "PE", "2026-10-27", tmp_path) == {"63": 0.99, "66": 2.22}
+
+
+# ---------------------------------------------------------------- the entry probe (record only, S1_v11_entry_probe.md)
+def test_entry_probe_records_changes_each_second_and_trades_nothing(fast):
+    import json
+    lg, q, ft = fast
+    for k in (1180.0, 1200.0, 1220.0):
+        q.set("PE", k, 18.0, 18.5)
+    q.book["HCLTECH26OCT1220PE"]["ohlc"] = {"open": 12.0}
+    s = lambda sec, m=15: datetime(2026, 10, 15, 9, m, sec, tzinfo=IST)                          # noqa: E731
+    assert ft.entry_probe(datetime(2026, 10, 15, 9, 14, 40, tzinfo=IST)) == 0                   # before 09:14:50
+    assert ft.entry_probe(s(0)) == 3 and q.many_calls == 1                                       # 1220, 1200, 1180
+    ft.entry_probe(s(1))                                                                         # nothing changed
+    q.set("PE", 1220.0, 17.0, 17.4)
+    ft.entry_probe(s(2))
+    rows = ft._probe["rows"]
+    assert len(rows) == 4 and rows[-1][:5] == ["09:15:02.000", "HCLTECH", "PE", 1220.0, 17.4]
+    assert rows[0][ft._probe["cols"].index("open")] == 12.0
+    assert not lg.state["positions"] and not lg.state.get("closed")                              # trades nothing
+    assert ft.entry_probe(s(5, 25)) == 3 and ft.entry_probe(s(9, 25)) == 0                      # after 09:20: every 10 s
+    ft.entry_probe(datetime(2026, 10, 15, 10, 0, 1, tzinfo=IST))                                 # past 10:00: saved
+    saved = json.loads((lg.dir / "entry_probe" / "2026-10-15.json").read_text())
+    assert saved["signals"][0]["symbol"] == "HCLTECH" and len(saved["rows"]) == len(rows)
