@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -14.5
+  },
+  {
+   "at": "10:45:45",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.245,
+   "same_best_bid_pct": 26.5,
+   "same_best_ask_pct": 32.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -319,6 +333,13 @@
    "at": "09:45"
   },
   {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 1.245,
+   "kotak": 12.05,
+   "upstox": 11.9,
+   "at": "10:45"
+  },
+  {
    "contract": "FEDERALBNK26OCT345PE",
    "gap_pct": 1.064,
    "kotak": 4.7,
@@ -338,6 +359,13 @@
    "kotak": 11.35,
    "upstox": 11.25,
    "at": "09:30"
+  },
+  {
+   "contract": "SBICARD26OCT560CE",
+   "gap_pct": 0.683,
+   "kotak": 14.65,
+   "upstox": 14.75,
+   "at": "10:45"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -361,35 +389,21 @@
    "at": "10:25"
   },
   {
-   "contract": "MCX26OCT3100CE",
-   "gap_pct": 0.289,
-   "kotak": 51.9,
-   "upstox": 52.05,
-   "at": "10:25"
-  },
-  {
-   "contract": "INFY26OCT1180CE",
-   "gap_pct": 0.243,
-   "kotak": 20.55,
-   "upstox": 20.5,
-   "at": "10:05"
-  },
-  {
-   "contract": "BAJFINANCE26OCTFUT",
-   "gap_pct": 0.175,
-   "kotak": 916.8,
-   "upstox": 918.4,
-   "at": "09:30"
+   "contract": "RELIANCE26OCT1200CE",
+   "gap_pct": 0.422,
+   "kotak": 11.85,
+   "upstox": 11.8,
+   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 578,
+  "rounds": 18,
+  "contract_quotes": 612,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
   "same_best_ask_pct": 26.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -13.0
+  "oi_same_pct": 95.6,
+  "upstox_minus_kotak_quote_time_s_median": -12.5
  }
 }
