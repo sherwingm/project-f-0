@@ -223,7 +223,10 @@ class LiveFeed:
                 except Exception as exc:  # noqa: BLE001 - keep polling; surface the error on the page
                     self.error = f"{type(exc).__name__}: {exc}"
                     log.warning("live poll failed: %s", exc)
-            self._stop.wait(self.interval())
+            done = time.monotonic()
+            while not self._stop.wait(min(1.0, self.interval())):    # re-checked each second: the stream may resume
+                if time.monotonic() - done >= self.interval() - 0.05:
+                    break
 
     def interval(self) -> float:
         """fast_seconds while the provider streams (server/upstox_stream.py), else poll_seconds."""

@@ -132,3 +132,19 @@ def test_the_feed_runs_every_second_only_while_streaming():
     assert f.interval() == 1
     live.ok = False
     assert f.interval() == 30
+
+
+def test_a_feed_waiting_on_kotak_switches_to_the_stream_within_a_second(monkeypatch):
+    import threading
+    p, live, _ = provider()
+    live.ok = False
+    f = LiveFeed(p, {"stocks": []}, 30, {}, fast_seconds=1, poll_always=True)
+    polls = []
+    monkeypatch.setattr(f, "poll_once", lambda: polls.append(time.monotonic()))
+    t = threading.Thread(target=f._loop, daemon=True)
+    t.start()
+    time.sleep(0.3)
+    live.ok = True                                                             # the stream resumes mid-wait
+    time.sleep(2.5)
+    f.stop()
+    assert len(polls) >= 2 and polls[1] - polls[0] < 2.5                       # not 30 s later
