@@ -1,0 +1,16 @@
+[Unit]
+Description=F&O scanner (paper)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/fo_scanner
+EnvironmentFile=/home/ubuntu/fo_scanner/.env
+Environment=TZ=Asia/Kolkata
+ExecStart=/home/ubuntu/fo_scanner/.venv/bin/uvicorn server.app:app --host 0.0.0.0 --port 8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

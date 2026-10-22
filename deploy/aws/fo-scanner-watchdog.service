@@ -1,0 +1,6 @@
+[Unit]
+Description=F&O scanner market-hours watchdog (restarts a stalled live feed)
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /home/ubuntu/fo_scanner/deploy/aws/watchdog.py

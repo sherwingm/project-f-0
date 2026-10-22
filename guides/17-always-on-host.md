@@ -5,6 +5,15 @@ Mumbai that never sleeps. The paper account and the opening snapshots are commit
 branch (`server/durable.py`), so a restart or a rebuilt VM picks up where it left off. Render becomes a mirror only
 (README, *Put it on your phone*). The phone reaches the VM over Tailscale; no port is open to the internet.
 
+**Quick path (22 Oct 2026):** create the VM (step 1A, region **Asia Pacific (Mumbai) ap-south-1**, plan **1 GB**
+rather than nano: pandas plus the live feed is tight in 512 MB), connect with SSH, then run
+`curl -fsSL https://raw.githubusercontent.com/sherwingm/project-f-0/main/deploy/aws/setup.sh | bash`. It does steps
+2-6, installs a **market-hours watchdog** (`deploy/aws/watchdog.py`: restarts the server when the live feed has not
+updated for 3 minutes, at most once per 10 minutes), and stops once to let you fill `~/fo_scanner/.env`
+(template `deploy/aws/env.example`). Then steps 7-10. **Cut over outside market hours**, in this order: Render
+`DATA_PROVIDER=none` and delete `LEDGER_GITHUB_TOKEN` there first, then start the VM with the token, so only one
+server ever writes the paper account.
+
 Everything below is in the order you run it. `<…>` is yours to fill in. Nothing here places real orders:
 `PAPER=true`, `BROKER=none`.
 
