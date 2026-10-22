@@ -620,6 +620,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "14:55:34",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.143,
+   "same_best_bid_pct": 38.2,
+   "same_best_ask_pct": 44.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -671,6 +685,13 @@
    "kotak": 4.05,
    "upstox": 3.95,
    "at": "10:15"
+  },
+  {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 2.143,
+   "kotak": 7.0,
+   "upstox": 6.85,
+   "at": "14:55"
   },
   {
    "contract": "FEDERALBNK26OCT350CE",
@@ -755,23 +776,16 @@
    "kotak": 12.05,
    "upstox": 11.9,
    "at": "10:45"
-  },
-  {
-   "contract": "BEL26OCT365PE",
-   "gap_pct": 1.205,
-   "kotak": 4.15,
-   "upstox": 4.2,
-   "at": "13:45"
   }
  ],
  "day": {
-  "rounds": 44,
-  "contract_quotes": 1474,
+  "rounds": 45,
+  "contract_quotes": 1508,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.85,
-  "same_best_ask_pct": 33.85,
+  "same_best_bid_pct": 33.3,
+  "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -14.75
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
