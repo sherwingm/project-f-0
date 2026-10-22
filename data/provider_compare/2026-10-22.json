@@ -522,6 +522,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -45.0
+  },
+  {
+   "at": "14:20:18",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.429,
+   "same_best_bid_pct": 20.6,
+   "same_best_ask_pct": 20.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -624,6 +638,13 @@
    "at": "10:20"
   },
   {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 1.429,
+   "kotak": 3.5,
+   "upstox": 3.45,
+   "at": "14:20"
+  },
+  {
    "contract": "LTF26OCT245PE",
    "gap_pct": 1.389,
    "kotak": 3.6,
@@ -657,18 +678,11 @@
    "kotak": 4.15,
    "upstox": 4.2,
    "at": "13:45"
-  },
-  {
-   "contract": "BAJFINANCE26OCT940CE",
-   "gap_pct": 1.13,
-   "kotak": 8.85,
-   "upstox": 8.75,
-   "at": "11:15"
   }
  ],
  "day": {
-  "rounds": 37,
-  "contract_quotes": 1236,
+  "rounds": 38,
+  "contract_quotes": 1270,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 32.4,
