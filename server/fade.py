@@ -6,7 +6,8 @@ The scan carries scanner/fade_live.py's list as meta.fade: for one session (`ses
 day it is, with the side to buy (a put on strong numbers, a call on weak ones), the expiry and its strikes. On that
 session this module:
 
-    entry  any poll from 09:15 to 15:20, retried every 30 seconds per stock (every poll; 2 minutes until 2026-10-20) until it fills: from the strike nearest
+    entry  from 09:15:00 to 15:20, retried every second per stock by entry_tick() (from 2026-10-23; every 30 s poll before,
+           2 minutes until 2026-10-20; one quote call a second for every waiting signal) until it fills: from the strike nearest
            the live stock price, walking away from the money (down for puts, up for calls), the first strike with a
            live bid and ask, a spread <= 10 % of the ask, ask >= Rs 2 and one lot at the ask within Rs 600-8,000;
            bought at the ask. Nothing by 15:20 -> refused with the reason.
@@ -44,7 +45,8 @@ from server.rules import lot_of, never_fits
 log = logging.getLogger("fade")
 
 OPEN_FROM, EOD_AT = time(9, 15), time(15, 20)
-RETRY_SECONDS = 30                                       # DECISIONS.md, 2026-10-20 (was 120)
+RETRY_SECONDS = 30                                       # the 30 s poll's own retry (DECISIONS.md, 2026-10-20; was 120)
+# entry_tick() retries every second from 09:15:00 on one quote call (DECISIONS.md, 2026-10-22, the user's decision)
 RETRY_SLACK = 5                                          # a poll landing a few seconds early still counts
 BAND, MIN_PREMIUM, MAX_SPREAD, WALK_MAX = (600.0, 8000.0), 2.0, 0.10, 15
 # the entry probe (record only, strategies/S1_v11_entry_probe.md)
@@ -414,6 +416,8 @@ class FadeTrader:
         self._last_why: dict[str, str] = {}
         self._lock = threading.RLock()                   # on_poll (feed thread) and fast_tick (fast-exit thread)
         self._cache: dict[str, dict | None] | None = None  # fast_tick's quotes, by tradingsymbol
+        self._book_cache: dict[str, dict | None] | None = None   # entry_tick's quotes for the entry walks
+        self._tick_quotes: tuple[float, dict] = (0.0, {})  # entry_tick's last call, reused by entry_probe that second
         self._probe: dict = {}                           # entry_probe's day: signals and changed quotes
         self._probe_seen: dict[str, tuple] = {}
         self._probe_last = self._probe_saved = 0.0
@@ -430,6 +434,8 @@ class FadeTrader:
     def _book(self, sig: dict, strikes: list[float]) -> dict[float, dict | None]:
         """{strike: live quote} for the strikes walk() may visit, in one quote call (QuoteSource.get_many)."""
         cs = {k: self._contract(sig, k) for k in strikes}
+        if self._book_cache is not None:
+            return {k: self._book_cache.get(c["tradingsymbol"]) for k, c in cs.items()}
         many = getattr(self.ledger.quotes, "get_many", None)
         if many:
             got = many(list(cs.values()))
@@ -522,8 +528,12 @@ class FadeTrader:
                                                                         "spot", "strikes", "listing")})
         if not cs:
             return 0
-        many = getattr(self.ledger.quotes, "get_many", None)
-        got = many(list(cs.values())) if many else {k: self.ledger.quotes.get(c) for k, c in cs.items()}
+        at, have = self._tick_quotes
+        got = {k: have[k] for k in cs if k in have} if abs(now.timestamp() - at) < 0.9 else {}
+        rest = [c for k, c in cs.items() if k not in got]       # entry_tick's call this second covers waiting signals
+        if rest:
+            many = getattr(self.ledger.quotes, "get_many", None)
+            got.update(many(rest) if many else {c["tradingsymbol"]: self.ledger.quotes.get(c) for c in rest})
         self._probe_last = now.timestamp()
         stamp = now.strftime("%H:%M:%S.%f")[:-3]
         for ts, q in got.items():
@@ -558,9 +568,6 @@ class FadeTrader:
     def _on_poll(self, now: datetime) -> None:
         if not self.ledger.is_open(now):
             return
-        today = now.date().isoformat()
-        st = self._state()
-        done = st.setdefault("fade", {})
         self._track_trail(now)
         self._track_v12(now)
         self._track_after_trail(now)
@@ -571,6 +578,40 @@ class FadeTrader:
         self._carry_exits(now)
         if now.time() < OPEN_FROM:
             return
+        self._entries(now)
+
+    def entry_tick(self, now: datetime) -> int:
+        """About every second (server/app.py) from 09:15:00 to 15:20: one quote call for every waiting signal's strikes,
+        then the same entry walk as the poll. Returns the contracts quoted (0: nothing waiting or outside the hours)."""
+        if not self.ledger.is_open(now) or not (OPEN_FROM <= now.time() < EOD_AT):
+            return 0
+        with self.ledger.lock, self._lock:
+            today = now.date().isoformat()
+            done = self._state().setdefault("fade", {})
+            cs = {}
+            for sig in self.signals(today):
+                if f"{today}:{sig['symbol']}" in done:
+                    continue
+                spot = self.spot(sig["symbol"]) or sig.get("spot")
+                for k in walk_path(sig.get("strikes") or [], spot, sig["side"]):
+                    c = self._contract(sig, k)
+                    cs[c["tradingsymbol"]] = c
+            if not cs:
+                return 0
+            many = getattr(self.ledger.quotes, "get_many", None)
+            self._book_cache = many(list(cs.values())) if many else {k: self.ledger.quotes.get(c) for k, c in cs.items()}
+            self._tick_quotes = (now.timestamp(), self._book_cache)
+            try:
+                self._entries(now, every=0)
+            finally:
+                self._book_cache = None
+            return len(cs)
+
+    def _entries(self, now: datetime, every: float = RETRY_SECONDS - RETRY_SLACK) -> None:
+        """Walk each of today's waiting signals (at most once per `every` seconds each); refuse what is left at 15:20."""
+        today = now.date().isoformat()
+        st = self._state()
+        done = st.setdefault("fade", {})
         for sig in self.signals(today):
             key = f"{today}:{sig['symbol']}"
             if key in done:
@@ -579,7 +620,7 @@ class FadeTrader:
                 self._refuse(st, sig, today, self._last_why.get(key) or "no affordable two-sided strike 09:15-15:20")
                 self._waiting(st, key, now, None)
                 continue
-            if now.timestamp() - self._tried.get(key, 0) < RETRY_SECONDS - RETRY_SLACK:
+            if every and now.timestamp() - self._tried.get(key, 0) < every:
                 continue
             self._tried[key] = now.timestamp()
             spot = self.spot(sig["symbol"]) or sig.get("spot")

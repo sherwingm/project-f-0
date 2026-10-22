@@ -142,3 +142,10 @@ The user does not want loss halts. The 2 % daily halt (manual orders only; rule 
 like the weekly one on 21 Oct: `server/risk.py` has no kill switch, an old `halts` latch is dropped, `DAILY_LOSS_HALT_PCT`
 is gone from config, render.yaml and the AWS env template. Unchanged: the per-trade risk cap, the new-position counts,
 the margin cap, the expiry-day block (manual orders) and the drawdown review banner (not a block).
+
+## 2026-10-22 · Fade entry retried every second from 09:15:00 (user decision)
+The live fade entry was tried at each 30 s poll, so it usually filled around 09:15:45. Now the server is always on
+(AWS), `server/fade.py` `entry_tick` runs every second from 09:15:00 to 15:20. It makes one quote call per second for all
+waiting signals' strikes, then runs the same walk and buys at the ask, unchanged. The 30 s poll still runs too. The entry
+probe (`strategies/S1_v11_entry_probe.md`) reuses that call. Arms A/B keep the 30 s retry. This does not reproduce v11's
+backtest entry (the 09:15:00 opening print); the probe measures how close a 1-second buy gets.

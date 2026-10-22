@@ -903,3 +903,26 @@ def test_entry_probe_records_changes_each_second_and_trades_nothing(fast):
     ft.entry_probe(datetime(2026, 10, 15, 10, 0, 1, tzinfo=IST))                                 # past 10:00: saved
     saved = json.loads((lg.dir / "entry_probe" / "2026-10-15.json").read_text())
     assert saved["signals"][0]["symbol"] == "HCLTECH" and len(saved["rows"]) == len(rows)
+
+
+# ---------------------------------------------------------------- 1-second entries (entry_tick, DECISIONS.md 2026-10-22)
+def test_entry_tick_buys_in_the_first_second_on_one_quote_call(fast):
+    lg, q, ft = fast
+    s = lambda sec, m=15: datetime(2026, 10, 15, 9, m, sec, tzinfo=IST)                          # noqa: E731
+    assert ft.entry_tick(datetime(2026, 10, 15, 9, 14, 59, tzinfo=IST)) == 0 and q.many_calls == 0   # before 09:15
+    assert ft.entry_tick(s(0)) > 0 and q.many_calls == 1 and not lg.state["positions"]          # no quotes yet: waits
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.entry_tick(s(1))                                                                         # the next second: bought
+    p = lg.state["positions"][0]
+    assert p["tradingsymbol"] == "HCLTECH26OCT1220PE" and p["entry"]["price"] == 18.5 and q.many_calls == 2
+    assert p["opened_at"].startswith("2026-10-15T09:15:01")
+    assert ft.entry_tick(s(2)) == 0 and q.many_calls == 2                                       # nothing waiting: no call
+
+
+def test_entry_probe_reuses_the_entry_ticks_quotes(fast):
+    lg, q, ft = fast
+    t = datetime(2026, 10, 15, 9, 15, 0, tzinfo=IST)
+    ft.entry_tick(t)                                                                            # nothing quoted: waits
+    ft.entry_probe(t)
+    assert q.many_calls == 1                                                                    # one call for both
+    assert ft.entry_tick(datetime(2026, 10, 15, 15, 20, tzinfo=IST)) == 0                       # 15:20: the poll refuses

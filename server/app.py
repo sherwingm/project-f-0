@@ -241,7 +241,7 @@ def startup() -> None:
 
 
 def _fade_fast_loop() -> None:
-    """The fade's live exits about every FADE_FAST_SECONDS (default 1 s): one quote call for the open fade contracts
+    """The fade's live exits and waiting entries about every FADE_FAST_SECONDS (default 1 s): one quote call for the open fade contracts
     only (Kotak: well inside 25/s; the shared limiter keeps the whole server under 200/min), then the stop and trail
     checks (server/fade.py fast_tick). Idle outside 09:16-15:20 or with no open fade position."""
     while True:
@@ -249,6 +249,7 @@ def _fade_fast_loop() -> None:
             if state.fade is not None:
                 now = datetime.now(IST)
                 state.fade.fast_tick(now)
+                state.fade.entry_tick(now)               # 1-second entries from 09:15:00 (DECISIONS.md 2026-10-22)
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits
             log.warning("fade fast exit: %s", exc)

@@ -437,7 +437,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       const rr = (ru.refused || []).filter(x => x.date === today);
       const ww = [...waitsToday(ru.open_wait, today, null), ...waitsToday(ru.fade_wait, today, ["F"])];
       const late = pastEntries();                      // a row left after 15:20: the server missed its 15:20 check
-      return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (every 30 seconds until 15:20)"}: ${ww.map(x =>
+      return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (fade every second, Arms A/B every 30 seconds, until 15:20)"}: ${ww.map(x =>
           `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${esc(x.reason)} · checked ${esc(String(x.at).slice(11, 16))})`).join(" · ")}</p>` : "")
         + (rr.length ? `<p class="note" style="margin:0">${rr.length && ww.length ? "<b>Refused:</b> " : ""}${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>` : "")) : "";
     },
