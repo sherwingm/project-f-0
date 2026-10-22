@@ -14,7 +14,7 @@
   --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
   --neutral:#8B98A5; --neutral-soft:rgba(139,152,165,.16); --unc:#E0B341; --unc-soft:rgba(224,179,65,.16);
   --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF; --atp:#F5A623; --star:#F5C542;
-  --top:52px; --disc:44px; --nav:0px;
+  --top:44px; --disc:28px; --nav:0px; --rail:68px; --pw:440px; --rowh:28px;
   color-scheme:dark;
 }
 :root[data-theme="light"] {
@@ -26,7 +26,7 @@
 }
 *, *::before, *::after { box-sizing:border-box; }
 html, body { height:100%; }
-body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.4 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   font-variant-numeric:tabular-nums; -webkit-text-size-adjust:100%; overflow:hidden; }
 button, input, select { font:inherit; color:inherit; }
 button { cursor:pointer; }
@@ -37,86 +37,164 @@ small, .muted { color:var(--muted); }
 a { color:var(--accent); }
 [hidden] { display:none !important; }
 
-/* ---------- top bar */
-.top { height:var(--top); display:flex; align-items:center; gap:10px; padding:0 12px; background:var(--panel); border-bottom:1px solid var(--line); position:relative; z-index:6; }
-.brand { font-weight:700; font-size:15px; letter-spacing:.01em; white-space:nowrap; }
-.brand i { font-style:normal; color:var(--accent); }
+/* ---------- shell: top bar, navigation rail, workspace */
+body { display:flex; flex-direction:column; height:100dvh; }
+.top { height:var(--top); flex:0 0 auto; display:flex; align-items:center; gap:12px; padding:0 10px 0 0; background:var(--panel); border-bottom:1px solid var(--line); position:relative; z-index:12; }
+.brand { width:var(--rail); align-self:stretch; flex:0 0 auto; display:flex; align-items:center; justify-content:center; border-right:1px solid var(--line); color:var(--accent); }
+.brand svg { width:22px; height:22px; }
+.bname { font-weight:700; font-size:14px; letter-spacing:.01em; white-space:nowrap; color:var(--ink); text-decoration:none; }
+.bname i { font-style:normal; color:var(--accent); }
 .mkt { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); white-space:nowrap; }
 .dot { width:8px; height:8px; border-radius:50%; background:var(--neutral); flex:0 0 auto; }
 .dot.on { background:var(--bull); box-shadow:0 0 0 3px var(--bull-soft); }
 .dot.err { background:var(--bear); }
+.dot.stale { background:var(--unc); }
 .clock { font-family:"JetBrains Mono",monospace; color:var(--ink); }
-.tsearch { position:relative; flex:1; max-width:340px; margin-left:auto; }
-.tsearch input { width:100%; height:34px; padding:0 34px 0 12px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); }
-.tsearch kbd { position:absolute; right:8px; top:8px; font:11px "JetBrains Mono",monospace; color:var(--muted); border:1px solid var(--line-strong); border-radius:4px; padding:0 5px; }
+.dsrc { display:inline-flex; align-items:center; gap:5px; height:22px; padding:0 7px; border:1px solid var(--line-strong); border-radius:3px; font-size:11px; color:var(--muted); white-space:nowrap; }
+.dsrc b { color:var(--ink); font-weight:600; }
+.dsrc.live { border-color:color-mix(in srgb, var(--bull) 55%, transparent); } .dsrc.live b { color:var(--bull); }
+.dsrc.stale { border-color:var(--unc); } .dsrc.stale b { color:var(--unc); }
+.dsrc.err { border-color:var(--bear); } .dsrc.err b { color:var(--bear); }
+.tsearch { position:relative; flex:1; max-width:360px; margin-left:auto; }
+.tsearch input { width:100%; height:30px; padding:0 34px 0 30px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); }
+.tsearch > svg { position:absolute; left:9px; top:8px; width:14px; height:14px; color:var(--muted); pointer-events:none; }
+.tsearch kbd { position:absolute; right:7px; top:6px; font:11px "JetBrains Mono",monospace; color:var(--muted); border:1px solid var(--line-strong); border-radius:3px; padding:0 5px; }
+.sugg { position:absolute; top:34px; left:0; right:0; background:var(--panel); border:1px solid var(--line-strong); border-radius:4px; box-shadow:0 12px 32px rgba(0,0,0,.35); max-height:340px; overflow:auto; z-index:30; }
+.sugg button { display:grid; grid-template-columns:96px minmax(0,1fr) auto; gap:8px; width:100%; padding:6px 10px; border:0; background:none; text-align:left; font-size:12px; align-items:center; }
+.sugg button small { color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sugg button[aria-selected="true"], .sugg button:hover { background:var(--raise); }
 .tbtns { display:flex; gap:6px; }
-.tb { height:34px; padding:0 11px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
-.tb[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+.tb { height:30px; padding:0 10px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
+.tb:hover { border-color:var(--muted); }
 .tb .n { font:11px "JetBrains Mono",monospace; background:var(--bear); color:#fff; border-radius:9px; padding:0 5px; }
 .pbar { font-size:12px; color:var(--muted); white-space:nowrap; display:flex; gap:6px; align-items:center; }
 .pbar b { color:var(--ink); } .pbar b.up { color:var(--bull); } .pbar b.down { color:var(--bear); }
-.notice { border:1px solid var(--unc); background:var(--unc-soft); border-radius:8px; padding:8px 12px; font-size:12px; margin:8px 12px 0; }
+.notice { border:1px solid var(--unc); background:var(--unc-soft); border-radius:4px; padding:6px 12px; font-size:12px; margin:6px 10px 0 calc(var(--rail) + 10px); flex:0 0 auto; }
 .notice b { color:var(--unc); }
 
-/* ---------- terminal grid */
-.term { display:grid; grid-template-columns:300px minmax(0,1fr) 400px; height:calc(100dvh - var(--top) - var(--disc)); }
-.wl, .center, .side, .board { min-height:0; background:var(--panel); }
-.wl { border-right:1px solid var(--line); display:flex; flex-direction:column; }
-.center { display:flex; flex-direction:column; min-width:0; }
-.side { border-left:1px solid var(--line); display:flex; flex-direction:column; }
-.board { grid-column:2 / 4; overflow:auto; padding:14px 16px 24px; display:none; }
-body[data-board] .board { display:block; }
-body[data-board] .center, body[data-board] .side { display:none; }
+.app { flex:1; min-height:0; display:grid; grid-template-columns:var(--rail) minmax(0,1fr); }
+.rail { background:var(--panel); border-right:1px solid var(--line); display:flex; flex-direction:column; padding:4px 0; overflow-y:auto; scrollbar-width:none; }
+.rail::-webkit-scrollbar { display:none; }
+.rail a, .rail button { position:relative; display:flex; flex-direction:column; align-items:center; gap:3px; padding:8px 2px 7px; border:0; background:none; color:var(--muted); font-size:10px; line-height:1.2; text-align:center; text-decoration:none; }
+.rail a:hover, .rail button:hover { color:var(--ink); background:var(--raise); }
+.rail svg { width:18px; height:18px; flex:0 0 auto; }
+.rail [aria-current="page"] { color:var(--ink); background:var(--raise); }
+.rail [aria-current="page"]::before { content:""; position:absolute; left:0; top:5px; bottom:5px; width:2px; background:var(--accent); }
+.rail .n { position:absolute; top:4px; right:12px; font:600 9px "JetBrains Mono",monospace; background:var(--bear); color:#fff; border-radius:7px; padding:0 4px; }
+.rail .sep { height:1px; background:var(--line); margin:5px 12px; flex:0 0 auto; }
+.rail .end { margin-top:auto; }
+.views { min-width:0; min-height:0; position:relative; }
+.view { display:none; height:100%; min-height:0; min-width:0; }
+.view.on { display:flex; flex-direction:column; }
+#v-scanner.on { display:grid; grid-template-columns:minmax(0,1fr) var(--pw); }
+body[data-panel="closed"] #v-scanner.on { grid-template-columns:minmax(0,1fr) 0; }
+body[data-panel="wide"] #v-scanner.on { --pw:min(62%, 1040px); }
 
-/* ---------- watchlist */
-.wl-h { padding:8px 10px 6px; border-bottom:1px solid var(--line); }
-.wl-tabs { display:flex; gap:4px; overflow-x:auto; scrollbar-width:none; }
-.wl-tabs::-webkit-scrollbar { display:none; }
-.wt { flex:0 0 auto; border:1px solid transparent; background:none; border-radius:6px; padding:4px 8px; font-size:12px; color:var(--muted); }
-.wt b { color:var(--ink); font-weight:600; margin-left:3px; }
-.wt[aria-pressed="true"] { background:var(--raise); border-color:var(--line-strong); color:var(--ink); }
-.wl-ctl { display:flex; gap:6px; align-items:center; margin-top:6px; }
-.wl-ctl select { flex:1; height:28px; border-radius:6px; border:1px solid var(--line-strong); background:var(--surface); padding:0 6px; font-size:12px; }
-.chip { border:1px solid var(--line-strong); background:var(--surface); border-radius:6px; padding:3px 8px; font-size:12px; white-space:nowrap; }
-.chip[aria-pressed="true"] { background:var(--bear); border-color:var(--bear); color:#fff; }
-.wl-list { overflow-y:auto; flex:1; }
-.wr { display:grid; grid-template-columns:18px minmax(0,1fr) auto; gap:0 8px; padding:7px 10px 7px 6px; border-bottom:1px solid var(--line); cursor:pointer; align-items:center; }
-.wr:hover { background:var(--raise); }
-.wr.sel { background:var(--raise); box-shadow:inset 3px 0 0 var(--accent); }
-.star { border:0; background:none; padding:0; width:18px; height:18px; color:var(--line-strong); font-size:13px; line-height:18px; }
-.star.on { color:var(--star); }
-.wn { min-width:0; }
-.wn b { font-weight:600; font-size:13px; }
-.wn small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-size:11px; }
-.wp { text-align:right; }
-.wp .px { font-size:13px; font-weight:500; display:block; border-radius:3px; padding:0 2px; }
-.wp small { font-family:"JetBrains Mono",monospace; font-size:11px; }
-.wm { grid-column:2 / 4; display:flex; gap:8px; align-items:center; font-size:11px; color:var(--muted); margin-top:2px; }
-.wm .lbl { margin-left:auto; }
-.ld { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:4px; vertical-align:middle; }
-.ld.b { background:var(--bull); } .ld.r { background:var(--bear); } .ld.n { background:var(--neutral); } .ld.u { background:var(--unc); }
-.fl-up { animation:flu .9s ease-out; } .fl-dn { animation:fld .9s ease-out; }
-@keyframes flu { from { background:var(--bull-soft); } to { background:transparent; } }
-@keyframes fld { from { background:var(--bear-soft); } to { background:transparent; } }
-.wl-foot { padding:6px 10px; border-top:1px solid var(--line); font-size:11px; color:var(--muted); }
-.empty { text-align:center; color:var(--muted); padding:28px 10px; }
-
-/* ---------- stock header */
-.sh { display:flex; gap:14px; align-items:flex-start; padding:10px 14px 8px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
-.sh h2 { margin:0; font-size:18px; font-weight:700; display:flex; gap:8px; align-items:center; }
-.sh h2 small { font-size:12px; font-weight:400; }
-.sh .sub { font-size:12px; color:var(--muted); margin-top:2px; }
-.sh .price { margin-left:auto; text-align:right; }
-.sh .big { font:600 22px/1.1 "JetBrains Mono",monospace; }
-.sh .chg { font:500 13px "JetBrains Mono",monospace; margin-left:8px; }
-.sh .tick { font-size:11px; color:var(--muted); margin-top:3px; }
-.sh .acts { display:flex; gap:6px; align-items:center; flex-wrap:wrap; width:100%; }
-.ib { height:28px; padding:0 9px; border-radius:6px; border:1px solid var(--line-strong); background:var(--surface); font-size:12px; display:inline-flex; align-items:center; gap:5px; }
+/* ---------- scanner workspace: toolbar, filter builder, results table */
+.work { display:flex; flex-direction:column; min-width:0; min-height:0; border-right:1px solid var(--line); background:var(--panel); }
+.sbar { display:flex; gap:6px; align-items:center; padding:6px 10px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.sbar .grow { flex:1; }
+.lbl-s { font-size:10.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; font-weight:600; }
+.inp, .sel { height:28px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); padding:0 8px; font-size:12px; }
+.sel { padding:0 4px 0 6px; max-width:240px; }
+.inp.sym { width:150px; }
+.ib, .chip { height:28px; padding:0 9px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); font-size:12px; display:inline-flex; align-items:center; gap:5px; white-space:nowrap; }
+.ib:hover, .chip:hover { border-color:var(--muted); }
 .ib.on { color:var(--star); border-color:var(--star); }
 .ib.go { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
 .ib.go.pe { background:var(--bear); border-color:var(--bear); color:#fff; }
-.armb { font:700 9.5px Inter,sans-serif; border-radius:5px; padding:0 5px; margin-left:4px; border:1px solid currentColor; vertical-align:1px; white-space:nowrap; }
+.ib.ghost { border-color:transparent; background:none; color:var(--muted); } .ib.ghost:hover { color:var(--ink); border-color:var(--line-strong); }
+.chip[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
+.seg { display:inline-flex; border:1px solid var(--line-strong); border-radius:4px; overflow:hidden; flex:0 0 auto; }
+.seg button { border:0; background:var(--surface); padding:0 10px; height:26px; font-size:12px; color:var(--muted); white-space:nowrap; }
+.seg button + button { border-left:1px solid var(--line-strong); }
+.seg button[aria-pressed="true"] { background:var(--raise); color:var(--ink); box-shadow:inset 0 -2px 0 var(--accent); }
+.seg button b { font:500 11px "JetBrains Mono",monospace; margin-left:4px; color:var(--muted); }
+.fbar { display:flex; flex-wrap:wrap; gap:6px; padding:6px 10px; border-bottom:1px solid var(--line); align-items:center; background:var(--bg); }
+.cond { display:inline-flex; align-items:center; height:28px; border:1px solid var(--line-strong); border-radius:4px; background:var(--surface); overflow:hidden; font-size:12px; }
+.cond > b { padding:0 6px 0 8px; font-weight:600; white-space:nowrap; }
+.cond select, .cond input { border:0; background:transparent; height:26px; font-size:12px; padding:0 3px; }
+.cond select { max-width:150px; }
+.cond input { width:58px; text-align:right; font-family:"JetBrains Mono",monospace; border-left:1px dotted var(--line-strong); }
+.cond input.wide { width:150px; text-align:left; font-family:inherit; }
+.cond input:focus-visible, .cond select:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
+.cond .u { color:var(--muted); padding:0 4px 0 1px; font-size:11px; }
+.cond .tally { font:11px "JetBrains Mono",monospace; color:var(--muted); padding:0 7px; border-left:1px solid var(--line); height:100%; display:flex; align-items:center; }
+.cond .x { border:0; border-left:1px solid var(--line); background:none; width:24px; height:100%; color:var(--muted); font-size:14px; }
+.cond .x:hover { color:var(--bear); background:var(--bear-soft); }
+.cond.bad { border-color:var(--bear); }
+.join { font:600 10px Inter,sans-serif; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; }
+.qrule { position:relative; flex:1 1 220px; min-width:200px; max-width:380px; }
+.qrule input { width:100%; }
+.qrule .hint { position:absolute; left:0; top:31px; z-index:25; background:var(--panel); border:1px solid var(--line-strong); border-radius:4px; padding:6px 9px; font-size:11.5px; color:var(--muted); width:max(100%, 340px); box-shadow:0 10px 26px rgba(0,0,0,.3); }
+.qrule .hint b { color:var(--ink); }
+.qrule .hint.err { color:var(--bear); }
+.rbar { display:flex; gap:12px; align-items:center; padding:4px 10px; border-bottom:1px solid var(--line); font-size:11.5px; color:var(--muted); white-space:nowrap; overflow-x:auto; scrollbar-width:none; }
+.rbar b { color:var(--ink); font-weight:600; }
+.rbar .stale { color:var(--unc); }
+.tbl-wrap { flex:1; overflow:auto; min-height:0; }
+table.st { width:100%; border-collapse:separate; border-spacing:0; font-size:12px; }
+.st th { position:sticky; top:0; z-index:2; background:var(--panel); font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:0; border-bottom:1px solid var(--line-strong); text-align:right; white-space:nowrap; }
+.st th button { all:unset; box-sizing:border-box; display:block; width:100%; padding:7px 8px; cursor:pointer; }
+.st th button:hover { color:var(--ink); }
+.st th button:focus-visible { outline:2px solid var(--focus); outline-offset:-2px; }
+.st th[aria-sort] button { color:var(--ink); }
+.st th[aria-sort="descending"] button::after { content:" ▼"; font-size:8px; color:var(--accent); }
+.st th[aria-sort="ascending"] button::after { content:" ▲"; font-size:8px; color:var(--accent); }
+.st th.fc button { box-shadow:inset 0 -2px 0 var(--unc); }
+.st td { height:var(--rowh); padding:0 8px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; font-family:"JetBrains Mono",monospace; font-size:12px; }
+.st .l { text-align:left; }
+.st td.l { font-family:Inter,sans-serif; }
+.st td.fc { background:color-mix(in srgb, var(--unc) 6%, transparent); }
+.st tbody tr { cursor:pointer; }
+.st tbody tr:hover td { background:var(--raise); }
+.st tbody tr.sel td { background:color-mix(in srgb, var(--accent) 13%, var(--panel)); }
+.st tbody tr.sel td:first-child { box-shadow:inset 2px 0 0 var(--accent); }
+.st tbody tr.nomatch td { opacity:.55; }
+.st td.sym { display:flex; align-items:center; gap:6px; }
+.st td.sym b { font-weight:600; font-size:12.5px; }
+.st td.sym small { color:var(--muted); font-size:11px; max-width:150px; overflow:hidden; text-overflow:ellipsis; }
+.st .px { border-radius:2px; padding:0 2px; }
+.lab { font:600 11px Inter,sans-serif; white-space:nowrap; }
+.lab.b { color:var(--bull); } .lab.r { color:var(--bear); } .lab.n { color:var(--neutral); } .lab.u { color:var(--unc); }
+.dots { display:inline-flex; gap:3px; vertical-align:middle; }
+.dots i { width:7px; height:7px; border-radius:50%; background:var(--line-strong); }
+.dots i.ok { background:var(--bull); } .dots i.no { background:color-mix(in srgb, var(--bear) 60%, transparent); }
+.star { border:0; background:none; padding:0; width:16px; height:16px; color:var(--line-strong); font-size:12px; line-height:16px; flex:0 0 auto; }
+.star:hover { color:var(--muted); } .star.on { color:var(--star); }
+.armb { font:700 9.5px Inter,sans-serif; border-radius:3px; padding:0 4px; margin-left:2px; border:1px solid currentColor; vertical-align:1px; white-space:nowrap; }
 .armb.a { color:#4C8DFF; } .armb.b { color:#B07CFF; }
+.fl-up { animation:flu .9s ease-out; } .fl-dn { animation:fld .9s ease-out; }
+@keyframes flu { from { background:var(--bull-soft); } to { background:transparent; } }
+@keyframes fld { from { background:var(--bear-soft); } to { background:transparent; } }
+.empty { text-align:center; color:var(--muted); padding:28px 10px; font-family:Inter,sans-serif; }
+.empty .btn { margin-top:8px; }
+.st td.empty { text-align:center; height:auto; padding:28px 10px; white-space:normal; font-family:Inter,sans-serif; }
+.pop { position:absolute; z-index:40; background:var(--panel); border:1px solid var(--line-strong); border-radius:4px; box-shadow:0 14px 36px rgba(0,0,0,.4); padding:8px; min-width:220px; font-size:12px; }
+.pop h4 { margin:2px 4px 6px; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+.pop label { display:flex; gap:8px; align-items:center; padding:4px; border-radius:3px; cursor:pointer; }
+.pop label:hover { background:var(--raise); }
+.pop .row { display:flex; gap:6px; margin-top:6px; }
+
+/* ---------- instrument panel (beside the table) */
+.panel { display:flex; flex-direction:column; min-width:0; min-height:0; background:var(--panel); overflow:hidden; }
+body[data-panel="closed"] .panel { visibility:hidden; }
+.phead { display:flex; align-items:center; gap:4px; padding:4px 6px 4px 12px; border-bottom:1px solid var(--line); font-size:11px; color:var(--muted); }
+.phead .grow { flex:1; }
+.phead .ib { height:24px; padding:0 7px; }
+.panel .chart-box { flex:0 0 230px; }
+body[data-panel="wide"] .panel .chart-box { flex:0 0 44%; }
+
+/* ---------- stock header */
+.sh { display:flex; gap:10px 14px; align-items:flex-start; padding:8px 12px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.sh h2 { margin:0; font-size:16px; font-weight:700; display:flex; gap:8px; align-items:center; }
+.sh h2 small { font-size:12px; font-weight:400; }
+.sh .sub { font-size:12px; color:var(--muted); margin-top:2px; }
+.sh .price { margin-left:auto; text-align:right; }
+.sh .big { font:600 19px/1.1 "JetBrains Mono",monospace; }
+.sh .chg { font:500 13px "JetBrains Mono",monospace; margin-left:8px; }
+.sh .tick { font-size:11px; color:var(--muted); margin-top:3px; }
+.sh .acts { display:flex; gap:6px; align-items:center; flex-wrap:wrap; width:100%; }
 .pill { display:inline-block; border-radius:999px; padding:1px 8px; font-size:11px; font-weight:600; line-height:1.7; white-space:nowrap; }
 .pill.b { background:var(--bull-soft); color:var(--bull); } .pill.r { background:var(--bear-soft); color:var(--bear); }
 .pill.n { background:var(--neutral-soft); color:var(--neutral); } .pill.u { background:var(--unc-soft); color:var(--unc); }
@@ -129,14 +207,10 @@ body[data-board] .center, body[data-board] .side { display:none; }
 .strip .atp b { color:var(--atp); }
 
 /* ---------- chart */
-.ctb { display:flex; gap:6px; align-items:center; padding:6px 12px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
-.ctb select { height:28px; border-radius:6px; border:1px solid var(--line-strong); background:var(--surface); padding:0 6px; font-size:12px; max-width:190px; }
-.seg { display:inline-flex; border:1px solid var(--line-strong); border-radius:6px; overflow:hidden; }
-.seg button { border:0; background:var(--surface); padding:4px 10px; font-size:12px; }
-.seg button + button { border-left:1px solid var(--line-strong); }
-.seg button[aria-pressed="true"] { background:var(--accent); color:var(--accent-ink); }
+.ctb { display:flex; gap:6px; align-items:center; padding:4px 10px; border-bottom:1px solid var(--line); flex-wrap:wrap; }
+.ctb select { height:26px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); padding:0 6px; font-size:12px; max-width:190px; }
 .cstat { font-size:11px; color:var(--muted); margin-left:auto; }
-.chart-box { position:relative; flex:1; min-height:280px; }
+.chart-box { position:relative; flex:1; min-height:160px; }
 #chart { position:absolute; inset:0; }
 .legend { position:absolute; left:10px; top:6px; z-index:3; font:11px "JetBrains Mono",monospace; color:var(--muted); pointer-events:none; display:flex; gap:10px; flex-wrap:wrap; }
 .legend b { color:var(--ink); font-weight:500; }
@@ -147,12 +221,12 @@ body[data-board] .center, body[data-board] .side { display:none; }
 /* ---------- side tabs */
 .tabs { display:flex; border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; }
 .tabs::-webkit-scrollbar { display:none; }
-.tab { flex:1 0 auto; border:0; background:none; padding:10px 12px; font-size:12px; font-weight:600; color:var(--muted); border-bottom:2px solid transparent; }
+.tab { flex:1 0 auto; border:0; background:none; padding:8px 10px; font-size:12px; font-weight:600; color:var(--muted); border-bottom:2px solid transparent; }
 .tab[aria-selected="true"] { color:var(--ink); border-bottom-color:var(--accent); }
-.tbody { overflow-y:auto; flex:1; padding:12px 14px 20px; }
+.tbody { overflow-y:auto; flex:1; min-height:0; padding:10px 12px 20px; }
 .tbody h3 { font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); margin:16px 0 8px; font-weight:600; }
 .tbody h3:first-child { margin-top:0; }
-.kvg { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.kvg { display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden; }
 .kvg div { background:var(--surface); padding:6px 9px; }
 .kvg small { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.04em; }
 .kvg b { font:500 13px "JetBrains Mono",monospace; }
@@ -200,7 +274,7 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .chgc.up { background:var(--bull-soft); } .chgc.down { background:var(--bear-soft); }
 
 /* verdict card, commentary (kept from the EOD page) */
-.verdictcard { border:1px solid var(--line); border-radius:10px; padding:10px 12px; background:var(--surface); }
+.verdictcard { border:1px solid var(--line); border-radius:4px; padding:10px 12px; background:var(--surface); }
 .verdictcard h3 { margin-top:0 !important; }
 .verdictcard .vhead { margin:0 0 8px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 .vrows > div { display:flex; gap:8px; padding:3px 0; font-size:12px; }
@@ -218,11 +292,8 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .yours { font-size:12px; color:var(--muted); } .yours b { color:var(--ink); }
 
 /* boards: movers, heatmap, scoreboard */
-.bh { display:flex; align-items:center; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
-.bh h2 { margin:0; font-size:17px; }
-.bh .x { margin-left:auto; }
 .mv { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:12px; }
-.card { background:var(--surface); border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+.card { background:var(--panel); border:1px solid var(--line); border-radius:4px; overflow:hidden; }
 .card h4 { margin:0; padding:9px 12px; font-size:12px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; }
 .card h4 small { font-weight:400; }
 .mt { width:100%; border-collapse:collapse; font:12px "JetBrains Mono",monospace; }
@@ -238,7 +309,7 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .hm-t:hover { outline:2px solid var(--accent); }
 .legendbar { display:flex; align-items:center; gap:6px; font-size:11px; color:var(--muted); }
 .legendbar i { width:120px; height:8px; border-radius:4px; background:linear-gradient(90deg,var(--bear),var(--surface),var(--bull)); border:1px solid var(--line); }
-.scoreboard { background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:12px 14px; font-size:13px; }
+.scoreboard { background:var(--panel); border:1px solid var(--line); border-radius:4px; padding:12px 14px; font-size:13px; }
 .scoreboard h2 { font-size:15px; margin:0 0 6px; }
 .scoreboard table { width:100%; border-collapse:collapse; font-size:12px; margin-top:8px; }
 .scoreboard th, .scoreboard td { padding:5px 4px; border-bottom:1px solid var(--line); text-align:left; white-space:nowrap; }
@@ -248,13 +319,14 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .count { font-size:12px; color:var(--muted); margin:6px 0; }
 
 /* sheets (orders, alerts) */
-.btn { border:1px solid var(--line-strong); background:var(--surface); border-radius:8px; padding:7px 12px; font-size:13px; min-height:34px; }
+.btn { border:1px solid var(--line-strong); background:var(--surface); border-radius:4px; padding:5px 12px; font-size:12.5px; min-height:30px; }
+.btn:hover { border-color:var(--muted); }
 .btn.primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
 .btn.danger { background:var(--bear); color:#fff; border-color:var(--bear); }
 .btn[disabled] { opacity:.5; cursor:default; }
 .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 .sheet-bg { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:30; display:flex; align-items:center; justify-content:center; padding:12px; }
-.sheet { background:var(--panel); color:var(--ink); width:100%; max-width:560px; border:1px solid var(--line-strong); border-radius:12px; padding:16px; max-height:calc(100dvh - 24px); overflow:auto; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.sheet { background:var(--panel); color:var(--ink); width:100%; max-width:560px; border:1px solid var(--line-strong); border-radius:6px; padding:16px; max-height:calc(100dvh - 24px); overflow:auto; box-shadow:0 20px 60px rgba(0,0,0,.4); }
 .sheet h2 { font-size:16px; margin:0 0 4px; }
 .sheet .sub { color:var(--muted); font-size:12px; margin:0 0 10px; }
 .field { margin:10px 0; }
@@ -290,109 +362,208 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .toast { background:var(--surface); border:1px solid var(--line-strong); border-left:3px solid var(--accent); border-radius:8px; padding:10px 12px; font-size:12px; max-width:320px; box-shadow:0 8px 24px rgba(0,0,0,.35); }
 .toast.up { border-left-color:var(--bull); } .toast.down { border-left-color:var(--bear); }
 
-/* permanent disclaimer */
-.disclaimer { position:fixed; left:0; right:0; bottom:0; z-index:20; background:var(--panel); border-top:2px solid var(--bear); padding:6px 14px calc(6px + env(safe-area-inset-bottom,0px)); font-size:11px; line-height:1.4; color:var(--ink); }
-.disclaimer b { color:var(--bear); }
-.mnav { display:none; }
+/* ---------- explainable scanner (Why tab) */
+.whyhead { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin:0 0 8px; font-size:12px; }
+.verdict-ok, .verdict-no { display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:12.5px; border-radius:3px; padding:2px 8px; }
+.verdict-ok { background:var(--bull-soft); color:var(--bull); } .verdict-no { background:var(--neutral-soft); color:var(--ink); }
+.whysum { font-size:12.5px; line-height:1.55; margin:0 0 10px; }
+table.ct { width:100%; border-collapse:collapse; font-size:12px; }
+.ct th { font:600 10px Inter,sans-serif; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); text-align:right; padding:5px 6px; border-bottom:1px solid var(--line-strong); white-space:nowrap; }
+.ct td { padding:6px; border-bottom:1px solid var(--line); text-align:right; vertical-align:top; font-family:"JetBrains Mono",monospace; white-space:nowrap; }
+.ct .l { text-align:left; font-family:Inter,sans-serif; white-space:normal; }
+.ct td small { display:block; color:var(--muted); font:10.5px Inter,sans-serif; margin-top:1px; }
+.ct td b { font-weight:600; }
+.ct .res { font:700 11px Inter,sans-serif; }
+.ct .res.ok { color:var(--bull); } .ct .res.no { color:var(--bear); } .ct .res.na { color:var(--unc); }
+.gauge { position:relative; height:4px; background:var(--raise); border-radius:2px; margin-top:5px; min-width:90px; }
+.gauge i { position:absolute; top:0; bottom:0; left:0; border-radius:2px; background:var(--muted); }
+.gauge i.ok { background:var(--bull); } .gauge i.no { background:var(--bear); }
+.gauge b { position:absolute; top:-3px; width:2px; height:10px; background:var(--ink); }
+.src { font-size:11px; color:var(--muted); margin:4px 0 0; line-height:1.5; }
+.src b { color:var(--ink); font-weight:600; }
+.fresh { display:inline-flex; align-items:center; gap:6px; font-size:11.5px; }
+.fresh.stale { color:var(--unc); }
 
-@media (max-width:1399px) { .term { grid-template-columns:260px minmax(0,1fr) 350px; } }
-/* ---------- phone / tablet: one column, bottom navigation */
+/* ---------- options chain view */
+.ocsum { display:flex; border-bottom:1px solid var(--line); overflow-x:auto; scrollbar-width:none; flex:0 0 auto; }
+.ocsum div { padding:6px 14px; border-right:1px solid var(--line); white-space:nowrap; }
+.ocsum small { display:block; font-size:10px; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); }
+.ocsum b { font:500 13px "JetBrains Mono",monospace; }
+table.oc2 { width:100%; border-collapse:separate; border-spacing:0; font:12px "JetBrains Mono",monospace; }
+.oc2 thead th { position:sticky; top:0; z-index:2; background:var(--panel); font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.03em; color:var(--muted); padding:6px 8px; border-bottom:1px solid var(--line-strong); text-align:right; white-space:nowrap; }
+.oc2 thead tr.side th { top:0; text-align:center; font-size:11px; color:var(--ink); border-bottom:1px solid var(--line); }
+.oc2 thead tr.side + tr th { top:27px; }
+.oc2 td { height:var(--rowh); padding:0 8px; border-bottom:1px solid var(--line); text-align:right; white-space:nowrap; position:relative; }
+.oc2 td.k { text-align:center; background:var(--raise); font-weight:600; color:var(--ink); border-left:1px solid var(--line-strong); border-right:1px solid var(--line-strong); }
+.oc2 td.k small { display:block; font-weight:400; font-size:10px; color:var(--muted); line-height:1; }
+.oc2 tr.atm td { border-top:1px solid var(--accent); border-bottom:1px solid var(--accent); }
+.oc2 tr.atm td.k { color:var(--accent); }
+.oc2 td.itm { background:color-mix(in srgb, var(--unc) 7%, transparent); }
+.oc2 td.bar-c { background:linear-gradient(270deg, color-mix(in srgb, var(--c, var(--bear)) 26%, transparent) var(--w), transparent var(--w)); }
+.oc2 td.bar-p { background:linear-gradient(90deg, color-mix(in srgb, var(--c, var(--bull)) 26%, transparent) var(--w), transparent var(--w)); }
+.oc2 td.neg { --c:var(--neutral); }
+@media (min-width:1100px) { #backBtn { display:none; } }
+@media (max-width:1099px) { #expandBtn { display:none; } }
+.oc2 td.hi { color:var(--unc); font-weight:600; }
+.oc2 .lp { cursor:pointer; text-decoration:underline dotted; text-underline-offset:3px; }
+.oc2 .lp:hover { color:var(--accent); }
+.oc2 td.ok-k { cursor:pointer; } .oc2 td.ok-k:hover { color:var(--accent); }
+.oc2 tbody tr:hover td:not(.k) { box-shadow:inset 0 0 0 999px color-mix(in srgb, var(--ink) 4%, transparent); }
+.ocfoot { padding:6px 12px 10px; font-size:11.5px; color:var(--muted); line-height:1.55; border-top:1px solid var(--line); }
+.ocfoot b { color:var(--ink); font-weight:600; }
+
+/* ---------- full-page views (analytics, saved scans, alerts, settings, scoreboard) */
+.page { overflow:auto; padding:12px 16px 24px; background:var(--bg); height:100%; }
+.ph { display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin:0 0 10px; }
+.ph h1 { margin:0; font-size:15px; font-weight:700; }
+.ph .x { margin-left:auto; }
+.tbox { background:var(--panel); border:1px solid var(--line); border-radius:4px; overflow:hidden; margin-bottom:12px; }
+.tbox > h3 { margin:0; padding:8px 12px; font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); border-bottom:1px solid var(--line); font-weight:600; display:flex; gap:8px; align-items:center; }
+.tbox > h3 .x { margin-left:auto; }
+.tbox .in { padding:10px 12px; }
+table.lt { width:100%; border-collapse:collapse; font-size:12px; }
+.lt th { font:600 10px Inter,sans-serif; text-transform:uppercase; letter-spacing:.04em; color:var(--muted); text-align:left; padding:6px 12px; border-bottom:1px solid var(--line); }
+.lt td { padding:6px 12px; border-bottom:1px solid var(--line); vertical-align:middle; }
+.lt tr:last-child td { border-bottom:0; }
+.lt .mono { font-size:11.5px; }
+.lt .acts { display:flex; gap:4px; justify-content:flex-end; }
+.lt input.inp { width:100%; max-width:260px; }
+.setg { display:grid; grid-template-columns:200px minmax(0,1fr); gap:10px 16px; align-items:center; font-size:12.5px; }
+.setg > span { color:var(--muted); }
+.setg p { margin:0; }
+.toggle { display:inline-flex; gap:8px; align-items:center; cursor:pointer; }
+kbd.k { font:11px "JetBrains Mono",monospace; border:1px solid var(--line-strong); border-bottom-width:2px; border-radius:3px; padding:0 5px; background:var(--surface); }
+
+/* permanent disclaimer */
+.disclaimer { flex:0 0 auto; z-index:20; background:var(--panel); border-top:2px solid var(--bear); padding:5px 14px calc(5px + env(safe-area-inset-bottom,0px)); font-size:11px; line-height:1.4; color:var(--ink); }
+.disclaimer b { color:var(--bear); }
+
+@media (max-width:1399px) { :root { --pw:380px; } .st td.sym small { display:none; } }
+/* ---------- phone / tablet: one column, the rail becomes a bottom bar, the panel a full screen */
 @media (max-width:1099px) {
-  :root { --nav:56px; }
-  html, body { overflow-x:hidden; }
-  body { overflow-y:auto; }
-  .top { position:sticky; top:0; gap:8px; padding:0 10px; }
-  .brand span, .mkt .lbl, .tbtns .wide, .pbar, .tsearch kbd { display:none; }
-  #ordersBtn, #themeBtn, #alertsBtn { display:none !important; }   /* in the More menu */
+  :root { --nav:54px; --rail:0px; }
+  .brand { display:none; }
+  .top { gap:8px; padding:0 8px; }
+  .bname { font-size:13px; }
+  .mkt .lbl, .tbtns .wide, .pbar, .tsearch kbd, .dsrc .lbl { display:none; }
+  #themeBtn { display:none !important; }
   .tsearch { max-width:none; min-width:0; }
-  .tsearch input { padding-right:10px; }
-  .wl-ctl select { min-width:0; }
-  .sh .acts { gap:5px; }
-  .term { display:block; height:auto; padding-bottom:calc(var(--disc) + var(--nav) + 8px); }
-  .wl { border:0; }
-  .wl-list { overflow:visible; }
-  body[data-mview="list"] .center, body[data-mview="list"] .side, body[data-mview="list"] .board { display:none !important; }
-  body:not([data-mview="list"]) .wl { display:none; }
-  .center, .side { border:0; }
-  .chart-box { flex:none; height:340px; }
-  .side { border-top:1px solid var(--line); }
-  .tabs { position:sticky; top:var(--top); background:var(--panel); z-index:4; }
-  .tbody { overflow:visible; }
-  body[data-board] .board { display:block; }
-  .mnav { display:flex; position:fixed; left:0; right:0; bottom:var(--disc); height:var(--nav); background:var(--panel); border-top:1px solid var(--line); z-index:19; }
-  .mnav button { flex:1; border:0; background:none; font-size:11px; color:var(--muted); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; }
-  .mnav button[aria-current="true"] { color:var(--accent); }
-  .mnav svg { width:20px; height:20px; }
+  .notice { margin:6px 8px 0; }
+  body { padding-bottom:var(--nav); }
+  .app { display:block; }
+  .views { height:100%; }
+  .rail { position:fixed; left:0; right:0; bottom:0; height:calc(var(--nav) + env(safe-area-inset-bottom,0px)); flex-direction:row; padding:0 0 env(safe-area-inset-bottom,0px); border:0; border-top:1px solid var(--line); z-index:19; overflow-x:auto; }
+  .rail a, .rail button { flex:1 0 64px; justify-content:center; padding:4px 2px; }
+  .rail .sep { display:none; } .rail .end { margin-top:0; }
+  .rail [aria-current="page"]::before { left:10px; right:10px; top:0; bottom:auto; width:auto; height:2px; }
+  #v-scanner.on, body[data-panel] #v-scanner.on { display:flex; flex-direction:column; }
+  .work { flex:1; border:0; }
+  .panel { position:fixed; left:0; right:0; top:var(--top); bottom:calc(var(--nav) + var(--disc)); z-index:15; overflow-y:auto; border-top:1px solid var(--line); }
+  body[data-panel="closed"] .panel, body:not([data-pnl-open]) .panel { display:none; }
+  .panel .chart-box, body[data-panel="wide"] .panel .chart-box { flex:0 0 300px; }
+  .panel .tbody { overflow:visible; flex:none; }
+  .inp.sym { width:110px; }
+  .st td.sym small, .sbar > .lbl-s { display:none; }
+  .setg { grid-template-columns:1fr; gap:4px 0; }
+  .setg > span { margin-top:8px; }
   .sh .price { margin-left:0; text-align:left; width:100%; }
+  .toasts { bottom:calc(var(--nav) + 12px) !important; }
 }
 @media (prefers-reduced-motion: reduce) { .fl-up, .fl-dn { animation:none; } }
 </style>
 </head>
-<body data-mview="list">
+<body data-panel="open">
 <header class="top">
-  <a class="brand" id="homeLink" href="/" style="text-decoration:none;color:inherit" title="Live results">F&amp;O <i>Terminal</i></a>
+  <a class="brand" id="brandMark" href="/" title="Dashboard: paper account and forward test" aria-label="Dashboard"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l5-5 4 3 8-9"/><path d="M3 21h18"/></svg></a>
+  <a class="bname" id="homeLink" href="/" title="Dashboard: paper account and forward test">F&amp;O <i>Terminal</i></a>
   <div class="mkt"><span class="dot" id="livedot"></span><span class="lbl" id="mktlbl">—</span><span class="clock" id="clock"></span></div>
-  <div class="tsearch"><input id="q" type="search" autocomplete="off" placeholder="Search symbol or company" aria-label="Search symbol or company"><kbd>/</kbd></div>
+  <span class="dsrc" id="dsrc" title=""></span>
+  <div class="tsearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+    <input id="q" type="search" autocomplete="off" placeholder="Search symbol or company" aria-label="Search symbol or company" aria-controls="sugg" aria-expanded="false" role="combobox"><kbd>/</kbd>
+    <div class="sugg" id="sugg" role="listbox" hidden></div></div>
   <div class="tbtns">
-    <button class="tb wide" type="button" id="moversBtn" aria-pressed="false">Movers</button>
-    <button class="tb wide" type="button" id="heatBtn" aria-pressed="false">Heatmap</button>
-    <button class="tb wide" type="button" id="scoreToggle" aria-pressed="false">Scoreboard</button>
-    <button class="tb wide" type="button" id="armABtn" aria-pressed="false" title="Forward paper test · arm A: every results beat">Arm A</button>
-    <button class="tb wide" type="button" id="armBBtn" aria-pressed="false" title="Forward paper test · arm B: results beats in a strong sector">Arm B</button>
-    <button class="tb" type="button" id="alertsBtn" title="Price alerts" aria-label="Price alerts">🔔<span class="n" id="alertN" hidden></span></button>
-    <button class="tb" type="button" id="ordersBtn" hidden>Orders</button>
+    <div class="pbar paperbar" id="paperbar" hidden></div>
+    <button class="tb wide" type="button" id="ordersBtn" hidden>Results</button>
     <button class="tb" type="button" id="themeBtn" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
   </div>
-  <div class="pbar paperbar" id="paperbar" hidden></div>
 </header>
 <div id="livebar" hidden><span id="livetext"></span></div>
 <div id="notice" class="notice" hidden></div>
 <div id="ddnotice" class="notice" hidden></div>
 
-<main class="term">
-  <aside class="wl" aria-label="Watchlist">
-    <div class="wl-h">
-      <div class="wl-tabs" id="segs" role="group" aria-label="Filter"></div>
-      <div class="wl-ctl">
-        <select id="sortSel" aria-label="Sort by"></select>
-        <button class="chip" type="button" id="sortDirBtn" aria-label="Sort direction">↓</button>
-        <button class="chip" type="button" id="callToggle" aria-pressed="false" title="Hide labels until you make your own call">Call mode</button>
+<main class="app">
+  <nav class="rail" id="rail" aria-label="Sections">
+    <a href="/" id="navHome" title="Dashboard: paper account, forward test, S1 fade"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>Dashboard</a>
+    <button type="button" data-view="scanner" title="F&amp;O scanner (S)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 5h18l-7 8v6l-4 2v-8z"/></svg>Scanner</button>
+    <button type="button" data-view="watchlist" title="Your watchlist (W)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>Watchlist</button>
+    <button type="button" data-view="options" title="Options chain (O)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h18v16H3zM12 4v16M3 9h18M3 14h18"/></svg>Options</button>
+    <button type="button" data-view="analytics" title="Market analytics: movers, build-ups, heatmap (M)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Analytics</button>
+    <button type="button" data-view="saved" title="Saved scans"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3h12v18l-6-4-6 4z"/></svg>Saved</button>
+    <button type="button" data-view="alerts" title="Price and scan alerts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 16V11a6 6 0 0112 0v5l2 2H4zM10 21h4"/></svg>Alerts<span class="n" id="alertN" hidden></span></button>
+    <button type="button" data-view="score" title="Your calls vs the system"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></svg>Scoreboard</button>
+    <span class="sep"></span>
+    <a href="/s2" id="navS2" title="S2: short build-ups and research"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7l6 6 4-4 8 8M15 17h6v-6"/></svg>S2</a>
+    <button type="button" class="end" data-view="settings" title="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg>Settings</button>
+  </nav>
+
+  <div class="views">
+    <section class="view" id="v-scanner" aria-label="Scanner">
+      <div class="work">
+        <div class="sbar">
+          <label class="lbl-s" for="presetSel">Scan</label>
+          <select class="sel" id="presetSel" aria-label="Scanner preset or saved scan"></select>
+          <span class="seg" id="uniSeg" role="group" aria-label="Universe"></span>
+          <input class="inp sym" id="symFilter" type="search" autocomplete="off" placeholder="Filter symbols" aria-label="Filter the table by symbol or company">
+          <span class="grow"></span>
+          <button class="ib" type="button" id="saveScanBtn" title="Save these conditions, sort and columns as a named scan">Save scan</button>
+          <button class="ib" type="button" id="colsBtn" aria-haspopup="true" aria-expanded="false" title="Choose the table's columns">Columns</button>
+          <button class="ib" type="button" id="callToggle" aria-pressed="false" title="Hide labels until you make your own call on each stock">Call mode</button>
+        </div>
+        <div class="fbar" id="fbar" aria-label="Filter conditions"></div>
+        <div class="rbar" id="rbar" aria-live="polite"></div>
+        <div class="tbl-wrap" id="tblWrap"><table class="st" id="tbl" aria-label="Scan results"><thead id="thead"></thead><tbody id="rows"></tbody></table></div>
       </div>
-      <p class="count" id="callHint" style="margin:4px 0 0" hidden></p>
-    </div>
-    <div class="wl-list" id="list" role="listbox" aria-label="Stocks"></div>
-    <div class="wl-foot" id="count"></div>
-  </aside>
+      <aside class="panel" id="panel" aria-label="Instrument analysis">
+        <div class="phead"><button class="ib ghost" type="button" id="backBtn" title="Back to the results (Esc)">← Results</button><span class="grow"></span>
+          <button class="ib ghost" type="button" id="expandBtn" aria-pressed="false" title="Widen the panel (E)">⇔ Widen</button>
+          <button class="ib ghost" type="button" id="closePanel" title="Close the panel (Esc)" aria-label="Close the panel">✕</button></div>
+        <div id="sh"></div>
+        <div class="ctb" id="ctb">
+          <select id="legSel" aria-label="Instrument to chart"></select>
+          <span class="seg" id="tfSeg" role="group" aria-label="Timeframe"></span>
+          <span class="cstat" id="cstat"></span>
+        </div>
+        <div class="chart-box"><div id="chart"></div><div class="legend" id="legend"></div><div class="cmsg" id="cmsg" hidden></div></div>
+        <div class="strip" id="strip"></div>
+        <div class="tabs" id="tabs" role="tablist"></div>
+        <div class="tbody" id="tbody" role="tabpanel"></div>
+      </aside>
+    </section>
 
-  <section class="center" aria-label="Chart">
-    <div id="sh"></div>
-    <div class="ctb" id="ctb">
-      <select id="legSel" aria-label="Instrument to chart"></select>
-      <span class="seg" id="tfSeg" role="group" aria-label="Timeframe"></span>
-      <span class="cstat" id="cstat"></span>
-    </div>
-    <div class="chart-box"><div id="chart"></div><div class="legend" id="legend"></div><div class="cmsg" id="cmsg" hidden></div></div>
-    <div class="strip" id="strip"></div>
-  </section>
+    <section class="view" id="v-options" aria-label="Options chain">
+      <div class="sbar">
+        <label class="lbl-s" for="ocSym">Underlying</label><select class="sel" id="ocSym"></select>
+        <label class="lbl-s" for="ocExp">Expiry</label><select class="sel" id="ocExp"></select>
+        <span class="lbl-s">Strikes</span><span class="seg" id="ocWin" role="group" aria-label="Strikes shown"></span>
+        <span class="lbl-s">Shade</span><span class="seg" id="ocHeat" role="group" aria-label="Shade strikes by"></span>
+        <button class="ib" type="button" id="ocAtm" title="Scroll to the at-the-money strike">Centre on ATM</button>
+        <span class="grow"></span>
+        <button class="ib" type="button" id="ocOpen">Open in scanner</button>
+      </div>
+      <div class="ocsum" id="ocSum"></div>
+      <div class="tbl-wrap" id="ocWrap"></div>
+      <div class="ocfoot" id="ocFoot"></div>
+    </section>
 
-  <section class="side" aria-label="Details">
-    <div class="tabs" id="tabs" role="tablist"></div>
-    <div class="tbody" id="tbody" role="tabpanel"></div>
-  </section>
-
-  <section class="board" id="board" aria-live="polite"><section class="scoreboard" id="scoreboard" hidden aria-label="Your calls versus the system"></section><div id="boardBody"></div></section>
+    <section class="view" id="v-analytics" aria-label="Market analytics"><div class="page" id="anBody" aria-live="polite"></div></section>
+    <section class="view" id="v-saved" aria-label="Saved scans"><div class="page" id="savedBody"></div></section>
+    <section class="view" id="v-alerts" aria-label="Alerts"><div class="page" id="alertsBody"></div></section>
+    <section class="view" id="v-score" aria-label="Scoreboard"><div class="page"><section class="scoreboard" id="scoreboard" aria-label="Your calls versus the system"></section></div></section>
+    <section class="view" id="v-settings" aria-label="Settings"><div class="page" id="settingsBody"></div></section>
+  </div>
 </main>
-
-<nav class="mnav" id="mnav" aria-label="Sections">
-  <button type="button" data-nav="list"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>Watchlist</button>
-  <button type="button" data-nav="stock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19V5M9 17V9M14 19v-7M19 15V7"/></svg>Chart</button>
-  <button type="button" data-nav="movers"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg>Movers</button>
-  <button type="button" data-nav="heatmap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="5"/><rect x="13" y="10" width="8" height="11"/><rect x="3" y="13" width="8" height="8"/></svg>Heatmap</button>
-  <button type="button" data-nav="more"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="12" r="1.5"/><circle cx="12" cy="12" r="1.5"/><circle cx="19" cy="12" r="1.5"/></svg>More</button>
-</nav>
 <div class="toasts" id="toasts" aria-live="polite"></div>
 <footer class="disclaimer" id="discbar" role="note"><div id="disc"></div></footer>
-
 <script id="scoring">
 // Honest scoring rules as pure functions, used by the scoreboard below and by tests/test_step8_scoreboard.py (node).
 //  - move: the stock's return over h sessions minus the index's over the same sessions (market-adjusted)
@@ -507,9 +678,11 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   }
 
   // ---- state
-  let filter = "all", sortKey = store.get("fos_sort", "pct"), sortDir = store.get("fos_sortdir", -1), query = "";
   let sel = BY[store.get("fos_sel", "")] ? store.get("fos_sel", "") : (stocks[0] || {}).symbol;
-  let tab = store.get("fos_tab", "overview"), board = null;
+  let tab = store.get("fos_tab2", "why"), curView = store.get("fos_view", "scanner"), anTab = store.get("fos_antab", "movers");
+  const prefs = Object.assign({ density: "compact", panel: "open", sound: true }, store.get("fos_prefs_v1", {}));
+  const applyPrefs = () => { document.documentElement.style.setProperty("--rowh", prefs.density === "comfortable" ? "34px" : "28px"); };
+  applyPrefs(); document.body.dataset.panel = prefs.panel === "wide" ? "wide" : "open";
   let tf = store.get("fos_tf", SERVER.live ? "5" : "D"), leg = "stock";
   let pins = new Set(store.get("fos_pins_v1", []));
   let alerts = store.get("fos_alerts_v1", []).filter(a => a.leg !== "fut");      // options-only site: stock alerts
@@ -535,6 +708,12 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     const open = SERVER.live ? !!LIVE.market_open : marketOpenGuess();
     $("#mktlbl").textContent = SERVER.live ? (LIVE.error ? "Feed error" : open ? "Market open" : "Market closed") : "EOD · " + meta.as_of_label;
     $("#livedot").className = "dot" + (SERVER.live && LIVE.error ? " err" : SERVER.live && open && LIVE.updated_at ? " on" : "");
+    // data source: live feed (and whether its polls are current) or the nightly closing scan (and how old it is)
+    if (typeof freshness !== "function" || !$("#dsrc")) return;
+    const f = freshness(), err = SERVER.live && LIVE.error, d = $("#dsrc");
+    d.className = "dsrc" + (err ? " err" : f.stale ? " stale" : f.live ? " live" : "");
+    d.innerHTML = `<span class="lbl">Data</span> <b>${err ? "Feed error" : f.live ? (f.stale ? "Live · stale" : f.open ? "Live" : "Last poll") : f.stale ? "EOD · stale" : "EOD"}</b>${f.live ? ` <span class="lbl">${esc(SERVER.live_source || "")} ${esc(LIVE.updated_at || "")}</span>` : ` <span class="lbl">${esc(meta.as_of)}</span>`}`;
+    d.title = (err ? "Live feed error: " + LIVE.error + ". " : "") + f.text + (f.why ? " · " + f.why : "") + (SERVER.live && !f.live ? " · live quotes from 09:15 IST" : "");
   }
   tickClock(); setInterval(tickClock, 1000);
 
@@ -601,7 +780,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const m = moveOf(c, h), y = yours.get(c), s = sys.get(c);
       return `<tr><td>${esc(c.symbol)}</td><td>${esc(c.as_of.slice(5))}</td><td class="${cls(y)}">${esc(c.call)}</td><td class="${cls(s)}">${esc(c.system || "—")}</td><td>${m == null ? "pending" : (m > 0 ? "+" : "") + m + "%"}</td><td>${esc(STATUS[y.status])}</td></tr>`;
     }).join("");
-    el.innerHTML = `<div class="bh"><h2>Your calls vs the system</h2><button class="btn x" type="button" data-closeboard>Close</button></div>
+    el.innerHTML = `<div class="ph"><h1>Scoreboard: your calls vs the system</h1></div>
       <p class="count" style="margin:0">Scored on the ${IDX ? "market-adjusted" : "raw"} move ${h} session${h === 1 ? "" : "s"} later: the stock's return ${IDX ? "minus " + esc(IDX.name) + "'s over the same sessions" : "(this build has no index, so moves are not market-adjusted)"}. A bullish or bearish call is a hit when the move goes its way by more than ±${th}%. Smaller moves and neutral calls are shown but not scored, and only the first call on a stock in any 3 sessions counts. The system's label and the baseline are scored by the same rules.${storageOk ? "" : " Storage is unavailable in this browser, so calls last only for this visit."}</p>
       <div style="overflow-x:auto"><table><thead><tr><th></th><th>Scored</th><th>Hits</th><th>Accuracy</th><th>Needed</th><th>Beats a coin</th></tr></thead><tbody>
         ${line("You", st.you)}${line("System labels", st.sys)}${line(`09:30 live labels (${st.snapDays} opening snapshot${st.snapDays === 1 ? "" : "s"})`, st.snap)}${line("Baseline: always bullish on the top-10 volume-ratio stocks", st.base)}</tbody></table></div>
@@ -612,13 +791,12 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
         <label>Threshold <select id="th">${[0.5,1,2].map(v => `<option value="${v}" ${v === th ? "selected" : ""}>±${v}%</option>`).join("")}</select></label>
         <button class="chip" type="button" id="exportCalls">Export</button><label class="chip" style="cursor:pointer">Import<input type="file" id="importCalls" accept="application/json" hidden></label>
         <button class="chip" type="button" id="clearCalls">Clear all</button></div>
-      ${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>Stock</th><th>Date</th><th>You</th><th>System</th><th>Move</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p class=\"count\">No calls yet. Turn on Call mode in the watchlist, judge a stock from its numbers, then tap Bull, Bear or Neutral above its chart.</p>"}`;
+      ${rows ? `<div style="overflow-x:auto"><table><thead><tr><th>Stock</th><th>Date</th><th>You</th><th>System</th><th>Move</th><th>Status</th></tr></thead><tbody>${rows}</tbody></table></div>` : "<p class=\"count\">No calls yet. Turn on Call mode in the scanner toolbar, judge a stock from its numbers, then tap Bull, Bear or Neutral in its panel header.</p>"}`;
     $("#hz").addEventListener("change", e => { scoreCfg.horizon = +e.target.value; saveCalls(); renderScoreboard(); });
     $("#th").addEventListener("change", e => { scoreCfg.threshold = +e.target.value; saveCalls(); renderScoreboard(); });
     $("#exportCalls").addEventListener("click", () => { const a = document.createElement("a"); a.href = "data:application/json," + encodeURIComponent(JSON.stringify({ calls, scoreCfg }, null, 1)); a.download = "fo-scanner-calls.json"; a.click(); });
     $("#importCalls").addEventListener("change", async e => { try { const j = JSON.parse(await e.target.files[0].text()); const inc = j.calls || j; const have = new Set(calls.map(c => c.symbol + c.as_of)); for (const c of inc) if (!have.has(c.symbol + c.as_of)) calls.push(c); saveCalls(); renderScoreboard(); render(); } catch (err) { alert("Could not read that file"); } });
     $("#clearCalls").addEventListener("click", () => { if (confirm("Delete all recorded calls?")) { calls = []; saveCalls(); renderScoreboard(); render(); } });
-    $("[data-closeboard]", el).addEventListener("click", () => setBoard(null));
     if (SERVER.orders && SERVER.paper) renderPaperScore();
   }
   // second score, from the paper ledger: what the trades made after real fills and charges (one group)
@@ -634,53 +812,8 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
         <tbody>${row("All paper trades", S.all)}</tbody></table></div>`;
     } catch (e) { box.innerHTML = ""; }
   }
-  $("#callToggle").addEventListener("click", e => {
-    callMode = !callMode; e.currentTarget.setAttribute("aria-pressed", callMode);
-    const h = $("#callHint"); h.hidden = !callMode; h.textContent = "Labels hidden until you call each stock (buttons above the chart)."; render();
-  });
-  $("#scoreToggle").addEventListener("click", () => setBoard(board === "score" ? null : "score"));
   scoreCalls();
 
-  // ---- watchlist
-  const segDefs = [["all", "All", stocks.length], ["pinned", "★", null], ["Bullish setup", "Bull", sum.bullish], ["Bearish setup", "Bear", sum.bearish], ["Neutral", "Neutral", sum.neutral]];
-  if (sum.unclassified) segDefs.push(["Unclassified", "Unclassified", sum.unclassified]);
-  const SORTS = [["pct", "% change"], ["value", "Traded value"], ["vr", "Volume × avg"], ["oi", "OI change"], ["pcr", "PCR"], ["sym", "Symbol A–Z"]];
-  $("#sortSel").innerHTML = SORTS.map(([k, n]) => `<option value="${k}" ${k === sortKey ? "selected" : ""}>${n}</option>`).join("");
-  $("#sortSel").addEventListener("change", e => { sortKey = e.target.value; sortDir = sortKey === "sym" ? 1 : -1; store.set("fos_sort", sortKey); store.set("fos_sortdir", sortDir); renderList(); });
-  $("#sortDirBtn").addEventListener("click", () => { sortDir = -sortDir; store.set("fos_sortdir", sortDir); renderList(); });
-  $("#q").addEventListener("input", e => { query = e.target.value.trim().toUpperCase(); renderList(); if (isPhone()) setMView("list"); });
-  $("#q").addEventListener("keydown", e => { if (e.key === "Enter") { const first = visibleRows()[0]; if (first) { select(first.symbol); e.target.blur(); } } });
-
-  function sortVal(s, v) {
-    return sortKey === "pct" ? v.pct : sortKey === "vr" ? v.vr : sortKey === "oi" ? v.oi : sortKey === "pcr" ? v.pcr
-      : sortKey === "value" ? (v.vol != null && v.ltp != null ? v.vol * v.ltp : null) : null;
-  }
-  function visibleRows() {
-    let rows = stocks.filter(s => (filter === "all" || (filter === "pinned" ? pins.has(s.symbol) : s.label === filter))
-      && (!query || s.symbol.includes(query) || (s.name || "").toUpperCase().includes(query)));
-    rows = rows.map(s => [s, view(s)]);
-    rows.sort((a, b) => {
-      const pa = pins.has(a[0].symbol), pb = pins.has(b[0].symbol);
-      if (filter === "all" && !query && pa !== pb) return pa ? -1 : 1;             // pinned stocks first
-      if (sortKey === "sym") return sortDir * a[0].symbol.localeCompare(b[0].symbol);
-      const x = sortVal(a[0], a[1]), y = sortVal(b[0], b[1]);
-      if (x == null && y == null) return a[0].symbol.localeCompare(b[0].symbol);
-      if (x == null) return 1; if (y == null) return -1;                            // missing values sink
-      return sortDir * (x - y) || a[0].symbol.localeCompare(b[0].symbol);
-    });
-    return rows.map(r => r[0]);
-  }
-  function renderSegs() {
-    $("#segs").innerHTML = segDefs.map(([k, n, c]) => `<button class="wt" type="button" data-f="${esc(k)}" aria-pressed="${k === filter}">${n}<b>${k === "pinned" ? pins.size : c}</b></button>`).join("");
-  }
-  $("#segs").addEventListener("click", e => { const b = e.target.closest("[data-f]"); if (!b) return; filter = b.dataset.f; renderSegs(); renderList(); });
-  function renderList() {
-    $("#sortDirBtn").textContent = sortDir < 0 ? "↓" : "↑";
-    const rows = visibleRows();
-    $("#count").textContent = `${rows.length} of ${stocks.length} stocks · ${SERVER.live && LIVE.updated_at ? "live " + LIVE.updated_at + " IST" : "closing data " + meta.as_of_label}`;
-    if (!rows.length) { $("#list").innerHTML = `<p class="empty">${filter === "pinned" ? "No pinned stocks yet. Tap ★ on a stock to pin it." : "No stocks match."}</p>`; return; }
-    $("#list").innerHTML = rows.map(rowHtml).join("");
-  }
   // ---- S1 rule trades: which arm a stock is in (the forward test's lists, and the live paper account's rule trades)
   const ARMS = {};                                    // symbol -> {A: "buy next session" | "open" | "paper", B: ...}
   function markArms(sym, arm, what) { (ARMS[sym] = ARMS[sym] || {})[arm] = ARMS[sym][arm] || what; }
@@ -692,37 +825,458 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     const a = ARMS[sym]; if (!a) return "";
     return ["A", "B"].filter(k => a[k]).map(k => `<span class="armb ${k.toLowerCase()}" title="S1 arm ${k}: ${esc(a[k])}">Arm ${k}</span>`).join("");
   }
-  function rowHtml(s) {
-    const v = view(s), blind = blindFor(s), cls = LABELS[s.label] || "n";
+
+  // ---- scanner: conditions on the numbers this build carries, presets, saved scans and the results table.
+  //      Every value comes from view(s): the live quote when the feed has the stock, else the closing scan.
+  //      Implied volatility and Greeks are not in either source, so they are not offered as filters.
+  const TH = meta.thresholds || {};
+  const PCR_LO = TH.pcr_low ?? 0.7, PCR_HI = TH.pcr_high ?? 1.3;
+  const chainOf = s => CHAIN[s.symbol] || s.chain;
+  const nextResults = s => { const u = ((s.events || {}).upcoming || []).find(u => u.type === "results" || u.type === "results_date"); return u ? u.sessions : null; };
+  const crore = v => v == null ? "—" : v >= 100 ? Math.round(v).toLocaleString("en-IN") : v.toFixed(1);
+  const SECTORS = [...new Set(stocks.map(s => sectorName(s.sector) || "Other"))].sort();
+  const EXPIRIES = [...new Set(stocks.map(s => (s.chain || {}).expiry).filter(Boolean))].sort();
+  const LABEL_OPTS = ["Bullish setup", "Bearish setup", "Neutral", "Unclassified"];
+  // kind num: compared with a threshold · enum: one value of a list · bool: yes / no · list: symbols typed in
+  const METRICS = {
+    pct:    { name: "Price change", unit: "%", kind: "num", live: 1, get: (s, v) => v.pct, fmt: pct, about: "last price vs the previous close" },
+    vr:     { name: "Volume vs 20-day avg", unit: "×", kind: "num", live: 1, get: (s, v) => v.vr, fmt: ratio, about: "volume ÷ its 20-day average; live: pro rata to the time of day" },
+    oi:     { name: "OI change", unit: "%", kind: "num", live: 1, get: (s, v) => v.oi, fmt: pct, about: "futures open interest, all expiries, vs the previous close" },
+    pcr:    { name: "PCR", unit: "", kind: "num", live: 1, get: (s, v) => v.pcr, fmt: num, about: "put open interest ÷ call open interest" },
+    ltp:    { name: "Price", unit: "₹", kind: "num", live: 1, get: (s, v) => v.ltp, fmt: fmtPx, about: "last traded price" },
+    value:  { name: "Traded value", unit: "₹ cr", kind: "num", live: 1, get: (s, v) => v.vol != null && v.ltp != null ? v.vol * v.ltp / 1e7 : null, fmt: v => v == null ? "—" : "₹" + crore(v) + " cr", about: "volume × price, in ₹ crore" },
+    mp:     { name: "Price vs max pain", unit: "%", kind: "num", live: 1, get: (s, v) => { const c = chainOf(s); return c && c.max_pain && v.ltp != null ? +((v.ltp / c.max_pain - 1) * 100).toFixed(2) : null; }, fmt: pct, about: "distance of the price from the nearest expiry's max-pain strike" },
+    res:    { name: "Results in", unit: "sessions", kind: "num", get: s => nextResults(s), fmt: v => v == null ? "none due" : v + " session" + (v === 1 ? "" : "s"), about: "sessions to the next results date on the exchange calendar" },
+    label:  { name: "Setup label", kind: "enum", opts: () => LABEL_OPTS, get: s => s.label || "Unclassified", fmt: x => x, about: "this scanner's own label from price, volume, OI and PCR" },
+    sector: { name: "Sector", kind: "enum", opts: () => SECTORS, get: s => sectorName(s.sector) || "Other", fmt: x => x },
+    expiry: { name: "Expiry", kind: "enum", opts: () => EXPIRIES, get: s => (chainOf(s) || {}).expiry || "none", fmt: x => x, about: "the nearest expiry in this build's strike table" },
+    sym:    { name: "Symbol", kind: "list", get: s => s.symbol, fmt: x => x, about: "symbols you type, separated by commas" },
+    wl:     { name: "In watchlist", kind: "bool", get: s => pins.has(s.symbol), fmt: x => x ? "yes" : "no" },
+    arm:    { name: "In an S1 arm", kind: "bool", get: s => !!ARMS[s.symbol], fmt: x => x ? "yes" : "no", about: "a pending or open S1 forward-test or paper rule trade" },
+  };
+  const OPS = { num: [[">", ">"], [">=", "≥"], ["<", "<"], ["<=", "≤"], ["between", "between"], ["absge", "|x| ≥"], ["absle", "|x| ≤"]],
+                enum: [["is", "is"], ["not", "is not"]], bool: [["yes", "yes"], ["no", "no"]], list: [["in", "is one of"], ["notin", "is none of"]] };
+  const blank = x => x === "" || x == null || !isFinite(+x);
+  const listOf = t => String(t || "").toUpperCase().split(/[\s,]+/).filter(Boolean);
+  function testCond(c, s, v) {
+    const M = METRICS[c.m]; if (!M) return { ok: false, val: null, missing: true };
+    const x = M.get(s, v);
+    if (M.kind === "bool") return { ok: c.op === "no" ? !x : !!x, val: x };
+    if (M.kind === "enum") return { ok: c.op === "not" ? x !== c.a : x === c.a, val: x };
+    if (M.kind === "list") { const set = listOf(c.a), hit = set.includes(x); return { ok: !set.length || (c.op === "notin" ? !hit : hit), val: x, idle: !set.length }; }
+    if (blank(c.a) || (c.op === "between" && blank(c.b))) return { ok: true, val: x, idle: true };    // a half-typed rule filters nothing
+    if (x == null) return { ok: false, val: null, missing: true };
+    const a = +c.a, b = +c.b;
+    const ok = c.op === ">" ? x > a : c.op === ">=" ? x >= a : c.op === "<" ? x < a : c.op === "<=" ? x <= a
+      : c.op === "between" ? x >= Math.min(a, b) && x <= Math.max(a, b) : c.op === "absge" ? Math.abs(x) >= a : Math.abs(x) <= a;
+    return { ok, val: x };
+  }
+  function evalScan(s, v = view(s), sc = scan) {
+    const rs = sc.conds.map(c => ({ c, ...testCond(c, s, v) }));
+    const act = rs.filter(r => !r.idle);
+    return { ok: !act.length || (sc.logic === "any" ? act.some(r => r.ok) : act.every(r => r.ok)), rs, act };
+  }
+  function ruleText(c) {
+    const M = METRICS[c.m]; if (!M) return "";
+    const op = (OPS[M.kind].find(o => o[0] === c.op) || [, c.op])[1], u = !M.unit || M.unit === "₹" ? "" : M.unit === "%" || M.unit === "×" ? M.unit : " " + M.unit;
+    if (M.kind === "bool") return op;
+    if (M.kind === "enum") return `${op} ${c.a}`;
+    if (M.kind === "list") return `${op} ${listOf(c.a).join(", ") || "(none typed)"}`;
+    if (c.op === "between") return `between ${c.a} and ${c.b}${u}`;
+    return `${op} ${M.unit === "₹" ? "₹" : ""}${c.a}${u}`;
+  }
+  const condText = c => `${METRICS[c.m] ? METRICS[c.m].name : c.m} ${ruleText(c)}`;
+
+  const C = (m, op, a = "", b = "") => ({ m, op, a: String(a), b: String(b) });
+  const PRESETS = [
+    { id: "all", name: "All F&O stocks", conds: [], sort: ["pct", -1], about: "every stock in the F&O universe" },
+    { id: "longbu", name: "Long build-up", conds: [C("pct", ">", 0), C("oi", ">", 0)], sort: ["oi", -1], about: "price up, futures OI up" },
+    { id: "shortbu", name: "Short build-up", conds: [C("pct", "<", 0), C("oi", ">", 0)], sort: ["oi", -1], about: "price down, futures OI up" },
+    { id: "cover", name: "Short covering", conds: [C("pct", ">", 0), C("oi", "<", 0)], sort: ["oi", 1], about: "price up, futures OI down" },
+    { id: "unwind", name: "Long unwinding", conds: [C("pct", "<", 0), C("oi", "<", 0)], sort: ["oi", 1], about: "price down, futures OI down" },
+    { id: "volspike", name: "Volume spike (≥ 2× avg)", conds: [C("vr", ">=", 2)], sort: ["vr", -1], about: "volume at least twice its 20-day average" },
+    { id: "oivol", name: "OI surge on volume", conds: [C("oi", ">=", 5), C("vr", ">=", 1.5)], sort: ["oi", -1], about: "OI up 5% or more with volume 1.5× average" },
+    { id: "bull", name: "Bullish setups", conds: [C("label", "is", "Bullish setup")], sort: ["pct", -1], about: "the scanner's Bullish label" },
+    { id: "bear", name: "Bearish setups", conds: [C("label", "is", "Bearish setup")], sort: ["pct", 1], about: "the scanner's Bearish label" },
+    { id: "pcrlow", name: `PCR below ${PCR_LO}`, conds: [C("pcr", "<", PCR_LO)], sort: ["pcr", 1], about: "low put-call ratio" },
+    { id: "pcrhigh", name: `PCR above ${PCR_HI}`, conds: [C("pcr", ">", PCR_HI)], sort: ["pcr", -1], about: "high put-call ratio" },
+    { id: "results", name: "Results within 5 sessions", conds: [C("res", "<=", 5)], sort: ["res", 1], about: "results due soon" },
+    { id: "maxpain", name: "Within 1% of max pain", conds: [C("mp", "absle", 1)], sort: ["mp", 1], about: "price close to the max-pain strike" },
+  ];
+  const DEFAULT_COLS = ["sym", "ltp", "pct", "vol", "vr", "value", "oi", "pcr", "label", "match"];
+  const COLS = {
+    sym:    { name: "Symbol", l: 1, fixed: 1, sort: r => r.s.symbol },
+    ltp:    { name: "LTP", m: "ltp" },
+    chg:    { name: "Chg", sort: r => r.v.chg, tip: "change vs the previous close, ₹" },
+    pct:    { name: "Chg %", m: "pct" },
+    vol:    { name: "Volume", sort: r => r.v.vol, tip: "shares traded" },
+    vr:     { name: "Vol × avg", m: "vr" },
+    value:  { name: "Value ₹ cr", m: "value" },
+    foi:    { name: "Fut OI", sort: r => futOi(r), tip: "futures open interest, all expiries" },
+    oi:     { name: "OI chg %", m: "oi" },
+    pcr:    { name: "PCR", m: "pcr" },
+    mp:     { name: "vs max pain", m: "mp" },
+    res:    { name: "Results in", m: "res" },
+    label:  { name: "Label", l: 1, m: "label", sort: r => LABEL_OPTS.indexOf(r.s.label) },
+    sector: { name: "Sector", l: 1, m: "sector" },
+    exp:    { name: "Expiry", m: "expiry" },
+    match:  { name: "Match", sort: r => r.e.act.filter(x => x.ok).length, tip: "one dot per condition: green passes, red fails" },
+  };
+  const futOi = r => r.v.q && r.v.q.fut_oi != null ? r.v.q.fut_oi : r.s.fut_oi;
+  const colVal = (k, r) => { const c = COLS[k]; return c.sort ? c.sort(r) : METRICS[c.m].get(r.s, r.v); };
+
+  // state: the scan being edited, its universe and the visible columns; saved scans live in this browser
+  const SAVED_KEY = "fos_scans_v1";
+  let saved = store.get(SAVED_KEY, []);
+  const fromPreset = p => ({ src: p.id, name: p.name, logic: "all", conds: p.conds.map(c => ({ ...c })), sort: p.sort.slice(), dirty: false });
+  let scan = store.get("fos_scan_v1", null);
+  if (!scan || !Array.isArray(scan.conds)) scan = fromPreset(PRESETS[0]);
+  scan.conds = scan.conds.filter(c => METRICS[c.m]);
+  let uni = store.get("fos_uni", "all"), symQ = "", ROWS = [];
+  let cols = store.get("fos_cols_v1", DEFAULT_COLS).filter(k => COLS[k]);
+  if (!cols.includes("sym")) cols.unshift("sym");
+  const saveScanState = () => store.set("fos_scan_v1", scan);
+  const universe = () => uni === "watchlist" ? stocks.filter(s => pins.has(s.symbol)) : stocks;
+  const scanTitle = () => scan.name + (scan.dirty ? " (edited)" : "");
+
+  function visibleRows() {
+    const q = symQ;
+    const rows = universe().filter(s => !q || s.symbol.includes(q) || (s.name || "").toUpperCase().includes(q))
+      .map(s => { const v = view(s); return { s, v, e: evalScan(s, v) }; }).filter(r => r.e.ok);
+    const [k, d] = COLS[scan.sort[0]] ? scan.sort : ["pct", -1];
+    rows.sort((a, b) => {
+      const x = colVal(k, a), y = colVal(k, b);
+      if (x == null && y == null) return a.s.symbol.localeCompare(b.s.symbol);
+      if (x == null) return 1; if (y == null) return -1;                              // missing values sink
+      if (typeof x === "string" || typeof y === "string") return d * String(x).localeCompare(String(y)) || a.s.symbol.localeCompare(b.s.symbol);
+      return d * (x - y) || a.s.symbol.localeCompare(b.s.symbol);
+    });
+    return rows;
+  }
+
+  // freshness of what the table shows: live polls go stale after 3 missed polls; a close is stale once a newer one exists
+  function secsSinceIst(hms) {
+    const m = /^(\d\d):(\d\d):(\d\d)/.exec(hms || ""); if (!m) return null;
+    const n = istNow(); return (n.getHours() * 3600 + n.getMinutes() * 60 + n.getSeconds()) - (+m[1] * 3600 + +m[2] * 60 + +m[3]);
+  }
+  function weekdaysAfter(d) {
+    if (!/^\d{4}-\d\d-\d\d$/.test(d || "")) return null;
+    const today = istDate(), n = istNow(), closed = n.getHours() * 60 + n.getMinutes() >= 930;
+    const x = new Date(d + "T00:00:00Z"), end = new Date(today + "T00:00:00Z"); let k = 0;
+    while (true) { x.setUTCDate(x.getUTCDate() + 1); if (x > end) break; const w = x.getUTCDay(); if (w > 0 && w < 6 && (x < end || closed)) k++; }
+    return k;
+  }
+  function freshness() {
+    if (SERVER.live && LIVE.updated_at && Object.keys(LIVE.quotes || {}).length) {          // the table shows these quotes
+      const open = !!LIVE.market_open, age = secsSinceIst(LIVE.updated_at);
+      const stale = LIVE.error || (open && age != null && age > 3 * Math.max(10, SERVER.poll_seconds));
+      return { live: true, open, stale: !!stale, text: open ? `live quotes · polled ${LIVE.updated_at} IST` : `last poll ${LIVE.updated_at} IST · market closed`,
+               why: stale ? (LIVE.error ? "the feed reports an error: " + LIVE.error : `no poll for ${Math.round(age)} s`) : "" };
+    }
+    const k = weekdaysAfter(meta.as_of);
+    return { live: false, stale: k != null && k > 0, text: `closing data · ${meta.as_of_label}`,
+             why: k ? `${k} weekday session${k === 1 ? " has" : "s have"} closed since (holidays not counted); the next nightly build brings them in` : "" };
+  }
+
+  // ---- toolbar: presets and saved scans, universe, symbol filter
+  function renderPresetSel() {
+    const sv = saved.map(x => `<option value="saved:${x.id}">${esc(x.name)}</option>`).join("");
+    $("#presetSel").innerHTML = `<optgroup label="Presets">${PRESETS.map(p => `<option value="${p.id}" title="${esc(p.about)}">${esc(p.name)}</option>`).join("")}</optgroup>`
+      + (sv ? `<optgroup label="Saved scans">${sv}</optgroup>` : "") + (scan.dirty ? `<option value="__edited">${esc(scanTitle())}</option>` : "");
+    $("#presetSel").value = scan.dirty ? "__edited" : scan.src;
+  }
+  function loadScan(id) {
+    if (id.startsWith("saved:")) {
+      const x = saved.find(y => "saved:" + y.id === id); if (!x) return;
+      scan = { src: id, name: x.name, logic: x.logic || "all", conds: x.conds.map(c => ({ ...c })), sort: (x.sort || ["pct", -1]).slice(), dirty: false };
+      if (x.cols) { cols = x.cols.filter(k => COLS[k]); store.set("fos_cols_v1", cols); }
+      if (x.uni) setUni(x.uni, true);
+    } else { const p = PRESETS.find(y => y.id === id); if (!p) return; scan = fromPreset(p); }
+    saveScanState(); renderScan(); if (tab === "why") renderTab();
+  }
+  $("#presetSel").addEventListener("change", e => { if (e.target.value !== "__edited") loadScan(e.target.value); });
+  function edited() { if (!scan.dirty) { scan.dirty = true; renderPresetSel(); } saveScanState(); }
+  function renderUni() {
+    $("#uniSeg").innerHTML = [["all", "All F&O", stocks.length], ["watchlist", "★ Watchlist", pins.size]]
+      .map(([k, n, c]) => `<button type="button" data-uni="${k}" aria-pressed="${k === uni}">${n}<b>${c}</b></button>`).join("");
+  }
+  function setUni(u, quiet) { uni = u; store.set("fos_uni", u); renderUni(); if (!quiet) { renderList(); renderFbar(); railState(); if (tab === "why") renderTab(); } }
+  $("#uniSeg").addEventListener("click", e => { const b = e.target.closest("[data-uni]"); if (b) setUni(b.dataset.uni); });
+  $("#symFilter").addEventListener("input", e => { symQ = e.target.value.trim().toUpperCase(); renderList(); if (tab === "why") renderTab(); });
+
+  // ---- filter builder: one chip per condition, editable in place; AND / OR; a typed quick rule
+  function condChip(c, i, tally) {
+    const M = METRICS[c.m], ops = OPS[M.kind];
+    const opSel = `<select data-f="op" aria-label="${esc(M.name)} comparison">${ops.map(([k, n]) => `<option value="${k}" ${k === c.op ? "selected" : ""}>${n}</option>`).join("")}</select>`;
+    let val = "";
+    if (M.kind === "num") {
+      const bad = x => blank(x) ? " bad" : "";
+      val = `<input data-f="a" inputmode="decimal" value="${esc(c.a)}" aria-label="${esc(M.name)} threshold" class="${bad(c.a)}">`
+        + (c.op === "between" ? `<span class="u">and</span><input data-f="b" inputmode="decimal" value="${esc(c.b)}" aria-label="${esc(M.name)} upper threshold">` : "")
+        + (M.unit ? `<span class="u">${esc(M.unit)}</span>` : "");
+    } else if (M.kind === "enum") {
+      const opts = M.opts(); if (!opts.includes(c.a)) c.a = opts[0] || "";
+      val = `<select data-f="a" aria-label="${esc(M.name)} value">${opts.map(o => `<option ${o === c.a ? "selected" : ""}>${esc(o)}</option>`).join("")}</select>`;
+    } else if (M.kind === "list") val = `<input data-f="a" class="wide" value="${esc(c.a)}" placeholder="RELIANCE, TCS" aria-label="Symbols">`;
+    const idle = M.kind === "num" && (blank(c.a) || (c.op === "between" && blank(c.b)));
+    return `<span class="cond${idle ? " bad" : ""}" data-i="${i}" title="${esc(M.about || "")}${idle ? " · type a number to apply this condition" : ""}"><b>${esc(M.name)}</b>${opSel}${val}
+      <span class="tally" title="stocks in this universe that pass this condition on its own">${tally}</span><button class="x" type="button" data-del aria-label="Remove ${esc(M.name)} condition">×</button></span>`;
+  }
+  function tallies() { const u = universe().map(s => [s, view(s)]); return scan.conds.map(c => u.filter(([s, v]) => testCond(c, s, v).ok).length); }
+  function renderFbar() {
+    const t = tallies(), n = scan.conds.length;
+    const logic = n > 1 ? `<span class="seg" role="group" aria-label="Combine conditions"><button type="button" data-logic="all" aria-pressed="${scan.logic !== "any"}" title="every condition must hold">All · AND</button><button type="button" data-logic="any" aria-pressed="${scan.logic === "any"}" title="any one condition is enough">Any · OR</button></span>` : "";
+    const chips = scan.conds.map((c, i) => (i ? `<span class="join">${scan.logic === "any" ? "or" : "and"}</span>` : "") + condChip(c, i, t[i])).join("");
+    const add = `<select class="sel" id="addCond" aria-label="Add a filter condition"><option value="">+ Add filter</option>
+      <optgroup label="Price and volume">${["pct", "ltp", "vr", "value"].map(k => `<option value="${k}">${METRICS[k].name}</option>`).join("")}</optgroup>
+      <optgroup label="Derivatives">${["oi", "pcr", "mp", "expiry"].map(k => `<option value="${k}">${METRICS[k].name}</option>`).join("")}<option disabled>Implied volatility · not in this data</option></optgroup>
+      <optgroup label="Stock">${["label", "sector", "sym", "res", "wl", "arm"].map(k => `<option value="${k}">${METRICS[k].name}</option>`).join("")}</optgroup></select>`;
+    $("#fbar").innerHTML = (n ? "" : `<span class="join">No conditions</span>`) + logic + chips + add
+      + `<span class="qrule"><input class="inp" id="qrule" autocomplete="off" placeholder="Type a rule: oi > 5, vol >= 2x" aria-label="Type rules to add, for example oi > 5, vol >= 2x"><span class="hint" id="qhint" hidden></span></span>`
+      + (n ? `<button class="ib ghost" type="button" id="clearConds" title="Remove every condition">Clear filters</button>` : "");
+  }
+  function updateTallies() { const t = tallies(); $$("#fbar .cond").forEach(el => { const i = +el.dataset.i; $(".tally", el).textContent = t[i]; }); }
+  function refreshScan() { edited(); renderList(); updateTallies(); if (tab === "why") renderTab(); }
+  $("#fbar").addEventListener("input", e => {
+    const ch = e.target.closest(".cond"); if (!ch || e.target.tagName !== "INPUT") return;
+    const c = scan.conds[+ch.dataset.i]; c[e.target.dataset.f] = e.target.value.trim();
+    const M = METRICS[c.m], idle = M.kind === "num" && (blank(c.a) || (c.op === "between" && blank(c.b)));
+    ch.classList.toggle("bad", idle); refreshScan();
+  });
+  $("#fbar").addEventListener("change", e => {
+    if (e.target.id === "addCond") {
+      const m = e.target.value; if (!m) return;
+      const M = METRICS[m], op = OPS[M.kind][0][0];
+      scan.conds.push(C(m, M.kind === "num" ? ({ pct: ">", vr: ">=", oi: ">", value: ">=" }[m] || op) : op, M.kind === "num" ? ({ pct: 0, vr: 1.5, oi: 0, pcr: PCR_LO, value: 100, mp: 1 }[m] ?? "") : M.kind === "enum" ? M.opts()[0] : ""));
+      if (m === "mp") scan.conds[scan.conds.length - 1].op = "absle";
+      edited(); renderFbar(); renderList(); if (tab === "why") renderTab();
+      const last = $$("#fbar .cond").pop(); const inp = last && $("input, select[data-f='a']", last); if (inp) inp.focus();
+      return;
+    }
+    const ch = e.target.closest(".cond"); if (!ch || e.target.tagName !== "SELECT") return;
+    const c = scan.conds[+ch.dataset.i]; c[e.target.dataset.f] = e.target.value;
+    edited(); renderFbar(); renderList(); if (tab === "why") renderTab();
+  });
+  $("#fbar").addEventListener("click", e => {
+    const d = e.target.closest("[data-del]");
+    if (d) { scan.conds.splice(+d.closest(".cond").dataset.i, 1); edited(); renderFbar(); renderList(); if (tab === "why") renderTab(); return; }
+    const l = e.target.closest("[data-logic]");
+    if (l) { scan.logic = l.dataset.logic; edited(); renderFbar(); renderList(); if (tab === "why") renderTab(); return; }
+    if (e.target.id === "clearConds") { scan.conds = []; edited(); renderFbar(); renderList(); if (tab === "why") renderTab(); toast("Filters cleared"); }
+  });
+  // quick rules, read by fixed patterns on this page (no AI): "oi > 5, vol >= 2x, chg < 0", "pcr 0.7 to 1.3", "bullish", "watchlist"
+  const ALIAS = { chg: "pct", change: "pct", pct: "pct", price: "ltp", ltp: "ltp", vol: "vr", volume: "vr", vr: "vr", oi: "oi", pcr: "pcr", value: "value", turnover: "value", maxpain: "mp", mp: "mp", results: "res", res: "res" };
+  const OPMAP = { ">": ">", ">=": ">=", "=>": ">=", "≥": ">=", "<": "<", "<=": "<=", "=<": "<=", "≤": "<=" };
+  function parseRule(t) {
+    const out = [];
+    for (const p of t.split(/,|;|&&|\band\b/i).map(x => x.trim()).filter(Boolean)) {
+      let m = p.match(/^(\|)?\s*([a-z]+)\s*\|?\s*(>=|<=|=>|=<|>|<|≥|≤)\s*(-?\d+(?:\.\d+)?)\s*(?:x|×|%|cr)?$/i);
+      if (m) {
+        const k = ALIAS[m[2].toLowerCase()]; if (!k) return { err: `"${m[2]}" is not a metric here (try chg, vol, oi, pcr, price, value, maxpain, results)` };
+        const op = OPMAP[m[3]]; out.push(C(k, m[1] ? (op.startsWith(">") ? "absge" : "absle") : op, m[4])); continue;
+      }
+      m = p.match(/^([a-z]+)\s+(-?\d+(?:\.\d+)?)\s*(?:to|\.\.|–)\s*(-?\d+(?:\.\d+)?)\s*(?:x|×|%)?$/i);
+      if (m && ALIAS[m[1].toLowerCase()]) { out.push(C(ALIAS[m[1].toLowerCase()], "between", m[2], m[3])); continue; }
+      m = p.match(/^(bull(?:ish)?|bear(?:ish)?|neutral)$/i);
+      if (m) { out.push(C("label", "is", /^bull/i.test(m[1]) ? "Bullish setup" : /^bear/i.test(m[1]) ? "Bearish setup" : "Neutral")); continue; }
+      if (/^(watchlist|pinned|starred)$/i.test(p)) { out.push(C("wl", "yes")); continue; }
+      return { err: `could not read "${p}"` };
+    }
+    return { conds: out };
+  }
+  function qhint(show) {
+    const el = $("#qhint"), inp = $("#qrule"); if (!el || !inp) return;
+    const t = inp.value.trim(); el.hidden = !show; el.classList.remove("err");
+    if (!t) { el.innerHTML = `Examples: <b>oi &gt; 5, vol &gt;= 2x, chg &lt; 0</b> · <b>pcr 0.7 to 1.3</b> · <b>|chg| &gt;= 3</b> · <b>bullish</b> · <b>watchlist</b>. Enter adds them. Read by fixed patterns on this page, not by AI.`; return; }
+    const r = parseRule(t);
+    if (r.err) { el.classList.add("err"); el.textContent = r.err; } else el.innerHTML = "Enter adds: " + r.conds.map(c => `<b>${esc(condText(c))}</b>`).join(" · ");
+  }
+  $("#fbar").addEventListener("focusin", e => { if (e.target.id === "qrule") qhint(true); });
+  $("#fbar").addEventListener("focusout", e => { if (e.target.id === "qrule") setTimeout(() => qhint(false), 120); });
+  $("#fbar").addEventListener("keyup", e => { if (e.target.id === "qrule" && e.key !== "Enter") qhint(true); });
+  $("#fbar").addEventListener("keydown", e => {
+    if (e.target.id !== "qrule" || e.key !== "Enter") return;
+    const r = parseRule(e.target.value.trim()); if (!e.target.value.trim()) return;
+    if (r.err) { qhint(true); return; }
+    scan.conds.push(...r.conds); edited(); renderFbar(); renderList(); if (tab === "why") renderTab();
+    toast(`Added ${r.conds.map(c => esc(condText(c))).join(" · ")}`); $("#qrule").focus();
+  });
+
+  // ---- results table
+  function renderHead() {
+    const used = new Set(scan.conds.map(c => c.m));
+    $("#thead").innerHTML = `<tr>${cols.map(k => {
+      const c = COLS[k], on = scan.sort[0] === k;
+      return `<th scope="col" class="${c.l ? "l" : ""}${c.m && used.has(c.m) ? " fc" : ""}"${on ? ` aria-sort="${scan.sort[1] < 0 ? "descending" : "ascending"}"` : ""}><button type="button" data-sort="${k}" title="Sort by ${esc(c.name)}${c.tip || (c.m && METRICS[c.m].about) ? ": " + esc(c.tip || METRICS[c.m].about) : ""}">${esc(c.name)}</button></th>`;
+    }).join("")}</tr>`;
+  }
+  function cellHtml(k, r, fl, used) {
+    const { s, v, e } = r, c = COLS[k], cls = (c.l ? "l" : "") + (c.m && used.has(c.m) ? " fc" : "");
+    let h;
+    switch (k) {
+      case "sym": return `<td class="l sym${used.has("sym") ? " fc" : ""}"><button class="star${pins.has(s.symbol) ? " on" : ""}" type="button" data-pin="${esc(s.symbol)}" aria-label="${pins.has(s.symbol) ? "Remove" : "Add"} ${esc(s.symbol)} ${pins.has(s.symbol) ? "from" : "to"} the watchlist">★</button><b>${esc(s.symbol)}</b>${armBadges(s.symbol)}<small title="${esc(s.name || "")}">${esc(s.name || "")}</small></td>`;
+      case "ltp": h = `<span class="px${fl}">${fmtPx(v.ltp)}</span>`; break;
+      case "chg": h = `<span class="${dirClass(v.chg)}">${signed(v.chg)}</span>`; break;
+      case "pct": h = `<span class="${dirClass(v.pct)}">${pct(v.pct)}</span>`; break;
+      case "vol": h = compact(v.vol); break;
+      case "vr": h = ratio(v.vr); break;
+      case "value": h = crore(METRICS.value.get(s, v)); break;
+      case "foi": h = compact(futOi(r)); break;
+      case "oi": h = `<span class="${dirClass(v.oi)}">${pct(v.oi)}</span>`; break;
+      case "pcr": h = num(v.pcr); break;
+      case "mp": h = pct(METRICS.mp.get(s, v)); break;
+      case "res": { const n = nextResults(s); h = n == null ? "—" : n === 0 ? "today" : String(n); break; }
+      case "label": h = blindFor(s) ? `<span class="muted">hidden</span>` : `<span class="lab ${LABELS[s.label] || "u"}">${esc((s.label || "—").replace(" setup", ""))}</span>`; break;
+      case "sector": h = esc(sectorName(s.sector) || "—"); break;
+      case "exp": h = esc((chainOf(s) || {}).expiry || "—"); break;
+      case "match": h = e.act.length ? `<span class="dots" title="${esc(e.act.map(x => (x.ok ? "✓ " : "✗ ") + condText(x.c)).join("\n"))}">${e.act.map(x => `<i class="${x.ok ? "ok" : "no"}"></i>`).join("")}</span>` : `<span class="muted">—</span>`; break;
+    }
+    return `<td class="${cls}">${h}</td>`;
+  }
+  function rowHtml(r) {
+    const { s, v } = r, used = new Set(scan.conds.map(c => c.m));
     let fl = "";
     if (v.live && lastPx[s.symbol] != null && v.ltp !== lastPx[s.symbol]) fl = v.ltp > lastPx[s.symbol] ? " fl-up" : " fl-dn";
     if (v.live) lastPx[s.symbol] = v.ltp;
-    return `<div class="wr${s.symbol === sel ? " sel" : ""}" data-sym="${esc(s.symbol)}" role="option" aria-selected="${s.symbol === sel}">
-      <button class="star${pins.has(s.symbol) ? " on" : ""}" type="button" data-pin="${esc(s.symbol)}" aria-label="${pins.has(s.symbol) ? "Unpin" : "Pin"} ${esc(s.symbol)}">★</button>
-      <div class="wn"><b>${esc(s.symbol)}</b>${armBadges(s.symbol)}<small>${esc(s.name || sectorName(s.sector))}</small></div>
-      <div class="wp"><span class="px${fl}">${fmtPx(v.ltp)}</span><small class="${dirClass(v.pct)}">${pct(v.pct)}</small></div>
-      <div class="wm"><span class="mono">${esc(v.time || "")}</span><span>Vol ${compact(v.vol)}${v.vr != null ? " · " + ratio(v.vr) : ""}</span>${blind ? "" : `<span class="lbl"><i class="ld ${cls}"></i>${esc((s.label || "").replace(" setup", ""))}</span>`}</div></div>`;
+    return `<tr data-sym="${esc(s.symbol)}" class="${s.symbol === sel ? "sel" : ""}" aria-selected="${s.symbol === sel}">${cols.map(k => cellHtml(k, r, fl, used)).join("")}</tr>`;
   }
-  $("#list").addEventListener("click", e => {
+  function emptyMsg() {
+    if (uni === "watchlist" && !pins.size) return `Your watchlist is empty. Tap ★ beside a stock to add it.<br><button class="btn" type="button" data-uni-all>Show all F&amp;O stocks</button>`;
+    const blk = scan.conds.length ? `No stock passes ${scan.logic === "any" ? "any" : "all"} of these conditions.` : "No stocks match.";
+    return `${blk}${symQ ? ` The symbol filter “${esc(symQ)}” also applies.` : ""}<br>${scan.conds.length ? `<button class="btn" type="button" data-clear-all>Clear filters</button>` : ""}`;
+  }
+  function renderRbar() {
+    const f = freshness(), n = universe().length;
+    $("#rbar").innerHTML = `<span><b>${ROWS.length}</b> of ${n} ${uni === "watchlist" ? "watchlist" : "F&amp;O"} stocks match</span>
+      <span>${scan.conds.length ? (scan.logic === "any" ? "any condition" : "all conditions") : "no conditions"}</span>
+      <span>sorted by ${esc(COLS[scan.sort[0]] ? COLS[scan.sort[0]].name : "—")} ${scan.sort[1] < 0 ? "↓" : "↑"}</span>
+      <span class="fresh${f.stale ? " stale" : ""}" title="${esc(f.why)}"><span class="dot${f.live ? (f.stale ? " stale" : " on") : f.stale ? " stale" : ""}"></span>${esc(f.text)}${f.stale ? " · stale" : ""}</span>
+      ${meta.generated_at_ist ? `<span>scan built ${esc(meta.generated_at_ist)}</span>` : ""}`;
+  }
+  function renderList() {
+    ROWS = visibleRows(); renderHead();
+    $("#rows").innerHTML = ROWS.length ? ROWS.map(rowHtml).join("") : `<tr><td colspan="${cols.length}" class="empty">${emptyMsg()}</td></tr>`;
+    renderRbar();
+  }
+  function renderScan() { renderPresetSel(); renderUni(); renderFbar(); renderList(); }
+  $("#thead").addEventListener("click", e => {
+    const b = e.target.closest("[data-sort]"); if (!b) return;
+    const k = b.dataset.sort, text = COLS[k].l && k !== "label";
+    scan.sort = scan.sort[0] === k ? [k, -scan.sort[1]] : [k, text ? 1 : -1]; edited(); renderList();
+  });
+  $("#rows").addEventListener("click", e => {
+    if (e.target.closest("[data-uni-all]")) { setUni("all"); return; }
+    if (e.target.closest("[data-clear-all]")) { scan.conds = []; edited(); renderFbar(); renderList(); return; }
     const p = e.target.closest("[data-pin]"); if (p) { e.stopPropagation(); togglePin(p.dataset.pin); return; }
     const r = e.target.closest("[data-sym]"); if (r) select(r.dataset.sym);
   });
   function togglePin(sym) {
-    pins.has(sym) ? pins.delete(sym) : pins.add(sym); store.set("fos_pins_v1", [...pins]);
-    renderSegs(); renderList(); if (sym === sel) renderHeader();
+    const on = !pins.has(sym); on ? pins.add(sym) : pins.delete(sym); store.set("fos_pins_v1", [...pins]);
+    renderUni(); renderList(); if (scan.conds.some(c => c.m === "wl")) updateTallies(); if (sym === sel) renderHeader();
+    toast(`${esc(sym)} ${on ? "added to" : "removed from"} the watchlist`);
+  }
+
+  // ---- columns menu and saving a scan (small popovers under their buttons)
+  function popover(btn, html, wire) {
+    closePop();
+    const p = document.createElement("div"); p.className = "pop"; p.setAttribute("role", "dialog"); p.innerHTML = html;
+    document.body.appendChild(p);
+    const r = btn.getBoundingClientRect(), w = p.offsetWidth;
+    p.style.top = (r.bottom + 4) + "px"; p.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.right - w)) + "px";
+    btn.setAttribute("aria-expanded", "true"); p._btn = btn;
+    wire(p); const f = p.querySelector("input, button"); if (f) f.focus();
+    setTimeout(() => addEventListener("mousedown", outside), 0);
+    function outside(e) { if (!p.contains(e.target) && e.target !== btn) closePop(); }
+    p._off = () => removeEventListener("mousedown", outside);
+  }
+  function closePop() { const p = $(".pop"); if (!p) return false; p._off(); if (p._btn) p._btn.setAttribute("aria-expanded", "false"); p.remove(); return true; }
+  $("#colsBtn").addEventListener("click", e => {
+    if (closePop()) return;
+    popover(e.currentTarget, `<h4>Columns</h4>${Object.entries(COLS).filter(([, c]) => !c.fixed).map(([k, c]) => `<label><input type="checkbox" data-col="${k}" ${cols.includes(k) ? "checked" : ""}> ${esc(c.name)}</label>`).join("")}
+      <div class="row"><button class="btn" type="button" data-reset>Reset</button><button class="btn" type="button" data-done>Done</button></div>`, p => {
+      p.addEventListener("change", ev => {
+        const k = ev.target.dataset.col; if (!k) return;
+        cols = ev.target.checked ? Object.keys(COLS).filter(x => x === k || cols.includes(x)) : cols.filter(x => x !== k);
+        store.set("fos_cols_v1", cols); renderList();
+      });
+      $("[data-reset]", p).addEventListener("click", () => { cols = DEFAULT_COLS.slice(); store.set("fos_cols_v1", cols); renderList(); $$("[data-col]", p).forEach(i => { i.checked = cols.includes(i.dataset.col); }); });
+      $("[data-done]", p).addEventListener("click", closePop);
+    });
+  });
+  $("#saveScanBtn").addEventListener("click", e => {
+    if (closePop()) return;
+    const cur = scan.src.startsWith("saved:") ? saved.find(x => "saved:" + x.id === scan.src) : null;
+    popover(e.currentTarget, `<h4>Save scan</h4>
+      <p class="count" style="margin:0 4px 6px">${scan.conds.length ? esc(scan.conds.map(condText).join(scan.logic === "any" ? " or " : " and ")) : "No conditions (every stock)"} · sorted by ${esc(COLS[scan.sort[0]] ? COLS[scan.sort[0]].name : "")}</p>
+      <input class="inp" id="scanName" style="width:100%" maxlength="60" value="${esc(cur ? cur.name : scan.dirty || scan.src !== "all" ? scan.name : "My scan")}" aria-label="Scan name">
+      <label><input type="checkbox" id="scanAlert" ${cur && cur.alert ? "checked" : ""} ${SERVER.live ? "" : "disabled"}> Alert me when a new stock matches${SERVER.live ? "" : " (needs the live server)"}</label>
+      <div class="row">${cur ? `<button class="btn primary" type="button" data-save="over">Update “${esc(cur.name)}”</button>` : ""}<button class="btn${cur ? "" : " primary"}" type="button" data-save="new">Save as new</button><button class="btn" type="button" data-cancel>Cancel</button></div>`, p => {
+      $("[data-cancel]", p).addEventListener("click", closePop);
+      $("#scanName", p).addEventListener("keydown", ev => { if (ev.key === "Enter") $(cur ? "[data-save=over]" : "[data-save=new]", p).click(); });
+      $$("[data-save]", p).forEach(b => b.addEventListener("click", () => {
+        const name = $("#scanName", p).value.trim() || "My scan", alert = $("#scanAlert", p).checked;
+        const rec = { name, logic: scan.logic, conds: scan.conds.map(c => ({ ...c })), sort: scan.sort.slice(), cols: cols.slice(), uni, alert, saved_at: new Date().toISOString() };
+        let id;
+        if (b.dataset.save === "over" && cur) { Object.assign(cur, rec); id = cur.id; } else { id = Date.now(); saved.push({ id, ...rec }); }
+        store.set(SAVED_KEY, saved); delete scanSeen[id];
+        scan.src = "saved:" + id; scan.name = name; scan.dirty = false; saveScanState(); renderPresetSel(); closePop();
+        toast(`Saved scan “${esc(name)}”${alert ? " · alerts on" : ""}`, "up");
+      }));
+    });
+  });
+  $("#callToggle").addEventListener("click", e => {
+    callMode = !callMode; e.currentTarget.setAttribute("aria-pressed", callMode); render();
+    toast(callMode ? "Call mode on: labels stay hidden until you call each stock in its panel." : "Call mode off: labels are shown.");
+  });
+
+  // ---- scan alerts: a saved scan with alerts on tells you when a stock newly matches it (live polls, this page open)
+  const scanSeen = {};                                            // saved id -> symbols that matched at the last check
+  let scanLog = store.get("fos_scanlog_v1", []).filter(x => x.date === istDate());
+  const matchesOf = x => (x.uni === "watchlist" ? stocks.filter(s => pins.has(s.symbol)) : stocks)
+    .filter(s => evalScan(s, view(s), { logic: x.logic, conds: x.conds }).ok).map(s => s.symbol);
+  function checkScanAlerts() {
+    if (!SERVER.live || !LIVE.updated_at) return;
+    for (const x of saved.filter(y => y.alert)) {
+      const now = new Set(matchesOf(x)), before = scanSeen[x.id];
+      scanSeen[x.id] = now;
+      if (!before) continue;                                      // the first check only sets the baseline
+      const fresh = [...now].filter(s => !before.has(s)); if (!fresh.length) continue;
+      const msg = `${x.name}: ${fresh.slice(0, 8).join(", ")}${fresh.length > 8 ? ` and ${fresh.length - 8} more` : ""} now match${fresh.length === 1 ? "es" : ""}`;
+      scanLog.unshift({ date: istDate(), time: LIVE.updated_at, scan: x.name, symbols: fresh }); scanLog = scanLog.slice(0, 60); store.set("fos_scanlog_v1", scanLog);
+      toast(`<b>Scan alert</b> · ${esc(msg)}`, "up"); if (prefs.sound) beep();
+      try { if ("Notification" in window && Notification.permission === "granted") new Notification("F&O scan alert", { body: msg }); } catch (e) { /* ignore */ }
+      if (curView === "alerts") renderAlertsView();
+    }
   }
 
   // ---- selecting a stock
-  function select(sym, keepLeg) {
+  //      open = false selects without opening the panel (page start); the scanner view is always the one shown
+  function select(sym, keepLeg, open = true) {
     if (!BY[sym]) return;
     const changed = sym !== sel; sel = sym; store.set("fos_sel", sym);
     if (changed && !keepLeg) leg = "stock";
-    setBoard(null, true);
-    $$(".wr").forEach(r => { const on = r.dataset.sym === sym; r.classList.toggle("sel", on); r.setAttribute("aria-selected", on); });
+    if (curView !== "scanner") setView("scanner", true);
+    if (open) { if (document.body.dataset.panel === "closed") document.body.dataset.panel = prefs.panel === "wide" ? "wide" : "open"; if (isPhone()) document.body.dataset.pnlOpen = "1"; }
+    $$("#rows tr[data-sym]").forEach(r => { const on = r.dataset.sym === sym; r.classList.toggle("sel", on); r.setAttribute("aria-selected", on); });
+    const row = open && $(`#rows tr[data-sym="${CSS.escape(sym)}"]`); if (row) row.scrollIntoView({ block: "nearest" });
     renderHeader(); renderLegs(); renderTabs(); renderTab(); loadChart(true);
     if (SERVER.live && BY[sym].chain) fetchChain(BY[sym]);            // also starts the option watch for the charts
-    if (isPhone()) { setMView("main"); scrollTo({ top: 0 }); }
+    if (isPhone() && open) $("#panel").scrollTop = 0;
+    if (open && chart) setTimeout(() => chart.timeScale().fitContent(), 60);   // the panel may just have been given its size
   }
+  function closePanel() {
+    if (isPhone()) { delete document.body.dataset.pnlOpen; return; }
+    document.body.dataset.panel = "closed";
+  }
+  function togglePanelWidth() {
+    const wide = document.body.dataset.panel !== "wide";
+    document.body.dataset.panel = wide ? "wide" : "open"; $("#expandBtn").setAttribute("aria-pressed", wide);
+    $("#expandBtn").textContent = wide ? "⇔ Narrow" : "⇔ Widen";
+    if (chart) setTimeout(() => chart.timeScale().fitContent(), 30);
+  }
+  $("#closePanel").addEventListener("click", closePanel);
+  $("#backBtn").addEventListener("click", closePanel);
+  $("#expandBtn").addEventListener("click", togglePanelWidth);
 
   // ---- stock header + strip
   function livePill(s) {
@@ -874,16 +1428,17 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   }
 
   // ---- side tabs
-  const TABS = [["overview", "Overview"], ["options", "Options"], ["news", "News"], ["results", "Results"], ["signals", "Signals"]];
-  if (!TABS.some(t => t[0] === tab)) tab = "overview";
+  const TABS = [["why", "Why"], ["overview", "Overview"], ["options", "Options"], ["news", "News"], ["results", "Results"], ["signals", "Signals"]];
+  if (!TABS.some(t => t[0] === tab)) tab = "why";
   function renderTabs() {
-    $("#tabs").innerHTML = TABS.map(([k, n], i) => `<button class="tab" type="button" role="tab" data-tab="${k}" aria-selected="${k === tab}" title="${n} (${i + 1})">${n}</button>`).join("");
+    $("#tabs").innerHTML = TABS.map(([k, n], i) => `<button class="tab" type="button" role="tab" data-tab="${k}" aria-selected="${k === tab}" title="${k === "why" ? "Why it matched the scan" : n} (${i + 1})">${n}</button>`).join("");
   }
   $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (!b) return; setTab(b.dataset.tab); });
-  function setTab(k) { tab = k; store.set("fos_tab", k); renderTabs(); renderTab(); $("#tbody").scrollTop = 0; }
+  function setTab(k) { tab = k; store.set("fos_tab2", k); renderTabs(); renderTab(); $("#tbody").scrollTop = 0; }
   function renderTab() {
-    const s = BY[sel], el = $("#tbody"); if (!s) { el.innerHTML = ""; return; }
-    if (tab === "overview") el.innerHTML = overviewHtml(s);
+    const s = BY[sel], el = $("#tbody"); if (!s) { el.innerHTML = `<p class="empty">Pick a stock in the table to see why it matched, its chart and its numbers.</p>`; return; }
+    if (tab === "why") el.innerHTML = whyHtml(s);
+    else if (tab === "overview") el.innerHTML = overviewHtml(s);
     else if (tab === "options") { el.innerHTML = optionsHtml(s, CHAIN[s.symbol] || s.chain); if (SERVER.live && s.chain && !CHAIN[s.symbol]) fetchChain(s); }
     else if (tab === "news") { el.innerHTML = newsHtml(s); if (SERVER.live && !NEWS[s.symbol]) fetchNews(s); }
     else if (tab === "results") el.innerHTML = resultsHtml(s);
@@ -896,6 +1451,64 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     $$("[data-trade]", el).forEach(b => b.addEventListener("click", () => openSheet(s, b.dataset.trade, b.dataset.strike != null ? Number(b.dataset.strike) : null)));
     $$("[data-leg]", el).forEach(b => b.addEventListener("click", () => { leg = b.dataset.leg; if (tf === "D" && SERVER.live) tf = "5"; renderLegs(); loadChart(true); if (isPhone()) scrollTo({ top: 0, behavior: "smooth" }); }));
     const nr = $("[data-newsrefresh]", el); if (nr) nr.addEventListener("click", () => { delete NEWS[s.symbol]; renderTab(); });
+    $$("[data-oc]", el).forEach(b => b.addEventListener("click", () => openOptions(b.dataset.oc)));
+    $$("[data-tabgo]", el).forEach(b => b.addEventListener("click", () => setTab(b.dataset.tabgo)));
+  }
+
+  // ---- explainable scanner: why this stock is (or is not) in the results, from the scan's own conditions and the
+  //      numbers they were tested on. Nothing here is generated text: every line is a condition, a value and a rule.
+  function gauge(c, x) {
+    const M = METRICS[c.m]; if (M.kind !== "num" || x == null || blank(c.a)) return "";
+    const abs = c.op === "absge" || c.op === "absle", val = abs ? Math.abs(x) : x;
+    const pts = [val, +c.a, 0].concat(c.op === "between" && !blank(c.b) ? [+c.b] : []);
+    let lo = Math.min(...pts), hi = Math.max(...pts); const pad = (hi - lo) * 0.12 || 1; lo -= pad; hi += pad;
+    const at = y => (100 * (y - lo) / (hi - lo)).toFixed(1);
+    const ok = testCond(c, BY[sel], view(BY[sel])).ok;
+    return `<div class="gauge" aria-hidden="true"><i class="${ok ? "ok" : "no"}" style="width:${at(val)}%"></i><b style="left:${at(+c.a)}%"></b>${c.op === "between" && !blank(c.b) ? `<b style="left:${at(+c.b)}%"></b>` : ""}</div>`;
+  }
+  function whyHtml(s) {
+    const v = view(s), e = evalScan(s, v), f = freshness(), ch = chainOf(s), blind = blindFor(s);
+    const inUni = uni !== "watchlist" || pins.has(s.symbol), inSym = !symQ || s.symbol.includes(symQ) || (s.name || "").toUpperCase().includes(symQ);
+    const listed = e.ok && inUni && inSym, act = e.act, pass = act.filter(r => r.ok), fail = act.filter(r => !r.ok);
+    const line = r => `${METRICS[r.c.m].name} ${r.val == null ? "has no value" : "is " + METRICS[r.c.m].fmt(r.val)} (rule: ${ruleText(r.c)})`;
+    let say;
+    if (!act.length) say = `This scan has no active conditions, so every ${uni === "watchlist" ? "watchlist" : "F&amp;O"} stock is listed.`;
+    else if (e.ok && scan.logic === "any") say = `Listed because ${pass.length} of ${act.length} conditions hold, and any one is enough: ${pass.map(r => esc(line(r))).join("; ")}.`;
+    else if (e.ok) say = `Listed because ${act.length === 1 ? "its one condition holds" : `all ${act.length} conditions hold`}: ${pass.map(r => esc(line(r))).join("; ")}.`;
+    else if (scan.logic === "any") say = `Not listed: none of the ${act.length} conditions holds. ${fail.map(r => esc(line(r))).join("; ")}.`;
+    else say = `Not listed: ${fail.length} of ${act.length} condition${act.length === 1 ? "" : "s"} fail${fail.length === 1 ? "s" : ""}: ${fail.map(r => esc(line(r))).join("; ")}.${pass.length ? ` Passing: ${pass.map(r => esc(METRICS[r.c.m].name)).join(", ")}.` : ""}`;
+    if (e.ok && !inUni) say += " It is not in your watchlist, which this view is limited to.";
+    if (e.ok && !inSym) say += ` The symbol filter “${esc(symQ)}” hides it from the table.`;
+    const idle = e.rs.filter(r => r.idle);
+    const srcTag = M => M.live ? (v.live ? `<small>live ${esc(v.time)}</small>` : `<small>close ${esc(meta.as_of)}</small>`) : `<small>scan</small>`;
+    const rows = e.rs.map(r => {
+      const M = METRICS[r.c.m], res = r.idle ? `<span class="res na">not applied</span>` : r.missing ? `<span class="res na">no data</span>` : r.ok ? `<span class="res ok">✓ pass</span>` : `<span class="res no">✗ fail</span>`;
+      return `<tr><td class="l" title="${esc(M.about || "")}">${esc(M.name)}${srcTag(M)}</td><td><b>${r.val == null ? "—" : esc(M.fmt(r.val))}</b>${gauge(r.c, r.val)}</td><td class="l">${esc(ruleText(r.c))}</td><td>${res}</td></tr>`;
+    }).join("");
+    let h = `<div class="whyhead"><span class="${listed ? "verdict-ok" : "verdict-no"}">${listed ? "✓ In the results" : e.ok ? "• Matches, but hidden" : "✗ Not in the results"}</span><span>Scan <b>${esc(scanTitle())}</b> · ${act.length > 1 ? (scan.logic === "any" ? "any condition" : "all conditions") : act.length ? "1 condition" : "no conditions"}</span></div>
+      <p class="whysum">${say}${idle.length ? ` <span class="muted">${idle.length} condition${idle.length === 1 ? " has" : "s have"} no number yet and ${idle.length === 1 ? "is" : "are"} not applied.</span>` : ""}</p>`;
+    if (rows) h += `<table class="ct"><thead><tr><th class="l">Condition</th><th>Value</th><th class="l">Rule</th><th>Result</th></tr></thead><tbody>${rows}</tbody></table>`;
+    // the numbers behind the conditions, with their own references
+    const q = v.q || {};
+    h += `<h3>Supporting data</h3><div class="kvg">
+      ${kvCell("Price", fmtPx(v.ltp), `${signed(v.chg)} (${pct(v.pct)}) vs prev close ${fmtPx(v.live ? q.prev_close : s.prev_close)}`, dirClass(v.pct))}
+      ${kvCell("Volume", compact(v.vol), `${ratio(v.vr)} the 20-day average of ${compact(s.avg_volume_20d)}${v.live ? ", pro rata" : ""}`)}
+      ${kvCell("Futures OI", compact(v.live && q.fut_oi != null ? q.fut_oi : s.fut_oi), `${pct(v.oi)} vs ${v.live ? "the last close" : "prev " + compact(s.fut_oi_prev)}`, dirClass(v.oi))}
+      ${kvCell("PCR", num(v.pcr), `put OI ${compact(s.put_oi)} ÷ call OI ${compact(s.call_oi)}${v.live && q.live_pcr != null ? " (live PCR)" : ""}`)}
+      ${ch ? kvCell("Max pain", fmtStrike(ch.max_pain), `expiry ${esc(ch.expiry)} · price ${pct(METRICS.mp.get(s, v))} from it`) + kvCell("OI walls", `${fmtStrike(ch.max_put_oi_strike)} / ${fmtStrike(ch.max_call_oi_strike)}`, "highest put OI (support) / call OI (resistance)") : kvCell("Strikes", "—", s.chain_problem ? esc(s.chain_problem) : "no strike table")}
+    </div>`;
+    const nr = nextResults(s);
+    h += `<div class="actions" style="margin-top:8px">${ch ? `<button class="btn" type="button" data-oc="${esc(s.symbol)}">Open options chain</button>` : ""}<button class="btn" type="button" data-tabgo="overview">Full overview</button>${nr != null ? `<span class="count" style="align-self:center">Results in ${nr} session${nr === 1 ? "" : "s"}</span>` : ""}</div>`;
+    // the scanner's own label: its rule and the reasons it printed for this stock
+    h += `<h3>Scanner label</h3>` + (blind ? `<p class="count">Hidden in call mode until you make your call (header above).</p>`
+      : `<p class="whyhead"><span class="pill ${LABELS[s.label] || "u"}">${esc(s.label || "Unclassified")}</span>${livePill(s)}</p><div class="why"><ul>${(s.reasons || []).map(r => "<li>" + esc(r) + "</li>").join("")}</ul></div>
+        <p class="src">Label rule thresholds in this build: volume above <b>${TH.volume_above ?? 1}×</b> its <b>${TH.volume_window_days ?? 20}-day</b> average counts as heavy; PCR below <b>${PCR_LO}</b> reads bullish and above <b>${PCR_HI}</b> bearish; price and futures OI direction give the build-up type.</p>`);
+    // where the numbers came from and how old they are
+    const srcs = meta.sources || {};
+    h += `<h3>Data and freshness</h3><p class="src"><span class="fresh${f.stale ? " stale" : ""}"><span class="dot${f.live ? (f.stale ? " stale" : " on") : f.stale ? " stale" : ""}"></span><b>${v.live ? `Live quote ${esc(v.time)} IST` : `Closing data of ${esc(meta.as_of_label)}`}</b>${f.stale ? " · stale: " + esc(f.why) : ""}</span><br>
+      ${v.live ? `Polled ${esc(LIVE.updated_at || "")} IST from ${esc(SERVER.live_source || "the broker feed")}; values marked “close” come from the nightly scan.` : `Scan built ${esc(meta.generated_at_ist || "—")}.${SERVER.live ? " Live quotes replace these from 09:15 IST." : ""}`}<br>
+      ${srcs.prices_volume ? `Prices and volume: ${esc(srcs.prices_volume)}.<br>` : ""}${srcs.oi_pcr ? `OI and PCR: ${esc(srcs.oi_pcr)}.<br>` : ""}${srcs.strikes ? `Strikes: ${esc(srcs.strikes)}.` : ""}</p>`;
+    return h;
   }
   function kvCell(label, value, sub = "", cls = "") { return `<div><small>${label}</small><b class="${cls}">${value}</b>${sub ? `<em>${sub}</em>` : ""}</div>`; }
   function overviewHtml(s) {
@@ -975,7 +1588,8 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   async function fetchChain(s) {
     try {
       CHAIN[s.symbol] = await getJson(`/api/chain/${encodeURIComponent(s.symbol)}`);
-      if (sel === s.symbol) { renderLegs(); if (tab === "options") renderTab(); }
+      if (sel === s.symbol) { renderLegs(); if (tab === "options" || tab === "why") renderTab(); }
+      if (curView === "options" && ocSym === s.symbol) renderOptionsView();
     } catch (e) { /* keep the EOD chain */ }
   }
 
@@ -1094,29 +1708,202 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     } catch (e) { box.innerHTML = `<span class="err">Could not get a verdict: ${esc(e.message)}</span>`; btn.disabled = false; btn.textContent = "Weigh the evidence"; }
   }
 
-  // ---- boards: top movers, heatmap, scoreboard (desktop: in place of chart + details; phone: full screen)
-  function setBoard(b, quiet) {
-    board = b; showScore = b === "score";
-    if (b) document.body.dataset.board = b; else delete document.body.dataset.board;
-    $("#moversBtn").setAttribute("aria-pressed", b === "movers"); $("#heatBtn").setAttribute("aria-pressed", b === "heatmap"); $("#scoreToggle").setAttribute("aria-pressed", b === "score");
-    renderScoreboard(); renderBoard();
-    if (b && isPhone()) setMView("main", b);
-    if (!b && !quiet && chart) setTimeout(() => chart.timeScale().fitContent(), 0);
-    navState();
+  // ---- views: the rail on the left picks one; the scanner keeps its table and panel while others are open
+  const VIEWS = ["scanner", "options", "analytics", "saved", "alerts", "score", "settings"];
+  if (!VIEWS.includes(curView)) curView = "scanner";
+  function railState() {
+    const cur = curView === "scanner" && uni === "watchlist" ? "watchlist" : curView;
+    $$("#rail [data-view]").forEach(b => { if (b.dataset.view === cur) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
   }
-  $("#moversBtn").addEventListener("click", () => setBoard(board === "movers" ? null : "movers"));
-  $("#heatBtn").addEventListener("click", () => setBoard(board === "heatmap" ? null : "heatmap"));
-  $("#armABtn").addEventListener("click", () => goHome("#arma"));
-  $("#armBBtn").addEventListener("click", () => goHome("#armb"));
+  function setView(v, quiet) {
+    if (v === "watchlist") { if (uni !== "watchlist") setUni("watchlist", true); v = "scanner"; }
+    else if (v === "scanner" && !quiet && curView === "scanner" && uni === "watchlist") setUni("all", true);
+    if (!VIEWS.includes(v)) v = "scanner";
+    curView = v; store.set("fos_view", v); showScore = v === "score";
+    $$(".view").forEach(el => el.classList.toggle("on", el.id === "v-" + v));
+    railState(); closePop();
+    if (v === "scanner") { renderScan(); if (chart) setTimeout(() => chart.timeScale().fitContent(), 0); }
+    else if (v === "options") renderOptionsView();
+    else if (v === "analytics") renderAnalytics();
+    else if (v === "saved") renderSaved();
+    else if (v === "alerts") renderAlertsView();
+    else if (v === "score") renderScoreboard();
+    else if (v === "settings") renderSettings();
+    if (!quiet) setHash();
+  }
+  $("#rail").addEventListener("click", e => {
+    const b = e.target.closest("[data-view]"); if (!b) return;
+    const v = b.dataset.view;
+    if (v === "scanner" && uni === "watchlist") setUni("all", true);
+    setView(v);
+  });
+
+  // ---- market analytics: movers and build-ups, sector heatmap (descriptive boards, click a name to open it)
   let heatMetric = "pct";
-  function renderBoard() {
-    const el = $("#boardBody");
-    if (board === "movers") el.innerHTML = moversHtml();
-    else if (board === "heatmap") el.innerHTML = heatmapHtml();
-    else { el.innerHTML = ""; return; }
+  function renderAnalytics() {
+    const el = $("#anBody");
+    const tabs = `<div class="ph"><span class="seg" role="group" aria-label="Analytics board">${[["movers", "Movers and build-ups"], ["heatmap", "Sector heatmap"]].map(([k, n]) => `<button type="button" data-an="${k}" aria-pressed="${k === anTab}">${n}</button>`).join("")}</span></div>`;
+    el.innerHTML = tabs + (anTab === "heatmap" ? heatmapHtml() : moversHtml());
     $$("[data-go]", el).forEach(t => t.addEventListener("click", () => select(t.dataset.go)));
-    $$("[data-closeboard]", el).forEach(b => b.addEventListener("click", () => setBoard(null)));
-    $$("[data-metric]", el).forEach(b => b.addEventListener("click", () => { heatMetric = b.dataset.metric; renderBoard(); }));
+    $$("[data-an]", el).forEach(b => b.addEventListener("click", () => { anTab = b.dataset.an; store.set("fos_antab", anTab); renderAnalytics(); setHash(); }));
+    $$("[data-metric]", el).forEach(b => b.addEventListener("click", () => { heatMetric = b.dataset.metric; renderAnalytics(); }));
+  }
+
+  // ---- options chain view: one underlying, its nearest expiry, call and put side by side around the strike
+  let ocSym = store.get("fos_ocsym", null), ocWin = store.get("fos_ocwin", 0), ocHeat = store.get("fos_ocheat", "oi");
+  const withChain = () => stocks.filter(s => s.chain).map(s => s.symbol);
+  function openOptions(sym) { if (BY[sym] && BY[sym].chain) { ocSym = sym; store.set("fos_ocsym", sym); } setView("options"); }
+  function legVals(chain, r, t) {
+    const live = !!chain.live_at, lv = k => r[`${t}_live_${k}`] != null ? r[`${t}_live_${k}`] : null;
+    return { px: lv("ltp") ?? r[`${t}_close`], ch: lv("chg_pct"), oi: lv("oi") ?? r[`${t}_oi`], doi: live ? lv("oi_chg") : r[`${t}_oi_chg`], vol: lv("vol") ?? r[`${t}_vol`] };
+  }
+  function renderOptionsView() {
+    const syms = withChain();
+    if (!ocSym || !syms.includes(ocSym)) ocSym = syms.includes(sel) ? sel : syms[0];
+    $("#ocSym").innerHTML = syms.map(k => `<option value="${esc(k)}" ${k === ocSym ? "selected" : ""}>${esc(k)}</option>`).join("");
+    $("#ocWin").innerHTML = [[3, "±3"], [5, "±5"], [0, "All"]].map(([k, n]) => `<button type="button" data-win="${k}" aria-pressed="${k === ocWin}">${n}</button>`).join("");
+    $("#ocHeat").innerHTML = [["off", "Off"], ["oi", "OI"], ["doi", "Δ OI"], ["vol", "Volume"]].map(([k, n]) => `<button type="button" data-heat="${k}" aria-pressed="${k === ocHeat}">${n}</button>`).join("");
+    const s = BY[ocSym], ch = s && chainOf(s);
+    if (!ch) {
+      $("#ocExp").innerHTML = ""; $("#ocSum").innerHTML = "";
+      $("#ocWrap").innerHTML = `<p class="empty">${!syms.length ? (meta.chain_available === false ? "Strike tables could not be built for this session (" + esc(meta.chain_status || "") + ")." : meta.fo_available ? "No stock in this build has a strike table." : "Strike-level data needs NSE's F&amp;O bhavcopy, which is not in this build.") : "No strike table for this stock."}</p>`;
+      $("#ocFoot").innerHTML = ""; return;
+    }
+    $("#ocExp").innerHTML = `<option>${esc(ch.expiry)}</option>`; $("#ocExp").title = "Only the nearest expiry is in this build's strike table";
+    const v = view(s), spot = v.ltp, live = !!ch.live_at;
+    let strikes = ch.strikes.slice().sort((a, b) => a.strike - b.strike);
+    const ai = Math.max(0, strikes.findIndex(r => r.strike === ch.atm));
+    if (ocWin) strikes = strikes.slice(Math.max(0, ai - ocWin), ai + ocWin + 1);
+    const legs = strikes.map(r => ({ r, c: legVals(ch, r, "ce"), p: legVals(ch, r, "pe") }));
+    const sumCe = legs.reduce((a, x) => a + (x.c.oi || 0), 0), sumPe = legs.reduce((a, x) => a + (x.p.oi || 0), 0);
+    $("#ocSum").innerHTML = [
+      ["Spot", `<span class="${dirClass(v.pct)}">${fmtPx(spot)}</span>`, v.live ? "live " + esc(v.time) : "close"],
+      ["Change", `<span class="${dirClass(v.pct)}">${pct(v.pct)}</span>`, ""],
+      ["ATM", fmtStrike(ch.atm), ""], ["Max pain", fmtStrike(ch.max_pain), pct(METRICS.mp.get(s, v)) + " away"],
+      ["Call OI wall", fmtStrike(ch.max_call_oi_strike), "resistance"], ["Put OI wall", fmtStrike(ch.max_put_oi_strike), "support"],
+      ["PCR", num(v.pcr), "all strikes"], ["Shown PCR", sumCe ? num(sumPe / sumCe) : "—", `${legs.length} strikes`],
+      ["Lot", s.lot_size ?? "—", ""], ["Data", live ? "live " + esc(ch.live_at) : "close " + esc(meta.as_of), live ? esc(SERVER.live_source || "") : "bhavcopy"],
+    ].map(([k, val, sub]) => `<div><small>${k}${sub ? " · " + sub : ""}</small><b>${val}</b></div>`).join("");
+    // shading: the chosen metric's cells, as a bar from the strike outward (calls red-tinted, puts green; Δ OI cuts grey)
+    const hk = { oi: "oi", doi: "doi", vol: "vol" }[ocHeat];
+    const mx = hk ? Math.max(1, ...legs.map(x => Math.max(Math.abs(x.c[hk] || 0), Math.abs(x.p[hk] || 0)))) : 1;
+    const shade = (x, k, side) => {
+      if (k !== hk || x[k] == null) return "";
+      const w = Math.round(100 * Math.abs(x[k]) / mx);
+      return ` bar-${side}${x[k] < 0 ? " neg" : ""}" style="--w:${w}%`;
+    };
+    const lp = (k, t, x) => SERVER.live ? `<span class="lp" data-leg="${t}:${k}" title="Chart ${fmtStrike(k)} ${t}">${fmtPx(x.px)}</span>` : fmtPx(x.px);
+    const rows = legs.map(({ r, c, p }) => {
+      const k = r.strike, itmC = spot != null && k < spot, itmP = spot != null && k > spot, ic = itmC ? " itm" : "", ip = itmP ? " itm" : "";
+      const pcrK = c.oi ? num(p.oi / c.oi) : "—";
+      return `<tr class="${k === ch.atm ? "atm" : ""}" data-k="${k}">
+        <td class="${ic}${k === ch.max_call_oi_strike ? " hi" : ""}${shade(c, "oi", "c")}">${compact(c.oi)}</td>
+        <td class="${ic}${shade(c, "doi", "c")}"><span class="${dirClass(c.doi)}">${c.doi != null ? signedCompact(c.doi) : "—"}</span></td>
+        <td class="${ic}${shade(c, "vol", "c")}">${compact(c.vol)}</td>
+        <td class="${ic}">${lp(k, "CE", c)}</td>${live ? `<td class="${ic}"><span class="${dirClass(c.ch)}">${c.ch != null ? pct(c.ch) : "—"}</span></td>` : ""}
+        <td class="k${SERVER.orders ? " ok-k" : ""}"${SERVER.orders ? ` data-trade="CE" data-strike="${k}" role="button" tabindex="0" title="Prepare an order at ${fmtStrike(k)}"` : ""}>${fmtStrike(k)}<small>PCR ${pcrK}</small></td>
+        ${live ? `<td class="${ip}"><span class="${dirClass(p.ch)}">${p.ch != null ? pct(p.ch) : "—"}</span></td>` : ""}<td class="${ip}">${lp(k, "PE", p)}</td>
+        <td class="${ip}${shade(p, "vol", "p")}">${compact(p.vol)}</td>
+        <td class="${ip}${shade(p, "doi", "p")}"><span class="${dirClass(p.doi)}">${p.doi != null ? signedCompact(p.doi) : "—"}</span></td>
+        <td class="${ip}${k === ch.max_put_oi_strike ? " hi" : ""}${shade(p, "oi", "p")}">${compact(p.oi)}</td></tr>`;
+    }).join("");
+    $("#ocWrap").innerHTML = `<table class="oc2" aria-label="${esc(s.symbol)} option chain, expiry ${esc(ch.expiry)}"><thead>
+      <tr class="side"><th colspan="${live ? 5 : 4}">Calls (CE)</th><th>${esc(s.symbol)}</th><th colspan="${live ? 5 : 4}">Puts (PE)</th></tr>
+      <tr><th>OI</th><th>Δ OI</th><th>Volume</th><th>LTP</th>${live ? "<th>Chg %</th>" : ""}<th style="text-align:center">Strike</th>${live ? "<th>Chg %</th>" : ""}<th>LTP</th><th>Volume</th><th>Δ OI</th><th>OI</th></tr></thead><tbody>${rows}</tbody></table>`;
+    $("#ocFoot").innerHTML = `Expiry <b>${esc(ch.expiry)}</b> · ${live ? `live prices and OI at <b>${esc(ch.live_at)}</b> IST` : `closing prices and OI of <b>${esc(meta.as_of_label)}</b>`} · amber cells are in the money · the ATM row is outlined · the highest call and put OI strikes are highlighted.
+      ${live ? "Δ OI is against the last close; Chg % is against each option's previous close." : "Δ OI is as reported in the closing bhavcopy; option % change appears with live prices."}
+      ${ch.one_sided_strikes ? ` ${ch.one_sided_strikes} strike${ch.one_sided_strikes === 1 ? " is" : "s are"} listed on one side only; the missing side shows 0 OI.` : ""}
+      ${ch.live_error ? `<span class="err">Live option prices unavailable: ${esc(ch.live_error)}</span>` : ""}<br>
+      <b>Implied volatility and Greeks are not shown:</b> this build's strike table (NSE bhavcopy, ATM ± 8 strikes) and the live chain carry price, volume and OI only, and the page does not estimate them. ${SERVER.live ? "Tap a price to chart that option in the scanner panel." : ""}${SERVER.orders ? " Tap a strike to prepare a paper order." : ""}`;
+    if (SERVER.live && !CHAIN[s.symbol]) fetchChain(s);
+  }
+  $("#ocSym").addEventListener("change", e => { ocSym = e.target.value; store.set("fos_ocsym", ocSym); renderOptionsView(); setHash(); });
+  $("#ocWin").addEventListener("click", e => { const b = e.target.closest("[data-win]"); if (!b) return; ocWin = +b.dataset.win; store.set("fos_ocwin", ocWin); renderOptionsView(); });
+  $("#ocHeat").addEventListener("click", e => { const b = e.target.closest("[data-heat]"); if (!b) return; ocHeat = b.dataset.heat; store.set("fos_ocheat", ocHeat); renderOptionsView(); });
+  $("#ocAtm").addEventListener("click", () => { const r = $("#ocWrap tr.atm"); if (r) r.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); });
+  $("#ocOpen").addEventListener("click", () => { if (ocSym) select(ocSym); });
+  $("#ocWrap").addEventListener("click", e => {
+    const l = e.target.closest("[data-leg]");
+    if (l) { const sym = ocSym; select(sym, true); leg = l.dataset.leg; if (tf === "D") tf = "5"; renderLegs(); loadChart(true); return; }
+    const t = e.target.closest("[data-trade]"); if (t) openSheet(BY[ocSym], "CE", Number(t.dataset.strike));
+  });
+  $("#ocWrap").addEventListener("keydown", e => { const t = e.target.closest("[data-trade]"); if (t && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); openSheet(BY[ocSym], "CE", Number(t.dataset.strike)); } });
+
+  // ---- saved scans: name, conditions, matches now, alerts; kept in this browser (export to move them)
+  function renderSaved() {
+    const el = $("#savedBody");
+    const rows = saved.map(x => {
+      const n = matchesOf(x).length;
+      return `<tr data-id="${x.id}"><td><input class="inp" data-rename value="${esc(x.name)}" aria-label="Scan name" maxlength="60"></td>
+        <td class="mono">${x.conds.length ? esc(x.conds.map(condText).join(x.logic === "any" ? " or " : " and ")) : "no conditions"}${x.uni === "watchlist" ? " · watchlist only" : ""}</td>
+        <td class="mono">${n}</td>
+        <td><label class="toggle"><input type="checkbox" data-alert ${x.alert ? "checked" : ""} ${SERVER.live ? "" : "disabled"}> ${x.alert ? "on" : "off"}</label></td>
+        <td><div class="acts"><button class="btn primary" type="button" data-open>Open</button><button class="btn" type="button" data-dup>Duplicate</button><button class="btn" type="button" data-del>Delete</button></div></td></tr>`;
+    }).join("");
+    el.innerHTML = `<div class="ph"><h1>Saved scans</h1><span class="count">${saved.length} saved in this browser</span>
+        <span class="x"></span><button class="btn" type="button" id="svExport" ${saved.length ? "" : "disabled"}>Export</button><label class="btn" style="cursor:pointer">Import<input type="file" id="svImport" accept="application/json" hidden></label></div>
+      <div class="tbox">${rows ? `<table class="lt"><thead><tr><th>Name</th><th>Conditions</th><th>Matches now</th><th>Alert on new matches</th><th></th></tr></thead><tbody>${rows}</tbody></table>`
+        : `<p class="empty">No saved scans yet. Build conditions in the scanner, then press <b>Save scan</b>.<br><button class="btn" type="button" data-goscan>Go to the scanner</button></p>`}</div>
+      <p class="count">Scans are kept in this browser's storage, so they do not follow you to another device; use Export and Import to move them. ${SERVER.live ? "Alerts are checked on every live poll while this page is open." : "Alerts need the live server."}</p>`;
+    const id = el2 => +el2.closest("tr").dataset.id, find = el2 => saved.find(x => x.id === id(el2));
+    $$("[data-open]", el).forEach(b => b.addEventListener("click", () => { loadScan("saved:" + id(b)); setView("scanner"); }));
+    $$("[data-dup]", el).forEach(b => b.addEventListener("click", () => { const x = find(b); saved.push({ ...JSON.parse(JSON.stringify(x)), id: Date.now(), name: x.name + " (copy)", alert: false }); store.set(SAVED_KEY, saved); renderSaved(); toast("Scan duplicated"); }));
+    $$("[data-del]", el).forEach(b => b.addEventListener("click", () => { const x = find(b); if (!confirm(`Delete the saved scan “${x.name}”?`)) return; saved = saved.filter(y => y.id !== x.id); store.set(SAVED_KEY, saved); if (scan.src === "saved:" + x.id) { scan.src = "all"; scan.dirty = true; saveScanState(); } renderSaved(); toast(`Deleted “${esc(x.name)}”`); }));
+    $$("[data-rename]", el).forEach(i => i.addEventListener("change", () => { const x = find(i); x.name = i.value.trim() || x.name; store.set(SAVED_KEY, saved); if (scan.src === "saved:" + x.id) { scan.name = x.name; saveScanState(); } toast("Renamed"); }));
+    $$("[data-alert]", el).forEach(i => i.addEventListener("change", () => { const x = find(i); x.alert = i.checked; delete scanSeen[x.id]; store.set(SAVED_KEY, saved); renderSaved(); toast(`Alerts ${x.alert ? "on" : "off"} for “${esc(x.name)}”`); if (x.alert && "Notification" in window && Notification.permission === "default") Notification.requestPermission(); }));
+    const gs = $("[data-goscan]", el); if (gs) gs.addEventListener("click", () => setView("scanner"));
+    $("#svExport").addEventListener("click", () => { const a = document.createElement("a"); a.href = "data:application/json," + encodeURIComponent(JSON.stringify({ saved_scans: saved }, null, 1)); a.download = "fo-scanner-scans.json"; a.click(); });
+    $("#svImport").addEventListener("change", async e => {
+      try {
+        const j = JSON.parse(await e.target.files[0].text()), inc = (j.saved_scans || j).filter(x => x && Array.isArray(x.conds));
+        inc.forEach((x, i) => saved.push({ ...x, id: Date.now() + i, conds: x.conds.filter(c => METRICS[c.m]) }));
+        store.set(SAVED_KEY, saved); renderSaved(); toast(`Imported ${inc.length} scan${inc.length === 1 ? "" : "s"}`, "up");
+      } catch (err) { toast("Could not read that file: it is not a scans export", "down"); }
+    });
+  }
+
+  // ---- settings: display and alert preferences, data sources, shortcuts (saved in this browser)
+  function renderSettings() {
+    const el = $("#settingsBody"), dark = document.documentElement.dataset.theme !== "light", srcs = meta.sources || {};
+    const segH = (key, opts, cur) => `<span class="seg" role="group">${opts.map(([k, n]) => `<button type="button" data-set="${key}" data-val="${k}" aria-pressed="${k === cur}">${n}</button>`).join("")}</span>`;
+    el.innerHTML = `<div class="ph"><h1>Settings</h1><span class="count">saved in this browser as you change them</span></div>
+      <div class="tbox"><h3>Display</h3><div class="in setg">
+        <span>Theme</span>${segH("theme", [["dark", "Dark"], ["light", "Light"]], dark ? "dark" : "light")}
+        <span>Table rows</span>${segH("density", [["compact", "Compact"], ["comfortable", "Comfortable"]], prefs.density)}
+        <span>Instrument panel</span>${segH("panel", [["open", "Normal width"], ["wide", "Wide"]], prefs.panel)}
+        <span>Alert sound</span><label class="toggle"><input type="checkbox" data-set="sound" ${prefs.sound ? "checked" : ""}> play a tone when a price or scan alert fires</label>
+      </div></div>
+      <div class="tbox"><h3>Data</h3><div class="in setg">
+        <span>This build</span><p class="mono">closing data of ${esc(meta.as_of_label)} · built ${esc(meta.generated_at_ist || "—")} · ${meta.universe_size ?? stocks.length} stocks</p>
+        <span>Live quotes</span><p>${SERVER.live ? `on, from ${esc(SERVER.live_source || "the broker")}, polled every ${SERVER.poll_seconds} s` : "off: this page shows closing data only"}</p>
+        <span>Orders</span><p>${SERVER.orders ? (SERVER.paper ? "paper orders (no real money)" : "real broker orders") : "off"}</p>
+        ${Object.entries(srcs).map(([k, val]) => `<span>${esc(k.replace(/_/g, " "))}</span><p>${esc(val)}</p>`).join("")}
+        <span>Not available</span><p>implied volatility and Greeks (not in the bhavcopy or the live chain this server uses)</p>
+      </div></div>
+      <div class="tbox"><h3>Keyboard</h3><div class="in setg">
+        <span><kbd class="k">/</kbd></span><p>search a symbol</p><span><kbd class="k">↑</kbd> <kbd class="k">↓</kbd></span><p>move through the results</p>
+        <span><kbd class="k">1</kbd>–<kbd class="k">6</kbd></span><p>panel tabs (Why, Overview, Options, News, Results, Signals)</p>
+        <span><kbd class="k">E</kbd></span><p>widen or narrow the panel</p><span><kbd class="k">F</kbd></span><p>add a filter</p>
+        <span><kbd class="k">S</kbd> <kbd class="k">W</kbd> <kbd class="k">O</kbd> <kbd class="k">M</kbd></span><p>scanner, watchlist, options chain, analytics</p>
+        <span><kbd class="k">Esc</kbd></span><p>close a menu, dialog or the panel</p>
+      </div></div>
+      <div class="tbox"><h3>Reset</h3><div class="in actions" style="margin:0">
+        <button class="btn" type="button" data-reset="layout">Reset scanner layout</button>
+        <button class="btn" type="button" data-reset="scans" ${saved.length ? "" : "disabled"}>Delete all saved scans</button>
+        <button class="btn" type="button" data-reset="watch" ${pins.size ? "" : "disabled"}>Clear the watchlist</button></div></div>`;
+    $$("[data-set]", el).forEach(b => b.addEventListener(b.type === "checkbox" ? "change" : "click", () => {
+      const k = b.dataset.set, val = b.type === "checkbox" ? b.checked : b.dataset.val;
+      if (k === "theme") { if ((val === "light") !== (document.documentElement.dataset.theme === "light")) $("#themeBtn").click(); }
+      else { prefs[k] = val; store.set("fos_prefs_v1", prefs); applyPrefs(); if (k === "panel") document.body.dataset.panel = val; }
+      renderSettings(); toast("Settings saved", "up");
+    }));
+    $$("[data-reset]", el).forEach(b => b.addEventListener("click", () => {
+      const k = b.dataset.reset;
+      if (k === "layout") { cols = DEFAULT_COLS.slice(); store.set("fos_cols_v1", cols); scan = fromPreset(PRESETS[0]); saveScanState(); setUni("all", true); toast("Scanner layout reset"); }
+      else if (k === "scans" && confirm(`Delete all ${saved.length} saved scans?`)) { saved = []; store.set(SAVED_KEY, saved); toast("Saved scans deleted"); }
+      else if (k === "watch" && confirm(`Remove all ${pins.size} stocks from the watchlist?`)) { pins.clear(); store.set("fos_pins_v1", []); renderUni(); toast("Watchlist cleared"); }
+      renderSettings();
+    }));
   }
   function moversHtml() {
     const all = stocks.map(s => ({ s, v: view(s) }));
@@ -1127,7 +1914,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
     const by = (k, d = -1) => (a, b) => (a.v[k] == null) - (b.v[k] == null) || d * ((a.v[k] ?? 0) - (b.v[k] ?? 0));
     const oiCol = v => `<span class="${dirClass(v.oi)}">OI ${pct(v.oi)}</span>`;
     const has = x => x.v.pct != null && x.v.oi != null;
-    return `<div class="bh"><h2>Top movers</h2><span class="count">${live ? "live, " + esc(LIVE.updated_at || "") + " IST" : "closing data of " + esc(meta.as_of_label)} · price vs previous close; OI = open interest vs last close</span><button class="btn x" type="button" data-closeboard>Close</button></div>
+    return `<div class="ph"><h1>Top movers</h1><span class="count">${live ? "live, " + esc(LIVE.updated_at || "") + " IST" : "closing data of " + esc(meta.as_of_label)} · price vs previous close; OI = open interest vs last close</span></div>
       <div class="mv">
         ${card("Top gainers", "% change", top(all.filter(x => x.v.pct != null), by("pct")), v => compact(v.vol))}
         ${card("Top losers", "% change", top(all.filter(x => x.v.pct != null), by("pct", 1)), v => compact(v.vol))}
@@ -1156,10 +1943,10 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const vals = xs.map(x => fn(x.v)).filter(v => v != null), avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
       return { name, xs: xs.sort((a, b) => weight(b) - weight(a)), avg, w: xs.reduce((a, x) => a + weight(x), 0) };
     }).sort((a, b) => b.w - a.w);
-    return `<div class="bh"><h2>Heatmap</h2>
+    return `<div class="ph"><h1>Heatmap</h1>
       <span class="seg">${Object.entries(M).map(([k, [n]]) => `<button type="button" data-metric="${k}" aria-pressed="${k === heatMetric}">${n}</button>`).join("")}</span>
       <span class="legendbar"><span>${heatMetric === "vr" ? "below avg" : "−" + scale + "%"}</span><i></i><span>${heatMetric === "vr" ? "above avg" : "+" + scale + "%"}</span></span>
-      <span class="count">tile size: traded value</span><button class="btn x" type="button" data-closeboard>Close</button></div>
+      <span class="count">tile size: traded value</span></div>
       ${secs.map(g => `<div class="hm-sec"><h4>${esc(g.name)} <span class="${dirClass(g.avg)} mono">${heatMetric === "vr" ? "" : pct(g.avg != null ? +g.avg.toFixed(2) : null)}</span></h4><div class="hm-tiles">${g.xs.map(x => {
         const val = fn(x.v), w = weight(x) / wmax;
         return `<div class="hm-t" data-go="${esc(x.s.symbol)}" style="${color(val)};flex:${(0.6 + 3 * w).toFixed(2)} 1 ${Math.round(70 + 150 * w)}px" title="${esc(x.s.name || x.s.symbol)} · ${fmtPx(x.v.ltp)}"><b>${esc(x.s.symbol)}</b><span>${fmtV(val)}</span></div>`; }).join("")}</div></div>`).join("")}`;
@@ -1167,32 +1954,43 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
 
   // ---- price alerts (stock / future LTP; checked on every live poll while this page is open)
   function saveAlerts() { store.set("fos_alerts_v1", alerts); const n = alerts.filter(a => !a.fired).length; $("#alertN").hidden = !n; $("#alertN").textContent = n; }
-  function openAlerts(sym) {
-    const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
-    const sheet = document.createElement("div"); sheet.className = "sheet"; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-modal", "true"); bg.appendChild(sheet);
-    const s = BY[sym || sel];
-    function draw() {
-      const q = s ? LIVE.quotes[s.symbol] : null;
-      const list = alerts.slice().reverse().map(a => `<div class="al"><span><b>${esc(a.sym)}</b> ${a.dir === "above" ? "rises to" : "falls to"} <b class="mono">${fmtPx(a.level)}</b>${a.fired ? ` <span class="pill ${a.dir === "above" ? "b" : "r"}">fired ${esc(a.fired)}</span>` : ""}</span><button class="chip" type="button" data-del="${a.id}">Delete</button></div>`).join("");
-      sheet.innerHTML = `<h2>Price alerts</h2><p class="sub">Checked on every live poll (${SERVER.poll_seconds}s) while this page is open: a sound, and a browser notification when allowed. They live in this browser only.</p>
-        ${s && SERVER.live ? `<div class="field"><label>${esc(s.symbol)} · now ${fmtPx(q ? q.ltp : s.close)}</label>
-          <div style="display:flex;gap:6px"><input class="num" id="alLv" type="number" step="0.05" inputmode="decimal" placeholder="Alert price" value="${q ? q.ltp : s.close}"><button class="btn primary" type="button" id="alAdd">Add</button></div></div>` : `<p class="count">Alerts need the live server.</p>`}
-        <h3 class="oh">Your alerts</h3>${list || "<p class='count'>None yet.</p>"}
-        <div class="actions"><button class="btn" type="button" id="alClose">Close</button></div>`;
-      $("#alClose", sheet).addEventListener("click", () => bg.remove());
-      $$("[data-del]", sheet).forEach(b => b.addEventListener("click", () => { alerts = alerts.filter(a => String(a.id) !== b.dataset.del); saveAlerts(); draw(); loadChart(false); }));
-      const add = $("#alAdd", sheet);
-      if (add) add.addEventListener("click", () => {
-        const lv = Number($("#alLv", sheet).value), lg = "stock", now = q ? q.ltp : s.close;
-        if (!(lv > 0)) return;
-        alerts.push({ id: Date.now(), sym: s.symbol, leg: lg, level: lv, dir: now != null && lv < now ? "below" : "above", created: new Date().toISOString(), fired: null });
-        saveAlerts(); draw(); loadChart(false);
-        if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
-      });
-    }
-    draw(); document.body.appendChild(bg);
+  let alertSym = null;
+  function openAlerts(sym) { alertSym = sym || sel; setView("alerts"); }
+  function renderAlertsView() {
+    const el = $("#alertsBody"), s = BY[alertSym || sel] || BY[sel], q = s ? LIVE.quotes[s.symbol] : null, now = s ? (q && q.ltp != null ? q.ltp : s.close) : null;
+    const rows = alerts.slice().reverse().map(a => {
+      const lq = LIVE.quotes[a.sym], px = lq && lq.ltp != null ? lq.ltp : BY[a.sym] ? BY[a.sym].close : null;
+      return `<tr><td><b>${esc(a.sym)}</b></td><td>${a.dir === "above" ? "rises to" : "falls to"}</td><td class="mono">${fmtPx(a.level)}</td><td class="mono">${fmtPx(px)}${px != null && !a.fired ? ` <small class="muted">${pct((a.level / px - 1) * 100)} away</small>` : ""}</td>
+        <td>${a.fired ? `<span class="pill ${a.dir === "above" ? "b" : "r"}">fired ${esc(a.fired)}</span>` : `<span class="pill n">waiting</span>`}</td><td><div class="acts"><button class="btn" type="button" data-del="${a.id}">Delete</button></div></td></tr>`;
+    }).join("");
+    const sv = saved.map(x => `<tr><td>${esc(x.name)}</td><td class="mono">${matchesOf(x).length} now</td><td><label class="toggle"><input type="checkbox" data-salert="${x.id}" ${x.alert ? "checked" : ""} ${SERVER.live ? "" : "disabled"}> ${x.alert ? "on" : "off"}</label></td></tr>`).join("");
+    const log = scanLog.map(x => `<tr><td class="mono">${esc(x.time)}</td><td>${esc(x.scan)}</td><td class="mono" title="${esc(x.symbols.join(", "))}">${esc(x.symbols.slice(0, 10).join(", "))}${x.symbols.length > 10 ? ` <span class="muted">and ${x.symbols.length - 10} more</span>` : ""}</td></tr>`).join("");
+    el.innerHTML = `<div class="ph"><h1>Alerts</h1><span class="count">checked on every live poll (${SERVER.poll_seconds} s) while this page is open · a tone${prefs.sound ? "" : " (off in Settings)"} and a browser notification when allowed · kept in this browser</span></div>
+      <div class="tbox"><h3>Price alerts</h3><div class="in">
+        ${SERVER.live && s ? `<div class="actions" style="margin:0;align-items:center"><input class="inp" id="alSym" list="alSyms" value="${esc(s.symbol)}" style="width:130px" aria-label="Symbol"><datalist id="alSyms">${stocks.map(x => `<option value="${esc(x.symbol)}">`).join("")}</datalist>
+          <span class="count" style="margin:0">now <b class="mono">${fmtPx(now)}</b></span>
+          <input class="inp" id="alLv" type="number" step="0.05" inputmode="decimal" placeholder="Alert price" value="${now ?? ""}" style="width:120px" aria-label="Alert price">
+          <button class="btn primary" type="button" id="alAdd">Add alert</button><span class="err" id="alErr"></span></div>`
+          : `<p class="count" style="margin:0">Price alerts need the live server: this page has closing data only, so nothing would ever trigger them.</p>`}</div>
+        ${rows ? `<table class="lt"><thead><tr><th>Symbol</th><th>When it</th><th>Level</th><th>Now</th><th>Status</th><th></th></tr></thead><tbody>${rows}</tbody></table>` : `<p class="empty">No price alerts yet.</p>`}</div>
+      <div class="tbox"><h3>Scan alerts <span class="count" style="margin:0;text-transform:none;letter-spacing:0">a saved scan tells you when a stock newly matches it</span></h3>
+        ${sv ? `<table class="lt"><thead><tr><th>Saved scan</th><th>Matches</th><th>Alert</th></tr></thead><tbody>${sv}</tbody></table>` : `<p class="empty">No saved scans. Save one from the scanner toolbar to get alerts on it.</p>`}</div>
+      ${log ? `<div class="tbox"><h3>Scan alerts fired today</h3><table class="lt"><thead><tr><th>Poll</th><th>Scan</th><th>New matches</th></tr></thead><tbody>${log}</tbody></table></div>` : ""}`;
+    $$("[data-del]", el).forEach(b => b.addEventListener("click", () => { alerts = alerts.filter(a => String(a.id) !== b.dataset.del); saveAlerts(); renderAlertsView(); loadChart(false); toast("Alert deleted"); }));
+    $$("[data-salert]", el).forEach(i => i.addEventListener("change", () => { const x = saved.find(y => String(y.id) === i.dataset.salert); x.alert = i.checked; delete scanSeen[x.id]; store.set(SAVED_KEY, saved); renderAlertsView(); toast(`Alerts ${x.alert ? "on" : "off"} for “${esc(x.name)}”`); }));
+    const symIn = $("#alSym", el);
+    if (symIn) symIn.addEventListener("change", () => { const k = symIn.value.trim().toUpperCase(); if (BY[k]) { alertSym = k; renderAlertsView(); } });
+    const add = $("#alAdd", el);
+    if (add) add.addEventListener("click", () => {
+      const k = $("#alSym", el).value.trim().toUpperCase(), st = BY[k], lv = Number($("#alLv", el).value);
+      if (!st) { $("#alErr", el).textContent = "Pick a symbol from the list."; return; }
+      if (!(lv > 0)) { $("#alErr", el).textContent = "Type a price above zero."; return; }
+      const lq = LIVE.quotes[k], cur = lq && lq.ltp != null ? lq.ltp : st.close;
+      alerts.push({ id: Date.now(), sym: k, leg: "stock", level: lv, dir: cur != null && lv < cur ? "below" : "above", created: new Date().toISOString(), fired: null });
+      saveAlerts(); renderAlertsView(); loadChart(false); toast(`Alert set: ${esc(k)} ${cur != null && lv < cur ? "falls to" : "rises to"} ${fmtPx(lv)}`, "up");
+      if ("Notification" in window && Notification.permission === "default") Notification.requestPermission();
+    });
   }
-  $("#alertsBtn").addEventListener("click", () => openAlerts(sel));
   function beep() {
     try { const c = new (window.AudioContext || window.webkitAudioContext)(), o = c.createOscillator(), g = c.createGain();
       o.connect(g); g.connect(c.destination); o.frequency.value = 880; g.gain.setValueAtTime(0.15, c.currentTime); g.gain.exponentialRampToValueAtTime(0.001, c.currentTime + 0.6); o.start(); o.stop(c.currentTime + 0.6); } catch (e) { /* no audio */ }
@@ -1210,11 +2008,11 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       if (a.dir === "above" ? px >= a.level : px <= a.level) {
         a.fired = (q.ts || "").slice(11, 19) || LIVE.updated_at; fired = true;
         const msg = `${a.sym}${a.leg === "fut" ? " future" : ""} ${a.dir === "above" ? "rose to" : "fell to"} ${fmtPx(px)} (alert ${fmtPx(a.level)})`;
-        toast(`<b>Alert</b> · ${esc(msg)}`, a.dir === "above" ? "up" : "down"); beep();
+        toast(`<b>Alert</b> · ${esc(msg)}`, a.dir === "above" ? "up" : "down"); if (prefs.sound) beep();
         try { if ("Notification" in window && Notification.permission === "granted") new Notification("F&O alert", { body: msg }); } catch (e) { /* ignore */ }
       }
     }
-    if (fired) saveAlerts();
+    if (fired) { saveAlerts(); if (curView === "alerts") renderAlertsView(); }
   }
 
   // ---- live polling
@@ -1223,10 +2021,11 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
       const r = await fetch("/api/live", auth); if (!r.ok) throw new Error(r.status);
       LIVE = await r.json();
       $("#livetext").textContent = LIVE.error ? "Live feed error: " + LIVE.error : "";
-      render(); checkAlerts(); refreshPaperBar();
+      render(); checkAlerts(); checkScanAlerts(); refreshPaperBar();
       if (sel && tf !== "D") loadChart(false);
       else if (sel && tf === "D" && LIVE.market_open) loadChart(false);
       if (sel && tab === "options" && LIVE.market_open && BY[sel].chain) fetchChain(BY[sel]);
+      if (curView === "options" && LIVE.market_open && ocSym && BY[ocSym]) fetchChain(BY[ocSym]);
     } catch (e) { LIVE.error = "unreachable"; }
     tickClock();
   }
@@ -1234,54 +2033,64 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
 
   // one render for everything that depends on the numbers
   function render() {
-    renderList(); renderHeader();
+    if (curView === "scanner") { renderList(); updateTallies(); }
+    renderHeader();
     if (tab !== "news" && tab !== "signals") { const y = $("#tbody").scrollTop; renderTab(); $("#tbody").scrollTop = y; }
-    if (board === "movers" || board === "heatmap") renderBoard();
+    if (curView === "analytics") renderAnalytics();
+    else if (curView === "alerts") renderAlertsView();
   }
 
-  // ---- phone navigation
-  function setMView(v) { document.body.dataset.mview = v; navState(); }
-  function navState() {
-    const cur = document.body.dataset.mview === "list" ? "list" : board || "stock";
-    $$("#mnav [data-nav]").forEach(b => b.setAttribute("aria-current", b.dataset.nav === cur));
+  // ---- top search: jump to any F&O stock (symbol first, then company name)
+  let sugg = [], suggAt = 0;
+  function renderSugg() {
+    const q = $("#q").value.trim().toUpperCase(), box = $("#sugg");
+    if (!q) { box.hidden = true; $("#q").setAttribute("aria-expanded", "false"); return; }
+    const a = stocks.filter(s => s.symbol.startsWith(q)), b = stocks.filter(s => !s.symbol.startsWith(q) && s.symbol.includes(q)),
+          c = stocks.filter(s => !s.symbol.includes(q) && (s.name || "").toUpperCase().includes(q));
+    sugg = a.concat(b, c).slice(0, 12); suggAt = 0;
+    box.innerHTML = sugg.length ? sugg.map((s, i) => { const v = view(s); return `<button type="button" role="option" data-go="${esc(s.symbol)}" aria-selected="${i === suggAt}"><b>${esc(s.symbol)}</b><small>${esc(s.name || sectorName(s.sector))}</small><span class="mono ${dirClass(v.pct)}">${pct(v.pct)}</span></button>`; }).join("")
+      : `<p class="empty" style="padding:10px">No F&amp;O stock matches “${esc(q)}”.</p>`;
+    box.hidden = false; $("#q").setAttribute("aria-expanded", "true");
   }
-  $("#mnav").addEventListener("click", e => {
-    const b = e.target.closest("[data-nav]"); if (!b) return;
-    const n = b.dataset.nav;
-    if (n === "list") { setBoard(null, true); setMView("list"); }
-    else if (n === "stock") { setBoard(null); setMView("main"); setTimeout(() => chart && chart.timeScale().fitContent(), 50); }
-    else if (n === "movers" || n === "heatmap") setBoard(n);
-    else if (n === "more") openMore();
-    scrollTo({ top: 0 });
+  function pickSugg(sym) { $("#q").value = ""; $("#sugg").hidden = true; $("#q").blur(); select(sym); }
+  $("#q").addEventListener("input", renderSugg);
+  $("#q").addEventListener("focus", renderSugg);
+  $("#q").addEventListener("blur", () => setTimeout(() => { $("#sugg").hidden = true; }, 150));
+  $("#sugg").addEventListener("mousedown", e => { const b = e.target.closest("[data-go]"); if (b) { e.preventDefault(); pickSugg(b.dataset.go); } });
+  $("#q").addEventListener("keydown", e => {
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      if (!sugg.length) return; e.preventDefault();
+      suggAt = (suggAt + (e.key === "ArrowDown" ? 1 : -1) + sugg.length) % sugg.length;
+      $$("#sugg [data-go]").forEach((b, i) => { b.setAttribute("aria-selected", i === suggAt); if (i === suggAt) b.scrollIntoView({ block: "nearest" }); });
+    } else if (e.key === "Enter") { if (sugg[suggAt]) pickSugg(sugg[suggAt].symbol); }
+    else if (e.key === "Escape") { $("#q").value = ""; $("#sugg").hidden = true; $("#q").blur(); e.stopPropagation(); }
   });
-  function openMore() {
-    const bg = document.createElement("div"); bg.className = "sheet-bg"; bg.addEventListener("click", e => { if (e.target === bg) bg.remove(); });
-    const sheet = document.createElement("div"); sheet.className = "sheet"; bg.appendChild(sheet);
-    sheet.innerHTML = `<h2>More</h2><div class="actions" style="flex-direction:column">
-      <button class="btn" type="button" data-m="armA">Forward test · Arm A (every results beat)</button>
-      <button class="btn" type="button" data-m="armB">Forward test · Arm B (strong sector)</button>
-      <button class="btn" type="button" data-m="score">Scoreboard: your calls vs the system</button>
-      <button class="btn" type="button" data-m="alerts">Price alerts</button>
-      ${SERVER.orders ? `<button class="btn" type="button" data-m="orders">Results: paper account</button>` : ""}
-      <button class="btn" type="button" data-m="theme">Light / dark theme</button>
-      <button class="btn" type="button" data-m="close">Close</button></div>`;
-    sheet.addEventListener("click", e => {
-      const m = (e.target.closest("[data-m]") || {}).dataset; if (!m) return; bg.remove();
-      if (m.m === "score") setBoard("score"); else if (m.m === "armA" || m.m === "armB") goHome("#" + m.m.toLowerCase()); else if (m.m === "alerts") openAlerts(sel); else if (m.m === "orders") goHome("#paper"); else if (m.m === "theme") $("#themeBtn").click();
-    });
-    document.body.appendChild(bg);
-  }
 
-  // ---- keyboard: / search · ↑↓ move · 1-5 tabs · Esc close
+  // ---- keyboard: / search · ↑↓ move · Enter open · 1-6 tabs · E widen · F add filter · S W O M views · Esc close
   addEventListener("keydown", e => {
     const typing = /INPUT|SELECT|TEXTAREA/.test((e.target || {}).tagName || "");
-    if (e.key === "Escape") { const sb = $$(".sheet-bg").pop(); if (sb) sb.remove(); else if (board) setBoard(null); else if (typing) e.target.blur(); return; }
+    if (e.key === "Escape") {
+      const sb = $$(".sheet-bg").pop();
+      if (closePop()) return; if (sb) { sb.remove(); return; }
+      if (typing) { e.target.blur(); return; }
+      if (curView === "scanner" && (isPhone() ? document.body.dataset.pnlOpen : document.body.dataset.panel !== "closed")) closePanel();
+      return;
+    }
     if (typing || e.ctrlKey || e.metaKey || e.altKey) return;
-    if (e.key === "/") { e.preventDefault(); $("#q").focus(); $("#q").select(); }
-    else if (e.key === "ArrowDown" || e.key === "ArrowUp") {
-      const rows = visibleRows(), i = rows.findIndex(s => s.symbol === sel), j = Math.max(0, Math.min(rows.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)));
-      if (rows[j] && rows[j].symbol !== sel) { e.preventDefault(); select(rows[j].symbol); const r = $(`.wr[data-sym="${CSS.escape(rows[j].symbol)}"]`); if (r) r.scrollIntoView({ block: "nearest" }); }
-    } else if (/^[1-5]$/.test(e.key)) setTab(TABS[+e.key - 1][0]);
+    const k = e.key;
+    if (k === "/") { e.preventDefault(); $("#q").focus(); $("#q").select(); }
+    else if (curView === "scanner" && (k === "ArrowDown" || k === "ArrowUp" || k === "j" || k === "k")) {
+      const i = ROWS.findIndex(r => r.s.symbol === sel), j = Math.max(0, Math.min(ROWS.length - 1, i < 0 ? 0 : i + (k === "ArrowDown" || k === "j" ? 1 : -1)));
+      if (ROWS[j] && ROWS[j].s.symbol !== sel) { e.preventDefault(); select(ROWS[j].s.symbol, false, !isPhone()); }
+    }
+    else if (k === "Enter" && curView === "scanner" && sel) select(sel);
+    else if (/^[1-6]$/.test(k) && curView === "scanner") setTab(TABS[+k - 1][0]);
+    else if ((k === "e" || k === "E") && curView === "scanner" && !isPhone()) { if (document.body.dataset.panel === "closed") select(sel); else togglePanelWidth(); }
+    else if (k === "f" || k === "F") { if (curView !== "scanner") setView("scanner"); e.preventDefault(); const a = $("#addCond"); if (a) a.focus(); }
+    else if (k === "s" || k === "S") { if (uni === "watchlist") setUni("all", true); setView("scanner"); }
+    else if (k === "w" || k === "W") setView("watchlist");
+    else if (k === "o" || k === "O") openOptions(sel);
+    else if (k === "m" || k === "M") setView("analytics");
   });
 
   // ---- orders
@@ -1450,27 +2259,41 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   function dirClass(v) { return v == null || v === 0 ? "flat" : v > 0 ? "up" : "down"; }
   function esc(t) { return String(t ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
 
-  // ---- links: #RELIANCE, #RELIANCE/options, #movers, #heatmap, #score, #arma, #armb (kept in the address bar)
+  // ---- links (kept in the address bar): #RELIANCE, #RELIANCE/options (a panel tab), #options/RELIANCE, #watchlist,
+  //      #movers, #heatmap, #saved, #alerts, #score, #settings; #arma, #armb, #paper open the dashboard
+  function setHash() {
+    let h = curView === "scanner" ? (uni === "watchlist" ? "watchlist" : "") + (sel ? (uni === "watchlist" ? "/" : "") + encodeURIComponent(sel) + (tab !== "why" ? "/" + tab : "") : "")
+      : curView === "options" ? "options/" + encodeURIComponent(ocSym || "") : curView === "analytics" ? anTab : curView;
+    try { history.replaceState(null, "", "#" + h); } catch (e) { /* file:// */ }
+  }
   function fromHash() {
-    const [a, b] = decodeURIComponent(location.hash.slice(1)).split("/");
-    if (!a) return false;
-    if (["arma", "armb", "paper"].includes(a.toLowerCase())) { goHome("#" + a.toLowerCase()); return true; }
-    const bn = { movers: "movers", heatmap: "heatmap", score: "score" }[a.toLowerCase()];
-    if (bn) { if (sel && !chartKey) _select(sel); setBoard(bn); return true; }
+    const parts = decodeURIComponent(location.hash.slice(1)).split("/").filter(Boolean);
+    let [a, b, c] = parts; if (!a) return false;
+    const al = a.toLowerCase();
+    if (["arma", "armb", "paper"].includes(al)) { goHome("#" + al); return true; }
+    if (al === "movers" || al === "heatmap") { anTab = al; if (sel) select(sel, false, false); setView("analytics"); return true; }
+    if (["saved", "alerts", "score", "settings"].includes(al)) { if (sel) select(sel, false, false); setView(al); return true; }
+    if (al === "options") { if (sel) select(sel, false, false); openOptions((b || "").toUpperCase() || sel); return true; }
+    if (al === "watchlist" || al === "scanner") { setUni(al === "watchlist" ? "watchlist" : "all", true); setView("scanner", true); [a, b] = [b, c]; if (!a) { if (sel) select(sel, false, false); return true; } }
     const sym = a.toUpperCase(); if (!BY[sym]) return false;
     if (b && TABS.some(t => t[0] === b.toLowerCase())) tab = b.toLowerCase();
     select(sym); return true;
   }
   addEventListener("hashchange", fromHash);
   const _select = select;
-  select = function (sym, keepLeg) { _select(sym, keepLeg); try { history.replaceState(null, "", "#" + encodeURIComponent(sym) + (tab !== "overview" ? "/" + tab : "")); } catch (e) { /* file:// */ } };
+  select = function (sym, keepLeg, open) { _select(sym, keepLeg, open); setHash(); };
   const _setTab = setTab;
-  setTab = function (k) { _setTab(k); try { history.replaceState(null, "", "#" + encodeURIComponent(sel) + (k !== "overview" ? "/" + k : "")); } catch (e) { /* file:// */ } };
+  setTab = function (k) { _setTab(k); setHash(); };
+  const S2 = SERVER.orders || SERVER.live ? "/s2" : "s2.html";
+  $("#navHome").href = HOME; $("#brandMark").href = HOME; $("#navS2").href = S2;
 
   // ---- start
-  saveAlerts(); renderSegs(); renderTabs(); renderList();
-  if (!fromHash()) { if (sel) select(sel); else render(); if (isPhone()) setMView("list"); }
-  navState();
+  saveAlerts(); renderTabs(); renderScan();
+  $("#expandBtn").setAttribute("aria-pressed", document.body.dataset.panel === "wide");
+  $("#expandBtn").textContent = document.body.dataset.panel === "wide" ? "⇔ Narrow" : "⇔ Widen";
+  setView(curView, true);
+  if (!fromHash()) { if (sel) select(sel, false, false); else render(); }
+  railState();
 })();
 </script>
 </body>
