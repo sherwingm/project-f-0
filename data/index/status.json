@@ -1,14 +1,14 @@
 {
  "recorder": {
-  "run_at": "2026-10-22T00:00:54+05:30",
-  "session": "2026-10-21",
+  "run_at": "2026-10-22T23:56:29+05:30",
+  "session": "2026-10-22",
   "expiry_check": {
    "bse_fo": {
-    "checked": 3283,
+    "checked": 3287,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9213,
+    "checked": 9217,
     "mismatch": 0
    },
    "SENSEX26O22 expiry": [
@@ -17,37 +17,42 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 22811.35,
-    "contracts": 184,
-    "rows": 10170,
+    "spot": 22687.65,
+    "contracts": 180,
+    "rows": 47209,
     "expiries": [
      "2026-10-27",
      "2026-11-03"
     ]
    },
    "SENSEX": {
-    "spot": 73709.69,
-    "contracts": 292,
-    "rows": 2825,
+    "spot": 73249.39,
+    "contracts": 296,
+    "rows": 23162,
     "expiries": [
      "2026-10-22",
      "2026-10-29"
     ]
    },
    "BANKNIFTY": {
-    "spot": 54976.9,
+    "spot": 54925.7,
     "contracts": 220,
-    "rows": 24499,
+    "rows": 4053,
     "expiries": [
      "2026-10-27",
      "2026-11-23"
     ]
    }
   },
-  "failures": [],
+  "failures": [
+   "NIFTY26OCT21650CE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr><ce",
+   "NIFTY26OCT22750CE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr><ce",
+   "NIFTY26N0322050PE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr><ce",
+   "SENSEX26OCT69600PE: {'code': 503, 'error': 'Service temporarily unavailable', 'message': 'Circuit breaker is open - too many recent failures'}"
+  ],
   "chain_eod_rows": 696,
-  "calls": 759,
-  "runtime_s": 1328.5,
+  "calls": 761,
+  "runtime_s": 1372.9,
   "contracts": 696
  },
  "recent_runs": [
@@ -98,6 +103,14 @@
    "calls": 759,
    "runtime_s": 1328.5,
    "failures": 0
+  },
+  {
+   "run_at": "2026-10-22T23:56:29+05:30",
+   "session": "2026-10-22",
+   "contracts": 696,
+   "calls": 761,
+   "runtime_s": 1372.9,
+   "failures": 4
   }
  ],
  "spot_backfill": {
@@ -239,21 +252,16 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 5865,
+   "rows": 5941,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-10-21",
-  "runtime_s": 8
+  "day": "2026-10-22",
+  "runtime_s": 9
  },
  "s1_trades_1m": {
-  "run_on": "2026-10-22",
+  "run_on": "2026-10-23",
   "days": {
-   "2026-10-14": {
-    "positions": 0,
-    "stock_rows": 0,
-    "option_rows": 0
-   },
    "2026-10-15": {
     "positions": 3,
     "stock_rows": 720,
@@ -267,7 +275,7 @@
    "2026-10-19": {
     "positions": 15,
     "stock_rows": 3970,
-    "option_rows": 2806
+    "option_rows": 2818
    },
    "2026-10-20": {
     "positions": 6,
@@ -277,10 +285,15 @@
    "2026-10-21": {
     "positions": 10,
     "stock_rows": 2166,
+    "option_rows": 2060
+   },
+   "2026-10-22": {
+    "positions": 7,
+    "stock_rows": 1444,
     "option_rows": 0
    }
   },
   "missing_tokens": [],
-  "calls": 64
+  "calls": 72
  }
 }
