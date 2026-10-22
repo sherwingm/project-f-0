@@ -476,6 +476,24 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -40.0
+  },
+  {
+   "at": "14:05:09",
+   "contracts": 34,
+   "on_both": 33,
+   "missing_kotak": [
+    "HCLTECH26OCT1410PE"
+   ],
+   "missing_upstox": [
+    "HCLTECH26OCT1410PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.521,
+   "same_best_bid_pct": 48.5,
+   "same_best_ask_pct": 45.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -485,6 +503,13 @@
    "kotak": 106.0,
    "upstox": 101.15,
    "at": "09:30"
+  },
+  {
+   "contract": "HAVELLS26OCT1070CE",
+   "gap_pct": 4.521,
+   "kotak": 18.8,
+   "upstox": 17.95,
+   "at": "14:05"
   },
   {
    "contract": "LODHA26OCT1000CE",
@@ -499,6 +524,13 @@
    "kotak": 134.0,
    "upstox": 139.25,
    "at": "09:30"
+  },
+  {
+   "contract": "HAVELLS26OCT1070PE",
+   "gap_pct": 3.341,
+   "kotak": 20.95,
+   "upstox": 21.65,
+   "at": "14:05"
   },
   {
    "contract": "ASHOKLEY26OCT142.5PE",
@@ -604,30 +636,16 @@
    "kotak": 8.85,
    "upstox": 8.75,
    "at": "11:15"
-  },
-  {
-   "contract": "FEDERALBNK26OCT345PE",
-   "gap_pct": 1.064,
-   "kotak": 4.7,
-   "upstox": 4.65,
-   "at": "09:50"
-  },
-  {
-   "contract": "INDHOTEL26OCT770CE",
-   "gap_pct": 1.01,
-   "kotak": 9.9,
-   "upstox": 10.0,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 1135,
+  "rounds": 35,
+  "contract_quotes": 1168,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -13.75
+  "upstox_minus_kotak_quote_time_s_median": -14.0
  }
 }
