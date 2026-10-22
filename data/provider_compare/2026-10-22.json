@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "09:55:20",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.95,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 29.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -121,6 +135,13 @@
    "kotak": 1.9,
    "upstox": 1.85,
    "at": "09:25"
+  },
+  {
+   "contract": "HCLTECH26OCT1420CE",
+   "gap_pct": 1.95,
+   "kotak": 17.95,
+   "upstox": 18.3,
+   "at": "09:55"
   },
   {
    "contract": "AXISBANK26OCT1210CE",
@@ -233,23 +254,16 @@
    "kotak": 21.9,
    "upstox": 21.9,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 1029.1,
-   "upstox": 1029.1,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 238,
+  "rounds": 8,
+  "contract_quotes": 272,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 25.0,
+  "same_best_ask_pct": 25.75,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -7.5
+  "upstox_minus_kotak_quote_time_s_median": -8.75
  }
 }
