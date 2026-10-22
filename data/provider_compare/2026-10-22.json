@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -18.0
+  },
+  {
+   "at": "13:45:01",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.205,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -550,6 +564,13 @@
    "at": "10:45"
   },
   {
+   "contract": "BEL26OCT365PE",
+   "gap_pct": 1.205,
+   "kotak": 4.15,
+   "upstox": 4.2,
+   "at": "13:45"
+  },
+  {
    "contract": "BAJFINANCE26OCT940CE",
    "gap_pct": 1.13,
    "kotak": 8.85,
@@ -569,23 +590,16 @@
    "kotak": 9.9,
    "upstox": 10.0,
    "at": "10:05"
-  },
-  {
-   "contract": "AXISBANK26OCT1210PE",
-   "gap_pct": 0.881,
-   "kotak": 11.35,
-   "upstox": 11.25,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 1033,
+  "rounds": 32,
+  "contract_quotes": 1067,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -13.0
+  "upstox_minus_kotak_quote_time_s_median": -13.25
  }
 }
