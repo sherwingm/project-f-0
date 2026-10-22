@@ -28,6 +28,12 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
   **Render is a mirror only** (`DATA_PROVIDER=none`, no ledger token): Render deploys no longer matter for trading,
   but **a VM restart during market hours** does. The external pinger is no longer needed.
 - To check on 23 Oct: the live feed on AWS in market hours (guide 17 step 8), and step 9 (NSE archives from the VM IP).
+- Login: themed `/login` page, 1-year cookie (Tailscale **Funnel** = public HTTPS, no VPN needed). Updates: Claude runs
+  `git pull && sudo systemctl restart fo-scanner` in the Lightsail browser SSH via Claude in Chrome (after market only).
+- **Daily loss halt removed** 22 Oct (DECISIONS.md): no loss halts at all now.
+- **Entry probe** (record only, from 23 Oct, `strategies/S1_v11_entry_probe.md`): asks every second 09:14:50-09:20 for the
+  fade signals' strikes + the opening print, in `paper-state:data/entry_probe/<date>.json`. After each session: compute
+  the pre-registered A / B / C verdicts (what entry gets v11's ₹3.23 L price); a rule needs >= 20 signals.
 
 ### Strategy state (unchanged by the move)
 - **S1 fade (arm F) exit = v12** (from 22 Oct, `strategies/S1_v12_fade_trail2.md`): on the entry day, on the best bid:
