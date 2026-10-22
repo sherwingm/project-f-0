@@ -168,6 +168,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 85.3,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "10:20:32",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.429,
+   "same_best_bid_pct": 26.5,
+   "same_best_ask_pct": 26.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.2,
+   "upstox_minus_kotak_quote_time_s_median": -11.5
   }
  ],
  "top_gaps": [
@@ -226,6 +240,13 @@
    "kotak": 13.6,
    "upstox": 13.4,
    "at": "09:30"
+  },
+  {
+   "contract": "LTM26OCT4300CE",
+   "gap_pct": 1.429,
+   "kotak": 76.95,
+   "upstox": 75.85,
+   "at": "10:20"
   },
   {
    "contract": "LTF26OCT245PE",
@@ -303,23 +324,16 @@
    "kotak": 245.5,
    "upstox": 245.2,
    "at": "10:15"
-  },
-  {
-   "contract": "HYUNDAI26OCTFUT",
-   "gap_pct": 0.083,
-   "kotak": 1926.8,
-   "upstox": 1928.4,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 408,
+  "rounds": 13,
+  "contract_quotes": 442,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.9,
-  "same_best_ask_pct": 25.75,
+  "same_best_bid_pct": 26.5,
+  "same_best_ask_pct": 26.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "upstox_minus_kotak_quote_time_s_median": -11.5
  }
 }
