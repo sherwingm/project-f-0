@@ -182,6 +182,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.2,
    "upstox_minus_kotak_quote_time_s_median": -11.5
+  },
+  {
+   "at": "10:25:35",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.617,
+   "same_best_bid_pct": 23.5,
+   "same_best_ask_pct": 14.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -284,11 +298,32 @@
    "at": "09:30"
   },
   {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 0.617,
+   "kotak": 16.2,
+   "upstox": 16.3,
+   "at": "10:25"
+  },
+  {
    "contract": "BANKINDIA26OCT135CE",
    "gap_pct": 0.606,
    "kotak": 3.3,
    "upstox": 3.32,
    "at": "09:30"
+  },
+  {
+   "contract": "MCX26OCT3100PE",
+   "gap_pct": 0.453,
+   "kotak": 55.15,
+   "upstox": 54.9,
+   "at": "10:25"
+  },
+  {
+   "contract": "MCX26OCT3100CE",
+   "gap_pct": 0.289,
+   "kotak": 51.9,
+   "upstox": 52.05,
+   "at": "10:25"
   },
   {
    "contract": "INFY26OCT1180CE",
@@ -303,37 +338,16 @@
    "kotak": 916.8,
    "upstox": 918.4,
    "at": "09:30"
-  },
-  {
-   "contract": "AXISBANK26OCTFUT",
-   "gap_pct": 0.157,
-   "kotak": 1211.2,
-   "upstox": 1213.1,
-   "at": "09:30"
-  },
-  {
-   "contract": "DMART26OCT3200CE",
-   "gap_pct": 0.156,
-   "kotak": 32.1,
-   "upstox": 32.15,
-   "at": "09:45"
-  },
-  {
-   "contract": "LTF26OCTFUT",
-   "gap_pct": 0.122,
-   "kotak": 245.5,
-   "upstox": 245.2,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 13,
-  "contract_quotes": 442,
+  "rounds": 14,
+  "contract_quotes": 476,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 26.5,
+  "same_best_ask_pct": 25.75,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -11.5
+  "upstox_minus_kotak_quote_time_s_median": -11.75
  }
 }
