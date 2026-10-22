@@ -98,6 +98,26 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`.
 - Backtests need `EVENTS_DB=$TEMP/fo-seed/events.sqlite`. Print ASCII on the Windows console (`PYTHONIOENCODING=utf-8`).
 
+## S3 index options, NIFTY first (a separate chat; DECISIONS.md "S3 · index options", 2026-10-22)
+- Research and backtest only: no S3 paper or live trade until a pod passes its gate and holdout and the user agrees.
+- **Split:** test 2024-10 → 2025-09; holdout 2025-10 → latest, once per pod.
+- **Data:** a sparse checkout of the `index-data` branch at `C:\Users\sherw\fo-index-data` (NIFTY only). Run with
+  `INDEX_STORE=C:/Users/sherw/fo-index-data/data/index`. Refresh it with `git -C ../fo-index-data pull` after GitHub
+  jobs run.
+- **Code:**
+  - `index_data/load.py`: the read side (merge rule);
+  - `scanner/s3_diagnostics.py` → `data/results/s3_diagnostics.md`;
+  - `scanner/s3_engine.py`: the multi-leg engine (`tests/test_s3_engine.py`).
+- **Done:** step 2 first pass.
+  - Last 30 minutes on expiry: 1.31x variance (interval 0.97-1.73), no reversal.
+  - No round-number or max-pain pinning.
+  - The ATM straddle sold to expiry is +13 % before costs, but not significant (t 0.7).
+- **Waiting:**
+  - the queued Upstox NIFTY re-fill (the path band fixes the ATM strikes missing on 21 of 107 expiry days). Then pull
+    `../fo-index-data`, re-run the diagnostics, check the RBI dates on the P1 page, and run P1
+    (`strategies/S3_P1_expiry_day_fly.md`, pre-registered; its runner `scanner/s3_p1.py` is not written yet);
+  - BANKNIFTY and SENSEX re-fills with the path band later.
+
 ## Index data (all on GitHub; no PC or Claude app needed)
 - **Complete:** expired 1-minute option candles from Upstox, with OI, Oct 2024 → Oct 2026.
   - **NIFTY:** 10,494 contracts, ~81 M rows.
