@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -32.5
+  },
+  {
+   "at": "11:36:05",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.0,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.2,
+   "upstox_minus_kotak_quote_time_s_median": -4.5
   }
  ],
  "top_gaps": [
@@ -422,6 +436,13 @@
    "kotak": 2.35,
    "upstox": 2.3,
    "at": "10:15"
+  },
+  {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 2.0,
+   "kotak": 2.5,
+   "upstox": 2.55,
+   "at": "11:36"
   },
   {
    "contract": "HCLTECH26OCT1420CE",
@@ -513,20 +534,13 @@
    "kotak": 13.85,
    "upstox": 13.75,
    "at": "11:20"
-  },
-  {
-   "contract": "SBICARD26OCT560CE",
-   "gap_pct": 0.683,
-   "kotak": 14.65,
-   "upstox": 14.75,
-   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 917,
+  "rounds": 28,
+  "contract_quotes": 951,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 27.3,
+  "same_best_bid_pct": 28.35,
   "same_best_ask_pct": 29.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
