@@ -152,6 +152,26 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
 .museg button { border:0; background:var(--surface); color:var(--muted); padding:6px 12px; font:inherit; font-size:12px; cursor:pointer; }
 .museg button + button { border-left:1px solid var(--line); }
 .museg button[aria-pressed="true"] { color:var(--ink); background:var(--raise, var(--surface)); box-shadow:inset 0 -2px 0 var(--arm-p); }
+.mu-hero { display:grid; grid-template-columns:minmax(0,1.3fr) minmax(0,1fr); gap:12px; margin:0 0 12px; }
+.mu-ladder, .mu-cmp > div { background:var(--surface); border:1px solid var(--line); border-radius:var(--r-md); }
+.mu-ladder { padding:12px 14px; }
+.mu-ladder h4 { margin:0 0 10px; font:600 10.5px Inter,sans-serif; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+.mu-row { display:grid; grid-template-columns:86px minmax(0,1fr) 44px 64px; align-items:center; gap:10px; padding:4px 0; }
+.mu-lbl { font-size:12px; color:var(--muted); }
+.mu-track { height:10px; border-radius:5px; background:var(--line); overflow:hidden; }
+.mu-track i { display:block; height:100%; border-radius:5px; background:var(--bull); }
+.mu-row b { font:600 13px "JetBrains Mono",monospace; text-align:right; }
+.mu-row small { font:11px "JetBrains Mono",monospace; color:var(--muted); }
+.mu-cmp { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.mu-cmp > div { padding:10px 12px; }
+.mu-cmp small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--muted); }
+.mu-cmp b { display:block; font:600 20px "JetBrains Mono",monospace; margin:2px 0; }
+.mu-cmp em { font-style:normal; font-size:11px; color:var(--muted); }
+.mu-tbl td b { font-weight:600; }
+.mu-n { display:block; color:var(--muted); font-size:10.5px; }
+td.mu-g { white-space:nowrap; font-weight:600; }
+.mu-dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:8px; vertical-align:1px; }
+@media (max-width:760px) { .mu-hero { grid-template-columns:1fr; } }
 .mubar { display:inline-block; vertical-align:middle; width:70px; height:6px; margin-right:8px; border-radius:3px; background:linear-gradient(90deg, var(--bull) var(--w), var(--line) var(--w)); }
 .prog { height:8px; border-radius:4px; background:var(--raise); overflow:hidden; margin:6px 0 2px; }
 .prog i { display:block; height:100%; background:var(--arm-f); }
@@ -450,35 +470,55 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
         return { x: p, open: true, e, held: chg(pk, e), after: null, up: chg(pk, e), got: chg(now, e) };
       })).filter(r => !arm || ((r.x.rule || {}).arms || []).includes(arm));
       if (!rows.length) return "";
-      const group = (name, f) => {
-        const g = rows.filter(f), v = g.map(r => r.up).filter(u => u != null).sort((a, b) => a - b);
-        if (!g.length) return "";
-        const n = v.length, at = t => { const k = v.filter(u => u >= t).length; return `${k}<small> of ${n}${n ? " · " + Math.round(100 * k / n) + "%" : ""}</small>`; };
+      // one group's numbers: share of trades whose max up reached each level, median max up, average booked
+      const stats = f => {
+        const g = rows.filter(f), v = g.map(r => r.up).filter(u => u != null).sort((x, y) => x - y), n = v.length;
+        const reach = t => ({ k: v.filter(u => u >= t).length, n });
         const med = n ? (n % 2 ? v[(n - 1) / 2] : (v[n / 2 - 1] + v[n / 2]) / 2) : null;
-        const gotV = g.map(r => r.got).filter(u => u != null), got = gotV.length ? gotV.reduce((a, b) => a + b, 0) / gotV.length : null;
-        return `<tr><td class="l">${name}</td><td>${g.length}${g.some(r => r.open) ? `<small> · ${g.filter(r => r.open).length} open</small>` : ""}</td>
-          <td>${at(0.0001)}</td><td>${at(10)}</td><td>${at(20)}</td><td>${at(50)}</td><td>${at(100)}</td>
-          <td class="${dir(med)}">${med == null ? "—" : pct(med)}</td><td class="${dir(v[n - 1])}">${n ? pct(v[n - 1]) : "—"}</td><td class="${dir(got)}">${got == null ? "—" : pct(got)}</td></tr>`;
+        const gotV = g.map(r => r.got).filter(u => u != null);
+        return { g, n, reach, med, best: n ? v[n - 1] : null, open: g.filter(r => r.open).length, got: gotV.length ? gotV.reduce((x, y) => x + y, 0) / gotV.length : null };
       };
-      const isF = r => (r.x.rule || {}).strategy === "fade";
-      const groups = arm ? [group(`${armTags([arm])} all trades`, () => true), arm === "F" ? group("live era (v11 / v12, from 21 Oct)", r => !oldFade(r.x)) + group("v10 side record (before 21 Oct)", r => oldFade(r.x)) : ""]
-        : [group("<b>All live trades</b>", () => true), group(`${armTags(["F"])} live era (from 21 Oct)`, r => isF(r) && !oldFade(r.x)), group(`${armTags(["F"])} v10 side record (before 21 Oct)`, r => oldFade(r.x)),
-           group(`${armTags(["A"])} every results beat`, r => ((r.x.rule || {}).arms || []).includes("A")), group(`${armTags(["B"])} strong sector`, r => ((r.x.rule || {}).arms || []).includes("B")),
-           group("manual (no rule)", r => !r.x.rule)];
-      const list = rows.slice().sort((a, b) => (b.up ?? -1e9) - (a.up ?? -1e9)).map(r => {
-        const x = r.x, w = r.up == null ? 0 : Math.max(0, Math.min(100, r.up / 3));
+      const share = r => r.n ? Math.round(100 * r.k / r.n) : 0;
+      const isF = r => (r.x.rule || {}).strategy === "fade", hasArm = a2 => r => ((r.x.rule || {}).arms || []).includes(a2);
+      const all = stats(() => true);
+      // headline: the ladder of levels reached, and what the median trade reached against what was booked
+      const ladder = [[0.0001, "Above entry"], [10, "+10 %"], [20, "+20 %"], [50, "+50 %"], [100, "+100 %"]].map(([t, lbl]) => {
+        const r = all.reach(t), s = share(r);
+        return `<div class="mu-row"><span class="mu-lbl">${lbl}</span><span class="mu-track"><i style="width:${s}%"></i></span><b>${s}%</b><small>${r.k} of ${r.n}</small></div>`;
+      }).join("");
+      const gap = all.med != null && all.got != null ? all.med - all.got : null;
+      const hero = `<div class="mu-hero">
+        <div class="mu-ladder"><h4>Trades that reached each level</h4>${ladder}</div>
+        <div class="mu-cmp">
+          <div><small>Median max up</small><b class="${dir(all.med)}">${all.med == null ? "—" : pct(all.med)}</b><em>half the trades went at least this high</em></div>
+          <div><small>Average booked / now</small><b class="${dir(all.got)}">${all.got == null ? "—" : pct(all.got)}</b><em>what the trades actually gave</em></div>
+          <div><small>Left on the table</small><b>${gap == null ? "—" : (gap < 0 ? "−" : "") + Math.abs(gap).toFixed(1) + " pts"}</b><em>median max up minus average booked</em></div>
+          <div><small>Best trade</small><b class="${dir(all.best)}">${all.best == null ? "—" : pct(all.best)}</b><em>${all.g.length} trades · ${all.open} still open</em></div>
+        </div></div>`;
+      // the same numbers by group
+      const groupRow = (name, f) => {
+        const s = stats(f); if (!s.g.length) return "";
+        const cell = t => { const r = s.reach(t); return `<td><b>${share(r)}%</b><small class="mu-n">${r.k}/${r.n}</small></td>`; };
+        return `<tr><td class="mu-g">${name}</td><td>${s.g.length}${s.open ? `<small class="mu-n">${s.open} open</small>` : ""}</td>${cell(20)}${cell(50)}${cell(100)}
+          <td class="${dir(s.med)}">${s.med == null ? "—" : pct(s.med)}</td><td class="${dir(s.got)}">${s.got == null ? "—" : pct(s.got)}</td></tr>`;
+      };
+      const dot = a2 => `<i class="mu-dot" style="background:var(--arm-${a2.toLowerCase()})"></i>`;
+      const groups = (arm === "F" ? [groupRow(`${dot("F")}Live (from 21 Oct)`, r => !oldFade(r.x)), groupRow(`${dot("F")}v10 (before 21 Oct)`, r => oldFade(r.x))]
+        : arm ? [] : [groupRow(`${dot("F")}Arm F · live`, r => isF(r) && !oldFade(r.x)), groupRow(`${dot("F")}Arm F · v10 record`, r => oldFade(r.x)),
+          groupRow(`${dot("A")}Arm A`, hasArm("A")), groupRow(`${dot("B")}Arm B`, hasArm("B")), groupRow("Manual", r => !r.x.rule)]).filter(Boolean);
+      const list = rows.slice().sort((x, y) => (y.up ?? -1e9) - (x.up ?? -1e9)).map(r => {
+        const x = r.x, w = r.up == null ? 0 : Math.max(2, Math.min(100, r.up / 3));
         return `<tr data-why="${r.open ? "pos" : "trade"}:${esc(x.id)}" tabindex="0"><td class="l"><b>${esc(x.symbol)}</b> <small>${num(x.strike, 0)} ${x.instrument}</small> ${x.rule ? armTags(x.rule.arms) : ""}</td>
           <td>${when(x.opened_at)}</td><td>${r.open ? "open" : "closed"}</td><td class="entry">${rs(r.e)}</td>
           <td class="gl ${dir(r.held)}">${r.held == null ? "—" : pct(r.held)}</td><td class="${dir(r.after)}">${r.open ? "<small>still held</small>" : r.after == null ? "—" : pct(r.after)}</td>
           <td class="l"><span class="mubar" style="--w:${w}%"></span><b class="${dir(r.up)}">${r.up == null ? "—" : pct(r.up)}</b></td>
           <td class="${dir(r.got)}">${r.got == null ? "—" : pct(r.got)}<small>${r.open ? " now" : " booked"}</small></td></tr>`;
       }).join("");
-      const seg = `<span class="museg" role="group" aria-label="Which peak">${[["held", "While held"], ["any", "Any time (to T-2 after the sale)"]].map(([k, n]) => `<button type="button" data-mu="${k}" aria-pressed="${k === muMode}">${n}</button>`).join("")}</span>`;
-      return panel("Max up: how high each trade went", `${seg}
-        <div class="tw"><table><thead><tr><th class="l">Group</th><th>Trades</th><th>Ever above entry</th><th>≥ +10 %</th><th>≥ +20 %</th><th>≥ +50 %</th><th>≥ +100 %</th><th>Median max up</th><th>Best</th><th>Average booked / now</th></tr></thead>
-          <tbody>${groups.join("")}</tbody></table></div>
+      const seg = `<span class="museg" role="group" aria-label="Which peak">${[["held", "While held"], ["any", "Any time, incl. after the sale"]].map(([k, n]) => `<button type="button" data-mu="${k}" aria-pressed="${k === muMode}">${n}</button>`).join("")}</span>`;
+      return panel("Max up", `${seg}${hero}
+        ${groups.length ? `<div class="tw mu-tbl"><table><thead><tr><th class="l">Group</th><th>Trades</th><th>Reached +20 %</th><th>Reached +50 %</th><th>Reached +100 %</th><th>Median max up</th><th>Avg booked / now</th></tr></thead><tbody>${groups.join("")}</tbody></table></div>` : ""}
         <details><summary>Every trade, highest first (${rows.length})</summary><div class="tw"><table><thead><tr><th class="l">Option</th><th>Bought</th><th>Status</th><th>Entry</th><th class="g">Max up while held</th><th>Max up after the sale</th><th class="l">Counted max up</th><th>Booked / now</th></tr></thead><tbody>${list}</tbody></table></div></details>
-        <p class="note">Max up = the highest traded price the option reached, as % above our entry price, from the live polls. <b>While held</b> counts only the time we owned it; <b>any time</b> adds the follow-up after the sale (closed trades are followed to their T-2 day). Open positions count their peak so far. A peak is the last traded price at a poll, so the bid at that moment could have been lower. Booked = net % after charges; for open positions, % at the current bid.</p>`,
+        <p class="note">Max up = the highest traded price the option reached, as % above our entry, from the live polls. <b>While held</b> counts only the time we owned it; <b>any time</b> adds the follow-up after the sale (to the T-2 day). Open positions count their peak so far. A peak is the last traded price at a poll; the bid then could have been lower. Booked = net % after charges; open positions: % at the current bid.</p>`,
         { sub: anyTime ? "highest price at any time after the entry" : "highest price while we held the option" });
     },
     refusedToday() {
