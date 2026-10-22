@@ -20,7 +20,16 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 - **Another Claude session works in the same folder** (S1 v10 / v11 studies, `stock-options-probe`). Commit only your own
   files (`git add <paths>`) and pull with `--autostash`.
 
-## Live system (Render, fo-scanner.onrender.com), deployed `3e7a469` (22 Oct, after market)
+## Live system: AWS Lightsail Mumbai VM (from 22 Oct 18:13 IST), code `43dd806`
+- **Primary = AWS** (`fo-scanner`, static IP 3.109.99.56, Ubuntu, `~/fo_scanner`, systemd `fo-scanner` + market-hours
+  watchdog; `deploy/aws/`, guide 17). Phone: Tailscale `https://ip-172-26-4-64.tail956abb.ts.net/` (PUBLIC_ACCESS=true,
+  no password; port 8000 closed). The VM's `.env` holds the new `LEDGER_GITHUB_TOKEN` (writes `paper-state`).
+  Update: `cd ~/fo_scanner && git pull && .venv/bin/pip install -r requirements-server.txt && sudo systemctl restart fo-scanner`.
+  **Render is a mirror only** (`DATA_PROVIDER=none`, no ledger token): Render deploys no longer matter for trading,
+  but **a VM restart during market hours** does. The external pinger is no longer needed.
+- To check on 23 Oct: the live feed on AWS in market hours (guide 17 step 8), and step 9 (NSE archives from the VM IP).
+
+### Strategy state (unchanged by the move)
 - **S1 fade (arm F) exit = v12** (from 22 Oct, `strategies/S1_v12_fade_trail2.md`): on the entry day, on the best bid:
   −20 % stop from 09:16; once the bid ≥ 1.10 × entry a trail sells at the first bid ≤ 0.98 × the highest bid since
   (`fade_trail`); else 15:20. Entry unchanged (v10: strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live
