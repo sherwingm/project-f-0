@@ -148,6 +148,11 @@ td.entry { font-weight:700; }
 .empty { color:var(--muted); background:var(--surface); border:1px dashed var(--line-strong); border-radius:var(--r-md); padding:14px 16px; margin:0; }
 details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
 .note { font-size:12px; color:var(--muted); margin:10px 0 0; }
+.museg { display:inline-flex; border:1px solid var(--line); border-radius:var(--r-md); overflow:hidden; margin:0 0 8px; }
+.museg button { border:0; background:var(--surface); color:var(--muted); padding:6px 12px; font:inherit; font-size:12px; cursor:pointer; }
+.museg button + button { border-left:1px solid var(--line); }
+.museg button[aria-pressed="true"] { color:var(--ink); background:var(--raise, var(--surface)); box-shadow:inset 0 -2px 0 var(--arm-p); }
+.mubar { display:inline-block; vertical-align:middle; width:70px; height:6px; margin-right:8px; border-radius:3px; background:linear-gradient(90deg, var(--bull) var(--w), var(--line) var(--w)); }
 .prog { height:8px; border-radius:4px; background:var(--raise); overflow:hidden; margin:6px 0 2px; }
 .prog i { display:block; height:100%; background:var(--arm-f); }
 .facts { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:8px; }
@@ -411,6 +416,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
 
   // ---- workspace panels: paper account
   const live = () => SERVER.orders;
+  let muMode = (() => { try { return localStorage.getItem("fo_mu") || "held"; } catch (e) { return "held"; } })();
   const notLive = what => empty(`${what} lives on the live server: open <a href="https://fo-scanner.onrender.com/">fo-scanner.onrender.com</a>.`);
   const paperWait = what => !live() ? notLive(what) : !P.loaded ? loading() : (P.err && !P.summary) ? empty(`Could not load the paper account: ${esc(P.err)}`) : null;
   const PANELS = {
@@ -430,6 +436,50 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
       if (paperWait("")) return "";
       return panel("Scoreboard", `<div class="sb">${sbCard("A", "every results beat", ["open", "close", null])}${sbCard("B", "results beat in a strong sector", ["open", "close", null])}${sbCard("F", "results-day fade", ["fade"])}</div>`,
         { sub: "rule trades only, 1 lot each, net of charges · a signal in both arms counts in both" });
+    },
+    // how high every live trade went above its entry: the best price it reached, against what was booked
+    maxUp(arm) {
+      if (paperWait("")) return "";
+      const anyTime = muMode === "any";
+      const rows = P.trades.map(c => {
+        const e = c.entry.price, held = c.held_peak && c.held_peak.price, after = c.after && c.after.peak && c.after.peak.price;
+        const best = [held, anyTime ? after : null].filter(v => v != null);
+        return { x: c, open: false, e, held: chg(held, e), after: chg(after, e), up: best.length ? chg(Math.max(...best), e) : null, got: c.return_pct };
+      }).concat(P.positions.map(p => {
+        const e = p.entry.price, pk = p.peak && p.peak.price, m = p.mark || {}, now = m.bid ?? m.price;
+        return { x: p, open: true, e, held: chg(pk, e), after: null, up: chg(pk, e), got: chg(now, e) };
+      })).filter(r => !arm || ((r.x.rule || {}).arms || []).includes(arm));
+      if (!rows.length) return "";
+      const group = (name, f) => {
+        const g = rows.filter(f), v = g.map(r => r.up).filter(u => u != null).sort((a, b) => a - b);
+        if (!g.length) return "";
+        const n = v.length, at = t => { const k = v.filter(u => u >= t).length; return `${k}<small> of ${n}${n ? " · " + Math.round(100 * k / n) + "%" : ""}</small>`; };
+        const med = n ? (n % 2 ? v[(n - 1) / 2] : (v[n / 2 - 1] + v[n / 2]) / 2) : null;
+        const gotV = g.map(r => r.got).filter(u => u != null), got = gotV.length ? gotV.reduce((a, b) => a + b, 0) / gotV.length : null;
+        return `<tr><td class="l">${name}</td><td>${g.length}${g.some(r => r.open) ? `<small> · ${g.filter(r => r.open).length} open</small>` : ""}</td>
+          <td>${at(0.0001)}</td><td>${at(10)}</td><td>${at(20)}</td><td>${at(50)}</td><td>${at(100)}</td>
+          <td class="${dir(med)}">${med == null ? "—" : pct(med)}</td><td class="${dir(v[n - 1])}">${n ? pct(v[n - 1]) : "—"}</td><td class="${dir(got)}">${got == null ? "—" : pct(got)}</td></tr>`;
+      };
+      const isF = r => (r.x.rule || {}).strategy === "fade";
+      const groups = arm ? [group(`${armTags([arm])} all trades`, () => true), arm === "F" ? group("live era (v11 / v12, from 21 Oct)", r => !oldFade(r.x)) + group("v10 side record (before 21 Oct)", r => oldFade(r.x)) : ""]
+        : [group("<b>All live trades</b>", () => true), group(`${armTags(["F"])} live era (from 21 Oct)`, r => isF(r) && !oldFade(r.x)), group(`${armTags(["F"])} v10 side record (before 21 Oct)`, r => oldFade(r.x)),
+           group(`${armTags(["A"])} every results beat`, r => ((r.x.rule || {}).arms || []).includes("A")), group(`${armTags(["B"])} strong sector`, r => ((r.x.rule || {}).arms || []).includes("B")),
+           group("manual (no rule)", r => !r.x.rule)];
+      const list = rows.slice().sort((a, b) => (b.up ?? -1e9) - (a.up ?? -1e9)).map(r => {
+        const x = r.x, w = r.up == null ? 0 : Math.max(0, Math.min(100, r.up / 3));
+        return `<tr data-why="${r.open ? "pos" : "trade"}:${esc(x.id)}" tabindex="0"><td class="l"><b>${esc(x.symbol)}</b> <small>${num(x.strike, 0)} ${x.instrument}</small> ${x.rule ? armTags(x.rule.arms) : ""}</td>
+          <td>${when(x.opened_at)}</td><td>${r.open ? "open" : "closed"}</td><td class="entry">${rs(r.e)}</td>
+          <td class="gl ${dir(r.held)}">${r.held == null ? "—" : pct(r.held)}</td><td class="${dir(r.after)}">${r.open ? "<small>still held</small>" : r.after == null ? "—" : pct(r.after)}</td>
+          <td class="l"><span class="mubar" style="--w:${w}%"></span><b class="${dir(r.up)}">${r.up == null ? "—" : pct(r.up)}</b></td>
+          <td class="${dir(r.got)}">${r.got == null ? "—" : pct(r.got)}<small>${r.open ? " now" : " booked"}</small></td></tr>`;
+      }).join("");
+      const seg = `<span class="museg" role="group" aria-label="Which peak">${[["held", "While held"], ["any", "Any time (to T-2 after the sale)"]].map(([k, n]) => `<button type="button" data-mu="${k}" aria-pressed="${k === muMode}">${n}</button>`).join("")}</span>`;
+      return panel("Max up: how high each trade went", `${seg}
+        <div class="tw"><table><thead><tr><th class="l">Group</th><th>Trades</th><th>Ever above entry</th><th>≥ +10 %</th><th>≥ +20 %</th><th>≥ +50 %</th><th>≥ +100 %</th><th>Median max up</th><th>Best</th><th>Average booked / now</th></tr></thead>
+          <tbody>${groups.join("")}</tbody></table></div>
+        <details><summary>Every trade, highest first (${rows.length})</summary><div class="tw"><table><thead><tr><th class="l">Option</th><th>Bought</th><th>Status</th><th>Entry</th><th class="g">Max up while held</th><th>Max up after the sale</th><th class="l">Counted max up</th><th>Booked / now</th></tr></thead><tbody>${list}</tbody></table></div></details>
+        <p class="note">Max up = the highest traded price the option reached, as % above our entry price, from the live polls. <b>While held</b> counts only the time we owned it; <b>any time</b> adds the follow-up after the sale (closed trades are followed to their T-2 day). Open positions count their peak so far. A peak is the last traded price at a poll, so the bid at that moment could have been lower. Booked = net % after charges; for open positions, % at the current bid.</p>`,
+        { sub: anyTime ? "highest price at any time after the entry" : "highest price while we held the option" });
     },
     refusedToday() {
       if (paperWait("")) return "";
@@ -709,7 +759,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
   const WORKSPACES = {
     paper: { tab: "Paper", color: "var(--arm-p)", title: "Paper account",
              desc: "Every live paper trade across the arms, marked at each live poll. Max up / max dip are the highest and lowest traded price since the entry.",
-             panels: () => [PANELS.paperTiles(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
+             panels: () => [PANELS.paperTiles(), PANELS.maxUp(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
     arma:  { tab: "Arm A", color: "var(--arm-a)", title: "Arm A · every results beat",
              desc: "Forward paper test: a call after every results beat, bought at the session's average price, marked at each close. Exits: 50% stop, 5 sessions without a new closing high, T-1. These rules failed the 2021-24 backtest; this tests them on new days.",
              panels: () => forwardPanels("A") },
@@ -718,7 +768,7 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
              panels: () => forwardPanels("B") },
     armf:  { tab: "Arm F", color: "var(--arm-f)", title: "Arm F · results-day fade (S1 v12)",
              desc: "On the first full session after a results filing: strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) → buy a put; weak numbers (net profit YoY < −10 %, QoQ < 0) → buy a call. 1 lot at the live ask within ₹600-8,000. Sold at the best bid once it is 20 % below the entry (from 09:16); once the bid is 10 % above the entry a trailing stop sells at the first bid 2 % below the highest bid since; else at 15:20 the same day (v12, from 22 Oct; v11 on 21 Oct had the stop only; v10 sold at 15:20). Paper only.",
-             panels: () => [PANELS.fadeTiles(), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV12(), PANELS.fadeV10(), PANELS.fadeTrail(), PANELS.fadeFd2(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
+             panels: () => [PANELS.fadeTiles(), PANELS.maxUp("F"), PANELS.fadeToday(), PANELS.fadeShadow(), PANELS.fadeV12(), PANELS.fadeV10(), PANELS.fadeTrail(), PANELS.fadeFd2(), PANELS.fadeT100(), PANELS.fadeSubfloor(), PANELS.fadeOpen(), PANELS.fadeClosed(), PANELS.fadeRefused(), PANELS.fadeHistory(), PANELS.fadeBacktest()] },
   };
   const TABS = Object.keys(WORKSPACES);
   $("#tabs").innerHTML = TABS.map(k => `<button type="button" role="tab" data-tab="${k}" style="--c:${WORKSPACES[k].color}"><i></i>${WORKSPACES[k].tab}</button>`).join("");
@@ -846,6 +896,8 @@ details summary { cursor:pointer; color:var(--muted); margin:10px 0 6px; }
     $$("[data-close]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); closePos(b.dataset.close, b); }));
   }
   $("#main").addEventListener("click", e => {
+    const mu = e.target.closest("[data-mu]");
+    if (mu) { muMode = mu.dataset.mu; try { localStorage.setItem("fo_mu", muMode); } catch (err) { /* private mode */ } render(); return; }
     if (e.target.closest("button, a, summary, input")) return;
     const el = e.target.closest("[data-why]"); if (!el) return;
     const key = el.dataset.why;
