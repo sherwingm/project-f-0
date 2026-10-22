@@ -439,7 +439,7 @@ class PaperLedger:
             self._follow_closed(now)
             self._touch_day(now)
             if self.risk is not None:
-                self.risk.state(self, now)            # latches the daily / weekly halt as soon as it is hit
+                self.risk.state(self, now)            # drawdown banner and limits
             self._save()
 
     # ------------------------------------------------------------ rule trades (server/rules.py)

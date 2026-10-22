@@ -51,8 +51,6 @@ services:
         value: "6"
       - key: MAX_OPEN_POSITIONS
         value: "3"
-      - key: DAILY_LOSS_HALT_PCT
-        value: "2"
       - key: LEDGER_GITHUB_TOKEN      # the paper account's durable copy (paper-state branch). Set here only while
         sync: false                   # Render is the only live server; delete it here once the VM (guide 17) runs
       - key: LEDGER_GITHUB_REPO

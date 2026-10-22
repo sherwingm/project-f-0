@@ -48,7 +48,7 @@ def test_review_carries_everything_the_sheet_shows(client):
     assert r["fill"]["price"] == 1.15 and r["fill"]["slippage_vs_mid"] is not None and r["fill"]["levels"]
     assert r["charges_entry"]["total"] > 0 and r["round_trip_now"]["charges"]["total"] > r["charges_entry"]["total"]
     assert r["risk"]["margin"] == pytest.approx(575.0) and r["risk"]["cap"] == 30000     # 6 % of Rs 5 lakh
-    assert r["risk"]["kill_switch"]["active"] is False and "day_pnl" in r["risk"]
+    assert "kill_switch" not in r["risk"] and "day_pnl" in r["risk"]
 
 
 def test_exit_review_shows_what_the_exit_realises(client):
@@ -99,7 +99,7 @@ def test_positions_expose_mtm_stop_expiry_and_t2(client):
 
 @pytest.mark.parametrize("text", [
     "Slippage vs mid", "Depth level used", "Charges, this order",
-    "Round trip if closed at once", "Margin", "per-trade cap", "Day P&L", "Kill switch", "MTM, net of charges",
+    "Round trip if closed at once", "Margin", "per-trade cap", "Day P&L", "MTM, net of charges",
     "T-2", "Refusals:", "Show the reasons", "Closed trades", "/api/paper/summary", "/api/paper/refusals", "paperbar"])
 def test_template_has_the_review_and_orders_screen_pieces(text):
     assert text in TEMPLATE

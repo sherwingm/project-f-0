@@ -1,4 +1,4 @@
-"""Step 6: per-trade risk cap, daily/weekly halts, drawdown banner, margin cap, intensity limits."""
+"""Step 6: per-trade risk cap, drawdown banner, margin cap, intensity limits."""
 from types import SimpleNamespace
 
 import pytest
@@ -7,7 +7,7 @@ from server.paper import PaperLedger, PaperRejected
 from server.risk import RiskGate
 from tests.test_step5_paper import CE, CLOCK, FUT, StubQuotes, allow_lottery, at, order, resolved  # noqa: F401 (autouse fixture)
 
-DEFAULTS = dict(risk_per_trade_pct=0.5, daily_loss_halt_pct=1.0, drawdown_review_pct=10,
+DEFAULTS = dict(risk_per_trade_pct=0.5, drawdown_review_pct=10,
                 margin_cap_pct=30, max_new_positions_per_day=3, max_new_positions_per_month=20, block_expiry_day_entries=True,
                 max_open_positions=99)
 
@@ -47,50 +47,30 @@ def test_short_option_needs_a_stop(tmp_path):
     assert any("short options need a stop" in b for b in r["blocked"])
 
 
-def test_daily_loss_halt_blocks_entries_for_the_rest_of_the_day_but_not_exits(tmp_path):
+def test_no_daily_loss_halt(tmp_path):
+    """Removed by the user on 2026-10-22 (DECISIONS.md): a big losing day blocks nothing."""
     ledger, q = make(tmp_path)
+    ledger.state["halts"] = {"day": "2026-09-21"}                # an old latch is dropped
     q.set(FUT, 1000.0, 1000.1, oi=10_000_000)
     ledger.submit(order("FUT"), resolved(FUT), stop=996.0, now=at(21))
-    q.set(FUT, 980.0, 980.1, oi=10_000_000)                      # gap through the stop: about -Rs 10,300 today
+    q.set(FUT, 980.0, 980.1, oi=10_000_000)                      # about -Rs 10,300 today
     ledger.on_poll(now=at(21, 11))
     s = ledger.summary(now=at(21, 11))
-    assert s["day_pnl"] <= -5000 and s["kill_switch"]["active"] and s["kill_switch"]["day_halt"]
+    assert s["day_pnl"] <= -5000 and "kill_switch" not in s and "halts" not in ledger.state
     q.set(CE, 4.0, 4.1)
-    with pytest.raises(PaperRejected, match="daily loss halt"):
-        ledger.submit(order(), resolved(CE), now=at(21, 11, 5))
-    q.set(FUT, 999.0, 999.1, oi=10_000_000)                      # recovers: the halt stays for the day
-    ledger.on_poll(now=at(21, 11, 10))
-    assert ledger.summary(now=at(21, 11, 10))["kill_switch"]["active"]
-    assert not ledger.positions_view()                           # the triggered stop exited at the next poll anyway
-    rec = ledger.submit(order(), resolved(CE), now=at(22))       # next session: entries allowed again
-    assert rec["status"] == "FILLED"
-
-
-def test_exits_are_allowed_while_halted(tmp_path):
-    ledger, q = make(tmp_path, daily_loss_halt_pct=0.1)          # Rs 500
-    q.set(CE, 4.0, 4.1)
-    ledger.submit(order(), resolved(CE), now=at(21))
-    q.set(CE, 2.5, 2.6)
-    ledger.on_poll(now=at(21, 11))
-    assert ledger.summary(now=at(21, 11))["kill_switch"]["active"]
-    rec = ledger.submit(order(side="SELL"), resolved(CE), now=at(21, 11, 5))
-    assert rec["intent"] == "exit" and rec["status"] == "FILLED"
+    assert ledger.submit(order(), resolved(CE), now=at(21, 11, 5))["status"] == "FILLED"
 
 
 def test_no_weekly_halt(tmp_path):
-    ledger, q = make(tmp_path, daily_loss_halt_pct=0.2)                             # Rs 1,000 a day
+    ledger, q = make(tmp_path)
     ledger.state["halts"] = {"week": "2026-09-21"}                                  # an old weekly latch is ignored
-    q.set(CE, 4.0, 4.1)
-    ledger.submit(order(), resolved(CE), now=at(21))
-    q.set(CE, 2.0, 2.1)
-    ledger.on_poll(now=at(21, 11))                                                  # day halt latches on the 21st
     q.set("RELIANCE26SEP1320CE", 1.0, 1.05)
     assert ledger.submit(order(strike=1320.0), resolved("RELIANCE26SEP1320CE"), now=at(22))["status"] == "FILLED"
-    assert "week" not in ledger.state["halts"]
+    assert "halts" not in ledger.state
 
 
 def test_drawdown_review_banner_is_not_a_block(tmp_path):
-    ledger, q = make(tmp_path, drawdown_review_pct=0.1, daily_loss_halt_pct=50)
+    ledger, q = make(tmp_path, drawdown_review_pct=0.1)
     q.set(CE, 4.0, 4.1)
     ledger.submit(order(), resolved(CE), now=at(21))
     q.set(CE, 1.0, 1.1)
@@ -146,8 +126,8 @@ def test_no_entries_on_expiry_day(tmp_path):
     assert any("expiry day" in b for b in r["blocked"])
 
 
-def test_summary_carries_kill_switch_and_limits(tmp_path):
+def test_summary_carries_the_limits(tmp_path):
     ledger, _ = make(tmp_path)
     s = ledger.summary(now=at(21))
-    assert s["kill_switch"] == {"active": False, "reason": None, "day_halt": False, "day_limit": -5000.0}
+    assert "kill_switch" not in s
     assert s["limits"]["risk_per_trade"] == 2500 and s["limits"]["margin_cap"] == 150_000

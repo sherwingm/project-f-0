@@ -4,9 +4,7 @@ when a queued order comes due. Exits are never blocked here.
     RISK_PER_TRADE_PCT      0.5  max loss per trade <= 0.5% of capital (Rs 2,500 on Rs 5 lakh). Long option:
                                  premium x qty. Futures and short options: |entry - stop| x qty, stop required.
                                  Lots are capped to fit; the review shows the cap.
-    DAILY_LOSS_HALT_PCT     1.0  day P&L (realised + unrealised) <= -1% of capital: no new entries until the
-                                 next session (latched for the day even if P&L recovers)
-    (no weekly loss halt: removed by the user on 2026-10-21, DECISIONS.md)
+    (no loss halts: the weekly one removed by the user on 2026-10-21, the daily one on 2026-10-22, DECISIONS.md)
     DRAWDOWN_REVIEW_PCT     10   drawdown from peak equity >= 10%: "review labels and sizing" banner, not a block
     MARGIN_CAP_PCT          30   margin of open positions + this order <= 30% of capital. Margin: Kotak's
                                  margin_required when a Kotak trade session already exists, else
@@ -36,33 +34,19 @@ class RiskGate:
         return round(self.s.risk_per_trade_pct / 100 * capital, 2)
 
     def state(self, ledger, now: datetime) -> dict:
-        """Kill-switch and banner state for the summary; latches a halt once it is hit."""
+        """Limits and the drawdown banner for the summary."""
         cap = ledger.state["capital"]
-        halts = ledger.state.setdefault("halts", {})
-        today = now.date().isoformat()
-        day_pnl = ledger.day_pnl(now)
-        day_limit = -self.s.daily_loss_halt_pct / 100 * cap
-        if day_pnl <= day_limit and halts.get("day") != today:
-            halts["day"] = today
-            log.warning("paper kill switch: day P&L Rs %.2f <= Rs %.2f; no new entries until the next session", day_pnl, day_limit)
-        halts.pop("week", None)                  # the weekly halt was removed (2026-10-21): drop an old latch
-        day_halt = halts.get("day") == today
+        ledger.state.pop("halts", None)          # the loss halts were removed (2026-10-21/22): drop an old latch
         eq = ledger.equity()
         peak = max(ledger.state.get("peak_equity", cap), eq)
         dd = (peak - eq) / peak * 100 if peak else 0.0
-        reason = None
-        if day_halt:
-            reason = f"daily loss halt: day P&L reached {self.s.daily_loss_halt_pct:g}% of capital; no new entries until the next session"
         month_start = now.date().replace(day=1)
-        return {"kill_switch": {"active": day_halt, "reason": reason, "day_halt": day_halt,
-                                "day_limit": round(day_limit, 2)},
-                "drawdown_review": dd >= self.s.drawdown_review_pct,
+        return {"drawdown_review": dd >= self.s.drawdown_review_pct,
                 "drawdown_review_message": "Drawdown from peak is {:.1f}%: review labels and sizing.".format(dd)
                 if dd >= self.s.drawdown_review_pct else None,
                 "limits": {"risk_per_trade": self.per_trade_cap(cap), "risk_per_trade_pct": self.s.risk_per_trade_pct,
                            "margin_cap": round(self.s.margin_cap_pct / 100 * cap, 2), "margin_cap_pct": self.s.margin_cap_pct,
                            "max_new_per_day": self.s.max_new_positions_per_day, "max_open": self.s.max_open_positions, "max_new_per_month": self.s.max_new_positions_per_month,
-                           "daily_loss_halt_pct": self.s.daily_loss_halt_pct,
                            "drawdown_review_pct": self.s.drawdown_review_pct},
                 "new_positions_today": ledger.new_positions(now.date()),
                 "new_positions_month": ledger.new_positions(month_start)}
@@ -77,13 +61,11 @@ class RiskGate:
         risk = {"cap": self.per_trade_cap(cap), "per_lot_max_loss": None, "max_loss": None, "used_pct": None,
                 "max_lots": None, "margin": review.get("margin"), "margin_source": "estimate",
                 "open_margin": ledger.open_margin(), "margin_cap": st["limits"]["margin_cap"],
-                "kill_switch": st["kill_switch"], "day_pnl": ledger.day_pnl(now), "week_pnl": ledger.week_pnl(now),
+                "day_pnl": ledger.day_pnl(now), "week_pnl": ledger.week_pnl(now),
                 "new_positions_today": st["new_positions_today"], "new_positions_month": st["new_positions_month"],
                 "drawdown_review": st["drawdown_review"]}
         review["risk"] = risk
 
-        if st["kill_switch"]["active"]:
-            blocked.append(st["kill_switch"]["reason"])
         if self.s.block_expiry_day_entries and review.get("sessions_to_expiry") == 0:
             blocked.append("no new positions on expiry day: stock derivatives are physically settled and the paper "
                            "account never holds to expiry")

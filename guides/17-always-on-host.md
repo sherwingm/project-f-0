@@ -106,7 +106,7 @@ TZ=Asia/Kolkata
 chmod 600 ~/fo_scanner/.env
 ```
 One `KEY=value` per line, no quotes, no spaces around `=` (systemd reads this file). The position limits
-(`RISK_PER_TRADE_PCT=6`, `MAX_OPEN_POSITIONS=3`, `DAILY_LOSS_HALT_PCT=2`, DECISIONS.md) are the defaults.
+(`RISK_PER_TRADE_PCT=6`, `MAX_OPEN_POSITIONS=3`, DECISIONS.md) are the defaults.
 Step 9 decides whether `SCAN_URL` stays.
 
 ## 6. systemd (the unit from guide 03)

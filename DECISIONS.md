@@ -136,3 +136,9 @@ Closed before the S1 structure; not reopened except as a component of an S1 vers
 | Shorting short-buildup | −₹487 per trade |
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
+
+## 2026-10-22 · Daily loss halt removed (user decision)
+The user does not want loss halts. The 2 % daily halt (manual orders only; rule trades were never blocked) is removed,
+like the weekly one on 21 Oct: `server/risk.py` has no kill switch, an old `halts` latch is dropped, `DAILY_LOSS_HALT_PCT`
+is gone from config, render.yaml and the AWS env template. Unchanged: the per-trade risk cap, the new-position counts,
+the margin cap, the expiry-day block (manual orders) and the drawdown review banner (not a block).
