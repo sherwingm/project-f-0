@@ -1325,14 +1325,12 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
           : rt ? kv("Round trip if closed at once", rt.exit_price != null ? `exit ₹${inr(rt.exit_price)} · charges ${money(rt.charges.total)} · net <b class="${dirClass(rt.net_pnl)}">${money(rt.net_pnl)}</b>` : esc(rt.note || "")) : ""}</div>`;
     }
     if (k) {
-      const ks = k.kill_switch;
       h += `<div class="review">${kv("Margin", k.margin != null ? `${money(k.margin)} (${esc(k.margin_source)}) · open + this ${money(k.margin_after)} of ${money(k.margin_cap)} cap` : "—")}
         ${kv("Risk", k.max_loss != null ? `max loss ${money(k.max_loss)} of the ${money(k.cap)} per-trade cap (${k.used_pct}%) · cap allows ${plural(k.max_lots, "lot")}` : `per-trade cap ${money(k.cap)}`)}
         ${kv("Day P&L", `<b class="${dirClass(k.day_pnl)}">${money(k.day_pnl)}</b> · week ${money(k.week_pnl)}`)}
-        ${kv("Kill switch", ks.active ? `<b class="down">ON</b> ${esc(ks.reason)}` : `off · halts at ${money(ks.day_limit)} a day`)}
         ${kv("New positions", `${k.new_positions_today} today · ${k.new_positions_month} this month`)}</div>`;
     } else if (r.intent === "exit") {
-      h += `<p class="count" style="margin:4px 0">Closing a position: the loss halts and sizing limits do not apply to exits.</p>`;
+      h += `<p class="count" style="margin:4px 0">Closing a position: the sizing limits do not apply to exits.</p>`;
     }
     if (r.warnings && r.warnings.length) h += `<ul class="reasons">${r.warnings.map(x => `<li>${esc(x)}</li>`).join("")}</ul>`;
     if (r.blocked.length) h += `<div class="err"><b>The server will not accept this order:</b><ul class="reasons">${r.blocked.map(x => `<li>${esc(x)}</li>`).join("")}</ul></div>`;
@@ -1412,8 +1410,7 @@ const SERVER = Object.assign({ live: false, orders: false, paper: true, commenta
   }
 
   function paperSummaryLine(sm) {
-    return `Equity ${money(sm.equity)} on ${money(sm.capital)} · day ${money(sm.day_pnl)} · week ${money(sm.week_pnl)} · drawdown ${sm.drawdown_pct}% · open margin ${money(sm.open_margin)}` +
-      (sm.kill_switch ? ` · kill switch ${sm.kill_switch.active ? "ON" : "off"}` : "");
+    return `Equity ${money(sm.equity)} on ${money(sm.capital)} · day ${money(sm.day_pnl)} · week ${money(sm.week_pnl)} · drawdown ${sm.drawdown_pct}% · open margin ${money(sm.open_margin)}`;
   }
 
   // The paper account at a glance in the top bar, and the drawdown banner when it applies.
