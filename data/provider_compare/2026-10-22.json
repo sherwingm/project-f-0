@@ -14,15 +14,43 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -3.0
+  },
+  {
+   "at": "09:25:07",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.632,
+   "same_best_bid_pct": 26.5,
+   "same_best_ask_pct": 25.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.2,
+   "upstox_minus_kotak_quote_time_s_median": -7.5
   }
  ],
  "top_gaps": [
+  {
+   "contract": "ASHOKLEY26OCT142.5PE",
+   "gap_pct": 2.632,
+   "kotak": 1.9,
+   "upstox": 1.85,
+   "at": "09:25"
+  },
   {
    "contract": "ABB26OCT6500CE",
    "gap_pct": 0.056,
    "kotak": 89.1,
    "upstox": 89.05,
    "at": "09:20"
+  },
+  {
+   "contract": "APLAPOLLO26OCTFUT",
+   "gap_pct": 0.015,
+   "kotak": 2039.7,
+   "upstox": 2040.0,
+   "at": "09:25"
   },
   {
    "contract": "ADANIGREEN26OCTFUT",
@@ -142,30 +170,16 @@
    "kotak": 22.6,
    "upstox": 22.6,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26OCT1720CE",
-   "gap_pct": 0.0,
-   "kotak": 21.95,
-   "upstox": 21.95,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26OCT1720PE",
-   "gap_pct": 0.0,
-   "kotak": 21.0,
-   "upstox": 21.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 34,
+  "rounds": 2,
+  "contract_quotes": 68,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 14.7,
-  "same_best_ask_pct": 2.9,
+  "same_best_bid_pct": 20.6,
+  "same_best_ask_pct": 13.95,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -3.0
+  "oi_same_pct": 92.65,
+  "upstox_minus_kotak_quote_time_s_median": -5.25
  }
 }
