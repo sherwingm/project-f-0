@@ -322,6 +322,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -43.0
+  },
+  {
+   "at": "11:15:58",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.622,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 26.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -27.5
   }
  ],
  "top_gaps": [
@@ -375,6 +389,20 @@
    "at": "09:55"
   },
   {
+   "contract": "BAJAJ-AUTO26OCT10200CE",
+   "gap_pct": 1.622,
+   "kotak": 144.85,
+   "upstox": 142.5,
+   "at": "11:15"
+  },
+  {
+   "contract": "AXISBANK26OCT1210CE",
+   "gap_pct": 1.487,
+   "kotak": 13.45,
+   "upstox": 13.25,
+   "at": "11:15"
+  },
+  {
    "contract": "AXISBANK26OCT1210CE",
    "gap_pct": 1.471,
    "kotak": 13.6,
@@ -410,6 +438,13 @@
    "at": "10:45"
   },
   {
+   "contract": "BAJFINANCE26OCT940CE",
+   "gap_pct": 1.13,
+   "kotak": 8.85,
+   "upstox": 8.75,
+   "at": "11:15"
+  },
+  {
    "contract": "FEDERALBNK26OCT345PE",
    "gap_pct": 1.064,
    "kotak": 4.7,
@@ -443,35 +478,14 @@
    "kotak": 16.2,
    "upstox": 16.3,
    "at": "10:25"
-  },
-  {
-   "contract": "BANKINDIA26OCT135CE",
-   "gap_pct": 0.606,
-   "kotak": 3.3,
-   "upstox": 3.32,
-   "at": "09:30"
-  },
-  {
-   "contract": "MCX26OCT3100PE",
-   "gap_pct": 0.453,
-   "kotak": 55.15,
-   "upstox": 54.9,
-   "at": "10:25"
-  },
-  {
-   "contract": "RELIANCE26OCT1200CE",
-   "gap_pct": 0.422,
-   "kotak": 11.85,
-   "upstox": 11.8,
-   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 23,
-  "contract_quotes": 781,
+  "rounds": 24,
+  "contract_quotes": 815,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 29.4,
+  "same_best_ask_pct": 27.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -13.0
