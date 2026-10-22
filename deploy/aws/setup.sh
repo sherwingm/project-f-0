@@ -34,9 +34,8 @@ if [ ! -f .env ]; then
   cp deploy/aws/env.example .env && chmod 600 .env
   echo "Fill in $APP/.env (nano $APP/.env), then run this script again."; exit 0
 fi
-for k in KOTAK_CONSUMER_KEY APP_PASSWORD; do
-  grep -q "^$k=." .env || { echo "$k is empty in .env: fill it in, then run again."; exit 1; }
-done
+grep -q "^KOTAK_CONSUMER_KEY=." .env || { echo "KOTAK_CONSUMER_KEY is empty in .env: fill it in, then run again."; exit 1; }
+grep -qi "^PUBLIC_ACCESS=true" .env || grep -q "^APP_PASSWORD=." .env ||   { echo "APP_PASSWORD is empty: set one, or PUBLIC_ACCESS=true for no login (reached over Tailscale only)."; exit 1; }
 chmod 600 .env
 
 echo "== systemd: server + market-hours watchdog"
