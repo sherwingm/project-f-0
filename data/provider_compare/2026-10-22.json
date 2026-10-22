@@ -70,6 +70,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -6.0
+  },
+  {
+   "at": "09:45:16",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.272,
+   "same_best_bid_pct": 26.5,
+   "same_best_ask_pct": 44.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -14.0
   }
  ],
  "top_gaps": [
@@ -102,6 +116,13 @@
    "at": "09:30"
   },
   {
+   "contract": "DRREDDY26OCT1220PE",
+   "gap_pct": 1.272,
+   "kotak": 19.65,
+   "upstox": 19.4,
+   "at": "09:45"
+  },
+  {
    "contract": "AXISBANK26OCT1210PE",
    "gap_pct": 0.881,
    "kotak": 11.35,
@@ -128,6 +149,13 @@
    "kotak": 1211.2,
    "upstox": 1213.1,
    "at": "09:30"
+  },
+  {
+   "contract": "DMART26OCT3200CE",
+   "gap_pct": 0.156,
+   "kotak": 32.1,
+   "upstox": 32.15,
+   "at": "09:45"
   },
   {
    "contract": "BHARATFORG26OCTFUT",
@@ -198,30 +226,16 @@
    "kotak": 6485.0,
    "upstox": 6485.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT365CE",
-   "gap_pct": 0.0,
-   "kotak": 5.1,
-   "upstox": 5.1,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT365PE",
-   "gap_pct": 0.0,
-   "kotak": 6.15,
-   "upstox": 6.15,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 170,
+  "rounds": 6,
+  "contract_quotes": 204,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 20.6,
-  "same_best_ask_pct": 25.0,
+  "same_best_bid_pct": 23.55,
+  "same_best_ask_pct": 25.75,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "upstox_minus_kotak_quote_time_s_median": -6.75
  }
 }
