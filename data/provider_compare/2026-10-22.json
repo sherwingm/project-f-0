@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "10:00:23",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.083,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -12.0
   }
  ],
  "top_gaps": [
@@ -200,6 +214,13 @@
    "at": "09:45"
   },
   {
+   "contract": "HYUNDAI26OCTFUT",
+   "gap_pct": 0.083,
+   "kotak": 1926.8,
+   "upstox": 1928.4,
+   "at": "10:00"
+  },
+  {
    "contract": "BHARATFORG26OCTFUT",
    "gap_pct": 0.058,
    "kotak": 1730.0,
@@ -242,28 +263,21 @@
    "at": "09:50"
   },
   {
-   "contract": "360ONE26OCT1040CE",
-   "gap_pct": 0.0,
-   "kotak": 7.0,
-   "upstox": 7.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26OCT1040PE",
-   "gap_pct": 0.0,
-   "kotak": 21.9,
-   "upstox": 21.9,
-   "at": "09:20"
+   "contract": "ICICIBANK26OCTFUT",
+   "gap_pct": 0.007,
+   "kotak": 1387.6,
+   "upstox": 1387.5,
+   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 272,
+  "rounds": 9,
+  "contract_quotes": 306,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 25.75,
+  "same_best_ask_pct": 26.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -8.75
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
