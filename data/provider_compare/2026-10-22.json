@@ -336,6 +336,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -27.5
+  },
+  {
+   "at": "11:20:58",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.722,
+   "same_best_bid_pct": 44.1,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -28.0
   }
  ],
  "top_gaps": [
@@ -466,26 +480,26 @@
    "at": "09:30"
   },
   {
+   "contract": "BHARTIARTL26OCT1920CE",
+   "gap_pct": 0.722,
+   "kotak": 13.85,
+   "upstox": 13.75,
+   "at": "11:20"
+  },
+  {
    "contract": "SBICARD26OCT560CE",
    "gap_pct": 0.683,
    "kotak": 14.65,
    "upstox": 14.75,
    "at": "10:45"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 0.617,
-   "kotak": 16.2,
-   "upstox": 16.3,
-   "at": "10:25"
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 815,
+  "rounds": 25,
+  "contract_quotes": 849,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 27.95,
+  "same_best_ask_pct": 29.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -13.0
