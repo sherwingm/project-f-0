@@ -126,6 +126,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -12.0
+  },
+  {
+   "at": "10:05:26",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.01,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -13.5
   }
  ],
  "top_gaps": [
@@ -179,6 +193,13 @@
    "at": "09:50"
   },
   {
+   "contract": "INDHOTEL26OCT770CE",
+   "gap_pct": 1.01,
+   "kotak": 9.9,
+   "upstox": 10.0,
+   "at": "10:05"
+  },
+  {
    "contract": "AXISBANK26OCT1210PE",
    "gap_pct": 0.881,
    "kotak": 11.35,
@@ -191,6 +212,13 @@
    "kotak": 3.3,
    "upstox": 3.32,
    "at": "09:30"
+  },
+  {
+   "contract": "INFY26OCT1180CE",
+   "gap_pct": 0.243,
+   "kotak": 20.55,
+   "upstox": 20.5,
+   "at": "10:05"
   },
   {
    "contract": "BAJFINANCE26OCTFUT",
@@ -254,30 +282,16 @@
    "kotak": 1220.3,
    "upstox": 1220.2,
    "at": "09:20"
-  },
-  {
-   "contract": "EICHERMOT26OCTFUT",
-   "gap_pct": 0.007,
-   "kotak": 7106.5,
-   "upstox": 7106.0,
-   "at": "09:50"
-  },
-  {
-   "contract": "ICICIBANK26OCTFUT",
-   "gap_pct": 0.007,
-   "kotak": 1387.6,
-   "upstox": 1387.5,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 306,
+  "rounds": 10,
+  "contract_quotes": 340,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 26.5,
+  "same_best_ask_pct": 27.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -11.0
  }
 }
