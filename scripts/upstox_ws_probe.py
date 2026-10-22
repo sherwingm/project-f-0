@@ -32,7 +32,7 @@ async def main() -> int:
         print("connected")
         sub = {"guid": "probe1", "method": "sub", "data": {"mode": "full", "instrumentKeys": KEYS}}
         await ws.send(json.dumps(sub).encode())                  # Upstox wants the request as a binary frame
-        n, size, first = 0, 0, None
+        n, size, seen = 0, 0, set()
         loop = asyncio.get_running_loop()
         end = loop.time() + 15
         while loop.time() < end:
@@ -41,11 +41,9 @@ async def main() -> int:
             except asyncio.TimeoutError:
                 break
             n, size = n + 1, size + len(m)
-            first = first or m
+            seen |= {k for k in KEYS if k.encode() in m}
         print(f"messages: {n}, bytes: {size}")
-        if first:
-            names = [k.encode() for k in KEYS]
-            print("first message has the subscribed keys:", [k.decode() for k in names if k in first])
+        print("keys with data:", sorted(seen))
     return 0
 
 
