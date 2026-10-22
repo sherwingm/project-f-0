@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "09:50:18",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.064,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 20.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -14.0
   }
  ],
  "top_gaps": [
@@ -121,6 +135,13 @@
    "kotak": 19.65,
    "upstox": 19.4,
    "at": "09:45"
+  },
+  {
+   "contract": "FEDERALBNK26OCT345PE",
+   "gap_pct": 1.064,
+   "kotak": 4.7,
+   "upstox": 4.65,
+   "at": "09:50"
   },
   {
    "contract": "AXISBANK26OCT1210PE",
@@ -193,6 +214,13 @@
    "at": "09:20"
   },
   {
+   "contract": "EICHERMOT26OCTFUT",
+   "gap_pct": 0.007,
+   "kotak": 7106.5,
+   "upstox": 7106.0,
+   "at": "09:50"
+  },
+  {
    "contract": "360ONE26OCT1040CE",
    "gap_pct": 0.0,
    "kotak": 7.0,
@@ -212,30 +240,16 @@
    "kotak": 1029.1,
    "upstox": 1029.1,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26OCT6500PE",
-   "gap_pct": 0.0,
-   "kotak": 111.45,
-   "upstox": 111.45,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 6485.0,
-   "upstox": 6485.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 204,
+  "rounds": 7,
+  "contract_quotes": 238,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 23.55,
-  "same_best_ask_pct": 25.75,
+  "same_best_bid_pct": 26.5,
+  "same_best_ask_pct": 25.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -6.75
+  "upstox_minus_kotak_quote_time_s_median": -7.5
  }
 }
