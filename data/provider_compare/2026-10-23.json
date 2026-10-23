@@ -130,6 +130,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.3,
    "upstox_minus_kotak_quote_time_s_median": -4.0
+  },
+  {
+   "at": "10:05:06",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.769,
+   "same_best_bid_pct": 20.0,
+   "same_best_ask_pct": 17.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -11.0
   }
  ],
  "top_gaps": [
@@ -183,6 +197,13 @@
    "at": "09:50"
   },
   {
+   "contract": "INDHOTEL26OCT780CE",
+   "gap_pct": 0.769,
+   "kotak": 6.5,
+   "upstox": 6.55,
+   "at": "10:05"
+  },
+  {
    "contract": "INDHOTEL26OCT790CE",
    "gap_pct": 0.752,
    "kotak": 6.65,
@@ -195,6 +216,13 @@
    "kotak": 20.1,
    "upstox": 20.25,
    "at": "09:40"
+  },
+  {
+   "contract": "IREDA26OCT100CE",
+   "gap_pct": 0.73,
+   "kotak": 1.37,
+   "upstox": 1.38,
+   "at": "10:05"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -258,30 +286,16 @@
    "kotak": 10156.0,
    "upstox": 10159.0,
    "at": "09:30"
-  },
-  {
-   "contract": "DRREDDY26OCTFUT",
-   "gap_pct": 0.024,
-   "kotak": 1246.9,
-   "upstox": 1247.2,
-   "at": "09:45"
-  },
-  {
-   "contract": "ADANIENSOL26OCTFUT",
-   "gap_pct": 0.016,
-   "kotak": 1266.4,
-   "upstox": 1266.2,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 314,
+  "rounds": 10,
+  "contract_quotes": 349,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 25.7,
-  "same_best_ask_pct": 25.7,
+  "same_best_ask_pct": 24.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -5.0
+  "upstox_minus_kotak_quote_time_s_median": -6.75
  }
 }
