@@ -172,6 +172,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "10:20:06",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.415,
+   "same_best_bid_pct": 22.9,
+   "same_best_ask_pct": 22.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.4,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
@@ -216,6 +230,13 @@
    "kotak": 83.0,
    "upstox": 81.75,
    "at": "09:45"
+  },
+  {
+   "contract": "MCX26OCT3000PE",
+   "gap_pct": 1.415,
+   "kotak": 42.4,
+   "upstox": 41.8,
+   "at": "10:20"
   },
   {
    "contract": "KEI26OCT3700PE",
@@ -288,6 +309,13 @@
    "at": "10:10"
   },
   {
+   "contract": "MARUTI26OCT11000PE",
+   "gap_pct": 0.579,
+   "kotak": 112.3,
+   "upstox": 112.95,
+   "at": "10:20"
+  },
+  {
    "contract": "TECHM26OCT1820CE",
    "gap_pct": 0.567,
    "kotak": 17.65,
@@ -300,30 +328,16 @@
    "kotak": 19.9,
    "upstox": 20.0,
    "at": "09:50"
-  },
-  {
-   "contract": "BAJFINANCE26OCT940PE",
-   "gap_pct": 0.427,
-   "kotak": 11.7,
-   "upstox": 11.65,
-   "at": "09:30"
-  },
-  {
-   "contract": "COLPAL26OCT1660PE",
-   "gap_pct": 0.42,
-   "kotak": 23.8,
-   "upstox": 23.9,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 419,
+  "rounds": 13,
+  "contract_quotes": 454,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 27.15,
+  "same_best_bid_pct": 25.7,
   "same_best_ask_pct": 25.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -8.75
+  "upstox_minus_kotak_quote_time_s_median": -8.5
  }
 }
