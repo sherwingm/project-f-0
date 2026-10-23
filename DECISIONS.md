@@ -198,3 +198,31 @@ are hypotheses until our data confirms them. S3 is separate from S1 and S2; noth
 | S3 P6 · NIFTY expiry-day naked short ATM straddle 14:30 → 15:15, no stop (lead from P2s; `strategies/S3_P6_expiry_late_naked_straddle.md`) | **Closed**: failed the (in-sample) test-window gate (2026-10-23); holdout not run | 50 trades: win rate 70 %, +18.7 % of the credit a trade (median +32.8 %), t 2.45; +₹255 a trade (t 1.38 in ₹: the lot went 25 → 75), total +₹12,769; halves +29.5 % / +7.8 %; 2× costs +9.2 %; neighbours +13.8 to +16.8 %. **Fails on the tail:** worst day −₹4,421 against an average month of +₹1,064, the naked-short risk the research warns about. In-sample by construction (the best of P2s's 108 cells), so even a pass would only have opened the holdout (`data/results/S3_P6_report.md`) |
 | S3 P4 · NIFTY 15-min opening-range breakout, long ATM option (next weekly), VIX < 14 + 20-day-EMA trend, 25 % stop + 25 % trail, out 15:15 (`strategies/S3_P4_orb_directional.md`) | **Closed**: failed the gate (2026-10-23) | Test window, 247 sessions → 59 trades (6 skipped: no breakout or no price; 3 of them in the 2024-12-26 expiry, which has one strike only). Win rate 29 %; exits trail 35, stop 12, time 12. Net −3.7 % of the premium a trade (median −14.7 %), t −0.92; −₹437 a trade, total −₹25,790; halves +5.4 % / −7.7 %. All 24 grid cells negative (−2.3 % to −8.1 %). Side reports: no filter −3.3 % (241 trades, t −1.6); calls −9.0 %, puts +1.1 % (not promotable). Holdout not run (`data/results/S3_P4_report.md`) |
 | S3 P7 · NIFTY expiry-day short iron fly ±4, 14:30 → 15:15, no stop, 5 lots (lead from P2s / P6 and the lot-size fee finding; `strategies/S3_P7_expiry_late_fly_5lots.md`) | **Closed**: failed the (in-sample) test-window gate (2026-10-23); holdout not run | 50 trades: win rate 70 %, +18.8 % of the credit a trade (median +30.2 %), t 2.25; +₹931 a trade (t 1.01), total +₹46,534; halves +32.4 % / +5.2 %; 2× costs +13.7 %; neighbours +16.1 to +18.9 %. **Fails on the tail again:** worst day −₹22,884 (2025-05-22, the call side up 93 points in 45 minutes) against an average month of +₹3,878; deepest drawdown −₹47,697. ±200-point wings do not cap a late-expiry move of that size. Descriptive lot re-pricing (all pods, 1 → 5 → 10 lots): P1 −4.9 → +1.5 → +2.2 %, P2s −9.2 → +9.1 → +11.4 %, P3 −13.9 → +1.9 → +3.8 %, P6 +18.7 → +25.1 → +25.9 %, P2 (long) −35.8 → −27.4 → −26.3 % (`data/results/S3_P7_report.md`) |
+
+## 2026-10-23 · S3 corrections from the independent review (before the re-runs)
+A 4-agent review (code audit, trade re-check, completeness critic, and a skeptic who reproduced every finding)
+confirmed 10 issues; none turns a FAIL into a PASS. Fixed in 32bd807c:
+- **Event date.** The August 2025 RBI decision was on **2025-08-06** (the MPC was moved to 4-6 Aug, press release
+  2025-2026/497). The P1 page's "correction" to 08-07 used the original schedule. 2025-08-07, an ordinary Thursday expiry
+  and the worst day of P6 and P7, had been skipped.
+- **Lot size.** `lot_on` took the day's first bhavcopy row (the near-month future), so the lot-75 weeklies of
+  2025-01-02 / 09 / 16 / 23 ran at lot 25. It now takes the traded contract's lot by (trade date, expiry).
+- A stray one-bar Saturday (2025-08-23) in the spot store was counted as a session (P3 T-3, P4 count). Days under 60 bars
+  are now dropped.
+- The diagnostics' expiry calendar counted listed expiry dates that never traded on their own date (later moved). Only
+  dates where a contract traded on its expiry date count now.
+- **Provenance:** reports now name the commit of their strategy page, and the runner refuses an uncommitted page.
+- **Known store gaps, recorded, not fixed:**
+  - the 2024-12-26 NIFTY expiry holds one strike (the week of 20-26 Dec 2024 is skipped everywhere; spot moved −1.5 %
+    on 12-20);
+  - quarterly expiries lack some round-thousand strikes (P3 on 2025-03-25 sold 23950 instead of 24000);
+  - 2025-04-07's band stops at 21100 PE;
+  - the 2025-02-01 Budget session is missing from spot and VIX.
+- **Recorded for the holdout:** the expiry-afternoon spot of the holdout period has already been looked at in descriptive
+  tables (diagnostics §1 by year, D2's Tuesday-after group). Any further expiry-afternoon spot work stops at 2025-09-30,
+  and SENSEX (R1) is the main independent test.
+- **About 420 looks** at the NIFTY test-window option returns so far. Only 5 primaries are independent and pre-registered
+  (P1, P2, P2s, P3, P4); of these only P2 (t −3.17) survives a Bonferroni or Holm correction.
+
+All S3 pods are re-run with these fixes, and the S3 pods table is updated with the corrected numbers.
+

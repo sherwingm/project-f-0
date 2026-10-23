@@ -56,6 +56,12 @@ Committee" for 2024-2025 and for 2025-2026. One correction to the first list: Au
 day is **2025-08-07, not 2025-08-06**. 2026-02-06 was added. In the test window, 2025-04-09 and 2025-08-07 are expiry
 days.
 
+**Second correction, 2026-10-23 (independent review, after the P1-P7 runs):** that first correction was wrong. The RBI
+moved the August 2025 meeting to 4-6 Aug (press release 2025-2026/497, 6 Jun 2025, "Meeting of the Monetary Policy
+Committee (MPC) - Rescheduled"), so the decision day is **2025-08-06**, as the first list had it. In the test window
+only 2025-04-09 is an expiry day among the event days. 2025-08-07 is an ordinary expiry day, and every pod is re-run
+with it traded. This changes data, not rules: the list was always meant to hold the actual decision days.
+
 ## Data
 - The run waits for the Upstox path-band re-fill (queued 2026-10-22), so that the expiry days whose ATM strike was
   missing are included.
