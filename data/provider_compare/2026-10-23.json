@@ -750,6 +750,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -3.0
+  },
+  {
+   "at": "13:45:13",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.922,
+   "same_best_bid_pct": 28.6,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -18.0
   }
  ],
  "top_gaps": [
@@ -787,6 +801,20 @@
    "kotak": 2.4,
    "upstox": 2.5,
    "at": "10:55"
+  },
+  {
+   "contract": "KALYANKJIL26OCT510PE",
+   "gap_pct": 3.922,
+   "kotak": 5.1,
+   "upstox": 5.3,
+   "at": "13:45"
+  },
+  {
+   "contract": "INDHOTEL26OCT790CE",
+   "gap_pct": 3.488,
+   "kotak": 4.3,
+   "upstox": 4.15,
+   "at": "13:45"
   },
   {
    "contract": "ADANIGREEN26OCT1200CE",
@@ -878,25 +906,11 @@
    "kotak": 2.8,
    "upstox": 2.75,
    "at": "13:10"
-  },
-  {
-   "contract": "BAJAJ-AUTO26OCT10100PE",
-   "gap_pct": 1.698,
-   "kotak": 76.55,
-   "upstox": 75.25,
-   "at": "09:30"
-  },
-  {
-   "contract": "DIVISLAB26OCT9100CE",
-   "gap_pct": 1.506,
-   "kotak": 83.0,
-   "upstox": 81.75,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 53,
-  "contract_quotes": 1853,
+  "rounds": 54,
+  "contract_quotes": 1888,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 40.0,
   "same_best_ask_pct": 37.1,
