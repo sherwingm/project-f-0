@@ -116,8 +116,11 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   is +7.8 % before costs, t 0.2.
 - **P1 (expiry-day iron fly): closed, failed** (DECISIONS.md "S3 pods"): 37 trades, win rate 41 %, −4.9 % of the
   credit a trade, t −0.68. The holdout is untouched. `scanner/s3_p1.py`.
+- **P2 (the expiry-day long straddle 14:45 → 15:25): closed, failed:** 52 trades, win rate 27 %, −35.8 % of the
+  premium a trade, t −3.17. `scanner/s3_p2.py`. The mirror (selling it) is a post-hoc lead only, and would need its
+  own page.
 - **Next:**
-  - P2 (the last-30-minutes long straddle on expiry) is the next pod on the plan;
+  - the user picks between P3 (the 1-3 DTE iron condor) and a pre-registered short last-40-minutes pod;
   - BANKNIFTY and SENSEX re-fills with the path band, when they are needed.
 
 ## Index data (all on GitHub; no PC or Claude app needed)
