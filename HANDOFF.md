@@ -101,7 +101,7 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 ## S3 index options, NIFTY first (a separate chat; DECISIONS.md "S3 · index options", 2026-10-22)
 - Research and backtest only: no S3 paper or live trade until a pod passes its gate and holdout and the user agrees.
 - **Split:** test 2024-10 → 2025-09; holdout 2025-10 → latest, once per pod.
-- **Data:** a sparse checkout of the `index-data` branch at `C:\Users\sherw\fo-index-data` (NIFTY only). Run with
+- **Data:** a sparse checkout of the `index-data` branch at `C:\Users\sherw\fo-index-data` (NIFTY, plus BANKNIFTY / SENSEX spot and BANKNIFTY daily). Run with
   `INDEX_STORE=C:/Users/sherw/fo-index-data/data/index`. Refresh it with `git -C ../fo-index-data pull` after GitHub
   jobs run.
 - **Code:**
@@ -119,9 +119,33 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 - **P2 (the expiry-day long straddle 14:45 → 15:25): closed, failed:** 52 trades, win rate 27 %, −35.8 % of the
   premium a trade, t −3.17. `scanner/s3_p2.py`. The mirror (selling it) is a post-hoc lead only, and would need its
   own page.
+- **23 Oct, every remaining pod run** (the user: "continue all the remaining tests and any new finding, don't wait for
+  my permission"). All closed, and the NIFTY holdout is still unseen:
+  - **P2s** (short fly, last 40 minutes, 30 % stop): −9.2 % of the credit, t −1.03;
+  - **P3** (1-3 DTE condor): −13.9 %, t −1.25. The research's VIX + ADX filter leaves 4 trades;
+  - **P4** (ORB long option): −3.7 %, t −0.92;
+  - **P5** (VIX-spike condor): not testable, 6 spikes in 2021-26;
+  - **P6** (naked late short straddle, a lead): +18.7 %, t 2.45 in-sample, but the worst day was −₹4,421 against an
+    average month of +₹1,064;
+  - **P7** (late short fly, 5 lots, a lead): +18.8 %, t 2.25 in-sample, but the worst day was −₹22,884 against +₹3,878.
+- **Findings:**
+  - Late-expiry ATM premium looks overpriced: the long side loses at any size, the short side gains about 25 % at 5 lots.
+    It fails only on the tail;
+  - fixed fees dominate at 1 lot;
+  - BANKNIFTY's Wednesday got calmer after losing its weekly expiry (DiD 0.42x);
+  - the BANKNIFTY expiry last half hour reverses the day's move (t −3.2, mostly 2024). See `data/results/s3_diag2.md`.
+- **Code:**
+  - `scanner/s3_pods.py`: the shared runner and report;
+  - `s3_p2s.py`, `s3_p3.py`, `s3_p4.py`, `s3_p6.py`, `s3_p7.py`, `s3_diag2.py`, `s3_r1.py`;
+  - `scanner/s3_regime.py`: ADX, EMA, delta strike choice.
+  - The engine now handles multi-day holds and trailing stops, and is vectorised.
 - **Next:**
-  - the user picks between P3 (the 1-3 DTE iron condor) and a pre-registered short last-40-minutes pod;
-  - BANKNIFTY and SENSEX re-fills with the path band, when they are needed.
+  - **R1, the SENSEX replication** (`strategies/S3_R1_sensex_late_expiry_replication.md`, pre-registered). It needs the
+    SENSEX path-band re-fill: queue `upstox_expired --underlying SENSEX --max-minutes 300` after 15:30 IST (the live
+    server streams on the same Upstox token). Then add `/data/index/options_1m/SENSEX/` to the sparse checkout, pull,
+    and run `python -m scanner.s3_r1`;
+  - the 4-agent review workflow (code audit, trade re-check, completeness critic) was re-run on 23 Oct after a usage
+    limit. Act on what it confirms.
 
 ## Index data (all on GitHub; no PC or Claude app needed)
 - **Complete:** expired 1-minute option candles from Upstox, with OI, Oct 2024 → Oct 2026.
