@@ -18,6 +18,7 @@ import pandas as pd
 import requests
 
 from .build import ROOT
+from .fade_entry_quality import md_table
 
 RES = ROOT / "data" / "results"
 RAW = "https://raw.githubusercontent.com/sherwingm/project-f-0/paper-state/data/"
@@ -102,9 +103,9 @@ def main() -> None:
             "Live best bids (server/peak.py), trades closed after the measurement deploy (23 Oct 2026). v12 is the "
             "control; nothing changes from this report. Net at peak is an ESTIMATE: it assumes the whole lot sells at "
             "the highest observed bid (see 'lot fitted at peak'). A diagnostic, not statistical proof.\n")
-    body = s.to_markdown(index=False) if n else "No measured trade yet: keep collecting."
+    body = md_table(s) if n else "No measured trade yet: keep collecting."
     (RES / "S1_fade_live_checkpoint.md").write_text(head + "\n" + body + "\n" +
-                                                     ("\n" + d.to_markdown(index=False) if n else ""), encoding="utf-8")
+                                                     ("\n" + md_table(d) if n else ""), encoding="utf-8")
     with pd.ExcelWriter(RES / "S1_fade_live_checkpoint.xlsx") as x:
         s.to_excel(x, sheet_name="Summary", index=False)
         if n:
