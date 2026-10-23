@@ -396,6 +396,24 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -37.0
+  },
+  {
+   "at": "11:40:09",
+   "contracts": 35,
+   "on_both": 34,
+   "missing_kotak": [
+    "HCLTECH26OCT1430PE"
+   ],
+   "missing_upstox": [
+    "HCLTECH26OCT1430PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.348,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 32.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -28.0
   }
  ],
  "top_gaps": [
@@ -419,6 +437,13 @@
    "kotak": 58.35,
    "upstox": 55.6,
    "at": "09:40"
+  },
+  {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 4.348,
+   "kotak": 2.3,
+   "upstox": 2.2,
+   "at": "11:40"
   },
   {
    "contract": "FEDERALBNK26OCT350CE",
@@ -531,23 +556,16 @@
    "kotak": 4.7,
    "upstox": 4.65,
    "at": "09:50"
-  },
-  {
-   "contract": "IRFC26OCT74CE",
-   "gap_pct": 1.0,
-   "kotak": 1.0,
-   "upstox": 1.01,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 28,
-  "contract_quotes": 979,
+  "rounds": 29,
+  "contract_quotes": 1013,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.4,
+  "same_best_bid_pct": 31.4,
   "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -13.5
+  "upstox_minus_kotak_quote_time_s_median": -14.0
  }
 }
