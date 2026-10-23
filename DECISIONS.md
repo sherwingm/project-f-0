@@ -185,3 +185,9 @@ are hypotheses until our data confirms them. S3 is separate from S1 and S2; noth
 - **Holdout:** net mean > 0 and Sharpe within 30 % of the test window's.
 - **Results** go into a "S3 pods" table in this file, passed or closed with their numbers.
 
+
+## S3 pods
+
+| Pod | Status | Record |
+|---|---|---|
+| S3 P1 · NIFTY expiry-day iron fly, 11:15, combined stop 30 %, out 14:45, VIX 13-20 (`strategies/S3_P1_expiry_day_fly.md`) | **Closed**: failed the gate (2026-10-23) | Test window 2024-10 → 2025-09, 53 expiry days → 37 trades (1 without prices, 2 event days, 13 VIX outside 13-20). Win rate 41 %, stop hit 49 %. Net −4.9 % of the credit a trade (median −33.7 %, t −0.68), −₹438 a trade at 1 lot, total −₹16,188; halves +0.3 % / −15.7 %; 2× costs −14.6 %; worst day −₹3,544 against an average month of −₹1,799. Neighbours (stop 25 / 35 %, 10:00) all negative; every fly cell in the grid negative (−1.6 % to −20 %). Side report, not promotable (picked after seeing the grid, all t < 1): the short straddle with a 20-35 % stop is about zero to +5.6 % (best 10:00 with a 25 % stop, +5.6 %, t 0.7). Fees are large at 1 lot (8 orders ≈ ₹190-240 against a credit of ~₹1,400-7,000). Holdout not run (`data/results/S3_P1_report.md`) |
