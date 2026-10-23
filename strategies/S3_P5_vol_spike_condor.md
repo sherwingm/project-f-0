@@ -22,3 +22,7 @@ idea itself.
 **Closed as not testable** on this data. It is not reopened by loosening the event rule. If a long daily history is
 built later (for example NIFTY options from the NSE bhavcopy back to 2008, against VIX from 2008), the same rule can be
 counted again there.
+
+## Addendum 2026-10-23: the long history (count only)
+The same rule on India VIX daily 2008-03 → 2026-10 (`vix_daily.parquet`) gives 15 episodes: 9 in 2008-2020 (2009,
+2010, 2011 ×2, 2013, 2015, 2020 ×3), plus the 6 above. Even 18 years stay under 30, so P5 stays closed.
