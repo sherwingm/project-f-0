@@ -270,6 +270,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "10:55:07",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.167,
+   "same_best_bid_pct": 25.7,
+   "same_best_ask_pct": 17.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.6,
+   "upstox_minus_kotak_quote_time_s_median": -19.0
   }
  ],
  "top_gaps": [
@@ -295,6 +309,13 @@
    "at": "09:40"
   },
   {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 4.167,
+   "kotak": 2.4,
+   "upstox": 2.5,
+   "at": "10:55"
+  },
+  {
    "contract": "LTM26OCT4200PE",
    "gap_pct": 3.306,
    "kotak": 60.5,
@@ -307,6 +328,13 @@
    "kotak": 14.15,
    "upstox": 14.5,
    "at": "10:15"
+  },
+  {
+   "contract": "ULTRACEMCO26OCT10800PE",
+   "gap_pct": 2.394,
+   "kotak": 75.2,
+   "upstox": 73.4,
+   "at": "10:55"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -398,30 +426,16 @@
    "kotak": 20.1,
    "upstox": 20.25,
    "at": "09:40"
-  },
-  {
-   "contract": "IREDA26OCT100CE",
-   "gap_pct": 0.73,
-   "kotak": 1.37,
-   "upstox": 1.38,
-   "at": "10:05"
-  },
-  {
-   "contract": "TECHM26OCT1820CE",
-   "gap_pct": 0.619,
-   "kotak": 16.15,
-   "upstox": 16.05,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 19,
-  "contract_quotes": 664,
+  "rounds": 20,
+  "contract_quotes": 699,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 28.6,
   "same_best_ask_pct": 25.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
