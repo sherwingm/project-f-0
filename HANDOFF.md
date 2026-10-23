@@ -37,7 +37,8 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
   every long-option trade keeps the highest / lowest best bid while held (`held_bid`), `peak_capture` at the exit
   (net at peak = estimate; `lot_fits_at_peak`, `max_gap_s`), `entry_quote`, and `data/observations/<date>.jsonl`
   (mirrored once the day is over). Checkpoint: `python -m scanner.fade_live_checkpoint` (target 30 measured trades;
-  0 on 23 Oct). **The GitHub repo is PUBLIC** (no secrets found; making it private is the user's call).
+  0 on 23 Oct). **The GitHub repo is PUBLIC, kept so by the user (23 Oct)**: free Actions minutes, free Pages, token-free raw
+  downloads. Never commit secrets; scan before pushing data.
 - **Upstox stream live** (from 23 Oct, DECISIONS.md): `server/upstox_stream.py`, prices pushed by the Upstox WebSocket,
   Kotak fallback when it is down; feed + A/B + fade retries every 1 s while streaming, 30 s on Kotak only.
   Check: `/api/live` -> `stream` (healthy, keys, streamed, served stream vs kotak) and `interval_s` = 1 in market hours.
