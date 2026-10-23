@@ -568,6 +568,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.3,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "12:40:11",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.125,
+   "same_best_bid_pct": 45.7,
+   "same_best_ask_pct": 51.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -11.0
   }
  ],
  "top_gaps": [
@@ -626,6 +640,13 @@
    "kotak": 4.8,
    "upstox": 4.95,
    "at": "11:20"
+  },
+  {
+   "contract": "FEDERALBNK26OCT350CE",
+   "gap_pct": 3.125,
+   "kotak": 1.6,
+   "upstox": 1.65,
+   "at": "12:40"
   },
   {
    "contract": "LAURUSLABS26OCT1940PE",
@@ -703,18 +724,11 @@
    "kotak": 11.35,
    "upstox": 11.5,
    "at": "12:35"
-  },
-  {
-   "contract": "KEI26OCT3700PE",
-   "gap_pct": 1.206,
-   "kotak": 45.6,
-   "upstox": 45.05,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 40,
-  "contract_quotes": 1398,
+  "rounds": 41,
+  "contract_quotes": 1433,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 34.3,
   "same_best_ask_pct": 31.4,
