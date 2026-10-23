@@ -456,6 +456,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "12:00:09",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.703,
+   "same_best_bid_pct": 34.3,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.3,
+   "upstox_minus_kotak_quote_time_s_median": -26.0
   }
  ],
  "top_gaps": [
@@ -514,6 +528,13 @@
    "kotak": 4.8,
    "upstox": 4.95,
    "at": "11:20"
+  },
+  {
+   "contract": "LAURUSLABS26OCT1940PE",
+   "gap_pct": 2.703,
+   "kotak": 22.2,
+   "upstox": 21.6,
+   "at": "12:00"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -591,23 +612,16 @@
    "kotak": 9.14,
    "upstox": 9.24,
    "at": "09:50"
-  },
-  {
-   "contract": "HINDUNILVR26OCT1800PE",
-   "gap_pct": 1.072,
-   "kotak": 18.65,
-   "upstox": 18.85,
-   "at": "11:45"
   }
  ],
  "day": {
-  "rounds": 32,
-  "contract_quotes": 1118,
+  "rounds": 33,
+  "contract_quotes": 1153,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 31.4,
-  "same_best_ask_pct": 30.0,
+  "same_best_ask_pct": 31.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -14.5
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
