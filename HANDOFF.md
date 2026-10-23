@@ -112,11 +112,13 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   - Last 30 minutes on expiry: 1.31x variance (interval 0.97-1.73), no reversal.
   - No round-number or max-pain pinning.
   - The ATM straddle sold to expiry is +13 % before costs, but not significant (t 0.7).
-- **Waiting:**
-  - the queued Upstox NIFTY re-fill (the path band fixes the ATM strikes missing on 21 of 107 expiry days). Then pull
-    `../fo-index-data`, re-run the diagnostics, check the RBI dates on the P1 page, and run P1
-    (`strategies/S3_P1_expiry_day_fly.md`, pre-registered; its runner `scanner/s3_p1.py` is not written yet);
-  - BANKNIFTY and SENSEX re-fills with the path band later.
+- **NIFTY re-fill done (23 Oct):** 107 of 108 expiry days complete. Diagnostics re-run: the straddle sold to expiry
+  is +7.8 % before costs, t 0.2.
+- **P1 (expiry-day iron fly): closed, failed** (DECISIONS.md "S3 pods"): 37 trades, win rate 41 %, −4.9 % of the
+  credit a trade, t −0.68. The holdout is untouched. `scanner/s3_p1.py`.
+- **Next:**
+  - P2 (the last-30-minutes long straddle on expiry) is the next pod on the plan;
+  - BANKNIFTY and SENSEX re-fills with the path band, when they are needed.
 
 ## Index data (all on GitHub; no PC or Claude app needed)
 - **Complete:** expired 1-minute option candles from Upstox, with OI, Oct 2024 → Oct 2026.
