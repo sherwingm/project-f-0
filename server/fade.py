@@ -716,7 +716,7 @@ class FadeTrader:
                 bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
                 px = bid or max(0.0, round(close - TICK, 2))
                 pos["rule"]["spot_at_exit"] = self.spot(pos["symbol"])
-                self.ledger.close_at(pos["id"], px, now, reason)
+                self.ledger.close_at(pos["id"], px, now, reason, price_is_bid=bool(bid))
                 log.info("fade carry exit %s: %s at %.2f (close %.2f, entry %.2f, peak %.2f)",
                          reason, pos["tradingsymbol"], px, close, entry, c["peak"])
             self.ledger._save()
@@ -968,5 +968,6 @@ class FadeTrader:
                 r["shadow_trail"]["status"] = "same"             # the trail never sold: the same 15:20 result
             if (r.get("shadow_v11") or {}).get("status") == "open":
                 r["shadow_v11"] = {"status": "same"}             # sold at 15:20: v11 sells there too
-            self.ledger.close_at(pos["id"], px, now, "fade_eod" if now.date() == opened else "fade_late")
+            self.ledger.close_at(pos["id"], px, now, "fade_eod" if now.date() == opened else "fade_late",
+                                 price_is_bid=bool(bid))
             log.info("fade exit: %s at %.2f", pos["tradingsymbol"], px)

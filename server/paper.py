@@ -30,6 +30,7 @@ Realised P&L of a closed trade = gross move x qty - entry charges - exit charges
 """
 from __future__ import annotations
 
+import copy
 import json
 import logging
 import os
@@ -405,7 +406,7 @@ class PaperLedger:
                        "max_loss_at_entry": round(ml * frac, 2) if ml else None,
                        "r_multiple": round(net / (ml * frac), 3) if ml else None,
                        "held_peak": pos.get("peak"), "held_trough": pos.get("trough"),
-                       "held_bid": pos.get("held_bid"), "entry_quote": pos.get("entry_quote"),
+                       "held_bid": copy.deepcopy(pos.get("held_bid")), "entry_quote": pos.get("entry_quote"),
                        "after": {"until": pos.get("t2_date") or pos["expiry"], "peak": None, "trough": None,
                                  "last": None}})
         if self._bid_tracked(pos) and qty >= pos["qty"]:
@@ -487,11 +488,12 @@ class PaperLedger:
             self._save()
             return pos
 
-    def close_at(self, pid: str, price: float, now: datetime, reason: str) -> dict:
-        """Close a whole position at `price` (a rule exit, or the results page's Close at the best bid)."""
+    def close_at(self, pid: str, price: float, now: datetime, reason: str, price_is_bid: bool = True) -> dict:
+        """Close a whole position at `price` (a rule exit, or the results page's Close at the best bid).
+        price_is_bid=False: the price came from the last trade (no bid then), so it is not a bid observation."""
         with self.lock:
             pos = self._position_by_id(pid)
-            if self._bid_tracked(pos):
+            if self._bid_tracked(pos) and price_is_bid:
                 pk.observe(pos, price, now, pk.SOURCE_EXIT)   # the exit-triggering quote counts as held
             f = {"price": price, "levels": [], "mode": reason, "mid": None, "slippage_vs_mid": None, "overflow_qty": 0}
             closed = self._close(pos, pos["qty"], f, "rule" if pos.get("rule") else None, now, reason)
@@ -515,9 +517,10 @@ class PaperLedger:
             q = self.quotes.get(c) or {}
             bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
             px = bid if bid else (round(q["last_price"] - self.tick, 2) if q.get("last_price") else None)
+            price_is_bid = bool(bid)
             if not px:
                 raise PaperRejected("no live quote for this contract right now; try again when the market is open")
-            return self.close_at(pid, px, now, "manual")
+            return self.close_at(pid, px, now, "manual", price_is_bid=price_is_bid)
 
     def _follow_closed(self, now: datetime) -> None:
         """After the exit: keep quoting the contract until its T-2 day, so the results page shows whether the
@@ -594,7 +597,8 @@ class PaperLedger:
             log.warning("%s exit of %s waits for the next poll: %s", reason, pos["tradingsymbol"], exc)
             return False
         if self._bid_tracked(pos):
-            pk.observe(pos, ((quote.get("depth") or {}).get("bid") or [[None]])[0][0], now, pk.SOURCE_EXIT)
+            b = ((quote.get("depth") or {}).get("bid") or [[None, None]])[0]
+            pk.observe(pos, b[0], now, pk.SOURCE_EXIT, b[1] if len(b) > 1 else None)
         closed = self._close(pos, pos["qty"], f, liq["class"], now, reason)
         self._log_order({"order_id": self._id("PAPER"), "placed_at": now.isoformat(timespec="seconds"), "paper": True,
                          "symbol": pos["symbol"], "instrument": pos["instrument"], "expiry": pos["expiry"], "strike": pos["strike"],
@@ -613,7 +617,8 @@ class PaperLedger:
         """A quote of an open long option: its best bid into the while-held peak / low, and the bid/ask record."""
         if not quote or not self._bid_tracked(pos):
             return
-        pk.observe(pos, ((quote.get("depth") or {}).get("bid") or [[None]])[0][0], now, source)
+        b = ((quote.get("depth") or {}).get("bid") or [[None, None]])[0]
+        pk.observe(pos, b[0], now, source, b[1] if len(b) > 1 else None)
         try:
             self.obs.add(pos, quote, now, source)
         except OSError as exc:

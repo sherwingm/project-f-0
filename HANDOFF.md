@@ -33,6 +33,11 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
 - Login: themed `/login` page, 1-year cookie (Tailscale **Funnel** = public HTTPS, no VPN needed). Updates: Claude runs
   `git pull && sudo systemctl restart fo-scanner` in the Lightsail browser SSH via Claude in Chrome (after market only).
 - **Daily loss halt removed** 22 Oct (DECISIONS.md): no loss halts at all now.
+- **Sellable-peak measurement** (from 23 Oct evening, `server/peak.py`, audit `data/results/S1_v12_measurement_audit.md`):
+  every long-option trade keeps the highest / lowest best bid while held (`held_bid`), `peak_capture` at the exit
+  (net at peak = estimate; `lot_fits_at_peak`, `max_gap_s`), `entry_quote`, and `data/observations/<date>.jsonl`
+  (mirrored once the day is over). Checkpoint: `python -m scanner.fade_live_checkpoint` (target 30 measured trades;
+  0 on 23 Oct). **The GitHub repo is PUBLIC** (no secrets found; making it private is the user's call).
 - **Upstox stream live** (from 23 Oct, DECISIONS.md): `server/upstox_stream.py`, prices pushed by the Upstox WebSocket,
   Kotak fallback when it is down; feed + A/B + fade retries every 1 s while streaming, 30 s on Kotak only.
   Check: `/api/live` -> `stream` (healthy, keys, streamed, served stream vs kotak) and `interval_s` = 1 in market hours.

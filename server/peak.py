@@ -6,7 +6,11 @@ the stock's price. Conventions:
     - quotes after the exit never touch it (the after-sale follow is kept separately, in closed["after"]);
     - a quote without a bid counts as missing and is skipped;
     - of equal bids the earliest keeps the timestamp (a later equal quote does not move the peak);
-    - "peak" means the highest OBSERVED bid: the market may have been higher between two quotes.
+    - "peak" means the highest OBSERVED bid: the market may have been higher between two quotes;
+    - the bid size at the peak is kept (peak_bid_qty); lot_fits_at_peak says whether the whole lot could have sold
+      there at that one level (None when the size is unknown), so peak_net is an ESTIMATED opportunity, not a fill;
+    - an exit priced from the last trade (no bid at that moment) is not an observation of the bid and is left out;
+    - max_gap_s is the longest time between two observations: a peak inside a long gap was not seen.
 
 capture(): peak_return_pct = (peak_bid - entry) / entry x 100 (MFE, can be negative: never above entry);
 MAE_pct = (low_bid - entry) / entry x 100; peak_net = the net P&L had it sold at peak_bid, with the trade's own entry
@@ -27,15 +31,18 @@ SOURCE_EXIT = "live best bid (exit quote)"
 OBS_DIR = "observations"                 # data/observations/<date>.jsonl, one row per bid/ask change of an open trade
 
 
-def observe(pos: dict, bid: float | None, now: datetime, source: str) -> None:
-    """One quote's best bid into pos["held_bid"] (see the module doc). Missing bids are counted, not used."""
+def observe(pos: dict, bid: float | None, now: datetime, source: str, qty: int | None = None) -> None:
+    """One quote's best bid (and its size) into pos["held_bid"] (see the module doc). Missing bids are counted."""
     hb = pos.setdefault("held_bid", {"first": None, "peak": None, "low": None, "last": None, "n": 0, "missing": 0,
                                      "sources": []})
     if bid is None or not bid > 0:
         hb["missing"] += 1
         return
     at = now.isoformat(timespec="seconds")
-    pt = {"price": float(bid), "at": at}
+    if hb["last"] is not None:
+        gap = (now - datetime.fromisoformat(hb["last"]["at"])).total_seconds()
+        hb["max_gap_s"] = max(hb.get("max_gap_s") or 0.0, round(gap, 1))
+    pt = {"price": float(bid), "at": at, "qty": qty}
     if hb["first"] is None:
         hb["first"] = pt
     if hb["peak"] is None or bid > hb["peak"]["price"]:
@@ -56,8 +63,11 @@ def capture(entry: float, qty: int, instrument: str, entry_charges: float, held_
         return None
     peak, low = hb["peak"]["price"], hb["low"]["price"]
     peak_net = round((peak - entry) * qty - entry_charges - ch.leg(instrument, "SELL", qty, peak)["total"], 2)
-    out = {"basis": "live best bid, observed at each quote (not LTP, not a candle high)",
-           "peak_bid": peak, "peak_at": hb["peak"]["at"], "low_bid": low, "low_at": hb["low"]["at"],
+    pq = hb["peak"].get("qty")
+    out = {"basis": "highest observed live best bid (not LTP, not a candle high); peak_net is an estimated "
+                    "opportunity that assumes the whole lot sells at that bid",
+           "peak_bid": peak, "peak_at": hb["peak"]["at"], "peak_bid_qty": pq,
+           "lot_fits_at_peak": None if pq is None else bool(pq >= qty), "max_gap_s": hb.get("max_gap_s"), "low_bid": low, "low_at": hb["low"]["at"],
            "peak_return_pct": round((peak - entry) / entry * 100, 2), "mae_pct": round((low - entry) / entry * 100, 2),
            "peak_gross": round((peak - entry) * qty, 2), "peak_net": peak_net,
            "giveback_rs": round(peak_net - net_pnl, 2),
@@ -90,7 +100,8 @@ class ObsLog:
         self._last[pos["id"]] = key
         row = {"id": pos["id"], "t": now.isoformat(timespec="seconds"), "ts": pos["tradingsymbol"], "bid": b[0],
                "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
-               "spot": quote.get("underlying"), "src": quote.get("source") or source}
+               "ltt": quote.get("timestamp"), "spot": quote.get("underlying"), "src": quote.get("source") or source,
+               "via": source}
         self.dir.mkdir(parents=True, exist_ok=True)
         with open(self.dir / f"{now.date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, separators=(",", ":")) + "\n")

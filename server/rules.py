@@ -293,5 +293,5 @@ class RuleTrader:
                 bid = ((q.get("depth") or {}).get("bid") or [[None]])[0][0]
                 px = bid or max(0.0, round(close - TICK, 2))
                 self.ledger.close_at(pos["id"], px, now, {"0_stop": "rule_stop", "1_decay": "rule_decay",
-                                                          "2_t_minus_1": "rule_t1"}[reason])
+                                                          "2_t_minus_1": "rule_t1"}[reason], price_is_bid=bool(bid))
                 log.info("rule exit %s: %s at %.2f", reason, pos["tradingsymbol"], px)

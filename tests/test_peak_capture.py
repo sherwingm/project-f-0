@@ -137,5 +137,61 @@ def test_the_1_second_check_feeds_the_held_peak(tmp_path):
     ft.on_poll(t(9, 16))
     q.set("PE", 1220.0, 19.4, 19.6)                                             # below +10 %: no trail yet
     ft.fast_tick(t(9, 20, 7))
-    assert lg.state["positions"][0]["held_bid"]["peak"] == {"price": 19.4, "at": t(9, 20, 7).isoformat(timespec="seconds")}
+    assert lg.state["positions"][0]["held_bid"]["peak"] == {"price": 19.4, "at": t(9, 20, 7).isoformat(timespec="seconds"),
+                                                            "qty": 5000}
     assert pk.SOURCE_FAST in lg.state["positions"][0]["held_bid"]["sources"]
+
+
+# ---------------------------------------------------------------- audit fixes (23 Oct)
+def test_an_exit_priced_from_the_last_trade_is_not_a_bid_observation(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    pos = lg.state["positions"][0]
+    lg.close_at(pos["id"], 25.0, t(15, 20), "fade_eod", price_is_bid=False)    # ltp - tick, no bid then
+    c = lg.state["closed"][-1]
+    assert c["peak_capture"] is None or c["peak_capture"]["peak_bid"] != 25.0
+    assert pk.SOURCE_EXIT not in ((c["held_bid"] or {}).get("sources") or [])
+
+
+def test_bid_size_at_the_peak_says_whether_the_lot_fitted():
+    pos = {}
+    pk.observe(pos, 10.0, t(9, 16), pk.SOURCE_POLL, qty=5000)
+    pk.observe(pos, 12.0, t(9, 17), pk.SOURCE_POLL, qty=100)                   # peak, but only 100 bid
+    c = pk.capture(10.0, 350, "PE", 20.0, pos["held_bid"], 11.0, 300.0)
+    assert c["peak_bid_qty"] == 100 and c["lot_fits_at_peak"] is False and "estimated" in c["basis"]
+    pk.observe(pos, 13.0, t(9, 18), pk.SOURCE_POLL)                             # size unknown
+    assert pk.capture(10.0, 350, "PE", 20.0, pos["held_bid"], 11.0, 300.0)["lot_fits_at_peak"] is None
+
+
+def test_the_longest_gap_between_observations_is_kept():
+    pos = {}
+    for s in (0, 1, 2, 47):
+        pk.observe(pos, 10.0 + s / 100, t(9, 16, s), pk.SOURCE_POLL)
+    assert pos["held_bid"]["max_gap_s"] == 45.0
+
+
+def test_the_closed_record_is_a_copy_later_quotes_cannot_reach(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    pos = lg.state["positions"][0]
+    lg.close_at(pos["id"], 18.0, t(9, 20), "fade_stop")
+    pk.observe(pos, 99.0, t(9, 21), pk.SOURCE_POLL)                            # the old dict, touched after the exit
+    assert lg.state["closed"][-1]["held_bid"]["peak"]["price"] == 18.0
+
+
+def test_the_live_checkpoint_reads_measured_trades_and_their_first_minutes(tmp_path, monkeypatch):
+    from scanner import fade_live_checkpoint as K
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    q.set("PE", 1220.0, 20.5, 20.8)
+    lg.on_poll(now=t(9, 16, 40))
+    lg.close_at(lg.state["positions"][0]["id"], 20.1, t(9, 17, 30), "fade_trail")
+    obs = [json.loads(x) for x in (tmp_path / "observations" / "2026-10-15.jsonl").read_text().splitlines()]
+    d = K.rows(lg.state, {"2026-10-15": obs})
+    assert len(d) == 1 and d["peak bid"].iat[0] == 20.5 and d["entry spread %"].iat[0] is not None
+    assert d["bid max up 1 min %"].iat[0] == round((20.5 / 18.5 - 1) * 100, 1)
+    s = K.summary(d)
+    assert s["closed trades measured"].iat[0] == 1 and s["target"].iat[0] == 30
