@@ -1,5 +1,12 @@
 {
- "queue": [],
+ "queue": [
+  {
+   "job": "upstox_expired",
+   "args": "--underlying SENSEX --max-minutes 300",
+   "added": "2026-10-23T20:35:06+05:30",
+   "why": "continues: the last run stopped on its time budget"
+  }
+ ],
  "history": [
   {
    "job": "upstox_expired",
