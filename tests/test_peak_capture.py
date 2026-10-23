@@ -195,3 +195,43 @@ def test_the_live_checkpoint_reads_measured_trades_and_their_first_minutes(tmp_p
     assert d["bid max up 1 min %"].iat[0] == round((20.5 / 18.5 - 1) * 100, 1)
     s = K.summary(d)
     assert s["closed trades measured"].iat[0] == 1 and s["target"].iat[0] == 30
+
+
+# ---------------------------------------------------------------- post-exit series and entry freshness (24 Oct)
+def test_the_entry_quote_keeps_its_last_trade_time(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-14 15:29:59"                # a stale, yesterday's book
+    ft.on_poll(t(9, 16))
+    assert lg.state["positions"][0]["entry_quote"]["ltt"] == "2026-10-14 15:29:59"
+
+
+def test_the_post_exit_series_runs_60_minutes_apart_from_the_held_peak(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    lg.close_at(lg.state["positions"][0]["id"], 18.0, t(9, 20), "fade_stop")
+    c = lg.state["closed"][-1]
+    assert c["post_exit_until"] == t(10, 20).isoformat(timespec="seconds")
+    lg._post_exit_series(t(9, 20, 10))                                          # Kotak only: the first record
+    q.set("PE", 1220.0, 25.0, 25.3)
+    lg._post_exit_series(t(9, 20, 20))                                          # 10 s later: throttled (30 s)
+    lg._post_exit_series(t(9, 20, 45))                                          # 35 s later: recorded
+    lg._post_exit_series(t(10, 21))                                             # past 60 minutes: nothing
+    rows = [json.loads(x) for x in (tmp_path / "observations" / "2026-10-15.jsonl").read_text().splitlines()]
+    after = [r for r in rows if r["phase"] == "after_exit"]
+    assert [r["bid"] for r in after] == [18.0, 25.0] and all(r["id"] == c["id"] for r in after)
+    assert c["held_bid"]["peak"]["price"] == 18.0 and c["peak_capture"]["peak_bid"] == 18.0   # untouched by 25.0
+
+
+def test_the_post_exit_series_records_every_poll_while_streaming(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.streaming = lambda: True
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    lg.close_at(lg.state["positions"][0]["id"], 18.0, t(9, 20), "fade_stop")
+    for s, b in ((1, 18.1), (2, 18.2), (3, 18.3)):
+        q.set("PE", 1220.0, b, b + 0.3)
+        lg._post_exit_series(t(9, 21, s))
+    rows = [json.loads(x) for x in (tmp_path / "observations" / "2026-10-15.jsonl").read_text().splitlines()]
+    assert [r["bid"] for r in rows if r["phase"] == "after_exit"] == [18.1, 18.2, 18.3]

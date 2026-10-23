@@ -43,7 +43,7 @@ def load_obs(day: str, cache: dict) -> list[dict]:
 def early(rows: list[dict], tid: str, opened: str, entry: float, spot0: float | None) -> dict:
     """Bid and stock moves 1, 3 and 5 minutes after the entry, from the observation record (live bids)."""
     t0 = datetime.fromisoformat(opened)
-    mine = [r for r in rows if r["id"] == tid and r.get("bid")]
+    mine = [r for r in rows if r["id"] == tid and r.get("bid") and r.get("phase", "held") != "after_exit"]
     out = {}
     for m in (1, 3, 5):
         w = [r for r in mine if 0 < (datetime.fromisoformat(r["t"]) - t0).total_seconds() <= m * 60]

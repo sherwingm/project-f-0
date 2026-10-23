@@ -29,6 +29,8 @@ SOURCE_POLL = "live best bid (feed poll)"
 SOURCE_FAST = "live best bid (1-s exit check)"
 SOURCE_EXIT = "live best bid (exit quote)"
 OBS_DIR = "observations"                 # data/observations/<date>.jsonl, one row per bid/ask change of an open trade
+POST_EXIT_MINUTES = 60                   # after a sale the contract's bid/ask is still recorded this long (phase after_exit)
+POST_EXIT_SLOW_S = 30                    # ... at most this often while prices come from Kotak (rate limits), not the stream
 
 
 def observe(pos: dict, bid: float | None, now: datetime, source: str, qty: int | None = None) -> None:
@@ -90,18 +92,21 @@ class ObsLog:
         self.dir = Path(data_dir) / OBS_DIR
         self._last: dict[str, tuple] = {}
 
-    def add(self, pos: dict, quote: dict, now: datetime, source: str) -> None:
+    def add(self, pos: dict, quote: dict, now: datetime, source: str, phase: str = "held") -> None:
+        """phase "held" while the trade is open; "after_exit" for the hypothetical follow-up after the sale (never
+        part of the held peak or of any P&L)."""
         d = quote.get("depth") or {}
         b = (d.get("bid") or [(None, None)])[0]
         a = (d.get("ask") or [(None, None)])[0]
         key = (b[0], b[1], a[0], a[1])
-        if self._last.get(pos["id"]) == key:
+        lk = f"{pos['id']}:{phase}"
+        if self._last.get(lk) == key:
             return
-        self._last[pos["id"]] = key
+        self._last[lk] = key
         row = {"id": pos["id"], "t": now.isoformat(timespec="seconds"), "ts": pos["tradingsymbol"], "bid": b[0],
                "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
                "ltt": quote.get("timestamp"), "spot": quote.get("underlying"), "src": quote.get("source") or source,
-               "via": source}
+               "via": source, "phase": phase}
         self.dir.mkdir(parents=True, exist_ok=True)
         with open(self.dir / f"{now.date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, separators=(",", ":")) + "\n")
@@ -118,4 +123,4 @@ def entry_quote(quote: dict | None, now: datetime) -> dict | None:
     return {"bid": b[0], "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
             "spread_pct": round((a[0] - b[0]) / mid * 100, 2) if mid else None, "spot": quote.get("underlying"),
             "volume": quote.get("volume"), "oi": quote.get("open_interest"), "source": quote.get("source") or "kotak",
-            "at": now.isoformat(timespec="seconds")}
+            "ltt": quote.get("timestamp"), "at": now.isoformat(timespec="seconds")}   # ltt: the quote's last trade

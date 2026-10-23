@@ -157,6 +157,7 @@ class PaperLedger:
         self.refusals_path = self.dir / "refusals.jsonl"
         self.queue = PaperQueue(self.dir / "paper_queue.jsonl")
         self.obs = pk.ObsLog(self.dir)                        # bid/ask changes of open trades (server/peak.py)
+        self._post_last: dict[str, float] = {}               # last post-exit record per closed trade (throttle)
         self.quotes = quotes or QuoteSource(None)
         self.tick = tick or settings.fill_tick
         self.rules = rules
@@ -412,6 +413,7 @@ class PaperLedger:
         if self._bid_tracked(pos) and qty >= pos["qty"]:
             closed["peak_capture"] = pk.capture(pos["entry"]["price"], qty, pos["instrument"], entry_part,
                                                 pos.get("held_bid"), f["price"], net)
+            closed["post_exit_until"] = (now + timedelta(minutes=pk.POST_EXIT_MINUTES)).isoformat(timespec="seconds")
         self.state["closed"].append(closed)
         day = self._ensure_day(now)
         day["realised"] = round(day.get("realised", 0.0) + net, 2)
@@ -450,6 +452,7 @@ class PaperLedger:
                     self._mark(pos, quote, now)
                     self._check_stop(pos, now)
             self._follow_closed(now)
+            self._post_exit_series(now)
             self._touch_day(now)
             if self.risk is not None:
                 self.risk.state(self, now)            # drawdown banner and limits
@@ -521,6 +524,26 @@ class PaperLedger:
             if not px:
                 raise PaperRejected("no live quote for this contract right now; try again when the market is open")
             return self.close_at(pid, px, now, "manual", price_is_bid=price_is_bid)
+
+    def _post_exit_series(self, now: datetime) -> None:
+        """For POST_EXIT_MINUTES after each long-option sale, the contract's bid/ask into the observation record as
+        phase "after_exit" (every poll while streaming, else every POST_EXIT_SLOW_S). Hypothetical only: it never
+        touches the closed trade's held peak or P&L."""
+        stream = getattr(self.quotes, "streaming", lambda: False)()
+        for c in self.state["closed"][-50:]:
+            until = c.get("post_exit_until")
+            if not until or now > datetime.fromisoformat(until):
+                continue
+            if not stream and now.timestamp() - self._post_last.get(c["id"], 0.0) < pk.POST_EXIT_SLOW_S:
+                continue
+            self._post_last[c["id"]] = now.timestamp()
+            q = self.quotes.get({k: c[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")},
+                                fresh=False)
+            if q:
+                try:
+                    self.obs.add(c, q, now, pk.SOURCE_POLL, phase="after_exit")
+                except OSError as exc:
+                    log.warning("observation log: %s", exc)
 
     def _follow_closed(self, now: datetime) -> None:
         """After the exit: keep quoting the contract until its T-2 day, so the results page shows whether the
