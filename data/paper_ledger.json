@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 419093.4799999999,
+ "cash": 417624.9099999999,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -49,7 +49,7 @@
     "bid": 54.0,
     "ask": 54.65,
     "ltp": 54.05,
-    "at": "2026-10-23T15:19:59+05:30",
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": -481.25,
@@ -65,9 +65,9 @@
     "beat": 4.65,
     "move": 5.73,
     "best": 82.5,
-    "stall": 0,
-    "checked": "2026-10-22",
-    "last_close": 82.5
+    "stall": 1,
+    "checked": "2026-10-23",
+    "last_close": 54.05
    },
    "peak": {
     "price": 105.9,
@@ -124,7 +124,7 @@
     "bid": 54.0,
     "ask": 54.65,
     "ltp": 54.05,
-    "at": "2026-10-23T15:19:59+05:30",
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": -651.25,
@@ -140,9 +140,9 @@
     "beat": 4.65,
     "move": 5.73,
     "best": 82.5,
-    "stall": 0,
-    "checked": "2026-10-22",
-    "last_close": 82.5
+    "stall": 1,
+    "checked": "2026-10-23",
+    "last_close": 54.05
    },
    "peak": {
     "price": 105.9,
@@ -198,8 +198,8 @@
     "price": 9.25,
     "bid": 9.25,
     "ask": 9.5,
-    "ltp": 9.2,
-    "at": "2026-10-23T15:19:59+05:30",
+    "ltp": 9.5,
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": -1470.0,
@@ -216,9 +216,9 @@
     "beat": 6.9,
     "move": 8.48,
     "best": 17.2,
-    "stall": 1,
-    "checked": "2026-10-22",
-    "last_close": 7.0
+    "stall": 2,
+    "checked": "2026-10-23",
+    "last_close": 9.2
    },
    "peak": {
     "price": 34.75,
@@ -275,7 +275,7 @@
     "bid": 5.94,
     "ask": 6.03,
     "ltp": 6.11,
-    "at": "2026-10-23T15:19:59+05:30",
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": 10140.0,
@@ -291,10 +291,10 @@
     "signal_date": "2026-10-16",
     "beat": 4.26,
     "move": 5.95,
-    "best": 5.71,
+    "best": 6.11,
     "stall": 0,
-    "checked": "2026-10-22",
-    "last_close": 5.71
+    "checked": "2026-10-23",
+    "last_close": 6.11
    },
    "peak": {
     "price": 12.47,
@@ -350,8 +350,8 @@
     "price": 9.25,
     "bid": 9.25,
     "ask": 9.5,
-    "ltp": 9.2,
-    "at": "2026-10-23T15:19:59+05:30",
+    "ltp": 9.5,
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": -2322.0,
@@ -368,9 +368,9 @@
     "beat": 6.9,
     "move": 8.48,
     "best": 17.25,
-    "stall": 1,
-    "checked": "2026-10-22",
-    "last_close": 7.0
+    "stall": 2,
+    "checked": "2026-10-23",
+    "last_close": 9.2
    },
    "peak": {
     "price": 34.75,
@@ -427,7 +427,7 @@
     "bid": 5.94,
     "ask": 6.03,
     "ltp": 6.11,
-    "at": "2026-10-23T15:19:59+05:30",
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
    "unrealised_gross": 10830.0,
@@ -443,10 +443,10 @@
     "signal_date": "2026-10-16",
     "beat": 4.26,
     "move": 5.95,
-    "best": 5.71,
+    "best": 6.11,
     "stall": 0,
-    "checked": "2026-10-22",
-    "last_close": 5.71
+    "checked": "2026-10-23",
+    "last_close": 6.11
    },
    "peak": {
     "price": 12.47,
@@ -458,18 +458,18 @@
    }
   },
   {
-   "id": "P-1792576237785-1",
-   "symbol": "FEDERALBNK",
+   "id": "P-1792749003150-6",
+   "symbol": "INDHOTEL",
    "instrument": "CE",
    "expiry": "2026-10-27",
-   "strike": 350.0,
-   "tradingsymbol": "FEDERALBNK26OCT350CE",
-   "lot_size": 2500,
+   "strike": 780.0,
+   "tradingsymbol": "INDHOTEL26OCT780CE",
+   "lot_size": 1000,
    "side": "BUY",
    "lots": 1,
-   "qty": 2500,
+   "qty": 1000,
    "entry": {
-    "price": 2.36,
+    "price": 6.51,
     "levels": [],
     "class": "rule",
     "mode": "rule_close",
@@ -480,130 +480,56 @@
    "entry_charges": {
     "instrument": "CE",
     "side": "BUY",
-    "qty": 2500,
-    "price": 2.36,
-    "value": 5900.0,
+    "qty": 1000,
+    "price": 6.51,
+    "value": 6510.0,
     "brokerage": 20.0,
     "stt": 0.0,
-    "exchange": 2.1,
+    "exchange": 2.31,
     "sebi": 0.01,
-    "stamp": 0.18,
-    "gst": 3.98,
-    "total": 26.27
+    "stamp": 0.2,
+    "gst": 4.02,
+    "total": 26.54
    },
-   "entry_charges_open": 26.27,
+   "entry_charges_open": 26.54,
    "stop": null,
-   "max_loss_at_entry": 5926.27,
+   "max_loss_at_entry": 6536.54,
    "margin": 0.0,
-   "opened_at": "2026-10-21T15:20:37+05:30",
+   "opened_at": "2026-10-23T15:20:03+05:30",
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 0.95,
-    "bid": 0.95,
-    "ask": 1.0,
-    "ltp": 1.0,
-    "at": "2026-10-23T15:19:59+05:30",
+    "price": 5.05,
+    "bid": 5.05,
+    "ask": 5.2,
+    "ltp": 5.2,
+    "at": "2026-10-23T15:20:09+05:30",
     "stale": false
    },
-   "unrealised_gross": -3525.0,
-   "exit_charges_est": 28.15,
-   "unrealised": -3579.42,
-   "liquidation_value": 2346.85,
+   "unrealised_gross": -1460.0,
+   "exit_charges_est": 33.3,
+   "unrealised": -1519.84,
+   "liquidation_value": 5016.7,
    "rule": {
     "entry_mode": "close",
-    "arms": [
-     "A"
-    ],
-    "signal_date": "2026-10-19",
-    "beat": 5.32,
-    "move": 3.21,
-    "best": 2.7,
-    "stall": 0,
-    "checked": "2026-10-22",
-    "last_close": 2.7
-   },
-   "peak": {
-    "price": 4.25,
-    "at": "2026-10-22T13:31:09+05:30"
-   },
-   "trough": {
-    "price": 0.9,
-    "at": "2026-10-23T15:13:14+05:30"
-   }
-  },
-  {
-   "id": "P-1792727105443-3",
-   "symbol": "INDHOTEL",
-   "instrument": "CE",
-   "expiry": "2026-10-27",
-   "strike": 790.0,
-   "tradingsymbol": "INDHOTEL26OCT790CE",
-   "lot_size": 1000,
-   "side": "BUY",
-   "lots": 1,
-   "qty": 1000,
-   "entry": {
-    "price": 6.45,
-    "levels": [],
-    "class": "rule",
-    "mode": "rule_open",
-    "mid": null,
-    "slippage_vs_mid": null,
-    "overflow_qty": 0
-   },
-   "entry_charges": {
-    "instrument": "CE",
-    "side": "BUY",
-    "qty": 1000,
-    "price": 6.45,
-    "value": 6450.0,
-    "brokerage": 20.0,
-    "stt": 0.0,
-    "exchange": 2.29,
-    "sebi": 0.01,
-    "stamp": 0.19,
-    "gst": 4.01,
-    "total": 26.5
-   },
-   "entry_charges_open": 26.5,
-   "stop": null,
-   "max_loss_at_entry": 6476.5,
-   "margin": 0.0,
-   "opened_at": "2026-10-23T09:15:05+05:30",
-   "t2_date": "2026-10-23",
-   "stop_triggered_at": null,
-   "mark": {
-    "price": 2.75,
-    "bid": 2.75,
-    "ask": 2.85,
-    "ltp": 2.85,
-    "at": "2026-10-23T15:19:59+05:30",
-    "stale": false
-   },
-   "unrealised_gross": -3700.0,
-   "exit_charges_est": 28.88,
-   "unrealised": -3755.38,
-   "liquidation_value": 2721.12,
-   "rule": {
-    "entry_mode": "open",
     "arms": [
      "A"
     ],
     "signal_date": "2026-10-22",
     "beat": 4.54,
     "move": 3.89,
-    "best": 6.45,
-    "stall": 0,
-    "checked": null
+    "best": 6.51,
+    "stall": 1,
+    "checked": "2026-10-23",
+    "last_close": 5.1
    },
    "peak": {
-    "price": 10.1,
-    "at": "2026-10-23T09:26:51+05:30"
+    "price": 6.51,
+    "at": "2026-10-23T15:20:03+05:30"
    },
    "trough": {
-    "price": 1.9,
-    "at": "2026-10-23T14:42:46+05:30"
+    "price": 5.2,
+    "at": "2026-10-23T15:20:04+05:30"
    }
   }
  ],
@@ -969,7 +895,7 @@
     },
     "last": {
      "price": 283.55,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1063,8 +989,8 @@
      "at": "2026-10-23T15:09:04+05:30"
     },
     "last": {
-     "price": 24.55,
-     "at": "2026-10-23T15:19:59+05:30"
+     "price": 25.15,
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1159,7 +1085,7 @@
     },
     "last": {
      "price": 0.35,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1254,7 +1180,7 @@
     },
     "last": {
      "price": 21.25,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1349,7 +1275,7 @@
     },
     "last": {
      "price": 0.18,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1443,8 +1369,8 @@
      "at": "2026-10-19T09:55:04+05:30"
     },
     "last": {
-     "price": 8.65,
-     "at": "2026-10-23T15:19:59+05:30"
+     "price": 8.45,
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1539,7 +1465,7 @@
     },
     "last": {
      "price": 0.15,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1638,7 +1564,7 @@
     },
     "last": {
      "price": 44.0,
-     "at": "2026-10-23T15:19:59+05:30"
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1759,8 +1685,8 @@
      "at": "2026-10-23T09:17:48+05:30"
     },
     "last": {
-     "price": 7.35,
-     "at": "2026-10-23T15:19:59+05:30"
+     "price": 7.3,
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1881,8 +1807,8 @@
      "at": "2026-10-23T14:43:37+05:30"
     },
     "last": {
-     "price": 0.6,
-     "at": "2026-10-23T15:19:59+05:30"
+     "price": 0.55,
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -1974,8 +1900,8 @@
      "at": "2026-10-23T09:17:39+05:30"
     },
     "last": {
-     "price": 51.8,
-     "at": "2026-10-23T15:19:59+05:30"
+     "price": 51.6,
+     "at": "2026-10-23T15:20:09+05:30"
     }
    },
    "rule": {
@@ -2013,12 +1939,21 @@
      "level": 12.397
     },
     "shadow_v10": {
-     "status": "pending",
-     "stopped_at": "2026-10-23T09:16:08+05:30"
+     "status": "done",
+     "stopped_at": "2026-10-23T09:16:08+05:30",
+     "fill": 51.3,
+     "net": 27389.35,
+     "at": "2026-10-23T15:20:03+05:30",
+     "late": false
     },
     "shadow_v11": {
-     "status": "tracking",
-     "since": "2026-10-23T09:16:08+05:30"
+     "status": "done",
+     "since": "2026-10-23T09:16:08+05:30",
+     "fill": 51.3,
+     "net": 27389.35,
+     "why": "15:20",
+     "at": "2026-10-23T15:20:03+05:30",
+     "late": false
     },
     "shadow_trail": {
      "status": "done",
@@ -2040,6 +1975,192 @@
     "stall": 0,
     "checked": null,
     "spot_at_exit": 1278.4
+   }
+  },
+  {
+   "id": "P-1792576237785-1",
+   "symbol": "FEDERALBNK",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 350.0,
+   "tradingsymbol": "FEDERALBNK26OCT350CE",
+   "lot_size": 2500,
+   "side": "BUY",
+   "stop": null,
+   "opened_at": "2026-10-21T15:20:37+05:30",
+   "t2_date": "2026-10-23",
+   "lots": 1,
+   "qty": 2500,
+   "entry": {
+    "price": 2.36,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_close",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": 26.27,
+   "exit": {
+    "price": 0.95,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_stop",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "exit_charges": {
+    "instrument": "CE",
+    "side": "SELL",
+    "qty": 2500,
+    "price": 0.95,
+    "value": 2375.0,
+    "brokerage": 20.0,
+    "stt": 3.56,
+    "exchange": 0.84,
+    "sebi": 0.0,
+    "stamp": 0.0,
+    "gst": 3.75,
+    "total": 28.15
+   },
+   "gross_pnl": -3525.0,
+   "charges_total": 54.42,
+   "net_pnl": -3579.42,
+   "reason": "rule_stop",
+   "closed_at": "2026-10-23T15:20:03+05:30",
+   "capital_committed": 5900.0,
+   "return_pct": -60.67,
+   "max_loss_at_entry": 5926.27,
+   "r_multiple": -0.604,
+   "held_peak": {
+    "price": 4.25,
+    "at": "2026-10-22T13:31:09+05:30"
+   },
+   "held_trough": {
+    "price": 0.9,
+    "at": "2026-10-23T15:13:14+05:30"
+   },
+   "after": {
+    "until": "2026-10-23",
+    "peak": {
+     "price": 0.95,
+     "at": "2026-10-23T15:20:04+05:30"
+    },
+    "trough": {
+     "price": 0.95,
+     "at": "2026-10-23T15:20:04+05:30"
+    },
+    "last": {
+     "price": 0.95,
+     "at": "2026-10-23T15:20:09+05:30"
+    }
+   },
+   "rule": {
+    "entry_mode": "close",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-19",
+    "beat": 5.32,
+    "move": 3.21,
+    "best": 2.7,
+    "stall": 0,
+    "checked": "2026-10-23",
+    "last_close": 0.95
+   }
+  },
+  {
+   "id": "P-1792727105443-3",
+   "symbol": "INDHOTEL",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 790.0,
+   "tradingsymbol": "INDHOTEL26OCT790CE",
+   "lot_size": 1000,
+   "side": "BUY",
+   "stop": null,
+   "opened_at": "2026-10-23T09:15:05+05:30",
+   "t2_date": "2026-10-23",
+   "lots": 1,
+   "qty": 1000,
+   "entry": {
+    "price": 6.45,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_open",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": 26.5,
+   "exit": {
+    "price": 2.75,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_stop",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "exit_charges": {
+    "instrument": "CE",
+    "side": "SELL",
+    "qty": 1000,
+    "price": 2.75,
+    "value": 2750.0,
+    "brokerage": 20.0,
+    "stt": 4.12,
+    "exchange": 0.98,
+    "sebi": 0.0,
+    "stamp": 0.0,
+    "gst": 3.78,
+    "total": 28.88
+   },
+   "gross_pnl": -3700.0,
+   "charges_total": 55.38,
+   "net_pnl": -3755.38,
+   "reason": "rule_stop",
+   "closed_at": "2026-10-23T15:20:03+05:30",
+   "capital_committed": 6450.0,
+   "return_pct": -58.22,
+   "max_loss_at_entry": 6476.5,
+   "r_multiple": -0.58,
+   "held_peak": {
+    "price": 10.1,
+    "at": "2026-10-23T09:26:51+05:30"
+   },
+   "held_trough": {
+    "price": 1.9,
+    "at": "2026-10-23T14:42:46+05:30"
+   },
+   "after": {
+    "until": "2026-10-23",
+    "peak": {
+     "price": 2.85,
+     "at": "2026-10-23T15:20:04+05:30"
+    },
+    "trough": {
+     "price": 2.85,
+     "at": "2026-10-23T15:20:04+05:30"
+    },
+    "last": {
+     "price": 2.85,
+     "at": "2026-10-23T15:20:09+05:30"
+    }
+   },
+   "rule": {
+    "entry_mode": "open",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-22",
+    "beat": 4.54,
+    "move": 3.89,
+    "best": 6.45,
+    "stall": 0,
+    "checked": "2026-10-23",
+    "last_close": 2.85
    }
   }
  ],
@@ -2076,8 +2197,8 @@
   },
   "2026-10-23": {
    "start_equity": 497305.65,
-   "end_equity": 484144.17,
-   "realised": 1013.84
+   "end_equity": 482624.33,
+   "realised": -6320.96
   }
  },
  "peak_equity": 563416.62,
@@ -2271,7 +2392,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-23T15:19:59+05:30",
+ "saved_at": "2026-10-23T15:20:09+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -2289,9 +2410,10 @@
    "2026-10-19:TECHM": "bought",
    "2026-10-19:WIPRO": "bought",
    "2026-10-21:FEDERALBNK": "bought",
-   "2026-10-21:PNB": "refused"
+   "2026-10-21:PNB": "refused",
+   "2026-10-23:INDHOTEL": "bought"
   },
-  "exits_checked": "2026-10-22",
+  "exits_checked": "2026-10-23",
   "refused": [
    {
     "date": "2026-10-14",
@@ -2441,14 +2563,14 @@
     "why": "net profit YoY +13.3 %, QoQ +31.1 %; revenue YoY +22.5 %",
     "np_yoy": 13.3,
     "spot_at_entry": 45.39,
-    "last_bid": 0.78,
+    "last_bid": 0.75,
     "max_bid": 1.37,
-    "exit": null,
-    "closed_at": null,
+    "exit": 0.75,
+    "closed_at": "2026-10-23T15:20:03+05:30",
     "late": false,
-    "charges": null,
-    "net": null,
-    "net_pct": null,
+    "charges": 66.88,
+    "net": 3653.12,
+    "net_pct": 69.19,
     "real_bought": false
    }
   ],
