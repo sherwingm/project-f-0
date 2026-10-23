@@ -484,6 +484,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.3,
    "upstox_minus_kotak_quote_time_s_median": -26.0
+  },
+  {
+   "at": "12:10:10",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.703,
+   "same_best_bid_pct": 45.7,
+   "same_best_ask_pct": 25.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -549,6 +563,13 @@
    "kotak": 22.2,
    "upstox": 21.6,
    "at": "12:00"
+  },
+  {
+   "contract": "NATIONALUM26OCT295PE",
+   "gap_pct": 2.703,
+   "kotak": 3.7,
+   "upstox": 3.6,
+   "at": "12:10"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -619,21 +640,14 @@
    "kotak": 12.85,
    "upstox": 13.0,
    "at": "10:00"
-  },
-  {
-   "contract": "WIPRO26OCT185CE",
-   "gap_pct": 1.094,
-   "kotak": 9.14,
-   "upstox": 9.24,
-   "at": "09:50"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 1188,
+  "rounds": 35,
+  "contract_quotes": 1223,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 31.4,
-  "same_best_ask_pct": 30.0,
+  "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -15.0
