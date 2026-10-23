@@ -777,3 +777,16 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - NIFTY Thursday lost its weekly expiry (2025-09): last-half-hour variance DiD vs Mon/Wed/Fri 0.92x (95 % 0.43-1.96). Tuesday gained it: 1.31x (0.62-2.90). Direction as the research says; not resolved with one year after the change.
   - **BANKNIFTY Wednesday lost its weekly expiry (2024-11): DiD 0.42x (0.20-0.92)**, a clear calming.
   - BANKNIFTY expiry days 2023-25: the last half hour reverses the day's move: slope −0.076, t −3.2, against −0.014 on other days. Carried by 2024 (t −4.1; 2023 +0.9; 2025 −1.5 on 19 days). It can't be turned into an option pod: BANKNIFTY minute options exist only from Nov 2024, when the expiry became monthly (~12 a year).
+- 2026-10-23: **S3 independent review** (a 4-agent workflow: code audit, trade re-check, completeness critic, and a skeptic who reproduced each finding). 10 issues confirmed, none flips a verdict. Fixed:
+  - the RBI Aug 2025 date is 08-06 (rescheduled), so 08-07, the worst day of P6 / P7, is traded now;
+  - the lot comes from the traded contract (the Jan 2025 weeklies had run at 25, not 75);
+  - stray one-bar days are dropped;
+  - only expiries that traded on their date count;
+  - reports carry the page commit;
+  - also fixed: VIX minutes stored at x100 or /100 in 2021-10 → 2023-08 (test window unaffected).
+
+  All pods re-run and still FAIL. P6 is +15.2 % (t 1.77), P7 +14.8 % (t 1.59), each now failing t, halves and the worst day (DECISIONS.md "S3 pods re-run"). New descriptive checks (pre-registered, `data/results/s3_d3_d5.md`):
+  - **D3 placebo:** the P6 trade on non-expiry days: −1.7 % of the credit, t −3.31 (186 days). It is an expiry-day effect.
+  - **D4 tail study** on spot (credit proxy from VIX, calibrated on P6, corr 0.71): on the 153 NIFTY expiry days of 2021-10 → 2024-09 the same late short straddle would have averaged **−28 % of the credit**; 22 % of days lose more than 1x the credit and 9 % more than 2x. Every year 2021-2024 is negative. The test window (+16.5 %) had unusually small late moves (mean 0.13 % against 0.22 %). **The late-expiry premium "edge" looks like a calm year, not a lasting effect.**
+  - **D5 SENSEX:** Friday lost its expiry: DiD 0.69x; Tuesday gained one: 0.46x. Both intervals span 0.1-4.6, so nothing is settled.
+  - SENSEX path-band re-fill dispatched for 15:31 IST. R1 (the SENSEX replication, amended before any SENSEX data was read) runs after it lands.
