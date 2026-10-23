@@ -70,6 +70,8 @@ def write_report(pod: Pod, allt: pd.DataFrame, n_days: int, window: tuple, halve
         keep &= ~allt["event"]
     if pod.vix:
         keep &= allt["vix"].between(*pod.vix)
+    if "eligible" in allt:                      # pod-specific filters (e.g. P4's trend agreement)
+        keep &= allt["eligible"].fillna(False).astype(bool)
     allt["traded"] = keep
     allt.to_csv(RES / f"S3_{pod.name}_{'holdout_' if holdout else ''}trades.csv", index=False)
 
