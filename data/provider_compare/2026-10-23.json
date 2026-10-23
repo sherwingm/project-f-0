@@ -70,6 +70,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -5.0
+  },
+  {
+   "at": "09:45:05",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.506,
+   "same_best_bid_pct": 25.7,
+   "same_best_ask_pct": 20.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -86,6 +100,13 @@
    "kotak": 76.55,
    "upstox": 75.25,
    "at": "09:30"
+  },
+  {
+   "contract": "DIVISLAB26OCT9100CE",
+   "gap_pct": 1.506,
+   "kotak": 83.0,
+   "upstox": 81.75,
+   "at": "09:45"
   },
   {
    "contract": "INDHOTEL26OCT790CE",
@@ -123,6 +144,13 @@
    "at": "09:40"
   },
   {
+   "contract": "CROMPTON26OCTFUT",
+   "gap_pct": 0.041,
+   "kotak": 197.44,
+   "upstox": 197.52,
+   "at": "09:45"
+  },
+  {
    "contract": "BAJFINANCE26OCTFUT",
    "gap_pct": 0.032,
    "kotak": 937.15,
@@ -135,6 +163,13 @@
    "kotak": 10156.0,
    "upstox": 10159.0,
    "at": "09:30"
+  },
+  {
+   "contract": "DRREDDY26OCTFUT",
+   "gap_pct": 0.024,
+   "kotak": 1246.9,
+   "upstox": 1247.2,
+   "at": "09:45"
   },
   {
    "contract": "ADANIENSOL26OCTFUT",
@@ -191,35 +226,14 @@
    "kotak": 6292.5,
    "upstox": 6292.5,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT350CE",
-   "gap_pct": 0.0,
-   "kotak": 6.45,
-   "upstox": 6.45,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT350PE",
-   "gap_pct": 0.0,
-   "kotak": 3.15,
-   "upstox": 3.15,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 353.05,
-   "upstox": 353.05,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 175,
+  "rounds": 6,
+  "contract_quotes": 210,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 25.7,
-  "same_best_ask_pct": 22.9,
+  "same_best_ask_pct": 21.45,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -5.0
