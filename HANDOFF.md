@@ -1,81 +1,65 @@
-# Handoff (2026-10-22, 22:15 IST)
+# Handoff (2026-10-24, 00:30 IST)
 
-Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The detailed records are in `PROGRESS.md`
-(log and the Core idea tracker), `DECISIONS.md` (rule and result changes), `INDEX_DATA_REPORT.md`,
-`DATA_ACCESS_AUDIT.md` (it has the Upstox vs Kotak comparison) and `STRATEGY_AUDIT.md`.
+Repo: `sherwingm/project-f-0` (**public**, kept so by the user: free Actions minutes, Pages, token-free raw files;
+never commit secrets), local clone `C:\Users\sherw\project-f-0`. Records: `PROGRESS.md`, `DECISIONS.md` (rule and
+result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT.md`.
 
 ## House rules
 - **S1 and S2 stay separate.** Commit and push every step, and log it in PROGRESS.md. A rule or result change goes
-  into DECISIONS.md in its own commit.
-- **During market hours (09:15-15:30 IST), do not redeploy Render**: it restarts the live paper trader.
-  - Changes under `data/index/**`, `index_data/**`, `**/*.md` and the data files listed in `render.yaml` are safe.
-  - Anything else needs **`[skip render]`** in the commit message, as the only commit in the push. Afterwards, check
-    `/api/paper/summary` → `version.commit` is unchanged.
-- **To deploy, the commit must change a watched file.** An empty commit is skipped by Render (this happened at 15:35
-  on 19 Oct). Use `DEPLOY_STAMP`.
-- **Excel files must be readable on first open** (user, 23 Oct): use the `xlsx` skill; plain-word headers (wrapped, bold),
-  columns wide enough, ₹ `#,##0` and % one decimal, frozen top row, filters, a Summary sheet first. Check before sending.
-- **The user reads on a phone.** Use plain words and send files with SendUserFile. End every reply with a
-  **"Still running"** list.
-- **Secrets stay in Render and GitHub secrets** (`KOTAK_CONSUMER_KEY`, `UPSTOX_ANALYTICS_TOKEN`, `APP_PASSWORD`,
-  `LEDGER_GITHUB_TOKEN`, which needs renewing before 2026-10-30), never in chat or the repo.
-- **Another Claude session works in the same folder** (S1 v10 / v11 studies, `stock-options-probe`). Commit only your own
-  files (`git add <paths>`) and pull with `--autostash`.
+  into DECISIONS.md in its own commit. Write a study's method in `strategies/*.md` and commit it **before** any number.
+- **The live server is the AWS VM.** Deploy yourself (the user wants that), **never 09:00-15:40 IST on weekdays**:
+  `ssh ubuntu@ip-172-26-4-64` over Tailscale works from this PC (24 Oct; prints a Tailscale auth-check line), then
+  `cd ~/fo_scanner && git pull && sudo systemctl restart fo-scanner`, guarded by a market-hours check on the VM's clock.
+  After: `systemctl is-active`, 0 errors in `journalctl -u fo-scanner --since -60s`, `/api/paper/summary` ->
+  `version.commit` = the pushed commit. Fallback: the Lightsail browser terminal via Claude in Chrome (its AWS session
+  expires; never type into the sign-in page). Render is a mirror only, so `[skip render]` no longer matters for trading.
+- **Excel files must be readable on first open:** use the `xlsx` skill (LibreOffice installed 23 Oct for recalc);
+  plain-word headers, widths, Rs `#,##0`, % one decimal, frozen top row, filters, a Summary sheet first.
+- **The user reads on a phone.** Plain words; send files with SendUserFile; end replies with a **"Still running"** list.
+- **Secrets** stay in the VM's `.env`, Render and GitHub secrets, never in chat or the repo. The user rotated the GitHub
+  token and the site password on 23 Oct after a screenshot showed them.
+- **Another Claude session works in the same folder** (S3 index options, other templates). Commit only your own files,
+  check the staged diff is yours (it has left colour edits in `templates/*.html` unstaged), pull with `--autostash`.
+- **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
-## Live system: AWS Lightsail Mumbai VM (from 22 Oct 18:13 IST), code `43dd806`
-- **Primary = AWS** (`fo-scanner`, static IP 3.109.99.56, Ubuntu, `~/fo_scanner`, systemd `fo-scanner` + market-hours
-  watchdog; `deploy/aws/`, guide 17). Phone: Tailscale `https://ip-172-26-4-64.tail956abb.ts.net/` (PUBLIC_ACCESS=true,
-  no password; port 8000 closed). The VM's `.env` holds the new `LEDGER_GITHUB_TOKEN` (writes `paper-state`).
-  Update: `cd ~/fo_scanner && git pull && .venv/bin/pip install -r requirements-server.txt && sudo systemctl restart fo-scanner`.
-  **Render is a mirror only** (`DATA_PROVIDER=none`, no ledger token): Render deploys no longer matter for trading,
-  but **a VM restart during market hours** does. The external pinger is no longer needed.
-- To check on 23 Oct: the live feed on AWS in market hours (guide 17 step 8), and step 9 (NSE archives from the VM IP).
-- Login: themed `/login` page, 1-year cookie (Tailscale **Funnel** = public HTTPS, no VPN needed). Updates: Claude runs
-  `git pull && sudo systemctl restart fo-scanner` in the Lightsail browser SSH via Claude in Chrome (after market only).
-- **Daily loss halt removed** 22 Oct (DECISIONS.md): no loss halts at all now.
-- **Sellable-peak measurement** (from 23 Oct evening, `server/peak.py`, audit `data/results/S1_v12_measurement_audit.md`):
-  every long-option trade keeps the highest / lowest best bid while held (`held_bid`), `peak_capture` at the exit
-  (net at peak = estimate; `lot_fits_at_peak`, `max_gap_s`), `entry_quote`, and `data/observations/<date>.jsonl`
-  (mirrored once the day is over; from 24 Oct also 60 min of post-exit bid/ask, phase `after_exit`, and the entry
-  quote's last-trade time `entry_quote.ltt` with `ltt_age_s` / `stale_ltt` (before 09:15 or > 5 min; a warning only)).
-  Validate the first measured trades: `python -m scanner.fade_live_validate`. `/api/paper/summary` → `version.commit`
-  now comes from the server's .git (`server/version.py`). Checkpoint: `python -m scanner.fade_live_checkpoint` (target 30 measured trades;
-  0 on 23 Oct). **The GitHub repo is PUBLIC, kept so by the user (23 Oct)**: free Actions minutes, free Pages, token-free raw
-  downloads. Never commit secrets; scan before pushing data.
-- **Upstox stream live** (from 23 Oct, DECISIONS.md): `server/upstox_stream.py`, prices pushed by the Upstox WebSocket,
-  Kotak fallback when it is down; feed + A/B + fade retries every 1 s while streaming, 30 s on Kotak only.
-  Check: `/api/live` -> `stream` (healthy, keys, streamed, served stream vs kotak) and `interval_s` = 1 in market hours.
-- **Fade entry every second from 09:15:00** (from 23 Oct, user decision, DECISIONS.md): `entry_tick` in the 1-s loop, one
-  quote call a second for all waiting signals; still buys at the ask with the same walk. Check on 23 Oct: fills near 09:15:0x.
-- **Entry probe** (record only, from 23 Oct, `strategies/S1_v11_entry_probe.md`): asks every second 09:14:50-09:20 for the
-  fade signals' strikes + the opening print, in `paper-state:data/entry_probe/<date>.json`. After each session: compute
-  the pre-registered A / B / C verdicts (what entry gets v11's ₹3.23 L price); a rule needs >= 20 signals.
+## Live system: AWS Lightsail Mumbai VM, commit `b9cf6f87` (deployed Fri 23 Oct 23:43 IST)
+- `fo-scanner`, static IP 3.109.99.56, `~/fo_scanner`, systemd `fo-scanner` + market-hours watchdog (`deploy/aws/`,
+  guide 17). `.env`: `DATA_PROVIDER=kotak`, `ORDERS=true PAPER=true BROKER=none`, `PUBLIC_ACCESS=false` + `APP_PASSWORD`,
+  `LEDGER_GITHUB_TOKEN` (writes `paper-state`), `UPSTOX_ANALYTICS_TOKEN`.
+- **Site:** `https://ip-172-26-4-64.tail956abb.ts.net/` (Tailscale Funnel, public HTTPS), themed `/login` page with a
+  1-year cookie; Basic auth still works for scripts.
+- **Prices: the Upstox WebSocket** (`server/upstox_stream.py`, ~848 keys, `full` mode), **Kotak automatic fallback** if
+  no message for 15 s. While streaming: feed, A/B entries, fade entries and exits every **1 s**; on Kotak only, 30 s.
+  PCR from the Kotak chain sweep (4 stocks / 10 s). `/api/live` -> `stream`, `interval_s`.
+- **Fade entry every second from 09:15:00** (`entry_tick`); **1-second exit check** (`fast_tick`).
+- **No loss halts** (weekly removed 21 Oct, daily 22 Oct).
+- **Entry probe** (record only): asks every second 09:14:50-09:20 (10 s to 10:00) for fade signals' strikes, in
+  `paper-state:data/entry_probe/<date>.json` (`strategies/S1_v11_entry_probe.md`).
+- **Sellable-peak measurement** (`server/peak.py`, measurement only):
+  - `held_bid`: highest / lowest best bid while held, with times, bid size, quote count, longest gap;
+  - `peak_capture` at the exit: net if sold at the peak bid (an estimate; `lot_fits_at_peak`), Rs left, capture %
+    (N/A when the peak never paid), price give-back;
+  - `entry_quote`: bid, ask, spread, sizes, `ltt` + `ltt_age_s` + `stale_ltt` (last trade before 09:15 or > 5 min old;
+    a warning only, it never refuses a trade);
+  - `data/observations/<date>.jsonl`: every bid/ask change while held, plus **60 min after the exit** (phase
+    `after_exit`, 1 s streaming / 30 s on Kotak, fetched in one batched call outside the ledger lock); mirrored to
+    `paper-state` once the day is over;
+  - exits priced from the last trade (no bid) are not counted as bid observations;
+  - **0 measured trades so far**: the first come Mon 26 Oct.
+- `/api/paper/summary` -> `version` = `{commit, commit_source}` from the server's `.git` (`server/version.py`).
 
-### Strategy state (unchanged by the move)
-- **S1 fade (arm F) exit = v12** (from 22 Oct, `strategies/S1_v12_fade_trail2.md`): on the entry day, on the best bid:
-  −20 % stop from 09:16; once the bid ≥ 1.10 × entry a trail sells at the first bid ≤ 0.98 × the highest bid since
-  (`fade_trail`); else 15:20. Entry unchanged (v10: strong numbers → put, weak → call; ₹2 floor; ₹600–8,000 lot; live
-  ask from 09:15, retried every 30 s).
-- **Below-₹2 rule** (from 23 Oct, `strategies/S1_v12_sub2_listing.md`, user decision 22 Oct): a fade signal refused only
-  by the ₹2 floor ("premium below Rs 2" / "never fits") is bought at the first two-sided strike (spread ≤ 10 %) if its
-  **listing-day price** was **₹2 to < ₹7**, with **as many lots as cost ≤ ₹8,000**; exit v12; `rule.sub2` on the
-  position; refusal reasons in `rules.fade_sub2_why`. Listing prices: `data/listing/<expiry>.csv` (`scanner/listing_prices.py`;
-  backfilled 22 Oct for the 27 Oct / 23 Nov / 29 Dec series; `fade_live` adds each night's new contracts and attaches
-  `signal.listing`; `daily.yml` commits `data/listing`). Fade only, not Arm A refusals.
-- **1-second exit check** (`server/fade.py` `fast_tick`, `FADE_FAST_SECONDS=1`, thread in `server/app.py`): one quote call
-  for today's open fade contracts, then stop / v12 trail / shadow checks. The 30 s universe poll is unchanged.
-- **Shadows on every v12 trade (no orders):** `shadow_v11` (stop only), `shadow_v10` (15:20), `shadow_trail` (5 % gap),
-  plus `shadow_t100`, `shadow_np25`, `shadow_fd2` (puts; review at 20). Reviews: **v12 vs v11/v10 at 30 closed v12 trades**
-  (`/api/paper/summary` → `fade_v12`, Arm F panel "Live v12 vs v11 and v10"); trail tag at 30.
-- **Weekly loss halt removed** (21 Oct). Daily halt 2 % stays; halts block manual orders only, never rule trades.
-- **Arms A / B:** rule trades (open walk and 15:20), skip F&O-ban stocks. Known gaps: no catch-up for a missed 15:20
-  check; the "close" entry books the day's average price.
-- **Data:** Kotak. Upstox built in; shadow comparison `/api/data/compare` (from 21 Oct). Switch only after clean days.
-- **Render free tier sleeps:** GitHub's keep-awake cron runs hours late (21 Oct: started 13:30 IST). **The user is setting
-  up an external pinger** (`/api/live` every ≤ 5 min, 08:30–15:45 IST weekdays). Better host: Oracle Always Free VM
-  (`guides/17-always-on-host.md`), not done.
-- Page: each fade position card shows the stop / trail level; closed trades show v10 and trail shadow ₹; the why drawer
-  shows both shadows.
+### Strategy state (S1 v12, unchanged)
+- **Fade (arm F), v12** (`strategies/S1_v12_fade_trail2.md`): v10 entry (strong numbers -> put, weak -> call; Rs 2 floor;
+  lot Rs 600-8,000; spread <= 10 %; buys the ask); on the best bid: -20 % stop from 09:16; trail on at >= 1.10 x entry,
+  sells at <= 0.98 x the highest bid since; else 15:20.
+- **Below-Rs 2 rule** (`strategies/S1_v12_sub2_listing.md`): a signal refused only by the Rs 2 floor is bought at the
+  first two-sided strike if its listing-day price was Rs 2-7, max lots <= Rs 8,000; exit v12. Listing prices in
+  `data/listing/<expiry>.csv`.
+- **Shadows on every v12 trade:** `shadow_v11`, `shadow_v10`, `shadow_trail` (5 %), `shadow_t100`, `shadow_np25`,
+  `shadow_fd2`. Review **v12 vs v11/v10 at 30 closed v12 trades**.
+- **Arms A / B:** open walk and 15:20 entries; skip ban stocks. **Known gap, confirmed 24 Oct:** the 15:20 "close" entry
+  books the day's average price, not a 15:20 price (all 4 checked fills were outside the 15:20 candle). A fix is a rule
+  change for the user to decide.
 
 ## S1 strategy work (records: PROGRESS.md, DECISIONS.md, `strategies/`, `data/results/`)
 **Practice:** write the rule in `strategies/*.md` and commit **before** any number; rule changes need the user's
@@ -94,6 +78,16 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   `S1_fade_trail_gap_loosen.csv`, `S1_fade_trail_tiered.md`, `S1_fade_peak_patterns.md`, `S1_fade_peak_rules_test.md`.
 - **Pre-open:** stock options have no pre-open (NSE/FAOP/71092); a fair-price limit fails; the stock in its auction is a
   first-minute effect only. `S1_fade_preopen_entry.md`.
+- **Peak capture and entry quality (23-24 Oct, descriptive; candle estimates):** `S1_fade_entry_quality_audit.md/.xlsx`,
+  `S1_v12_measurement_audit.md`, `S1_fade_decline_recovery_report.md/.xlsx` (protocols in `strategies/`).
+  - 102 of 152 losers never rose +2 % (Rs 1.32 L of Rs 1.74 L lost): the weakness is entry/direction, not the exit.
+  - At entry the never-profitable losers look like the winners (premium, strike distance, expiry, gap, NP YoY: no
+    difference); the stock running on with the headline (open -> close, retrospective) is the main post-entry cause.
+  - The >= Rs 15 premium edge is not robust (1st half worse; bootstrap CI includes 0). Strike distance: no link (11 rows
+    with split-adjusted stock prices excluded).
+  - After the -20 % stop (136 trades): 56 % touch entry again later (median ~22 min), 24 % close above it.
+  - Paper entry check (23 positions): 11 inside the minute's traded range, 8 outside (incl. all 4 15:20 close
+    entries), 4 unresolved. ADANIENSOL 23 Oct was bought at Rs 10.55 on a book whose last trade was the previous day.
 - **Below ₹2:** buying refused signals anyway loses (−4.4 %); expiry-gap filters don't fix it; **listing price ₹2–7 with
   max lots** is the best cut (+2.3 % v12, +5.8 % v11; 71 % of trades reach +20 %), now live; **listed under ₹2 loses with
   every exit**. `S1_refused_listing_price.md/.xlsx`, `S1_fade_cheap_dte.md`, `S1_refused_below_floor_all.xlsx`,
@@ -188,18 +182,20 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   session.
 
 ## Open (ask the user before doing)
-- Review v12 vs v11/v10 at 30 closed v12 trades; review the below-₹2 rule's live trades as they come.
-- Update the explanation doc with the newer findings (if the user wants).
+- **After Mon 26 Oct's close (after 15:40):** `python -m scanner.fade_live_validate` on the first measured trades
+  (entry quote and stale flag, held peak/low, exit bid, 60-min post-exit rows, backup); `python -m
+  scanner.fade_live_checkpoint` (target 30 measured trades); the 27 Oct contracts' T-1 exits on 26 Oct; the entry
+  probe's A / B / C verdicts.
+- Review v12 vs v11/v10 at 30 closed v12 trades; the below-Rs 2 rule's live trades as they come.
+- Hypotheses for live data (no rule change without the user): recovery after the stop on real bids; stale first-second
+  entries; entry spread vs the 2 % trail gap and early bid moves.
 - **A/B catch-up** for a missed 15:20 check; **A/B "close" entry at the 15:20 ask** (rule change).
-- **Switch to Upstox** after clean shadow days (`/api/data/compare`).
-- Always-on host (Oracle VM, guide 17) if the pinger is not enough.
-- `LEDGER_GITHUB_TOKEN` renewal before 2026-10-30.
+- The new `LEDGER_GITHUB_TOKEN` on the VM: check its expiry date (the old one ended 2026-10-30).
 - Clean the `index-data` history when the repo passes ~3 GB.
 
 ## After a context compaction
 - Read this file first, then the tail of `PROGRESS.md`.
-- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`.
-- Check after 23 Oct's session: fade positions carry `trail`, `shadow_v11`, `shadow_v10`; any `fade_trail` / `fade_stop`
-  exits fire within seconds (fast_tick); a below-₹2 refusal either buys with `rule.sub2` (lots > 1) or logs a reason in
-  `rules.fade_sub2_why`; `data/forward/fade.json` signals carry `listing`; the nightly job committed `data/listing`.
-- Stray untracked files from verification agents in the repo root (`calib_cash.csv`, `fills_mech.csv`): not ours to commit.
+- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. Python: `%TEMP%\fo-venv\Scripts\python.exe` (tests: all pass
+  except `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`).
+- Claude Code plugins on this PC (user scope): `skin-code` and `skins` (a custom "trader" skin is applied).
+- Stray untracked files from other sessions (`calib_cash.csv`, `fills_mech.csv`, `data/cache/s2_expiries_*.txt`): not ours.
