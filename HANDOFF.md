@@ -13,6 +13,8 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
     `/api/paper/summary` → `version.commit` is unchanged.
 - **To deploy, the commit must change a watched file.** An empty commit is skipped by Render (this happened at 15:35
   on 19 Oct). Use `DEPLOY_STAMP`.
+- **Excel files must be readable on first open** (user, 23 Oct): use the `xlsx` skill; plain-word headers (wrapped, bold),
+  columns wide enough, ₹ `#,##0` and % one decimal, frozen top row, filters, a Summary sheet first. Check before sending.
 - **The user reads on a phone.** Use plain words and send files with SendUserFile. End every reply with a
   **"Still running"** list.
 - **Secrets stay in Render and GitHub secrets** (`KOTAK_CONSUMER_KEY`, `UPSTOX_ANALYTICS_TOKEN`, `APP_PASSWORD`,
