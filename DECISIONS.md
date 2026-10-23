@@ -250,4 +250,8 @@ Descriptive after the fixes:
   negative; 9 % of days lose more than 2x the credit. The test window was a calm year (mean 14:30 → 15:15 move 0.13 %
   against 0.22 %). The late-expiry short-premium leads (P6, P7) are not reopened on the NIFTY holdout. R1 (SENSEX) still
   runs as pre-registered.
+- **D6 (daily bhavcopy, descriptive):** the weekly ATM short straddle held to expiry is −7.2 % of the credit
+  (2021-10 → 2024-09, 151 trades, t −1.2) and −2.4 % in the test window. The monthly put-write at k 0.94 won 34 of 34 in
+  2021-24, then lost 7.5x its credit once (April 2025). **D7:** India VIX is above the next week's realised vol in
+  every band except VIX > 22 and rising (+0.5 points; RV above VIX on 38 % of days).
 
