@@ -14,6 +14,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date, time
 
+import numpy as np
 import pandas as pd
 
 from index_data import load as L
@@ -81,33 +82,39 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
     credit = net > 0
     prem = abs(net)
 
-    # minute marks: last traded close per leg, carried forward up to MARK_STALE minutes
+    # minute marks: last traded close per leg, carried forward; a minute where any leg's mark is older than
+    # MARK_STALE minutes is not judged (vectorised; same rules as a minute-by-minute loop)
     window = chain[(chain["timestamp"] > t_in) & (chain["timestamp"] <= t_out)]
-    minutes = sorted(window["timestamp"].unique())
+    minutes = pd.DatetimeIndex(sorted(window["timestamp"].unique()))
     last = [px for _, _, px in legs]
-    seen = [t_in] * len(legs)
-    per_leg = {(k, lg.opt): g.set_index("timestamp")["close"] for lg, k, _ in legs
-               for g in [chain[(chain["strike"] == k) & (chain["option_type"] == lg.opt)]]}
-    exit_t, reason, worst, peak = t_out, "time", 0.0, 0.0
-    for m in minutes:
-        for i, (lg, k, _) in enumerate(legs):
-            s = per_leg[(k, lg.opt)]
-            if m in s.index:
-                last[i], seen[i] = float(s[m]), m
-        if any((m - x).total_seconds() > MARK_STALE * 60 for x in seen):
-            continue
-        val = sum(sign[lg.side] * p for (lg, _, _), p in zip(legs, last))       # value to close, same sign as net
-        pnl_pt = net - val                                                       # per unit, before exit costs (credit or debit)
-        worst, peak = min(worst, pnl_pt / prem), max(peak, pnl_pt)
-        if spec.stop is not None and pnl_pt <= -spec.stop * prem:
-            exit_t, reason = m, "stop"
-            break
-        if spec.target is not None and pnl_pt >= spec.target * prem:
-            exit_t, reason = m, "target"
-            break
-        if spec.trail is not None and not credit and peak > 0 and prem + pnl_pt <= (1 - spec.trail) * (prem + peak):
-            exit_t, reason = m, "trail"
-            break
+    exit_t, reason, worst = t_out, "time", 0.0
+    if len(minutes):
+        pxs, stale = [], np.zeros(len(minutes), bool)
+        for lg, k, px0 in legs:
+            g = window[(window["strike"] == k) & (window["option_type"] == lg.opt)].drop_duplicates("timestamp", keep="last")
+            ser = pd.Series(g["close"].to_numpy(float), index=pd.DatetimeIndex(g["timestamp"]))
+            seen = pd.Series(ser.index, index=ser.index)
+            p = ser.reindex(minutes).ffill().fillna(px0).to_numpy()
+            sn = seen.reindex(minutes).ffill().fillna(t_in)
+            stale |= ((minutes - pd.DatetimeIndex(sn)).total_seconds() > MARK_STALE * 60)
+            pxs.append(p)
+        val = sum(sign[lg.side] * p for (lg, _, _), p in zip(legs, pxs))
+        pnl = net - val
+        valid = ~stale
+        peak = np.maximum.accumulate(np.where(valid, pnl, -np.inf))
+        hit_stop = valid & (pnl <= -spec.stop * prem) if spec.stop is not None else np.zeros(len(minutes), bool)
+        hit_tgt = valid & (pnl >= spec.target * prem) if spec.target is not None else np.zeros(len(minutes), bool)
+        hit_trl = (valid & (peak > 0) & (prem + pnl <= (1 - spec.trail) * (prem + peak))
+                   if spec.trail is not None and not credit else np.zeros(len(minutes), bool))
+        anyhit = hit_stop | hit_tgt | hit_trl
+        end_i = int(np.argmax(anyhit)) if anyhit.any() else len(minutes) - 1
+        if anyhit.any():
+            exit_t = minutes[end_i]
+            reason = "stop" if hit_stop[end_i] else ("target" if hit_tgt[end_i] else "trail")
+        last = [float(p[end_i]) for p in pxs]
+        v = valid[: end_i + 1]
+        if v.any():
+            worst = min(0.0, float((pnl[: end_i + 1][v] / prem).min()))
     if reason == "time":   # the exit minute's own marks (or the last fresh ones before it)
         for i, (lg, k, _) in enumerate(legs):
             p = L.price_at(chain, k, lg.opt, t_out, stale=MARK_STALE)

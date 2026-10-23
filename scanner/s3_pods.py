@@ -57,7 +57,13 @@ def run_pod(pod: Pod, holdout: bool = False) -> dict:
             r = run_day(sp, d, exp) if exp else {"day": d, "skip": "no expiry"}
             rows.append({**r, "cell": pod.label(cell), "cost_mult": cm, "vix": vix_at(d, *sp.entry, vcache),
                          "event": d in EVENTS, "weekday": d.strftime("%a"), "expiry": exp})
-    allt = pd.DataFrame(rows)
+    return write_report(pod, pd.DataFrame(rows), len(days), window, halves, holdout)
+
+
+def write_report(pod: Pod, allt: pd.DataFrame, n_days: int, window: tuple, halves: tuple, holdout: bool,
+                 extra: list | None = None) -> dict:
+    """Apply the pod's skips, score the gate on the primary cell, write the report and the trades CSV."""
+    allt = allt.copy()
     allt["skip"] = allt["skip"].fillna("")
     keep = allt["skip"] == ""
     if pod.skip_events:
@@ -79,7 +85,7 @@ def run_pod(pod: Pod, holdout: bool = False) -> dict:
     lines = [f"# S3 {pod.name} · {pod.title}: {'HOLDOUT' if holdout else 'test window'} {window[0]} → {window[1]}", "",
              f"Pre-registered: `{pod.page}`. Engine `scanner/s3_engine.py`, runner `scanner/s3_pods.py`. Mean, t and halves "
              f"on net % of {unit}; rupees at 1 lot.", "",
-             f"Days {len(days)}. Primary cell: {s['n']} trades. Not traded: {int((pall['skip'] != '').sum())} without prices"
+             f"Days {n_days}. Primary cell: {s['n']} trades. Not traded: {int((pall['skip'] != '').sum())} without prices"
              + (f", {int((pall['event'] & (pall['skip'] == '')).sum())} event days" if pod.skip_events else "")
              + (f", {int(((pall['skip'] == '') & ~pall['vix'].between(*pod.vix)).sum())} with VIX outside "
                 f"{pod.vix[0]:g}-{pod.vix[1]:g}" if pod.vix else "") + ".", "",
@@ -111,6 +117,7 @@ def run_pod(pod: Pod, holdout: bool = False) -> dict:
         for name, grp in side.groupby(col, observed=True):
             nm = ("event day" if name else "other day") if col == "event" else name
             lines.append(f"| {nm} | {len(grp)} | {grp['net_pct_premium'].mean():+.1f} % | {(grp['net_rs'] > 0).mean() * 100:.0f} % |")
+    lines += extra or []
     sk = pall[pall["skip"] != ""]
     if len(sk):
         lines += ["", "## Days without prices (primary cell)", ""] + [f"- {r.day}: {r.skip}" for r in sk.itertuples()]
