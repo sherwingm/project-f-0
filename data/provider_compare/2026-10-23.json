@@ -414,6 +414,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -28.0
+  },
+  {
+   "at": "11:45:09",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.072,
+   "same_best_bid_pct": 34.3,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -12.0
   }
  ],
  "top_gaps": [
@@ -551,21 +565,21 @@
    "at": "09:50"
   },
   {
-   "contract": "ETERNAL26OCT305PE",
-   "gap_pct": 1.064,
-   "kotak": 4.7,
-   "upstox": 4.65,
-   "at": "09:50"
+   "contract": "HINDUNILVR26OCT1800PE",
+   "gap_pct": 1.072,
+   "kotak": 18.65,
+   "upstox": 18.85,
+   "at": "11:45"
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 1013,
+  "rounds": 30,
+  "contract_quotes": 1048,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 31.4,
   "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -13.5
  }
 }
