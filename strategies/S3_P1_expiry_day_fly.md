@@ -48,9 +48,13 @@ Also reported (never part of the gate):
 30 % of the test window's.
 
 ## Event days (no trade)
-Union Budget 2025-02-01; RBI policy decisions 2024-10-09, 2024-12-06, 2025-02-07, 2025-04-09, 2025-06-06,
-2025-08-06; holdout: 2025-10-01, 2025-12-05. Taken from memory: they are checked against the RBI press releases before
-the run, and any correction is recorded here before the run. Only 2025-04-09 is an expiry day in the test window.
+Union Budget 2025-02-01; RBI policy decisions (the last day of each MPC meeting) 2024-10-09, 2024-12-06, 2025-02-07,
+2025-04-09, 2025-06-06, 2025-08-07; holdout: 2025-10-01, 2025-12-05, 2026-02-06.
+
+**Checked 2026-10-23, before the run,** against the RBI press releases "Meeting Schedule of the Monetary Policy
+Committee" for 2024-2025 and for 2025-2026. One correction to the first list: August 2025 was 5-7 Aug, so the decision
+day is **2025-08-07, not 2025-08-06**. 2026-02-06 was added. In the test window, 2025-04-09 and 2025-08-07 are expiry
+days.
 
 ## Data
 - The run waits for the Upstox path-band re-fill (queued 2026-10-22), so that the expiry days whose ATM strike was
