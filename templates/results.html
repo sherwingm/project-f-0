@@ -934,6 +934,9 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             p.peak_capture ? ["Net if sold at the peak bid", srs(p.peak_capture.peak_net, 2), dir(p.peak_capture.peak_net)] : null,
             p.peak_capture ? ["Captured of the peak", `${p.peak_capture.capture_pct != null ? pct(p.peak_capture.capture_pct) : "N/A (the peak never paid after charges)"} · left ${srs(p.peak_capture.giveback_rs, 2)} · price ${p.peak_capture.peak_to_exit_pct}% below the peak at the exit`] : null,
             p.entry_quote ? ["Entry quote", `bid ${rs(p.entry_quote.bid)} / ask ${rs(p.entry_quote.ask)} · spread ${p.entry_quote.spread_pct ?? "—"} %`] : null,
+            p.entry_quote ? ["Last trade before entry", p.entry_quote.ltt
+              ? `${esc(p.entry_quote.ltt)}${p.entry_quote.ltt_age_s != null ? ` · ${p.entry_quote.ltt_age_s >= 3600 ? (p.entry_quote.ltt_age_s / 3600).toFixed(1) + " h" : Math.round(p.entry_quote.ltt_age_s) + " s"} before` : ""}${p.entry_quote.stale_ltt ? ` · ⚠ ${esc(p.entry_quote.stale_ltt_reason)} (old last trade; the bid/ask may still have been live)` : ""}`
+              : `— ${esc(p.entry_quote.stale_ltt_reason || "")}`, p.entry_quote.stale_ltt ? "down" : ""] : null,
             ["Stock at entry", se ? rs(se) : null], ["Strike distance at entry", otm != null ? `${otm.toFixed(1)} % ${otm >= 0 ? "out of" : "in"} the money` : null],
             ["Stock at exit", sx ? rs(sx) : null], fade && fadeMove != null ? ["The stock's fade (entry → exit)", pct(fadeMove), dir(fadeMove)] : null,
             ["Lot", `${p.lots} × ${p.lot_size} · ${rs(e * p.qty, 0)}`], ["Expiry", day(p.expiry)],

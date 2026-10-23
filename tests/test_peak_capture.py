@@ -235,3 +235,101 @@ def test_the_post_exit_series_records_every_poll_while_streaming(tmp_path):
         lg._post_exit_series(t(9, 21, s))
     rows = [json.loads(x) for x in (tmp_path / "observations" / "2026-10-15.jsonl").read_text().splitlines()]
     assert [r["bid"] for r in rows if r["phase"] == "after_exit"] == [18.1, 18.2, 18.3]
+
+
+# ---------------------------------------------------------------- last-trade age (task 1) and the running commit (task 2)
+@pytest.mark.parametrize("ltt, now, stale, reason", [
+    ("2026-10-15 09:15:58", t(9, 16), False, None),                                   # fresh: 2 s old
+    ("2026-10-14 15:39:53", t(9, 15), True, "last trade before today's 09:15 open"),  # ADANIENSOL's case
+    ("2026-10-15 09:20:00", t(9, 30), True, "last trade more than 5 min old"),
+    (None, t(9, 16), None, "no last-trade time in the quote"),
+    ("not a time", t(9, 16), None, "unreadable last-trade time 'not a time'"),
+    ("2026-10-15 10:00:00", t(9, 16), None, "last-trade time is after the entry (clock mismatch)"),
+])
+def test_last_trade_age_and_the_stale_flag(ltt, now, stale, reason):
+    a = pk.ltt_age(ltt, now)
+    assert a["stale_ltt"] is stale and a["stale_ltt_reason"] == reason
+    if ltt == "2026-10-14 15:39:53":
+        assert a["ltt_age_s"] == 63307.0                                               # 17 h 35 min 7 s
+
+
+def test_a_stale_entry_is_flagged_but_still_bought_at_its_price(tmp_path):
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-14 15:29:59"
+    ft.on_poll(t(9, 16))
+    p = lg.state["positions"][0]
+    assert p["entry"]["price"] == 18.5 and p["entry_quote"]["stale_ltt"] is True             # a warning, not a refusal
+
+
+def test_the_running_commit_comes_from_git_or_is_none(tmp_path, monkeypatch):
+    from server.version import deployed
+    monkeypatch.delenv("GIT_COMMIT", raising=False)
+    monkeypatch.delenv("RENDER_GIT_COMMIT", raising=False)
+    assert deployed(tmp_path) == {"commit": None, "commit_source": None}                  # no checkout
+    g = tmp_path / ".git"
+    (g / "refs" / "heads").mkdir(parents=True)
+    (g / "HEAD").write_text("ref: refs/heads/main\n")
+    (g / "refs" / "heads" / "main").write_text("8bac3c5a1234567890abcdef\n")
+    assert deployed(tmp_path) == {"commit": "8bac3c5a", "commit_source": "git"}
+    (g / "refs" / "heads" / "main").unlink()
+    (g / "packed-refs").write_text("# pack\n0123456789abcdef refs/heads/main\n")
+    assert deployed(tmp_path)["commit"] == "01234567"                                    # after git gc
+    monkeypatch.setenv("GIT_COMMIT", "feedbeef99")
+    assert deployed(tmp_path) == {"commit": "feedbeef", "commit_source": "env"}
+
+
+# ---------------------------------------------------------------- task 3: the post-exit record never holds the ledger lock
+def test_post_exit_quotes_are_fetched_outside_the_ledger_lock_in_one_call(tmp_path):
+    import threading
+    import time as _t
+    lg, q, ft = ledger(tmp_path)
+    for k in (1180.0, 1200.0, 1220.0):
+        q.set("PE", k, 18.0, 18.5)
+    ft.on_poll(t(9, 16))
+    lg.close_at(lg.state["positions"][0]["id"], 18.0, t(9, 20), "fade_stop")
+    for k in (1180.0, 1200.0):                                    # two more sales close together
+        c = {**lg.state["closed"][-1]}
+        c.update(id=f"X{int(k)}", strike=k, tradingsymbol=f"HCLTECH26OCT{int(k)}PE")
+        lg.state["closed"].append(c)
+    calls, inside = [], threading.Event()
+    real = q.get_many
+
+    def slow(cs):                                                 # a slow broker: 0.3 s per call
+        calls.append(len(cs))
+        inside.set()
+        _t.sleep(0.3)
+        return real(cs)
+    q.get_many = slow
+    th = threading.Thread(target=lg._post_exit_series, args=(t(9, 21),))
+    th.start()
+    assert inside.wait(2)
+    a = _t.perf_counter()
+    got = lg.lock.acquire(timeout=0.1)                            # a trading check needs the lock meanwhile
+    waited = _t.perf_counter() - a
+    if got:
+        lg.lock.release()
+    th.join()
+    assert got and waited < 0.1                                   # not blocked by the slow call
+    assert calls == [3]                                           # three trades, one batched call
+
+
+# ---------------------------------------------------------------- task 5: the live-trade validator on a simulated day
+def test_the_validator_passes_a_consistent_trade_and_catches_a_tampered_one(tmp_path):
+    from scanner.fade_live_validate import check_trade
+    lg, q, ft = ledger(tmp_path)
+    q.set("PE", 1220.0, 18.0, 18.5)
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-15 09:15:58"
+    ft.on_poll(t(9, 16))
+    q.set("PE", 1220.0, 21.0, 21.3)
+    lg.on_poll(now=t(9, 18))
+    lg.close_at(lg.state["positions"][0]["id"], 20.5, t(9, 20), "fade_trail")
+    q.set("PE", 1220.0, 22.0, 22.3)
+    lg._post_exit_series(t(9, 21))
+    rows = [json.loads(x) for x in (tmp_path / "observations" / "2026-10-15.jsonl").read_text().splitlines()]
+    c = lg.state["closed"][-1]
+    res = check_trade(c, rows, True)
+    assert [r for r in res if r[1] == "FAIL"] == [], res
+    bad = json.loads(json.dumps(c))
+    bad["peak_capture"]["peak_net"] += 500                                    # tampered: no longer re-derivable
+    assert any(r[0] == "capture" and r[1] == "FAIL" for r in check_trade(bad, rows, True))

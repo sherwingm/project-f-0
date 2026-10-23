@@ -52,6 +52,7 @@ from server.paper import PaperLedger, PaperRejected, QuoteSource, trade_stats
 from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
 from server.verdict import Verdict
+from server.version import deployed
 from server.config import settings
 from server.live import FakeProvider, KiteProvider, LiveFeed, market_open
 
@@ -133,6 +134,7 @@ class State:
         self.fut_source = None              # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
         self.upstox = None                  # server.upstox.UpstoxProvider (instrument keys) when the stream is on
         self.stream = None                  # server.upstox_stream.UpstoxStream
+        self.version: dict | None = None    # server.version.deployed(), read once at start-up
 
     def load_scan(self, path: Path) -> None:
         scan = json.loads(path.read_text())
@@ -166,6 +168,8 @@ SCAN_PATH = ROOT / "data" / "scan.json"
 @app.on_event("startup")
 def startup() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
+    state.version = deployed(ROOT)
+    log.info("running commit %s (%s)", state.version["commit"], state.version["commit_source"])
     if settings.scan_url:
         try:
             _pull_scan()
@@ -741,9 +745,10 @@ def api_paper_summary(_: str = Depends(auth)):
     from server.fade import CARRY_DATES, fd2, shadow_entries, split, t100, trail_shadow, v10_shadow, v12_compare
     m = getattr(state, "mirror", None)
     lg = _ledger()
-    # which code is running: Render sets RENDER_GIT_COMMIT on every deploy (None when run elsewhere)
+    # which code is running: read at start-up from a deploy setting or the checkout's .git (server/version.py)
+    ver = state.version or deployed(ROOT)
     return {**lg.summary(), "persistence": m.status if m is not None else {"enabled": False},
-            "version": {"commit": os.getenv("RENDER_GIT_COMMIT"), "fade_carry_dates": sorted(CARRY_DATES)},
+            "version": {**ver, "fade_carry_dates": sorted(CARRY_DATES)},
             "fade_split": split(getattr(lg, "state", {})),            # strategies/S1_v10_np25_shadow_track.md
             "fade_t100": t100(getattr(lg, "state", {})),              # strategies/S1_v10_t100_shadow_track.md
             "fade_v10_shadow": v10_shadow(getattr(lg, "state", {})),  # strategies/S1_v11_fade_stop20.md

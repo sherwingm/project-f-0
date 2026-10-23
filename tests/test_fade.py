@@ -262,7 +262,7 @@ def test_summary_endpoint_reports_the_running_commit(monkeypatch):
         body = TestClient(app_mod.app).get("/api/paper/summary").json()
     finally:
         app_mod.app.dependency_overrides.clear()
-    assert body["version"] == {"commit": "abc1234", "fade_carry_dates": []}
+    assert body["version"] == {"commit": "abc1234", "commit_source": "env", "fade_carry_dates": []}
     assert body["fade_split"]["v10 all fade"]["closed"] == 0
 
 

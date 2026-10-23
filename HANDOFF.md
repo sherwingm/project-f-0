@@ -37,7 +37,9 @@ Repo: `sherwingm/project-f-0`, local clone `C:\Users\sherw\project-f-0`. The det
   every long-option trade keeps the highest / lowest best bid while held (`held_bid`), `peak_capture` at the exit
   (net at peak = estimate; `lot_fits_at_peak`, `max_gap_s`), `entry_quote`, and `data/observations/<date>.jsonl`
   (mirrored once the day is over; from 24 Oct also 60 min of post-exit bid/ask, phase `after_exit`, and the entry
-  quote's last-trade time `entry_quote.ltt`). Checkpoint: `python -m scanner.fade_live_checkpoint` (target 30 measured trades;
+  quote's last-trade time `entry_quote.ltt` with `ltt_age_s` / `stale_ltt` (before 09:15 or > 5 min; a warning only)).
+  Validate the first measured trades: `python -m scanner.fade_live_validate`. `/api/paper/summary` → `version.commit`
+  now comes from the server's .git (`server/version.py`). Checkpoint: `python -m scanner.fade_live_checkpoint` (target 30 measured trades;
   0 on 23 Oct). **The GitHub repo is PUBLIC, kept so by the user (23 Oct)**: free Actions minutes, free Pages, token-free raw
   downloads. Never commit secrets; scan before pushing data.
 - **Upstox stream live** (from 23 Oct, DECISIONS.md): `server/upstox_stream.py`, prices pushed by the Upstox WebSocket,

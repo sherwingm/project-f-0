@@ -20,7 +20,8 @@ when peak_net > 0 (else None with a reason), never clamped; peak_to_exit_pct = (
 from __future__ import annotations
 
 import json
-from datetime import datetime
+import threading
+from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
 
 from server import charges as ch
@@ -29,6 +30,13 @@ SOURCE_POLL = "live best bid (feed poll)"
 SOURCE_FAST = "live best bid (1-s exit check)"
 SOURCE_EXIT = "live best bid (exit quote)"
 OBS_DIR = "observations"                 # data/observations/<date>.jsonl, one row per bid/ask change of an open trade
+IST = timezone(timedelta(hours=5, minutes=30))
+# The entry quote's LAST-TRADE age (not the book's freshness: a quote with an old last trade can still carry a live
+# bid / ask, and providers send no quote time). stale_ltt = True when the last trade was before that day's 09:15 open
+# (a previous session, like ADANIENSOL on 23 Oct 2026), or more than LTT_STALE_S before the entry. A warning only:
+# it never rejects or changes a trade.
+LTT_STALE_S = 300
+SESSION_OPEN = time(9, 15)
 POST_EXIT_MINUTES = 60                   # after a sale the contract's bid/ask is still recorded this long (phase after_exit)
 POST_EXIT_SLOW_S = 30                    # ... at most this often while prices come from Kotak (rate limits), not the stream
 
@@ -91,6 +99,7 @@ class ObsLog:
     def __init__(self, data_dir: Path):
         self.dir = Path(data_dir) / OBS_DIR
         self._last: dict[str, tuple] = {}
+        self._lock = threading.Lock()                    # the feed poll, the 1-s check and the post-exit record write
 
     def add(self, pos: dict, quote: dict, now: datetime, source: str, phase: str = "held") -> None:
         """phase "held" while the trade is open; "after_exit" for the hypothetical follow-up after the sale (never
@@ -100,9 +109,13 @@ class ObsLog:
         a = (d.get("ask") or [(None, None)])[0]
         key = (b[0], b[1], a[0], a[1])
         lk = f"{pos['id']}:{phase}"
-        if self._last.get(lk) == key:
-            return
-        self._last[lk] = key
+        with self._lock:
+            if self._last.get(lk) == key:
+                return
+            self._last[lk] = key
+            self._write(pos, quote, now, source, phase, b, a)
+
+    def _write(self, pos, quote, now, source, phase, b, a) -> None:
         row = {"id": pos["id"], "t": now.isoformat(timespec="seconds"), "ts": pos["tradingsymbol"], "bid": b[0],
                "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
                "ltt": quote.get("timestamp"), "spot": quote.get("underlying"), "src": quote.get("source") or source,
@@ -110,6 +123,28 @@ class ObsLog:
         self.dir.mkdir(parents=True, exist_ok=True)
         with open(self.dir / f"{now.date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, separators=(",", ":")) + "\n")
+
+
+def ltt_age(ltt, now: datetime) -> dict:
+    """{"ltt_age_s", "stale_ltt", "stale_ltt_reason"} for a last-trade time (str "YYYY-MM-DD HH:MM:SS" IST, ISO, or
+    datetime). Missing or unreadable -> age None, stale_ltt None, with the reason."""
+    if ltt in (None, ""):
+        return {"ltt_age_s": None, "stale_ltt": None, "stale_ltt_reason": "no last-trade time in the quote"}
+    try:
+        t = ltt if isinstance(ltt, datetime) else datetime.fromisoformat(str(ltt).strip().replace(" ", "T"))
+    except ValueError:
+        return {"ltt_age_s": None, "stale_ltt": None, "stale_ltt_reason": f"unreadable last-trade time {str(ltt)[:30]!r}"}
+    t = t.replace(tzinfo=IST) if t.tzinfo is None else t
+    n = now.replace(tzinfo=IST) if now.tzinfo is None else now
+    age = round((n - t).total_seconds(), 1)
+    open_ = datetime.combine(n.astimezone(IST).date(), SESSION_OPEN, IST)
+    if age < -5:
+        return {"ltt_age_s": age, "stale_ltt": None, "stale_ltt_reason": "last-trade time is after the entry (clock mismatch)"}
+    if t < open_:
+        return {"ltt_age_s": age, "stale_ltt": True, "stale_ltt_reason": "last trade before today's 09:15 open"}
+    if age > LTT_STALE_S:
+        return {"ltt_age_s": age, "stale_ltt": True, "stale_ltt_reason": f"last trade more than {LTT_STALE_S // 60} min old"}
+    return {"ltt_age_s": age, "stale_ltt": False, "stale_ltt_reason": None}
 
 
 def entry_quote(quote: dict | None, now: datetime) -> dict | None:
@@ -123,4 +158,5 @@ def entry_quote(quote: dict | None, now: datetime) -> dict | None:
     return {"bid": b[0], "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
             "spread_pct": round((a[0] - b[0]) / mid * 100, 2) if mid else None, "spot": quote.get("underlying"),
             "volume": quote.get("volume"), "oi": quote.get("open_interest"), "source": quote.get("source") or "kotak",
-            "ltt": quote.get("timestamp"), "at": now.isoformat(timespec="seconds")}   # ltt: the quote's last trade
+            "ltt": quote.get("timestamp"), "at": now.isoformat(timespec="seconds"),   # ltt: the quote's last trade
+            **ltt_age(quote.get("timestamp"), now)}

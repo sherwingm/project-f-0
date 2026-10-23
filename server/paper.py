@@ -452,11 +452,11 @@ class PaperLedger:
                     self._mark(pos, quote, now)
                     self._check_stop(pos, now)
             self._follow_closed(now)
-            self._post_exit_series(now)
             self._touch_day(now)
             if self.risk is not None:
                 self.risk.state(self, now)            # drawdown banner and limits
             self._save()
+        self._post_exit_series(now)                   # outside the lock: its quote call never holds up a trading check
 
     # ------------------------------------------------------------ rule trades (server/rules.py)
     def open_rule(self, contract: dict, price: float, now: datetime, rule: dict, lots: int = 1,
@@ -530,18 +530,26 @@ class PaperLedger:
         phase "after_exit" (every poll while streaming, else every POST_EXIT_SLOW_S). Hypothetical only: it never
         touches the closed trade's held peak or P&L."""
         stream = getattr(self.quotes, "streaming", lambda: False)()
-        for c in self.state["closed"][-50:]:
-            until = c.get("post_exit_until")
-            if not until or now > datetime.fromisoformat(until):
-                continue
-            if not stream and now.timestamp() - self._post_last.get(c["id"], 0.0) < pk.POST_EXIT_SLOW_S:
-                continue
-            self._post_last[c["id"]] = now.timestamp()
-            q = self.quotes.get({k: c[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")},
-                                fresh=False)
+        due = []
+        with self.lock:                                   # pick what is due (no broker call under the lock)
+            for c in self.state["closed"][-50:]:
+                until = c.get("post_exit_until")
+                if not until or now > datetime.fromisoformat(until):
+                    continue
+                if not stream and now.timestamp() - self._post_last.get(c["id"], 0.0) < pk.POST_EXIT_SLOW_S:
+                    continue
+                self._post_last[c["id"]] = now.timestamp()
+                due.append(({"id": c["id"], "tradingsymbol": c["tradingsymbol"]},
+                            {k: c[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}))
+        if not due:
+            return
+        many = getattr(self.quotes, "get_many", None)    # one call for every due contract
+        got = many([ct for _, ct in due]) if many else {ct["tradingsymbol"]: self.quotes.get(ct, fresh=False) for _, ct in due}
+        for ref, ct in due:
+            q = got.get(ct["tradingsymbol"])
             if q:
                 try:
-                    self.obs.add(c, q, now, pk.SOURCE_POLL, phase="after_exit")
+                    self.obs.add(ref, q, now, pk.SOURCE_POLL, phase="after_exit")
                 except OSError as exc:
                     log.warning("observation log: %s", exc)
 
