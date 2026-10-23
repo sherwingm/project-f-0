@@ -42,6 +42,7 @@ class Spec:
     target: float | None = None      # credit: cost to close <= credit x (1 − target); debit: value >= debit x (1 + target)
     lots: int = 1
     cost_mult: float = 1.0           # 2.0 = the gate's stress at twice the costs (charges and slippage)
+    trail: float | None = None       # debit only: close when the position's value falls this share below its peak
 
 
 def _slip(offset: int, t: time, cost_mult: float) -> float:
@@ -58,11 +59,13 @@ def _rev(side: str) -> str:
     return "SELL" if side == "BUY" else "BUY"
 
 
-def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot: int, underlying: str = "NIFTY") -> dict:
-    """One trade on one day's merged chain (index_data.load.options_day). Returns a trade row, or a row with `skip`."""
+def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot: int, underlying: str = "NIFTY",
+             exit_day: date | None = None) -> dict:
+    """One trade on a merged chain (index_data.load.options_day; several days concatenated for a multi-day hold, with
+    `exit_day` the day of the time exit). Returns a trade row, or a row with `skip`."""
     step = STRIKE_STEP[underlying]
     atm = round(spot_entry / step) * step
-    t_in, t_out = L.at(day, *spec.entry), L.at(day, *spec.exit)
+    t_in, t_out = L.at(day, *spec.entry), L.at(exit_day or day, *spec.exit)
     base = {"day": day, "pod": spec.name, "spot": spot_entry, "atm": atm}
     legs = []
     for lg in spec.legs:
@@ -85,7 +88,7 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
     seen = [t_in] * len(legs)
     per_leg = {(k, lg.opt): g.set_index("timestamp")["close"] for lg, k, _ in legs
                for g in [chain[(chain["strike"] == k) & (chain["option_type"] == lg.opt)]]}
-    exit_t, reason, worst = t_out, "time", 0.0
+    exit_t, reason, worst, peak = t_out, "time", 0.0, 0.0
     for m in minutes:
         for i, (lg, k, _) in enumerate(legs):
             s = per_leg[(k, lg.opt)]
@@ -95,12 +98,15 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
             continue
         val = sum(sign[lg.side] * p for (lg, _, _), p in zip(legs, last))       # value to close, same sign as net
         pnl_pt = net - val                                                       # per unit, before exit costs (credit or debit)
-        worst = min(worst, pnl_pt / prem)
+        worst, peak = min(worst, pnl_pt / prem), max(peak, pnl_pt)
         if spec.stop is not None and pnl_pt <= -spec.stop * prem:
             exit_t, reason = m, "stop"
             break
         if spec.target is not None and pnl_pt >= spec.target * prem:
             exit_t, reason = m, "target"
+            break
+        if spec.trail is not None and not credit and peak > 0 and prem + pnl_pt <= (1 - spec.trail) * (prem + peak):
+            exit_t, reason = m, "trail"
             break
     if reason == "time":   # the exit minute's own marks (or the last fresh ones before it)
         for i, (lg, k, _) in enumerate(legs):
@@ -113,12 +119,15 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
     fees = sum(charges.leg(lg.opt, lg.side, qty, fi)["total"] + charges.leg(lg.opt, _rev(lg.side), qty, fo)["total"]
                for (lg, _, _), fi, fo in zip(legs, fills_in, fills_out)) * spec.cost_mult
     pnl = gross_pt * qty - fees
-    widths = [abs(lg.offset) for lg in spec.legs if lg.side == "BUY"]
-    defined = credit and any(lg.side == "BUY" for lg in spec.legs)
-    margin = ((max(widths) * step - prem) * qty if defined and widths else
+    # defined risk: the widest gap between a sold and a bought strike of the same type, less the credit
+    widths = [abs(kb - ks) for lb, kb, _ in legs if lb.side == "BUY" for ls, ks, _ in legs
+              if ls.side == "SELL" and ls.opt == lb.opt]
+    covered = all(any(lb.side == "BUY" and lb.opt == ls.opt for lb, _, _ in legs) for ls, _, _ in legs if ls.side == "SELL")
+    margin = ((max(widths) - prem) * qty if credit and covered and widths else
               0.12 * spot_entry * qty * sum(1 for lg in spec.legs if lg.side == "SELL") / 2 if credit else prem * qty)
     return {**base, "skip": "", "kind": "credit" if credit else "debit", "lot": lot, "qty": qty,
             "premium": round(prem, 2), "premium_rs": round(prem * qty, 2), "exit_at": pd.Timestamp(exit_t).strftime("%H:%M"),
+            "exit_day": pd.Timestamp(exit_t).date(),
             "reason": reason, "gross_rs": round(gross_pt * qty, 2), "fees_rs": round(fees, 2), "net_rs": round(pnl, 2),
             "net_pct_premium": round(pnl / (prem * qty) * 100, 2), "margin_rs": round(margin, 2),
             "net_pct_margin": round(pnl / margin * 100, 3) if margin > 0 else None,
@@ -126,11 +135,28 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
             "legs": ";".join(f"{lg.side[0]}{k:.0f}{lg.opt}@{fi:.2f}>{fo:.2f}" for (lg, k, _), fi, fo in zip(legs, fills_in, fills_out))}
 
 
-def run_day(spec: Spec, day: date, expiry: date, underlying: str = "NIFTY", index: str = "NIFTY50") -> dict:
-    """Load the day's chain and spot from the index store and simulate."""
+def spot_at(day: date, hh: int, mm: int, index: str = "NIFTY50") -> float | None:
+    """The spot's last close at or before a minute (at most 3 minutes old)."""
     sp = L.spot_1m(day, day, index)
-    sp = sp[sp["timestamp"] <= L.at(day, *spec.entry)]
-    if sp.empty or (L.at(day, *spec.entry) - sp["timestamp"].iloc[-1]).total_seconds() > 180:
+    sp = sp[sp["timestamp"] <= L.at(day, hh, mm)]
+    if sp.empty or (L.at(day, hh, mm) - sp["timestamp"].iloc[-1]).total_seconds() > 180:
+        return None
+    return float(sp["close"].iloc[-1])
+
+
+def chain_between(underlying: str, expiry: date, day: date, exit_day: date | None) -> pd.DataFrame:
+    """The merged chain of one expiry from `day` to `exit_day` (both included), concatenated."""
+    if not exit_day or exit_day == day:
+        return L.options_day(underlying, expiry, day)
+    days = [d for d in L.trade_days(underlying, expiry) if day <= d <= exit_day]
+    return pd.concat([L.options_day(underlying, expiry, d) for d in days], ignore_index=True)
+
+
+def run_day(spec: Spec, day: date, expiry: date, underlying: str = "NIFTY", index: str = "NIFTY50",
+            exit_day: date | None = None) -> dict:
+    """Load the chain (day → exit_day) and the entry spot from the index store and simulate."""
+    s = spot_at(day, *spec.entry, index)
+    if s is None:
         return {"day": day, "pod": spec.name, "skip": "no spot at entry"}
-    return simulate(L.options_day(underlying, expiry, day), float(sp["close"].iloc[-1]), day, spec, L.lot_on(day, underlying),
-                    underlying)
+    return simulate(chain_between(underlying, expiry, day, exit_day), s, day, spec, L.lot_on(day, underlying), underlying,
+                    exit_day)

@@ -78,3 +78,33 @@ def test_iron_fly_margin_is_its_max_loss():
     # credit 99 + 99 − 20.2 − 20.2 = 157.6; wings 200 points wide -> max loss (200 − 157.6) x 75
     assert r["premium"] == pytest.approx(157.6)
     assert r["margin_rs"] == pytest.approx((200 - 157.6) * 75, abs=0.01)
+
+
+def _rows(day, prices):
+    return [dict(timestamp=L.at(day, *map(int, t.split(":"))), strike=float(k), option_type=o, open=c, high=c, low=c,
+                 close=c, volume=10, oi=100, source="upstox") for (k, o), path in prices.items() for t, c in path.items()]
+
+
+def test_multi_day_hold_marks_across_the_night_and_exits_on_the_exit_day():
+    d0, d1 = date(2025, 1, 7), date(2025, 1, 8)
+    spec = Spec("condor", [Leg("SELL", "CE", 4), Leg("SELL", "PE", -4), Leg("BUY", "CE", 6), Leg("BUY", "PE", -6)],
+                entry=(15, 0), exit=(15, 15), target=0.5, stop=1.0)
+    rows = _rows(d0, {(24200, "CE"): {"15:00": 20}, (23800, "PE"): {"15:00": 20}, (24300, "CE"): {"15:00": 5},
+                      (23700, "PE"): {"15:00": 5}})
+    rows += _rows(d1, {(24200, "CE"): {"09:15": 12, "11:00": 8}, (23800, "PE"): {"09:15": 12, "11:00": 6},
+                       (24300, "CE"): {"09:15": 3, "11:00": 2}, (23700, "PE"): {"09:15": 3, "11:00": 1.5}})
+    c = pd.DataFrame(rows).sort_values(["strike", "option_type", "timestamp"]).reset_index(drop=True)
+    r = simulate(c, 24000.0, d0, spec, lot=75, exit_day=d1)
+    # credit (all legs >= 2 strikes out: 1 %; and 15:00: 1 %) 19.8 + 19.8 - 5.05 - 5.05 = 29.5; 09:15 cost 18 (+39 %);
+    # 11:00 cost 14 - 3.5 = 10.5 -> +64 % >= 50 % target
+    assert r["reason"] == "target" and r["exit_day"] == d1 and r["exit_at"] == "11:00"
+    assert r["premium"] == pytest.approx(29.5)
+    assert r["margin_rs"] == pytest.approx((100 - 29.5) * 75, abs=0.01)     # wings 100 points beyond the shorts
+
+
+def test_trailing_stop_on_a_debit_sells_after_the_peak_gives_back():
+    spec = Spec("call", [Leg("BUY", "CE", 0)], entry=(9, 45), exit=(15, 15), trail=0.25)
+    c = chain({(24000, "CE"): {"09:45": 100, "10:30": 160, "11:00": 125, "11:30": 115, "15:15": 300}})
+    r = simulate(c, 24000.0, DAY, spec, lot=75)
+    # paid 100.5; peak value 160; 25 % below the peak = 120 -> 11:30 (115) sells
+    assert r["reason"] == "trail" and r["exit_at"] == "11:30"
