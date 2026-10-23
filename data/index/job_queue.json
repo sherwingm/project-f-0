@@ -1,12 +1,5 @@
 {
- "queue": [
-  {
-   "job": "upstox_expired",
-   "args": "--underlying SENSEX --max-minutes 300",
-   "added": "2026-10-23T20:35:06+05:30",
-   "why": "continues: the last run stopped on its time budget"
-  }
- ],
+ "queue": [],
  "history": [
   {
    "job": "upstox_expired",
@@ -28,6 +21,13 @@
    "added": "2026-10-22T22:55:29+05:30",
    "why": "S3: path band fills the at-the-money strikes missing on 21 of 107 NIFTY expiry days (2026-10-22)",
    "dispatched": "2026-10-23T00:22:34+05:30"
+  },
+  {
+   "job": "upstox_expired",
+   "args": "--underlying SENSEX --max-minutes 300",
+   "added": "2026-10-23T20:35:06+05:30",
+   "why": "continues: the last run stopped on its time budget",
+   "dispatched": "2026-10-24T00:23:15+05:30"
   }
  ]
 }
