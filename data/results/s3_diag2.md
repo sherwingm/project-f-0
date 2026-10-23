@@ -6,21 +6,21 @@ Pre-registered: `strategies/S3_D2_expiry_natural_experiments.md`. r_last = 15:00
 
 | Weekday | Days before → after | Weekday ratio | Control (Mon/Wed/Fri) ratio | DiD |
 |---|---|---|---|---|
-| Thursday (expiry → no expiry) | 190 → 47 | 0.75x | 0.81x | **0.92x** (0.43-1.96) |
+| Thursday (expiry → no expiry) | 190 → 49 | 0.72x | 0.81x | **0.89x** (0.40-1.82) |
 | Tuesday (no expiry → expiry) | 191 → 52 | 1.07x | 0.81x | **1.31x** (0.62-2.90) |
 
 ## 2. BANKNIFTY: Wednesday lost the weekly expiry (weekly Wednesdays 2023-09-06 → 2024-11-13)
 
 | Weekday | Days before → after | Weekday ratio | Control (Mon/Tue/Thu/Fri, no expiry) ratio | DiD |
 |---|---|---|---|---|
-| Wednesday (expiry → no expiry) | 53 → 85 | 0.43x | 1.02x | **0.42x** (0.20-0.92) |
+| Wednesday (expiry → no expiry) | 53 → 91 | 0.41x | 1.04x | **0.39x** (0.18-0.86) |
 
 ## 3. BANKNIFTY: does the last half hour reverse the day's move? (2023-2025)
 
 | Group | Days | Opposite sign | Slope of r_last on r_day | t |
 |---|---|---|---|---|
-| Expiry days | 127 | 55 % | -0.076 | -3.2 |
-| Other days | 609 | 47 % | -0.014 | -1.7 |
-| Expiry days 2023 | 55 | 40 % | 0.039 | 0.9 |
-| Expiry days 2024 | 53 | 72 % | -0.122 | -4.1 |
-| Expiry days 2025 | 19 | 53 % | -0.154 | -1.5 |
+| Expiry days | 111 | 52 % | -0.074 | -2.8 |
+| Other days | 625 | 48 % | -0.015 | -1.8 |
+| Expiry days 2023 | 51 | 37 % | 0.051 | 1.1 |
+| Expiry days 2024 | 48 | 69 % | -0.117 | -3.8 |
+| Expiry days 2025 | 12 | 50 % | -0.226 | -1.5 |
