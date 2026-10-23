@@ -211,7 +211,7 @@ def expiry_day(exps: list[date]) -> tuple[list[str], dict]:
     f = pd.DataFrame(rows)
     out = ["", "## 3b. Expiry-day ATM straddle by time of day (test window; strike fixed at the 09:20 ATM)",
            f"{len(f)} expiry days; {len(miss)} without the ATM strike or spot at 09:20 "
-           f"({', '.join(str(x) for x in miss)}). These are filled by the queued Upstox re-fill (path band).", "",
+           f"({', '.join(str(x) for x in miss)}).", "",
            "| Time | Median value vs 09:20 | Mean | Days below 09:20 |", "|---|---|---|---|"]
     for c in [f"{h:02d}:{m:02d}" for h, m in TIMES]:
         r = f[c] / f["09:20"]
@@ -241,9 +241,10 @@ def main() -> None:
     lines = ["# S3 diagnostics: NIFTY (descriptive, no trades)", "",
              "DECISIONS.md \"S3 · index options\". Spot sections use 2021-10 → latest; option sections use the test "
              "window 2024-10-01 → 2025-09-30 only. Script: `python -m scanner.s3_diagnostics`.", "",
-             "Data caveat: until the Upstox path-band re-fill lands, days whose at-the-money strike is missing are left "
-             "out of section 3. Those are the weeks after a > 5 % move, so section 3 leans towards calm weeks and flatters "
-             "option sellers.", ""]
+             "Data: after the Upstox path-band re-fill (2026-10-22), 107 of 108 NIFTY expiry days have the ATM and "
+             "±4-strike prices at 09:20 / 10:00 / 11:15 / 14:45; 2024-12-26 has one strike only. Before the re-fill the "
+             "missing days were the weeks after a > 5 % move, and the straddle edge read +13 % (t 0.7) instead of the "
+             "figures below.", ""]
     lines += last_half_hour(f)
     lines += pinning(f)
     a, ia = vrp(exps)
