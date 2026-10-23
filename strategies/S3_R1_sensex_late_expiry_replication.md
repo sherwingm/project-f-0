@@ -30,3 +30,21 @@ over the window) and form an independent sample of expiry afternoons. The NIFTY 
 - **The mean effect replicates if** R1a at 5 lots has a net mean > 0 with t ≥ 2, **and** R1b's net mean is < 0.
 - Each cell is also scored on the full S3 gate (2× costs, halves, worst day vs the average month, ≥ 30 trades). A
   replication is a research finding. It does not open any trade; selling is outside "Long options only".
+
+## Amendment 2026-10-23, before any SENSEX option data was read (from the independent review)
+1. **Neighbours:** each cell gets real neighbours, the same time shifts as P6 / P2:
+   - R1a and R1c: 14:30 → 15:25, 14:45 → 15:15, 14:45 → 15:25;
+   - R1b: 14:30 → 15:25, 15:00 → 15:25, 14:45 → 15:15.
+
+   Before this, an empty list made "neighbours positive" pass by default.
+2. **R1b trades event days**, as P2 did (a long straddle wants movement).
+3. **R1c wings ±6 strikes (±600 points, ~0.75 % of SENSEX)** instead of ±4. This matches P7's ±200 on NIFTY (~0.8 %).
+   ±4 would be a narrower, different fly.
+4. **The lot stays fixed at 20** (SENSEX's lot changed in late 2024; the store has no SENSEX lot history). % figures
+   are lot-free apart from the fixed fees. The 2024-10-25 SENSEX expiry is missing from the store, which leaves one day
+   out.
+5. **Overlap:** days that are also NIFTY expiry days are reported separately (e.g. 2024-10-31, 2024-11-14), and the
+   mean effect is shown without them too.
+6. **Placebo (R1d, descriptive): is it an expiry effect?** The R1a trade (sell the ATM straddle of the nearest weekly
+   expiry 14:30 → 15:15, 1 and 5 lots) on SENSEX days that are not a SENSEX expiry day, reported by sessions to expiry
+   (1, 2, 3+). If the late premium is an expiry-day effect, the placebo is near zero or negative.
