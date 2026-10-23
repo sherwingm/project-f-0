@@ -16,11 +16,15 @@ import pandas as pd
 from index_data import load as L
 from scanner.fade_preopen_entry import R, _n, iv
 
+MIN_BARS = 60                                    # a real session has ~375 one-minute bars
+
 
 @lru_cache(maxsize=2)
 def daily(index: str = "NIFTY50") -> pd.DataFrame:
     s = L.spot_1m(date(2021, 10, 1), date(2026, 12, 31), index)
     s["d"] = s["timestamp"].dt.date
+    n = s.groupby("d")["close"].transform("size")
+    s = s[n >= MIN_BARS]                         # drops stray rows such as a one-bar Saturday (2025-08-23)
     d = s.groupby("d").agg(open=("open", "first"), high=("high", "max"), low=("low", "min"), close=("close", "last"))
     d["ema20"] = d["close"].ewm(span=20, adjust=False).mean()
     d["adx14"] = adx(d, 14)

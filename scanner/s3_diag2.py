@@ -12,7 +12,7 @@ import numpy as np
 import pandas as pd
 
 from index_data import load as L
-from scanner.s3_diagnostics import daily_spot
+from scanner.s3_diagnostics import daily_spot, traded_expiries
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / "data" / "results" / "s3_diag2.md"
@@ -20,8 +20,7 @@ START = date(2021, 10, 20)
 
 
 def bhav_expiries(under: str) -> set[date]:
-    parts = [pd.read_parquet(p, columns=["XpryDt"]) for p in sorted((L._store() / "options_daily" / under).glob("*.parquet"))]
-    x = set(pd.to_datetime(pd.concat(parts)["XpryDt"]).dt.date)
+    x = traded_expiries(under)
     try:
         x |= set(L.expiries(under))
     except FileNotFoundError:

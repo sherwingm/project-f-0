@@ -6,6 +6,8 @@ writes data/results/S3_<name>_report.md (or _holdout.md) and the trades CSV.
 """
 from __future__ import annotations
 
+import os
+import subprocess
 from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
@@ -42,6 +44,18 @@ class Pod:
     underlying: str = "NIFTY"
     index: str = "NIFTY50"
     lot: int | None = None                      # fixed lot (None: the bhavcopy lot on the day)
+
+
+def page_commit(page: str) -> str:
+    """The commit that last changed a strategy page. Refuses to run on an uncommitted or edited page, so every report
+    names the rules it ran under (review 2026-10-23: pre-registration was not provable from git)."""
+    if os.getenv("S3_ALLOW_DIRTY_PAGE") == "1":
+        return "unchecked"
+    dirty = subprocess.run(["git", "status", "--porcelain", "--", page], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    h = subprocess.run(["git", "log", "-1", "--format=%h %cI", "--", page], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+    if dirty or not h:
+        raise SystemExit(f"{page} is not committed as it stands: commit and push the page before running")
+    return h
 
 
 def expiry_days(window: tuple, underlying: str = "NIFTY") -> list[date]:
@@ -88,7 +102,7 @@ def write_report(pod: Pod, allt: pd.DataFrame, n_days: int, window: tuple, halve
     pall = allt[(allt["cell"] == pod.label(pod.primary)) & (allt["cost_mult"] == 1.0)]
     unit = "the credit" if pod.measure == "credit" else "the premium paid"
     lines = [f"# S3 {pod.name} · {pod.title}: {'HOLDOUT' if holdout else 'test window'} {window[0]} → {window[1]}", "",
-             f"Pre-registered: `{pod.page}`. Engine `scanner/s3_engine.py`, runner `scanner/s3_pods.py`. Mean, t and halves "
+             f"Pre-registered: `{pod.page}` (page commit {page_commit(pod.page)}). Engine `scanner/s3_engine.py`, runner `scanner/s3_pods.py`. Mean, t and halves "
              f"on net % of {unit}; rupees at 1 lot.", "",
              f"Days {n_days}. Primary cell: {s['n']} trades. Not traded: {int((pall['skip'] != '').sum())} without prices"
              + (f", {int((pall['event'] & (pall['skip'] == '')).sum())} event days" if pod.skip_events else "")

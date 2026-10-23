@@ -166,5 +166,5 @@ def run_day(spec: Spec, day: date, expiry: date, underlying: str = "NIFTY", inde
     s = spot_at(day, *spec.entry, index)
     if s is None:
         return {"day": day, "pod": spec.name, "skip": "no spot at entry"}
-    return simulate(chain_between(underlying, expiry, day, exit_day), s, day, spec, lot or L.lot_on(day, underlying),
+    return simulate(chain_between(underlying, expiry, day, exit_day), s, day, spec, lot or L.lot_on(day, underlying, expiry),
                     underlying, exit_day)

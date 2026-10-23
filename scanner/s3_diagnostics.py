@@ -36,9 +36,16 @@ def vix_band(v: float) -> str:
 
 def expiry_dates() -> list[date]:
     """NIFTY option expiries as traded (bhavcopy XpryDt), 2021 →; plus those with 1-minute files."""
-    parts = [pd.read_parquet(p, columns=["XpryDt"]) for p in sorted((L._store() / "options_daily" / "NIFTY").glob("*.parquet"))]
-    x = set(pd.to_datetime(pd.concat(parts)["XpryDt"]).dt.date)
-    return sorted(x | set(L.expiries("NIFTY")))
+    return sorted(traded_expiries("NIFTY") | set(L.expiries("NIFTY")))
+
+
+def traded_expiries(under: str) -> set[date]:
+    """Bhavcopy expiries that traded on their own date (TradDt == XpryDt). A listed XpryDt later moved for a holiday or
+    a calendar change never traded on that date and is not an expiry day (fixed 2026-10-23)."""
+    parts = [pd.read_parquet(p, columns=["TradDt", "XpryDt"]) for p in sorted((L._store() / "options_daily" / under).glob("*.parquet"))]
+    x = pd.concat(parts)
+    t, e = pd.to_datetime(x["TradDt"]).dt.date, pd.to_datetime(x["XpryDt"]).dt.date
+    return set(e[t == e])
 
 
 def t_clustered(g: pd.DataFrame, col: str = "edge", by: str = "e") -> float:

@@ -76,7 +76,7 @@ def collect(window: tuple) -> tuple[pd.DataFrame, int]:
                     if not (ce and pe):
                         rows.append({**meta, "cell": label(cell), "cost_mult": cm, "skip": f"no strike near delta {dl:g}"})
                         continue
-                    r = simulate(chain, s, day, condor(cell, ce[0], pe[0], atm, cm), L.lot_on(day), "NIFTY", e)
+                    r = simulate(chain, s, day, condor(cell, ce[0], pe[0], atm, cm), L.lot_on(day, "NIFTY", e), "NIFTY", e)
                     rows.append({**r, **meta, "cell": label(cell), "cost_mult": cm, "delta_ce": round(ce[1], 3),
                                  "delta_pe": round(pe[1], 3), "short_ce": ce[0], "short_pe": pe[0]})
     return pd.DataFrame(rows), len(exps)

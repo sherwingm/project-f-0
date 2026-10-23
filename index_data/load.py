@@ -98,25 +98,40 @@ def vix_1m(start, end) -> pd.DataFrame:
     return _monthly("INDIAVIX", start, end)
 
 
-@lru_cache(maxsize=1)
-def _lots(underlying: str) -> pd.Series:
+@lru_cache(maxsize=4)
+def _lot_table(underlying: str) -> pd.DataFrame:
+    """Option (IDO) lot per (trade date, expiry) from the bhavcopy (NewBrdLotQty, known from 2024-07-05)."""
     parts = []
     for p in sorted((_store() / "options_daily" / underlying).glob("*.parquet")):
-        df = pd.read_parquet(p, columns=["TradDt", "NewBrdLotQty"]).dropna()
+        df = pd.read_parquet(p, columns=["TradDt", "XpryDt", "FinInstrmTp", "NewBrdLotQty"]).dropna()
+        df = df[df["FinInstrmTp"] == "IDO"]
         if not df.empty:
-            parts.append(df.drop_duplicates("TradDt"))
-    s = pd.concat(parts).drop_duplicates("TradDt", keep="last")
-    s["TradDt"] = pd.to_datetime(s["TradDt"]).dt.date
-    return s.set_index("TradDt")["NewBrdLotQty"].astype(int).sort_index()
+            parts.append(df.drop_duplicates(["TradDt", "XpryDt"]))
+    t = pd.concat(parts).drop_duplicates(["TradDt", "XpryDt"], keep="last")
+    t["TradDt"] = pd.to_datetime(t["TradDt"]).dt.date
+    t["XpryDt"] = pd.to_datetime(t["XpryDt"]).dt.date
+    t["NewBrdLotQty"] = t["NewBrdLotQty"].astype(int)
+    return t.sort_values(["TradDt", "XpryDt"]).reset_index(drop=True)
 
 
-def lot_on(day, underlying: str = "NIFTY") -> int:
-    """Lot size on a trading day from the bhavcopy (known from 2024-07-05); the last known value on or before it."""
-    s = _lots(underlying)
-    s = s[s.index <= _day(day)]
-    if s.empty:
+def lot_on(day, underlying: str = "NIFTY", expiry=None) -> int:
+    """The option lot of the contract traded: (day, expiry) from the bhavcopy. Without an expiry, or when that pair is
+    missing, the lot of the nearest expiry on the last known trade date on or before `day`. (Fixed 2026-10-23: it used to
+    take the day's first bhavcopy row, the near-month future, so lot-75 weeklies of Jan 2025 ran at 25.)"""
+    t = _lot_table(underlying)
+    d = _day(day)
+    if expiry is not None:
+        m = t[(t["TradDt"] == d) & (t["XpryDt"] == _day(expiry))]
+        if len(m):
+            return int(m["NewBrdLotQty"].iloc[0])
+        m = t[(t["TradDt"] <= d) & (t["XpryDt"] == _day(expiry))]
+        if len(m):
+            return int(m["NewBrdLotQty"].iloc[-1])
+    before = t[t["TradDt"] <= d]
+    if before.empty:
         raise ValueError(f"no lot size known on or before {day}")
-    return int(s.iloc[-1])
+    last = before[before["TradDt"] == before["TradDt"].iloc[-1]]
+    return int(last.sort_values("XpryDt")["NewBrdLotQty"].iloc[0])
 
 
 def at(day, hh: int, mm: int) -> datetime:

@@ -24,7 +24,7 @@ RES = ROOT / "data" / "results"
 TEST = (date(2024, 10, 1), date(2025, 9, 30))
 HALVES = ((date(2024, 10, 1), date(2025, 3, 31)), (date(2025, 4, 1), date(2025, 9, 30)))
 EVENTS = {date(2025, 2, 1), date(2024, 10, 9), date(2024, 12, 6), date(2025, 2, 7), date(2025, 4, 9), date(2025, 6, 6),
-          date(2025, 8, 7), date(2025, 10, 1), date(2025, 12, 5), date(2026, 2, 6)}
+          date(2025, 8, 6), date(2025, 10, 1), date(2025, 12, 5), date(2026, 2, 6)}
 VIX_LO, VIX_HI = 13.0, 20.0
 ENTRIES = [(9, 20), (10, 0), (11, 15)]
 STOPS = [0.20, 0.25, 0.30, 0.35, None]

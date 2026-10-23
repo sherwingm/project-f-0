@@ -67,6 +67,8 @@ def collect(window: tuple) -> tuple[pd.DataFrame, int]:
     daily = G.daily()
     rows, vcache, n = [], {}, 0
     for day, g in sp.groupby("d"):
+        if len(g) < G.MIN_BARS:                 # a stray one-bar day (2025-08-23) is not a session
+            continue
         n += 1
         prev = daily[daily.index < day].iloc[-1]
         trend = "CE" if prev["close"] > prev["ema20"] else "PE"
