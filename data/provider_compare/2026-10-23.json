@@ -554,6 +554,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -11.0
+  },
+  {
+   "at": "12:35:10",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.322,
+   "same_best_bid_pct": 42.9,
+   "same_best_ask_pct": 34.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.3,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -684,23 +698,23 @@
    "at": "10:20"
   },
   {
+   "contract": "SUNPHARMA26OCT1740PE",
+   "gap_pct": 1.322,
+   "kotak": 11.35,
+   "upstox": 11.5,
+   "at": "12:35"
+  },
+  {
    "contract": "KEI26OCT3700PE",
    "gap_pct": 1.206,
    "kotak": 45.6,
    "upstox": 45.05,
    "at": "10:10"
-  },
-  {
-   "contract": "ICICIBANK26OCT1400PE",
-   "gap_pct": 1.167,
-   "kotak": 12.85,
-   "upstox": 13.0,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 39,
-  "contract_quotes": 1363,
+  "rounds": 40,
+  "contract_quotes": 1398,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 34.3,
   "same_best_ask_pct": 31.4,
