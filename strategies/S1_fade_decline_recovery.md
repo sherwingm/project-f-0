@@ -31,3 +31,46 @@ have made on those same trades, from the existing file.
 - "Recovered" does not mean "held profitably": a trade can touch entry and fall again.
 - Groups under 20 trades are marked inconclusive.
 - Live best-bid data (from 26 Oct) will answer the same questions on real bids; until then, these are estimates.
+
+## Addendum (24 Oct 2026, written after the first pass, BEFORE the measures below were computed)
+The first pass (the definitions above) was run first. The user's brief of 24 Oct adds these measures; each is fixed
+here before it is calculated.
+
+**Per trade:** entry price; the actual v12 exit time and reason; the candle high and low over the held minutes
+(09:17 through the exit minute).
+
+**For each decline threshold x (5, 10, 15, 20 %):**
+- *Reached*: the decline minute as defined above.
+- *Sufficient observations for a window of N minutes*: at least N candles left after the decline minute up to 15:19.
+  Each window's denominator is these trades, not all that fell.
+- *Before the exit / after the exit*: a recovery candle at or before the v12 exit minute counts as **before exit**
+  (the trade was still held); one after the exit minute counts as **after exit** (hypothetical, never realised P&L).
+  A decline that happened after the exit is counted separately as a "post-exit decline".
+- *Recovery relative to entry*: a later candle high ≥ entry.
+- *Recovery from the threshold*: a later candle high ≥ the decline low × 1.10 (a 10 % bounce from where it fell),
+  reported next to the recovery to entry.
+- *Later best and worst*: the highest high and lowest low after the decline minute, as % of entry.
+- *Realised net*: v12's net ₹ as booked by the backtest. Any post-exit recovery is shown in a separate column and is
+  never added to it.
+- Split by v12 exit reason (stop / trail) and by half.
+- *Same-candle ambiguity*: trades whose decline and v12 exit fall in the same minute, and those whose held high and
+  low share one candle, are counted and flagged.
+
+**Data-quality exclusions:**
+- Historical backtest exits are all same day by construction (none on the next session). The 8 next-session paper
+  exits of 16–19 Oct are excluded from any paper-trade comparison.
+- The 11 rows with impossible strike distances (strike / stock open of 1.9–9.5, consistent with stock prices adjusted
+  for later splits or bonuses; not verified against an outside source) are excluded from every strike-distance
+  statement.
+
+**Entry-price check (paper trades):** for each of the 23 paper positions, the contract's 1-minute candle of the entry
+minute from Kotak's history (read-only, run on the server with its own key). The fill is labelled:
+- *consistent*: inside the candle's low–high;
+- *outside the traded range*: unconfirmed;
+- *unresolved*: no candle returned.
+ADANIENSOL 23 Oct is also checked against the second-by-second entry probe. A fill inside the range is still not proof
+the ask was there.
+
+**Entry quality:** only entry-time features with valid data (premium; strike distance on the 328 valid rows; sessions
+to expiry; the opening gap). Spread and the stock's price at 09:16 have no historical source and are reported as
+missing.
