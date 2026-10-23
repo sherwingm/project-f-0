@@ -422,9 +422,9 @@ td.mu-g { white-space:nowrap; font-weight:600; }
                    fade_stop: "Fade: \u221220 % stop", fade_trail: "Fade v12: trail (2 % below the peak)" };
   function closedTable(rows, shadows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].concat(shadows ? ["v10 shadow ₹", "Trail shadow ₹"] : []).map(h => `<th rowspan="2">${h}</th>`).join("")}
-      <th class="g" colspan="2">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
-      <tr><th class="g">Max up</th><th>Max dip</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
-        const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough;
+      <th class="g" colspan="4">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
+      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="realised net / net had it sold at the peak bid">Captured</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
+        const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough, pc = c.peak_capture;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && todayIso() <= a.until;
         return `<tr data-why="trade:${esc(c.id)}" tabindex="0"><td><b>${esc(c.symbol)}</b> <small>${num(c.strike, 0)} ${c.instrument} · ${day(c.expiry)}</small> ${c.rule ? armTags(c.rule.arms) + ` <small>${c.rule.entry_mode === "fade" ? "fade" : c.rule.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td><td>${when(c.opened_at)}</td><td>${when(c.closed_at)}</td>
@@ -929,6 +929,11 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             [p.closed_at ? "Net" : "If sold now (MTM)", p.closed_at ? `${srs(p.net_pnl, 2)} (${pct(p.return_pct)})` : srs(p.unrealised, 2), dir(p.closed_at ? p.net_pnl : p.unrealised)],
             ["Max up while held", hp ? `${pct(chg(hp.price, e))} · ${when(hp.at)}` : null, dir(hp && chg(hp.price, e))],
             ["Max dip while held", ht ? `${pct(chg(ht.price, e))} · ${when(ht.at)}` : null, dir(ht && chg(ht.price, e))],
+            p.peak_capture ? ["Highest bid while held (sellable)", `${rs(p.peak_capture.peak_bid)} · ${pct(p.peak_capture.peak_return_pct)} · ${when(p.peak_capture.peak_at)}`, dir(p.peak_capture.peak_return_pct)] : (p.held_bid && p.held_bid.peak ? ["Highest bid so far (sellable)", `${rs(p.held_bid.peak.price)} · ${pct(chg(p.held_bid.peak.price, e))} · ${when(p.held_bid.peak.at)}`, dir(chg(p.held_bid.peak.price, e))] : null),
+            p.peak_capture ? ["Lowest bid while held", `${rs(p.peak_capture.low_bid)} · ${pct(p.peak_capture.mae_pct)} · ${when(p.peak_capture.low_at)}`, dir(p.peak_capture.mae_pct)] : null,
+            p.peak_capture ? ["Net if sold at the peak bid", srs(p.peak_capture.peak_net, 2), dir(p.peak_capture.peak_net)] : null,
+            p.peak_capture ? ["Captured of the peak", `${p.peak_capture.capture_pct != null ? pct(p.peak_capture.capture_pct) : "N/A (the peak never paid after charges)"} · left ${srs(p.peak_capture.giveback_rs, 2)} · price ${p.peak_capture.peak_to_exit_pct}% below the peak at the exit`] : null,
+            p.entry_quote ? ["Entry quote", `bid ${rs(p.entry_quote.bid)} / ask ${rs(p.entry_quote.ask)} · spread ${p.entry_quote.spread_pct ?? "—"} %`] : null,
             ["Stock at entry", se ? rs(se) : null], ["Strike distance at entry", otm != null ? `${otm.toFixed(1)} % ${otm >= 0 ? "out of" : "in"} the money` : null],
             ["Stock at exit", sx ? rs(sx) : null], fade && fadeMove != null ? ["The stock's fade (entry → exit)", pct(fadeMove), dir(fadeMove)] : null,
             ["Lot", `${p.lots} × ${p.lot_size} · ${rs(e * p.qty, 0)}`], ["Expiry", day(p.expiry)],

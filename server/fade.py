@@ -489,6 +489,10 @@ class FadeTrader:
                 return 0
             many = getattr(self.ledger.quotes, "get_many", None)
             self._cache = many(list(cs.values())) if many else {k: self.ledger.quotes.get(c) for k, c in cs.items()}
+            from server.peak import SOURCE_FAST
+            for pos in self.ledger.state["positions"]:            # each second's bid into the while-held peak
+                if pos["tradingsymbol"] in cs:
+                    self.ledger.observe(pos, self._cache.get(pos["tradingsymbol"]), now, SOURCE_FAST)
             try:
                 self._track_trail(now)
                 self._track_v12(now)
@@ -643,7 +647,7 @@ class FadeTrader:
                     self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
-            self._buy(st, sig, key, today, now, spot, k, px, lot)
+            self._buy(st, sig, key, today, now, spot, k, px, lot, quote=book.get(k))
 
     def _sub2(self, st, sig, key, today, now, spot, book) -> bool:
         """The below-Rs 2 rule: buy now if sub2_pick finds a contract; the reason is kept when it does not."""
@@ -653,10 +657,11 @@ class FadeTrader:
             return False
         k, px, lot, lots, lc = p
         self._buy(st, sig, key, today, now, spot, k, px, lot, lots=lots,
-                  sub2={"listing_close": lc, "lots": lots, "rule": "strategies/S1_v12_sub2_listing.md"})
+                  sub2={"listing_close": lc, "lots": lots, "rule": "strategies/S1_v12_sub2_listing.md"}, quote=book.get(k))
         return True
 
-    def _buy(self, st, sig, key, today, now, spot, k, px, lot, lots: int = 1, sub2: dict | None = None) -> None:
+    def _buy(self, st, sig, key, today, now, spot, k, px, lot, lots: int = 1, sub2: dict | None = None,
+             quote: dict | None = None) -> None:
         done = st.setdefault("fade", {})
         rule = {"strategy": "fade", "version": "v12", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
                 "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
@@ -671,7 +676,7 @@ class FadeTrader:
                 "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
         if sub2:
             rule["sub2"] = sub2
-        pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule, lots=lots)
+        pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule, lots=lots, quote=quote)
         done[key] = "bought" if not sub2 else "bought (below Rs 2, listing Rs 2-7)"
         self._waiting(st, key, now, None)
         for r in st.get("fade_shadow_entries") or []:

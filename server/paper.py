@@ -41,6 +41,7 @@ from typing import Callable
 
 from scanner.binomial import hits_needed
 from server import charges as ch
+from server import peak as pk
 from server import sessions
 from server.config import settings
 from server.fills import NoLiquidity, PaperQueue, fill
@@ -154,6 +155,7 @@ class PaperLedger:
         self.orders_path = self.dir / "paper_orders.jsonl"
         self.refusals_path = self.dir / "refusals.jsonl"
         self.queue = PaperQueue(self.dir / "paper_queue.jsonl")
+        self.obs = pk.ObsLog(self.dir)                        # bid/ask changes of open trades (server/peak.py)
         self.quotes = quotes or QuoteSource(None)
         self.tick = tick or settings.fill_tick
         self.rules = rules
@@ -403,8 +405,12 @@ class PaperLedger:
                        "max_loss_at_entry": round(ml * frac, 2) if ml else None,
                        "r_multiple": round(net / (ml * frac), 3) if ml else None,
                        "held_peak": pos.get("peak"), "held_trough": pos.get("trough"),
+                       "held_bid": pos.get("held_bid"), "entry_quote": pos.get("entry_quote"),
                        "after": {"until": pos.get("t2_date") or pos["expiry"], "peak": None, "trough": None,
                                  "last": None}})
+        if self._bid_tracked(pos) and qty >= pos["qty"]:
+            closed["peak_capture"] = pk.capture(pos["entry"]["price"], qty, pos["instrument"], entry_part,
+                                                pos.get("held_bid"), f["price"], net)
         self.state["closed"].append(closed)
         day = self._ensure_day(now)
         day["realised"] = round(day.get("realised", 0.0) + net, 2)
@@ -449,7 +455,8 @@ class PaperLedger:
             self._save()
 
     # ------------------------------------------------------------ rule trades (server/rules.py)
-    def open_rule(self, contract: dict, price: float, now: datetime, rule: dict, lots: int = 1) -> dict:
+    def open_rule(self, contract: dict, price: float, now: datetime, rule: dict, lots: int = 1,
+                  quote: dict | None = None) -> dict:
         """A rule trade: `lots` lots (default one) bought at `price` (the rule's fill), outside the manual order limits."""
         with self.lock:
             self._ensure_day(now)
@@ -463,6 +470,13 @@ class PaperLedger:
             pos = self._open(req, {"quantity": qty, "lot_size": int(contract["lot_size"]), "tradingsymbol": contract["tradingsymbol"]}, None,
                              review, f, {"class": "rule"}, now)
             pos["rule"] = {**rule, "best": price, "stall": 0, "checked": None}
+            eq = pk.entry_quote(quote, now)
+            if eq:
+                pos["entry_quote"] = eq                       # the bid / ask / spread it was bought on
+                try:
+                    self.obs.add(pos, quote, now, "entry quote")   # recorded; the held peak starts after it
+                except OSError as exc:
+                    log.warning("observation log: %s", exc)
             track(pos, price, now)
             self._log_order({"order_id": self._id("RULE"), "placed_at": now.isoformat(timespec="seconds"), "paper": True,
                              "auto": "rule " + rule["entry_mode"], "symbol": contract["symbol"],
@@ -477,6 +491,8 @@ class PaperLedger:
         """Close a whole position at `price` (a rule exit, or the results page's Close at the best bid)."""
         with self.lock:
             pos = self._position_by_id(pid)
+            if self._bid_tracked(pos):
+                pk.observe(pos, price, now, pk.SOURCE_EXIT)   # the exit-triggering quote counts as held
             f = {"price": price, "levels": [], "mode": reason, "mid": None, "slippage_vs_mid": None, "overflow_qty": 0}
             closed = self._close(pos, pos["qty"], f, "rule" if pos.get("rule") else None, now, reason)
             if pos.get("rule"):
@@ -519,6 +535,12 @@ class PaperLedger:
                 continue
             a = c["after"]
             at = now.isoformat(timespec="seconds")
+            bid = (((q or {}).get("depth") or {}).get("bid") or [[None]])[0][0]
+            if bid:                                           # the sellable after-sale peak, apart from the LTP one
+                if a.get("peak_bid") is None or bid > a["peak_bid"]["price"]:
+                    a["peak_bid"] = {"price": bid, "at": at}
+                if a.get("low_bid") is None or bid < a["low_bid"]["price"]:
+                    a["low_bid"] = {"price": bid, "at": at}
             a["last"] = {"price": px, "at": at}
             if a["peak"] is None or px > a["peak"]["price"]:
                 a["peak"] = {"price": px, "at": at}
@@ -571,6 +593,8 @@ class PaperLedger:
         except NoLiquidity as exc:
             log.warning("%s exit of %s waits for the next poll: %s", reason, pos["tradingsymbol"], exc)
             return False
+        if self._bid_tracked(pos):
+            pk.observe(pos, ((quote.get("depth") or {}).get("bid") or [[None]])[0][0], now, pk.SOURCE_EXIT)
         closed = self._close(pos, pos["qty"], f, liq["class"], now, reason)
         self._log_order({"order_id": self._id("PAPER"), "placed_at": now.isoformat(timespec="seconds"), "paper": True,
                          "symbol": pos["symbol"], "instrument": pos["instrument"], "expiry": pos["expiry"], "strike": pos["strike"],
@@ -580,6 +604,20 @@ class PaperLedger:
                          "liquidity_class": liq["class"], "position_id": pos["id"],
                          "net_pnl": closed["net_pnl"], "charges": closed["exit_charges"]})
         return True
+
+    @staticmethod
+    def _bid_tracked(pos: dict) -> bool:
+        return is_option(pos["instrument"]) and pos["side"] == "BUY"
+
+    def observe(self, pos: dict, quote: dict | None, now: datetime, source: str) -> None:
+        """A quote of an open long option: its best bid into the while-held peak / low, and the bid/ask record."""
+        if not quote or not self._bid_tracked(pos):
+            return
+        pk.observe(pos, ((quote.get("depth") or {}).get("bid") or [[None]])[0][0], now, source)
+        try:
+            self.obs.add(pos, quote, now, source)
+        except OSError as exc:
+            log.warning("observation log: %s", exc)
 
     def _close_at_mark(self, pos: dict, now: datetime, reason: str) -> None:
         px = (pos.get("mark") or {}).get("price")
@@ -598,6 +636,7 @@ class PaperLedger:
             side_px = 0.0 if is_option(pos["instrument"]) and pos["side"] == "BUY" else prev
         pos["mark"] = {"price": side_px, "bid": bid, "ask": ask, "ltp": quote.get("last_price"),
                        "at": now.isoformat(timespec="seconds"), "stale": stale}
+        self.observe(pos, quote, now, pk.SOURCE_POLL)
         track(pos, quote.get("last_price") or (None if stale else side_px), now)
         self._revalue(pos)
 

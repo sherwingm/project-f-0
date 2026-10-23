@@ -198,12 +198,13 @@ class RuleTrader:
                                                                 "arms": sig["arms"], "reason": why}]
         log.info("rule %s entry %s %s refused: %s", mode, today, sig["symbol"], why)
 
-    def _buy(self, sig: dict, mode: str, strike: float, price: float, lot: int, now: datetime) -> None:
+    def _buy(self, sig: dict, mode: str, strike: float, price: float, lot: int, now: datetime,
+             quote: dict | None = None) -> None:
         contract = {"symbol": sig["symbol"], "instrument": "CE", "expiry": sig["expiry"], "strike": strike,
                     "tradingsymbol": tradingsymbol(sig["symbol"], "CE", sig["expiry"], strike), "lot_size": lot}
         rule = {"entry_mode": mode, "arms": sig["arms"], "signal_date": sig["signal_date"], "beat": sig.get("beat"),
                 "move": sig.get("move")}
-        pos = self.ledger.open_rule(contract, price, now, rule)
+        pos = self.ledger.open_rule(contract, price, now, rule, quote=quote)
         log.info("rule %s entry: %s at %.2f x %d (arms %s)", mode, pos["tradingsymbol"], price, lot, ",".join(sig["arms"]))
 
     def on_poll(self, now: datetime) -> None:
@@ -246,7 +247,7 @@ class RuleTrader:
                     self._waiting(st, key, now, sig["arms"], w)
                     continue                                     # try again next poll, until 15:20
                 k, px, lot = w
-                self._buy(sig, "open", k, px, lot, now)
+                self._buy(sig, "open", k, px, lot, now, quote=book.get(k))
                 with self.ledger.lock:                           # saved now: a restart must not buy it again
                     st["open"][key] = "bought"
                     self._waiting(st, key, now, sig["arms"], None)
@@ -266,7 +267,7 @@ class RuleTrader:
                     self._refuse(st, sig, "close", today, w)
                     continue
                 k, px, lot, _ = w
-                self._buy(sig, "close", k, px, lot, now)
+                self._buy(sig, "close", k, px, lot, now, quote=book.get(k))
                 st["close"][key] = "bought"
             self.check_exits(now)
             with self.ledger.lock:
