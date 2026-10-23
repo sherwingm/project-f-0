@@ -226,3 +226,23 @@ confirmed 10 issues; none turns a FAIL into a PASS. Fixed in 32bd807c:
 
 All S3 pods are re-run with these fixes, and the S3 pods table is updated with the corrected numbers.
 
+### S3 pods re-run with the review fixes (2026-10-23; supersedes the numbers in the rows above)
+Fixes 32bd807c: the 2025-08-06 event date, the lot of the traded contract, stray days dropped. All verdicts unchanged.
+
+| Pod | Trades | Win rate | Net per trade | t | Other | Verdict |
+|---|---|---|---|---|---|---|
+| P1 fly 11:15 30 % stop | 37 | 41 % | −4.0 % of credit | −0.56 | −₹16,330 total | FAIL |
+| P2 long straddle 14:45 → 15:25 | 52 | 29 % | −34.8 % of premium | −3.08 | the only independent primary with \|t\| ≥ 2 | FAIL |
+| P2s short fly 14:45 → 15:25 30 % stop | 51 | 49 % | −7.9 % | −0.92 | stop hit 43 % | FAIL |
+| P3 condor T-2 | 49 | 73 % | −12.2 % | −1.09 | halves −30.8 / +4.0 % | FAIL |
+| P4 ORB long | 59 | 29 % | −3.6 % of premium | −0.91 | 247 sessions | FAIL |
+| P6 naked straddle 14:30 → 15:15 | 51 | 71 % | +15.2 % | 1.77 | halves +31.0 / −0.0 %; worst −₹7,107 vs avg month +₹449 | FAIL (t, halves, worst day) |
+| P7 fly ±4 14:30 → 15:15, 5 lots | 51 | 69 % | +14.8 % | 1.59 | halves +33.0 / −2.8 %; worst −₹35,747 vs +₹672 | FAIL (t, halves, worst day) |
+
+Descriptive after the fixes:
+- **D3 placebo:** the P6 trade on test-window non-expiry days: 186 trades, −1.7 % of the credit, t −3.31. The late
+  premium is an expiry-day effect, and outside expiry days selling it loses.
+- **Diagnostics:** last-half-hour variance on expiry days is 1.33x.
+- **D2:** the BANKNIFTY lost-Wednesday DiD is 0.39x (0.18-0.86). The BANKNIFTY expiry reversal is t −2.8 on the real
+  expiry dates (111 days).
+
