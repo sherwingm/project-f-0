@@ -340,6 +340,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -26.0
+  },
+  {
+   "at": "11:20:08",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.125,
+   "same_best_bid_pct": 31.4,
+   "same_best_ask_pct": 31.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -386,6 +400,13 @@
    "at": "10:15"
   },
   {
+   "contract": "BHEL26OCT380PE",
+   "gap_pct": 3.125,
+   "kotak": 4.8,
+   "upstox": 4.95,
+   "at": "11:20"
+  },
+  {
    "contract": "TECHM26OCT1820CE",
    "gap_pct": 2.473,
    "kotak": 14.15,
@@ -398,6 +419,13 @@
    "kotak": 75.2,
    "upstox": 73.4,
    "at": "10:55"
+  },
+  {
+   "contract": "BHARTIARTL26OCT1880PE",
+   "gap_pct": 2.222,
+   "kotak": 11.25,
+   "upstox": 11.0,
+   "at": "11:20"
   },
   {
    "contract": "TECHM26OCT1820CE",
@@ -468,30 +496,16 @@
    "kotak": 1.0,
    "upstox": 1.01,
    "at": "10:10"
-  },
-  {
-   "contract": "INDHOTEL26OCT780CE",
-   "gap_pct": 0.769,
-   "kotak": 6.5,
-   "upstox": 6.55,
-   "at": "10:05"
-  },
-  {
-   "contract": "INDHOTEL26OCT790CE",
-   "gap_pct": 0.752,
-   "kotak": 6.65,
-   "upstox": 6.7,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 839,
+  "rounds": 25,
+  "contract_quotes": 874,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 28.6,
-  "same_best_ask_pct": 26.1,
+  "same_best_ask_pct": 26.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -13.5
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
