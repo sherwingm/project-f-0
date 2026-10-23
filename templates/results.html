@@ -457,6 +457,47 @@ td.mu-g { white-space:nowrap; font-weight:600; }
       return panel("Scoreboard", `<div class="sb">${sbCard("A", "every results beat", ["open", "close", null])}${sbCard("B", "results beat in a strong sector", ["open", "close", null])}${sbCard("F", "results-day fade", ["fade"])}</div>`,
         { sub: "rule trades only, 1 lot each, net of charges · a signal in both arms counts in both" });
     },
+    // the session's plan in one place: every rule trade the server will try to buy today, how the strike is chosen,
+    // how it exits, and (from /api/paper/rules) whether it has been bought, refused or is still being tried
+    todayPlan() {
+      const today = todayIso(), ru = (P.rules || {}).rules || {}, k = sym => `${today}:${sym}`;
+      const boughtToday = (sym, arm) => P.positions.concat(P.trades).filter(x => x.symbol === sym && String(x.opened_at || "").slice(0, 10) === today
+        && (!arm || ((x.rule || {}).arms || []).includes(arm)));
+      const leg = x => `<b>${num(x.strike, 0)} ${x.instrument}</b> at ${rs(x.entry.price)} <small>${x.lots} lot · ${rs(x.entry.price * x.qty, 0)}</small>`;
+      const state = (book, waitBook, sym, mode) => {
+        const st = (book || {})[k(sym)], w = (waitBook || {})[k(sym)];
+        if (st === "bought") return `<span class="chip in">bought</span>`;
+        if (st === "refused") { const r = (ru.refused || []).filter(x => x.date === today && x.symbol === sym && (!mode || x.mode === mode)).pop();
+          return `<span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`; }
+        if (w) return `<span class="chip">trying</span> <small>${esc(w.reason)} · ${esc(String(w.at).slice(11, 16))}</small>`;
+        return `<span class="chip">waiting</span>`;
+      };
+      const rows = [];
+      if (FD && FD.session === today) (FD.signals || []).forEach(s => {
+        const got = boughtToday(s.symbol, "F");
+        rows.push(`<tr data-why="sig:${esc(s.symbol)}" tabindex="0"><td><b>${esc(s.symbol)}</b> ${armTags(["F"])}</td>
+          <td><span class="tag ${s.side === "PE" ? "pe" : "ce"}">${s.side === "PE" ? "PUT" : "CALL"}</span></td>
+          <td class="l">${esc(s.why || "")}<br><small>${s.side === "PE" ? "strong numbers: bet the jump fades" : "weak numbers: bet the drop recovers"} · stock ${rs(s.spot)} · expiry ${day(s.expiry)}</small></td>
+          <td class="l">${got.length ? got.map(leg).join("<br>") : `picked live from 09:15<br><small>first strike from the price outward with a lot of ₹600–8,000 and a premium of ₹2 or more</small>`}</td>
+          <td class="l"><small>−20 % stop · trail from +10 %, sells 2 % below the peak bid · else 15:20 today</small></td>
+          <td class="l">${got.length ? `<span class="chip in">bought</span>` : state(ru.fade, ru.fade_wait, s.symbol, "fade")}</td></tr>`);
+      });
+      (FW && FW.arms ? Object.entries(FW.arms) : []).forEach(([arm, st]) => (st.pending || []).forEach(p => {
+        if (rows.some(r => r.includes(`data-plan="${p.symbol}"`))) return;            // one row for a stock in both arms
+        const arms = Object.entries(FW.arms).filter(([, s2]) => (s2.pending || []).some(q => q.symbol === p.symbol)).map(([a]) => a);
+        const got = boughtToday(p.symbol, arm);
+        rows.push(`<tr data-plan="${esc(p.symbol)}"><td><b>${esc(p.symbol)}</b> ${armTags(arms)}</td><td><span class="tag ce">CALL</span></td>
+          <td class="l">results beat ${pct(p.beat)} vs its sector, day move ${pct(p.move)}<br><small>stock ${rs(p.spot)} · expiry ${day(p.expiry)}</small></td>
+          <td class="l">${got.length ? got.map(leg).join("<br>") : p.open_strike ? `09:15: <b>${num(p.open_strike, 0)} CE</b> near ${rs(p.open_ref)} <small>(${rs(p.open_ref * (p.open_lot || 0), 0)} a lot, last close)</small><br><small>and a second lot at 15:20, strike picked then</small>` : "picked at 09:15 and 15:20"}</td>
+          <td class="l"><small>50 % stop at a close · 5 sessions without a new closing high · T-1</small></td>
+          <td class="l">open ${state(ru.open, ru.open_wait, p.symbol, "open")}<br>close ${state(ru.close, null, p.symbol, "close")}</td></tr>`);
+      }));
+      const stale = FD && FD.session && FD.session !== today ? `<p class="note">The fade list on the server is for ${day(FD.session)}, not today: tonight's build has not run yet.</p>` : "";
+      return panel(`Today's trades · ${day(today)}`, (rows.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buys</th><th class="l">Why</th><th class="l">Strike and price</th><th class="l">Exit</th><th class="l">Now</th></tr></thead><tbody>${rows.join("")}</tbody></table></div>`
+        : empty("No rule trades for today: no strong or weak results and no results beats yesterday.")) + stale
+        + `<p class="note">Paper only, 1 lot each. Fade strikes are chosen at the live ask when the market opens, so the strike shown here appears once bought. Arm A / B strikes come from last night's closing prices; the 09:15 order uses the live price.${FD && (FD.ban || []).length ? ` In the F&amp;O ban today (not traded): ${FD.ban.map(esc).join(", ")}.` : ""}</p>`,
+        { sub: "what the paper account will try to buy this session", rt: FD && FD.made_at ? "list made " + when(FD.made_at) : "" });
+    },
     // how high every live trade went above its entry: the best price it reached, against what was booked
     maxUp(arm) {
       if (paperWait("")) return "";
@@ -799,7 +840,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   const WORKSPACES = {
     paper: { tab: "Paper", color: "var(--arm-p)", title: "Paper account",
              desc: "Every live paper trade across the arms, marked at each live poll. Max up / max dip are the highest and lowest traded price since the entry.",
-             panels: () => [PANELS.paperTiles(), PANELS.maxUp(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
+             panels: () => [PANELS.todayPlan(), PANELS.paperTiles(), PANELS.maxUp(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
     arma:  { tab: "Arm A", color: "var(--arm-a)", title: "Arm A · every results beat",
              desc: "Forward paper test: a call after every results beat, bought at the session's average price, marked at each close. Exits: 50% stop, 5 sessions without a new closing high, T-1. These rules failed the 2021-24 backtest; this tests them on new days.",
              panels: () => forwardPanels("A") },
