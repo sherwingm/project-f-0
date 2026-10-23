@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 424556.1399999999,
+ "cash": 410931.5799999999,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -45,17 +45,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 80.7,
-    "bid": 80.7,
-    "ask": 81.8,
-    "ltp": 82.3,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 75.8,
+    "bid": 75.8,
+    "ask": 77.85,
+    "ltp": 76.0,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": 2856.25,
-   "exit_charges_est": 42.97,
-   "unrealised": 2786.42,
-   "liquidation_value": 10044.53,
+   "unrealised_gross": 2243.75,
+   "exit_charges_est": 41.8,
+   "unrealised": 2175.09,
+   "liquidation_value": 9433.2,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -120,17 +120,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 80.7,
-    "bid": 80.7,
-    "ask": 81.8,
-    "ltp": 82.3,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 75.8,
+    "bid": 75.8,
+    "ask": 77.85,
+    "ltp": 76.0,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": 2686.25,
-   "exit_charges_est": 42.97,
-   "unrealised": 2616.35,
-   "liquidation_value": 10044.53,
+   "unrealised_gross": 2073.75,
+   "exit_charges_est": 41.8,
+   "unrealised": 2005.02,
+   "liquidation_value": 9433.2,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -195,17 +195,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 8.7,
-    "bid": 8.7,
-    "ask": 8.9,
-    "ltp": 8.85,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 32.95,
+    "bid": 32.95,
+    "ask": 34.35,
+    "ltp": 32.9,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": -1800.0,
-   "exit_charges_est": 33.62,
-   "unrealised": -1860.38,
-   "liquidation_value": 5186.38,
+   "unrealised_gross": 12750.0,
+   "exit_charges_est": 61.57,
+   "unrealised": 12661.67,
+   "liquidation_value": 19708.43,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -221,8 +221,8 @@
     "last_close": 7.0
    },
    "peak": {
-    "price": 26.0,
-    "at": "2026-10-22T09:20:01+05:30"
+    "price": 34.75,
+    "at": "2026-10-23T09:15:03+05:30"
    },
    "trough": {
     "price": 6.1,
@@ -271,17 +271,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 5.99,
-    "bid": 5.99,
-    "ask": 6.2,
-    "ltp": 6.1,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 6.05,
+    "bid": 6.05,
+    "ask": 6.27,
+    "ltp": 6.31,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": 10290.0,
-   "exit_charges_est": 58.11,
-   "unrealised": 10204.83,
-   "liquidation_value": 17911.89,
+   "unrealised_gross": 10470.0,
+   "exit_charges_est": 58.46,
+   "unrealised": 10384.48,
+   "liquidation_value": 18091.54,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -347,17 +347,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 8.7,
-    "bid": 8.7,
-    "ask": 8.9,
-    "ltp": 8.85,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 32.95,
+    "bid": 32.95,
+    "ask": 34.35,
+    "ltp": 32.9,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": -2652.0,
-   "exit_charges_est": 33.62,
-   "unrealised": -2712.77,
-   "liquidation_value": 5186.38,
+   "unrealised_gross": 11898.0,
+   "exit_charges_est": 61.57,
+   "unrealised": 11809.28,
+   "liquidation_value": 19708.43,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -373,8 +373,8 @@
     "last_close": 7.0
    },
    "peak": {
-    "price": 26.0,
-    "at": "2026-10-22T09:20:01+05:30"
+    "price": 34.75,
+    "at": "2026-10-23T09:15:03+05:30"
    },
    "trough": {
     "price": 6.1,
@@ -423,17 +423,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 5.99,
-    "bid": 5.99,
-    "ask": 6.2,
-    "ltp": 6.1,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 6.05,
+    "bid": 6.05,
+    "ask": 6.27,
+    "ltp": 6.31,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": 10980.0,
-   "exit_charges_est": 58.11,
-   "unrealised": 10895.14,
-   "liquidation_value": 17911.89,
+   "unrealised_gross": 11160.0,
+   "exit_charges_est": 58.46,
+   "unrealised": 11074.79,
+   "liquidation_value": 18091.54,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -499,17 +499,17 @@
    "t2_date": "2026-10-23",
    "stop_triggered_at": null,
    "mark": {
-    "price": 2.6,
-    "bid": 2.6,
-    "ask": 2.7,
-    "ltp": 2.65,
-    "at": "2026-10-22T15:29:11+05:30",
+    "price": 3.1,
+    "bid": 3.1,
+    "ask": 3.65,
+    "ltp": 2.85,
+    "at": "2026-10-23T09:15:07+05:30",
     "stale": false
    },
-   "unrealised_gross": 600.0,
-   "exit_charges_est": 36.09,
-   "unrealised": 537.64,
-   "liquidation_value": 6463.91,
+   "unrealised_gross": 1850.0,
+   "exit_charges_est": 38.48,
+   "unrealised": 1785.25,
+   "liquidation_value": 7711.52,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -530,6 +530,194 @@
    "trough": {
     "price": 1.35,
     "at": "2026-10-22T09:37:48+05:30"
+   }
+  },
+  {
+   "id": "P-1792727100352-1",
+   "symbol": "ADANIENSOL",
+   "instrument": "PE",
+   "expiry": "2026-10-27",
+   "strike": 1260.0,
+   "tradingsymbol": "ADANIENSOL26OCT1260PE",
+   "lot_size": 675,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 675,
+   "entry": {
+    "price": 10.55,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 675,
+    "price": 10.55,
+    "value": 7121.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.53,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.06,
+    "total": 26.81
+   },
+   "entry_charges_open": 26.81,
+   "stop": null,
+   "max_loss_at_entry": 7148.06,
+   "margin": 0.0,
+   "opened_at": "2026-10-23T09:15:00+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": {
+    "price": 9.95,
+    "bid": 9.95,
+    "ask": 11.6,
+    "ltp": 6.0,
+    "at": "2026-10-23T09:15:07+05:30",
+    "stale": false
+   },
+   "unrealised_gross": -405.0,
+   "exit_charges_est": 36.5,
+   "unrealised": -468.31,
+   "liquidation_value": 6679.75,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-23",
+    "filed": "2026-10-22",
+    "why": "net profit YoY +144.8 %, QoQ +10.3 %; revenue YoY +52.8 %",
+    "spot_at_entry": 1295.39,
+    "np_yoy": 144.8,
+    "np_qoq": 10.3,
+    "rev_yoy": 52.8,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 21.1,
+     "hit_at": null,
+     "max_bid": 4.55
+    },
+    "stop": {
+     "level": 8.44,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 11.605,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 11.605,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": true,
+     "D": -1.512,
+     "D_raw": -1.476,
+     "tagged": false
+    },
+    "best": 10.55,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 10.55,
+    "at": "2026-10-23T09:15:00+05:30"
+   },
+   "trough": {
+    "price": 6.0,
+    "at": "2026-10-23T09:15:03+05:30"
+   }
+  },
+  {
+   "id": "P-1792727105443-3",
+   "symbol": "INDHOTEL",
+   "instrument": "CE",
+   "expiry": "2026-10-27",
+   "strike": 790.0,
+   "tradingsymbol": "INDHOTEL26OCT790CE",
+   "lot_size": 1000,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1000,
+   "entry": {
+    "price": 6.45,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_open",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 1000,
+    "price": 6.45,
+    "value": 6450.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.29,
+    "sebi": 0.01,
+    "stamp": 0.19,
+    "gst": 4.01,
+    "total": 26.5
+   },
+   "entry_charges_open": 26.5,
+   "stop": null,
+   "max_loss_at_entry": 6476.5,
+   "margin": 0.0,
+   "opened_at": "2026-10-23T09:15:05+05:30",
+   "t2_date": "2026-10-23",
+   "stop_triggered_at": null,
+   "mark": {
+    "price": 6.35,
+    "bid": 6.35,
+    "ask": 6.65,
+    "ltp": 6.8,
+    "at": "2026-10-23T09:15:07+05:30",
+    "stale": false
+   },
+   "unrealised_gross": -100.0,
+   "exit_charges_est": 35.81,
+   "unrealised": -162.31,
+   "liquidation_value": 6314.19,
+   "rule": {
+    "entry_mode": "open",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-10-22",
+    "beat": 4.54,
+    "move": 3.89,
+    "best": 6.45,
+    "stall": 0,
+    "checked": null
+   },
+   "peak": {
+    "price": 6.8,
+    "at": "2026-10-23T09:15:07+05:30"
+   },
+   "trough": {
+    "price": 6.4,
+    "at": "2026-10-23T09:15:06+05:30"
    }
   }
  ],
@@ -799,8 +987,8 @@
      "at": "2026-10-21T09:44:23+05:30"
     },
     "last": {
-     "price": 1.15,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 1.0,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -894,8 +1082,8 @@
      "at": "2026-10-21T09:15:41+05:30"
     },
     "last": {
-     "price": 103.4,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 117.55,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -989,8 +1177,8 @@
      "at": "2026-10-22T15:29:11+05:30"
     },
     "last": {
-     "price": 28.15,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 60.25,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1084,8 +1272,8 @@
      "at": "2026-10-22T15:29:11+05:30"
     },
     "last": {
-     "price": 0.65,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 0.7,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1180,7 +1368,7 @@
     },
     "last": {
      "price": 9.05,
-     "at": "2026-10-22T15:29:11+05:30"
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1275,7 +1463,7 @@
     },
     "last": {
      "price": 0.39,
-     "at": "2026-10-22T15:29:11+05:30"
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1369,8 +1557,8 @@
      "at": "2026-10-19T09:55:04+05:30"
     },
     "last": {
-     "price": 3.6,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 4.25,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1464,8 +1652,8 @@
      "at": "2026-10-22T09:20:01+05:30"
     },
     "last": {
-     "price": 0.1,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 0.15,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1563,8 +1751,8 @@
      "at": "2026-10-21T09:27:38+05:30"
     },
     "last": {
-     "price": 27.25,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 27.6,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1685,8 +1873,8 @@
      "at": "2026-10-22T15:29:11+05:30"
     },
     "last": {
-     "price": 3.2,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 3.5,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1807,8 +1995,8 @@
      "at": "2026-10-22T09:25:12+05:30"
     },
     "last": {
-     "price": 1.3,
-     "at": "2026-10-22T15:29:11+05:30"
+     "price": 1.4,
+     "at": "2026-10-23T09:15:07+05:30"
     }
    },
    "rule": {
@@ -1856,9 +2044,14 @@
    "start_equity": 500604.32,
    "end_equity": 497305.65,
    "realised": 0.0
+  },
+  "2026-10-23": {
+   "start_equity": 497305.65,
+   "end_equity": 526103.38,
+   "realised": 0.0
   }
  },
- "peak_equity": 530796.23,
+ "peak_equity": 540064.14,
  "created_at": "2026-10-13T22:10:45+05:30",
  "archive": [
   {
@@ -2049,10 +2242,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-22T15:29:16+05:30",
- "halts": {
-  "day": "2026-10-22"
- },
+ "saved_at": "2026-10-23T09:15:07+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -2061,7 +2251,8 @@
    "2026-10-19:WIPRO": "bought",
    "2026-10-19:IRFC": "refused",
    "2026-10-21:FEDERALBNK": "bought",
-   "2026-10-21:PNB": "refused"
+   "2026-10-21:PNB": "refused",
+   "2026-10-23:INDHOTEL": "bought"
   },
   "close": {
    "2026-10-15:TATAELXSI": "bought",
@@ -2144,6 +2335,15 @@
      "A"
     ],
     "reason": "never fits: 1 lot is 8,000 shares, so Rs 8,000 allows at most Rs 1.00 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-10-23",
+    "symbol": "SAGILITY",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 12,000 shares, so Rs 8,000 allows at most Rs 0.67 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -2161,7 +2361,9 @@
    "2026-10-19:UJJIVANSFB": "refused",
    "2026-10-21:UNIONBANK": "refused",
    "2026-10-21:HINDZINC": "bought",
-   "2026-10-21:BAJFINANCE": "bought"
+   "2026-10-21:BAJFINANCE": "bought",
+   "2026-10-23:ADANIENSOL": "bought",
+   "2026-10-23:SAGILITY": "refused"
   },
   "open_wait": {},
   "fade_wait": {},
@@ -2192,7 +2394,37 @@
     "net": -550.12,
     "net_pct": -7.63,
     "real_bought": false
+   },
+   {
+    "key": "2026-10-23:SAGILITY",
+    "date": "2026-10-23",
+    "symbol": "SAGILITY",
+    "side": "PE",
+    "expiry": "2026-10-27",
+    "strike": 44.0,
+    "tradingsymbol": "SAGILITY26OCT44PE",
+    "lot_size": 12000,
+    "entry": 0.44,
+    "bid_at_entry": 0.42,
+    "lot_cost": 5280.0,
+    "opened_at": "2026-10-23T09:15:00+05:30",
+    "refused": "never fits: 1 lot is 12,000 shares, so Rs 8,000 allows at most Rs 0.67 a share, below the Rs 2 floor",
+    "why": "net profit YoY +13.3 %, QoQ +31.1 %; revenue YoY +22.5 %",
+    "np_yoy": 13.3,
+    "spot_at_entry": 45.39,
+    "last_bid": 0.42,
+    "max_bid": 0.42,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
    }
-  ]
+  ],
+  "fade_sub2_why": {
+   "2026-10-23:SAGILITY": "below-Rs 2 rule: 1 lot at 45 costs more than Rs 8,000"
+  }
  }
 }
