@@ -245,4 +245,9 @@ Descriptive after the fixes:
 - **Diagnostics:** last-half-hour variance on expiry days is 1.33x.
 - **D2:** the BANKNIFTY lost-Wednesday DiD is 0.39x (0.18-0.86). The BANKNIFTY expiry reversal is t −2.8 on the real
   expiry dates (111 days).
+- **D4 tail study (spot, pre-registered):** with a VIX-based credit proxy calibrated on P6's trades (corr 0.71), the
+  P6 trade averages −28 % of the credit on the 153 NIFTY expiry days of 2021-10 → 2024-09. Every year 2021-2024 is
+  negative; 9 % of days lose more than 2x the credit. The test window was a calm year (mean 14:30 → 15:15 move 0.13 %
+  against 0.22 %). The late-expiry short-premium leads (P6, P7) are not reopened on the NIFTY holdout. R1 (SENSEX) still
+  runs as pre-registered.
 
