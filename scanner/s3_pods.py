@@ -39,22 +39,25 @@ class Pod:
     expiry_for: Callable[[date], date] | None = None   # day -> expiry traded (default: the day itself)
     measure: str = "credit"
     extra: dict = field(default_factory=dict)
+    underlying: str = "NIFTY"
+    index: str = "NIFTY50"
+    lot: int | None = None                      # fixed lot (None: the bhavcopy lot on the day)
 
 
-def expiry_days(window: tuple) -> list[date]:
-    return [e for e in L.expiries("NIFTY") if window[0] <= e <= window[1] and e in L.trade_days("NIFTY", e)]
+def expiry_days(window: tuple, underlying: str = "NIFTY") -> list[date]:
+    return [e for e in L.expiries(underlying) if window[0] <= e <= window[1] and e in L.trade_days(underlying, e)]
 
 
 def run_pod(pod: Pod, holdout: bool = False) -> dict:
     window = HOLDOUT if holdout else TEST
     halves = HOLDOUT_HALVES if holdout else HALVES
-    days = (pod.days or expiry_days)(window)
+    days = pod.days(window) if pod.days else expiry_days(window, pod.underlying)
     rows, vcache = [], {}
     for d in days:
         exp = pod.expiry_for(d) if pod.expiry_for else d
         for cell, cm in [(c, 1.0) for c in pod.cells] + [(pod.primary, 2.0)]:
             sp = pod.spec(cell, cm)
-            r = run_day(sp, d, exp) if exp else {"day": d, "skip": "no expiry"}
+            r = (run_day(sp, d, exp, pod.underlying, pod.index, lot=pod.lot) if exp else {"day": d, "skip": "no expiry"})
             rows.append({**r, "cell": pod.label(cell), "cost_mult": cm, "vix": vix_at(d, *sp.entry, vcache),
                          "event": d in EVENTS, "weekday": d.strftime("%a"), "expiry": exp})
     return write_report(pod, pd.DataFrame(rows), len(days), window, halves, holdout)

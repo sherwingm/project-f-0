@@ -160,10 +160,11 @@ def chain_between(underlying: str, expiry: date, day: date, exit_day: date | Non
 
 
 def run_day(spec: Spec, day: date, expiry: date, underlying: str = "NIFTY", index: str = "NIFTY50",
-            exit_day: date | None = None) -> dict:
-    """Load the chain (day → exit_day) and the entry spot from the index store and simulate."""
+            exit_day: date | None = None, lot: int | None = None) -> dict:
+    """Load the chain (day → exit_day) and the entry spot from the index store and simulate. `lot` overrides the
+    bhavcopy lot (SENSEX has no bhavcopy in the store)."""
     s = spot_at(day, *spec.entry, index)
     if s is None:
         return {"day": day, "pod": spec.name, "skip": "no spot at entry"}
-    return simulate(chain_between(underlying, expiry, day, exit_day), s, day, spec, L.lot_on(day, underlying), underlying,
-                    exit_day)
+    return simulate(chain_between(underlying, expiry, day, exit_day), s, day, spec, lot or L.lot_on(day, underlying),
+                    underlying, exit_day)
