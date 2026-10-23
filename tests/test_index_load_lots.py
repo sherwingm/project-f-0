@@ -35,3 +35,18 @@ def test_without_expiry_the_nearest_expiry_on_the_last_trade_date(store):
     assert L.lot_on(date(2025, 1, 4), "NIFTY") == 75
     with pytest.raises(ValueError):
         L.lot_on(date(2024, 12, 1), "NIFTY")
+
+
+def test_vix_minutes_stored_at_x100_or_div100_are_rescaled(tmp_path, monkeypatch):
+    import pandas as pd
+    d = tmp_path / "spot_1m" / "INDIAVIX"
+    d.mkdir(parents=True)
+    ts = pd.date_range("2022-02-24 09:15", periods=4, freq="min", tz="Asia/Kolkata")
+    pd.DataFrame({"timestamp": ts, "open": [30.0, 0.31, 3100.0, 31.0], "high": [30.0, 0.31, 3100.0, 31.0],
+                  "low": [30.0, 0.31, 3100.0, 31.0], "close": [30.0, 0.31, 3100.0, 31.0]}).to_parquet(d / "2022-02.parquet")
+    pd.DataFrame({"date": [pd.Timestamp("2022-02-24")], "close": [30.3]}).to_parquet(tmp_path / "vix_daily.parquet")
+    monkeypatch.setattr(L, "STORE", tmp_path)
+    L._vix_daily.cache_clear()
+    v = L.vix_1m(date(2022, 2, 24), date(2022, 2, 24))
+    L._vix_daily.cache_clear()
+    assert list(v["close"].round(2)) == [30.0, 31.0, 31.0, 31.0]

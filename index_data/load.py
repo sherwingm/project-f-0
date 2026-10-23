@@ -13,6 +13,7 @@ from datetime import date, datetime, time
 from functools import lru_cache
 from pathlib import Path
 
+import numpy as np
 import pandas as pd
 
 from .common import IST, STORE
@@ -95,7 +96,34 @@ def spot_1m(start, end, index: str = "NIFTY50") -> pd.DataFrame:
 
 
 def vix_1m(start, end) -> pd.DataFrame:
-    return _monthly("INDIAVIX", start, end)
+    """India VIX by the minute. Rows stored at x100 or /100 (left in 2021-10 → 2023-08 by the old download) are rescaled
+    to the unit of that day's daily close (vix_daily.parquet): each value is multiplied by whichever of 0.01, 1, 100
+    brings it nearest the daily close (fixed 2026-10-23)."""
+    v = _monthly("INDIAVIX", start, end)
+    if v.empty:
+        return v
+    ref = _vix_daily()
+    day_ref = v["timestamp"].dt.date.map(ref)
+    day_ref = day_ref.fillna(v.groupby(v["timestamp"].dt.date)["close"].transform("median"))
+    for col in ("open", "high", "low", "close"):
+        x = v[col].astype(float)
+        best = x.copy()
+        err = (np.log(x / day_ref)).abs()
+        for f in (0.01, 100.0):
+            e = (np.log(x * f / day_ref)).abs()
+            best = best.where(e >= err, x * f)
+            err = err.where(e >= err, e)
+        v[col] = best
+    return v
+
+
+@lru_cache(maxsize=1)
+def _vix_daily() -> dict:
+    p = _store() / "vix_daily.parquet"
+    if not p.exists():
+        return {}
+    d = pd.read_parquet(p)
+    return dict(zip(pd.to_datetime(d["date"]).dt.date, d["close"].astype(float)))
 
 
 @lru_cache(maxsize=4)
