@@ -198,14 +198,36 @@ class RuleTrader:
                                                                 "arms": sig["arms"], "reason": why}]
         log.info("rule %s entry %s %s refused: %s", mode, today, sig["symbol"], why)
 
-    def _buy(self, sig: dict, mode: str, strike: float, price: float, lot: int, now: datetime,
-             quote: dict | None = None) -> None:
+    def _buy(self, st: dict, key: str, sig: dict, mode: str, strike: float, price: float, lot: int, now: datetime,
+             quote: dict | None = None, old_price: float | None = None) -> None:
+        """Order the call decided at `price`; st[mode][key] is "ordered" until the ledger fills it ("bought") or cancels
+        it (open: the walk tries again; close: refused). strategies/S1_paper_real_order_fills.md."""
         contract = {"symbol": sig["symbol"], "instrument": "CE", "expiry": sig["expiry"], "strike": strike,
                     "tradingsymbol": tradingsymbol(sig["symbol"], "CE", sig["expiry"], strike), "lot_size": lot}
         rule = {"entry_mode": mode, "arms": sig["arms"], "signal_date": sig["signal_date"], "beat": sig.get("beat"),
                 "move": sig.get("move")}
-        pos = self.ledger.open_rule(contract, price, now, rule, quote=quote)
-        log.info("rule %s entry: %s at %.2f x %d (arms %s)", mode, pos["tradingsymbol"], price, lot, ",".join(sig["arms"]))
+        today = now.date().isoformat()
+
+        def filled(pos: dict, at: datetime) -> None:
+            st[mode][key] = "bought"
+            if mode == "open":
+                self._waiting(st, key, at, sig["arms"], None)
+            self.ledger._save()
+            log.info("rule %s entry: %s at %.2f x %d (arms %s)", mode, pos["tradingsymbol"], pos["entry"]["price"], lot,
+                     ",".join(sig["arms"]))
+
+        def cancelled(why: str, at: datetime) -> None:
+            if mode == "close":
+                self._refuse(st, sig, "close", today, f"buy order not filled ({why})")
+                return
+            st[mode].pop(key, None)                              # the open walk tries again next poll
+            self._last_why[key] = f"buy order not filled ({why})"
+            self._waiting(st, key, at, sig["arms"], self._last_why[key])
+
+        st[mode][key] = "ordered"
+        cutoff = datetime.combine(now.date(), EOD_AT, now.tzinfo) if mode == "open" else None
+        self.ledger.buy_rule(contract, price, now, rule, quote=quote, on_fill=filled, on_cancel=cancelled,
+                             cutoff=cutoff, old_price=old_price)
 
     def on_poll(self, now: datetime) -> None:
         if not self.ledger.is_open(now):
@@ -247,10 +269,8 @@ class RuleTrader:
                     self._waiting(st, key, now, sig["arms"], w)
                     continue                                     # try again next poll, until 15:20
                 k, px, lot = w
-                self._buy(sig, "open", k, px, lot, now, quote=book.get(k))
                 with self.ledger.lock:                           # saved now: a restart must not buy it again
-                    st["open"][key] = "bought"
-                    self._waiting(st, key, now, sig["arms"], None)
+                    self._buy(st, key, sig, "open", k, px, lot, now, quote=book.get(k))
                     self.ledger._save()
         if now.time() >= EOD_AT and st.get("exits_checked") != today:
             for sig in sigs:
@@ -267,8 +287,14 @@ class RuleTrader:
                     self._refuse(st, sig, "close", today, w)
                     continue
                 k, px, lot, _ = w
-                self._buy(sig, "close", k, px, lot, now, quote=book.get(k))
-                st["close"][key] = "bought"
+                ask = (((book.get(k) or {}).get("depth") or {}).get("ask") or [[None]])[0][0]
+                if self.ledger.real_orders:                      # the real 15:20 book, not the day's ATP (2026-10-26)
+                    if not ask:
+                        self._refuse(st, sig, "close", today, f"no ask at 15:20 (at {k:g})")
+                        continue
+                    self._buy(st, key, sig, "close", k, float(ask), lot, now, quote=book.get(k), old_price=px)
+                else:
+                    self._buy(st, key, sig, "close", k, px, lot, now, quote=book.get(k))
             self.check_exits(now)
             with self.ledger.lock:
                 st["exits_checked"] = today
@@ -281,6 +307,8 @@ class RuleTrader:
             r = pos.get("rule")
             if not r or r.get("strategy") == "fade" or r.get("checked") == today:    # fade: server/fade.py exits
                 continue
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             q = self.ledger.quotes.get({k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
                                                             "lot_size")}) or {}
             close = q.get("last_price")

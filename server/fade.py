@@ -662,28 +662,46 @@ class FadeTrader:
 
     def _buy(self, st, sig, key, today, now, spot, k, px, lot, lots: int = 1, sub2: dict | None = None,
              quote: dict | None = None) -> None:
+        """Order the contract decided at the ask `px`: the ledger fills it as a real order (or at once with instant
+        fills); the stop, trail and +100 % levels come from the fill price. Until it fills the signal shows "ordered"."""
         done = st.setdefault("fade", {})
-        rule = {"strategy": "fade", "version": "v12", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
-                "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
-                "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
-                "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
-                "shadow_t100": {"target": t100_target(px), "hit_at": None, "max_bid": None},
-                "stop": {"level": round(px * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
-                "trail": {"status": "open", "start": round(px * V12_START, 4), "gap": V12_GAP, "peak": None},
-                "shadow_v10": {"status": "open"},
-                "shadow_v11": {"status": "open"},
-                "shadow_trail": {"status": "open", "start": round(px * TRAIL_START, 4), "peak": None},
-                "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
-        if sub2:
-            rule["sub2"] = sub2
-        pos = self.ledger.open_rule(self._contract(sig, k, lot), px, now, rule, lots=lots, quote=quote)
-        done[key] = "bought" if not sub2 else "bought (below Rs 2, listing Rs 2-7)"
-        self._waiting(st, key, now, None)
-        for r in st.get("fade_shadow_entries") or []:
-            if r["key"] == key:
-                r["real_bought"] = True                      # its ask rose to Rs 2: not a refused trade after all
-        self.ledger._save()
-        log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], px, lot, sig.get("why"))
+
+        def rule(fill: float) -> dict:
+            r = {"strategy": "fade", "version": "v12", "entry_mode": "fade", "arms": ["F"], "signal_date": today,
+                 "filed": sig.get("filed"), "why": sig.get("why"), "spot_at_entry": spot,
+                 "np_yoy": sig.get("np_yoy"), "np_qoq": sig.get("np_qoq"), "rev_yoy": sig.get("rev_yoy"),
+                 "shadow_np25": in_shadow(sig["side"], sig.get("np_yoy")),
+                 "shadow_t100": {"target": t100_target(fill), "hit_at": None, "max_bid": None},
+                 "stop": {"level": round(fill * S20, 4), "from": S20_FROM.strftime("%H:%M"), "min_bid": None},
+                 "trail": {"status": "open", "start": round(fill * V12_START, 4), "gap": V12_GAP, "peak": None},
+                 "shadow_v10": {"status": "open"},
+                 "shadow_v11": {"status": "open"},
+                 "shadow_trail": {"status": "open", "start": round(fill * TRAIL_START, 4), "peak": None},
+                 "shadow_fd2": sig.get("filing_day") if sig["side"] == "PE" else None}
+            if sub2:
+                r["sub2"] = sub2
+            return r
+
+        def filled(pos: dict, at: datetime) -> None:
+            with self._lock:
+                done[key] = "bought" if not sub2 else "bought (below Rs 2, listing Rs 2-7)"
+                self._waiting(st, key, at, None)
+                for r in st.get("fade_shadow_entries") or []:
+                    if r["key"] == key:
+                        r["real_bought"] = True              # its ask rose to Rs 2: not a refused trade after all
+                self.ledger._save()
+            log.info("fade entry: %s at %.2f x %d (%s)", pos["tradingsymbol"], pos["entry"]["price"], lot, sig.get("why"))
+
+        def cancelled(why: str, at: datetime) -> None:
+            with self._lock:
+                done.pop(key, None)                          # the walk tries again, as for any unfilled entry
+                self._last_why[key] = f"buy order not filled ({why})"
+                self._waiting(st, key, at, self._last_why[key])
+
+        done[key] = "ordered"
+        self._waiting(st, key, now, f"buy order working at {px:g} (limit order, strategies/S1_paper_real_order_fills.md)")
+        self.ledger.buy_rule(self._contract(sig, k, lot), px, now, rule, lots=lots, quote=quote, on_fill=filled,
+                             on_cancel=cancelled, cutoff=datetime.combine(now.date(), EOD_AT, now.tzinfo), spot=spot)
 
     @staticmethod
     def carried(pos: dict) -> bool:
@@ -697,6 +715,8 @@ class FadeTrader:
             return
         today = now.date().isoformat()
         for pos in list(self.ledger.state["positions"]):
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             if not self.carried(pos):
                 continue
             c = pos["rule"].setdefault("carry", {"peak": pos["entry"]["price"], "checked": None})
@@ -779,6 +799,8 @@ class FadeTrader:
             return
         stopped = []
         for pos in self.ledger.state["positions"]:
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             r = pos.get("rule") or {}
             t1, stop = r.get("shadow_t100"), r.get("stop")
             if not ((t1 and not t1.get("hit_at")) or (stop and r.get("strategy") == "fade" and not self.carried(pos))):
@@ -818,6 +840,8 @@ class FadeTrader:
         if not (S20_FROM <= now.time() < EOD_AT):
             return
         for pos in self.ledger.state["positions"]:
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             r = pos.get("rule") or {}
             sh = r.get("shadow_trail")
             if r.get("strategy") != "fade" or not sh or sh.get("status") not in ("open", "active"):
@@ -851,6 +875,8 @@ class FadeTrader:
             return
         sold = []
         for pos in self.ledger.state["positions"]:
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             r = pos.get("rule") or {}
             tr = r.get("trail")
             if r.get("strategy") != "fade" or not tr or tr.get("status") not in ("open", "active"):
@@ -949,6 +975,8 @@ class FadeTrader:
     def _exits(self, now: datetime) -> None:
         """Sell every fade position from 15:20 on its entry day, or at the first poll of any later day."""
         for pos in list(self.ledger.state["positions"]):
+            if pos.get("exiting"):
+                continue                                         # its sell order is working
             r = pos.get("rule") or {}
             if r.get("strategy") != "fade" or self.carried(pos):
                 continue

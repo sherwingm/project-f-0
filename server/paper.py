@@ -42,6 +42,7 @@ from typing import Callable
 
 from scanner.binomial import hits_needed
 from server import charges as ch
+from server import order_sim as om
 from server import peak as pk
 from server import sessions
 from server.config import settings
@@ -148,8 +149,10 @@ class QuoteSource:
 class PaperLedger:
     def __init__(self, data_dir: Path, quotes: QuoteSource | None = None, capital: float | None = None,
                  tick: float | None = None, rules: Rules | None = None, always_open: bool = False,
-                 clock: Callable[[], datetime] | None = None):
+                 clock: Callable[[], datetime] | None = None, real_orders: bool = False):
         self.dir = Path(data_dir)
+        self.real_orders = real_orders                       # rule trades filled as real orders (server/order_sim.py)
+        self._orders: list[dict] = []                        # rule orders in flight (memory; sells rebuilt below)
         self.clock = clock or (lambda: datetime.now(IST))    # injectable, so tests can pin the session
         self.dir.mkdir(parents=True, exist_ok=True)
         self.path = self.dir / "paper_ledger.json"
@@ -168,6 +171,7 @@ class PaperLedger:
         self.state = self._load(capital if capital is not None else settings.paper_capital)
         if self.state.pop("_restarted", False):
             self._save()                     # the fresh account (with the archive) reaches the durable copy at once
+        self._resume_orders()
 
     # ------------------------------------------------------------ persistence
     def _load(self, capital: float) -> dict:
@@ -457,6 +461,7 @@ class PaperLedger:
                 self.risk.state(self, now)            # drawdown banner and limits
             self._save()
         self._post_exit_series(now)                   # outside the lock: its quote call never holds up a trading check
+        self.work_orders(now)
 
     # ------------------------------------------------------------ rule trades (server/rules.py)
     def open_rule(self, contract: dict, price: float, now: datetime, rule: dict, lots: int = 1,
@@ -491,13 +496,23 @@ class PaperLedger:
             self._save()
             return pos
 
-    def close_at(self, pid: str, price: float, now: datetime, reason: str, price_is_bid: bool = True) -> dict:
+    def close_at(self, pid: str, price: float, now: datetime, reason: str, price_is_bid: bool = True,
+                 instant: bool = False) -> dict | None:
         """Close a whole position at `price` (a rule exit, or the results page's Close at the best bid).
-        price_is_bid=False: the price came from the last trade (no bid then), so it is not a bid observation."""
+        price_is_bid=False: the price came from the last trade (no bid then), so it is not a bid observation.
+        With real orders a rule exit is not filled here: a sell order starts working (work_orders) and None returns."""
         with self.lock:
             pos = self._position_by_id(pid)
+            if pos.get("exiting"):
+                return None                                   # its sell is already working
             if self._bid_tracked(pos) and price_is_bid:
                 pk.observe(pos, price, now, pk.SOURCE_EXIT)   # the exit-triggering quote counts as held
+            if self.real_orders and pos.get("rule") and not instant:
+                pos["exiting"] = {"reason": reason, "decision_price": price, "price_is_bid": price_is_bid,
+                                  "placed_at": now.isoformat(timespec="seconds"), "tries": 0}
+                self._orders.append({"side": "SELL", "pid": pid, "placed": now.timestamp(), "last_try": now.timestamp()})
+                self._save()
+                return None
             f = {"price": price, "levels": [], "mode": reason, "mid": None, "slippage_vs_mid": None, "overflow_qty": 0}
             closed = self._close(pos, pos["qty"], f, "rule" if pos.get("rule") else None, now, reason)
             if pos.get("rule"):
@@ -523,7 +538,164 @@ class PaperLedger:
             price_is_bid = bool(bid)
             if not px:
                 raise PaperRejected("no live quote for this contract right now; try again when the market is open")
-            return self.close_at(pid, px, now, "manual", price_is_bid=price_is_bid)
+            return self.close_at(pid, px, now, "manual", price_is_bid=price_is_bid, instant=True)
+
+    # ------------------------------------------------------------ rule orders (strategies/S1_paper_real_order_fills.md)
+    def buy_rule(self, contract: dict, price: float, now: datetime, rule, lots: int = 1, quote: dict | None = None,
+                 on_fill: Callable | None = None, on_cancel: Callable | None = None, cutoff: datetime | None = None,
+                 spot: float | None = None, old_price: float | None = None) -> None:
+        """A rule entry decided at `price` (the ask of `quote`). `rule` is the rule dict or a function of the fill price
+        returning it. Instant fills: bought now at `price`. Real orders: a limit order that work_orders fills from the
+        next quote, or cancels (on_cancel(why, now)) after om.BUY_WAIT_S or at `cutoff`. on_fill(pos, now) either way."""
+        with self.lock:
+            if not self.real_orders:
+                pos = self.open_rule(contract, price, now, rule(price) if callable(rule) else rule, lots=lots, quote=quote)
+                if on_fill:
+                    on_fill(pos, now)
+                return
+            tick = om.tick_for(spot or (quote or {}).get("underlying"))
+            limit = om.buy_limit(price, tick)
+            wait = now + timedelta(seconds=om.BUY_WAIT_S)
+            o = {"side": "BUY", "contract": contract, "lots": max(1, int(lots)), "decision_price": price, "limit": limit,
+                 "tick": tick, "placed": now.timestamp(), "last_try": now.timestamp(), "tries": 0, "rule": rule,
+                 "on_fill": on_fill, "on_cancel": on_cancel, "old_price": old_price,
+                 "deadline": min(wait, cutoff) if cutoff else wait}
+            self._log_order({"order_id": self._id("ORDER"), "paper": True, "placed_at": now.isoformat(timespec="seconds"),
+                             "tradingsymbol": contract["tradingsymbol"], "side": "BUY", "order_type": "LIMIT",
+                             "limit": limit, "decision_price": price, "status": "OPEN"})
+            why = om.rejected(limit, (quote or {}).get("last_price"))
+            if why:
+                self._cancel(o, now, why)
+                return
+            self._orders.append(o)
+
+    def work_orders(self, now: datetime) -> None:
+        """About every second: each working rule order against its contract's latest quote (one quote call)."""
+        if not self._orders or not self.is_open(now):
+            return
+        with self.lock:
+            due = [o for o in self._orders if now.timestamp() - o["last_try"] >= om.STEP_S]
+            cs = {}
+            for o in list(due):
+                if o["side"] == "SELL":
+                    pos = next((p for p in self.state["positions"] if p["id"] == o["pid"]), None)
+                    if pos is None:
+                        self._orders.remove(o)
+                        due.remove(o)
+                        continue
+                    o["contract"] = {k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol",
+                                                         "lot_size")}
+                cs[o["contract"]["tradingsymbol"]] = o["contract"]
+        if not cs:
+            return
+        many = getattr(self.quotes, "get_many", None)    # outside the lock, like _post_exit_series
+        got = many(list(cs.values())) if many else {k: self.quotes.get(c) for k, c in cs.items()}
+        with self.lock:
+            for o in due:
+                if o in self._orders:
+                    o["last_try"] = now.timestamp()
+                    step = self._step_buy if o["side"] == "BUY" else self._step_sell
+                    step(o, got.get(o["contract"]["tradingsymbol"]), now)
+
+    def _step_buy(self, o: dict, q: dict | None, now: datetime) -> None:
+        o["tries"] += 1
+        m = None
+        if q:
+            why = om.rejected(o["limit"], q.get("last_price"))
+            if why:
+                self._cancel(o, now, why)
+                return
+            qty = int(o["contract"]["lot_size"]) * o["lots"]
+            m = om.match("BUY", qty, o["limit"], q.get("depth"))
+        if m is None:
+            if now >= o["deadline"]:
+                self._cancel(o, now, f"buy limit {o['limit']:g} not filled in {now.timestamp() - o['placed']:.0f} s")
+            return
+        self._orders.remove(o)
+        price = round(m["price"], 4)
+        rule = o["rule"](price) if callable(o["rule"]) else o["rule"]
+        pos = self.open_rule(o["contract"], price, now, rule, lots=o["lots"], quote=q)
+        pos["order"] = {"decision_price": o["decision_price"], "limit": o["limit"], "tick": o["tick"],
+                        "placed_at": datetime.fromtimestamp(o["placed"], IST).isoformat(timespec="seconds"),
+                        "filled_at": now.isoformat(timespec="seconds"),
+                        "wait_s": round(now.timestamp() - o["placed"], 1), "tries": o["tries"], "levels": m["levels"],
+                        "old_price": o["old_price"]}
+        self._save()
+        log.info("rule buy %s filled at %.2f (decided at %.2f, %.0f s)", o["contract"]["tradingsymbol"], price,
+                 o["decision_price"], now.timestamp() - o["placed"])
+        if o["on_fill"]:
+            o["on_fill"](pos, now)
+
+    def _cancel(self, o: dict, now: datetime, why: str) -> None:
+        if o in self._orders:
+            self._orders.remove(o)
+        self._log_order({"order_id": self._id("ORDER"), "paper": True, "placed_at": now.isoformat(timespec="seconds"),
+                         "tradingsymbol": o["contract"]["tradingsymbol"], "side": "BUY", "order_type": "LIMIT",
+                         "limit": o["limit"], "decision_price": o["decision_price"], "status": "CANCELLED",
+                         "reason": why})
+        log.info("rule buy %s cancelled: %s", o["contract"]["tradingsymbol"], why)
+        if o["on_cancel"]:
+            o["on_cancel"](why, now)
+
+    def _step_sell(self, o: dict, q: dict | None, now: datetime) -> None:
+        pos = self._position_by_id(o["pid"])
+        ex = pos["exiting"]
+        ex["tries"] = ex.get("tries", 0) + 1
+        depth = (q or {}).get("depth")
+        bid, _ = om.best(depth, "SELL")
+        if not bid:
+            return                                        # no bid this second: the order waits
+        if now.timestamp() - o["placed"] >= om.SELL_SWEEP_S:
+            m, limit = om.sweep(pos["qty"], depth), None
+        else:
+            limit = om.sell_limit(bid, om.tick_for(q.get("underlying")))
+            why = om.rejected(limit, q.get("last_price"))
+            if why:
+                ex["last_reject"] = why
+                return
+            m = om.match("SELL", pos["qty"], limit, depth)
+        if m is None:
+            return
+        self._orders.remove(o)
+        price = round(m["price"], 4)
+        f = {"price": price, "levels": m["levels"], "mode": ex["reason"], "mid": None, "slippage_vs_mid": None,
+             "overflow_qty": sum(l["qty"] for l in m["levels"] if l.get("overflow"))}
+        closed = self._close(pos, pos["qty"], f, "rule", now, ex["reason"])
+        closed["rule"] = pos["rule"]
+        closed["entry_order"] = pos.get("order")
+        closed["exit_order"] = {**ex, "limit": limit, "filled_at": now.isoformat(timespec="seconds"),
+                                "wait_s": round(now.timestamp() - o["placed"], 1), "levels": m["levels"],
+                                "swept": limit is None}
+        ei = (pos.get("order") or {}).get("decision_price") or pos["entry"]["price"]
+        xi, n = ex["decision_price"], closed["qty"]
+        inet = round((xi - ei) * n - ch.leg(pos["instrument"], "BUY", n, ei)["total"]
+                     - ch.leg(pos["instrument"], "SELL", n, xi)["total"], 2)
+        closed["instant"] = {"entry": ei, "exit": xi, "net": inet,
+                             "basis": "the decision ask and bid, filled at once (paper before 2026-10-26)"}
+        closed["fill_cost_rs"] = round(inet - closed["net_pnl"], 2)
+        self._log_order({"order_id": self._id("RULE"), "paper": True, "placed_at": now.isoformat(timespec="seconds"),
+                         "auto": ex["reason"], "symbol": pos["symbol"], "tradingsymbol": pos["tradingsymbol"],
+                         "side": "SELL", "quantity": n, "order_type": "LIMIT", "status": "FILLED", "fill_price": price,
+                         "decision_price": xi, "position_id": pos["id"], "net_pnl": closed["net_pnl"]})
+        self._touch_day(now)
+        self._save()
+        log.info("rule sell %s filled at %.2f (decided at %.2f, %.0f s)", pos["tradingsymbol"], price, xi,
+                 now.timestamp() - o["placed"])
+
+    def _resume_orders(self) -> None:
+        """After a restart: working sells start again; buys in flight were lost, so their signals wait again."""
+        now = time.time()
+        for pos in self.state.get("positions", []):
+            if pos.get("exiting"):
+                self._orders.append({"side": "SELL", "pid": pos["id"], "placed": now, "last_try": 0.0})
+        rules = self.state.get("rules") or {}
+        for sect in ("fade", "open", "close"):
+            for k, v in list((rules.get(sect) or {}).items()):
+                if v == "ordered":
+                    if sect == "close":
+                        rules[sect][k] = "refused"
+                    else:
+                        del rules[sect][k]
 
     def _post_exit_series(self, now: datetime) -> None:
         """For POST_EXIT_MINUTES after each long-option sale, the contract's bid/ask into the observation record as
@@ -645,8 +817,9 @@ class PaperLedger:
         return is_option(pos["instrument"]) and pos["side"] == "BUY"
 
     def observe(self, pos: dict, quote: dict | None, now: datetime, source: str) -> None:
-        """A quote of an open long option: its best bid into the while-held peak / low, and the bid/ask record."""
-        if not quote or not self._bid_tracked(pos):
+        """A quote of an open long option: its best bid into the while-held peak / low, and the bid/ask record.
+        A position whose sell is working is no longer held: the peak stopped at the exit decision."""
+        if not quote or not self._bid_tracked(pos) or pos.get("exiting"):
             return
         b = ((quote.get("depth") or {}).get("bid") or [[None, None]])[0]
         pk.observe(pos, b[0], now, source, b[1] if len(b) > 1 else None)

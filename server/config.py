@@ -14,6 +14,8 @@ no live feed, no commentary, and password-protected access.
     ORDERS                true | false   (default false: the page has no order controls at all)
     BROKER                none | kite | groww | fake   (default none; only used when ORDERS=true)
     PAPER                 true | false           (default true: orders are simulated and logged)
+    PAPER_REAL_ORDERS     true | false   (default true: paper rule trades fill as real limit orders,
+                          strategies/S1_paper_real_order_fills.md; false: at once at the decision price)
     KITE_API_KEY, KITE_API_SECRET, KITE_ACCESS_TOKEN
                           Kite Connect (paid plan needed for quotes; Personal plan can only trade)
     GROWW_TOTP_TOKEN, GROWW_TOTP_SECRET   Groww TOTP-flow key (headless daily login), or
@@ -93,6 +95,7 @@ class Settings:
     groww_oi_calls_per_poll: int = int(os.getenv("GROWW_OI_CALLS_PER_POLL", "60"))
     poll_seconds: int = int(os.getenv("POLL_SECONDS", "30"))
     fade_fast_seconds: float = float(os.getenv("FADE_FAST_SECONDS", "1"))   # 0 = off
+    paper_real_orders: bool = _bool("PAPER_REAL_ORDERS", True)   # rule trades fill as real orders (paper)
     upstox_stream: bool = _bool("UPSTOX_STREAM", True)      # Upstox WebSocket prices when the token is set
     live_fast_seconds: float = float(os.getenv("LIVE_FAST_SECONDS", "1"))   # the feed's interval while streaming
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")

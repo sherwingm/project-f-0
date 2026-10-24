@@ -236,7 +236,8 @@ def startup() -> None:
         state.broker = None
     elif isinstance(state.broker, PaperBroker):
         _start_mirror()
-        state.ledger = PaperLedger(settings.data_dir, QuoteSource(state.feed), always_open=bool(state.feed and state.feed.poll_always))
+        state.ledger = PaperLedger(settings.data_dir, QuoteSource(state.feed), always_open=bool(state.feed and state.feed.poll_always),
+                                   real_orders=settings.paper_real_orders)
         margin_fn = None
         if settings.kotak_consumer_key and settings.kotak_mobile and settings.kotak_ucc and settings.kotak_totp_secret and settings.kotak_mpin:
             from server.kotak import shared_session
@@ -269,6 +270,7 @@ def _fade_fast_loop() -> None:
         try:
             if state.fade is not None:
                 now = datetime.now(IST)
+                state.ledger.work_orders(now)            # rule orders in flight (strategies/S1_paper_real_order_fills.md)
                 state.fade.fast_tick(now)
                 state.fade.entry_tick(now)               # 1-second entries from 09:15:00 (DECISIONS.md 2026-10-22)
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)

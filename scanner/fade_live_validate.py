@@ -8,6 +8,7 @@ carrying the measurement fields it prints PASS / FAIL / WAIT per check:
   held    peak / low present, inside the held window, equal to the max / min of the record's held bids
   exit    exit price and reason; a bid-priced exit is the held window's last bid
   after   post-exit rows exist, start after the exit, stop by the 60-minute cutoff, never earlier than the sale
+  order   real-order fills: waited >= 1 quote each way; instant vs real-order net reconciles
   capture net at the peak re-derived with the same charges; capture N/A exactly when the peak never paid
   backup  the day's record is on GitHub (WAIT until the day is over)
 Changes nothing. Trades without the fields are listed as "not measured", never reconstructed.
@@ -64,8 +65,18 @@ def check_trade(c: dict, rows: list[dict], backed_up: bool | None) -> list[tuple
     else:
         add("held", False, "no held bid peak")
     add("exit", c.get("reason") is not None, f"exit {c['exit']['price']} at {c['closed_at'][11:19]} ({c.get('reason')})")
+    xo = c.get("exit_order") or {}
     if c.get("reason") in ("fade_stop", "fade_trail") and hb.get("last"):
-        add("exit", abs(hb["last"]["price"] - c["exit"]["price"]) < 1e-9, "the exit bid is the held window's last bid")
+        decided = xo.get("decision_price", c["exit"]["price"])
+        add("exit", abs(hb["last"]["price"] - decided) < 1e-9, "the exit decision bid is the held window's last bid")
+    if xo:                                     # real-order fills (strategies/S1_paper_real_order_fills.md)
+        eo, inst = c.get("entry_order") or {}, c.get("instant") or {}
+        add("order", eo.get("wait_s", 0) >= 0.5 and xo.get("wait_s", 0) >= 0.5,
+            f"buy decided {eo.get('decision_price')} -> filled {c['entry']['price']} after {eo.get('wait_s')} s; "
+            f"sell decided {xo.get('decision_price')} -> filled {c['exit']['price']} after {xo.get('wait_s')} s"
+            f"{' (swept)' if xo.get('swept') else ''}")
+        add("order", abs(inst.get("net", 0) - c["net_pnl"] - (c.get("fill_cost_rs") or 0)) < 0.02,
+            f"instant net {inst.get('net')} vs real-order net {c['net_pnl']}: fill cost {c.get('fill_cost_rs')}")
     after = sorted((r for r in rows if r["id"] == c["id"] and r.get("phase") == "after_exit"), key=lambda r: r["t"])
     until = closed + timedelta(minutes=POST_EXIT_MINUTES)
     if after:
