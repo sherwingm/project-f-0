@@ -66,6 +66,13 @@ editing this file on purpose, in its own commit, with the reason.
        did, but the live trader did not. Both A/B entries now refuse it ("in the F&O ban today"). The list is the
        session's NSE ban list from the fade signal file (`meta.fade.ban`, written nightly and before the open). A file
        for another session blocks nothing. The fade already skipped banned stocks.
+  - **Paper rule trades are filled as real orders from 2026-10-26 (the user, 2026-10-24: "do it the paper trading as
+    the real order"; confirmed: real-order fill is the main P&L, an unfilled buy cancels after 60 s and the entry
+    retries, the A/B 15:20 close entry is filled the same way).** A buy is a limit at the ask plus Kotak's protection,
+    filled from the next quote (~1 s later) only if the asks within the limit hold the whole order; a sell chases
+    the bid each second until filled. The A/B 15:20 entry now pays the real 15:20 book, not the day's ATP + ₹0.01
+    (the confirmed gap of 24 Oct). Every trade also keeps the old instant prices and their net (`closed.instant`),
+    so v12's review compares like with like. Still paper: no broker order. `strategies/S1_paper_real_order_fills.md`.
   - Backtests size **one lot costing ₹600–8,000** (lot size × entry fill), from S1 v6 on (2026-10-12). Reason: at
     the at-the-money strike, v4's ₹2,000–8,000 budget left 3 trades and v5's ₹10,000–30,000 band left 57, short of
     the 200 the gate needs; v6 keeps lots cheap by walking up the strikes instead. S1 v5 and earlier used
