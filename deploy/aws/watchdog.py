@@ -16,6 +16,7 @@ import json
 import subprocess
 import sys
 import time
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -85,7 +86,20 @@ def main() -> int:
     print(f"{now:%H:%M:%S} STALE ({why}): restarting fo-scanner")
     STATE.parent.mkdir(parents=True, exist_ok=True)
     STATE.write_text(str(time.time()))
+    phone(e, f"⚠️ F&O scanner stalled at {now:%H:%M} ({why}). The watchdog is restarting it now.")
     return subprocess.call(["systemctl", "restart", "fo-scanner"])
+
+
+def phone(e: dict[str, str], text: str) -> None:
+    """A Telegram alert (server/alerts.py), when TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are set; never fails."""
+    tok, chat = e.get("TELEGRAM_BOT_TOKEN", ""), e.get("TELEGRAM_CHAT_ID", "")
+    if not (tok and chat):
+        return
+    data = urllib.parse.urlencode({"chat_id": chat, "text": text}).encode()
+    try:
+        urllib.request.urlopen(f"https://api.telegram.org/bot{tok}/sendMessage", data=data, timeout=10).close()
+    except Exception as exc:  # noqa: BLE001
+        print(f"telegram alert not sent: {type(exc).__name__}")
 
 
 if __name__ == "__main__":

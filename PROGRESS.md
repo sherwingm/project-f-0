@@ -799,3 +799,7 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - sell (stop, trail, 15:20, A/B exits): limit at the bid - protection each second, the whole visible bid side from 10 s; the peak stops at the decision;
   - rejected without a last price or outside NSE price protection; the A/B 15:20 entry now pays the real 15:20 ask (old ATP price kept);
   - every trade keeps `instant` (old instant-fill net) and `fill_cost_rs`; `PAPER_REAL_ORDERS=false` restores instant fills. 13 new tests; full suite passes.
+- 2026-10-24: **Best-practice additions picked by the user** (after comparing our paper trading with published practice):
+  - `scanner/fade_live_vs_backtest.py` (read-only): each live fade trade vs the price the v12 backtest would have booked (09:16 open + 1 tick from the entry probe, the stop/trail level - 1 tick, the 15:19 last trade - 1 tick), gap split into entry and exit;
+  - phone alerts by Telegram (`server/alerts.py`, off until TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID are in the VM .env): buy filled, buy not filled, sell filled with real vs instant net, sell stuck 30 s, stream lost/back, loop errors, server start, watchdog restart, and the day's result after 15:31.
+  - Not taken (offered): blocking stale-price entries, a pre-written stop rule for v12, a shadow loss halt.

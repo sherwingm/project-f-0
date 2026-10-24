@@ -41,6 +41,7 @@ from pathlib import Path
 from typing import Callable
 
 from scanner.binomial import hits_needed
+from server import alerts
 from server import charges as ch
 from server import order_sim as om
 from server import peak as pk
@@ -623,6 +624,8 @@ class PaperLedger:
         self._save()
         log.info("rule buy %s filled at %.2f (decided at %.2f, %.0f s)", o["contract"]["tradingsymbol"], price,
                  o["decision_price"], now.timestamp() - o["placed"])
+        alerts.send(f"🟢 BUY {o['contract']['tradingsymbol']} · {pos['qty']} @ ₹{price:.2f} (decided {o['decision_price']:g}, "
+                    f"{now.timestamp() - o['placed']:.0f} s) · cost ₹{price * pos['qty']:,.0f}")
         if o["on_fill"]:
             o["on_fill"](pos, now)
 
@@ -634,6 +637,8 @@ class PaperLedger:
                          "limit": o["limit"], "decision_price": o["decision_price"], "status": "CANCELLED",
                          "reason": why})
         log.info("rule buy %s cancelled: %s", o["contract"]["tradingsymbol"], why)
+        alerts.send(f"⏸ Buy not filled: {o['contract']['tradingsymbol']} (limit {o['limit']:g}): {why}. The entry retries.",
+                    key="cancel:" + o["contract"]["tradingsymbol"], every=1800)
         if o["on_cancel"]:
             o["on_cancel"](why, now)
 
@@ -655,6 +660,9 @@ class PaperLedger:
                 return
             m = om.match("SELL", pos["qty"], limit, depth)
         if m is None:
+            if now.timestamp() - o["placed"] >= 30:
+                alerts.send(f"⚠️ Sell still not filled after 30 s: {pos['tradingsymbol']} ({ex['reason']}, decided at "
+                            f"{ex['decision_price']:g}). Bid now {bid:g}.", key="stuck:" + pos["id"], every=3600)
             return
         self._orders.remove(o)
         price = round(m["price"], 4)
@@ -681,6 +689,10 @@ class PaperLedger:
         self._save()
         log.info("rule sell %s filled at %.2f (decided at %.2f, %.0f s)", pos["tradingsymbol"], price, xi,
                  now.timestamp() - o["placed"])
+        why = {"fade_stop": "stop -20 %", "fade_trail": "trail", "fade_eod": "15:20", "fade_late": "late", "rule_stop": "stop", "rule_decay": "decay", "rule_t1": "T-1"}.get(ex["reason"], ex["reason"])
+        alerts.send(f"{'✅' if closed['net_pnl'] >= 0 else '🔴'} SELL {pos['tradingsymbol']} · {why} · @ ₹{price:.2f} "
+                    f"(decided {xi:g}, {now.timestamp() - o['placed']:.0f} s{', swept' if limit is None else ''}) · "
+                    f"net ₹{closed['net_pnl']:,.0f} (instant ₹{inet:,.0f})")
 
     def _resume_orders(self) -> None:
         """After a restart: working sells start again; buys in flight were lost, so their signals wait again."""

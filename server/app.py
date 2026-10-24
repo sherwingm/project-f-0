@@ -53,6 +53,7 @@ from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
 from server.verdict import Verdict
 from server.version import deployed
+from server import alerts
 from server.config import settings
 from server.live import FakeProvider, KiteProvider, LiveFeed, market_open
 
@@ -170,6 +171,7 @@ def startup() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
     state.version = deployed(ROOT)
     log.info("running commit %s (%s)", state.version["commit"], state.version["commit_source"])
+    alerts.send(f"🔄 F&O scanner started (commit {state.version['commit']}).", key="startup", every=300)
     if settings.scan_url:
         try:
             _pull_scan()
@@ -274,9 +276,44 @@ def _fade_fast_loop() -> None:
                 state.fade.fast_tick(now)
                 state.fade.entry_tick(now)               # 1-second entries from 09:15:00 (DECISIONS.md 2026-10-22)
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
+                _phone_tick(now)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits
             log.warning("fade fast exit: %s", exc)
+            alerts.send(f"⚠️ Trading loop error: {exc}"[:300], key="fast-loop", every=900)
         time.sleep(settings.fade_fast_seconds)
+
+
+_PHONE: dict = {"stream": None, "eod": None}
+
+
+def _phone_tick(now: datetime) -> None:
+    """Phone alerts the 1-second loop raises (server/alerts.py): the Upstox stream lost or back during market hours,
+    and once after 15:31 on a session day, the day's paper result."""
+    if not alerts.enabled():
+        return
+    from server import sessions
+    from server.rules import streaming
+    if sessions.market_open_at(now):
+        s = streaming(state.ledger)
+        if _PHONE["stream"] is True and not s:
+            alerts.send("⚠️ Upstox price stream lost: prices now come from Kotak (slower). Trading continues.",
+                        key="stream-down", every=600)
+        elif _PHONE["stream"] is False and s:
+            alerts.send("✅ Upstox price stream is back (1-second prices).", key="stream-up", every=600)
+        _PHONE["stream"] = s
+    today = now.date().isoformat()
+    if now.strftime("%H:%M") >= "15:31" and _PHONE["eod"] != today and sessions.is_session(now.date()):
+        _PHONE["eod"] = today
+        closed = [c for c in state.ledger.state.get("closed", []) if c.get("rule") and c["closed_at"][:10] == today]
+        net = sum(c["net_pnl"] for c in closed)
+        inst = [c["instant"]["net"] for c in closed if c.get("instant")]
+        lines = [f"📊 {today}: {len(closed)} paper trade(s) closed, net ₹{net:,.0f}"
+                 + (f" (instant fills would be ₹{sum(inst):,.0f})" if inst else "")]
+        lines += [f"• {c['tradingsymbol']} {c.get('reason')}: ₹{c['net_pnl']:,.0f}" for c in closed[:12]]
+        still = len(state.ledger.state.get("positions", []))
+        if still:
+            lines.append(f"{still} position(s) still open.")
+        alerts.send("\n".join(lines))
 
 
 def _start_compare() -> None:
