@@ -39,7 +39,7 @@ from pathlib import Path
 from urllib.parse import parse_qs, quote
 
 from fastapi import Depends, FastAPI, HTTPException, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from pydantic import BaseModel
 
@@ -388,6 +388,13 @@ def _rebuild() -> dict:
 
 
 # ---------------------------------------------------------------- page & data
+@app.get("/tokens.css")
+def tokens_css():
+    """Shared design tokens for every page (templates/tokens.css). Public: it holds colours only."""
+    return Response((ROOT / "templates" / "tokens.css").read_text(encoding="utf-8"), media_type="text/css",
+                    headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/", response_class=HTMLResponse)
 def results_page(_: str = Depends(auth)):
     """The home page: paper account and the forward test (templates/results.html), no chart and no scan."""

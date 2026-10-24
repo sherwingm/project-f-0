@@ -8,22 +8,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<link rel="stylesheet" href="/tokens.css">
 <style>
-:root {
-  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
-  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
-  --neutral:#8B98A5; --neutral-soft:rgba(139,152,165,.16); --unc:#E0B341; --unc-soft:rgba(224,179,65,.16);
-  --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF; --atp:#F5A623; --star:#F5C542;
-  --top:44px; --disc:28px; --nav:0px; --rail:68px; --pw:440px; --rowh:28px;
-  color-scheme:dark;
-}
-:root[data-theme="light"] {
-  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
-  --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
-  --neutral:#6B7785; --neutral-soft:rgba(107,119,133,.12); --unc:#A47A12; --unc-soft:rgba(164,122,18,.12);
-  --accent:#2563EB; --accent-ink:#FFFFFF; --focus:#2563EB; --atp:#C97A00; --star:#D4A20C;
-  color-scheme:light;
-}
+:root { --top:44px; --disc:28px; --nav:0px; --rail:68px; --pw:440px; --rowh:28px; }
 *, *::before, *::after { box-sizing:border-box; }
 html, body { height:100%; }
 body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.4 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
@@ -66,7 +53,7 @@ body { display:flex; flex-direction:column; height:100dvh; }
 .tbtns { display:flex; gap:6px; }
 .tb { height:30px; padding:0 10px; border-radius:4px; border:1px solid var(--line-strong); background:var(--surface); white-space:nowrap; display:inline-flex; align-items:center; gap:6px; }
 .tb:hover { border-color:var(--muted); }
-.tb .n { font:11px "JetBrains Mono",monospace; background:var(--bear); color:#fff; border-radius:9px; padding:0 5px; }
+.tb .n { font:11px "JetBrains Mono",monospace; background:var(--bear); color:var(--on-signal); border-radius:9px; padding:0 5px; }
 .pbar { font-size:12px; color:var(--muted); white-space:nowrap; display:flex; gap:6px; align-items:center; }
 .pbar b { color:var(--ink); } .pbar b.up { color:var(--bull); } .pbar b.down { color:var(--bear); }
 .notice { border:1px solid var(--unc); background:var(--unc-soft); border-radius:4px; padding:6px 12px; font-size:12px; margin:6px 10px 0 calc(var(--rail) + 10px); flex:0 0 auto; }
@@ -80,7 +67,7 @@ body { display:flex; flex-direction:column; height:100dvh; }
 .rail svg { width:18px; height:18px; flex:0 0 auto; }
 .rail [aria-current="page"] { color:var(--ink); background:var(--raise); }
 .rail [aria-current="page"]::before { content:""; position:absolute; left:0; top:5px; bottom:5px; width:2px; background:var(--accent); }
-.rail .n { position:absolute; top:4px; right:12px; font:600 9px "JetBrains Mono",monospace; background:var(--bear); color:#fff; border-radius:7px; padding:0 4px; }
+.rail .n { position:absolute; top:4px; right:12px; font:600 9px "JetBrains Mono",monospace; background:var(--bear); color:var(--on-signal); border-radius:7px; padding:0 4px; }
 .rail .sep { height:1px; background:var(--line); margin:5px 12px; flex:0 0 auto; }
 .rail .end { margin-top:auto; }
 .views { min-width:0; min-height:0; position:relative; }
@@ -102,7 +89,7 @@ body[data-panel="wide"] #v-scanner.on { --pw:min(62%, 1040px); }
 .ib:hover, .chip:hover { border-color:var(--muted); }
 .ib.on { color:var(--star); border-color:var(--star); }
 .ib.go { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
-.ib.go.pe { background:var(--bear); border-color:var(--bear); color:#fff; }
+.ib.go.pe { background:var(--bear); border-color:var(--bear); color:var(--on-signal); }
 .ib.ghost { border-color:transparent; background:none; color:var(--muted); } .ib.ghost:hover { color:var(--ink); border-color:var(--line-strong); }
 .chip[aria-pressed="true"] { background:var(--accent); border-color:var(--accent); color:var(--accent-ink); }
 .seg { display:inline-flex; border:1px solid var(--line-strong); border-radius:4px; overflow:hidden; flex:0 0 auto; }
@@ -322,7 +309,7 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .btn { border:1px solid var(--line-strong); background:var(--surface); border-radius:4px; padding:5px 12px; font-size:12.5px; min-height:30px; }
 .btn:hover { border-color:var(--muted); }
 .btn.primary { background:var(--accent); color:var(--accent-ink); border-color:var(--accent); }
-.btn.danger { background:var(--bear); color:#fff; border-color:var(--bear); }
+.btn.danger { background:var(--bear); color:var(--on-signal); border-color:var(--bear); }
 .btn[disabled] { opacity:.5; cursor:default; }
 .actions { display:flex; gap:8px; flex-wrap:wrap; margin-top:10px; }
 .sheet-bg { position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:30; display:flex; align-items:center; justify-content:center; padding:12px; }
@@ -334,7 +321,7 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .seg2 { display:flex; border:1px solid var(--line-strong); border-radius:8px; overflow:hidden; }
 .seg2 button { flex:1; border:0; background:var(--surface); padding:9px; min-height:38px; }
 .seg2 button[aria-pressed="true"] { background:var(--accent); color:var(--accent-ink); }
-.seg2 button.buy[aria-pressed="true"] { background:var(--bull); color:#fff; } .seg2 button.sell[aria-pressed="true"] { background:var(--bear); color:#fff; }
+.seg2 button.buy[aria-pressed="true"] { background:var(--bull); color:var(--on-signal); } .seg2 button.sell[aria-pressed="true"] { background:var(--bear); color:var(--on-signal); }
 .stepper { display:flex; align-items:center; gap:10px; }
 .stepper button { width:38px; height:38px; border-radius:8px; border:1px solid var(--line-strong); background:var(--surface); font-size:18px; }
 .stepper b { font-size:17px; min-width:2ch; text-align:center; }
@@ -343,7 +330,7 @@ table.oc { width:100%; border-collapse:collapse; font:11.5px "JetBrains Mono",mo
 .review div { display:flex; justify-content:space-between; gap:8px; padding:2px 0; }
 .review span:first-child { color:var(--muted); }
 .badge { display:inline-block; border-radius:5px; padding:1px 7px; font-size:11px; font-weight:700; }
-.badge.paper { background:var(--neutral-soft); color:var(--neutral); } .badge.live { background:var(--bear); color:#fff; }
+.badge.paper { background:var(--neutral-soft); color:var(--neutral); } .badge.live { background:var(--bear); color:var(--on-signal); }
 .err { color:var(--bear); font-size:12px; margin:6px 0; }
 .ok { color:var(--bull); }
 .chk { display:flex; gap:8px; align-items:flex-start; font-size:12px; margin:8px 0; }

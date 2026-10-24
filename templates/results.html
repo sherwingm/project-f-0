@@ -7,24 +7,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css">
 <style>
 /* Design tokens: one system for every workspace. A strategy changes what is shown, never how it looks. */
-:root {
-  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
-  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
-  --unc:#E0B341; --unc-soft:rgba(224,179,65,.16); --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF;
-  --arm-a:#4C8DFF; --arm-b:#B07CFF; --arm-f:#E0A030; --arm-p:#26A69A;
-  --r-sm:8px; --r-md:12px; --r-lg:16px; --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
-  --shadow:0 10px 30px rgba(0,0,0,.35);
-  --disc:44px; color-scheme:dark;
-}
-:root[data-theme="light"] {
-  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
-  --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
-  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB;
-  --arm-a:#2563EB; --arm-b:#7C3AED; --arm-f:#B7791F; --arm-p:#0F9D76;
-  --shadow:0 10px 30px rgba(20,26,33,.18); color-scheme:light;
-}
+:root { --disc:44px; }
 *, *::before, *::after { box-sizing:border-box; }
 html, body { overflow-x:hidden; }
 body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
@@ -431,6 +417,8 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="entry">${rs(e)}</td><td>${rs(e * c.qty, 0)}</td><td>${rs(c.exit.price)}</td><td class="${dir(c.net_pnl)}">${srs(c.net_pnl, 2)}</td><td class="${dir(c.return_pct)}">${pct(c.return_pct)}</td>${shadows ? (() => { const r = c.rule || {}, v = shadowNet(r.shadow_v10, c.net_pnl), t = shadowNet(r.shadow_trail, c.net_pnl);
             return `<td class="${dir(v)}" title="${esc(v10Text(r) || "")}">${v != null ? srs(v, 2) : r.shadow_v10 ? "pending" : "—"}</td><td class="${dir(t)}" title="${esc(trailText(r, c.entry.price) || "")}">${t != null ? srs(t, 2) + (r.shadow_trail.status === "done" ? " <small>trail</small>" : "") : r.shadow_trail ? "—" : "not tagged"}</td>`; })() : ""}
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
+          <td class="${dir(pc && pc.peak_return_pct)}">${pc ? pct(pc.peak_return_pct) + ` <small>${rs(pc.peak_bid)} · ${when(pc.peak_at)}</small>` : "—"}</td>
+          <td title="${pc ? esc("at the peak bid: " + srs(pc.peak_net, 2) + " · left: " + srs(pc.giveback_rs, 2)) : ""}">${pc ? (pc.capture_pct != null ? pct(pc.capture_pct) : "N/A") + ` <small>left ${srs(pc.giveback_rs, 0)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>

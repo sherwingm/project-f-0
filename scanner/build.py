@@ -218,9 +218,18 @@ def s2_data(folder: Path) -> dict | None:
     return out if any(out.values()) else None
 
 
+TOKENS_LINK = '<link rel="stylesheet" href="/tokens.css">'
+
+
+def inline_tokens(html: str) -> str:
+    """The static GitHub Pages copy has no /tokens.css route, so the shared tokens go inline."""
+    css = (ROOT / "templates" / "tokens.css").read_text(encoding="utf-8")
+    return html.replace(TOKENS_LINK, f"<style>{chr(10)}{css}</style>", 1)
+
+
 def render_s2(scan: dict, template: Path, out: Path) -> None:
     """The S2 page for GitHub Pages, with its data embedded."""
-    html = template.read_text(encoding="utf-8")
+    html = inline_tokens(template.read_text(encoding="utf-8"))
     data = json.dumps(scan.get("meta", {}).get("s2"), separators=(",", ":")).replace("</", "<\\/")
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(html.replace("/*__S2__*/null", data), encoding="utf-8")
@@ -228,7 +237,7 @@ def render_s2(scan: dict, template: Path, out: Path) -> None:
 
 def render_results(scan: dict, template: Path, out: Path) -> None:
     """The results page for GitHub Pages: the forward test embedded (the paper account needs the live server)."""
-    html = template.read_text(encoding="utf-8")
+    html = inline_tokens(template.read_text(encoding="utf-8"))
     fwd = json.dumps(scan.get("meta", {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
     fade = json.dumps(scan.get("meta", {}).get("fade"), separators=(",", ":")).replace("</", "<\\/")
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -236,7 +245,7 @@ def render_results(scan: dict, template: Path, out: Path) -> None:
 
 
 def render(scan: dict, template: Path, out: Path) -> None:
-    html = template.read_text(encoding="utf-8")
+    html = inline_tokens(template.read_text(encoding="utf-8"))
     payload = json.dumps(scan, separators=(",", ":")).replace("</", "<\\/")
     if "/*__SCAN_DATA__*/" not in html:
         raise ValueError("template is missing the /*__SCAN_DATA__*/ placeholder")

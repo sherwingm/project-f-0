@@ -1,0 +1,23 @@
+/* F&O Terminal design tokens: the one place colours, radii and shadows are defined.
+   Linked by templates/index.html, results.html, s2.html and index_trading.html (served at /tokens.css),
+   and inlined into docs/*.html by scanner/build.py for the static GitHub Pages copy.
+   Page layout sizes (--top, --rail, --pw, --rowh, --disc, ...) stay in each page. */
+:root {
+  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#5A6878;
+  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
+  --neutral:#8B98A5; --neutral-soft:rgba(139,152,165,.16); --unc:#E0B341; --unc-soft:rgba(224,179,65,.16);
+  --accent:#4C8DFF; --accent-ink:#0B0F14; --on-signal:#0B0F14; --focus:#4C8DFF; --atp:#F5A623; --star:#F5C542;
+  --arm-a:#4C8DFF; --arm-b:#B07CFF; --arm-f:#E0A030; --arm-p:#26A69A;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  color-scheme:dark;
+}
+:root[data-theme="light"] {
+  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#8693A1;
+  --bull:#0B7A5B; --bull-soft:rgba(11,122,91,.12); --bear:#C62F2F; --bear-soft:rgba(198,47,47,.10);
+  --neutral:#6B7785; --neutral-soft:rgba(107,119,133,.12); --unc:#86620D; --unc-soft:rgba(134,98,13,.12);
+  --accent:#2563EB; --accent-ink:#FFFFFF; --on-signal:#FFFFFF; --focus:#2563EB; --atp:#A05C00; --star:#9A7508;
+  --arm-a:#2563EB; --arm-b:#7C3AED; --arm-f:#8F5E10; --arm-p:#0B7A5B;
+  --shadow:0 10px 30px rgba(20,26,33,.18);
+  color-scheme:light;
+}

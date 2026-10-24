@@ -7,21 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/tokens.css">
 <style>
-:root {
-  --bg:#0B0F14; --panel:#10151C; --surface:#151B23; --raise:#1B232D; --ink:#E6EDF3; --muted:#8B98A5; --line:#222B36; --line-strong:#33404F;
-  --bull:#26A69A; --bull-soft:rgba(38,166,154,.16); --bear:#EF5350; --bear-soft:rgba(239,83,80,.16);
-  --unc:#E0B341; --unc-soft:rgba(224,179,65,.16); --accent:#4C8DFF; --accent-ink:#FFFFFF; --focus:#4C8DFF;
-  --arm-a:#4C8DFF; --arm-b:#B07CFF; --arm-f:#E0A030; --arm-p:#26A69A;
-  --r-sm:8px; --r-md:12px; --r-lg:16px;
-  --disc:44px; color-scheme:dark;
-}
-:root[data-theme="light"] {
-  --bg:#EEF1F5; --panel:#FFFFFF; --surface:#FFFFFF; --raise:#F4F6F9; --ink:#141A21; --muted:#5E6B78; --line:#E1E6EC; --line-strong:#C7D0DA;
-  --bull:#0F9D76; --bull-soft:rgba(15,157,118,.12); --bear:#D93A3A; --bear-soft:rgba(217,58,58,.10);
-  --unc:#A47A12; --unc-soft:rgba(164,122,18,.12); --accent:#2563EB; --focus:#2563EB;
-  --arm-a:#2563EB; --arm-b:#7C3AED; --arm-f:#B7791F; --arm-p:#0F9D76; color-scheme:light;
-}
+:root { --disc:44px; }
 *, *::before, *::after { box-sizing:border-box; }
 body { margin:0; background:var(--bg); color:var(--ink); font:13px/1.45 Inter,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
   font-variant-numeric:tabular-nums; -webkit-text-size-adjust:100%; padding-bottom:calc(var(--disc) + 16px); }
