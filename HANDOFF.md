@@ -8,7 +8,7 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **S1 and S2 stay separate.** Commit and push every step, and log it in PROGRESS.md. A rule or result change goes
   into DECISIONS.md in its own commit. Write a study's method in `strategies/*.md` and commit it **before** any number.
 - **The live server is the AWS VM.** Deploy yourself (the user wants that), **never 09:00-15:40 IST on weekdays**:
-  `ssh ubuntu@ip-172-26-4-64` over Tailscale works from this PC (24 Oct; prints a Tailscale auth-check line), then
+  `ssh -o BatchMode=yes fo-scanner` (direct key login; NOT Tailscale SSH, which can stall on a browser approval the user does not want), then
   `cd ~/fo_scanner && git pull && sudo systemctl restart fo-scanner`, guarded by a market-hours check on the VM's clock.
   After: `systemctl is-active`, 0 errors in `journalctl -u fo-scanner --since -60s`, `/api/paper/summary` ->
   `version.commit` = the pushed commit. Fallback: the Lightsail browser terminal via Claude in Chrome (its AWS session
@@ -23,6 +23,9 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
 ## Live system: AWS Lightsail Mumbai VM, commit `686cc1f7` (deployed Sat 24 Oct)
+- **Phone alerts by Telegram** (`server/alerts.py`, bot token + chat id in the VM `.env` since 24 Oct): fills, unfilled
+  buys, stuck sells, stream lost/back, errors, restarts, the day's result after 15:31. Live vs backtest per trade:
+  `python -m scanner.fade_live_vs_backtest data <date>`.
 - **Paper rule trades fill as real orders from Mon 26 Oct** (`strategies/S1_paper_real_order_fills.md`,
   `server/order_sim.py`): buy = limit at ask + Kotak protection, filled from the next quote only if the lot fits,
   cancelled after 60 s; sell chases the bid each second; A/B 15:20 entry at the real ask. `closed.instant` keeps the
