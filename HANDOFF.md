@@ -22,7 +22,12 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
   check the staged diff is yours (it has left colour edits in `templates/*.html` unstaged), pull with `--autostash`.
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
-## Live system: AWS Lightsail Mumbai VM, commit `b9cf6f87` (deployed Fri 23 Oct 23:43 IST)
+## Live system: AWS Lightsail Mumbai VM, commit `686cc1f7` (deployed Sat 24 Oct)
+- **Paper rule trades fill as real orders from Mon 26 Oct** (`strategies/S1_paper_real_order_fills.md`,
+  `server/order_sim.py`): buy = limit at ask + Kotak protection, filled from the next quote only if the lot fits,
+  cancelled after 60 s; sell chases the bid each second; A/B 15:20 entry at the real ask. `closed.instant` keeps the
+  old instant-fill net, `fill_cost_rs` the gap. `PAPER_REAL_ORDERS=false` turns it off. Monday: check the first
+  fills (`order` area in `fade_live_validate`).
 - `fo-scanner`, static IP 3.109.99.56, `~/fo_scanner`, systemd `fo-scanner` + market-hours watchdog (`deploy/aws/`,
   guide 17). `.env`: `DATA_PROVIDER=kotak`, `ORDERS=true PAPER=true BROKER=none`, `PUBLIC_ACCESS=false` + `APP_PASSWORD`,
   `LEDGER_GITHUB_TOKEN` (writes `paper-state`), `UPSTOX_ANALYTICS_TOKEN`.
