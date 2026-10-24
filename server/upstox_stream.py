@@ -37,6 +37,78 @@ MAX_KEYS = 1900                 # `full` mode allows 2,000 keys per connection
 SUB_CHUNK = 500                 # keys per subscribe message
 STALE_SECONDS = 15.0            # no message for this long during market hours: the stream counts as down
 CHAIN_EVERY, CHAIN_STOCKS = 10.0, 4     # Kotak option-chain sweep for the live PCR (same budget as 12 per 30 s)
+WATCH_FOR = 120.0               # a contract the trading loops asked about keeps its 1-second candles this long
+CANDLES = "candles_1s"          # data/candles_1s/<date>.jsonl (measurement only)
+
+
+class Candles:
+    """1-second candles built from the stream's ticks, for the option contracts the trading loops ask about
+    (held trades, entry walks, the entry probe, the 60-minute follow after a sale). Measurement only.
+
+    Each message that changes a watched contract is a tick. Per contract and per second it keeps the OHLC of the
+    last traded price and of the best bid, the last best ask, the tick count and the volume traded in that second.
+    A finished second is one JSON row: {ts, t (HH:MM:SS), o,h,l,c (last price), bo,bh,bl,bc (best bid), a (last
+    ask), n (ticks), v (volume in the second)}. Seconds without a tick write nothing. The retail feed pushes
+    snapshots of changes, not every exchange trade, so a candle is the best this feed can see, not a full tape."""
+
+    def __init__(self):
+        self.watch: dict[str, tuple[str, float]] = {}     # instrument key -> (tradingsymbol, watched until)
+        self.bars: dict[str, dict] = {}
+        self.done: list[dict] = []
+        self.vol: dict[str, float] = {}
+
+    def want(self, pairs: dict[str, str], now: float) -> None:
+        for ik, ts in pairs.items():
+            self.watch[ik] = (ts, now + WATCH_FOR)
+
+    def tick(self, ik: str, s: dict, now: float) -> None:
+        w = self.watch.get(ik)
+        if not w or now > w[1]:
+            return
+        ltp = (s.get("ltpc") or {}).get("ltp") or None
+        dp = s.get("depth") or []
+        bid = max((p for p, q, _, _ in dp if p and q), default=None)
+        ask = min((p for _, _, p, q in dp if p and q), default=None)
+        vtt = s.get("vtt")
+        sec = int(now)
+        b = self.bars.get(ik)
+        if b and b["s"] != sec:
+            self._close(ik)
+            b = None
+        if b is None:
+            v0 = self.vol.get(ik, vtt)
+            b = self.bars[ik] = {"s": sec, "ts": w[0], "o": ltp, "h": ltp, "l": ltp, "c": ltp, "bo": bid, "bh": bid,
+                                 "bl": bid, "bc": bid, "a": ask, "n": 0, "v0": v0, "v1": vtt}
+        if ltp:
+            b["o"] = b["o"] or ltp
+            b["h"], b["l"], b["c"] = max(b["h"] or ltp, ltp), min(b["l"] or ltp, ltp), ltp
+        if bid:
+            b["bo"] = b["bo"] or bid
+            b["bh"], b["bl"], b["bc"] = max(b["bh"] or bid, bid), min(b["bl"] or bid, bid), bid
+        if ask:
+            b["a"] = ask
+        b["n"] += 1
+        if vtt is not None:
+            b["v1"] = vtt
+
+    def _close(self, ik: str) -> None:
+        b = self.bars.pop(ik)
+        if b["v1"] is not None:
+            self.vol[ik] = b["v1"]
+        v = (b["v1"] - b["v0"]) if b["v1"] is not None and b["v0"] is not None else None
+        self.done.append({"ts": b["ts"], "t": datetime.fromtimestamp(b["s"], IST).strftime("%H:%M:%S"),
+                          "o": b["o"], "h": b["h"], "l": b["l"], "c": b["c"], "bo": b["bo"], "bh": b["bh"],
+                          "bl": b["bl"], "bc": b["bc"], "a": b["a"], "n": b["n"], "v": v})
+
+    def take(self, now: float) -> list[dict]:
+        """Every finished second (the current one stays open), and forget contracts no longer watched."""
+        for ik in [ik for ik, b in self.bars.items() if b["s"] < int(now)]:
+            self._close(ik)
+        for ik in [ik for ik, (_, until) in self.watch.items() if now > until]:
+            del self.watch[ik]
+            self.vol.pop(ik, None)
+        out, self.done = self.done, []
+        return out
 
 
 # ---------------------------------------------------------------- protobuf wire format
@@ -166,6 +238,7 @@ class UpstoxStream:
         self.token, self.max_keys = token, max_keys
         self.lock = threading.Lock()
         self.state: dict[str, dict] = {}            # instrument key -> merged parts
+        self.candles = Candles()                    # 1-second candles of the watched contracts
         self.subs: set[str] = set()
         self._pending: set[str] = set()
         self.connected = False
@@ -190,6 +263,24 @@ class UpstoxStream:
         with self.lock:
             s = self.state.get(key)
             return dict(s) if s else None
+
+    def watch(self, pairs: dict[str, str]) -> None:
+        """Build 1-second candles for these contracts ({instrument key: tradingsymbol}) for the next WATCH_FOR s."""
+        with self.lock:
+            self.candles.want(pairs, time.time())
+
+    def write_candles(self, data_dir) -> int:
+        """Append the finished seconds to data/candles_1s/<date>.jsonl; returns the rows written."""
+        from pathlib import Path
+        with self.lock:
+            rows = self.candles.take(time.time())
+        if not rows:
+            return 0
+        d = Path(data_dir) / CANDLES
+        d.mkdir(parents=True, exist_ok=True)
+        with open(d / f"{datetime.now(IST).date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
+            fh.write("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows))
+        return len(rows)
 
     def healthy(self, now: float | None = None) -> bool:
         return self.connected and (now or time.time()) - self.last_msg < STALE_SECONDS
@@ -264,8 +355,11 @@ class UpstoxStream:
                     continue
                 if parts:
                     with self.lock:
+                        now = time.time()
                         for k, p in parts.items():
-                            self.state.setdefault(k, {}).update({n: v for n, v in p.items() if v is not None})
+                            st = self.state.setdefault(k, {})
+                            st.update({n: v for n, v in p.items() if v is not None})
+                            self.candles.tick(k, st, now)
 
 
 # ---------------------------------------------------------------- the provider
@@ -343,6 +437,10 @@ class StreamingProvider:
         return out
 
     def quote_many(self, tradingsymbols: list[str]) -> dict[str, dict]:
+        watch = getattr(self.live, "watch", None)          # 1-second candles of the options the loops ask about
+        if watch:
+            ik = {self._ikey(t)[0]: t.split(":", 1)[-1] for t in tradingsymbols}
+            watch({k: v for k, v in ik.items() if k and v.endswith(("CE", "PE"))})
         out, missing = self._from_stream(list(tradingsymbols))
         for t in list(out):                               # lot size, expiry, tradingsymbol from Kotak's scrip master
             rec = self.kotak._fo_record(t.split(":", 1)[-1])

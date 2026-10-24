@@ -277,6 +277,8 @@ def _fade_fast_loop() -> None:
                 state.fade.entry_tick(now)               # 1-second entries from 09:15:00 (DECISIONS.md 2026-10-22)
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
                 _phone_tick(now)
+                if state.stream is not None:
+                    state.stream.write_candles(settings.data_dir)   # 1-second candles (server/upstox_stream.py)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits
             log.warning("fade fast exit: %s", exc)
             alerts.send(f"⚠️ Trading loop error: {exc}"[:300], key="fast-loop", every=900)
