@@ -14,9 +14,37 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -10.0
+  },
+  {
+   "at": "09:25:00",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.095,
+   "same_best_bid_pct": 8.8,
+   "same_best_ask_pct": 15.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.2,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "ANANDRATHI26OCTFUT",
+   "gap_pct": 0.095,
+   "kotak": 2216.7,
+   "upstox": 2218.8,
+   "at": "09:25"
+  },
+  {
+   "contract": "ANGELONE26OCTFUT",
+   "gap_pct": 0.073,
+   "kotak": 274.9,
+   "upstox": 275.1,
+   "at": "09:25"
+  },
   {
    "contract": "360ONE26OCT980CE",
    "gap_pct": 0.0,
@@ -142,30 +170,16 @@
    "kotak": 13.05,
    "upstox": 13.05,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26OCT1720PE",
-   "gap_pct": 0.0,
-   "kotak": 18.4,
-   "upstox": 18.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 1715.0,
-   "upstox": 1715.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 34,
+  "rounds": 2,
+  "contract_quotes": 68,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 14.7,
-  "same_best_ask_pct": 2.9,
+  "same_best_bid_pct": 11.75,
+  "same_best_ask_pct": 9.05,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 91.15,
+  "upstox_minus_kotak_quote_time_s_median": -8.5
  }
 }
