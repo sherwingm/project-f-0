@@ -480,6 +480,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -19.5
+  },
+  {
+   "at": "12:10:07",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.619,
+   "same_best_bid_pct": 20.6,
+   "same_best_ask_pct": 38.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -561,6 +575,13 @@
    "at": "11:10"
   },
   {
+   "contract": "MCX26OCT3100PE",
+   "gap_pct": 2.619,
+   "kotak": 21.0,
+   "upstox": 20.45,
+   "at": "12:10"
+  },
+  {
    "contract": "HINDUNILVR26OCT1800PE",
    "gap_pct": 2.165,
    "kotak": 11.55,
@@ -615,23 +636,16 @@
    "kotak": 4.35,
    "upstox": 4.3,
    "at": "10:40"
-  },
-  {
-   "contract": "SBIN26OCT950PE",
-   "gap_pct": 1.111,
-   "kotak": 4.5,
-   "upstox": 4.45,
-   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 1153,
+  "rounds": 35,
+  "contract_quotes": 1187,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -17.25
+  "upstox_minus_kotak_quote_time_s_median": -17.5
  }
 }
