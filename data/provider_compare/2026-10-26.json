@@ -256,6 +256,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.5
+  },
+  {
+   "at": "10:50:04",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.857,
+   "same_best_bid_pct": 29.4,
+   "same_best_ask_pct": 44.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -17.5
   }
  ],
  "top_gaps": [
@@ -293,6 +307,13 @@
    "kotak": 21.2,
    "upstox": 21.85,
    "at": "09:40"
+  },
+  {
+   "contract": "SUNPHARMA26OCT1760PE",
+   "gap_pct": 2.857,
+   "kotak": 8.75,
+   "upstox": 8.5,
+   "at": "10:50"
   },
   {
    "contract": "BHARTIARTL26OCT1880CE",
@@ -391,23 +412,16 @@
    "kotak": 4546.8,
    "upstox": 4553.4,
    "at": "09:35"
-  },
-  {
-   "contract": "MCX26OCTFUT",
-   "gap_pct": 0.123,
-   "kotak": 3101.9,
-   "upstox": 3105.7,
-   "at": "10:20"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 610,
+  "rounds": 19,
+  "contract_quotes": 644,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 27.95,
+  "same_best_bid_pct": 29.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.55,
-  "upstox_minus_kotak_quote_time_s_median": -13.25
+  "oi_same_pct": 100.0,
+  "upstox_minus_kotak_quote_time_s_median": -13.5
  }
 }
