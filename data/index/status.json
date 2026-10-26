@@ -1,56 +1,51 @@
 {
  "recorder": {
-  "run_at": "2026-10-23T23:43:16+05:30",
-  "session": "2026-10-23",
+  "run_at": "2026-10-27T01:19:01+05:30",
+  "session": "2026-10-26",
   "expiry_check": {
    "bse_fo": {
-    "checked": 3199,
+    "checked": 3203,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9233,
+    "checked": 9319,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 22600.0,
+    "spot": 22753.2,
     "contracts": 180,
-    "rows": 91196,
+    "rows": 0,
     "expiries": [
      "2026-10-27",
      "2026-11-03"
     ]
    },
    "SENSEX": {
-    "spot": 73123.83,
+    "spot": 73606.75,
     "contracts": 292,
-    "rows": 210711,
+    "rows": 2830,
     "expiries": [
      "2026-10-29",
      "2026-11-05"
     ]
    },
    "BANKNIFTY": {
-    "spot": 54287.35,
-    "contracts": 220,
-    "rows": 42506,
+    "spot": 54366.7,
+    "contracts": 216,
+    "rows": 3,
     "expiries": [
      "2026-10-27",
      "2026-11-23"
     ]
    }
   },
-  "failures": [
-   "BANKNIFTY26NOV52700PE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr",
-   "BANKNIFTY26NOV56900CE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr",
-   "BANKNIFTY26OCT52400CE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 502, 'ContentType': 'text/html', 'ResponseText': '<html>\\r\\n<head><title>502 Bad Gateway</title></head>\\r\\n<body>\\r\\n<center><h1>502 Bad Gateway</h1></center>\\r\\n<hr",
-   "BANKNIFTY26NOV54400CE: {'Error': 'Unexpected response format', 'Exception': 'Expecting value: line 1 column 1 (char 0)', 'StatusCode': 503, 'ContentType': 'text/html', 'ResponseText': '<html><body><h2>HTTP Server Error 503</h2><p>No available server to handle this request</p></body></html>', 'Reques"
-  ],
-  "chain_eod_rows": 692,
-  "calls": 808,
-  "runtime_s": 1474.1,
-  "contracts": 692
+  "failures": [],
+  "chain_eod_rows": 688,
+  "calls": 724,
+  "runtime_s": 1250.3,
+  "contracts": 688
  },
  "recent_runs": [
   {
@@ -116,6 +111,14 @@
    "calls": 808,
    "runtime_s": 1474.1,
    "failures": 4
+  },
+  {
+   "run_at": "2026-10-27T01:19:01+05:30",
+   "session": "2026-10-26",
+   "contracts": 688,
+   "calls": 724,
+   "runtime_s": 1250.3,
+   "failures": 0
   }
  ],
  "spot_backfill": {
@@ -257,61 +260,16 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 6125,
+   "rows": 6153,
    "errors": [],
-   "runtime_s": 1
+   "runtime_s": 3
   },
-  "upstox_topup": {
-   "NIFTY": {
-    "underlying": "NIFTY",
-    "expiries": 2,
-    "first": "2026-10-13",
-    "last": "2026-10-19",
-    "estimate_calls": 554,
-    "contracts_done": 0,
-    "contracts_skipped": 304,
-    "rows": 0,
-    "stopped": null,
-    "calls": 4,
-    "runtime_s": 3
-   },
-   "BANKNIFTY": {
-    "underlying": "BANKNIFTY",
-    "expiries": 0
-   },
-   "SENSEX": {
-    "underlying": "SENSEX",
-    "expiries": 2,
-    "first": "2026-10-15",
-    "last": "2026-10-22",
-    "estimate_calls": 890,
-    "contracts_done": 422,
-    "contracts_skipped": 88,
-    "rows": 893471,
-    "stopped": null,
-    "calls": 1444,
-    "runtime_s": 701
-   }
-  },
-  "vix_daily": {
-   "yf_rows": 4567,
-   "yf_first": "2008-03-03",
-   "yf_last": "2026-10-23",
-   "compared_days": 1181,
-   "mismatch_gt_1pct": 0,
-   "worst": []
-  },
-  "day": "2026-10-23",
-  "runtime_s": 732
+  "day": "2026-10-26",
+  "runtime_s": 10
  },
  "s1_trades_1m": {
-  "run_on": "2026-10-24",
+  "run_on": "2026-10-27",
   "days": {
-   "2026-10-16": {
-    "positions": 10,
-    "stock_rows": 3240,
-    "option_rows": 2505
-   },
    "2026-10-19": {
     "positions": 15,
     "stock_rows": 3970,
@@ -325,20 +283,25 @@
    "2026-10-21": {
     "positions": 10,
     "stock_rows": 2166,
-    "option_rows": 2060
+    "option_rows": 2064
    },
    "2026-10-22": {
     "positions": 7,
     "stock_rows": 1444,
-    "option_rows": 1086
+    "option_rows": 1087
    },
    "2026-10-23": {
     "positions": 10,
     "stock_rows": 2166,
+    "option_rows": 1989
+   },
+   "2026-10-26": {
+    "positions": 7,
+    "stock_rows": 1444,
     "option_rows": 0
    }
   },
   "missing_tokens": [],
-  "calls": 81
+  "calls": 71
  }
 }
