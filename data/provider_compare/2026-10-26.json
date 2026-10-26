@@ -564,6 +564,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "12:40:08",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.706,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 29.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -594,6 +608,13 @@
    "kotak": 49.35,
    "upstox": 46.9,
    "at": "10:55"
+  },
+  {
+   "contract": "TECHM26OCT1780PE",
+   "gap_pct": 4.706,
+   "kotak": 12.75,
+   "upstox": 13.35,
+   "at": "12:40"
   },
   {
    "contract": "KOTAKBANK26OCT440CE",
@@ -666,6 +687,13 @@
    "at": "09:35"
   },
   {
+   "contract": "TECHM26OCT1820CE",
+   "gap_pct": 1.887,
+   "kotak": 2.65,
+   "upstox": 2.6,
+   "at": "12:40"
+  },
+  {
    "contract": "GLENMARK26OCT2200CE",
    "gap_pct": 1.835,
    "kotak": 10.9,
@@ -692,25 +720,11 @@
    "kotak": 9.6,
    "upstox": 9.45,
    "at": "10:00"
-  },
-  {
-   "contract": "HINDALCO26OCT880PE",
-   "gap_pct": 1.19,
-   "kotak": 8.4,
-   "upstox": 8.5,
-   "at": "10:00"
-  },
-  {
-   "contract": "COFORGE26OCT1880PE",
-   "gap_pct": 1.171,
-   "kotak": 29.9,
-   "upstox": 30.25,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 40,
-  "contract_quotes": 1357,
+  "rounds": 41,
+  "contract_quotes": 1391,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 35.3,
