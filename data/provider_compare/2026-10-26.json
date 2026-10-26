@@ -158,6 +158,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -4.5
+  },
+  {
+   "at": "10:15:03",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.478,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 47.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.5
   }
  ],
  "top_gaps": [
@@ -174,6 +188,13 @@
    "kotak": 2.01,
    "upstox": 1.91,
    "at": "09:30"
+  },
+  {
+   "contract": "KOTAKBANK26OCT440CE",
+   "gap_pct": 4.478,
+   "kotak": 3.35,
+   "upstox": 3.2,
+   "at": "10:15"
   },
   {
    "contract": "COFORGE26OCT1880CE",
@@ -209,6 +230,13 @@
    "kotak": 29.9,
    "upstox": 30.25,
    "at": "09:40"
+  },
+  {
+   "contract": "LT26OCT3700PE",
+   "gap_pct": 1.074,
+   "kotak": 32.6,
+   "upstox": 32.95,
+   "at": "10:15"
   },
   {
    "contract": "BAJFINANCE26OCT910PE",
@@ -286,30 +314,16 @@
    "kotak": 146.0,
    "upstox": 146.1,
    "at": "09:30"
-  },
-  {
-   "contract": "HINDALCO26OCTFUT",
-   "gap_pct": 0.062,
-   "kotak": 883.25,
-   "upstox": 882.7,
-   "at": "10:00"
-  },
-  {
-   "contract": "COFORGE26OCTFUT",
-   "gap_pct": 0.037,
-   "kotak": 1873.3,
-   "upstox": 1874.0,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 372,
+  "rounds": 12,
+  "contract_quotes": 406,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 23.5,
-  "same_best_ask_pct": 23.5,
+  "same_best_ask_pct": 26.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.1,
+  "oi_same_pct": 98.55,
   "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
