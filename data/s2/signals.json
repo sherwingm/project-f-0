@@ -1,27 +1,15 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-22",
- "generated": "2026-10-23T00:31+05:30",
- "signals": [
-  {
-   "symbol": "SWIGGY",
-   "close": 211.4,
-   "price_pct": -5.48,
-   "oi_pct": 12.66,
-   "vol_ratio": 2.41,
-   "put": {
-    "expiry": "2026-11-23",
-    "strike": 190.0,
-    "premium": 4.06,
-    "lot": 1825,
-    "lot_cost": 7409,
-    "below_spot_pct": 10.12,
-    "contracts": 449.0
-   }
-  }
- ],
+ "session": "2026-10-26",
+ "generated": "2026-10-27T01:49+05:30",
+ "signals": [],
  "note": null,
  "history": [
+  {
+   "session": "2026-10-26",
+   "symbols": [],
+   "note": null
+  },
   {
    "session": "2026-10-22",
    "symbols": [
