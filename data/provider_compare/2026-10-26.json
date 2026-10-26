@@ -172,6 +172,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -13.5
+  },
+  {
+   "at": "10:20:03",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.123,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 23.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -35.0
   }
  ],
  "top_gaps": [
@@ -281,6 +295,13 @@
    "at": "09:35"
   },
   {
+   "contract": "MCX26OCTFUT",
+   "gap_pct": 0.123,
+   "kotak": 3101.9,
+   "upstox": 3105.7,
+   "at": "10:20"
+  },
+  {
    "contract": "ANANDRATHI26OCTFUT",
    "gap_pct": 0.095,
    "kotak": 2216.7,
@@ -307,23 +328,16 @@
    "kotak": 1264.5,
    "upstox": 1263.6,
    "at": "09:45"
-  },
-  {
-   "contract": "BANDHANBNK26OCTFUT",
-   "gap_pct": 0.068,
-   "kotak": 146.0,
-   "upstox": 146.1,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 406,
+  "rounds": 13,
+  "contract_quotes": 440,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 23.5,
-  "same_best_ask_pct": 26.9,
+  "same_best_ask_pct": 23.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.55,
+  "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
