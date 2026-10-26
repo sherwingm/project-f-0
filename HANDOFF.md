@@ -43,6 +43,10 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **No loss halts** (weekly removed 21 Oct, daily 22 Oct).
 - **Entry probe** (record only): asks every second 09:14:50-09:20 (10 s to 10:00) for fade signals' strikes, in
   `paper-state:data/entry_probe/<date>.json` (`strategies/S1_v11_entry_probe.md`).
+- **26 Oct stale list (fixed 26 Oct, 93ffb965):** Friday's nightly scan built everything but its final `git push` lost a race
+  with two index-data pushes, so no Monday list existed (same on 21 Oct). daily / fade-morning / retrain now pull-rebase and
+  retry 5x. The page hides an Arm A/B list that is not for today (`forward.for_today`, `server.rules.forward_is_current`); it
+  goes live with the next AWS restart (after 15:40). The trader itself was right: it ignores a list from another session.
 - **Sellable-peak measurement** (`server/peak.py`, measurement only):
   - `held_bid`: highest / lowest best bid while held, with times, bid size, quote count, longest gap;
   - `peak_capture` at the exit: net if sold at the peak bid (an estimate; `lot_fits_at_peak`), Rs left, capture %
