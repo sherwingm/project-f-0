@@ -426,6 +426,13 @@ def _rebuild() -> dict:
     return scan["meta"]
 
 
+def _forward_for_page(fw: dict | None) -> dict | None:
+    """The forward list plus `for_today`: whether it is the list for the current session (server.rules.forward_is_current),
+    so the results page never shows an old list as today's."""
+    from server.rules import forward_is_current
+    return None if fw is None else {**fw, "for_today": forward_is_current(fw, datetime.now(IST).date())}
+
+
 # ---------------------------------------------------------------- page & data
 @app.get("/tokens.css")
 def tokens_css():
@@ -439,7 +446,7 @@ def results_page(_: str = Depends(auth)):
     """The home page: paper account and the forward test (templates/results.html), no chart and no scan."""
     html = (ROOT / "templates" / "results.html").read_text(encoding="utf-8")
     meta = (state.scan or {}).get("meta") or {}
-    fwd = json.dumps(meta.get("forward"), separators=(",", ":")).replace("</", "<\\/")
+    fwd = json.dumps(_forward_for_page(meta.get("forward")), separators=(",", ":")).replace("</", "<\\/")
     fade = json.dumps(meta.get("fade"), separators=(",", ":")).replace("</", "<\\/")
     return (html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade)
             .replace("/*__SERVER__*/{}", json.dumps(settings.public())))
@@ -460,7 +467,7 @@ def api_s2(_: str = Depends(auth)):
 
 @app.get("/api/forward")
 def api_forward(_: str = Depends(auth)):
-    return ((state.scan or {}).get("meta") or {}).get("forward")
+    return _forward_for_page(((state.scan or {}).get("meta") or {}).get("forward"))
 
 
 @app.get("/api/fade")

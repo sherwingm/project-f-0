@@ -46,19 +46,27 @@ WALK_MAX = 15                                  # strikes tried upward from the a
 BAN_WHY = "in the F&O ban today"
 
 
-def signals_for(fw: dict | None, today: date) -> list[dict]:
-    """The forward test's "buy next session" list, when today is that next session: one row per stock with the
-    arms that hold it. A stale list (a session passed since it was made) gives nothing."""
+def forward_is_current(fw: dict | None, today: date) -> bool:
+    """True when `today` is the session the forward list was made for (the first session after its last_session). A
+    session in between, a missed nightly build, makes it stale; the page asks this too (meta.forward.for_today)."""
     if not fw or not fw.get("last_session"):
-        return []
+        return False
     last = date.fromisoformat(fw["last_session"])
     if last >= today:
-        return []
+        return False
     d = last + timedelta(days=1)
     while d < today:
         if sessions.is_session(d):
-            return []                          # the list is for a session already gone
+            return False                       # the list is for a session already gone
         d += timedelta(days=1)
+    return True
+
+
+def signals_for(fw: dict | None, today: date) -> list[dict]:
+    """The forward test's "buy next session" list, when today is that next session: one row per stock with the
+    arms that hold it. A stale list (a session passed since it was made) gives nothing."""
+    if not forward_is_current(fw, today):
+        return []
     rows: dict[str, dict] = {}
     for arm, st in (fw.get("arms") or {}).items():
         for p in st.get("pending", []):

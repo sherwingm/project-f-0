@@ -53,4 +53,10 @@ jobs:
           git config user.email "bot@users.noreply.github.com"
           git add data/model.pkl data/model_report.json
           git diff --cached --quiet || git commit -m "model: retrained $(date -u +%F)"
-          git push
+          pushed=0
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase --autostash origin main && git push -q && { pushed=1; break; }
+            git rebase --abort 2>/dev/null || true
+            echo "push attempt $i failed (another job pushed meanwhile); retrying"; sleep $((i * 5))
+          done
+          [ "$pushed" = 1 ] || { echo "push failed after 5 attempts"; exit 1; }

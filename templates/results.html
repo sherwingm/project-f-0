@@ -500,7 +500,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="l"><small>−20 % stop · trail from +10 %, sells 2 % below the peak bid · else 15:20 today</small></td>
           <td class="l">${got.length ? `<span class="chip in">bought</span>` : state(ru.fade, ru.fade_wait, s.symbol, "fade")}</td></tr>`);
       });
-      (FW && FW.arms ? Object.entries(FW.arms) : []).forEach(([arm, st]) => (st.pending || []).forEach(p => {
+      (FW && FW.arms && FW.for_today !== false ? Object.entries(FW.arms) : []).forEach(([arm, st]) => (st.pending || []).forEach(p => {
         if (rows.some(r => r.includes(`data-plan="${p.symbol}"`))) return;            // one row for a stock in both arms
         const arms = Object.entries(FW.arms).filter(([, s2]) => (s2.pending || []).some(q => q.symbol === p.symbol)).map(([a]) => a);
         const got = boughtToday(p.symbol, arm);
@@ -510,7 +510,8 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="l"><small>50 % stop at a close · 5 sessions without a new closing high · T-1</small></td>
           <td class="l">open ${state(ru.open, ru.open_wait, p.symbol, "open")}<br>close ${state(ru.close, null, p.symbol, "close")}</td></tr>`);
       }));
-      const stale = FD && FD.session && FD.session !== today ? `<p class="note">The fade list on the server is for ${day(FD.session)}, not today: tonight's build has not run yet.</p>` : "";
+      const stale = (FD && FD.session && FD.session !== today ? `<p class="note">The fade list on the server is for ${day(FD.session)}, not today: tonight's build has not run yet.</p>` : "")
+        + (FW && FW.for_today === false ? `<p class="note">The Arm A / B list is not for today (it was made after the ${day(FW.last_session)} session): no Arm A / B trades are planned until a fresh list arrives.</p>` : "");
       return panel(`Today's trades · ${day(today)}`, (rows.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buys</th><th class="l">Why</th><th class="l">Strike and price</th><th class="l">Exit</th><th class="l">Now</th></tr></thead><tbody>${rows.join("")}</tbody></table></div>`
         : empty("No rule trades for today: no strong or weak results and no results beats yesterday.")) + stale
         + `<p class="note">Paper only, 1 lot each. Fade strikes are chosen at the live ask when the market opens, so the strike shown here appears once bought. Arm A / B strikes come from last night's closing prices; the 09:15 order uses the live price.${FD && (FD.ban || []).length ? ` In the F&amp;O ban today (not traded): ${FD.ban.map(esc).join(", ")}.` : ""}</p>`,

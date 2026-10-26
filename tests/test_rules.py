@@ -271,3 +271,25 @@ def test_quote_source_get_many_uses_one_provider_call():
     got = QuoteSource(Feed()).get_many(cs)
     assert Feed.provider.calls == [[TS[1300.0], TS[1400.0]]]
     assert got[TS[1300.0]]["underlying"] == 1301.0 and got[TS[1400.0]] is None
+
+
+# ---------------------------------------------------------------- the 26 Oct 2026 stale list (page and server agree)
+def test_a_list_missing_a_session_is_stale_and_the_next_session_is_current():
+    from datetime import date
+    from server.rules import forward_is_current, signals_for
+    fw = {"last_session": "2026-10-22", "arms": {"A": {"pending": [{"symbol": "INDHOTEL"}]}}}      # made after Thursday
+    assert forward_is_current(fw, date(2026, 10, 23)) is True                                       # Friday: its session
+    assert forward_is_current(fw, date(2026, 10, 26)) is False                                      # Monday: Friday was missed
+    assert signals_for(fw, date(2026, 10, 26)) == []                                                # the trader agrees
+    fri = {**fw, "last_session": "2026-10-23"}
+    assert forward_is_current(fri, date(2026, 10, 26)) is True                                      # weekend skipped
+    assert forward_is_current(None, date(2026, 10, 26)) is False and forward_is_current({}, date(2026, 10, 26)) is False
+
+
+def test_the_results_page_is_told_whether_the_forward_list_is_for_today(monkeypatch):
+    from datetime import datetime
+    import server.app as app_mod
+    stale = {"last_session": "2026-10-22", "arms": {}}
+    monkeypatch.setattr(app_mod, "datetime", type("D", (datetime,), {"now": classmethod(lambda cls, tz=None: datetime(2026, 10, 26, 9, 30, tzinfo=tz))}))
+    assert app_mod._forward_for_page(stale)["for_today"] is False
+    assert app_mod._forward_for_page(None) is None

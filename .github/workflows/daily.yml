@@ -103,4 +103,10 @@ jobs:
           git add -A data/listing 2>/dev/null || true
           git add data/s2 docs/s2.html 2>/dev/null || true
           git diff --cached --quiet || git commit -m "scan: $(python -c "import json;print(json.load(open('data/scan.json'))['meta']['as_of'])")"
-          git push
+          pushed=0
+          for i in 1 2 3 4 5; do
+            git pull -q --rebase --autostash origin main && git push -q && { pushed=1; break; }
+            git rebase --abort 2>/dev/null || true
+            echo "push attempt $i failed (another job pushed meanwhile); retrying"; sleep $((i * 5))
+          done
+          [ "$pushed" = 1 ] || { echo "push failed after 5 attempts"; exit 1; }
