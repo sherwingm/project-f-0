@@ -45,17 +45,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 53.5,
-    "bid": 53.5,
+    "price": 54.0,
+    "bid": 54.0,
     "ask": 54.2,
     "ltp": 54.2,
-    "at": "2026-10-26T15:25:57+05:30",
+    "at": "2026-10-26T15:26:08+05:30",
     "stale": false
    },
-   "unrealised_gross": -543.75,
-   "exit_charges_est": 36.45,
-   "unrealised": -607.06,
-   "liquidation_value": 6651.05,
+   "unrealised_gross": -481.25,
+   "exit_charges_est": 36.56,
+   "unrealised": -544.67,
+   "liquidation_value": 6713.44,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -94,11 +94,11 @@
      "qty": 125
     },
     "last": {
-     "price": 53.5,
-     "at": "2026-10-26T15:25:57+05:30",
-     "qty": 125
+     "price": 54.0,
+     "at": "2026-10-26T15:26:08+05:30",
+     "qty": 250
     },
-    "n": 15057,
+    "n": 15065,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -148,17 +148,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 53.5,
-    "bid": 53.5,
+    "price": 54.0,
+    "bid": 54.0,
     "ask": 54.2,
     "ltp": 54.2,
-    "at": "2026-10-26T15:25:57+05:30",
+    "at": "2026-10-26T15:26:08+05:30",
     "stale": false
    },
-   "unrealised_gross": -713.75,
-   "exit_charges_est": 36.45,
-   "unrealised": -777.13,
-   "liquidation_value": 6651.05,
+   "unrealised_gross": -651.25,
+   "exit_charges_est": 36.56,
+   "unrealised": -714.74,
+   "liquidation_value": 6713.44,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -197,11 +197,11 @@
      "qty": 125
     },
     "last": {
-     "price": 53.5,
-     "at": "2026-10-26T15:25:57+05:30",
-     "qty": 125
+     "price": 54.0,
+     "at": "2026-10-26T15:26:08+05:30",
+     "qty": 250
     },
-    "n": 15057,
+    "n": 15065,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2713,7 +2713,7 @@
   },
   "2026-10-26": {
    "start_equity": 479220.88,
-   "end_equity": 473207.47,
+   "end_equity": 473332.25,
    "realised": 6074.2
   }
  },
@@ -2908,7 +2908,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-26T15:25:57+05:30",
+ "saved_at": "2026-10-26T15:26:08+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
