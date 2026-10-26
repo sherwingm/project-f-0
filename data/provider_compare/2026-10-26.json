@@ -270,6 +270,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -17.5
+  },
+  {
+   "at": "10:55:04",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.965,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 23.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -14.5
   }
  ],
  "top_gaps": [
@@ -286,6 +300,13 @@
    "kotak": 2.01,
    "upstox": 1.91,
    "at": "09:30"
+  },
+  {
+   "contract": "ULTRACEMCO26OCT11000CE",
+   "gap_pct": 4.965,
+   "kotak": 49.35,
+   "upstox": 46.9,
+   "at": "10:55"
   },
   {
    "contract": "KOTAKBANK26OCT440CE",
@@ -405,23 +426,16 @@
    "kotak": 4214.3,
    "upstox": 4208.0,
    "at": "10:40"
-  },
-  {
-   "contract": "BRITANNIA26OCTFUT",
-   "gap_pct": 0.145,
-   "kotak": 4546.8,
-   "upstox": 4553.4,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 19,
-  "contract_quotes": 644,
+  "rounds": 20,
+  "contract_quotes": 678,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 29.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.5
+  "upstox_minus_kotak_quote_time_s_median": -14.0
  }
 }
