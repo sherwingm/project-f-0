@@ -45,17 +45,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 53.35,
-    "bid": 53.35,
-    "ask": 54.25,
+    "price": 53.3,
+    "bid": 53.3,
+    "ask": 54.2,
     "ltp": 54.0,
-    "at": "2026-10-26T15:23:24+05:30",
+    "at": "2026-10-26T15:23:34+05:30",
     "stale": false
    },
-   "unrealised_gross": -562.5,
-   "exit_charges_est": 36.41,
-   "unrealised": -625.77,
-   "liquidation_value": 6632.34,
+   "unrealised_gross": -568.75,
+   "exit_charges_est": 36.4,
+   "unrealised": -632.01,
+   "liquidation_value": 6626.1,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -94,11 +94,11 @@
      "qty": 125
     },
     "last": {
-     "price": 53.35,
-     "at": "2026-10-26T15:23:24+05:30",
-     "qty": 125
+     "price": 53.3,
+     "at": "2026-10-26T15:23:34+05:30",
+     "qty": 375
     },
-    "n": 14954,
+    "n": 14961,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -148,17 +148,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 53.35,
-    "bid": 53.35,
-    "ask": 54.25,
+    "price": 53.3,
+    "bid": 53.3,
+    "ask": 54.2,
     "ltp": 54.0,
-    "at": "2026-10-26T15:23:24+05:30",
+    "at": "2026-10-26T15:23:34+05:30",
     "stale": false
    },
-   "unrealised_gross": -732.5,
-   "exit_charges_est": 36.41,
-   "unrealised": -795.84,
-   "liquidation_value": 6632.34,
+   "unrealised_gross": -738.75,
+   "exit_charges_est": 36.4,
+   "unrealised": -802.08,
+   "liquidation_value": 6626.1,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -197,11 +197,11 @@
      "qty": 125
     },
     "last": {
-     "price": 53.35,
-     "at": "2026-10-26T15:23:24+05:30",
-     "qty": 125
+     "price": 53.3,
+     "at": "2026-10-26T15:23:34+05:30",
+     "qty": 375
     },
-    "n": 14954,
+    "n": 14961,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2713,7 +2713,7 @@
   },
   "2026-10-26": {
    "start_equity": 479220.88,
-   "end_equity": 473170.05,
+   "end_equity": 473157.57,
    "realised": 6074.2
   }
  },
@@ -2908,7 +2908,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-26T15:23:24+05:30",
+ "saved_at": "2026-10-26T15:23:34+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
