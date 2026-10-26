@@ -634,6 +634,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -21.0
+  },
+  {
+   "at": "13:05:09",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 5.882,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -28.5
   }
  ],
  "top_gaps": [
@@ -643,6 +657,13 @@
    "kotak": 1.45,
    "upstox": 1.55,
    "at": "10:10"
+  },
+  {
+   "contract": "BDL26OCT1020CE",
+   "gap_pct": 5.882,
+   "kotak": 11.05,
+   "upstox": 10.4,
+   "at": "13:05"
   },
   {
    "contract": "KEI26OCT3800CE",
@@ -685,6 +706,13 @@
    "kotak": 5.75,
    "upstox": 5.55,
    "at": "10:40"
+  },
+  {
+   "contract": "BDL26OCT1020PE",
+   "gap_pct": 3.425,
+   "kotak": 7.3,
+   "upstox": 7.55,
+   "at": "13:05"
   },
   {
    "contract": "COFORGE26OCT1880CE",
@@ -762,25 +790,11 @@
    "kotak": 44.0,
    "upstox": 44.8,
    "at": "11:35"
-  },
-  {
-   "contract": "RELIANCE26OCT1200CE",
-   "gap_pct": 1.613,
-   "kotak": 6.2,
-   "upstox": 6.1,
-   "at": "12:30"
-  },
-  {
-   "contract": "ICICIBANK26OCT1390CE",
-   "gap_pct": 1.563,
-   "kotak": 9.6,
-   "upstox": 9.45,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 45,
-  "contract_quotes": 1527,
+  "rounds": 46,
+  "contract_quotes": 1561,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 35.3,
   "same_best_ask_pct": 35.3,
