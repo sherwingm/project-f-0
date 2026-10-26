@@ -536,6 +536,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -22.5
+  },
+  {
+   "at": "12:30:08",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.613,
+   "same_best_bid_pct": 44.1,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -29.5
   }
  ],
  "top_gaps": [
@@ -652,6 +666,13 @@
    "at": "11:35"
   },
   {
+   "contract": "RELIANCE26OCT1200CE",
+   "gap_pct": 1.613,
+   "kotak": 6.2,
+   "upstox": 6.1,
+   "at": "12:30"
+  },
+  {
    "contract": "ICICIBANK26OCT1390CE",
    "gap_pct": 1.563,
    "kotak": 9.6,
@@ -671,23 +692,16 @@
    "kotak": 29.9,
    "upstox": 30.25,
    "at": "09:40"
-  },
-  {
-   "contract": "RECLTD26OCT295CE",
-   "gap_pct": 1.149,
-   "kotak": 4.35,
-   "upstox": 4.3,
-   "at": "10:40"
   }
  ],
  "day": {
-  "rounds": 38,
-  "contract_quotes": 1289,
+  "rounds": 39,
+  "contract_quotes": 1323,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -20.25
+  "upstox_minus_kotak_quote_time_s_median": -21.0
  }
 }
