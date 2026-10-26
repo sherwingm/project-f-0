@@ -1002,6 +1002,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 85.3,
    "upstox_minus_kotak_quote_time_s_median": -10.0
+  },
+  {
+   "at": "15:15:13",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.128,
+   "same_best_bid_pct": 38.2,
+   "same_best_ask_pct": 44.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -1132,23 +1146,23 @@
    "at": "11:45"
   },
   {
+   "contract": "HDFCBANK26OCT690PE",
+   "gap_pct": 2.128,
+   "kotak": 4.7,
+   "upstox": 4.8,
+   "at": "15:15"
+  },
+  {
    "contract": "SBIN26OCT960PE",
    "gap_pct": 2.041,
    "kotak": 4.9,
    "upstox": 5.0,
    "at": "14:15"
-  },
-  {
-   "contract": "BHARTIARTL26OCT1880CE",
-   "gap_pct": 2.024,
-   "kotak": 12.35,
-   "upstox": 12.6,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 71,
-  "contract_quotes": 2410,
+  "rounds": 72,
+  "contract_quotes": 2444,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 38.2,
   "same_best_ask_pct": 41.2,
