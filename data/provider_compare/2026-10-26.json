@@ -396,6 +396,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "11:40:06",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.075,
+   "same_best_bid_pct": 44.1,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -519,6 +533,13 @@
    "at": "10:45"
   },
   {
+   "contract": "GODREJPROP26OCT1520CE",
+   "gap_pct": 1.075,
+   "kotak": 13.95,
+   "upstox": 13.8,
+   "at": "11:40"
+  },
+  {
    "contract": "LT26OCT3700PE",
    "gap_pct": 1.074,
    "kotak": 32.6,
@@ -531,23 +552,16 @@
    "kotak": 6.35,
    "upstox": 6.3,
    "at": "09:30"
-  },
-  {
-   "contract": "WIPRO26OCT190CE",
-   "gap_pct": 0.633,
-   "kotak": 1.58,
-   "upstox": 1.59,
-   "at": "11:00"
   }
  ],
  "day": {
-  "rounds": 28,
-  "contract_quotes": 950,
+  "rounds": 29,
+  "contract_quotes": 984,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 29.4,
-  "same_best_ask_pct": 33.85,
+  "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -15.5
+  "upstox_minus_kotak_quote_time_s_median": -16.0
  }
 }
