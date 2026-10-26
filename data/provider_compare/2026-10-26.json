@@ -676,6 +676,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "13:20:10",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.899,
+   "same_best_bid_pct": 44.1,
+   "same_best_ask_pct": 47.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -17.5
   }
  ],
  "top_gaps": [
@@ -727,6 +741,13 @@
    "kotak": 3.35,
    "upstox": 3.2,
    "at": "10:15"
+  },
+  {
+   "contract": "DMART26OCT3150CE",
+   "gap_pct": 3.899,
+   "kotak": 21.8,
+   "upstox": 20.95,
+   "at": "13:20"
   },
   {
    "contract": "RELIANCE26OCT1190PE",
@@ -785,6 +806,13 @@
    "at": "12:10"
   },
   {
+   "contract": "ETERNAL26OCT325PE",
+   "gap_pct": 2.381,
+   "kotak": 2.1,
+   "upstox": 2.15,
+   "at": "13:20"
+  },
+  {
    "contract": "HINDUNILVR26OCT1800PE",
    "gap_pct": 2.165,
    "kotak": 11.55,
@@ -804,28 +832,14 @@
    "kotak": 2.65,
    "upstox": 2.6,
    "at": "12:40"
-  },
-  {
-   "contract": "GLENMARK26OCT2200CE",
-   "gap_pct": 1.835,
-   "kotak": 10.9,
-   "upstox": 10.7,
-   "at": "11:35"
-  },
-  {
-   "contract": "EICHERMOT26OCT7000PE",
-   "gap_pct": 1.818,
-   "kotak": 44.0,
-   "upstox": 44.8,
-   "at": "11:35"
   }
  ],
  "day": {
-  "rounds": 48,
-  "contract_quotes": 1629,
+  "rounds": 49,
+  "contract_quotes": 1663,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 35.3,
-  "same_best_ask_pct": 36.75,
+  "same_best_ask_pct": 38.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
   "upstox_minus_kotak_quote_time_s_median": -21.0
