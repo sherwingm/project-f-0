@@ -382,6 +382,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -21.0
+  },
+  {
+   "at": "11:35:06",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.835,
+   "same_best_bid_pct": 26.5,
+   "same_best_ask_pct": 35.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -456,6 +470,20 @@
    "at": "09:35"
   },
   {
+   "contract": "GLENMARK26OCT2200CE",
+   "gap_pct": 1.835,
+   "kotak": 10.9,
+   "upstox": 10.7,
+   "at": "11:35"
+  },
+  {
+   "contract": "EICHERMOT26OCT7000PE",
+   "gap_pct": 1.818,
+   "kotak": 44.0,
+   "upstox": 44.8,
+   "at": "11:35"
+  },
+  {
    "contract": "ICICIBANK26OCT1390CE",
    "gap_pct": 1.563,
    "kotak": 9.6,
@@ -510,30 +538,16 @@
    "kotak": 1.58,
    "upstox": 1.59,
    "at": "11:00"
-  },
-  {
-   "contract": "HINDALCO26OCT880CE",
-   "gap_pct": 0.446,
-   "kotak": 11.2,
-   "upstox": 11.15,
-   "at": "10:00"
-  },
-  {
-   "contract": "DIXON26OCT11250CE",
-   "gap_pct": 0.394,
-   "kotak": 114.1,
-   "upstox": 113.65,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 916,
+  "rounds": 28,
+  "contract_quotes": 950,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 29.4,
-  "same_best_ask_pct": 32.4,
+  "same_best_ask_pct": 33.85,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -16.0
+  "upstox_minus_kotak_quote_time_s_median": -15.5
  }
 }
