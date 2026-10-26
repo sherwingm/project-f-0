@@ -261,4 +261,5 @@ Descriptive after the fixes:
   (2021-10 → 2024-09, 151 trades, t −1.2) and −2.4 % in the test window. The monthly put-write at k 0.94 won 34 of 34 in
   2021-24, then lost 7.5x its credit once (April 2025). **D7:** India VIX is above the next week's realised vol in
   every band except VIX > 22 and rising (+0.5 points; RV above VIX on 38 % of days).
+| S3 R1 · SENSEX replication of the late-expiry premium (`strategies/S3_R1_sensex_late_expiry_replication.md` + amendment) | **Does not replicate** (2026-10-26) | SENSEX test window, after the path-band re-fill (3,044 new contracts). R1a short straddle 14:30 → 15:15: 1 lot −6.5 % of the credit (t −0.52), 5 lots −2.7 % (t −0.22), worst day −₹29,740. R1b long straddle 14:45 → 15:25: −20.6 % (t −1.69). R1c short fly ±6, 5 lots: −8.7 % (t −0.66). Both sides lose on SENSEX expiry afternoons (costs and spread, no overpricing to harvest); the result holds without the 2 days shared with NIFTY expiries. Placebo on non-expiry days: −1.5 % (t −3.74). Together with D4, P6 / P7's NIFTY test-window edge is treated as specific to that period; the late-expiry short-premium idea is closed (`data/results/S3_R1_summary.md`) |
 
