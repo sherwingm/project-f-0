@@ -466,6 +466,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -7.0
+  },
+  {
+   "at": "12:05:07",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.941,
+   "same_best_bid_pct": 29.4,
+   "same_best_ask_pct": 29.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -19.5
   }
  ],
  "top_gaps": [
@@ -524,6 +538,13 @@
    "kotak": 56.95,
    "upstox": 55.25,
    "at": "11:10"
+  },
+  {
+   "contract": "MAXHEALTH26OCT830CE",
+   "gap_pct": 2.941,
+   "kotak": 6.8,
+   "upstox": 6.6,
+   "at": "12:05"
   },
   {
    "contract": "SUNPHARMA26OCT1760PE",
@@ -601,23 +622,16 @@
    "kotak": 4.5,
    "upstox": 4.45,
    "at": "10:45"
-  },
-  {
-   "contract": "GODREJPROP26OCT1520CE",
-   "gap_pct": 1.075,
-   "kotak": 13.95,
-   "upstox": 13.8,
-   "at": "11:40"
   }
  ],
  "day": {
-  "rounds": 33,
-  "contract_quotes": 1119,
+  "rounds": 34,
+  "contract_quotes": 1153,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -17.0
+  "upstox_minus_kotak_quote_time_s_median": -17.25
  }
 }
