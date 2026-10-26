@@ -284,6 +284,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -14.5
+  },
+  {
+   "at": "11:00:05",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.633,
+   "same_best_bid_pct": 38.2,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -29.0
   }
  ],
  "top_gaps": [
@@ -393,6 +407,13 @@
    "at": "09:30"
   },
   {
+   "contract": "WIPRO26OCT190CE",
+   "gap_pct": 0.633,
+   "kotak": 1.58,
+   "upstox": 1.59,
+   "at": "11:00"
+  },
+  {
    "contract": "HINDALCO26OCT880CE",
    "gap_pct": 0.446,
    "kotak": 11.2,
@@ -419,23 +440,16 @@
    "kotak": 163.9,
    "upstox": 164.2,
    "at": "09:45"
-  },
-  {
-   "contract": "RADICO26OCTFUT",
-   "gap_pct": 0.149,
-   "kotak": 4214.3,
-   "upstox": 4208.0,
-   "at": "10:40"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 678,
+  "rounds": 21,
+  "contract_quotes": 712,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 29.4,
   "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -14.5
  }
 }
