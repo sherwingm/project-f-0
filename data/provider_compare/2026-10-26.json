@@ -144,9 +144,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.0,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "10:10:03",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 6.897,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 38.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -4.5
   }
  ],
  "top_gaps": [
+  {
+   "contract": "ITC26OCT260PE",
+   "gap_pct": 6.897,
+   "kotak": 1.45,
+   "upstox": 1.55,
+   "at": "10:10"
+  },
   {
    "contract": "BANDHANBNK26OCT145PE",
    "gap_pct": 4.975,
@@ -279,23 +300,16 @@
    "kotak": 1873.3,
    "upstox": 1874.0,
    "at": "09:40"
-  },
-  {
-   "contract": "COLPAL26OCTFUT",
-   "gap_pct": 0.006,
-   "kotak": 1630.9,
-   "upstox": 1631.0,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 10,
-  "contract_quotes": 338,
+  "rounds": 11,
+  "contract_quotes": 372,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 23.5,
-  "same_best_ask_pct": 22.05,
+  "same_best_ask_pct": 23.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.5,
+  "oi_same_pct": 97.1,
   "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
