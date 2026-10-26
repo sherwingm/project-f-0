@@ -107,7 +107,7 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 - Option minutes (gitignored, local): `data/results/S1_v10_{bandv10,band12,band12q4,band050,band050q4}_minutes.csv`;
   re-fetch with the `stock-options-probe` workflow. Daily NSE option prices: `data/cache/fo_prices_*.csv` (fetched Apr–Oct
   2026), `fo_bhavcopy_*.csv` (to 2026-09-25).
-- Python with openpyxl / pytest: `%TEMP%\fo-venv\Scripts\python.exe`. Tests: all pass except the known
+- Python with openpyxl / pytest: `C:\Users\sherw\.venvs\fo\Scripts\python.exe` (moved 2026-10-26: %TEMP% was cleared). Tests: all pass except the known
   `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`.
 - Backtests need `EVENTS_DB=$TEMP/fo-seed/events.sqlite`. Print ASCII on the Windows console (`PYTHONIOENCODING=utf-8`).
 
@@ -150,12 +150,13 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 - **The review (23 Oct)** found 10 issues, all fixed or recorded; none flipped a verdict. About 420 looks at the NIFTY
   test window so far: re-mining it is not useful.
 - **Next:**
-  - **R1, the SENSEX replication** (pre-registered and amended before any SENSEX data was read). The SENSEX path-band
-    re-fill was dispatched at 15:31 IST on 23 Oct (`upstox_expired --underlying SENSEX --max-minutes 300`; it re-queues
-    itself if stopped). When `data/index/status.json` shows SENSEX `stopped: null`:
-    1. `git -C ../fo-index-data sparse-checkout add /data/index/options_1m/SENSEX/` (with `MSYS_NO_PATHCONV=1`), then pull;
-    2. run `python -m scanner.s3_r1`;
-    3. record R1 in DECISIONS.
+  - **R1, the SENSEX replication: done 26 Oct, does not replicate.** Both sides lose on SENSEX expiry afternoons
+    (`data/results/S3_R1_summary.md`). The late-expiry short-premium idea is closed. SENSEX options are now in the
+    sparse checkout.
+  - **Paid 2018 → data (the user asked, 25 Oct):** a Telegram seller of "GDFL" data (OptionVault repo, ₹18k for
+    everything). My advice: get a free January 2025 NIFTY options sample first and check it against our data before
+    paying. Licence and quality risk; its public sample is mislabelled. The free alternative: extend the NSE daily
+    bhavcopy back to 2018 (the user has not chosen yet).
   - Open, low priority:
     - the CBOE VIX → India VIX link (needs a download, so the user's OK);
     - max pain from the full bhavcopy OI;
@@ -203,7 +204,7 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 
 ## After a context compaction
 - Read this file first, then the tail of `PROGRESS.md`.
-- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. Python: `%TEMP%\fo-venv\Scripts\python.exe` (tests: all pass
+- `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. Python: `C:\Users\sherw\.venvs\fo\Scripts\python.exe` (tests: all pass
   except `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`).
 - Claude Code plugins on this PC (user scope): `skin-code` and `skins` (a custom "trader" skin is applied).
 - Stray untracked files from other sessions (`calib_cash.csv`, `fills_mech.csv`, `data/cache/s2_expiries_*.txt`): not ours.
