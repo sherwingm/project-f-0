@@ -452,6 +452,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "12:00:07",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 5.724,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 26.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
@@ -461,6 +475,13 @@
    "kotak": 1.45,
    "upstox": 1.55,
    "at": "10:10"
+  },
+  {
+   "contract": "KEI26OCT3800CE",
+   "gap_pct": 5.724,
+   "kotak": 42.8,
+   "upstox": 45.25,
+   "at": "12:00"
   },
   {
    "contract": "BANDHANBNK26OCT145PE",
@@ -587,23 +608,16 @@
    "kotak": 13.95,
    "upstox": 13.8,
    "at": "11:40"
-  },
-  {
-   "contract": "LT26OCT3700PE",
-   "gap_pct": 1.074,
-   "kotak": 32.6,
-   "upstox": 32.95,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 32,
-  "contract_quotes": 1085,
+  "rounds": 33,
+  "contract_quotes": 1119,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 32.4,
   "same_best_ask_pct": 35.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -17.25
+  "upstox_minus_kotak_quote_time_s_median": -17.0
  }
 }
