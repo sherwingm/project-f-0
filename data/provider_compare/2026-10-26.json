@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.2,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "09:35:01",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.024,
+   "same_best_bid_pct": 23.5,
+   "same_best_ask_pct": 20.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -4.0
   }
  ],
  "top_gaps": [
@@ -53,11 +67,25 @@
    "at": "09:30"
   },
   {
+   "contract": "BHARTIARTL26OCT1880CE",
+   "gap_pct": 2.024,
+   "kotak": 12.35,
+   "upstox": 12.6,
+   "at": "09:35"
+  },
+  {
    "contract": "BAJFINANCE26OCT910PE",
    "gap_pct": 0.787,
    "kotak": 6.35,
    "upstox": 6.3,
    "at": "09:30"
+  },
+  {
+   "contract": "BRITANNIA26OCTFUT",
+   "gap_pct": 0.145,
+   "kotak": 4546.8,
+   "upstox": 4553.4,
+   "at": "09:35"
   },
   {
    "contract": "ANANDRATHI26OCTFUT",
@@ -170,30 +198,16 @@
    "kotak": 17.85,
    "upstox": 17.85,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 2474.4,
-   "upstox": 2474.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIGREEN26OCT1180CE",
-   "gap_pct": 0.0,
-   "kotak": 23.0,
-   "upstox": 23.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 102,
+  "rounds": 4,
+  "contract_quotes": 136,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 14.7,
-  "same_best_ask_pct": 15.2,
+  "same_best_bid_pct": 19.1,
+  "same_best_ask_pct": 17.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.2,
-  "upstox_minus_kotak_quote_time_s_median": -8.0
+  "oi_same_pct": 92.65,
+  "upstox_minus_kotak_quote_time_s_median": -7.5
  }
 }
