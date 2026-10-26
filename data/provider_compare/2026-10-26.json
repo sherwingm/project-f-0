@@ -228,6 +228,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -28.5
+  },
+  {
+   "at": "10:40:04",
+   "contracts": 34,
+   "on_both": 34,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.478,
+   "same_best_bid_pct": 35.3,
+   "same_best_ask_pct": 32.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -251,6 +265,13 @@
    "kotak": 3.35,
    "upstox": 3.2,
    "at": "10:15"
+  },
+  {
+   "contract": "RELIANCE26OCT1190PE",
+   "gap_pct": 3.478,
+   "kotak": 5.75,
+   "upstox": 5.55,
+   "at": "10:40"
   },
   {
    "contract": "COFORGE26OCT1880CE",
@@ -286,6 +307,13 @@
    "kotak": 29.9,
    "upstox": 30.25,
    "at": "09:40"
+  },
+  {
+   "contract": "RECLTD26OCT295CE",
+   "gap_pct": 1.149,
+   "kotak": 4.35,
+   "upstox": 4.3,
+   "at": "10:40"
   },
   {
    "contract": "LT26OCT3700PE",
@@ -330,6 +358,13 @@
    "at": "09:45"
   },
   {
+   "contract": "RADICO26OCTFUT",
+   "gap_pct": 0.149,
+   "kotak": 4214.3,
+   "upstox": 4208.0,
+   "at": "10:40"
+  },
+  {
    "contract": "BRITANNIA26OCTFUT",
    "gap_pct": 0.145,
    "kotak": 4546.8,
@@ -349,37 +384,16 @@
    "kotak": 2216.7,
    "upstox": 2218.8,
    "at": "09:25"
-  },
-  {
-   "contract": "DIXON26OCTFUT",
-   "gap_pct": 0.08,
-   "kotak": 11201.0,
-   "upstox": 11210.0,
-   "at": "09:45"
-  },
-  {
-   "contract": "ANGELONE26OCTFUT",
-   "gap_pct": 0.073,
-   "kotak": 274.9,
-   "upstox": 275.1,
-   "at": "09:25"
-  },
-  {
-   "contract": "DRREDDY26OCTFUT",
-   "gap_pct": 0.071,
-   "kotak": 1264.5,
-   "upstox": 1263.6,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 16,
-  "contract_quotes": 542,
+  "rounds": 17,
+  "contract_quotes": 576,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.45,
-  "same_best_ask_pct": 31.35,
+  "same_best_bid_pct": 29.4,
+  "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -11.5
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
