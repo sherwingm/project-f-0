@@ -98,6 +98,24 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.2,
    "upstox_minus_kotak_quote_time_s_median": -21.0
+  },
+  {
+   "at": "09:55:02",
+   "contracts": 34,
+   "on_both": 33,
+   "missing_kotak": [
+    "HCLTECH26OCT1410PE"
+   ],
+   "missing_upstox": [
+    "HCLTECH26OCT1410PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 39.4,
+   "same_best_ask_pct": 45.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -243,13 +261,13 @@
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 238,
+  "rounds": 8,
+  "contract_quotes": 271,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 23.5,
   "same_best_ask_pct": 20.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.1,
+  "oi_same_pct": 97.05,
   "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
