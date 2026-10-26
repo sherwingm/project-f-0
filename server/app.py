@@ -285,7 +285,35 @@ def _fade_fast_loop() -> None:
         time.sleep(settings.fade_fast_seconds)
 
 
-_PHONE: dict = {"stream": None, "eod": None}
+_PHONE: dict = {"stream": None, "eod": None, "ready": None, "plan": None, "missing": None, "late": None, "checked": 0.0}
+
+
+def _plan_alerts(now: datetime) -> None:
+    """The next session's plan on Telegram (server/plan_alert.py): "list ready" once when it lands, the plan at 09:08, a
+    warning at 09:08 when the lists are not for today, and a note if a missing list arrives after the open."""
+    if now.timestamp() - _PHONE["checked"] < 30:
+        return
+    _PHONE["checked"] = now.timestamp()
+    from server import plan_alert as pa, sessions
+    meta, today, hhmm = (state.scan or {}).get("meta") or {}, now.date(), now.strftime("%H:%M")
+    day = pa.target_day(today, now.hour * 60 + now.minute)
+    if _PHONE["ready"] != day.isoformat() and (hhmm >= "15:45" or hhmm < "09:15"):
+        text = pa.ready_text(meta, day)
+        if text:
+            _PHONE["ready"] = day.isoformat()
+            alerts.send(text, key=f"ready-{day}", every=86400)
+    if not sessions.is_session(today):
+        return
+    if "09:08" <= hhmm < "09:15" and _PHONE["plan"] != today.isoformat():
+        _PHONE["plan"] = today.isoformat()
+        text, ok = pa.morning_text(meta, today)
+        _PHONE["missing"] = None if ok else today.isoformat()
+        alerts.send(text, key=f"plan-{today}", every=86400)
+    elif "09:15" <= hhmm < "15:00" and _PHONE["missing"] == today.isoformat() and _PHONE["late"] != today.isoformat():
+        text = pa.late_text(meta, today)
+        if text:
+            _PHONE["late"] = today.isoformat()
+            alerts.send(text, key=f"late-{today}", every=86400)
 
 
 def _phone_tick(now: datetime) -> None:
@@ -303,6 +331,7 @@ def _phone_tick(now: datetime) -> None:
         elif _PHONE["stream"] is False and s:
             alerts.send("✅ Upstox price stream is back (1-second prices).", key="stream-up", every=600)
         _PHONE["stream"] = s
+    _plan_alerts(now)
     today = now.date().isoformat()
     if now.strftime("%H:%M") >= "15:31" and _PHONE["eod"] != today and sessions.is_session(now.date()):
         _PHONE["eod"] = today
