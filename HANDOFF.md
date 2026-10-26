@@ -43,6 +43,8 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **No loss halts** (weekly removed 21 Oct, daily 22 Oct).
 - **Entry probe** (record only): asks every second 09:14:50-09:20 (10 s to 10:00) for fade signals' strikes, in
   `paper-state:data/entry_probe/<date>.json` (`strategies/S1_v11_entry_probe.md`).
+- **Deploy route (26 Oct):** the user set Tailscale SSH to `accept`, so `tailscale ssh ubuntu@ip-172-26-4-64` works from the PC with no
+  approval; the page fix (dd3dae0b) was deployed that way, after 15:40, and the ledger was identical before and after (21 closed, 2 open).
 - **26 Oct stale list (fixed 26 Oct, 93ffb965):** Friday's nightly scan built everything but its final `git push` lost a race
   with two index-data pushes, so no Monday list existed (same on 21 Oct). daily / fade-morning / retrain now pull-rebase and
   retry 5x. The page hides an Arm A/B list that is not for today (`forward.for_today`, `server.rules.forward_is_current`); it
