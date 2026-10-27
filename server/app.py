@@ -262,6 +262,8 @@ def startup() -> None:
     if src == "kotak" and state.feed and settings.upstox_analytics_token:
         _start_compare()
     threading.Thread(target=_daily_rebuild_loop, daemon=True).start()
+    if settings.scan_url:
+        threading.Thread(target=_scan_watch_loop, name="scan-watch", daemon=True).start()
 
 
 def _fade_fast_loop() -> None:
@@ -429,20 +431,52 @@ def _start_mirror() -> None:
         state.mirror = None
 
 
-def _pull_scan() -> dict:
+def _scan_id(meta: dict) -> tuple:
+    return (meta.get("as_of"), (meta.get("fade") or {}).get("session"), (meta.get("fade") or {}).get("made_at"),
+            (meta.get("forward") or {}).get("last_session"))
+
+
+def _pull_scan(only_if_new: bool = False) -> dict:
     """Read the scan someone else built (SCAN_URL, e.g. the GitHub Action's raw data/scan.json), keep a local copy,
-    and load it. Refuses anything that is not a scan, so a bad download never replaces a good scan."""
+    and load it. Refuses anything that is not a scan, so a bad download never replaces a good scan.
+    only_if_new: keep the loaded scan when the download carries the same lists (the watcher below)."""
     import requests
     r = requests.get(settings.scan_url, timeout=60, headers={"Cache-Control": "no-cache"})
     r.raise_for_status()
     scan = r.json()
     if not isinstance(scan, dict) or not scan.get("stocks") or "meta" not in scan:
         raise ValueError("SCAN_URL did not return a scan (no stocks/meta)")
+    if only_if_new and _scan_id(scan["meta"]) == _scan_id((state.scan or {}).get("meta") or {}):
+        return scan["meta"]
     SCAN_PATH.parent.mkdir(parents=True, exist_ok=True)
     SCAN_PATH.write_text(json.dumps(scan))
     state.load_scan(SCAN_PATH)
     log.info("scan %s read from SCAN_URL (%d stocks)", scan["meta"].get("as_of"), len(scan["stocks"]))
     return scan["meta"]
+
+
+def _scan_watch_once(now: datetime) -> str:
+    """The scan build on GitHub runs hours after its 20:30 schedule, and the fixed pulls (08:40, 09:05, 21:00, 22:00)
+    can miss it: while the next session's lists are not here yet, look again; load only what changed. Never during
+    09:15-15:45, so a list is not switched on mid-session."""
+    from server import plan_alert as pa
+    if "09:15" <= now.strftime("%H:%M") < "15:45":
+        return "skipped: market hours"
+    day = pa.target_day(now.date(), now.hour * 60 + now.minute)
+    r = pa.plan_rows((state.scan or {}).get("meta") or {}, day)
+    if r["fade_ok"] and r["fw_ok"]:
+        return "lists current"
+    _pull_scan(only_if_new=True)
+    return "checked"
+
+
+def _scan_watch_loop() -> None:
+    while True:
+        time.sleep(600)
+        try:
+            _scan_watch_once(datetime.now(IST))
+        except Exception as exc:  # noqa: BLE001 - the fixed pulls still run
+            log.warning("scan watch: %s", exc)
 
 
 def _rebuild() -> dict:

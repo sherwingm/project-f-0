@@ -66,3 +66,39 @@ def test_a_missing_list_that_arrives_late_is_announced_once(monkeypatch):
     for h, m in ((10, 30), (11, 0)):
         app._plan_alerts(datetime(2026, 10, 26, h, m, tzinfo=IST))
     assert len(sent) == 2 and sent[1].startswith("🕘")
+
+
+# ---------------------------------------------------------------- the scan watcher (27 Oct 2026)
+def _scan(as_of, fade_session, last):
+    return {"stocks": [{"symbol": "X"}], "meta": {"as_of": as_of, "fade": {"session": fade_session, "signals": [], "made_at": as_of},
+                                                  "forward": {"last_session": last, "arms": {}}}}
+
+
+def _watch_env(monkeypatch, tmp_path, current, remote):
+    import server.app as app
+    import requests
+    loaded, fetched = [], []
+    monkeypatch.setattr(app.settings, "scan_url", "http://x/scan.json")
+    monkeypatch.setattr(app, "SCAN_PATH", tmp_path / "scan.json")
+    monkeypatch.setattr(app.state, "scan", current, raising=False)
+    monkeypatch.setattr(app.state, "load_scan", lambda p: loaded.append(p), raising=False)
+    resp = type("R", (), {"raise_for_status": lambda s: None, "json": lambda s: remote})()
+    monkeypatch.setattr(requests, "get", lambda *a, **k: fetched.append(a) or resp)
+    return app, loaded, fetched
+
+
+def test_the_watcher_loads_a_list_that_lands_overnight_and_not_during_the_session(monkeypatch, tmp_path):
+    old, new = _scan("2026-10-22", "2026-10-23", "2026-10-22"), _scan("2026-10-26", "2026-10-27", "2026-10-26")
+    app, loaded, fetched = _watch_env(monkeypatch, tmp_path, old, new)
+    mon = lambda h, m: datetime(2026, 10, 27, h, m, tzinfo=IST)                    # noqa: E731
+    assert app._scan_watch_once(mon(10, 0)) == "skipped: market hours" and fetched == []
+    assert app._scan_watch_once(mon(3, 0)) == "checked" and len(loaded) == 1       # new lists: loaded
+    app.state.scan = new
+    assert app._scan_watch_once(mon(4, 0)) == "lists current" and len(fetched) == 1   # current: no more downloads
+
+
+def test_the_watcher_keeps_the_loaded_scan_when_the_download_is_unchanged(monkeypatch, tmp_path):
+    same = _scan("2026-10-22", "2026-10-23", "2026-10-22")
+    app, loaded, fetched = _watch_env(monkeypatch, tmp_path, same, same)
+    assert app._scan_watch_once(datetime(2026, 10, 27, 3, 0, tzinfo=IST)) == "checked"
+    assert len(fetched) == 1 and loaded == []                                      # looked, found nothing new, reloaded nothing
