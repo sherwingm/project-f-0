@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -11.0
+  },
+  {
+   "at": "09:50:04",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.696,
+   "same_best_bid_pct": 51.4,
+   "same_best_ask_pct": 51.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.3,
+   "upstox_minus_kotak_quote_time_s_median": -48.0
   }
  ],
  "top_gaps": [
@@ -114,6 +128,13 @@
    "kotak": 20.65,
    "upstox": 21.3,
    "at": "09:25"
+  },
+  {
+   "contract": "EICHERMOT26OCT7100PE",
+   "gap_pct": 2.696,
+   "kotak": 38.95,
+   "upstox": 40.0,
+   "at": "09:50"
   },
   {
    "contract": "BSE26OCT3400CE",
@@ -219,23 +240,16 @@
    "kotak": 350.5,
    "upstox": 350.5,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26OCT1260CE",
-   "gap_pct": 0.0,
-   "kotak": 12.95,
-   "upstox": 12.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 210,
+  "rounds": 7,
+  "contract_quotes": 245,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 22.9,
-  "same_best_ask_pct": 24.3,
+  "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.85,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 94.3,
+  "upstox_minus_kotak_quote_time_s_median": -11.0
  }
 }
