@@ -147,6 +147,13 @@ def ltt_age(ltt, now: datetime) -> dict:
     return {"ltt_age_s": age, "stale_ltt": False, "stale_ltt_reason": None}
 
 
+def not_traded_today(quote: dict | None, now: datetime) -> bool:
+    """True when the quote's last trade is from before today's 09:15 open: its bid / ask are left over from an earlier
+    session, not a price anyone can trade at now (27 Oct 2026: five fade puts bought at 09:15:01 at yesterday's ask,
+    up to twice the first real price). A quote without a last-trade time is not held back (Kotak sends none)."""
+    return bool(quote) and ltt_age(quote.get("timestamp"), now)["stale_ltt_reason"] == "last trade before today's 09:15 open"
+
+
 def entry_quote(quote: dict | None, now: datetime) -> dict | None:
     """The quote a rule trade was bought on: bid, ask, sizes, relative spread, last price and the stock's price."""
     if not quote:

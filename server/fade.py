@@ -38,7 +38,7 @@ import threading
 from datetime import datetime, time
 from typing import Callable
 
-from server import sessions
+from server import peak as pk, sessions
 from server.broker import tradingsymbol
 from server.rules import lot_of, never_fits, streaming
 
@@ -629,6 +629,10 @@ class FadeTrader:
             self._tried[key] = now.timestamp()
             spot = self.spot(sig["symbol"]) or sig.get("spot")
             book = self._book(sig, walk_path(sig.get("strikes") or [], spot, sig["side"]))
+            if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+                self._last_why[key] = w = "waiting for the first trade today (every quote is yesterday's)"
+                self._waiting(st, key, now, w)                   # no price of today yet: no buy and no refusal
+                continue
             why = never_fits(lot_of(book), BAND, MIN_PREMIUM)
             if why and self._sub2(st, sig, key, today, now, spot, book):
                 continue
@@ -647,6 +651,10 @@ class FadeTrader:
                     self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
+            if pk.not_traded_today(book.get(k), now):           # yesterday's book: wait for today's first trade
+                self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
+                self._waiting(st, key, now, w)
+                continue
             self._buy(st, sig, key, today, now, spot, k, px, lot, quote=book.get(k))
 
     def _sub2(self, st, sig, key, today, now, spot, book) -> bool:
@@ -656,6 +664,10 @@ class FadeTrader:
             st.setdefault("fade_sub2_why", {})[key] = p
             return False
         k, px, lot, lots, lc = p
+        if pk.not_traded_today(book.get(k), now):               # yesterday's book: wait (True = handled for now)
+            self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
+            self._waiting(st, key, now, w)
+            return True
         self._buy(st, sig, key, today, now, spot, k, px, lot, lots=lots,
                   sub2={"listing_close": lc, "lots": lots, "rule": "strategies/S1_v12_sub2_listing.md"}, quote=book.get(k))
         return True

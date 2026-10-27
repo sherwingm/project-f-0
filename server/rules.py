@@ -26,7 +26,7 @@ from datetime import date, datetime, time, timedelta
 from typing import Callable
 
 from scanner import backtest_s1_v7 as v7
-from server import sessions
+from server import peak as pk, sessions
 from server.broker import tradingsymbol
 
 log = logging.getLogger("rules")
@@ -266,6 +266,10 @@ class RuleTrader:
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
                 strikes = sig.get("liquid_strikes") or ([sig["open_strike"]] if sig.get("open_strike") else [])
                 book = self._book(sig, path_up(strikes, spot))
+                if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+                    self._last_why[key] = w = "waiting for the first trade today (every quote is yesterday's)"
+                    self._waiting(st, key, now, sig["arms"], w)  # no price of today yet: no buy and no refusal
+                    continue
                 why = never_fits(lot_of(book) or sig.get("open_lot") or 0)
                 if why:                                          # no strike can ever fit: say so now, not at 15:20
                     self._refuse(st, sig, "open", today, why)
@@ -277,6 +281,10 @@ class RuleTrader:
                     self._waiting(st, key, now, sig["arms"], w)
                     continue                                     # try again next poll, until 15:20
                 k, px, lot = w
+                if pk.not_traded_today(book.get(k), now):       # yesterday's book: wait for today's first trade
+                    self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
+                    self._waiting(st, key, now, sig["arms"], w)
+                    continue
                 with self.ledger.lock:                           # saved now: a restart must not buy it again
                     self._buy(st, key, sig, "open", k, px, lot, now, quote=book.get(k))
                     self.ledger._save()
@@ -295,6 +303,9 @@ class RuleTrader:
                     self._refuse(st, sig, "close", today, w)
                     continue
                 k, px, lot, _ = w
+                if pk.not_traded_today(book.get(k), now):
+                    self._refuse(st, sig, "close", today, f"no trade today at {k:g} (the quote is yesterday's)")
+                    continue
                 ask = (((book.get(k) or {}).get("depth") or {}).get("ask") or [[None]])[0][0]
                 if self.ledger.real_orders:                      # the real 15:20 book, not the day's ATP (2026-10-26)
                     if not ask:

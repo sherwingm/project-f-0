@@ -201,9 +201,23 @@ def test_the_live_checkpoint_reads_measured_trades_and_their_first_minutes(tmp_p
 def test_the_entry_quote_keeps_its_last_trade_time(tmp_path):
     lg, q, ft = ledger(tmp_path)
     q.set("PE", 1220.0, 18.0, 18.5)
-    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-14 15:29:59"                # a stale, yesterday's book
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-15 09:16:30"
+    ft.on_poll(t(9, 17))
+    assert lg.state["positions"][0]["entry_quote"]["ltt"] == "2026-10-15 09:16:30"
+
+
+def test_the_fade_waits_for_the_first_trade_today_instead_of_buying_yesterdays_book(tmp_path):
+    lg, q, ft = ledger(tmp_path)                                    # 27 Oct 2026: bought at 09:15:01 at yesterday's ask
+    q.set("PE", 1220.0, 18.0, 18.5)
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-14 15:29:59"
     ft.on_poll(t(9, 16))
-    assert lg.state["positions"][0]["entry_quote"]["ltt"] == "2026-10-14 15:29:59"
+    assert lg.state["positions"] == [] and not lg.state["rules"]["refused"]
+    assert "first trade today" in lg.state["rules"]["fade_wait"]["2026-10-15:HCLTECH"]["reason"]
+    q.set("PE", 1220.0, 9.0, 9.2)                                    # the first real trade, at half the old price
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-15 09:16:02"
+    ft.on_poll(t(9, 18))
+    pos = lg.state["positions"][0]
+    assert pos["entry"]["price"] == 9.2 and pos["entry_quote"]["stale_ltt"] is False
 
 
 def test_the_post_exit_series_runs_60_minutes_apart_from_the_held_peak(tmp_path):
@@ -253,11 +267,11 @@ def test_last_trade_age_and_the_stale_flag(ltt, now, stale, reason):
         assert a["ltt_age_s"] == 63307.0                                               # 17 h 35 min 7 s
 
 
-def test_a_stale_entry_is_flagged_but_still_bought_at_its_price(tmp_path):
-    lg, q, ft = ledger(tmp_path)
+def test_an_old_trade_from_today_is_flagged_but_still_bought_at_its_price(tmp_path):
+    lg, q, ft = ledger(tmp_path)                                    # only yesterday's book waits (27 Oct 2026)
     q.set("PE", 1220.0, 18.0, 18.5)
-    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-14 15:29:59"
-    ft.on_poll(t(9, 16))
+    q.book["HCLTECH26OCT1220PE"]["timestamp"] = "2026-10-15 09:15:10"
+    ft.on_poll(t(11, 0))
     p = lg.state["positions"][0]
     assert p["entry"]["price"] == 18.5 and p["entry_quote"]["stale_ltt"] is True             # a warning, not a refusal
 

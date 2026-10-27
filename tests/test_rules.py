@@ -293,3 +293,27 @@ def test_the_results_page_is_told_whether_the_forward_list_is_for_today(monkeypa
     monkeypatch.setattr(app_mod, "datetime", type("D", (datetime,), {"now": classmethod(lambda cls, tz=None: datetime(2026, 10, 26, 9, 30, tzinfo=tz))}))
     assert app_mod._forward_for_page(stale)["for_today"] is False
     assert app_mod._forward_for_page(None) is None
+
+
+def test_the_0915_buy_waits_for_the_first_trade_today_and_15_20_refuses_an_option_with_none(setup):
+    lg, q, rt, box = setup                                          # 27 Oct 2026: Arm A bought at yesterday's ask too
+    q.set(1300.0, 10.0, ask=10.0)
+    q.book[TS[1300.0]]["timestamp"] = "2026-10-13 15:29:59"
+    rt.on_poll(at(14, 9, 15, 2))
+    assert lg.state["positions"] == [] and not lg.state["rules"]["refused"]
+    assert "first trade today" in lg.state["rules"]["open_wait"]["2026-10-14:HCLTECH"]["reason"]
+    q.set(1300.0, 6.0, ask=6.0)
+    q.book[TS[1300.0]]["timestamp"] = "2026-10-14 09:16:02"
+    rt.on_poll(at(14, 9, 16, 5))
+    assert [p["entry"]["price"] for p in lg.state["positions"]] == [6.0]
+
+
+def test_the_15_20_buy_refuses_an_option_that_has_not_traded_today(setup):
+    lg, q, rt, box = setup
+    for k in (1300.0, 1350.0, 1400.0):
+        q.set(k, 10.0, ask=10.0)
+        q.book[TS[k]]["timestamp"] = "2026-10-13 15:29:59"
+    rt.on_poll(at(14, 15, 20))
+    assert not [p for p in lg.state["positions"] if p.get("rule", {}).get("mode") == "close"]
+    assert any("not traded today" in r.get("reason", "") or "the quote is yesterday's" in r.get("reason", "")
+               for r in lg.state["rules"]["refused"])
