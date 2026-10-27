@@ -224,6 +224,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.4,
    "upstox_minus_kotak_quote_time_s_median": -77.0
+  },
+  {
+   "at": "10:40:06",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 7.083,
+   "same_best_bid_pct": 54.3,
+   "same_best_ask_pct": 54.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -52.0
   }
  ],
  "top_gaps": [
@@ -240,6 +254,13 @@
    "kotak": 2.55,
    "upstox": 2.8,
    "at": "09:20"
+  },
+  {
+   "contract": "POLYCAB26OCT7700PE",
+   "gap_pct": 7.083,
+   "kotak": 29.65,
+   "upstox": 27.55,
+   "at": "10:40"
   },
   {
    "contract": "ASHOKLEY26OCT142.5CE",
@@ -319,6 +340,13 @@
    "at": "09:55"
   },
   {
+   "contract": "RELIANCE26OCTFUT",
+   "gap_pct": 0.008,
+   "kotak": 1191.3,
+   "upstox": 1191.4,
+   "at": "10:40"
+  },
+  {
    "contract": "360ONE26OCT980CE",
    "gap_pct": 0.0,
    "kotak": 79.2,
@@ -352,30 +380,16 @@
    "kotak": 24.55,
    "upstox": 24.55,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 6420.0,
-   "upstox": 6420.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT350CE",
-   "gap_pct": 0.0,
-   "kotak": 3.3,
-   "upstox": 3.3,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 16,
-  "contract_quotes": 560,
+  "rounds": 17,
+  "contract_quotes": 595,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 28.6,
-  "same_best_ask_pct": 36.2,
+  "same_best_ask_pct": 37.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -17.5
+  "upstox_minus_kotak_quote_time_s_median": -18.0
  }
 }
