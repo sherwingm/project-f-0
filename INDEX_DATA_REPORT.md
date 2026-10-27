@@ -59,6 +59,7 @@ saved beforehand (the recorder keeps `recorded_tokens.json`).
 |---|---|---|---|---|---|---|---|---|
 | before expiry (DATA_ACCESS_AUDIT) | 2026-10-18 | 1,923 | — | 385 | — | yes | 1,807 | — |
 | probe 1 | 2026-10-20 (run 2026-10-20) | 1923 | 384 | 462 | 0 | no | 376 | retained |
+| probe 2 | 2026-10-27 (run 2026-10-27) | 1923 | 384 | 462 | 0 | no | 361 | retained |
 
 ## VIX corrections
 Kotak's India VIX minutes with open > 200 were divided by 100: **92,936 rows corrected**, from **2021-10-20 09:15** to

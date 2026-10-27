@@ -52,5 +52,59 @@
   ],
   "verdict": "retained",
   "label": "2026-10-20"
+ },
+ {
+  "run_on": "2026-10-27",
+  "token": "47141",
+  "contract": "NIFTY 19-Oct-2026 22650 CE",
+  "expired_on": "2026-10-19",
+  "checks": [
+   {
+    "check": "1min before expiry",
+    "call": "nse_fo|47141 1min 2026-10-12..2026-10-16",
+    "rows": 1923,
+    "first": "2026-10-12T09:15:00+0530",
+    "last": "2026-10-16T15:39:00+0530",
+    "error": null
+   },
+   {
+    "check": "1min expiry day",
+    "call": "nse_fo|47141 1min 2026-10-19..2026-10-19",
+    "rows": 384,
+    "first": "2026-10-19T09:15:00+0530",
+    "last": "2026-10-19T15:39:00+0530",
+    "error": null
+   },
+   {
+    "check": "5min",
+    "call": "nse_fo|47141 5min 2026-10-12..2026-10-19",
+    "rows": 462,
+    "first": "2026-10-12T09:15:00+0530",
+    "last": "2026-10-19T15:35:00+0530",
+    "error": null
+   },
+   {
+    "check": "daily",
+    "call": "nse_fo|47141 D 2026-10-12..2026-10-19",
+    "rows": 0,
+    "first": null,
+    "last": null,
+    "error": null
+   },
+   {
+    "check": "control: NIFTY 50 spot 1min expiry day",
+    "call": "nse_cm|Nifty 50 1min 2026-10-19..2026-10-19",
+    "rows": 361,
+    "first": "2026-10-19T09:15:00+0530",
+    "last": "2026-10-19T15:29:00+0530",
+    "error": null
+   },
+   {
+    "check": "still in the scrip master",
+    "result": false
+   }
+  ],
+  "verdict": "retained",
+  "label": "2026-10-27"
  }
 ]
