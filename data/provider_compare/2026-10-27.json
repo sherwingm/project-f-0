@@ -546,6 +546,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -87.0
+  },
+  {
+   "at": "12:35:10",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.745,
+   "same_best_bid_pct": 68.6,
+   "same_best_ask_pct": 51.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -70.0
   }
  ],
  "top_gaps": [
@@ -620,6 +634,13 @@
    "at": "09:25"
   },
   {
+   "contract": "SOLARINDS26OCT19000CE",
+   "gap_pct": 2.745,
+   "kotak": 41.9,
+   "upstox": 40.75,
+   "at": "12:35"
+  },
+  {
    "contract": "EICHERMOT26OCT7100PE",
    "gap_pct": 2.696,
    "kotak": 38.95,
@@ -681,23 +702,16 @@
    "kotak": 67.44,
    "upstox": 67.38,
    "at": "10:30"
-  },
-  {
-   "contract": "IREDA26OCTFUT",
-   "gap_pct": 0.087,
-   "kotak": 103.93,
-   "upstox": 104.02,
-   "at": "11:55"
   }
  ],
  "day": {
-  "rounds": 39,
-  "contract_quotes": 1365,
+  "rounds": 40,
+  "contract_quotes": 1400,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.7,
-  "same_best_ask_pct": 45.7,
+  "same_best_bid_pct": 47.15,
+  "same_best_ask_pct": 46.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -41.0
+  "upstox_minus_kotak_quote_time_s_median": -41.5
  }
 }
