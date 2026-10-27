@@ -1,10 +1,15 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-26",
- "generated": "2026-10-27T01:49+05:30",
+ "session": "2026-10-27",
+ "generated": "2026-10-28T01:20+05:30",
  "signals": [],
- "note": null,
+ "note": "expiry or rollover session: the combined OI jumps, so no signals are read today",
  "history": [
+  {
+   "session": "2026-10-27",
+   "symbols": [],
+   "note": "expiry or rollover session: the combined OI jumps, so no signals are read today"
+  },
   {
    "session": "2026-10-26",
    "symbols": [],
