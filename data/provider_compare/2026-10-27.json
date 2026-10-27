@@ -504,6 +504,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -149.0
+  },
+  {
+   "at": "12:20:10",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 8.197,
+   "same_best_bid_pct": 51.4,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -527,6 +541,13 @@
    "kotak": 2.4,
    "upstox": 2.6,
    "at": "11:35"
+  },
+  {
+   "contract": "PGEL26OCT510CE",
+   "gap_pct": 8.197,
+   "kotak": 6.1,
+   "upstox": 6.6,
+   "at": "12:20"
   },
   {
    "contract": "POLYCAB26OCT7700PE",
@@ -639,23 +660,16 @@
    "kotak": 103.93,
    "upstox": 104.02,
    "at": "11:55"
-  },
-  {
-   "contract": "IRFC26OCTFUT",
-   "gap_pct": 0.081,
-   "kotak": 74.05,
-   "upstox": 74.11,
-   "at": "11:55"
   }
  ],
  "day": {
-  "rounds": 36,
-  "contract_quotes": 1260,
+  "rounds": 37,
+  "contract_quotes": 1295,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.7,
   "same_best_ask_pct": 45.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -40.0
+  "upstox_minus_kotak_quote_time_s_median": -41.0
  }
 }
