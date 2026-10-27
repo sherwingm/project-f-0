@@ -246,7 +246,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   const chg = (px, ref) => px == null || !ref ? null : (px / ref - 1) * 100;
   const MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
   const day = d => d ? `${+d.slice(8, 10)} ${MON[+d.slice(5, 7) - 1]}` : "—";
-  const when = t => !t ? "" : t.length > 10 ? `${day(t.slice(0, 10))} ${t.slice(11, 16)}` : day(t);
+  const when = t => !t ? "" : t.length > 10 ? `${day(t.slice(0, 10))} ${t.slice(11, 19)}` : day(t);
   const optName = (sym, strike, typ) => `${esc(sym)} <span>${num(strike, Number.isInteger(+strike) ? 0 : 2)} ${typ === "PE" ? "PUT" : "CALL"}</span>`;
   const tile = (k, v, c = "") => `<div class="tile"><small>${k}</small><b class="${c}">${v}</b></div>`;
   const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
@@ -487,7 +487,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
         if (st === "bought") return `<span class="chip in">bought</span>`;
         if (st === "refused") { const r = (ru.refused || []).filter(x => x.date === today && x.symbol === sym && (!mode || x.mode === mode)).pop();
           return `<span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`; }
-        if (w) return `<span class="chip">trying</span> <small>${esc(w.reason)} · ${esc(String(w.at).slice(11, 16))}</small>`;
+        if (w) return `<span class="chip">trying</span> <small>${esc(w.reason)} · ${esc(String(w.at).slice(11, 19))}</small>`;
         return `<span class="chip">waiting</span>`;
       };
       const rows = [];
@@ -524,10 +524,11 @@ td.mu-g { white-space:nowrap; font-weight:600; }
       const rows = P.trades.map(c => {
         const e = c.entry.price, held = c.held_peak && c.held_peak.price, after = c.after && c.after.peak && c.after.peak.price;
         const best = [held, anyTime ? after : null].filter(v => v != null);
-        return { x: c, open: false, e, held: chg(held, e), after: chg(after, e), up: best.length ? chg(Math.max(...best), e) : null, got: c.return_pct };
+        return { x: c, open: false, e, held: chg(held, e), after: chg(after, e), up: best.length ? chg(Math.max(...best), e) : null, got: c.return_pct,
+                 heldAt: c.held_peak && c.held_peak.at, afterAt: c.after && c.after.peak && c.after.peak.at };
       }).concat(P.positions.map(p => {
         const e = p.entry.price, pk = p.peak && p.peak.price, m = p.mark || {}, now = m.bid ?? m.price;
-        return { x: p, open: true, e, held: chg(pk, e), after: null, up: chg(pk, e), got: chg(now, e) };
+        return { x: p, open: true, e, held: chg(pk, e), after: null, up: chg(pk, e), got: chg(now, e), heldAt: p.peak && p.peak.at };
       })).filter(r => !arm || ((r.x.rule || {}).arms || []).includes(arm));
       if (!rows.length) return "";
       // one group's numbers: share of trades whose max up reached each level, median max up, average booked
@@ -570,7 +571,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
         const x = r.x, w = r.up == null ? 0 : Math.max(2, Math.min(100, r.up / 3));
         return `<tr data-why="${r.open ? "pos" : "trade"}:${esc(x.id)}" tabindex="0"><td class="l"><b>${esc(x.symbol)}</b> <small>${num(x.strike, 0)} ${x.instrument}</small> ${x.rule ? armTags(x.rule.arms) : ""}</td>
           <td>${when(x.opened_at)}</td><td>${r.open ? "open" : "closed"}</td><td class="entry">${rs(r.e)}</td>
-          <td class="gl ${dir(r.held)}">${r.held == null ? "—" : pct(r.held)}</td><td class="${dir(r.after)}">${r.open ? "<small>still held</small>" : r.after == null ? "—" : pct(r.after)}</td>
+          <td class="gl ${dir(r.held)}">${r.held == null ? "—" : pct(r.held)}${r.held != null && r.heldAt ? `<br><small>${when(r.heldAt)}</small>` : ""}</td><td class="${dir(r.after)}">${r.open ? "<small>still held</small>" : r.after == null ? "—" : pct(r.after) + (r.afterAt ? `<br><small>${when(r.afterAt)}</small>` : "")}</td>
           <td class="l"><span class="mubar" style="--w:${w}%"></span><b class="${dir(r.up)}">${r.up == null ? "—" : pct(r.up)}</b></td>
           <td class="${dir(r.got)}">${r.got == null ? "—" : pct(r.got)}<small>${r.open ? " now" : " booked"}</small></td></tr>`;
       }).join("");
@@ -588,7 +589,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
       const ww = [...waitsToday(ru.open_wait, today, null), ...waitsToday(ru.fade_wait, today, ["F"])];
       const late = pastEntries();                      // a row left after 15:20: the server missed its 15:20 check
       return rr.length || ww.length ? panel("Not bought today", (ww.length ? `<p class="note" style="margin:0 0 6px"><b>${late ? "Not bought, last reason seen" : "Still trying"}</b>${late ? "" : " (fade every second, Arms A/B every 30 seconds, until 15:20)"}: ${ww.map(x =>
-          `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${esc(x.reason)} · checked ${esc(String(x.at).slice(11, 16))})`).join(" · ")}</p>` : "")
+          `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${esc(x.reason)} · checked ${esc(String(x.at).slice(11, 19))})`).join(" · ")}</p>` : "")
         + (rr.length ? `<p class="note" style="margin:0">${rr.length && ww.length ? "<b>Refused:</b> " : ""}${rr.map(x => `<b>${esc(x.symbol)}</b> ${armTags(x.arms)} (${x.mode}: ${esc(x.reason)})`).join(" · ")}</p>` : "")) : "";
     },
     openPositions() {
@@ -719,7 +720,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
       const rows = s.rows || [], n = s.closed || 0;
       const status = r => r.net == null ? `<span class="chip">open</span>` : r.real_bought ? `<span class="chip out" title="Its ask later rose to Rs 2 and the real trader bought it: left out of the judged set">real bought</span>` : `<span class="chip in">closed${r.late ? " late" : ""}</span>`;
       const table = rows.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Contract</th><th>Day</th><th>Entry (ask)</th><th>Lot</th><th>Lot cost</th><th>Bought</th><th>Bid now / exit</th><th>High bid</th><th>Net</th><th>Net %</th><th class="l">Status</th></tr></thead><tbody>${rows.map(r =>
-          `<tr title="${esc(r.refused || "")}"><td><b>${esc(r.symbol)}</b></td><td>${r.strike} ${r.side === "PE" ? "PUT" : "CALL"} <small>${day(r.expiry)}</small></td><td>${day(r.date)}</td><td>${rs(r.entry)}</td><td>${(r.lot_size || 0).toLocaleString("en-IN")}</td><td>${rs(r.lot_cost)}</td><td>${esc(String(r.opened_at || "").slice(11, 16))}</td>
+          `<tr title="${esc(r.refused || "")}"><td><b>${esc(r.symbol)}</b></td><td>${r.strike} ${r.side === "PE" ? "PUT" : "CALL"} <small>${day(r.expiry)}</small></td><td>${day(r.date)}</td><td>${rs(r.entry)}</td><td>${(r.lot_size || 0).toLocaleString("en-IN")}</td><td>${rs(r.lot_cost)}</td><td>${esc(String(r.opened_at || "").slice(11, 19))}</td>
             <td>${r.exit != null ? rs(r.exit) : r.last_bid != null ? rs(r.last_bid) : "—"}</td><td>${r.max_bid != null ? rs(r.max_bid) : "—"}</td><td class="${dir(r.net)}">${r.net != null ? srs(r.net) : "—"}</td><td class="${dir(r.net_pct)}">${r.net_pct != null ? pct(r.net_pct) : "—"}</td><td class="l">${status(r)}</td></tr>`).join("")}</tbody></table></div>`
         : empty("None yet. A shadow entry is made when the fade walk refuses a stock only because its option is under ₹2.");
       return panel(T, `<div class="tiles">${tile("Closed", n)}${tile("Win rate", n ? Math.round(100 * s.wins / n) + "%" : "—")}${tile("Average net", s.mean_net_pct == null ? "—" : pct(s.mean_net_pct), dir(s.mean_net_pct))}${tile("Booked net", n ? srs(s.net_rs) : "—", dir(s.net_rs))}${tile("t", s.t == null ? "—" : s.t.toFixed(2))}${tile("Open", s.open || 0)}</div>
@@ -734,7 +735,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
         if (st === "bought") return `<span class="chip in">bought</span>`;
         if (st === "refused") { const r = (ru.refused || []).filter(x => x.mode === "fade" && x.date === FD.session && x.symbol === sym).pop();
           return `<span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`; }
-        if (w) return `<span class="chip">waiting</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 16))}</small>`;
+        if (w) return `<span class="chip">waiting</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 19))}</small>`;
         return P.rules ? "—" : "";
       };
       if (!FD) return panel("Next fade list", empty("The fade list is made each evening from the day's results filings."));
@@ -806,7 +807,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
         return `${label}: <span class="chip out">refused</span>${r ? ` <small>${esc(r.reason)}</small>` : ""}`;
       }
       const w = mode === "open" ? (ru.open_wait || {})[key] : null;
-      if (w) return `${label}: <span class="chip${pastEntries() ? " out" : ""}">${pastEntries() ? "not bought" : "waiting"}</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 16))}</small>`;
+      if (w) return `${label}: <span class="chip${pastEntries() ? " out" : ""}">${pastEntries() ? "not bought" : "waiting"}</span> <small>${esc(w.reason)} · checked ${esc(String(w.at).slice(11, 19))}</small>`;
       return `${label}: <small>${later}</small>`;
     };
     return `${one("open", "Open", "from 09:15")}<br>${one("close", "15:20", "not yet")}`;
