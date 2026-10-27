@@ -280,6 +280,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -23.0
+  },
+  {
+   "at": "11:00:07",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.448,
+   "same_best_bid_pct": 40.0,
+   "same_best_ask_pct": 54.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.4,
+   "upstox_minus_kotak_quote_time_s_median": -33.0
   }
  ],
  "top_gaps": [
@@ -310,6 +324,13 @@
    "kotak": 1.28,
    "upstox": 1.34,
    "at": "09:25"
+  },
+  {
+   "contract": "UPL26OCT495PE",
+   "gap_pct": 3.448,
+   "kotak": 2.9,
+   "upstox": 2.8,
+   "at": "11:00"
   },
   {
    "contract": "SBICARD26OCT540PE",
@@ -361,6 +382,13 @@
    "at": "09:45"
   },
   {
+   "contract": "UNITDSPR26OCTFUT",
+   "gap_pct": 0.104,
+   "kotak": 1254.3,
+   "upstox": 1253.0,
+   "at": "11:00"
+  },
+  {
    "contract": "NMDC26OCTFUT",
    "gap_pct": 0.089,
    "kotak": 67.44,
@@ -403,35 +431,21 @@
    "at": "09:55"
   },
   {
-   "contract": "RELIANCE26OCTFUT",
-   "gap_pct": 0.008,
-   "kotak": 1191.3,
-   "upstox": 1191.4,
-   "at": "10:40"
-  },
-  {
-   "contract": "360ONE26OCT980CE",
-   "gap_pct": 0.0,
-   "kotak": 79.2,
-   "upstox": 79.2,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26OCT980PE",
-   "gap_pct": 0.0,
-   "kotak": 9.5,
-   "upstox": 9.5,
-   "at": "09:20"
+   "contract": "VOLTAS26OCTFUT",
+   "gap_pct": 0.011,
+   "kotak": 940.5,
+   "upstox": 940.4,
+   "at": "11:00"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 700,
+  "rounds": 21,
+  "contract_quotes": 735,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.85,
+  "same_best_bid_pct": 37.1,
   "same_best_ask_pct": 37.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -19.5
+  "upstox_minus_kotak_quote_time_s_median": -21.0
  }
 }
