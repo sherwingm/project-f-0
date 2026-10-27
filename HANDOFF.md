@@ -1,4 +1,4 @@
-# Handoff (2026-10-24, 00:30 IST)
+# Handoff (2026-10-27, 09:00 IST)
 
 Repo: `sherwingm/project-f-0` (**public**, kept so by the user: free Actions minutes, Pages, token-free raw files;
 never commit secrets), local clone `C:\Users\sherw\project-f-0`. Records: `PROGRESS.md`, `DECISIONS.md` (rule and
@@ -8,8 +8,11 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **S1 and S2 stay separate.** Commit and push every step, and log it in PROGRESS.md. A rule or result change goes
   into DECISIONS.md in its own commit. Write a study's method in `strategies/*.md` and commit it **before** any number.
 - **The live server is the AWS VM.** Deploy yourself (the user wants that), **never 09:00-15:40 IST on weekdays**:
-  `ssh -o BatchMode=yes fo-scanner` (direct key login; NOT Tailscale SSH, which can stall on a browser approval the user does not want), then
-  `cd ~/fo_scanner && git pull && sudo systemctl restart fo-scanner`, guarded by a market-hours check on the VM's clock.
+  `ssh -o BatchMode=yes fo-scanner` (direct key login) **or** `"C:/Program Files/Tailscale/tailscale.exe" ssh ubuntu@ip-172-26-4-64
+  'bash -s' < script.sh` (the user set Tailscale SSH to `accept` on 26 Oct: no approval any more; the AWS console login and
+  the Lightsail browser terminal are NOT needed), then `cd ~/fo_scanner && git pull && sudo systemctl restart fo-scanner`,
+  guarded by a market-hours check on the VM's own clock (reuse the 26 Oct deploy script pattern: guard, ledger counts
+  before/after, strategy constants, restart, `is-active`, errors, commit, page 200, `PAPER=true`).
   After: `systemctl is-active`, 0 errors in `journalctl -u fo-scanner --since -60s`, `/api/paper/summary` ->
   `version.commit` = the pushed commit. Fallback: the Lightsail browser terminal via Claude in Chrome (its AWS session
   expires; never type into the sign-in page). Render is a mirror only, so `[skip render]` no longer matters for trading.
@@ -22,7 +25,18 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
   check the staged diff is yours (it has left colour edits in `templates/*.html` unstaged), pull with `--autostash`.
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
-## Live system: AWS Lightsail Mumbai VM, commit `686cc1f7` (deployed Sat 24 Oct)
+## Live system: AWS Lightsail Mumbai VM, commit `25669145` (deployed Mon 26 Oct 22:49)
+- **Pushed 27 Oct, NOT deployed yet:** `bd8ae35f`, the **scan watcher** (`_scan_watch_once`): while the next session's lists are
+  not on the server it pulls `SCAN_URL` every 10 min outside 09:15-15:45 and reloads only what changed. Deploy it **after
+  15:45 on 27 Oct**, guarded.
+- **27 Oct plan (loaded by the 08:40 pull):** fade APLAPOLLO, MANKIND, MAHABANK, RECLTD, TATACONSUM, SONACOMS, PAYTM;
+  Arm A COFORGE, DRREDDY, JSWSTEEL, SHREECEM; Arm B none.
+- **Telegram plan alerts** (`server/plan_alert.py`, live 26 Oct): "List for <day> is ready" once when the next session's lists
+  land; at **09:08** the plan, or "No full list for <day>" naming the stale list; "arrived after the open" if a missing
+  list lands 09:15-15:00. A list for another day is never shown as the plan.
+- **`server/autoupdate.py` is untracked and NOT wired in** (a self-updating server: pulls `main` after 15:45 and restarts). The
+  permission check blocked wiring it on 26 Oct, and it runs whatever lands on `main` while the VM holds a token that can write
+  there, so it needs the user's explicit OK (safer: only tagged or signed commits). Never `git add -A` it by accident.
 - **Phone alerts by Telegram** (`server/alerts.py`, bot token + chat id in the VM `.env` since 24 Oct): fills, unfilled
   buys, stuck sells, stream lost/back, errors, restarts, the day's result after 15:31. Live vs backtest per trade:
   `python -m scanner.fade_live_vs_backtest data <date>`.
@@ -45,10 +59,13 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
   `paper-state:data/entry_probe/<date>.json` (`strategies/S1_v11_entry_probe.md`).
 - **Deploy route (26 Oct):** the user set Tailscale SSH to `accept`, so `tailscale ssh ubuntu@ip-172-26-4-64` works from the PC with no
   approval; the page fix (dd3dae0b) was deployed that way, after 15:40, and the ledger was identical before and after (21 closed, 2 open).
-- **26 Oct stale list (fixed 26 Oct, 93ffb965):** Friday's nightly scan built everything but its final `git push` lost a race
+- **26 Oct stale list (fixed, live 26 Oct 22:49):** Friday's nightly scan built everything but its final `git push` lost a race
   with two index-data pushes, so no Monday list existed (same on 21 Oct). daily / fade-morning / retrain now pull-rebase and
-  retry 5x. The page hides an Arm A/B list that is not for today (`forward.for_today`, `server.rules.forward_is_current`); it
-  goes live with the next AWS restart (after 15:40). The trader itself was right: it ignores a list from another session.
+  retry 5x (**proved**: the 26 Oct build ran 20:11 UTC and pushed 20:21 UTC = 01:51 IST). The page hides an Arm A/B list that
+  is not for today (`forward.for_today`, `server.rules.forward_is_current`). The trader itself was right: it ignores a list
+  from another session.
+- **List timing:** GitHub's 20:30 IST schedule really runs ~00:15-02:00 IST; the server pulls the scan at 08:40, 09:05, 21:00
+  and 22:00 IST (plus the watcher above once deployed), so overnight lists reach it at 08:40 at the latest.
 - **Sellable-peak measurement** (`server/peak.py`, measurement only):
   - `held_bid`: highest / lowest best bid while held, with times, bid size, quote count, longest gap;
   - `peak_capture` at the exit: net if sold at the peak bid (an estimate; `lot_fits_at_peak`), Rs left, capture %
@@ -197,10 +214,11 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   session.
 
 ## Open (ask the user before doing)
-- **After Mon 26 Oct's close (after 15:40):** `python -m scanner.fade_live_validate` on the first measured trades
-  (entry quote and stale flag, held peak/low, exit bid, 60-min post-exit rows, backup); `python -m
-  scanner.fade_live_checkpoint` (target 30 measured trades); the 27 Oct contracts' T-1 exits on 26 Oct; the entry
-  probe's A / B / C verdicts.
+- **Tue 27 Oct, before 09:15:** the **09:08 Telegram plan** should arrive (not yet seen sent); trades start 09:15 (11 planned).
+- **After Tue 27 Oct's close (after 15:45):** deploy `bd8ae35f` (guarded); then `python -m scanner.fade_live_validate` on the
+  first measured trades (no trade was measured on 26 Oct: no list that day; entry quote and stale flag, held peak/low,
+  exit bid, 60-min post-exit rows, backup); `python -m scanner.fade_live_checkpoint` (target 30 measured trades); the
+  first real-order fills; the entry probe's A / B / C verdicts. Check that tonight's build ran and pushed.
 - Review v12 vs v11/v10 at 30 closed v12 trades; the below-Rs 2 rule's live trades as they come.
 - Hypotheses for live data (no rule change without the user): recovery after the stop on real bids; stale first-second
   entries; entry spread vs the 2 % trail gap and early bid moves.
@@ -210,6 +228,10 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 
 ## After a context compaction
 - Read this file first, then the tail of `PROGRESS.md`.
+- This chat is a fork of "rem works in fade", renamed "S1 fade live fixes 26 Oct" (the desktop app nests forks under their parent;
+  `claude://claude.ai/epitaxy/local_7712e1b3-d385-48bb-a87b-25789c0bada8` opens it). The user's mods `live-trades` (a paper-account
+  pane) and `pet-crab` are in `C:/Users/sherw/.claude/dev-mods/7712e1b3-d385-48bb-a87b-25789c0bada8/`; they only draw in a terminal
+  Claude Code >= 2.1.308 (`claude` on the PATH is 2.1.96; the desktop app shows no mod panes).
 - `gh` is at `C:/Program Files/GitHub CLI/gh.exe`. Python: `C:\Users\sherw\.venvs\fo\Scripts\python.exe` (tests: all pass
   except `test_spec12_step7_model.py::test_infer_for_scan_adds_the_model_block`).
 - Claude Code plugins on this PC (user scope): `skin-code` and `skins` (a custom "trader" skin is applied).
