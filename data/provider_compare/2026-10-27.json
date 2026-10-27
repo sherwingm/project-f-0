@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -39.0
+  },
+  {
+   "at": "11:55:09",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.351,
+   "same_best_bid_pct": 54.3,
+   "same_best_ask_pct": 71.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -53.0
   }
  ],
  "top_gaps": [
@@ -515,6 +529,13 @@
    "at": "09:35"
   },
   {
+   "contract": "IREDA26OCT104CE",
+   "gap_pct": 1.351,
+   "kotak": 0.74,
+   "upstox": 0.75,
+   "at": "11:55"
+  },
+  {
    "contract": "GLENMARK26OCT2240CE",
    "gap_pct": 1.149,
    "kotak": 8.7,
@@ -550,42 +571,35 @@
    "at": "10:30"
   },
   {
+   "contract": "IREDA26OCTFUT",
+   "gap_pct": 0.087,
+   "kotak": 103.93,
+   "upstox": 104.02,
+   "at": "11:55"
+  },
+  {
+   "contract": "IRFC26OCTFUT",
+   "gap_pct": 0.081,
+   "kotak": 74.05,
+   "upstox": 74.11,
+   "at": "11:55"
+  },
+  {
    "contract": "BEL26OCTFUT",
    "gap_pct": 0.067,
    "kotak": 372.9,
    "upstox": 372.65,
    "at": "09:35"
-  },
-  {
-   "contract": "ASHOKLEY26OCTFUT",
-   "gap_pct": 0.042,
-   "kotak": 143.06,
-   "upstox": 143.0,
-   "at": "09:25"
-  },
-  {
-   "contract": "BPCL26OCTFUT",
-   "gap_pct": 0.034,
-   "kotak": 290.45,
-   "upstox": 290.55,
-   "at": "11:20"
-  },
-  {
-   "contract": "BAJAJHLDNG26OCTFUT",
-   "gap_pct": 0.027,
-   "kotak": 10964.0,
-   "upstox": 10967.0,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 1085,
+  "rounds": 32,
+  "contract_quotes": 1120,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 42.9,
   "same_best_ask_pct": 42.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -32.0
+  "upstox_minus_kotak_quote_time_s_median": -32.5
  }
 }
