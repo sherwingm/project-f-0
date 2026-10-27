@@ -658,6 +658,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -37.0
+  },
+  {
+   "at": "13:15:12",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.256,
+   "same_best_bid_pct": 68.6,
+   "same_best_ask_pct": 57.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -96.0
   }
  ],
  "top_gaps": [
@@ -746,6 +760,13 @@
    "at": "09:50"
   },
   {
+   "contract": "DIVISLAB26OCT9400PE",
+   "gap_pct": 2.256,
+   "kotak": 39.9,
+   "upstox": 39.0,
+   "at": "13:15"
+  },
+  {
    "contract": "BSE26OCT3400CE",
    "gap_pct": 2.05,
    "kotak": 21.95,
@@ -793,23 +814,16 @@
    "kotak": 1254.3,
    "upstox": 1253.0,
    "at": "11:00"
-  },
-  {
-   "contract": "NMDC26OCTFUT",
-   "gap_pct": 0.089,
-   "kotak": 67.44,
-   "upstox": 67.38,
-   "at": "10:30"
   }
  ],
  "day": {
-  "rounds": 47,
-  "contract_quotes": 1645,
+  "rounds": 48,
+  "contract_quotes": 1680,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 51.4,
-  "same_best_ask_pct": 48.6,
+  "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -41.0
+  "oi_same_pct": 98.55,
+  "upstox_minus_kotak_quote_time_s_median": -41.5
  }
 }
