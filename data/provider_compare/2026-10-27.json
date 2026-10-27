@@ -196,6 +196,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -56.0
+  },
+  {
+   "at": "10:30:06",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.089,
+   "same_best_bid_pct": 45.7,
+   "same_best_ask_pct": 51.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.6,
+   "upstox_minus_kotak_quote_time_s_median": -117.0
   }
  ],
  "top_gaps": [
@@ -247,6 +261,13 @@
    "kotak": 31.05,
    "upstox": 31.1,
    "at": "09:45"
+  },
+  {
+   "contract": "NMDC26OCTFUT",
+   "gap_pct": 0.089,
+   "kotak": 67.44,
+   "upstox": 67.38,
+   "at": "10:30"
   },
   {
    "contract": "BEL26OCTFUT",
@@ -331,23 +352,16 @@
    "kotak": 3.3,
    "upstox": 3.3,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCT350PE",
-   "gap_pct": 0.0,
-   "kotak": 1.9,
-   "upstox": 1.9,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 490,
+  "rounds": 15,
+  "contract_quotes": 525,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 28.6,
-  "same_best_ask_pct": 36.2,
+  "same_best_ask_pct": 37.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.1,
-  "upstox_minus_kotak_quote_time_s_median": -16.5
+  "upstox_minus_kotak_quote_time_s_median": -17.0
  }
 }
