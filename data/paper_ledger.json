@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 459905.36999999994,
+ "cash": 425211.79,
  "positions": [
   {
    "id": "P-1792057633424-1",
@@ -207,6 +207,695 @@
      "live best bid (feed poll)"
     ],
     "max_gap_s": 10.3
+   }
+  },
+  {
+   "id": "P-1793072701712-3",
+   "symbol": "RECLTD",
+   "instrument": "CE",
+   "expiry": "2026-11-23",
+   "strike": 310.0,
+   "tradingsymbol": "RECLTD26NOV310CE",
+   "lot_size": 1575,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1575,
+   "entry": {
+    "price": 4.9,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 1575,
+    "price": 4.9,
+    "value": 7717.5,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.74,
+    "sebi": 0.01,
+    "stamp": 0.23,
+    "gst": 4.09,
+    "total": 27.07
+   },
+   "entry_charges_open": 27.07,
+   "stop": null,
+   "max_loss_at_entry": 7744.57,
+   "margin": 0.0,
+   "opened_at": "2026-10-27T09:15:01+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 38.42,
+   "unrealised": -65.49,
+   "liquidation_value": 7679.08,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-27",
+    "filed": "2026-10-26",
+    "why": "net profit YoY -21.2 %, QoQ -17.1 %; revenue YoY -1.0 %",
+    "spot_at_entry": 298.2,
+    "np_yoy": -21.2,
+    "np_qoq": -17.1,
+    "rev_yoy": -1.0,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 9.8,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 3.92,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 5.39,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 5.39,
+     "peak": null
+    },
+    "shadow_fd2": null,
+    "best": 4.9,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 4.7,
+    "bid_qty": 1575,
+    "ask": 4.9,
+    "ask_qty": 1575,
+    "ltp": 4.85,
+    "spread_pct": 4.17,
+    "spot": null,
+    "volume": 538650,
+    "oi": 700875,
+    "source": "upstox_stream",
+    "ltt": "2026-10-26 15:39:51",
+    "at": "2026-10-27T09:15:01+05:30",
+    "ltt_age_s": 63310.7,
+    "stale_ltt": true,
+    "stale_ltt_reason": "last trade before today's 09:15 open"
+   },
+   "peak": {
+    "price": 4.9,
+    "at": "2026-10-27T09:15:01+05:30"
+   },
+   "trough": {
+    "price": 4.9,
+    "at": "2026-10-27T09:15:01+05:30"
+   },
+   "order": {
+    "decision_price": 4.9,
+    "limit": 5.4,
+    "tick": 0.05,
+    "placed_at": "2026-10-27T09:15:00+05:30",
+    "filled_at": "2026-10-27T09:15:01+05:30",
+    "wait_s": 1.0,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 4.9,
+      "qty": 1575
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793072701725-5",
+   "symbol": "TATACONSUM",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 880.0,
+   "tradingsymbol": "TATACONSUM26NOV880PE",
+   "lot_size": 550,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 550,
+   "entry": {
+    "price": 12.1,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 550,
+    "price": 12.1,
+    "value": 6655.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.36,
+    "sebi": 0.01,
+    "stamp": 0.2,
+    "gst": 4.03,
+    "total": 26.6
+   },
+   "entry_charges_open": 26.6,
+   "stop": null,
+   "max_loss_at_entry": 6681.6,
+   "margin": 0.0,
+   "opened_at": "2026-10-27T09:15:01+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 36.38,
+   "unrealised": -62.98,
+   "liquidation_value": 6618.62,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-27",
+    "filed": "2026-10-26",
+    "why": "net profit YoY +15.7 %, QoQ +10.1 %; revenue YoY +14.0 %",
+    "spot_at_entry": 936.5,
+    "np_yoy": 15.7,
+    "np_qoq": 10.1,
+    "rev_yoy": 14.0,
+    "shadow_np25": false,
+    "shadow_t100": {
+     "target": 24.2,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 9.68,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 13.31,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 13.31,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 12.1,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 11.65,
+    "bid_qty": 1650,
+    "ask": 12.1,
+    "ask_qty": 550,
+    "ltp": 11.75,
+    "spread_pct": 3.79,
+    "spot": null,
+    "volume": 259600,
+    "oi": 81950,
+    "source": "upstox_stream",
+    "ltt": "2026-10-26 15:39:31",
+    "at": "2026-10-27T09:15:01+05:30",
+    "ltt_age_s": 63330.7,
+    "stale_ltt": true,
+    "stale_ltt_reason": "last trade before today's 09:15 open"
+   },
+   "peak": {
+    "price": 12.1,
+    "at": "2026-10-27T09:15:01+05:30"
+   },
+   "trough": {
+    "price": 12.1,
+    "at": "2026-10-27T09:15:01+05:30"
+   },
+   "order": {
+    "decision_price": 12.1,
+    "limit": 12.5,
+    "tick": 0.05,
+    "placed_at": "2026-10-27T09:15:00+05:30",
+    "filled_at": "2026-10-27T09:15:01+05:30",
+    "wait_s": 1.0,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 12.1,
+      "qty": 550
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793072703147-10",
+   "symbol": "APLAPOLLO",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 1900.0,
+   "tradingsymbol": "APLAPOLLO26NOV1900PE",
+   "lot_size": 350,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 350,
+   "entry": {
+    "price": 16.7,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 350,
+    "price": 16.7,
+    "value": 5845.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.08,
+    "sebi": 0.01,
+    "stamp": 0.18,
+    "gst": 3.97,
+    "total": 26.24
+   },
+   "entry_charges_open": 26.24,
+   "stop": null,
+   "max_loss_at_entry": 5871.24,
+   "margin": 0.0,
+   "opened_at": "2026-10-27T09:15:03+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 34.83,
+   "unrealised": -61.07,
+   "liquidation_value": 5810.17,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-27",
+    "filed": "2026-10-26",
+    "why": "net profit YoY +26.8 %, QoQ +45.3 %; revenue YoY +34.5 %",
+    "spot_at_entry": 2077.9,
+    "np_yoy": 26.8,
+    "np_qoq": 45.3,
+    "rev_yoy": 34.5,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 33.4,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 13.36,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 18.37,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 18.37,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": true,
+     "D": -0.252,
+     "D_raw": 0.43,
+     "tagged": false
+    },
+    "best": 16.7,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 15.65,
+    "bid_qty": 700,
+    "ask": 16.7,
+    "ask_qty": 1050,
+    "ltp": 16.0,
+    "spread_pct": 6.49,
+    "spot": null,
+    "volume": 317800,
+    "oi": 76300,
+    "source": "upstox_stream",
+    "ltt": "2026-10-26 15:39:00",
+    "at": "2026-10-27T09:15:03+05:30",
+    "ltt_age_s": 63363.1,
+    "stale_ltt": true,
+    "stale_ltt_reason": "last trade before today's 09:15 open"
+   },
+   "peak": {
+    "price": 16.7,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "trough": {
+    "price": 16.7,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "order": {
+    "decision_price": 16.7,
+    "limit": 17.25,
+    "tick": 0.05,
+    "placed_at": "2026-10-27T09:15:01+05:30",
+    "filled_at": "2026-10-27T09:15:03+05:30",
+    "wait_s": 1.4,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 16.7,
+      "qty": 350
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793072703160-12",
+   "symbol": "SONACOMS",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 700.0,
+   "tradingsymbol": "SONACOMS26NOV700PE",
+   "lot_size": 1225,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1225,
+   "entry": {
+    "price": 6.5,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 1225,
+    "price": 6.5,
+    "value": 7962.5,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.83,
+    "sebi": 0.01,
+    "stamp": 0.24,
+    "gst": 4.11,
+    "total": 27.19
+   },
+   "entry_charges_open": 27.19,
+   "stop": null,
+   "max_loss_at_entry": 7989.69,
+   "margin": 0.0,
+   "opened_at": "2026-10-27T09:15:03+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 38.89,
+   "unrealised": -66.08,
+   "liquidation_value": 7923.61,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-27",
+    "filed": "2026-10-26",
+    "why": "net profit YoY +30.8 %, QoQ +24.9 %; revenue YoY +35.2 %",
+    "spot_at_entry": 781.9,
+    "np_yoy": 30.8,
+    "np_qoq": 24.9,
+    "rev_yoy": 35.2,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 13.0,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 5.2,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 7.15,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 7.15,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 6.5,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 6.2,
+    "bid_qty": 4900,
+    "ask": 6.5,
+    "ask_qty": 1225,
+    "ltp": 6.4,
+    "spread_pct": 4.72,
+    "spot": null,
+    "volume": 556150,
+    "oi": 161700,
+    "source": "upstox_stream",
+    "ltt": "2026-10-26 15:39:08",
+    "at": "2026-10-27T09:15:03+05:30",
+    "ltt_age_s": 63355.1,
+    "stale_ltt": true,
+    "stale_ltt_reason": "last trade before today's 09:15 open"
+   },
+   "peak": {
+    "price": 6.5,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "trough": {
+    "price": 6.5,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "order": {
+    "decision_price": 6.5,
+    "limit": 6.85,
+    "tick": 0.05,
+    "placed_at": "2026-10-27T09:15:01+05:30",
+    "filled_at": "2026-10-27T09:15:03+05:30",
+    "wait_s": 1.4,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 6.5,
+      "qty": 1225
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793072703172-14",
+   "symbol": "PAYTM",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 1400.0,
+   "tradingsymbol": "PAYTM26NOV1400PE",
+   "lot_size": 725,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 725,
+   "entry": {
+    "price": 8.8,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 725,
+    "price": 8.8,
+    "value": 6380.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.27,
+    "sebi": 0.01,
+    "stamp": 0.19,
+    "gst": 4.01,
+    "total": 26.48
+   },
+   "entry_charges_open": 26.48,
+   "stop": null,
+   "max_loss_at_entry": 6406.48,
+   "margin": 0.0,
+   "opened_at": "2026-10-27T09:15:03+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 35.86,
+   "unrealised": -62.34,
+   "liquidation_value": 6344.14,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-27",
+    "filed": "2026-10-26",
+    "why": "net profit YoY +971.4 %, QoQ +2.3 %; revenue YoY +28.5 %",
+    "spot_at_entry": 1654.7,
+    "np_yoy": 971.4,
+    "np_qoq": 2.3,
+    "rev_yoy": 28.5,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 17.6,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 7.04,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 9.68,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 9.68,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 8.8,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 8.55,
+    "bid_qty": 2175,
+    "ask": 8.8,
+    "ask_qty": 2175,
+    "ltp": 8.7,
+    "spread_pct": 2.88,
+    "spot": null,
+    "volume": 377000,
+    "oi": 244325,
+    "source": "upstox_stream",
+    "ltt": "2026-10-26 15:38:01",
+    "at": "2026-10-27T09:15:03+05:30",
+    "ltt_age_s": 63422.1,
+    "stale_ltt": true,
+    "stale_ltt_reason": "last trade before today's 09:15 open"
+   },
+   "peak": {
+    "price": 8.8,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "trough": {
+    "price": 8.8,
+    "at": "2026-10-27T09:15:03+05:30"
+   },
+   "order": {
+    "decision_price": 8.8,
+    "limit": 9.25,
+    "tick": 0.05,
+    "placed_at": "2026-10-27T09:15:01+05:30",
+    "filled_at": "2026-10-27T09:15:03+05:30",
+    "wait_s": 1.4,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 8.8,
+      "qty": 725
+     }
+    ],
+    "old_price": null
    }
   }
  ],
@@ -2715,6 +3404,11 @@
    "start_equity": 479220.88,
    "end_equity": 473219.95,
    "realised": 6074.2
+  },
+  "2026-10-27": {
+   "start_equity": 473219.95,
+   "end_equity": 472901.99,
+   "realised": 0.0
   }
  },
  "peak_equity": 563416.62,
@@ -2908,7 +3602,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-26T15:29:57+05:30",
+ "saved_at": "2026-10-27T09:15:03+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -3011,6 +3705,15 @@
      "F"
     ],
     "reason": "never fits: 1 lot is 12,000 shares, so Rs 8,000 allows at most Rs 0.67 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-10-27",
+    "symbol": "MAHABANK",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 6,500 shares, so Rs 8,000 allows at most Rs 1.23 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -3030,10 +3733,21 @@
    "2026-10-21:HINDZINC": "bought",
    "2026-10-21:BAJFINANCE": "bought",
    "2026-10-23:ADANIENSOL": "bought",
-   "2026-10-23:SAGILITY": "refused"
+   "2026-10-23:SAGILITY": "refused",
+   "2026-10-27:MAHABANK": "refused",
+   "2026-10-27:RECLTD": "bought",
+   "2026-10-27:TATACONSUM": "bought",
+   "2026-10-27:APLAPOLLO": "bought",
+   "2026-10-27:SONACOMS": "bought",
+   "2026-10-27:PAYTM": "bought"
   },
   "open_wait": {},
-  "fade_wait": {},
+  "fade_wait": {
+   "2026-10-27:MANKIND": {
+    "reason": "spread above 10 % of the ask (at 2040: bid 9.0, ask 19.9)",
+    "at": "2026-10-27T09:15:01+05:30"
+   }
+  },
   "fade_shadow_entries": [
    {
     "key": "2026-10-21:UNIONBANK",
@@ -3091,7 +3805,8 @@
    }
   ],
   "fade_sub2_why": {
-   "2026-10-23:SAGILITY": "below-Rs 2 rule: 1 lot at 45 costs more than Rs 8,000"
+   "2026-10-23:SAGILITY": "below-Rs 2 rule: 1 lot at 45 costs more than Rs 8,000",
+   "2026-10-27:MAHABANK": "below-Rs 2 rule: 1 lot at 75 costs more than Rs 8,000"
   }
  }
 }
