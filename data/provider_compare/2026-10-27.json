@@ -28,6 +28,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.6,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "09:30:04",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.027,
+   "same_best_bid_pct": 11.4,
+   "same_best_ask_pct": 14.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.6,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -58,6 +72,13 @@
    "kotak": 143.06,
    "upstox": 143.0,
    "at": "09:25"
+  },
+  {
+   "contract": "BAJAJHLDNG26OCTFUT",
+   "gap_pct": 0.027,
+   "kotak": 10964.0,
+   "upstox": 10967.0,
+   "at": "09:30"
   },
   {
    "contract": "360ONE26OCT980CE",
@@ -163,23 +184,16 @@
    "kotak": 2513.0,
    "upstox": 2513.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIGREEN26OCT1260CE",
-   "gap_pct": 0.0,
-   "kotak": 9.5,
-   "upstox": 9.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 2,
-  "contract_quotes": 70,
+  "rounds": 3,
+  "contract_quotes": 105,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.75,
-  "same_best_ask_pct": 26.45,
+  "same_best_bid_pct": 22.9,
+  "same_best_ask_pct": 17.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 85.75,
-  "upstox_minus_kotak_quote_time_s_median": -8.5
+  "oi_same_pct": 88.6,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
