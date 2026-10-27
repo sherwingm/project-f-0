@@ -42,9 +42,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.6,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "09:35:04",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 12.903,
+   "same_best_bid_pct": 28.6,
+   "same_best_ask_pct": 28.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -12.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "BEL26OCT375CE",
+   "gap_pct": 12.903,
+   "kotak": 1.55,
+   "upstox": 1.75,
+   "at": "09:35"
+  },
   {
    "contract": "ADANIPORTS26OCT1740PE",
    "gap_pct": 9.804,
@@ -67,6 +88,20 @@
    "at": "09:25"
   },
   {
+   "contract": "BSE26OCT3400CE",
+   "gap_pct": 2.05,
+   "kotak": 21.95,
+   "upstox": 22.4,
+   "at": "09:35"
+  },
+  {
+   "contract": "BEL26OCTFUT",
+   "gap_pct": 0.067,
+   "kotak": 372.9,
+   "upstox": 372.65,
+   "at": "09:35"
+  },
+  {
    "contract": "ASHOKLEY26OCTFUT",
    "gap_pct": 0.042,
    "kotak": 143.06,
@@ -79,6 +114,13 @@
    "kotak": 10964.0,
    "upstox": 10967.0,
    "at": "09:30"
+  },
+  {
+   "contract": "BSE26OCTFUT",
+   "gap_pct": 0.018,
+   "kotak": 3390.3,
+   "upstox": 3390.9,
+   "at": "09:35"
   },
   {
    "contract": "360ONE26OCT980CE",
@@ -156,42 +198,14 @@
    "kotak": 11.75,
    "upstox": 11.75,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 1271.3,
-   "upstox": 1271.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26OCT2500CE",
-   "gap_pct": 0.0,
-   "kotak": 15.0,
-   "upstox": 15.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26OCT2500PE",
-   "gap_pct": 0.0,
-   "kotak": 5.15,
-   "upstox": 5.15,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 2513.0,
-   "upstox": 2513.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 105,
+  "rounds": 4,
+  "contract_quotes": 140,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 22.9,
-  "same_best_ask_pct": 17.6,
+  "same_best_bid_pct": 25.75,
+  "same_best_ask_pct": 23.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 88.6,
   "upstox_minus_kotak_quote_time_s_median": -9.0
