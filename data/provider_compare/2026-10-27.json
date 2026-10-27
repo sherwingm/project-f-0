@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.3,
    "upstox_minus_kotak_quote_time_s_median": -48.0
+  },
+  {
+   "at": "09:55:05",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.015,
+   "same_best_bid_pct": 28.6,
+   "same_best_ask_pct": 34.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -179,6 +193,13 @@
    "at": "09:35"
   },
   {
+   "contract": "HDFCBANK26OCTFUT",
+   "gap_pct": 0.015,
+   "kotak": 688.3,
+   "upstox": 688.2,
+   "at": "09:55"
+  },
+  {
    "contract": "360ONE26OCT980CE",
    "gap_pct": 0.0,
    "kotak": 79.2,
@@ -233,23 +254,16 @@
    "kotak": 1.9,
    "upstox": 1.9,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 350.5,
-   "upstox": 350.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 245,
+  "rounds": 8,
+  "contract_quotes": 280,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 22.9,
-  "same_best_ask_pct": 28.6,
+  "same_best_bid_pct": 25.75,
+  "same_best_ask_pct": 31.45,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.3,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "oi_same_pct": 95.7,
+  "upstox_minus_kotak_quote_time_s_median": -11.5
  }
 }
