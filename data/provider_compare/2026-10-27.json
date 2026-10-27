@@ -252,6 +252,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.1,
    "upstox_minus_kotak_quote_time_s_median": -80.0
+  },
+  {
+   "at": "10:50:06",
+   "contracts": 35,
+   "on_both": 35,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.952,
+   "same_best_bid_pct": 37.1,
+   "same_best_ask_pct": 42.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.1,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -317,6 +331,13 @@
    "kotak": 21.95,
    "upstox": 22.4,
    "at": "09:35"
+  },
+  {
+   "contract": "TATACONSUM26OCT990CE",
+   "gap_pct": 0.952,
+   "kotak": 5.25,
+   "upstox": 5.3,
+   "at": "10:50"
   },
   {
    "contract": "DIVISLAB26OCT9300CE",
@@ -387,18 +408,11 @@
    "kotak": 9.5,
    "upstox": 9.5,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26OCTFUT",
-   "gap_pct": 0.0,
-   "kotak": 973.4,
-   "upstox": 973.4,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 630,
+  "rounds": 19,
+  "contract_quotes": 665,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 28.6,
   "same_best_ask_pct": 37.1,
