@@ -338,6 +338,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.7,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "09:50:04",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "EICHERMOT26OCT7200CE",
+    "EICHERMOT26OCT7200PE",
+    "ENRIN26OCT2850CE",
+    "ENRIN26OCT2850PE",
+    "ETERNAL26OCT330CE",
+    "ETERNAL26OCT330PE",
+    "FEDERALBNK26OCT345CE",
+    "FEDERALBNK26OCT345PE",
+    "FORCEMOT26OCT17250CE",
+    "FORCEMOT26OCT17250PE",
+    "FORTIS26OCT750CE",
+    "FORTIS26OCT750PE",
+    "GAIL26OCT167.5CE",
+    "GAIL26OCT167.5PE",
+    "GLENMARK26OCT2300CE",
+    "GLENMARK26OCT2300PE",
+    "GMRAIRPORT26OCT89CE",
+    "GMRAIRPORT26OCT89PE",
+    "GODFRYPHLP26OCT1700CE",
+    "GODFRYPHLP26OCT1700PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "EICHERMOT26OCT7200CE",
+    "EICHERMOT26OCT7200PE",
+    "ENRIN26OCT2850CE",
+    "ENRIN26OCT2850PE",
+    "ETERNAL26OCT330CE",
+    "ETERNAL26OCT330PE",
+    "FEDERALBNK26OCT345CE",
+    "FEDERALBNK26OCT345PE",
+    "FORCEMOT26OCT17250CE",
+    "FORCEMOT26OCT17250PE",
+    "FORTIS26OCT750CE",
+    "FORTIS26OCT750PE",
+    "GAIL26OCT167.5CE",
+    "GAIL26OCT167.5PE",
+    "GLENMARK26OCT2300CE",
+    "GLENMARK26OCT2300PE",
+    "GMRAIRPORT26OCT89CE",
+    "GMRAIRPORT26OCT89PE",
+    "GODFRYPHLP26OCT1700CE",
+    "GODFRYPHLP26OCT1700PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 60.9,
+   "same_best_ask_pct": 39.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -43.0
   }
  ],
  "top_gaps": [
@@ -483,13 +540,13 @@
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 138,
+  "rounds": 7,
+  "contract_quotes": 161,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.65,
-  "same_best_ask_pct": 44.75,
+  "same_best_bid_pct": 45.8,
+  "same_best_ask_pct": 41.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -19.0
  }
 }
