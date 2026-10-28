@@ -2500,6 +2500,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "13:00:11",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "APOLLOHOSP26OCT8100CE",
+    "APOLLOHOSP26OCT8100PE",
+    "ASHOKLEY26OCT145CE",
+    "ASHOKLEY26OCT145PE",
+    "ASIANPAINT26OCT2280CE",
+    "ASIANPAINT26OCT2280PE",
+    "ASTRAL26OCT1360CE",
+    "ASTRAL26OCT1360PE",
+    "ATHERENERG26OCT1660CE",
+    "ATHERENERG26OCT1660PE",
+    "AUBANK26OCT880CE",
+    "AUBANK26OCT880PE",
+    "AUROPHARMA26OCT1640CE",
+    "AUROPHARMA26OCT1640PE",
+    "AXISBANK26OCT1220CE",
+    "AXISBANK26OCT1220PE",
+    "BAJAJ-AUTO26OCT10500CE",
+    "BAJAJ-AUTO26OCT10500PE",
+    "BAJAJFINSV26OCT1660CE",
+    "BAJAJFINSV26OCT1660PE"
+   ],
+   "missing_upstox": [
+    "APOLLOHOSP26OCT8100CE",
+    "APOLLOHOSP26OCT8100PE",
+    "ASHOKLEY26OCT145CE",
+    "ASHOKLEY26OCT145PE",
+    "ASIANPAINT26OCT2280CE",
+    "ASIANPAINT26OCT2280PE",
+    "ASTRAL26OCT1360CE",
+    "ASTRAL26OCT1360PE",
+    "ATHERENERG26NOV1860CE",
+    "ATHERENERG26OCT1660CE",
+    "ATHERENERG26OCT1660PE",
+    "AUBANK26OCT880CE",
+    "AUBANK26OCT880PE",
+    "AUROPHARMA26OCT1640CE",
+    "AUROPHARMA26OCT1640PE",
+    "AXISBANK26OCT1220CE",
+    "AXISBANK26OCT1220PE",
+    "BAJAJ-AUTO26OCT10500CE",
+    "BAJAJ-AUTO26OCT10500PE",
+    "BAJAJFINSV26OCT1660CE",
+    "BAJAJFINSV26OCT1660PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.023,
+   "same_best_bid_pct": 43.5,
+   "same_best_ask_pct": 47.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -2616,6 +2673,13 @@
    "at": "09:35"
   },
   {
+   "contract": "AUBANK26NOVFUT",
+   "gap_pct": 0.023,
+   "kotak": 887.3,
+   "upstox": 887.1,
+   "at": "13:00"
+  },
+  {
    "contract": "UNITDSPR26NOVFUT",
    "gap_pct": 0.016,
    "kotak": 1238.8,
@@ -2635,23 +2699,16 @@
    "kotak": 975.5,
    "upstox": 975.5,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 6627.5,
-   "upstox": 6627.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 44,
-  "contract_quotes": 1011,
+  "rounds": 45,
+  "contract_quotes": 1034,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -42.5
+  "upstox_minus_kotak_quote_time_s_median": -42.0
  }
 }
