@@ -3237,6 +3237,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.7,
    "upstox_minus_kotak_quote_time_s_median": -90.0
+  },
+  {
+   "at": "14:05:14",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "NYKAA26OCT345CE",
+    "NYKAA26OCT345PE",
+    "OBEROIRLTY26OCT1600CE",
+    "OBEROIRLTY26OCT1600PE",
+    "OFSS26OCT10000CE",
+    "OFSS26OCT10000PE",
+    "OIL26OCT450CE",
+    "OIL26OCT450PE",
+    "ONGC26OCT225CE",
+    "ONGC26OCT225PE",
+    "PAGEIND26OCT34000CE",
+    "PAGEIND26OCT34000PE",
+    "PATANJALI26OCT350CE",
+    "PATANJALI26OCT350PE",
+    "PAYTM26OCT1600CE",
+    "PAYTM26OCT1600PE",
+    "PERSISTENT26OCT5800CE",
+    "PERSISTENT26OCT5800PE",
+    "PETRONET26OCT285CE",
+    "PETRONET26OCT285PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "NYKAA26OCT345CE",
+    "NYKAA26OCT345PE",
+    "OBEROIRLTY26OCT1600CE",
+    "OBEROIRLTY26OCT1600PE",
+    "OFSS26OCT10000CE",
+    "OFSS26OCT10000PE",
+    "OIL26OCT450CE",
+    "OIL26OCT450PE",
+    "ONGC26OCT225CE",
+    "ONGC26OCT225PE",
+    "PAGEIND26OCT34000CE",
+    "PAGEIND26OCT34000PE",
+    "PATANJALI26OCT350CE",
+    "PATANJALI26OCT350PE",
+    "PAYTM26OCT1600CE",
+    "PAYTM26OCT1600PE",
+    "PERSISTENT26OCT5800CE",
+    "PERSISTENT26OCT5800PE",
+    "PETRONET26OCT285CE",
+    "PETRONET26OCT285PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.143,
+   "same_best_bid_pct": 78.3,
+   "same_best_ask_pct": 69.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -53.0
   }
  ],
  "top_gaps": [
@@ -3281,6 +3338,13 @@
    "kotak": 1762.3,
    "upstox": 1764.9,
    "at": "11:20"
+  },
+  {
+   "contract": "PAYTM26NOVFUT",
+   "gap_pct": 0.143,
+   "kotak": 1612.7,
+   "upstox": 1615.0,
+   "at": "14:05"
   },
   {
    "contract": "KAYNES26NOVFUT",
@@ -3372,18 +3436,11 @@
    "kotak": 1238.8,
    "upstox": 1239.0,
    "at": "12:45"
-  },
-  {
-   "contract": "APOLLOHOSP26NOVFUT",
-   "gap_pct": 0.012,
-   "kotak": 8110.0,
-   "upstox": 8109.0,
-   "at": "11:10"
   }
  ],
  "day": {
-  "rounds": 57,
-  "contract_quotes": 1309,
+  "rounds": 58,
+  "contract_quotes": 1332,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
