@@ -3465,6 +3465,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -29.0
+  },
+  {
+   "at": "14:25:14",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "SUPREMEIND26OCT3200CE",
+    "SUPREMEIND26OCT3200PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE",
+    "TATACONSUM26OCT990CE",
+    "TATACONSUM26OCT990PE",
+    "TATAELXSI26OCT3750CE",
+    "TATAELXSI26OCT3750PE",
+    "TATAPOWER26OCT335CE",
+    "TATAPOWER26OCT335PE",
+    "TATASTEEL26OCT167.5CE",
+    "TATASTEEL26OCT167.5PE",
+    "TCS26OCT2440CE",
+    "TCS26OCT2440PE",
+    "TECHM26OCT1780CE",
+    "TECHM26OCT1780PE",
+    "TIINDIA26OCT2100CE",
+    "TIINDIA26OCT2100PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "SUPREMEIND26OCT3200CE",
+    "SUPREMEIND26OCT3200PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE",
+    "TATACONSUM26OCT990CE",
+    "TATACONSUM26OCT990PE",
+    "TATAELXSI26OCT3750CE",
+    "TATAELXSI26OCT3750PE",
+    "TATAPOWER26OCT335CE",
+    "TATAPOWER26OCT335PE",
+    "TATASTEEL26OCT167.5CE",
+    "TATASTEEL26OCT167.5PE",
+    "TCS26OCT2440CE",
+    "TCS26OCT2440PE",
+    "TECHM26OCT1780CE",
+    "TECHM26OCT1780PE",
+    "TIINDIA26OCT2100CE",
+    "TIINDIA26OCT2100PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 69.6,
+   "same_best_ask_pct": 60.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -34.0
   }
  ],
  "top_gaps": [
@@ -3610,13 +3667,13 @@
   }
  ],
  "day": {
-  "rounds": 61,
-  "contract_quotes": 1401,
+  "rounds": 62,
+  "contract_quotes": 1424,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -46.0
+  "upstox_minus_kotak_quote_time_s_median": -44.5
  }
 }
