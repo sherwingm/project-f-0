@@ -167,6 +167,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 86.4,
    "upstox_minus_kotak_quote_time_s_median": -2.5
+  },
+  {
+   "at": "09:35:04",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "BEL26OCT365CE",
+    "BEL26OCT365PE",
+    "BHARATFORG26OCT1760CE",
+    "BHARATFORG26OCT1760PE",
+    "BHARTIARTL26OCT1960CE",
+    "BHARTIARTL26OCT1960PE",
+    "BHEL26OCT400CE",
+    "BHEL26OCT400PE",
+    "BIOCON26OCT335CE",
+    "BIOCON26OCT335PE",
+    "BLUESTARCO26OCT1540CE",
+    "BLUESTARCO26OCT1540PE",
+    "BOSCHLTD26OCT46000CE",
+    "BOSCHLTD26OCT46000PE",
+    "BPCL26OCT290CE",
+    "BPCL26OCT290PE",
+    "BRITANNIA26OCT4500CE",
+    "BRITANNIA26OCT4500PE",
+    "BSE26OCT3450CE",
+    "BSE26OCT3450PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "BEL26OCT365CE",
+    "BEL26OCT365PE",
+    "BHARATFORG26OCT1760CE",
+    "BHARATFORG26OCT1760PE",
+    "BHARTIARTL26OCT1960CE",
+    "BHARTIARTL26OCT1960PE",
+    "BHEL26OCT400CE",
+    "BHEL26OCT400PE",
+    "BIOCON26OCT335CE",
+    "BIOCON26OCT335PE",
+    "BLUESTARCO26OCT1540CE",
+    "BLUESTARCO26OCT1540PE",
+    "BOSCHLTD26OCT46000CE",
+    "BOSCHLTD26OCT46000PE",
+    "BPCL26OCT290CE",
+    "BPCL26OCT290PE",
+    "BRITANNIA26OCT4500CE",
+    "BRITANNIA26OCT4500PE",
+    "BSE26OCT3450CE",
+    "BSE26OCT3450PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.423,
+   "same_best_bid_pct": 56.5,
+   "same_best_ask_pct": 47.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -25.0
   }
  ],
  "top_gaps": [
@@ -192,6 +249,13 @@
    "at": "09:30"
   },
   {
+   "contract": "TATAELXSI26NOV4000CE",
+   "gap_pct": 0.423,
+   "kotak": 35.45,
+   "upstox": 35.6,
+   "at": "09:35"
+  },
+  {
    "contract": "BANDHANBNK26NOVFUT",
    "gap_pct": 0.262,
    "kotak": 152.7,
@@ -204,6 +268,20 @@
    "kotak": 10704.0,
    "upstox": 10697.0,
    "at": "09:30"
+  },
+  {
+   "contract": "BSE26NOVFUT",
+   "gap_pct": 0.058,
+   "kotak": 3463.6,
+   "upstox": 3461.6,
+   "at": "09:35"
+  },
+  {
+   "contract": "BHARTIARTL26NOVFUT",
+   "gap_pct": 0.031,
+   "kotak": 1956.5,
+   "upstox": 1955.9,
+   "at": "09:35"
   },
   {
    "contract": "360ONE26NOVFUT",
@@ -288,37 +366,16 @@
    "kotak": 7.9,
    "upstox": 7.9,
    "at": "09:20"
-  },
-  {
-   "contract": "COFORGE26NOV2240CE",
-   "gap_pct": 0.0,
-   "kotak": 4.7,
-   "upstox": 4.7,
-   "at": "09:20"
-  },
-  {
-   "contract": "DRREDDY26NOV1400CE",
-   "gap_pct": 0.0,
-   "kotak": 8.3,
-   "upstox": 8.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "DRREDDY26NOV1420CE",
-   "gap_pct": 0.0,
-   "kotak": 6.25,
-   "upstox": 6.25,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 69,
+  "rounds": 4,
+  "contract_quotes": 92,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.5,
-  "same_best_ask_pct": 36.4,
+  "same_best_bid_pct": 45.65,
+  "same_best_ask_pct": 39.05,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -2.5
+  "upstox_minus_kotak_quote_time_s_median": -5.75
  }
 }
