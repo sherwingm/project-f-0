@@ -623,6 +623,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -56.0
+  },
+  {
+   "at": "10:15:05",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "KEI26OCT3900CE",
+    "KEI26OCT3900PE",
+    "KFINTECH26OCT840CE",
+    "KFINTECH26OCT840PE",
+    "KOTAKBANK26OCT440CE",
+    "KOTAKBANK26OCT440PE",
+    "KPITTECH26OCT520CE",
+    "KPITTECH26OCT520PE",
+    "LAURUSLABS26OCT2180CE",
+    "LAURUSLABS26OCT2180PE",
+    "LICHSGFIN26OCT505CE",
+    "LICHSGFIN26OCT505PE",
+    "LICI26OCT385CE",
+    "LICI26OCT385PE",
+    "LODHA26OCT1020CE",
+    "LODHA26OCT1020PE",
+    "LT26OCT3800CE",
+    "LT26OCT3800PE",
+    "LTF26OCT245CE",
+    "LTF26OCT245PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "KEI26OCT3900CE",
+    "KEI26OCT3900PE",
+    "KFINTECH26OCT840CE",
+    "KFINTECH26OCT840PE",
+    "KOTAKBANK26OCT440CE",
+    "KOTAKBANK26OCT440PE",
+    "KPITTECH26OCT520CE",
+    "KPITTECH26OCT520PE",
+    "LAURUSLABS26OCT2180CE",
+    "LAURUSLABS26OCT2180PE",
+    "LICHSGFIN26OCT505CE",
+    "LICHSGFIN26OCT505PE",
+    "LICI26OCT385CE",
+    "LICI26OCT385PE",
+    "LODHA26OCT1020CE",
+    "LODHA26OCT1020PE",
+    "LT26OCT3800CE",
+    "LT26OCT3800PE",
+    "LTF26OCT245CE",
+    "LTF26OCT245PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 47.8,
+   "same_best_ask_pct": 52.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -25.0
   }
  ],
  "top_gaps": [
@@ -768,13 +825,13 @@
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 253,
+  "rounds": 12,
+  "contract_quotes": 276,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 47.8,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -19.0
+  "upstox_minus_kotak_quote_time_s_median": -22.0
  }
 }
