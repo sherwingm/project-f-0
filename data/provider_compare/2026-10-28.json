@@ -3294,6 +3294,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -53.0
+  },
+  {
+   "at": "14:10:14",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "PFC26OCT320CE",
+    "PFC26OCT320PE",
+    "PGEL26OCT540CE",
+    "PGEL26OCT540PE",
+    "PHOENIXLTD26OCT1900CE",
+    "PHOENIXLTD26OCT1900PE",
+    "PIDILITIND26OCT1420CE",
+    "PIDILITIND26OCT1420PE",
+    "PIIND26OCT2060CE",
+    "PIIND26OCT2060PE",
+    "PNB26OCT121CE",
+    "PNB26OCT121PE",
+    "PNBHOUSING26OCT1120CE",
+    "PNBHOUSING26OCT1120PE",
+    "POLICYBZR26OCT980CE",
+    "POLICYBZR26OCT980PE",
+    "POLYCAB26OCT7700CE",
+    "POLYCAB26OCT7700PE",
+    "POWERGRID26OCT252.5CE",
+    "POWERGRID26OCT252.5PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "PFC26OCT320CE",
+    "PFC26OCT320PE",
+    "PGEL26OCT540CE",
+    "PGEL26OCT540PE",
+    "PHOENIXLTD26OCT1900CE",
+    "PHOENIXLTD26OCT1900PE",
+    "PIDILITIND26OCT1420CE",
+    "PIDILITIND26OCT1420PE",
+    "PIIND26OCT2060CE",
+    "PIIND26OCT2060PE",
+    "PNB26OCT121CE",
+    "PNB26OCT121PE",
+    "PNBHOUSING26OCT1120CE",
+    "PNBHOUSING26OCT1120PE",
+    "POLICYBZR26OCT980CE",
+    "POLICYBZR26OCT980PE",
+    "POLYCAB26OCT7700CE",
+    "POLYCAB26OCT7700PE",
+    "POWERGRID26OCT252.5CE",
+    "POWERGRID26OCT252.5PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.02,
+   "same_best_bid_pct": 52.2,
+   "same_best_ask_pct": 56.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -3431,16 +3488,16 @@
    "at": "13:00"
   },
   {
-   "contract": "UNITDSPR26NOVFUT",
-   "gap_pct": 0.016,
-   "kotak": 1238.8,
-   "upstox": 1239.0,
-   "at": "12:45"
+   "contract": "POLICYBZR26NOVFUT",
+   "gap_pct": 0.02,
+   "kotak": 990.9,
+   "upstox": 991.1,
+   "at": "14:10"
   }
  ],
  "day": {
-  "rounds": 58,
-  "contract_quotes": 1332,
+  "rounds": 59,
+  "contract_quotes": 1355,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
