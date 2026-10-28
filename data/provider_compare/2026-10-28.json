@@ -1645,6 +1645,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -48.0
+  },
+  {
+   "at": "11:45:08",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "HDFCAMC26OCT2300CE",
+    "HDFCAMC26OCT2300PE",
+    "HDFCBANK26OCT680CE",
+    "HDFCBANK26OCT680PE",
+    "HDFCLIFE26OCT510CE",
+    "HDFCLIFE26OCT510PE",
+    "HEROMOTOCO26OCT5300CE",
+    "HEROMOTOCO26OCT5300PE",
+    "HINDALCO26OCT890CE",
+    "HINDALCO26OCT890PE",
+    "HINDPETRO26OCT345CE",
+    "HINDPETRO26OCT345PE",
+    "HINDUNILVR26OCT1780CE",
+    "HINDUNILVR26OCT1780PE",
+    "HINDZINC26OCT510CE",
+    "HINDZINC26OCT510PE",
+    "HYUNDAI26OCT1920CE",
+    "HYUNDAI26OCT1920PE",
+    "ICICIBANK26OCT1380CE",
+    "ICICIBANK26OCT1380PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "HDFCAMC26OCT2300CE",
+    "HDFCAMC26OCT2300PE",
+    "HDFCBANK26OCT680CE",
+    "HDFCBANK26OCT680PE",
+    "HDFCLIFE26OCT510CE",
+    "HDFCLIFE26OCT510PE",
+    "HEROMOTOCO26OCT5300CE",
+    "HEROMOTOCO26OCT5300PE",
+    "HINDALCO26OCT890CE",
+    "HINDALCO26OCT890PE",
+    "HINDPETRO26OCT345CE",
+    "HINDPETRO26OCT345PE",
+    "HINDUNILVR26OCT1780CE",
+    "HINDUNILVR26OCT1780PE",
+    "HINDZINC26OCT510CE",
+    "HINDZINC26OCT510PE",
+    "HYUNDAI26OCT1920CE",
+    "HYUNDAI26OCT1920PE",
+    "ICICIBANK26OCT1380CE",
+    "ICICIBANK26OCT1380PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 69.6,
+   "same_best_ask_pct": 69.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -32.0
   }
  ],
  "top_gaps": [
@@ -1790,13 +1847,13 @@
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 666,
+  "rounds": 30,
+  "contract_quotes": 689,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -38.0
+  "upstox_minus_kotak_quote_time_s_median": -37.0
  }
 }
