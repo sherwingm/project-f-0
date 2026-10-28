@@ -1307,6 +1307,59 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "11:15:07",
+   "contracts": 41,
+   "on_both": 22,
+   "missing_kotak": [
+    "ASTRAL26OCT1340CE",
+    "ASTRAL26OCT1340PE",
+    "ATHERENERG26OCT1660CE",
+    "ATHERENERG26OCT1660PE",
+    "AUBANK26OCT870CE",
+    "AUBANK26OCT870PE",
+    "AUROPHARMA26OCT1640CE",
+    "AUROPHARMA26OCT1640PE",
+    "AXISBANK26OCT1210CE",
+    "AXISBANK26OCT1210PE",
+    "BAJAJ-AUTO26OCT10500CE",
+    "BAJAJ-AUTO26OCT10500PE",
+    "BAJAJFINSV26OCT1640CE",
+    "BAJAJFINSV26OCT1640PE",
+    "BAJFINANCE26OCT910CE",
+    "BAJFINANCE26OCT910PE",
+    "BANDHANBNK26OCT155CE",
+    "BANDHANBNK26OCT155PE"
+   ],
+   "missing_upstox": [
+    "ASTRAL26OCT1340CE",
+    "ASTRAL26OCT1340PE",
+    "ATHERENERG26NOV1860CE",
+    "ATHERENERG26OCT1660CE",
+    "ATHERENERG26OCT1660PE",
+    "AUBANK26OCT870CE",
+    "AUBANK26OCT870PE",
+    "AUROPHARMA26OCT1640CE",
+    "AUROPHARMA26OCT1640PE",
+    "AXISBANK26OCT1210CE",
+    "AXISBANK26OCT1210PE",
+    "BAJAJ-AUTO26OCT10500CE",
+    "BAJAJ-AUTO26OCT10500PE",
+    "BAJAJFINSV26OCT1640CE",
+    "BAJAJFINSV26OCT1640PE",
+    "BAJFINANCE26OCT910CE",
+    "BAJFINANCE26OCT910PE",
+    "BANDHANBNK26OCT155CE",
+    "BANDHANBNK26OCT155PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 77.3,
+   "same_best_ask_pct": 72.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -27.0
   }
  ],
  "top_gaps": [
@@ -1452,13 +1505,13 @@
   }
  ],
  "day": {
-  "rounds": 23,
-  "contract_quotes": 529,
+  "rounds": 24,
+  "contract_quotes": 551,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 52.2,
-  "same_best_ask_pct": 52.2,
+  "same_best_ask_pct": 54.35,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -36.0
+  "upstox_minus_kotak_quote_time_s_median": -35.0
  }
 }
