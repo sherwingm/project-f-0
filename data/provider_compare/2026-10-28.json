@@ -1022,6 +1022,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -73.0
+  },
+  {
+   "at": "10:50:06",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "SOLARINDS26OCT19250CE",
+    "SOLARINDS26OCT19250PE",
+    "SONACOMS26OCT860CE",
+    "SONACOMS26OCT860PE",
+    "SRF26OCT2300CE",
+    "SRF26OCT2300PE",
+    "SUNPHARMA26OCT1740CE",
+    "SUNPHARMA26OCT1740PE",
+    "SUPREMEIND26OCT3200CE",
+    "SUPREMEIND26OCT3200PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE",
+    "TATACONSUM26OCT980CE",
+    "TATACONSUM26OCT980PE",
+    "TATAELXSI26OCT3700CE",
+    "TATAELXSI26OCT3700PE",
+    "TATAPOWER26OCT335CE",
+    "TATAPOWER26OCT335PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "SOLARINDS26OCT19250CE",
+    "SOLARINDS26OCT19250PE",
+    "SONACOMS26OCT860CE",
+    "SONACOMS26OCT860PE",
+    "SRF26OCT2300CE",
+    "SRF26OCT2300PE",
+    "SUNPHARMA26OCT1740CE",
+    "SUNPHARMA26OCT1740PE",
+    "SUPREMEIND26OCT3200CE",
+    "SUPREMEIND26OCT3200PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE",
+    "TATACONSUM26OCT980CE",
+    "TATACONSUM26OCT980PE",
+    "TATAELXSI26OCT3700CE",
+    "TATAELXSI26OCT3700PE",
+    "TATAPOWER26OCT335CE",
+    "TATAPOWER26OCT335PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 47.8,
+   "same_best_ask_pct": 43.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -51.0
   }
  ],
  "top_gaps": [
@@ -1167,13 +1224,13 @@
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 414,
+  "rounds": 19,
+  "contract_quotes": 437,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.0,
+  "same_best_bid_pct": 47.8,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -32.0
+  "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
