@@ -1,30 +1,30 @@
 {
  "recorder": {
-  "run_at": "2026-10-28T00:48:27+05:30",
-  "session": "2026-10-27",
+  "run_at": "2026-10-29T00:55:02+05:30",
+  "session": "2026-10-28",
   "expiry_check": {
    "bse_fo": {
     "checked": 3211,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9319,
+    "checked": 8921,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 22749.75,
+    "spot": 22698.85,
     "contracts": 180,
-    "rows": 4,
+    "rows": 107144,
     "expiries": [
-     "2026-10-27",
-     "2026-11-03"
+     "2026-11-03",
+     "2026-11-09"
     ]
    },
    "SENSEX": {
-    "spot": 73598.67,
-    "contracts": 292,
+    "spot": 73246.03,
+    "contracts": 296,
     "rows": 0,
     "expiries": [
      "2026-10-29",
@@ -32,20 +32,20 @@
     ]
    },
    "BANKNIFTY": {
-    "spot": 53974.9,
+    "spot": 54267.4,
     "contracts": 216,
-    "rows": 16225,
+    "rows": 38948,
     "expiries": [
-     "2026-10-27",
-     "2026-11-23"
+     "2026-11-23",
+     "2026-12-29"
     ]
    }
   },
   "failures": [],
-  "chain_eod_rows": 688,
-  "calls": 749,
-  "runtime_s": 1321.0,
-  "contracts": 688
+  "chain_eod_rows": 692,
+  "calls": 836,
+  "runtime_s": 1499.1,
+  "contracts": 692
  },
  "recent_runs": [
   {
@@ -126,6 +126,14 @@
    "contracts": 688,
    "calls": 749,
    "runtime_s": 1321.0,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-10-29T00:55:02+05:30",
+   "session": "2026-10-28",
+   "contracts": 692,
+   "calls": 836,
+   "runtime_s": 1499.1,
    "failures": 0
   }
  ],
@@ -249,7 +257,7 @@
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 376,
+    "rows_added": 30,
     "runtime_s": 2
    },
    "SENSEX": {
@@ -268,48 +276,67 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 6153,
+   "rows": 5241,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-10-27",
-  "runtime_s": 9
+  "day": "2026-10-28",
+  "runtime_s": 8
  },
  "s1_trades_1m": {
-  "run_on": "2026-10-28",
+  "run_on": "2026-10-29",
   "days": {
-   "2026-10-20": {
-    "positions": 6,
-    "stock_rows": 0,
-    "option_rows": 0
-   },
    "2026-10-21": {
     "positions": 10,
     "stock_rows": 2166,
-    "option_rows": 2077
+    "option_rows": 91
    },
    "2026-10-22": {
     "positions": 7,
     "stock_rows": 1444,
-    "option_rows": 1089
+    "option_rows": 106
    },
    "2026-10-23": {
     "positions": 10,
     "stock_rows": 2166,
-    "option_rows": 2003
+    "option_rows": 154
    },
    "2026-10-26": {
     "positions": 7,
     "stock_rows": 1444,
-    "option_rows": 1010
+    "option_rows": 171
    },
    "2026-10-27": {
     "positions": 16,
     "stock_rows": 3954,
+    "option_rows": 1793
+   },
+   "2026-10-28": {
+    "positions": 27,
+    "stock_rows": 5661,
     "option_rows": 0
    }
   },
-  "missing_tokens": [],
-  "calls": 73
+  "missing_tokens": [
+   "HINDZINC26OCT540PE",
+   "BAJFINANCE26OCT920PE",
+   "FEDERALBNK26OCT355CE",
+   "FEDERALBNK26OCT350CE",
+   "TECHM26OCT1820CE",
+   "WIPRO26OCT185CE",
+   "FEDERALBNK26OCT350CE",
+   "TECHM26OCT1820CE",
+   "WIPRO26OCT185CE",
+   "ADANIENSOL26OCT1260PE",
+   "FEDERALBNK26OCT350CE",
+   "INDHOTEL26OCT790CE",
+   "TECHM26OCT1820CE",
+   "WIPRO26OCT185CE",
+   "INDHOTEL26OCT780CE",
+   "TECHM26OCT1820CE",
+   "WIPRO26OCT185CE",
+   "INDHOTEL26OCT780CE"
+  ],
+  "calls": 89
  }
 }
