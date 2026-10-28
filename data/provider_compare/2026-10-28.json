@@ -680,6 +680,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "10:20:06",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "LTM26OCT4050CE",
+    "LTM26OCT4050PE",
+    "LUPIN26OCT1960CE",
+    "LUPIN26OCT1960PE",
+    "M&M26OCT2850CE",
+    "M&M26OCT2850PE",
+    "MAHABANK26OCT79CE",
+    "MAHABANK26OCT79PE",
+    "MANAPPURAM26OCT285CE",
+    "MANAPPURAM26OCT285PE",
+    "MANKIND26OCT2500CE",
+    "MANKIND26OCT2500PE",
+    "MARICO26OCT770CE",
+    "MARICO26OCT770PE",
+    "MARUTI26OCT11400CE",
+    "MARUTI26OCT11400PE",
+    "MAXHEALTH26OCT860CE",
+    "MAXHEALTH26OCT860PE",
+    "MAZDOCK26OCT1760CE",
+    "MAZDOCK26OCT1760PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "LTM26OCT4050CE",
+    "LTM26OCT4050PE",
+    "LUPIN26OCT1960CE",
+    "LUPIN26OCT1960PE",
+    "M&M26OCT2850CE",
+    "M&M26OCT2850PE",
+    "MAHABANK26OCT79CE",
+    "MAHABANK26OCT79PE",
+    "MANAPPURAM26OCT285CE",
+    "MANAPPURAM26OCT285PE",
+    "MANKIND26OCT2500CE",
+    "MANKIND26OCT2500PE",
+    "MARICO26OCT770CE",
+    "MARICO26OCT770PE",
+    "MARUTI26OCT11400CE",
+    "MARUTI26OCT11400PE",
+    "MAXHEALTH26OCT860CE",
+    "MAXHEALTH26OCT860PE",
+    "MAZDOCK26OCT1760CE",
+    "MAZDOCK26OCT1760PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 52.2,
+   "same_best_ask_pct": 65.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -34.0
   }
  ],
  "top_gaps": [
@@ -825,13 +882,13 @@
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 276,
+  "rounds": 13,
+  "contract_quotes": 299,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 47.8,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -22.0
+  "upstox_minus_kotak_quote_time_s_median": -25.0
  }
 }
