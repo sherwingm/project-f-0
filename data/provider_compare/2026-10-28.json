@@ -2329,6 +2329,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -58.0
+  },
+  {
+   "at": "12:45:10",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "TRENT26OCT2850CE",
+    "TRENT26OCT2850PE",
+    "TVSMOTOR26OCT4150CE",
+    "TVSMOTOR26OCT4150PE",
+    "UJJIVANSFB26OCT55CE",
+    "UJJIVANSFB26OCT55PE",
+    "ULTRACEMCO26OCT11200CE",
+    "ULTRACEMCO26OCT11200PE",
+    "UNIONBANK26OCT182.5CE",
+    "UNIONBANK26OCT182.5PE",
+    "UNITDSPR26OCT1240CE",
+    "UNITDSPR26OCT1240PE",
+    "UNOMINDA26OCT1100CE",
+    "UNOMINDA26OCT1100PE",
+    "UPL26OCT525CE",
+    "UPL26OCT525PE",
+    "VBL26OCT405CE",
+    "VBL26OCT405PE",
+    "VEDL26OCT230CE",
+    "VEDL26OCT230PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "TRENT26OCT2850CE",
+    "TRENT26OCT2850PE",
+    "TVSMOTOR26OCT4150CE",
+    "TVSMOTOR26OCT4150PE",
+    "UJJIVANSFB26OCT55CE",
+    "UJJIVANSFB26OCT55PE",
+    "ULTRACEMCO26OCT11200CE",
+    "ULTRACEMCO26OCT11200PE",
+    "UNIONBANK26OCT182.5CE",
+    "UNIONBANK26OCT182.5PE",
+    "UNITDSPR26OCT1240CE",
+    "UNITDSPR26OCT1240PE",
+    "UNOMINDA26OCT1100CE",
+    "UNOMINDA26OCT1100PE",
+    "UPL26OCT525CE",
+    "UPL26OCT525PE",
+    "VBL26OCT405CE",
+    "VBL26OCT405PE",
+    "VEDL26OCT230CE",
+    "VEDL26OCT230PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.073,
+   "same_best_bid_pct": 52.2,
+   "same_best_ask_pct": 43.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -33.0
   }
  ],
  "top_gaps": [
@@ -2382,6 +2439,13 @@
    "at": "12:00"
   },
   {
+   "contract": "UJJIVANSFB26NOVFUT",
+   "gap_pct": 0.073,
+   "kotak": 54.9,
+   "upstox": 54.94,
+   "at": "12:45"
+  },
+  {
    "contract": "BAJAJ-AUTO26NOVFUT",
    "gap_pct": 0.065,
    "kotak": 10704.0,
@@ -2431,6 +2495,13 @@
    "at": "09:35"
   },
   {
+   "contract": "UNITDSPR26NOVFUT",
+   "gap_pct": 0.016,
+   "kotak": 1238.8,
+   "upstox": 1239.0,
+   "at": "12:45"
+  },
+  {
    "contract": "APOLLOHOSP26NOVFUT",
    "gap_pct": 0.012,
    "kotak": 8110.0,
@@ -2457,30 +2528,16 @@
    "kotak": 352.2,
    "upstox": 352.2,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1298.8,
-   "upstox": 1298.8,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 2473.1,
-   "upstox": 2473.1,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 41,
-  "contract_quotes": 942,
+  "rounds": 42,
+  "contract_quotes": 965,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -43.0
+  "upstox_minus_kotak_quote_time_s_median": -42.5
  }
 }
