@@ -409,7 +409,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   function closedTable(rows, shadows) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].concat(shadows ? ["v10 shadow ₹", "Trail shadow ₹"] : []).map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="4">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
-      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="realised net / net had it sold at the peak bid">Captured</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
+      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="net at the peak bid minus the net we got: what the exit left behind">Left behind</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough, pc = c.peak_capture;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && todayIso() <= a.until;
@@ -418,7 +418,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             return `<td class="${dir(v)}" title="${esc(v10Text(r) || "")}">${v != null ? srs(v, 2) : r.shadow_v10 ? "pending" : "—"}</td><td class="${dir(t)}" title="${esc(trailText(r, c.entry.price) || "")}">${t != null ? srs(t, 2) + (r.shadow_trail.status === "done" ? " <small>trail</small>" : "") : r.shadow_trail ? "—" : "not tagged"}</td>`; })() : ""}
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="${dir(pc && pc.peak_return_pct)}">${pc ? pct(pc.peak_return_pct) + ` <small>${rs(pc.peak_bid)} · ${when(pc.peak_at)}</small>` : "—"}</td>
-          <td title="${pc ? esc("at the peak bid: " + srs(pc.peak_net, 2) + " · left: " + srs(pc.giveback_rs, 2)) : ""}">${pc ? (pc.capture_pct != null ? pct(pc.capture_pct) : "N/A") + ` <small>left ${srs(pc.giveback_rs, 0)}</small>` : "—"}</td>
+          <td title="${pc ? esc("at the peak bid: " + srs(pc.peak_net, 2) + " · left: " + srs(pc.giveback_rs, 2)) : ""}">${pc ? `<span class="${dir(-pc.giveback_rs)}">${srs(pc.giveback_rs, 0)}</span>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>
@@ -922,7 +922,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             p.peak_capture ? ["Highest bid while held (sellable)", `${rs(p.peak_capture.peak_bid)} · ${pct(p.peak_capture.peak_return_pct)} · ${when(p.peak_capture.peak_at)}`, dir(p.peak_capture.peak_return_pct)] : (p.held_bid && p.held_bid.peak ? ["Highest bid so far (sellable)", `${rs(p.held_bid.peak.price)} · ${pct(chg(p.held_bid.peak.price, e))} · ${when(p.held_bid.peak.at)}`, dir(chg(p.held_bid.peak.price, e))] : null),
             p.peak_capture ? ["Lowest bid while held", `${rs(p.peak_capture.low_bid)} · ${pct(p.peak_capture.mae_pct)} · ${when(p.peak_capture.low_at)}`, dir(p.peak_capture.mae_pct)] : null,
             p.peak_capture ? ["Net if sold at the peak bid", srs(p.peak_capture.peak_net, 2), dir(p.peak_capture.peak_net)] : null,
-            p.peak_capture ? ["Captured of the peak", `${p.peak_capture.capture_pct != null ? pct(p.peak_capture.capture_pct) : "N/A (the peak never paid after charges)"} · left ${srs(p.peak_capture.giveback_rs, 2)} · price ${p.peak_capture.peak_to_exit_pct}% below the peak at the exit`] : null,
+            p.peak_capture ? ["Left behind vs the peak bid", `${srs(p.peak_capture.giveback_rs, 2)} · price ${p.peak_capture.peak_to_exit_pct}% below the peak at the exit`] : null,
             p.entry_quote ? ["Entry quote", `bid ${rs(p.entry_quote.bid)} / ask ${rs(p.entry_quote.ask)} · spread ${p.entry_quote.spread_pct ?? "—"} %`] : null,
             p.entry_quote ? ["Last trade before entry", p.entry_quote.ltt
               ? `${esc(p.entry_quote.ltt)}${p.entry_quote.ltt_age_s != null ? ` · ${p.entry_quote.ltt_age_s >= 3600 ? (p.entry_quote.ltt_age_s / 3600).toFixed(1) + " h" : Math.round(p.entry_quote.ltt_age_s) + " s"} before` : ""}${p.entry_quote.stale_ltt ? ` · ⚠ ${esc(p.entry_quote.stale_ltt_reason)} (old last trade; the bid/ask may still have been live)` : ""}`
