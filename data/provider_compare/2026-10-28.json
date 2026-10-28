@@ -3806,6 +3806,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -52.0
+  },
+  {
+   "at": "15:09:22",
+   "contracts": 44,
+   "on_both": 44,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.99,
+   "same_best_bid_pct": 56.8,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -44.5
   }
  ],
  "top_gaps": [
@@ -3831,6 +3845,13 @@
    "at": "09:30"
   },
   {
+   "contract": "CHOLAFIN26NOV1560CE",
+   "gap_pct": 0.99,
+   "kotak": 50.5,
+   "upstox": 51.0,
+   "at": "15:09"
+  },
+  {
    "contract": "DRREDDY26NOV1400CE",
    "gap_pct": 0.498,
    "kotak": 10.05,
@@ -3843,6 +3864,13 @@
    "kotak": 35.45,
    "upstox": 35.6,
    "at": "09:35"
+  },
+  {
+   "contract": "CHOLAFIN26NOV1560PE",
+   "gap_pct": 0.286,
+   "kotak": 52.45,
+   "upstox": 52.3,
+   "at": "15:09"
   },
   {
    "contract": "BANDHANBNK26NOVFUT",
@@ -3922,42 +3950,28 @@
    "at": "09:45"
   },
   {
+   "contract": "CHOLAFIN26NOVFUT",
+   "gap_pct": 0.038,
+   "kotak": 1559.0,
+   "upstox": 1559.6,
+   "at": "15:09"
+  },
+  {
    "contract": "ICICIBANK26NOVFUT",
    "gap_pct": 0.036,
    "kotak": 1370.6,
    "upstox": 1370.1,
    "at": "10:00"
-  },
-  {
-   "contract": "KOTAKBANK26NOVFUT",
-   "gap_pct": 0.034,
-   "kotak": 443.9,
-   "upstox": 444.05,
-   "at": "13:45"
-  },
-  {
-   "contract": "BHARTIARTL26NOVFUT",
-   "gap_pct": 0.031,
-   "kotak": 1956.5,
-   "upstox": 1955.9,
-   "at": "09:35"
-  },
-  {
-   "contract": "BIOCON26NOVFUT",
-   "gap_pct": 0.029,
-   "kotak": 350.6,
-   "upstox": 350.7,
-   "at": "15:04"
   }
  ],
  "day": {
-  "rounds": 70,
-  "contract_quotes": 1672,
+  "rounds": 71,
+  "contract_quotes": 1716,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -47.5
+  "upstox_minus_kotak_quote_time_s_median": -47.0
  }
 }
