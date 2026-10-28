@@ -3066,6 +3066,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -108.0
+  },
+  {
+   "at": "13:50:13",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "LAURUSLABS26OCT2180CE",
+    "LAURUSLABS26OCT2180PE",
+    "LICHSGFIN26OCT510CE",
+    "LICHSGFIN26OCT510PE",
+    "LICI26OCT390CE",
+    "LICI26OCT390PE",
+    "LODHA26OCT1020CE",
+    "LODHA26OCT1020PE",
+    "LT26OCT3800CE",
+    "LT26OCT3800PE",
+    "LTF26OCT245CE",
+    "LTF26OCT245PE",
+    "LTM26OCT4100CE",
+    "LTM26OCT4100PE",
+    "LUPIN26OCT1960CE",
+    "LUPIN26OCT1960PE",
+    "M&M26OCT2900CE",
+    "M&M26OCT2900PE",
+    "MAHABANK26OCT79CE",
+    "MAHABANK26OCT79PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "LAURUSLABS26OCT2180CE",
+    "LAURUSLABS26OCT2180PE",
+    "LICHSGFIN26OCT510CE",
+    "LICHSGFIN26OCT510PE",
+    "LICI26OCT390CE",
+    "LICI26OCT390PE",
+    "LODHA26OCT1020CE",
+    "LODHA26OCT1020PE",
+    "LT26OCT3800CE",
+    "LT26OCT3800PE",
+    "LTF26OCT245CE",
+    "LTF26OCT245PE",
+    "LTM26OCT4100CE",
+    "LTM26OCT4100PE",
+    "LUPIN26OCT1960CE",
+    "LUPIN26OCT1960PE",
+    "M&M26OCT2900CE",
+    "M&M26OCT2900PE",
+    "MAHABANK26OCT79CE",
+    "MAHABANK26OCT79PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 69.6,
+   "same_best_ask_pct": 65.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -76.0
   }
  ],
  "top_gaps": [
@@ -3211,13 +3268,13 @@
   }
  ],
  "day": {
-  "rounds": 54,
-  "contract_quotes": 1240,
+  "rounds": 55,
+  "contract_quotes": 1263,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -44.5
+  "upstox_minus_kotak_quote_time_s_median": -46.0
  }
 }
