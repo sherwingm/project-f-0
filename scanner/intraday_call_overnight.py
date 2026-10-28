@@ -14,6 +14,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .results_intraday import hm
@@ -80,7 +81,7 @@ def stats(g: pd.DataFrame) -> dict:
 
 def main() -> None:
     con = pd.read_csv(RES / "S1_v10_bandintra_contracts.csv")
-    mi = pd.read_csv(RES / "S1_v10_bandintra_minutes.csv")
+    mi = read_table(RES / "S1_v10_bandintra_minutes.csv")
     mi["date"], mi["t"] = mi["ts"].str[:10], mi["ts"].str[11:16]
     mins = {k: g for k, g in mi.groupby(["symbol", "day0", "strike"])}
     res = {}

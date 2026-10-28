@@ -29,6 +29,7 @@ import pandas as pd
 
 from server import charges as ch
 from scanner.stats import clustered_t
+from scanner.fastio import read_table
 
 TICK = 0.01            # test dates are all from 2025-11-03 (Rs 0.01 tick)
 STOP = 0.20            # -20 % stop
@@ -168,7 +169,7 @@ def load():
     keys = set(zip(t.symbol, t.day0, t.side, t.strike.astype(float)))
     by = {}
     for s in SETS:
-        m = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        m = read_table(RES / f"S1_v10_{s}_minutes.csv")
         m["t"] = m["ts"].str[11:16]
         for k, g in m.groupby(["symbol", "day0", "side", "strike"]):
             if k in keys and k not in by:

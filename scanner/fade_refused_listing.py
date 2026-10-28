@@ -12,6 +12,7 @@ import glob
 
 import pandas as pd
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .fade_cheap_dte import V12, _R
@@ -28,7 +29,7 @@ def max_lots(t: pd.DataFrame) -> pd.DataFrame:
     t["lots"] = [max(1, int(CAP // (r.entry_B * r.lot))) for r in t.itertuples()]
     by = {}
     for s in sorted(set(t["set"])):
-        m = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        m = read_table(RES / f"S1_v10_{s}_minutes.csv")
         m["t"] = m["ts"].str[11:16]
         for k, g in m.groupby(["symbol", "day0", "side", "strike"]):
             by[k] = g.sort_values("ts")

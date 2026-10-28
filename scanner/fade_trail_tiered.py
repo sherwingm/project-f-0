@@ -12,6 +12,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .fade_stop_trail import SPLIT
@@ -95,7 +96,7 @@ def table(trades: pd.DataFrame, res: dict, label: str) -> pd.DataFrame:
 def main() -> None:
     by = {}
     for s in SETS:
-        m = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        m = read_table(RES / f"S1_v10_{s}_minutes.csv")
         m["t"] = m["ts"].str[11:16]
         for k, g in m.groupby(["symbol", "day0", "side", "strike"]):
             if k not in by:

@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .results_intraday import at, hm
@@ -28,7 +29,7 @@ def pct(a: float, b: float) -> float:
 
 def filing_day_moves(nifty_dir: Path) -> pd.DataFrame:
     cases = pd.read_csv(RES / "S1_intraday_cases.csv")
-    mins = pd.read_csv(RES / "S1_intraday_minutes.csv")
+    mins = read_table(RES / "S1_intraday_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     stock = {k: g.drop_duplicates("t").set_index("t")["c"] for k, g in mins.groupby(["symbol", "day"])}
     nf = pd.concat([pd.read_parquet(p) for p in sorted(nifty_dir.glob("*.parquet"))])

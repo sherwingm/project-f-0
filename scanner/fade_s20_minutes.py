@@ -16,6 +16,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .stats import clustered_t
@@ -56,7 +57,7 @@ def one(m: pd.DataFrame | None, r, stop_from: str = "09:15") -> dict | None:
 
 def main() -> None:
     c = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
-    mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+    mins = read_table(RES / "S1_v10_bandv10_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
     rows = [x for r in c.itertuples() if (x := one(by.get((r.symbol, r.day0, r.side, float(r.strike))), r))]

@@ -1,10 +1,11 @@
 import json, sys
 import pandas as pd
 from scanner.fade_s20_minutes import one, RES
+from scanner.fastio import read_table
 
 S = sys.argv[1]  # folder holding trades.json (/api/paper/trades)
 c = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
-mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+mins = read_table(RES / "S1_v10_bandv10_minutes.csv")
 mins["t"] = mins["ts"].str[11:16]
 by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
 rows = []

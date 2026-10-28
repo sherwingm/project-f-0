@@ -12,6 +12,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .build import ROOT
 from .fade_stop_trail import SPLIT
 from .stats import clustered_t
@@ -24,7 +25,7 @@ KEY = ["symbol", "day0", "side", "strike"]
 def minutes() -> dict:
     by = {}
     for s in SETS:
-        m = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        m = read_table(RES / f"S1_v10_{s}_minutes.csv")
         m["t"] = m["ts"].str[11:16]
         for k, g in m.groupby(KEY):
             if k not in by:

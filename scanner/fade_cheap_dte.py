@@ -10,6 +10,7 @@ from datetime import date
 
 import pandas as pd
 
+from .fastio import read_table
 from .backtest_cheap_options import sessions_to
 from .backtest_s1_v2 import md
 from .build import ROOT
@@ -32,7 +33,7 @@ def build() -> pd.DataFrame:
     rows, seen = [], set()
     for s in SETS:
         c = pd.read_csv(RES / f"S1_v10_{s}_contracts.csv")
-        mins = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        mins = read_table(RES / f"S1_v10_{s}_minutes.csv")
         mins["t"] = mins["ts"].str[11:16]
         by = {k: g.sort_values("ts") for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
         for r in c.itertuples():

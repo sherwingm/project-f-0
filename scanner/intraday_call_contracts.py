@@ -15,6 +15,7 @@ import pandas as pd
 
 from server import sessions
 
+from .fastio import read_table
 from .build import ROOT
 from .events.store import Store
 from .option_engine import monthly
@@ -35,7 +36,7 @@ def choose_expiry(expiries, day: str) -> str | None:
 def main() -> None:
     cases = pd.read_csv(RES / "S1_intraday_results_path_cases.csv")
     cases = cases[(cases["class"] == "strong") & (cases["day"] >= START) & (cases["day"] <= END)]
-    mins = pd.read_csv(RES / "S1_intraday_minutes.csv")
+    mins = read_table(RES / "S1_intraday_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     stock = {k: g.set_index("t")["c"] for k, g in mins.groupby(["symbol", "day"])}
     days = sorted(f"{p.stem[-8:-4]}-{p.stem[-4:-2]}-{p.stem[-2:]}" for p in CACHE.glob("fo_bhavcopy_*.csv"))

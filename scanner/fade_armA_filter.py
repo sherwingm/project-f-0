@@ -14,6 +14,7 @@ import math
 import numpy as np
 import pandas as pd
 
+from .fastio import read_table
 from .backtest_cheap_options import _read_index
 from .backtest_s1_v2 import md
 from .build import ROOT
@@ -107,7 +108,7 @@ def v11_minutes() -> pd.DataFrame:
     """The minute trades with S1 v11's exit as live: the -20 % stop from 09:16 (v11_net), else the 15:20 result."""
     from .fade_s20_minutes import one
     c = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
-    mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+    mins = read_table(RES / "S1_v10_bandv10_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
     rows = [x for r in c.itertuples() if (x := one(by.get((r.symbol, r.day0, r.side, float(r.strike))), r, "09:16"))]

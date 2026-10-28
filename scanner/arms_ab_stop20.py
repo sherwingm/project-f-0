@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import pandas as pd
 
+from .fastio import read_table
 from . import backtest_s1_v4 as v4
 from .backtest_s1_v2 import md
 from .build import ROOT
@@ -68,7 +69,7 @@ def stats(g: pd.DataFrame, col: str) -> dict:
 def main() -> None:
     t = pd.read_csv(RES / "S1_v8_trades.csv")
     t = t[t["arm"].isin(["A", "B"]) & (t["excluded"].fillna("") == "")]
-    mins = pd.read_csv(RES / "S1_v10_bandab_minutes.csv")
+    mins = read_table(RES / "S1_v10_bandab_minutes.csv")
     mins["date"], mins["t"] = mins["ts"].str[:10], mins["ts"].str[11:16]
     by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "strike"])}
     rows = pd.DataFrame([one(r, by.get((r.symbol, r.entry_date, float(r.strike)))) for r in t.itertuples()])

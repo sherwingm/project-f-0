@@ -19,6 +19,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .backtest_s1_v10 import BAND, MIN_CONTRACTS, TICK, quotes_of, start_strike
 from .build import ROOT
@@ -157,7 +158,7 @@ def trades(kind: str, costs) -> tuple[pd.DataFrame, Counter]:
     variants = VARIANTS[kind]
     contracts, minutes, *_ = FILES[BAND_OF[kind]]
     c = pd.read_csv(contracts)
-    mins = pd.read_csv(minutes)
+    mins = read_table(minutes)
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts") for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
     rows, fun = [], Counter(contracts=len(c))

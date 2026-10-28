@@ -10,6 +10,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .fade_stop_trail import SPLIT
@@ -53,7 +54,7 @@ def main() -> None:
     t = t[t["B_excluded"].fillna("") == ""].reset_index(drop=True)
     con = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
     strike = {(r.symbol, r.day0, r.side): float(r.strike) for r in con.itertuples()}
-    mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+    mins = read_table(RES / "S1_v10_bandv10_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts") for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
     vs = ["v11", "v10", "N1", "N2-30", "N2-35", "N2-40", "N3a", "N3b"]

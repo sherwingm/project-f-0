@@ -16,6 +16,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .backtest_s1_v10 import Bhav
 from .build import ROOT
@@ -143,7 +144,7 @@ def test1(bhav: Bhav, cal: list[str], eq: Eq, c: float) -> pd.DataFrame:
     base = base[base["B_excluded"].fillna("") == ""]
     con = pd.read_csv(RES / "S1_v10_bandv10_contracts.csv")
     con = {(r.symbol, r.day0, r.side): r for r in con.itertuples()}
-    mins = pd.read_csv(RES / "S1_v10_bandv10_minutes.csv")
+    mins = read_table(RES / "S1_v10_bandv10_minutes.csv")
     mins["t"] = mins["ts"].str[11:16]
     by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
     variants = {"main": (c, 1.0, False), "c=1": (1.0, 1.0, False), "Lx0.90": (c, 0.90, False),

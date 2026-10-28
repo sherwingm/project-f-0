@@ -14,6 +14,7 @@ import pandas as pd
 
 from server import charges as ch
 
+from .fastio import read_table
 from .backtest_s1_v2 import md
 from .build import ROOT
 from .fade_armA_filter import Prices, flag
@@ -52,7 +53,7 @@ def build() -> pd.DataFrame:
     rows = []
     for s in SETS:
         c = pd.read_csv(RES / f"S1_v10_{s}_contracts.csv")
-        mins = pd.read_csv(RES / f"S1_v10_{s}_minutes.csv")
+        mins = read_table(RES / f"S1_v10_{s}_minutes.csv")
         mins["t"] = mins["ts"].str[11:16]
         by = {k: g.sort_values("ts").reset_index(drop=True) for k, g in mins.groupby(["symbol", "day0", "side", "strike"])}
         for r in c.itertuples():
