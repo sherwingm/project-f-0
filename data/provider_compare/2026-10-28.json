@@ -1250,6 +1250,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -62.0
+  },
+  {
+   "at": "11:10:07",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "ADANIPOWER26OCT185CE",
+    "ADANIPOWER26OCT185PE",
+    "ALKEM26OCT5050CE",
+    "ALKEM26OCT5050PE",
+    "AMBER26OCT6100CE",
+    "AMBER26OCT6100PE",
+    "AMBUJACEM26OCT350CE",
+    "AMBUJACEM26OCT350PE",
+    "ANANDRATHI26OCT2260CE",
+    "ANANDRATHI26OCT2260PE",
+    "ANGELONE26OCT290CE",
+    "ANGELONE26OCT290PE",
+    "APLAPOLLO26OCT2180CE",
+    "APLAPOLLO26OCT2180PE",
+    "APOLLOHOSP26OCT8100CE",
+    "APOLLOHOSP26OCT8100PE",
+    "ASHOKLEY26OCT142.5CE",
+    "ASHOKLEY26OCT142.5PE",
+    "ASIANPAINT26OCT2260CE",
+    "ASIANPAINT26OCT2260PE"
+   ],
+   "missing_upstox": [
+    "ADANIPOWER26OCT185CE",
+    "ADANIPOWER26OCT185PE",
+    "ALKEM26OCT5050CE",
+    "ALKEM26OCT5050PE",
+    "AMBER26OCT6100CE",
+    "AMBER26OCT6100PE",
+    "AMBUJACEM26OCT350CE",
+    "AMBUJACEM26OCT350PE",
+    "ANANDRATHI26OCT2260CE",
+    "ANANDRATHI26OCT2260PE",
+    "ANGELONE26OCT290CE",
+    "ANGELONE26OCT290PE",
+    "APLAPOLLO26OCT2180CE",
+    "APLAPOLLO26OCT2180PE",
+    "APOLLOHOSP26OCT8100CE",
+    "APOLLOHOSP26OCT8100PE",
+    "ASHOKLEY26OCT142.5CE",
+    "ASHOKLEY26OCT142.5PE",
+    "ASIANPAINT26OCT2260CE",
+    "ASIANPAINT26OCT2260PE",
+    "ATHERENERG26NOV1860CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.012,
+   "same_best_bid_pct": 56.5,
+   "same_best_ask_pct": 73.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -1324,6 +1381,13 @@
    "at": "09:35"
   },
   {
+   "contract": "APOLLOHOSP26NOVFUT",
+   "gap_pct": 0.012,
+   "kotak": 8110.0,
+   "upstox": 8109.0,
+   "at": "11:10"
+  },
+  {
    "contract": "360ONE26NOVFUT",
    "gap_pct": 0.0,
    "kotak": 975.5,
@@ -1385,23 +1449,16 @@
    "kotak": 5066.0,
    "upstox": 5066.0,
    "at": "09:20"
-  },
-  {
-   "contract": "AMBER26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 6050.0,
-   "upstox": 6050.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 22,
-  "contract_quotes": 506,
+  "rounds": 23,
+  "contract_quotes": 529,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.0,
+  "same_best_bid_pct": 52.2,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.9,
-  "upstox_minus_kotak_quote_time_s_median": -37.0
+  "oi_same_pct": 100.0,
+  "upstox_minus_kotak_quote_time_s_median": -36.0
  }
 }
