@@ -3180,6 +3180,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -30.0
+  },
+  {
+   "at": "14:00:13",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "MPHASIS26OCT2500CE",
+    "MPHASIS26OCT2500PE",
+    "MUTHOOTFIN26OCT2400CE",
+    "MUTHOOTFIN26OCT2400PE",
+    "NAM-INDIA26OCT940CE",
+    "NAM-INDIA26OCT940PE",
+    "NATIONALUM26OCT325CE",
+    "NATIONALUM26OCT325PE",
+    "NAUKRI26OCT1180CE",
+    "NAUKRI26OCT1180PE",
+    "NBCC26OCT70CE",
+    "NBCC26OCT70PE",
+    "NESTLEIND26OCT1170CE",
+    "NESTLEIND26OCT1170PE",
+    "NHPC26OCT74CE",
+    "NHPC26OCT74PE",
+    "NMDC26OCT68CE",
+    "NMDC26OCT68PE",
+    "NTPC26OCT305CE",
+    "NTPC26OCT305PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "MPHASIS26OCT2500CE",
+    "MPHASIS26OCT2500PE",
+    "MUTHOOTFIN26OCT2400CE",
+    "MUTHOOTFIN26OCT2400PE",
+    "NAM-INDIA26OCT940CE",
+    "NAM-INDIA26OCT940PE",
+    "NATIONALUM26OCT325CE",
+    "NATIONALUM26OCT325PE",
+    "NAUKRI26OCT1180CE",
+    "NAUKRI26OCT1180PE",
+    "NBCC26OCT70CE",
+    "NBCC26OCT70PE",
+    "NESTLEIND26OCT1170CE",
+    "NESTLEIND26OCT1170PE",
+    "NHPC26OCT74CE",
+    "NHPC26OCT74PE",
+    "NMDC26OCT68CE",
+    "NMDC26OCT68PE",
+    "NTPC26OCT305CE",
+    "NTPC26OCT305PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 47.8,
+   "same_best_ask_pct": 65.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -90.0
   }
  ],
  "top_gaps": [
@@ -3325,13 +3382,13 @@
   }
  ],
  "day": {
-  "rounds": 56,
-  "contract_quotes": 1286,
+  "rounds": 57,
+  "contract_quotes": 1309,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -44.5
+  "upstox_minus_kotak_quote_time_s_median": -46.0
  }
 }
