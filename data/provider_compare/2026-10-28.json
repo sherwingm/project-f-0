@@ -1193,6 +1193,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "11:05:07",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "360ONE26OCT980CE",
+    "360ONE26OCT980PE",
+    "ABB26OCT6500CE",
+    "ABB26OCT6500PE",
+    "ABCAPITAL26OCT355CE",
+    "ABCAPITAL26OCT355PE",
+    "ADANIENSOL26OCT1280CE",
+    "ADANIENSOL26OCT1280PE",
+    "ADANIENT26OCT2450CE",
+    "ADANIENT26OCT2450PE",
+    "ADANIGREEN26OCT1280CE",
+    "ADANIGREEN26OCT1280PE",
+    "ADANIPORTS26OCT1740CE",
+    "ADANIPORTS26OCT1740PE",
+    "WIPRO26OCT185CE",
+    "WIPRO26OCT185PE",
+    "YESBANK26OCT16CE",
+    "YESBANK26OCT16PE",
+    "ZYDUSLIFE26OCT1180CE",
+    "ZYDUSLIFE26OCT1180PE"
+   ],
+   "missing_upstox": [
+    "360ONE26OCT980CE",
+    "360ONE26OCT980PE",
+    "ABB26OCT6500CE",
+    "ABB26OCT6500PE",
+    "ABCAPITAL26OCT355CE",
+    "ABCAPITAL26OCT355PE",
+    "ADANIENSOL26OCT1280CE",
+    "ADANIENSOL26OCT1280PE",
+    "ADANIENT26OCT2450CE",
+    "ADANIENT26OCT2450PE",
+    "ADANIGREEN26OCT1280CE",
+    "ADANIGREEN26OCT1280PE",
+    "ADANIPORTS26OCT1740CE",
+    "ADANIPORTS26OCT1740PE",
+    "ATHERENERG26NOV1860CE",
+    "WIPRO26OCT185CE",
+    "WIPRO26OCT185PE",
+    "YESBANK26OCT16CE",
+    "YESBANK26OCT16PE",
+    "ZYDUSLIFE26OCT1180CE",
+    "ZYDUSLIFE26OCT1180PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 60.9,
+   "same_best_ask_pct": 65.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -62.0
   }
  ],
  "top_gaps": [
@@ -1338,13 +1395,13 @@
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 483,
+  "rounds": 22,
+  "contract_quotes": 506,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 47.8,
+  "same_best_bid_pct": 50.0,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 95.8,
-  "upstox_minus_kotak_quote_time_s_median": -36.0
+  "oi_same_pct": 97.9,
+  "upstox_minus_kotak_quote_time_s_median": -37.0
  }
 }
