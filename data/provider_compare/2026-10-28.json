@@ -908,6 +908,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -42.0
+  },
+  {
+   "at": "10:40:06",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "PNBHOUSING26OCT1100CE",
+    "PNBHOUSING26OCT1100PE",
+    "POLICYBZR26OCT1000CE",
+    "POLICYBZR26OCT1000PE",
+    "POLYCAB26OCT7700CE",
+    "POLYCAB26OCT7700PE",
+    "POWERGRID26OCT250CE",
+    "POWERGRID26OCT250PE",
+    "POWERINDIA26OCT29000CE",
+    "POWERINDIA26OCT29000PE",
+    "PREMIERENE26OCT820CE",
+    "PREMIERENE26OCT820PE",
+    "PRESTIGE26OCT1400CE",
+    "PRESTIGE26OCT1400PE",
+    "RADICO26OCT4250CE",
+    "RADICO26OCT4250PE",
+    "RBLBANK26OCT350CE",
+    "RBLBANK26OCT350PE",
+    "RECLTD26OCT285CE",
+    "RECLTD26OCT285PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "PNBHOUSING26OCT1100CE",
+    "PNBHOUSING26OCT1100PE",
+    "POLICYBZR26OCT1000CE",
+    "POLICYBZR26OCT1000PE",
+    "POLYCAB26OCT7700CE",
+    "POLYCAB26OCT7700PE",
+    "POWERGRID26OCT250CE",
+    "POWERGRID26OCT250PE",
+    "POWERINDIA26OCT29000CE",
+    "POWERINDIA26OCT29000PE",
+    "PREMIERENE26OCT820CE",
+    "PREMIERENE26OCT820PE",
+    "PRESTIGE26OCT1400CE",
+    "PRESTIGE26OCT1400PE",
+    "RADICO26OCT4250CE",
+    "RADICO26OCT4250PE",
+    "RBLBANK26OCT350CE",
+    "RBLBANK26OCT350PE",
+    "RECLTD26OCT285CE",
+    "RECLTD26OCT285PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 56.5,
+   "same_best_ask_pct": 56.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -66.0
   }
  ],
  "top_gaps": [
@@ -1053,13 +1110,13 @@
   }
  ],
  "day": {
-  "rounds": 16,
-  "contract_quotes": 368,
+  "rounds": 17,
+  "contract_quotes": 391,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 47.8,
   "same_best_ask_pct": 52.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.7,
-  "upstox_minus_kotak_quote_time_s_median": -27.5
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
