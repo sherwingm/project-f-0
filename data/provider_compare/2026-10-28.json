@@ -2610,6 +2610,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -59.0
+  },
+  {
+   "at": "13:10:11",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "BIOCON26OCT345CE",
+    "BIOCON26OCT345PE",
+    "BLUESTARCO26OCT1620CE",
+    "BLUESTARCO26OCT1620PE",
+    "BOSCHLTD26OCT47000CE",
+    "BOSCHLTD26OCT47000PE",
+    "BPCL26OCT290CE",
+    "BPCL26OCT290PE",
+    "BRITANNIA26OCT4550CE",
+    "BRITANNIA26OCT4550PE",
+    "BSE26OCT3500CE",
+    "BSE26OCT3500PE",
+    "CAMS26OCT680CE",
+    "CAMS26OCT680PE",
+    "CANBK26OCT118CE",
+    "CANBK26OCT118PE",
+    "CDSL26OCT1240CE",
+    "CDSL26OCT1240PE",
+    "CGPOWER26OCT840CE",
+    "CGPOWER26OCT840PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "BIOCON26OCT345CE",
+    "BIOCON26OCT345PE",
+    "BLUESTARCO26OCT1620CE",
+    "BLUESTARCO26OCT1620PE",
+    "BOSCHLTD26OCT47000CE",
+    "BOSCHLTD26OCT47000PE",
+    "BPCL26OCT290CE",
+    "BPCL26OCT290PE",
+    "BRITANNIA26OCT4550CE",
+    "BRITANNIA26OCT4550PE",
+    "BSE26OCT3500CE",
+    "BSE26OCT3500PE",
+    "CAMS26OCT680CE",
+    "CAMS26OCT680PE",
+    "CANBK26OCT118CE",
+    "CANBK26OCT118PE",
+    "CDSL26OCT1240CE",
+    "CDSL26OCT1240PE",
+    "CGPOWER26OCT840CE",
+    "CGPOWER26OCT840PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 52.2,
+   "same_best_ask_pct": 47.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -101.0
   }
  ],
  "top_gaps": [
@@ -2755,13 +2812,13 @@
   }
  ],
  "day": {
-  "rounds": 46,
-  "contract_quotes": 1056,
+  "rounds": 47,
+  "contract_quotes": 1079,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -42.5
+  "upstox_minus_kotak_quote_time_s_median": -43.0
  }
 }
