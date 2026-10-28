@@ -418,7 +418,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             return `<td class="${dir(v)}" title="${esc(v10Text(r) || "")}">${v != null ? srs(v, 2) : r.shadow_v10 ? "pending" : "—"}</td><td class="${dir(t)}" title="${esc(trailText(r, c.entry.price) || "")}">${t != null ? srs(t, 2) + (r.shadow_trail.status === "done" ? " <small>trail</small>" : "") : r.shadow_trail ? "—" : "not tagged"}</td>`; })() : ""}
           <td class="gl ${dir(chg(hp && hp.price, e))}">${hp ? pct(chg(hp.price, e)) + ` <small>${rs(hp.price)}</small>` : "—"}</td><td class="${dir(chg(ht && ht.price, e))}">${ht ? pct(chg(ht.price, e)) + ` <small>${rs(ht.price)}</small>` : "—"}</td>
           <td class="${dir(pc && pc.peak_return_pct)}">${pc ? pct(pc.peak_return_pct) + ` <small>${rs(pc.peak_bid)} · ${when(pc.peak_at)}</small>` : "—"}</td>
-          <td title="${pc ? esc("at the peak bid: " + srs(pc.peak_net, 2) + " · left: " + srs(pc.giveback_rs, 2)) : ""}">${pc ? `<span class="${dir(-pc.giveback_rs)}">${srs(pc.giveback_rs, 0)}</span>` : "—"}</td>
+          <td title="${pc ? esc("at the peak bid: " + srs(pc.peak_net, 2) + " · left: " + srs(pc.giveback_rs, 2)) : ""}">${pc ? `<span class="${dir(-pc.giveback_rs)}">${pct(pc.giveback_rs / (e * c.qty) * 100)}</span> <small>${srs(pc.giveback_rs, 0)}</small>` : "—"}</td>
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>
