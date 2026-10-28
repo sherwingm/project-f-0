@@ -1702,6 +1702,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "11:50:08",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "ICICIGI26OCT1580CE",
+    "ICICIGI26OCT1580PE",
+    "ICICILIFE26OCT410CE",
+    "ICICILIFE26OCT410PE",
+    "IDEA26OCT12CE",
+    "IDEA26OCT12PE",
+    "IDFCFIRSTB26OCT72CE",
+    "IDFCFIRSTB26OCT72PE",
+    "IEX26OCT102CE",
+    "IEX26OCT102PE",
+    "INDHOTEL26OCT810CE",
+    "INDHOTEL26OCT810PE",
+    "INDIANB26OCT830CE",
+    "INDIANB26OCT830PE",
+    "INDIGO26OCT4650CE",
+    "INDIGO26OCT4650PE",
+    "INDUSINDBK26OCT840CE",
+    "INDUSINDBK26OCT840PE",
+    "INDUSTOWER26OCT380CE",
+    "INDUSTOWER26OCT380PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "ICICIGI26OCT1580CE",
+    "ICICIGI26OCT1580PE",
+    "ICICILIFE26OCT410CE",
+    "ICICILIFE26OCT410PE",
+    "IDEA26OCT12CE",
+    "IDEA26OCT12PE",
+    "IDFCFIRSTB26OCT72CE",
+    "IDFCFIRSTB26OCT72PE",
+    "IEX26OCT102CE",
+    "IEX26OCT102PE",
+    "INDHOTEL26OCT810CE",
+    "INDHOTEL26OCT810PE",
+    "INDIANB26OCT830CE",
+    "INDIANB26OCT830PE",
+    "INDIGO26OCT4650CE",
+    "INDIGO26OCT4650PE",
+    "INDUSINDBK26OCT840CE",
+    "INDUSINDBK26OCT840PE",
+    "INDUSTOWER26OCT380CE",
+    "INDUSTOWER26OCT380PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 43.5,
+   "same_best_ask_pct": 47.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -1847,13 +1904,13 @@
   }
  ],
  "day": {
-  "rounds": 30,
-  "contract_quotes": 689,
+  "rounds": 31,
+  "contract_quotes": 712,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -37.0
+  "upstox_minus_kotak_quote_time_s_median": -38.0
  }
 }
