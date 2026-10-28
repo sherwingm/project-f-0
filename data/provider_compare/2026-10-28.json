@@ -2215,6 +2215,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -43.0
+  },
+  {
+   "at": "12:35:10",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "SHREECEM26OCT23250CE",
+    "SHREECEM26OCT23250PE",
+    "SHRIRAMFIN26OCT820CE",
+    "SHRIRAMFIN26OCT820PE",
+    "SIEMENS26OCT3350CE",
+    "SIEMENS26OCT3350PE",
+    "SOLARINDS26OCT19250CE",
+    "SOLARINDS26OCT19250PE",
+    "SONACOMS26OCT880CE",
+    "SONACOMS26OCT880PE",
+    "SRF26OCT2300CE",
+    "SRF26OCT2300PE",
+    "SUNPHARMA26OCT1760CE",
+    "SUNPHARMA26OCT1760PE",
+    "SUPREMEIND26OCT3250CE",
+    "SUPREMEIND26OCT3250PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "SHREECEM26OCT23250CE",
+    "SHREECEM26OCT23250PE",
+    "SHRIRAMFIN26OCT820CE",
+    "SHRIRAMFIN26OCT820PE",
+    "SIEMENS26OCT3350CE",
+    "SIEMENS26OCT3350PE",
+    "SOLARINDS26OCT19250CE",
+    "SOLARINDS26OCT19250PE",
+    "SONACOMS26OCT880CE",
+    "SONACOMS26OCT880PE",
+    "SRF26OCT2300CE",
+    "SRF26OCT2300PE",
+    "SUNPHARMA26OCT1760CE",
+    "SUNPHARMA26OCT1760PE",
+    "SUPREMEIND26OCT3250CE",
+    "SUPREMEIND26OCT3250PE",
+    "SUZLON26OCT37CE",
+    "SUZLON26OCT37PE",
+    "SWIGGY26OCT185CE",
+    "SWIGGY26OCT185PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 73.9,
+   "same_best_ask_pct": 60.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -76.0
   }
  ],
  "top_gaps": [
@@ -2360,13 +2417,13 @@
   }
  ],
  "day": {
-  "rounds": 39,
-  "contract_quotes": 896,
+  "rounds": 40,
+  "contract_quotes": 919,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -42.0
+  "upstox_minus_kotak_quote_time_s_median": -42.5
  }
 }
