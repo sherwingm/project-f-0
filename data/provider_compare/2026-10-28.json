@@ -1474,6 +1474,63 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "11:30:08",
+   "contracts": 44,
+   "on_both": 23,
+   "missing_kotak": [
+    "COCHINSHIP26OCT1120CE",
+    "COCHINSHIP26OCT1120PE",
+    "COFORGE26OCT1940CE",
+    "COFORGE26OCT1940PE",
+    "COLPAL26OCT1600CE",
+    "COLPAL26OCT1600PE",
+    "CONCOR26OCT415CE",
+    "CONCOR26OCT415PE",
+    "CROMPTON26OCT197.5CE",
+    "CROMPTON26OCT197.5PE",
+    "CUMMINSIND26OCT4600CE",
+    "CUMMINSIND26OCT4600PE",
+    "DABUR26OCT360CE",
+    "DABUR26OCT360PE",
+    "DELHIVERY26OCT385CE",
+    "DELHIVERY26OCT385PE",
+    "DIVISLAB26OCT9700CE",
+    "DIVISLAB26OCT9700PE",
+    "DIXON26OCT11250CE",
+    "DIXON26OCT11250PE"
+   ],
+   "missing_upstox": [
+    "ATHERENERG26NOV1860CE",
+    "COCHINSHIP26OCT1120CE",
+    "COCHINSHIP26OCT1120PE",
+    "COFORGE26OCT1940CE",
+    "COFORGE26OCT1940PE",
+    "COLPAL26OCT1600CE",
+    "COLPAL26OCT1600PE",
+    "CONCOR26OCT415CE",
+    "CONCOR26OCT415PE",
+    "CROMPTON26OCT197.5CE",
+    "CROMPTON26OCT197.5PE",
+    "CUMMINSIND26OCT4600CE",
+    "CUMMINSIND26OCT4600PE",
+    "DABUR26OCT360CE",
+    "DABUR26OCT360PE",
+    "DELHIVERY26OCT385CE",
+    "DELHIVERY26OCT385PE",
+    "DIVISLAB26OCT9700CE",
+    "DIVISLAB26OCT9700PE",
+    "DIXON26OCT11250CE",
+    "DIXON26OCT11250PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 69.6,
+   "same_best_ask_pct": 60.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.7,
+   "upstox_minus_kotak_quote_time_s_median": -26.0
   }
  ],
  "top_gaps": [
@@ -1619,13 +1676,13 @@
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 597,
+  "rounds": 27,
+  "contract_quotes": 620,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 54.35,
+  "same_best_bid_pct": 56.5,
   "same_best_ask_pct": 56.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -37.0
+  "upstox_minus_kotak_quote_time_s_median": -36.0
  }
 }
