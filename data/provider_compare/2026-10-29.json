@@ -448,9 +448,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -98.0
+  },
+  {
+   "at": "12:00:09",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.475,
+   "same_best_bid_pct": 64.7,
+   "same_best_ask_pct": 60.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -62.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "TATAELXSI26NOV4000CE",
+   "gap_pct": 4.475,
+   "kotak": 51.4,
+   "upstox": 49.1,
+   "at": "12:00"
+  },
   {
    "contract": "TATACONSUM26NOV1020CE",
    "gap_pct": 2.878,
@@ -583,23 +604,16 @@
    "kotak": 1804.5,
    "upstox": 1804.9,
    "at": "09:20"
-  },
-  {
-   "contract": "BANDHANBNK26NOVFUT",
-   "gap_pct": 0.019,
-   "kotak": 157.25,
-   "upstox": 157.28,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 32,
-  "contract_quotes": 1634,
+  "rounds": 33,
+  "contract_quotes": 1685,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.0,
+  "same_best_bid_pct": 51.0,
   "same_best_ask_pct": 49.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -47.0
+  "upstox_minus_kotak_quote_time_s_median": -49.0
  }
 }
