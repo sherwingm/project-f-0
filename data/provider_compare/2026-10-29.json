@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -59.0
+  },
+  {
+   "at": "11:25:07",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.444,
+   "same_best_bid_pct": 54.9,
+   "same_best_ask_pct": 60.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.0,
+   "upstox_minus_kotak_quote_time_s_median": -60.0
   }
  ],
  "top_gaps": [
@@ -403,6 +417,13 @@
    "at": "10:40"
   },
   {
+   "contract": "BHEL26NOV400PE",
+   "gap_pct": 0.444,
+   "kotak": 11.25,
+   "upstox": 11.3,
+   "at": "11:25"
+  },
+  {
    "contract": "LT26NOV3900CE",
    "gap_pct": 0.413,
    "kotak": 36.35,
@@ -452,6 +473,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BPCL26NOVFUT",
+   "gap_pct": 0.034,
+   "kotak": 290.5,
+   "upstox": 290.4,
+   "at": "11:25"
+  },
+  {
    "contract": "ADANIPORTS26NOVFUT",
    "gap_pct": 0.022,
    "kotak": 1804.5,
@@ -478,30 +506,16 @@
    "kotak": 159.78,
    "upstox": 159.79,
    "at": "10:25"
-  },
-  {
-   "contract": "360ONE26NOV1000CE",
-   "gap_pct": 0.0,
-   "kotak": 30.0,
-   "upstox": 30.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOV1000PE",
-   "gap_pct": 0.0,
-   "kotak": 31.0,
-   "upstox": 31.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 1277,
+  "rounds": 26,
+  "contract_quotes": 1328,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.1,
+  "same_best_bid_pct": 46.1,
   "same_best_ask_pct": 47.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -42.0
+  "upstox_minus_kotak_quote_time_s_median": -43.0
  }
 }
