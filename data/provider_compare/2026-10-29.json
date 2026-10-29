@@ -546,6 +546,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -128.0
+  },
+  {
+   "at": "12:35:10",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.036,
+   "same_best_bid_pct": 58.0,
+   "same_best_ask_pct": 57.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -63.0
   }
  ],
  "top_gaps": [
@@ -676,25 +690,25 @@
    "at": "11:20"
   },
   {
+   "contract": "SBIN26NOVFUT",
+   "gap_pct": 0.036,
+   "kotak": 968.8,
+   "upstox": 969.15,
+   "at": "12:35"
+  },
+  {
    "contract": "ASHOKLEY26NOVFUT",
    "gap_pct": 0.035,
    "kotak": 143.45,
    "upstox": 143.4,
    "at": "09:25"
-  },
-  {
-   "contract": "BPCL26NOVFUT",
-   "gap_pct": 0.034,
-   "kotak": 290.5,
-   "upstox": 290.4,
-   "at": "11:25"
   }
  ],
  "day": {
-  "rounds": 39,
-  "contract_quotes": 1991,
+  "rounds": 40,
+  "contract_quotes": 2042,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 51.0,
+  "same_best_bid_pct": 51.95,
   "same_best_ask_pct": 52.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
