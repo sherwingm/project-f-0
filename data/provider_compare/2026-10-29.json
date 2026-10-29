@@ -266,6 +266,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "10:55:07",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.236,
+   "same_best_bid_pct": 43.1,
+   "same_best_ask_pct": 47.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -30.0
   }
  ],
  "top_gaps": [
@@ -324,6 +338,13 @@
    "kotak": 14.95,
    "upstox": 15.0,
    "at": "09:40"
+  },
+  {
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 0.236,
+   "kotak": 21.15,
+   "upstox": 21.2,
+   "at": "10:55"
   },
   {
    "contract": "ANANDRATHI26NOVFUT",
@@ -401,21 +422,14 @@
    "kotak": 251.0,
    "upstox": 251.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6500PE",
-   "gap_pct": 0.0,
-   "kotak": 255.4,
-   "upstox": 255.4,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 19,
-  "contract_quotes": 971,
+  "rounds": 20,
+  "contract_quotes": 1022,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 47.1,
-  "same_best_ask_pct": 46.9,
+  "same_best_bid_pct": 45.1,
+  "same_best_ask_pct": 47.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.1,
   "upstox_minus_kotak_quote_time_s_median": -34.0
