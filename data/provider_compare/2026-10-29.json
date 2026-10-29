@@ -994,6 +994,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -58.0
+  },
+  {
+   "at": "15:15:16",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.602,
+   "same_best_bid_pct": 60.8,
+   "same_best_ask_pct": 70.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -1024,6 +1038,13 @@
    "kotak": 20.85,
    "upstox": 20.25,
    "at": "10:20"
+  },
+  {
+   "contract": "APLAPOLLO26NOV2400CE",
+   "gap_pct": 2.602,
+   "kotak": 13.45,
+   "upstox": 13.8,
+   "at": "15:15"
   },
   {
    "contract": "MANKIND26NOV2700CE",
@@ -1129,23 +1150,16 @@
    "kotak": 36.35,
    "upstox": 36.2,
    "at": "10:25"
-  },
-  {
-   "contract": "RELIANCE26NOV1170CE",
-   "gap_pct": 0.413,
-   "kotak": 36.35,
-   "upstox": 36.5,
-   "at": "14:25"
   }
  ],
  "day": {
-  "rounds": 71,
-  "contract_quotes": 3623,
+  "rounds": 72,
+  "contract_quotes": 3674,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 54.9,
   "same_best_ask_pct": 54.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -58.0
+  "upstox_minus_kotak_quote_time_s_median": -56.0
  }
 }
