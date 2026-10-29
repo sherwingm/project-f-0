@@ -176,10 +176,30 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   - **R1, the SENSEX replication: done 26 Oct, does not replicate.** Both sides lose on SENSEX expiry afternoons
     (`data/results/S3_R1_summary.md`). The late-expiry short-premium idea is closed. SENSEX options are now in the
     sparse checkout.
-  - **Paid 2018 → data (the user asked, 25 Oct):** a Telegram seller of "GDFL" data (OptionVault repo, ₹18k for
-    everything). My advice: get a free January 2025 NIFTY options sample first and check it against our data before
-    paying. Licence and quality risk; its public sample is mislabelled. The free alternative: extend the NSE daily
-    bhavcopy back to 2018 (the user has not chosen yet).
+  - **Free data first (the user chose it 29 Oct):**
+    - **Added:** the NSE daily bhavcopy for NIFTY + BANKNIFTY 2018-01 → 2020-12 on `index-data` (5cffec2f; 740
+      sessions; validated: `data/results/s3_data_2018_validation.md`). Also NSE's official daily closes (Nifty 50,
+      Nifty Bank, India VIX) 2018 → 2025-09 in `index_close_daily.parquet` (e6ccd264), from `index_data/index_close.py`.
+    - **L1** (long straddle when VIX > 22 and rising) **fails on 2018-21** and is closed:
+      - mean +7.8 %, but t 0.64;
+      - one trade makes the mean;
+      - neighbours are negative.
+    - **D6R:** plain selling still loses on 2018-21.
+    - Not read: Oct 2022 → Sep 2024 validation (about 2 L1 signals, so it can never reach 30 trades), Jan → Sep 2022,
+      the holdout.
+    - **Paid ₹18k data: not bought** (L1 did not pass).
+  - **Workstream B, the index paper system** (branch `index-paper`, 231720ab + 2ac1d9b8; **not merged, not deployed**):
+    - `index_paper/`: its own ledger (`DATA_DIR/index_paper`, IDs `IX-<pod>-<date>-<n>`):
+      - buys fill at the ask, sells at the bid;
+      - no fill without a live quote (entry rejected, or exit_pending);
+      - the held peak / low are on the combined bid of all legs in the same poll;
+      - the 60-min after-exit follow-up is kept apart from P&L;
+      - capture, MAE and giveback are recorded.
+    - Pods all off (`pods.ENABLED` is empty). L1's live rule is there but disabled.
+    - `/api/index/positions` + `/results` and the `/index` page show it.
+    - **Not done:** a live quote adapter (Kotak / Upstox) and a scheduler calling `runner.tick`. Merging and
+      deploying are the user's call.
+    - `tests/test_index_paper.py`: 13 tests.
   - Open, low priority:
     - the CBOE VIX → India VIX link (needs a download, so the user's OK);
     - max pain from the full bhavcopy OI;

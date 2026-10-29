@@ -816,3 +816,20 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   trail exits kept 65-93 %). After the stop: 4 of 14 back to entry on the day, 2 above at 15:20 (candle study 56 % /
   24 %). Shadows: v12 ahead on 18, behind on 19 because of ADANIENSOL (+₹27k held). No entry feature validated; ML not
   justified (18 trades, 3 days).
+- 2026-10-29: **S3, free data first (the user's choice).**
+  - **Step 1, data:** NSE daily bhavcopy for NIFTY + BANKNIFTY 2018-01 → 2020-12 (`index_data.bhavcopy_ohlc`, the
+    same code as 2021+). 740 sessions, matching NSE's index-close days exactly; schema = the 2021 files; 0 duplicates,
+    0 bad closes; a liquid ATM pair every day. On `index-data` 5cffec2f; validation in
+    `data/results/s3_data_2018_validation.md`. NSE official daily closes (Nifty 50 / Bank / India VIX) 2018 → 2025-09:
+    `index_data/index_close.py`, e6ccd264.
+  - **Step 2, the count:** "VIX > 22 and rising" (close > 22 and > the close 5 sessions earlier) = 146 days
+    2018 → 2025-09 (109 in 2018-21), so step 3 passes.
+  - **Step 4:** L1 pre-registered, look-ahead table included, 9f07cdd9.
+  - **Step 5, L1 on 2018-21: FAIL.** 30 trades, +7.8 % mean but t 0.64, median −15.8 %, one Mar-2020 trade makes the
+    mean, neighbours negative (`data/results/S3_L1_report.md`).
+  - **Step 6, D6R:** selling still loses (weekly straddle −1.5 %, puts −67.6 % / −17.1 % of credit;
+    `data/results/s3_d6r.md`).
+  - **Steps 7-8:** nothing to validate; holdout unread; no data purchase.
+  - **Workstream B:** index paper ledger + API + page on branch `index-paper` (13 tests; not merged or deployed; no
+    live quote feed yet).
+  - The fo venv now also has `requirements-server.txt` (pandas 2.3.3, as the server pins).
