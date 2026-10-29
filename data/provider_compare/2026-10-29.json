@@ -168,9 +168,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -82.0
+  },
+  {
+   "at": "10:20:05",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.878,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 52.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.0,
+   "upstox_minus_kotak_quote_time_s_median": -51.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "TATACONSUM26NOV1020CE",
+   "gap_pct": 2.878,
+   "kotak": 20.85,
+   "upstox": 20.25,
+   "at": "10:20"
+  },
   {
    "contract": "KOTAKBANK26NOV450CE",
    "gap_pct": 1.571,
@@ -303,23 +324,16 @@
    "kotak": 10.95,
    "upstox": 10.95,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOV1300CE",
-   "gap_pct": 0.0,
-   "kotak": 56.0,
-   "upstox": 56.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 614,
+  "rounds": 13,
+  "contract_quotes": 665,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 43.15,
-  "same_best_ask_pct": 45.0,
+  "same_best_bid_pct": 47.1,
+  "same_best_ask_pct": 46.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -30.0
+  "upstox_minus_kotak_quote_time_s_median": -33.0
  }
 }
