@@ -1,40 +1,40 @@
 {
  "recorder": {
-  "run_at": "2026-10-29T00:55:02+05:30",
-  "session": "2026-10-28",
+  "run_at": "2026-10-30T01:00:10+05:30",
+  "session": "2026-10-29",
   "expiry_check": {
    "bse_fo": {
     "checked": 3211,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 8921,
+    "checked": 8939,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 22698.85,
-    "contracts": 180,
-    "rows": 107144,
+    "spot": 22936.75,
+    "contracts": 184,
+    "rows": 10330,
     "expiries": [
      "2026-11-03",
      "2026-11-09"
     ]
    },
    "SENSEX": {
-    "spot": 73246.03,
+    "spot": 74151.04,
     "contracts": 296,
-    "rows": 0,
+    "rows": 7996,
     "expiries": [
      "2026-10-29",
      "2026-11-05"
     ]
    },
    "BANKNIFTY": {
-    "spot": 54267.4,
-    "contracts": 216,
-    "rows": 38948,
+    "spot": 54909.65,
+    "contracts": 220,
+    "rows": 17171,
     "expiries": [
      "2026-11-23",
      "2026-12-29"
@@ -42,10 +42,10 @@
    }
   },
   "failures": [],
-  "chain_eod_rows": 692,
-  "calls": 836,
-  "runtime_s": 1499.1,
-  "contracts": 692
+  "chain_eod_rows": 700,
+  "calls": 750,
+  "runtime_s": 1325.6,
+  "contracts": 700
  },
  "recent_runs": [
   {
@@ -134,6 +134,14 @@
    "contracts": 692,
    "calls": 836,
    "runtime_s": 1499.1,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-10-30T01:00:10+05:30",
+   "session": "2026-10-29",
+   "contracts": 700,
+   "calls": 750,
+   "runtime_s": 1325.6,
    "failures": 0
   }
  ],
@@ -257,7 +265,7 @@
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 30,
+    "rows_added": 376,
     "runtime_s": 2
    },
    "SENSEX": {
@@ -276,21 +284,16 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 5241,
+   "rows": 5259,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-10-28",
-  "runtime_s": 8
+  "day": "2026-10-29",
+  "runtime_s": 9
  },
  "s1_trades_1m": {
-  "run_on": "2026-10-29",
+  "run_on": "2026-10-30",
   "days": {
-   "2026-10-21": {
-    "positions": 10,
-    "stock_rows": 2166,
-    "option_rows": 91
-   },
    "2026-10-22": {
     "positions": 7,
     "stock_rows": 1444,
@@ -309,21 +312,20 @@
    "2026-10-27": {
     "positions": 16,
     "stock_rows": 3954,
-    "option_rows": 1793
+    "option_rows": 1798
    },
    "2026-10-28": {
     "positions": 27,
     "stock_rows": 5661,
+    "option_rows": 4313
+   },
+   "2026-10-29": {
+    "positions": 33,
+    "stock_rows": 7173,
     "option_rows": 0
    }
   },
   "missing_tokens": [
-   "HINDZINC26OCT540PE",
-   "BAJFINANCE26OCT920PE",
-   "FEDERALBNK26OCT355CE",
-   "FEDERALBNK26OCT350CE",
-   "TECHM26OCT1820CE",
-   "WIPRO26OCT185CE",
    "FEDERALBNK26OCT350CE",
    "TECHM26OCT1820CE",
    "WIPRO26OCT185CE",
@@ -337,6 +339,6 @@
    "WIPRO26OCT185CE",
    "INDHOTEL26OCT780CE"
   ],
-  "calls": 89
+  "calls": 130
  }
 }
