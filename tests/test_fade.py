@@ -363,7 +363,7 @@ def test_index_page_and_api_are_read_only_and_reachable(monkeypatch):
     finally:
         app_mod.app.dependency_overrides.clear()
     assert page.status_code == 200 and "Index options" in page.text and "/*__SERVER__*/" not in page.text
-    assert sub.status_code == 200 and exp["next"]["NIFTY"] == ["2026-10-19"] and pos["pods"] == []
+    assert sub.status_code == 200 and exp["next"]["NIFTY"] == ["2026-10-19"] and pos["positions"] == []
     assert 'href="/index"' in home
     assert "place" not in page.text.lower() or "can place an order" in page.text      # no order controls
 
