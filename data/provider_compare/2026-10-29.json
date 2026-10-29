@@ -336,6 +336,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -68.0
+  },
+  {
+   "at": "11:20:07",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.105,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 49.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -59.0
   }
  ],
  "top_gaps": [
@@ -424,6 +438,13 @@
    "at": "09:20"
   },
   {
+   "contract": "BHARTIARTL26NOV1960CE",
+   "gap_pct": 0.105,
+   "kotak": 47.7,
+   "upstox": 47.65,
+   "at": "11:20"
+  },
+  {
    "contract": "ASHOKLEY26NOVFUT",
    "gap_pct": 0.035,
    "kotak": 143.45,
@@ -471,23 +492,16 @@
    "kotak": 31.0,
    "upstox": 31.0,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1000.1,
-   "upstox": 1000.1,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 1226,
+  "rounds": 25,
+  "contract_quotes": 1277,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 44.1,
+  "same_best_bid_pct": 45.1,
   "same_best_ask_pct": 47.1,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.05,
-  "upstox_minus_kotak_quote_time_s_median": -38.0
+  "oi_same_pct": 98.0,
+  "upstox_minus_kotak_quote_time_s_median": -42.0
  }
 }
