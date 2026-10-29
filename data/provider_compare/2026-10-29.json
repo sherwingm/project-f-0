@@ -56,6 +56,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.2,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "09:40:04",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.776,
+   "same_best_bid_pct": 37.3,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -72,6 +86,20 @@
    "kotak": 63.0,
    "upstox": 62.5,
    "at": "09:20"
+  },
+  {
+   "contract": "COLPAL26NOV1600CE",
+   "gap_pct": 0.776,
+   "kotak": 38.65,
+   "upstox": 38.35,
+   "at": "09:40"
+  },
+  {
+   "contract": "TATACONSUM26NOV1020CE",
+   "gap_pct": 0.334,
+   "kotak": 14.95,
+   "upstox": 15.0,
+   "at": "09:40"
   },
   {
    "contract": "ANANDRATHI26NOVFUT",
@@ -184,28 +212,14 @@
    "kotak": 1317.6,
    "upstox": 1317.6,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2500CE",
-   "gap_pct": 0.0,
-   "kotak": 86.5,
-   "upstox": 86.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2500PE",
-   "gap_pct": 0.0,
-   "kotak": 70.0,
-   "upstox": 70.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 206,
+  "rounds": 5,
+  "contract_quotes": 257,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.9,
-  "same_best_ask_pct": 24.15,
+  "same_best_bid_pct": 31.4,
+  "same_best_ask_pct": 29.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 92.2,
   "upstox_minus_kotak_quote_time_s_median": -19.0
