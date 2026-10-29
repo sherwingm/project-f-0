@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -63.0
+  },
+  {
+   "at": "11:55:09",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.01,
+   "same_best_bid_pct": 72.5,
+   "same_best_ask_pct": 70.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -98.0
   }
  ],
  "top_gaps": [
@@ -464,6 +478,13 @@
    "kotak": 13.8,
    "upstox": 14.0,
    "at": "09:25"
+  },
+  {
+   "contract": "INFY26NOV1140PE",
+   "gap_pct": 1.01,
+   "kotak": 34.65,
+   "upstox": 35.0,
+   "at": "11:55"
   },
   {
    "contract": "TATAELXSI26NOV4000CE",
@@ -569,23 +590,16 @@
    "kotak": 157.25,
    "upstox": 157.28,
    "at": "09:30"
-  },
-  {
-   "contract": "KEI26NOVFUT",
-   "gap_pct": 0.01,
-   "kotak": 3882.0,
-   "upstox": 3882.4,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 1583,
+  "rounds": 32,
+  "contract_quotes": 1634,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 49.0,
+  "same_best_bid_pct": 50.0,
   "same_best_ask_pct": 49.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -45.0
+  "upstox_minus_kotak_quote_time_s_median": -47.0
  }
 }
