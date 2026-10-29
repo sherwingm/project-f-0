@@ -154,9 +154,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.1,
    "upstox_minus_kotak_quote_time_s_median": -45.0
+  },
+  {
+   "at": "10:15:05",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.571,
+   "same_best_bid_pct": 52.9,
+   "same_best_ask_pct": 66.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.0,
+   "upstox_minus_kotak_quote_time_s_median": -82.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "KOTAKBANK26NOV450CE",
+   "gap_pct": 1.571,
+   "kotak": 9.55,
+   "upstox": 9.4,
+   "at": "10:15"
+  },
   {
    "contract": "AMBUJACEM26NOV350CE",
    "gap_pct": 1.449,
@@ -221,6 +242,13 @@
    "at": "09:30"
   },
   {
+   "contract": "KEI26NOVFUT",
+   "gap_pct": 0.01,
+   "kotak": 3882.0,
+   "upstox": 3882.4,
+   "at": "10:15"
+  },
+  {
    "contract": "360ONE26NOV1000CE",
    "gap_pct": 0.0,
    "kotak": 30.0,
@@ -282,30 +310,16 @@
    "kotak": 56.0,
    "upstox": 56.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOV1300PE",
-   "gap_pct": 0.0,
-   "kotak": 41.0,
-   "upstox": 41.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1317.6,
-   "upstox": 1317.6,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 563,
+  "rounds": 12,
+  "contract_quotes": 614,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 37.3,
-  "same_best_ask_pct": 43.1,
+  "same_best_bid_pct": 43.15,
+  "same_best_ask_pct": 45.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.1,
-  "upstox_minus_kotak_quote_time_s_median": -27.0
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
