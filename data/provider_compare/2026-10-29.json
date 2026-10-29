@@ -686,6 +686,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -92.0
+  },
+  {
+   "at": "13:25:12",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.211,
+   "same_best_bid_pct": 56.9,
+   "same_best_ask_pct": 60.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -92.0
   }
  ],
  "top_gaps": [
@@ -795,6 +809,13 @@
    "at": "10:55"
   },
   {
+   "contract": "LT26NOV3900CE",
+   "gap_pct": 0.211,
+   "kotak": 47.4,
+   "upstox": 47.5,
+   "at": "13:25"
+  },
+  {
    "contract": "ANANDRATHI26NOVFUT",
    "gap_pct": 0.183,
    "kotak": 2294.8,
@@ -821,23 +842,16 @@
    "kotak": 1685.0,
    "upstox": 1686.0,
    "at": "12:40"
-  },
-  {
-   "contract": "SBIN26NOVFUT",
-   "gap_pct": 0.036,
-   "kotak": 968.8,
-   "upstox": 969.15,
-   "at": "12:35"
   }
  ],
  "day": {
-  "rounds": 49,
-  "contract_quotes": 2501,
+  "rounds": 50,
+  "contract_quotes": 2552,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 52.9,
   "same_best_ask_pct": 52.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -54.0
+  "upstox_minus_kotak_quote_time_s_median": -56.5
  }
 }
