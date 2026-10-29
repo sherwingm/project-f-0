@@ -805,3 +805,14 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - Not taken (offered): blocking stale-price entries, a pre-written stop rule for v12, a shadow loss halt.
 - 2026-10-24: **1-second candles from the Upstox WebSocket** (measurement only; the user: "if you find anything new just teach me then do it"). `server/upstox_stream.py` `Candles`: every stream message for an option the trading loops asked about in the last 120 s is a tick; per second it keeps OHLC of the last price and of the best bid, the last ask, tick count and volume; finished seconds go to `data/candles_1s/<date>.jsonl` (1-second loop). Shows the intra-second peak the once-a-second read can miss. Not yet mirrored to paper-state (file size first).
 - 2026-10-26: **S3 R1, the SENSEX replication: does not replicate.** The SENSEX path-band re-fill finished on 23 Oct (2 runs, 3,044 contracts; 51 test-window expiry days, 4 missing prices at round-thousand quarterly strikes). Short straddle 14:30 → 15:15: −6.5 % (1 lot) / −2.7 % (5 lots); long straddle −20.6 %; short fly ±6 −8.7 %; non-expiry placebo −1.5 % (t −3.7). Both sides lose on SENSEX, so the late-expiry short-premium idea is closed (DECISIONS). The Python venv moved to `C:\Users\sherw\.venvs\fo` (the old `%TEMP%\fo-venv` was cleared).
+- 2026-10-29: **S1 fade live research checkpoint** (research only, no rule / sizing / order change;
+  `data/results/S1_fade_checkpoint_2026-10-29_report.md`, tables + per-trade CSV beside it, code
+  `scanner/fade_checkpoint_live.py`). **18 measured v12 trades, not 30** (27-29 Oct; 28 counting Arm A/B). All 18 pass
+  every record check; VM ledger = GitHub backup (29 Oct observations not yet backed up). Live −₹29,471, 4 wins of 18,
+  mean −24.1 % (backtest +2.86 %, 55 %); **14 of 18 stopped** (backtest 40 %), median sale 16.8 % below the stop level.
+  Main mechanism: live buys at 09:15:0x and the stop checks only from 09:16; in 9 of 14 stops the bid was through the
+  stop before 09:16. The v12 backtest bought at the 09:16 open (stop from 09:17), so it never held that minute.
+  27 Oct: 5 of 6 entries on the previous day's book (fixed 28 Oct, `32595932`). Peak capture is minor (5 paying peaks,
+  trail exits kept 65-93 %). After the stop: 4 of 14 back to entry on the day, 2 above at 15:20 (candle study 56 % /
+  24 %). Shadows: v12 ahead on 18, behind on 19 because of ADANIENSOL (+₹27k held). No entry feature validated; ML not
+  justified (18 trades, 3 days).

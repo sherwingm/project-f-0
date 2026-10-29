@@ -219,9 +219,17 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   first measured trades (no trade was measured on 26 Oct: no list that day; entry quote and stale flag, held peak/low,
   exit bid, 60-min post-exit rows, backup); `python -m scanner.fade_live_checkpoint` (target 30 measured trades); the
   first real-order fills; the entry probe's A / B / C verdicts. Check that tonight's build ran and pushed.
-- Review v12 vs v11/v10 at 30 closed v12 trades; the below-Rs 2 rule's live trades as they come.
-- Hypotheses for live data (no rule change without the user): recovery after the stop on real bids; stale first-second
-  entries; entry spread vs the 2 % trail gap and early bid moves.
+- **Research checkpoint done 29 Oct** (`data/results/S1_fade_checkpoint_2026-10-29_report.md`): 18 measured v12 trades
+  (not 30); audit passed, do not repeat it. Re-run with `python -m scanner.fade_checkpoint_live <ledger> <observations_dir>
+  <stem>` on copies from the VM (after 15:45). Open from it, for the user's decision (no change made): the **09:15
+  unprotected minute** vs the 09:16 backtest entry (§8.1: buy from 09:16, or stop from the first quote, or keep);
+  measurement-only: always write the first held quote, per-day after-exit extremes, store previous close / opening gap
+  at entry. Check the 29 Oct observation file reached `paper-state`.
+- Review v12 vs v11/v10 at 30 closed v12 trades (19 now); report with and without ADANIENSOL. The below-Rs 2 rule's live
+  trades as they come.
+- Hypotheses for live data (no rule change without the user), first answers in the 29 Oct checkpoint: recovery after the
+  stop is rarer on bids (4 of 14); stale first-second entries confirmed on 27 Oct and fixed; the entry spread did not
+  separate outcomes (failed). Re-test at 30 trades.
 - **A/B catch-up** for a missed 15:20 check; **A/B "close" entry at the 15:20 ask** (rule change).
 - The new `LEDGER_GITHUB_TOKEN` on the VM: check its expiry date (the old one ended 2026-10-30).
 - Clean the `index-data` history when the repo passes ~3 GB.
