@@ -476,6 +476,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -79.0
+  },
+  {
+   "at": "12:10:09",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.752,
+   "same_best_bid_pct": 58.8,
+   "same_best_ask_pct": 62.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -80.0
   }
  ],
  "top_gaps": [
@@ -534,6 +548,13 @@
    "kotak": 38.65,
    "upstox": 38.35,
    "at": "09:40"
+  },
+  {
+   "contract": "LUPIN26NOV1980CE",
+   "gap_pct": 0.752,
+   "kotak": 66.5,
+   "upstox": 67.0,
+   "at": "12:10"
   },
   {
    "contract": "DRREDDY26NOV1400CE",
@@ -611,23 +632,16 @@
    "kotak": 290.5,
    "upstox": 290.4,
    "at": "11:25"
-  },
-  {
-   "contract": "ADANIPORTS26NOVFUT",
-   "gap_pct": 0.022,
-   "kotak": 1804.5,
-   "upstox": 1804.9,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 1736,
+  "rounds": 35,
+  "contract_quotes": 1787,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.0,
-  "same_best_ask_pct": 50.0,
+  "same_best_bid_pct": 51.0,
+  "same_best_ask_pct": 51.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -50.0
+  "upstox_minus_kotak_quote_time_s_median": -51.0
  }
 }
