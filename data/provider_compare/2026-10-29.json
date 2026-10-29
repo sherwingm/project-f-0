@@ -938,6 +938,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -47.0
+  },
+  {
+   "at": "14:55:15",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.83,
+   "same_best_bid_pct": 68.6,
+   "same_best_ask_pct": 51.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -46.0
   }
  ],
  "top_gaps": [
@@ -998,6 +1012,13 @@
    "at": "11:55"
   },
   {
+   "contract": "BAJFINANCE26NOV940PE",
+   "gap_pct": 0.83,
+   "kotak": 24.1,
+   "upstox": 23.9,
+   "at": "14:55"
+  },
+  {
    "contract": "TATAELXSI26NOV4000CE",
    "gap_pct": 0.794,
    "kotak": 63.0,
@@ -1017,6 +1038,13 @@
    "kotak": 66.5,
    "upstox": 67.0,
    "at": "12:10"
+  },
+  {
+   "contract": "BAJFINANCE26NOV940CE",
+   "gap_pct": 0.718,
+   "kotak": 27.85,
+   "upstox": 28.05,
+   "at": "14:55"
   },
   {
    "contract": "DRREDDY26NOV1400CE",
@@ -1066,30 +1094,16 @@
    "kotak": 14.95,
    "upstox": 15.0,
    "at": "09:40"
-  },
-  {
-   "contract": "ATHERENERG26NOV1800CE",
-   "gap_pct": 0.236,
-   "kotak": 21.15,
-   "upstox": 21.2,
-   "at": "10:55"
-  },
-  {
-   "contract": "M&M26NOV2900CE",
-   "gap_pct": 0.23,
-   "kotak": 86.8,
-   "upstox": 87.0,
-   "at": "14:00"
   }
  ],
  "day": {
-  "rounds": 67,
-  "contract_quotes": 3419,
+  "rounds": 68,
+  "contract_quotes": 3470,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 54.9,
   "same_best_ask_pct": 54.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -60.0
+  "upstox_minus_kotak_quote_time_s_median": -59.5
  }
 }
