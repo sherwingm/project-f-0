@@ -882,6 +882,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -60.0
+  },
+  {
+   "at": "14:35:14",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.485,
+   "same_best_bid_pct": 66.7,
+   "same_best_ask_pct": 58.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -37.0
   }
  ],
  "top_gaps": [
@@ -963,6 +977,13 @@
    "at": "10:40"
   },
   {
+   "contract": "LT26NOV3900CE",
+   "gap_pct": 0.485,
+   "kotak": 51.55,
+   "upstox": 51.8,
+   "at": "14:35"
+  },
+  {
    "contract": "BHEL26NOV400PE",
    "gap_pct": 0.444,
    "kotak": 11.25,
@@ -1017,20 +1038,13 @@
    "kotak": 2294.8,
    "upstox": 2290.6,
    "at": "09:25"
-  },
-  {
-   "contract": "SHRIRAMFIN26NOVFUT",
-   "gap_pct": 0.137,
-   "kotak": 841.85,
-   "upstox": 843.0,
-   "at": "14:25"
   }
  ],
  "day": {
-  "rounds": 63,
-  "contract_quotes": 3215,
+  "rounds": 64,
+  "contract_quotes": 3266,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 52.9,
+  "same_best_bid_pct": 53.9,
   "same_best_ask_pct": 54.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
