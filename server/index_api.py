@@ -74,11 +74,21 @@ def chain():
     return read("chain_latest.json")
 
 
+def _ledger_report() -> dict:
+    """The index paper ledger (index_paper/, its own store under DATA_DIR/index_paper, apart from S1 and S2)."""
+    from index_paper.ledger import IndexPaperLedger
+    from index_paper.report import build
+    return build(IndexPaperLedger(settings.data_dir))
+
+
 @router.get("/positions")
 def positions():
-    return {"pods": [], "positions": [], "note": "no index pods yet: data layer only (INDEX_DATA_PLAN.md)"}
+    r = _ledger_report()
+    return {"positions": r["open"], "rejected": r["rejected"],
+            "note": "paper only; every index pod is off until the user turns it on"}
 
 
 @router.get("/results")
 def results():
-    return {"pods": [], "note": "no index pods yet: strategy results plug in here"}
+    r = _ledger_report()
+    return {"pods": r["pods"], "closed": r["closed"]}

@@ -124,14 +124,25 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     if (rc && !rc.error) h += `<h2>Source reconciliation <small>Kotak vs Upstox on the same minutes</small></h2><div class="kv">
         <div><small>Matched minutes</small><b>${num(rc.matched_minutes)}</b></div><div><small>Mean |close diff|</small><b>${num(rc.mean_abs_close_diff, 4)}</b></div>
         <div><small>Max |close diff|</small><b>${num(rc.max_abs_close_diff, 2)}</b></div><div><small>Only in Kotak / Upstox</small><b>${num(rc.only_kotak)} / ${num(rc.only_upstox)}</b></div></div>`;
-    h += `<h2>Pods <small>index strategies; each will report its paper results here</small></h2>
-      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th></tr></thead>
-      <tbody><tr><td colspan="8" style="text-align:left"><span class="muted">No pods yet. The data layer comes first; a pod is added only with its own pre-registered rules.</span></td></tr></tbody></table></div>`;
+    const R = D.results || {}, pods = R.pods || [], P = D.positions || {}, open = P.positions || [], closed = R.closed || [];
+    const pct = v => v == null ? "—" : `${v > 0 ? "+" : ""}${num(v, 1)} %`;
+    h += `<h2>Pods <small>index strategies, paper only; a pod trades only after the user turns it on</small></h2>
+      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th><th>Peak (median)</th><th>Capture</th></tr></thead>
+      <tbody>${pods.length ? pods.map(p => `<tr><td><b>${esc(p.pod)}</b><br><small>${esc(p.title)}</small></td><td><span class="pill ${p.enabled ? "pass" : "fail"}">${p.enabled ? "on" : "off"}</span><br><small>${esc(p.status)}</small></td>
+        <td>${num(p.trades)}</td><td>${num(p.won)}</td><td>${pct(p.mean_pct)}</td><td>${pct(p.median_pct)}</td><td>${p.t == null ? "—" : num(p.t, 2)}</td><td>${num(p.total_rs)}</td>
+        <td>${pct(p.median_peak_return_pct)}</td><td>${p.median_capture_pct == null ? "—" : num(p.median_capture_pct, 0) + " %"}</td></tr>`).join("")
+        : `<tr><td colspan="10" style="text-align:left"><span class="muted">No pods registered.</span></td></tr>`}</tbody></table></div>`;
+    const legs = p => (p.legs || []).map(l => `${esc(String(l.strike))} ${esc(l.opt)}`).join(" + ");
+    h += `<h2>Open index positions <small>bid-based value, all legs in the same poll</small></h2>` + (open.length ? `<div class="tw"><table><thead><tr><th>ID</th><th>Legs</th><th>Opened</th><th>Debit ₹</th><th>Now ₹</th><th>Peak ₹</th><th>Low ₹</th><th>Polls</th></tr></thead><tbody>${open.map(p => { const x = p.held || {};
+        return `<tr><td>${esc(p.id)}</td><td>${legs(p)}</td><td>${esc((p.opened_at || "").replace("T", " ").slice(0, 16))}</td><td>${num(p.debit_rs)}</td><td>${num((x.last || {}).value)}</td><td>${num((x.peak || {}).value)}</td><td>${num((x.low || {}).value)}</td><td>${num(x.n)}${x.missing ? ` <small>(${num(x.missing)} missing)</small>` : ""}${p.exit_pending ? ` <span class="pill fail">exit waiting for a bid</span>` : ""}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="empty">No open index positions.</p>`);
+    h += `<h2>Closed index trades <small>sold at the bid; the after-exit follow-up is never part of the P&L</small></h2>` + (closed.length ? `<div class="tw"><table><thead><tr><th>ID</th><th>Legs</th><th>Closed</th><th>Net ₹</th><th>Net %</th><th>Peak %</th><th>Drawdown %</th><th>Capture</th><th>After exit peak ₹</th></tr></thead><tbody>${closed.slice().reverse().map(p => { const c = p.capture || {};
+        return `<tr><td>${esc(p.id)}</td><td>${legs(p)}</td><td>${esc((p.closed_at || "").replace("T", " ").slice(0, 16))}<br><small>${esc(p.exit_reason || "")}</small></td><td class="${p.net_rs > 0 ? "up" : "down"}">${num(p.net_rs)}</td><td>${pct(p.net_pct)}</td><td>${pct(c.peak_return_pct)}</td><td>${pct(c.mae_pct)}</td><td>${c.capture_pct == null ? "—" : num(c.capture_pct, 0) + " %"}</td><td>${num(((p.after || {}).peak || {}).value)}</td></tr>`; }).join("")}</tbody></table></div>` : `<p class="empty">No closed index trades.</p>`);
     $("#main").innerHTML = h;
   }
   render();
-  Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile")])
-    .then(([s, e, p, r]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r }; render(); });
+  Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile"),
+    get("/api/index/positions"), get("/api/index/results")])
+    .then(([s, e, p, r, pos, res]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r, positions: pos, results: res }; render(); });
 })();
 </script>
 </body>

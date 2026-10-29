@@ -143,3 +143,18 @@ def test_report(tmp_path):
     assert l1["pod"] == "L1" and l1["trades"] == 1 and l1["won"] == 1 and l1["enabled"] is False
     assert capture({"held": {}}) is None
 
+
+def test_api_reads_ledger(tmp_path, monkeypatch):
+    from fastapi import FastAPI
+    from fastapi.testclient import TestClient
+    from server import index_api
+    monkeypatch.setattr(index_api.settings, "data_dir", tmp_path)
+    led = IndexPaperLedger(tmp_path)
+    p = led.open("L1", LEGS, quotes((99, 100), (79, 80)), T0)
+    app = FastAPI()
+    app.include_router(index_api.router)
+    c = TestClient(app)
+    pos = c.get("/api/index/positions").json()
+    assert [x["id"] for x in pos["positions"]] == [p["id"]]
+    res = c.get("/api/index/results").json()
+    assert res["pods"][0]["pod"] == "L1" and res["pods"][0]["enabled"] is False and res["closed"] == []
