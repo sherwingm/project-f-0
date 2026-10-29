@@ -406,6 +406,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -94.0
+  },
+  {
+   "at": "11:45:08",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.68,
+   "same_best_bid_pct": 58.8,
+   "same_best_ask_pct": 70.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -61.0
   }
  ],
  "top_gaps": [
@@ -450,6 +464,13 @@
    "kotak": 38.65,
    "upstox": 38.35,
    "at": "09:40"
+  },
+  {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 0.68,
+   "kotak": 14.7,
+   "upstox": 14.6,
+   "at": "11:45"
   },
   {
    "contract": "POWERGRID26NOV260PE",
@@ -541,23 +562,16 @@
    "kotak": 3882.0,
    "upstox": 3882.4,
    "at": "10:15"
-  },
-  {
-   "contract": "MOTHERSON26NOVFUT",
-   "gap_pct": 0.006,
-   "kotak": 159.78,
-   "upstox": 159.79,
-   "at": "10:25"
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 1481,
+  "rounds": 30,
+  "contract_quotes": 1532,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 47.1,
-  "same_best_ask_pct": 47.1,
+  "same_best_bid_pct": 48.05,
+  "same_best_ask_pct": 48.05,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.0,
-  "upstox_minus_kotak_quote_time_s_median": -44.0
+  "upstox_minus_kotak_quote_time_s_median": -44.5
  }
 }
