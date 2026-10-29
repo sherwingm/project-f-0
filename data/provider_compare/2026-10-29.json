@@ -224,6 +224,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -49.0
+  },
+  {
+   "at": "10:40:06",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.602,
+   "same_best_bid_pct": 54.9,
+   "same_best_ask_pct": 52.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -31.0
   }
  ],
  "top_gaps": [
@@ -261,6 +275,13 @@
    "kotak": 38.65,
    "upstox": 38.35,
    "at": "09:40"
+  },
+  {
+   "contract": "POWERGRID26NOV260PE",
+   "gap_pct": 0.602,
+   "kotak": 8.3,
+   "upstox": 8.25,
+   "at": "10:40"
   },
   {
    "contract": "LT26NOV3900CE",
@@ -359,20 +380,13 @@
    "kotak": 255.4,
    "upstox": 255.4,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 6495.0,
-   "upstox": 6495.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 16,
-  "contract_quotes": 818,
+  "rounds": 17,
+  "contract_quotes": 869,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 44.15,
+  "same_best_bid_pct": 47.1,
   "same_best_ask_pct": 43.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.1,
