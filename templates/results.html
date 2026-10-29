@@ -868,7 +868,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   const WORKSPACES = {
     paper: { tab: "Paper", color: "var(--arm-p)", title: "Paper account",
              desc: "Every live paper trade across the arms, marked at each live poll. Max up / max dip are the highest and lowest traded price since the entry.",
-             panels: () => [PANELS.todayPlan(), PANELS.paperTiles(), PANELS.maxUp(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
+             panels: () => [PANELS.todayPlan(), PANELS.maxUp(), PANELS.scoreboards(), PANELS.refusedToday(), PANELS.openPositions(), PANELS.closedTrades(), PANELS.refusals()] },
     arma:  { tab: "Arm A", color: "var(--arm-a)", title: "Arm A · every results beat",
              desc: "Forward paper test: a call after every results beat, bought at the session's average price, marked at each close. Exits: 50% stop, 5 sessions without a new closing high, T-1. These rules failed the 2021-24 backtest; this tests them on new days.",
              panels: () => forwardPanels("A") },
