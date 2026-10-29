@@ -294,6 +294,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -63.0
+  },
+  {
+   "at": "11:05:07",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.63,
+   "same_best_bid_pct": 45.1,
+   "same_best_ask_pct": 47.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -42.0
   }
  ],
  "top_gaps": [
@@ -303,6 +317,13 @@
    "kotak": 20.85,
    "upstox": 20.25,
    "at": "10:20"
+  },
+  {
+   "contract": "VEDL26NOV235CE",
+   "gap_pct": 1.63,
+   "kotak": 9.2,
+   "upstox": 9.05,
+   "at": "11:05"
   },
   {
    "contract": "KOTAKBANK26NOV450CE",
@@ -429,23 +450,16 @@
    "kotak": 1000.1,
    "upstox": 1000.1,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6500CE",
-   "gap_pct": 0.0,
-   "kotak": 251.0,
-   "upstox": 251.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 1073,
+  "rounds": 22,
+  "contract_quotes": 1124,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 43.1,
+  "same_best_bid_pct": 44.1,
   "same_best_ask_pct": 47.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.1,
-  "upstox_minus_kotak_quote_time_s_median": -34.0
+  "upstox_minus_kotak_quote_time_s_median": -38.0
  }
 }
