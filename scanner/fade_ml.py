@@ -80,9 +80,9 @@ def score(name: str, test: pd.DataFrame, p: np.ndarray, k: int) -> dict:
             "total Rs all": rs.sum(), "total Rs kept (skip flagged)": rs[~flag].sum()}
 
 
-def evaluate(f: pd.DataFrame, x: pd.DataFrame, tr: np.ndarray, te: np.ndarray, label: str) -> tuple[list[dict], dict]:
+def evaluate(f: pd.DataFrame, x: pd.DataFrame, tr: np.ndarray, te: np.ndarray, label: str, rl: dict | None = None) -> tuple[list[dict], dict]:
     test = f[te]
-    rl = rules(f)
+    rl = rl or rules(f)
     k = int(rl[next(iter(rl))][te].sum())
     rows, probs = [], {}
     for name, m in rl.items():
@@ -96,7 +96,7 @@ def evaluate(f: pd.DataFrame, x: pd.DataFrame, tr: np.ndarray, te: np.ndarray, l
     return rows, probs
 
 
-def walk_forward(f: pd.DataFrame, x: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+def walk_forward(f: pd.DataFrame, x: pd.DataFrame, rl: dict | None = None) -> tuple[pd.DataFrame, pd.DataFrame]:
     q = pd.to_datetime(f["day0"]).dt.to_period("Q")
     oos = pd.DataFrame(index=f.index, columns=list(models()), dtype=float)
     for qq in sorted(q.unique()):
@@ -108,7 +108,7 @@ def walk_forward(f: pd.DataFrame, x: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
             oos.loc[te, name] = m.predict_proba(x[te])[:, 1]
     done = oos.notna().all(axis=1).to_numpy()
     test = f[done]
-    rl = rules(f)
+    rl = rl or rules(f)
     k = int(rl[next(iter(rl))][done].sum())
     rows = [score(n, test, m[done].to_numpy().astype(float), k) for n, m in rl.items()]
     rows += [score(n, test, oos.loc[done, n].to_numpy(), k) for n in models()]
@@ -118,7 +118,7 @@ def walk_forward(f: pd.DataFrame, x: pd.DataFrame) -> tuple[pd.DataFrame, pd.Dat
 
 
 def explain(f: pd.DataFrame, x: pd.DataFrame, tr: np.ndarray, te: np.ndarray) -> tuple[pd.DataFrame, list[str], pd.DataFrame]:
-    y = f["fail"].astype(int)
+    y = f["fail"].astype(int).to_numpy()
     lr = models()["Logistic regression"]().fit(x[tr], y[tr])
     coef = lr[-1].coef_[0]
     w = pd.DataFrame({"feature": x.columns, "weight (train half, scaled)": coef,
