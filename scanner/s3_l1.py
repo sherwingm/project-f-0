@@ -35,7 +35,7 @@ def bhav(lo: date, hi: date) -> pd.DataFrame:
     parts = []
     for p in sorted((L._store() / "options_daily" / "NIFTY").glob("*.parquet")):
         if lo.strftime("%Y-%m") <= p.stem <= hi.strftime("%Y-%m"):
-            parts.append(pd.read_parquet(p, columns=["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric",
+            parts.append(L.read_store(p, columns=["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric",
                                                      "TtlTradgVol"]))
     b = pd.concat(parts)
     b = b[b["FinInstrmTp"] == "IDO"].copy()
@@ -70,7 +70,7 @@ def count() -> None:
     by_year = pd.Series([d.year for d in sig]).value_counts().sort_index()
     print(f"sessions 2018-01-01 → {COUNT_END}: {sum(d >= date(2018, 1, 1) for d in sessions)}")
     print(f"qualifying days (NSE official VIX): {len(sig)}  by year: {by_year.to_dict()}")
-    yv = pd.read_parquet(L._store() / "vix_daily.parquet").dropna(subset=["close"])
+    yv = L.read_store(L._store() / "vix_daily.parquet").dropna(subset=["close"])
     yv = yv.set_index(pd.to_datetime(yv["date"]).dt.date)["close"]
     ys = {d: x for d, x in signals([d for d in sessions if d in yv.index], yv).items() if d >= date(2018, 1, 1)}
     print(f"qualifying days (vix_daily, yfinance): {len(ys)}; only official: {sorted(set(sig) - set(ys))}; "

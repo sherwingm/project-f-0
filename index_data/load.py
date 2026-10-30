@@ -25,6 +25,34 @@ def _store() -> Path:
     return Path(STORE)
 
 
+FEATHER_CACHE = Path(__file__).resolve().parents[1] / "data" / "cache" / "index" / "feather"   # git-ignored, local only
+
+
+def read_store(path, columns: list[str] | None = None) -> pd.DataFrame:
+    """pd.read_parquet through a local Feather copy (built on the first read, reused while the Parquet is unchanged).
+
+    The Parquet on the index-data branch stays the master; the copy lives under data/cache/index/feather and is rebuilt
+    whenever the Parquet is newer. A frame Feather cannot hold (a non-default index) is read from the Parquet each time."""
+    p = Path(path)
+    try:
+        rel = p.absolute().relative_to(_store().absolute())
+    except ValueError:
+        rel = Path("_other") / p.absolute().as_posix().replace(":", "").lstrip("/")
+    f = (FEATHER_CACHE / rel).with_suffix(".feather")
+    if f.exists() and f.stat().st_mtime >= p.stat().st_mtime:
+        return pd.read_feather(f, columns=columns)
+    df = pd.read_parquet(p)
+    if isinstance(df.index, pd.RangeIndex) and df.index.start == 0 and df.index.step == 1:
+        try:
+            f.parent.mkdir(parents=True, exist_ok=True)
+            tmp = f.with_suffix(".tmp")
+            df.to_feather(tmp)
+            tmp.replace(f)
+        except Exception:       # read-only folder or an unsupported column: the Parquet result is still right
+            pass
+    return df if columns is None else df[columns]
+
+
 def _day(d) -> date:
     return d if isinstance(d, date) and not isinstance(d, datetime) else pd.Timestamp(d).date()
 
@@ -61,7 +89,7 @@ def options_day(underlying: str, expiry, day) -> pd.DataFrame:
     if not path.exists():
         return pd.DataFrame(columns=["timestamp", "strike", "option_type", "open", "high", "low", "close", "volume",
                                      "oi", "source"])
-    df = pd.read_parquet(path)
+    df = read_store(path)
     df = df[(df["timestamp"].dt.time >= OPEN) & (df["timestamp"].dt.time <= CLOSE)]
     return merge_sources(df)
 
@@ -81,7 +109,7 @@ def price_at(day_frame: pd.DataFrame, strike: float, option_type: str, at: datet
 def _monthly(folder: str, start, end) -> pd.DataFrame:
     s, e = pd.Timestamp(_day(start)), pd.Timestamp(_day(end))
     months = pd.period_range(s.to_period("M"), e.to_period("M"), freq="M")
-    parts = [pd.read_parquet(p) for m in months
+    parts = [read_store(p) for m in months
              if (p := _store() / "spot_1m" / folder / f"{m}.parquet").exists()]
     if not parts:
         return pd.DataFrame(columns=["timestamp", "open", "high", "low", "close"])
@@ -122,7 +150,7 @@ def _vix_daily() -> dict:
     p = _store() / "vix_daily.parquet"
     if not p.exists():
         return {}
-    d = pd.read_parquet(p)
+    d = read_store(p)
     return dict(zip(pd.to_datetime(d["date"]).dt.date, d["close"].astype(float)))
 
 
@@ -131,7 +159,7 @@ def _lot_table(underlying: str) -> pd.DataFrame:
     """Option (IDO) lot per (trade date, expiry) from the bhavcopy (NewBrdLotQty, known from 2024-07-05)."""
     parts = []
     for p in sorted((_store() / "options_daily" / underlying).glob("*.parquet")):
-        df = pd.read_parquet(p, columns=["TradDt", "XpryDt", "FinInstrmTp", "NewBrdLotQty"]).dropna()
+        df = read_store(p, columns=["TradDt", "XpryDt", "FinInstrmTp", "NewBrdLotQty"]).dropna()
         df = df[df["FinInstrmTp"] == "IDO"]
         if not df.empty:
             parts.append(df.drop_duplicates(["TradDt", "XpryDt"]))

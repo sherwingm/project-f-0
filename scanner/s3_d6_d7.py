@@ -24,7 +24,7 @@ STEP = 50
 
 
 def bhav() -> pd.DataFrame:
-    parts = [pd.read_parquet(p, columns=["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric", "TtlTradgVol",
+    parts = [L.read_store(p, columns=["TradDt", "FinInstrmTp", "XpryDt", "StrkPric", "OptnTp", "ClsPric", "TtlTradgVol",
                                          "NewBrdLotQty"])
              for p in sorted((L._store() / "options_daily" / "NIFTY").glob("*.parquet"))]
     b = pd.concat(parts)

@@ -42,7 +42,7 @@ def expiry_dates() -> list[date]:
 def traded_expiries(under: str) -> set[date]:
     """Bhavcopy expiries that traded on their own date (TradDt == XpryDt). A listed XpryDt later moved for a holiday or
     a calendar change never traded on that date and is not an expiry day (fixed 2026-10-23)."""
-    parts = [pd.read_parquet(p, columns=["TradDt", "XpryDt"]) for p in sorted((L._store() / "options_daily" / under).glob("*.parquet"))]
+    parts = [L.read_store(p, columns=["TradDt", "XpryDt"]) for p in sorted((L._store() / "options_daily" / under).glob("*.parquet"))]
     x = pd.concat(parts)
     t, e = pd.to_datetime(x["TradDt"]).dt.date, pd.to_datetime(x["XpryDt"]).dt.date
     return set(e[t == e])

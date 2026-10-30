@@ -20,6 +20,7 @@ import pandas as pd
 import requests
 
 from .common import STORE, upsert_parquet
+from .load import read_store
 
 log = logging.getLogger("index_data.index_close")
 URL = "https://nsearchives.nseindia.com/content/indices/ind_close_all_{dmy}.csv"
@@ -74,7 +75,7 @@ def run(start: date, end: date, store=STORE) -> dict:
 
 
 def load(store=STORE) -> pd.DataFrame:
-    d = pd.read_parquet(store / FILE)
+    d = read_store(store / FILE)
     d["date"] = pd.to_datetime(d["date"]).dt.date
     return d
 
