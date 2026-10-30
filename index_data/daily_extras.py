@@ -2,7 +2,8 @@
 
     KOTAK_CONSUMER_KEY=... UPSTOX_ANALYTICS_TOKEN=... INDEX_STORE=... python -m index_data.daily_extras [--weekly]
 
-1. Index spot + India VIX, today's 1-minute candles (Kotak; VIX x100 fix applied) -> spot_1m/<name>/<YYYY-MM>.parquet.
+1. Index spot + India VIX, today's 1-minute candles (Kotak; VIX x100 fix applied) -> spot_1m/<name>/<YYYY-MM>.parquet,
+   then the month's 09:15 bars and missing minutes from Upstox's public candles (`fill_spot_upstox.nightly`).
 2. Today's NSE daily OHLC of every index option and future (raw F&O bhavcopy) -> options_daily/<underlying>/<YYYY-MM>.parquet.
    NSE may refuse a cloud runner on some nights; the next night's run tries again (restart-safe).
 3. Weekly (Fridays, or --weekly): the Upstox expired-contract top-up for the expiries of the last 14 days (NIFTY,
@@ -35,6 +36,11 @@ def main() -> None:
         out["spot_vix_1m"] = backfill(k, day, day)
     except Exception as exc:  # noqa: BLE001
         out["spot_vix_1m"] = {"error": str(exc)[:300]}
+    try:   # Kotak's 09:15 bar is wrong; Upstox's equals NSE's official open (index_data/fill_spot_upstox.py)
+        from .fill_spot_upstox import nightly
+        out["spot_upstox_repair"] = nightly(day)
+    except Exception as exc:  # noqa: BLE001
+        out["spot_upstox_repair"] = {"error": str(exc)[:300]}
     try:
         from .bhavcopy_ohlc import run as ohlc
         out["options_daily"] = ohlc(day, day)
