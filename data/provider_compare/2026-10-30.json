@@ -364,6 +364,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -45.0
+  },
+  {
+   "at": "11:30:05",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.336,
+   "same_best_bid_pct": 43.6,
+   "same_best_ask_pct": 47.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.4,
+   "upstox_minus_kotak_quote_time_s_median": -36.0
   }
  ],
  "top_gaps": [
@@ -424,6 +438,13 @@
    "at": "09:30"
   },
   {
+   "contract": "COFORGE26NOV2040PE",
+   "gap_pct": 1.336,
+   "kotak": 63.6,
+   "upstox": 64.45,
+   "at": "11:30"
+  },
+  {
    "contract": "AMBUJACEM26NOV370CE",
    "gap_pct": 1.19,
    "kotak": 4.2,
@@ -480,6 +501,13 @@
    "at": "10:35"
   },
   {
+   "contract": "COFORGE26NOV2040CE",
+   "gap_pct": 0.544,
+   "kotak": 73.5,
+   "upstox": 73.1,
+   "at": "11:30"
+  },
+  {
    "contract": "BANDHANBNK26NOV160CE",
    "gap_pct": 0.45,
    "kotak": 6.67,
@@ -492,28 +520,14 @@
    "kotak": 47.55,
    "upstox": 47.35,
    "at": "09:20"
-  },
-  {
-   "contract": "DIVISLAB26NOV9800CE",
-   "gap_pct": 0.41,
-   "kotak": 353.75,
-   "upstox": 355.2,
-   "at": "09:45"
-  },
-  {
-   "contract": "APLAPOLLO26NOV2400CE",
-   "gap_pct": 0.4,
-   "kotak": 12.5,
-   "upstox": 12.45,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 1430,
+  "rounds": 27,
+  "contract_quotes": 1485,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.5,
-  "same_best_ask_pct": 44.55,
+  "same_best_ask_pct": 45.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.4,
   "upstox_minus_kotak_quote_time_s_median": -31.0
