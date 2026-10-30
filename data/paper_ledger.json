@@ -2928,7 +2928,7 @@
     "shadow_t100": {
      "target": 8.8,
      "hit_at": null,
-     "max_bid": 4.4
+     "max_bid": 5.05
     },
     "stop": {
      "level": 3.52,
@@ -2936,10 +2936,11 @@
      "min_bid": 3.6
     },
     "trail": {
-     "status": "open",
+     "status": "active",
      "start": 4.84,
      "gap": 0.02,
-     "peak": null
+     "peak": 5.05,
+     "started_at": "2026-10-30T09:22:13+05:30"
     },
     "shadow_v10": {
      "status": "open"
@@ -2948,9 +2949,10 @@
      "status": "open"
     },
     "shadow_trail": {
-     "status": "open",
+     "status": "active",
      "start": 4.84,
-     "peak": null
+     "peak": 5.05,
+     "started_at": "2026-10-30T09:22:13+05:30"
     },
     "shadow_fd2": null,
     "best": 4.4,
@@ -3005,9 +3007,9 @@
      "qty": 1200
     },
     "peak": {
-     "price": 4.4,
-     "at": "2026-10-30T09:21:04+05:30",
-     "qty": 3600
+     "price": 5.05,
+     "at": "2026-10-30T09:22:13+05:30",
+     "qty": 7200
     },
     "low": {
      "price": 3.4,
@@ -3015,11 +3017,11 @@
      "qty": 3600
     },
     "last": {
-     "price": 4.35,
-     "at": "2026-10-30T09:22:05+05:30",
-     "qty": 2400
+     "price": 5.05,
+     "at": "2026-10-30T09:22:20+05:30",
+     "qty": 7200
     },
-    "n": 381,
+    "n": 396,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)",
@@ -13442,7 +13444,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-30T09:22:05+05:30",
+ "saved_at": "2026-10-30T09:22:20+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -13769,7 +13771,7 @@
     "why": "net profit YoY +12.9 %, QoQ +3.3 %; revenue YoY +8.6 %",
     "np_yoy": 12.9,
     "spot_at_entry": 105.35,
-    "last_bid": 2.03,
+    "last_bid": 1.99,
     "max_bid": 2.14,
     "exit": null,
     "closed_at": null,
