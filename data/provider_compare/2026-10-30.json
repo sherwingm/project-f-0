@@ -56,9 +56,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.4,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "09:40:01",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 5.011,
+   "same_best_bid_pct": 40.0,
+   "same_best_ask_pct": 43.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.7,
+   "upstox_minus_kotak_quote_time_s_median": -31.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "APLAPOLLO26NOV2340CE",
+   "gap_pct": 5.011,
+   "kotak": 21.95,
+   "upstox": 20.85,
+   "at": "09:40"
+  },
   {
    "contract": "TATACONSUM26NOV1030CE",
    "gap_pct": 3.457,
@@ -123,6 +144,13 @@
    "at": "09:20"
   },
   {
+   "contract": "APLAPOLLO26NOV2400CE",
+   "gap_pct": 0.4,
+   "kotak": 12.5,
+   "upstox": 12.45,
+   "at": "09:40"
+  },
+  {
    "contract": "ADANIPORTS26NOV1900CE",
    "gap_pct": 0.372,
    "kotak": 26.85,
@@ -184,30 +212,16 @@
    "kotak": 265.45,
    "upstox": 265.45,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6400PE",
-   "gap_pct": 0.0,
-   "kotak": 163.0,
-   "upstox": 163.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 6450.0,
-   "upstox": 6450.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 220,
+  "rounds": 5,
+  "contract_quotes": 275,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.9,
-  "same_best_ask_pct": 24.5,
+  "same_best_bid_pct": 32.7,
+  "same_best_ask_pct": 34.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.75,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "oi_same_pct": 92.7,
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
