@@ -574,6 +574,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "12:45:07",
+   "contracts": 54,
+   "on_both": 54,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.342,
+   "same_best_bid_pct": 42.6,
+   "same_best_ask_pct": 51.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -28.5
   }
  ],
  "top_gaps": [
@@ -655,6 +669,13 @@
    "at": "12:00"
   },
   {
+   "contract": "TATAPOWER26NOV345PE",
+   "gap_pct": 1.342,
+   "kotak": 7.45,
+   "upstox": 7.55,
+   "at": "12:45"
+  },
+  {
    "contract": "COFORGE26NOV2040PE",
    "gap_pct": 1.336,
    "kotak": 63.6,
@@ -709,23 +730,16 @@
    "kotak": 43.65,
    "upstox": 43.95,
    "at": "10:10"
-  },
-  {
-   "contract": "HYUNDAI26NOV2000CE",
-   "gap_pct": 0.662,
-   "kotak": 22.65,
-   "upstox": 22.5,
-   "at": "10:35"
   }
  ],
  "day": {
-  "rounds": 41,
-  "contract_quotes": 2255,
+  "rounds": 42,
+  "contract_quotes": 2309,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 49.1,
+  "same_best_bid_pct": 48.2,
   "same_best_ask_pct": 47.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 96.4,
+  "oi_same_pct": 97.3,
   "upstox_minus_kotak_quote_time_s_median": -36.0
  }
 }
