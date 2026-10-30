@@ -448,6 +448,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "12:00:06",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.53,
+   "same_best_bid_pct": 45.5,
+   "same_best_ask_pct": 49.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.2,
+   "upstox_minus_kotak_quote_time_s_median": -74.0
   }
  ],
  "top_gaps": [
@@ -501,6 +515,13 @@
    "at": "10:45"
   },
   {
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 1.53,
+   "kotak": 45.75,
+   "upstox": 46.45,
+   "at": "12:00"
+  },
+  {
    "contract": "GMRAIRPORT26NOV88CE",
    "gap_pct": 1.418,
    "kotak": 2.82,
@@ -513,6 +534,13 @@
    "kotak": 21.25,
    "upstox": 20.95,
    "at": "09:30"
+  },
+  {
+   "contract": "COFORGE26NOV2180CE",
+   "gap_pct": 1.408,
+   "kotak": 24.85,
+   "upstox": 24.5,
+   "at": "12:00"
   },
   {
    "contract": "COFORGE26NOV2040PE",
@@ -576,27 +604,13 @@
    "kotak": 22.65,
    "upstox": 22.5,
    "at": "10:35"
-  },
-  {
-   "contract": "COFORGE26NOV2040CE",
-   "gap_pct": 0.544,
-   "kotak": 73.5,
-   "upstox": 73.1,
-   "at": "11:30"
-  },
-  {
-   "contract": "BANDHANBNK26NOV160CE",
-   "gap_pct": 0.45,
-   "kotak": 6.67,
-   "upstox": 6.64,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 32,
-  "contract_quotes": 1760,
+  "rounds": 33,
+  "contract_quotes": 1815,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 46.35,
+  "same_best_bid_pct": 45.5,
   "same_best_ask_pct": 47.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.4,
