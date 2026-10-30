@@ -308,6 +308,16 @@ after a Feather-cache bug (3bc25898): identical to the clean files.
 | G1 gap follow-through | 35, −1.3 %, t −0.16 | 33, −4.3 %, median −18.4 %, t −0.54 | fail |
 | P4 ORB long (test window 2024-10 → 2025-09) | −3.6 % | 58, −2.6 %, median −12.1 %, t −0.66 | fail |
 
+**R2, the same four on SENSEX** (F2; lot fixed at 20): E1 31 trades −2.8 % (16 % won); Q1 31, −8.4 %; B1 486,
+−3.4 % (t −2.40, reliably negative); G1 35, −2.3 % (calls +2.0 % on 18, puts −6.9 % on 17). **All fail: nothing
+replicates.**
+**F3a, G1's "calls work" hint on unseen NIFTY spot 2022-01 → 2024-09: not supported** (0 of 4 checks). After a
+confirmed up gap NIFTY moved +0.03 % by 15:15 (45 gaps, t 0.34), every session +0.01 %, down gaps −0.14 %; half 2
+of the up gaps was negative. The call/put split of the first run was noise. G1 stays closed.
+**F4, max up (descriptive):** median trades peaked at only +6 % (E1) to +14 % (B1, G1) above the premium while held
+and were booked at −9 % to −18 %. Peaks of +50 % came on 2 of 31 (E1), 7 of 34 (Q1), 85 of 488 (B1), 2 of 33 (G1).
+No exit is chosen from this (it would be fitted on seen data).
+
 ## 2026-10-30 · S1 fade · 09:16 entry: a pre-registered re-run and a walk-choice recorder (user decision)
 The user approved the three next steps from the 09:15 vs 09:16 counterfactual ("Do it", 30 Oct). None of them
 changes v12's entry, exit or sizing.
