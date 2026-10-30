@@ -280,6 +280,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.2,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "11:00:04",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.959,
+   "same_best_bid_pct": 45.5,
+   "same_best_ask_pct": 49.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.7,
+   "upstox_minus_kotak_quote_time_s_median": -35.0
   }
  ],
  "top_gaps": [
@@ -368,6 +382,13 @@
    "at": "09:25"
   },
   {
+   "contract": "UNITDSPR26NOV1320CE",
+   "gap_pct": 0.959,
+   "kotak": 36.5,
+   "upstox": 36.15,
+   "at": "11:00"
+  },
+  {
    "contract": "GODREJCP26NOV810CE",
    "gap_pct": 0.946,
    "kotak": 15.85,
@@ -415,23 +436,16 @@
    "kotak": 12.5,
    "upstox": 12.45,
    "at": "09:40"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1900CE",
-   "gap_pct": 0.372,
-   "kotak": 26.85,
-   "upstox": 26.75,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 1100,
+  "rounds": 21,
+  "contract_quotes": 1155,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.5,
-  "same_best_ask_pct": 40.75,
+  "same_best_ask_pct": 41.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 95.45,
+  "oi_same_pct": 94.5,
   "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
