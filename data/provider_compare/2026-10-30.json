@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.4,
    "upstox_minus_kotak_quote_time_s_median": -23.0
+  },
+  {
+   "at": "09:50:01",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.795,
+   "same_best_bid_pct": 38.2,
+   "same_best_ask_pct": 38.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.5,
+   "upstox_minus_kotak_quote_time_s_median": -34.0
   }
  ],
  "top_gaps": [
@@ -116,6 +130,13 @@
    "at": "09:35"
   },
   {
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 1.795,
+   "kotak": 27.85,
+   "upstox": 27.35,
+   "at": "09:50"
+  },
+  {
    "contract": "AXISBANK26NOV1220PE",
    "gap_pct": 1.412,
    "kotak": 21.25,
@@ -128,6 +149,13 @@
    "kotak": 4.2,
    "upstox": 4.25,
    "at": "09:20"
+  },
+  {
+   "contract": "ADANIENT26NOV2800CE",
+   "gap_pct": 1.143,
+   "kotak": 17.5,
+   "upstox": 17.3,
+   "at": "09:50"
   },
   {
    "contract": "BDL26NOV1000CE",
@@ -212,30 +240,16 @@
    "kotak": 1311.0,
    "upstox": 1310.2,
    "at": "09:20"
-  },
-  {
-   "contract": "BEL26NOVFUT",
-   "gap_pct": 0.055,
-   "kotak": 366.85,
-   "upstox": 366.65,
-   "at": "09:30"
-  },
-  {
-   "contract": "DIXON26NOVFUT",
-   "gap_pct": 0.027,
-   "kotak": 11062.0,
-   "upstox": 11059.0,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 330,
+  "rounds": 7,
+  "contract_quotes": 385,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 36.35,
-  "same_best_ask_pct": 39.05,
+  "same_best_bid_pct": 38.2,
+  "same_best_ask_pct": 38.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.55,
-  "upstox_minus_kotak_quote_time_s_median": -14.5
+  "oi_same_pct": 94.5,
+  "upstox_minus_kotak_quote_time_s_median": -17.0
  }
 }
