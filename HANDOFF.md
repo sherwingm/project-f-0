@@ -245,6 +245,11 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   unprotected minute** vs the 09:16 backtest entry (§8.1: buy from 09:16, or stop from the first quote, or keep);
   measurement-only: always write the first held quote, per-day after-exit extremes, store previous close / opening gap
   at entry. Check the 29 Oct observation file reached `paper-state`.
+- **09:15 vs 09:16 counterfactual done 30 Oct** (`data/results/S1_fade_0916_counterfactual_2026-10-30_report.md`): too small
+  to decide; 28-29 Oct +₹2,951 on 11 pairs, no stops avoided, gain mostly a smaller stake. Waiting for the user's
+  approval on the next step (re-run unchanged at 30 fresh-book trades; optionally record the walk's own 09:16 choice,
+  a server measurement change). Re-run: `python -m scanner.fade_entry_0916_cf <ledger> <observations_dir>
+  <entry_probe_dir> <stem>` on copies (probe files named <day>.json).
 - Review v12 vs v11/v10 at 30 closed v12 trades (19 now); report with and without ADANIENSOL. The below-Rs 2 rule's live
   trades as they come.
 - Hypotheses for live data (no rule change without the user), first answers in the 29 Oct checkpoint: recovery after the

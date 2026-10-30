@@ -78,5 +78,16 @@ entries, both exits and the net difference.
 - Statements: n is small (≤ 19 signals, 4 days). Differences are described, not tested for significance beyond a
   paired t shown for scale. Nothing here is a validated edge or a rule recommendation by itself.
 
-## Changes after this was committed
-(none yet)
+## Changes after this was committed (commit 9a5bfa43)
+1. **Bug fix in the 09:15 replay (item 9):** the first run checked the stop and trail from the first row after the
+   09:15 entry; v12 checks both only from 09:16 (item 6, the spec). Fixed so the replay uses rows from 09:16:00. The
+   09:16 simulation was not affected (its entry is after 09:16). After the fix the replay matches the booked exit
+   reason on all 17 pairs.
+2. **"Largest contributing trade" is chosen inside each group** (the first run removed a 27 Oct trade from the
+   28-29 Oct group, which removed nothing).
+3. **Added, post hoc, clearly labelled:** a second "comparable" variant that also accepts the server's own 1-second
+   exit-check row as the 09:16 entry row. The committed definition (probe rows only) is still reported unchanged. On
+   28-29 Oct the earliest 09:16:00 row is usually that 1-second row (it sorts before the probe's row of the same
+   second), so the committed definition left only 1 changed trade.
+4. **Added a split by `walk_same`** (already a defined flag, item 4) after seeing that 5 of 13 changed trades would
+   have been bought at a different strike.

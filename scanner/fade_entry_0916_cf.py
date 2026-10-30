@@ -1,0 +1,304 @@
+"""S1 fade · 09:15 vs 09:16 entry counterfactual (read-only; strategies/S1_fade_0916_entry_counterfactual.md).
+
+    python -m scanner.fade_entry_0916_cf <paper_ledger.json> <observations_dir> <entry_probe_dir> [stem]
+
+Inputs are copies: the server's ledger, its bid/ask record (data/observations/<day>.jsonl) and the entry probe
+(data/entry_probe/<day>.json). For every bought v12 fade signal it keeps the actual 09:15 trade, builds a 09:16
+entry from the first eligible recorded ask at or after 09:16:00, and applies the v12 exit on the recorded bids that
+follow. Prices are observed quotes; sales are simulated at the observed bid (no order model). Nothing is interpolated:
+a trade whose entry or exit cannot be decided from the records is "unavailable". Writes data/results/<stem>.md and
+<stem>_trades.csv (default stem S1_fade_0916_counterfactual).
+"""
+from __future__ import annotations
+
+import json
+import math
+import statistics as stt
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import pandas as pd
+
+from server import charges as ch
+from server.fade import BAND, MAX_SPREAD, MIN_PREMIUM, PROBE_STRIKES, walk, walk_path
+
+from .build import ROOT
+from .fade_entry_quality import md_table
+
+RES = ROOT / "data" / "results"
+STOP, TRAIL_ON, GAP = 0.80, 1.10, 0.02          # v12 (strategies/S1_v12_fade_trail2.md)
+T16, T16_LAST = "09:16:00", "09:20:00"          # the 09:16 entry: first eligible row in [09:16:00, 09:20:00]
+
+
+def sec(t: str) -> float:
+    h, m, s = t.split(":")
+    return int(h) * 3600 + int(m) * 60 + float(s)
+
+
+def hhmmss(iso: str) -> str:
+    return iso[11:19]
+
+
+# ------------------------------------------------------------------------------------------------- the records
+def stream(c: dict, obs: list[dict], probe: dict | None) -> list[dict]:
+    """Every recorded book of the trade's contract: probe rows (same symbol and strike) and observation rows (this
+    position id, held and after-exit), sorted by time. Times are 'HH:MM:SS[.fff]' on the trade day."""
+    out = []
+    if probe:
+        cols = probe["cols"]
+        for r in probe["rows"]:
+            d = dict(zip(cols, r))
+            if d["symbol"] == c["symbol"] and d["strike"] == c["strike"]:
+                out.append({"t": d["t"], "bid": d["bid"], "ask": d["ask"], "bid_qty": d["bid_qty"],
+                            "ask_qty": d["ask_qty"], "ltt": d["ltt"], "src": "probe"})
+    for r in obs:
+        if r["id"] == c["id"]:
+            out.append({"t": hhmmss(r["t"]), "bid": r["bid"], "ask": r["ask"], "bid_qty": r["bid_qty"],
+                        "ask_qty": r["ask_qty"], "ltt": r["ltt"], "src": "obs-" + r["phase"], "via": r.get("via")})
+    return sorted(out, key=lambda x: sec(x["t"]))
+
+
+def eligible(r: dict, day: str, qty: int) -> tuple[bool, str]:
+    b, a = r.get("bid"), r.get("ask")
+    if not b or not a or b <= 0 or a <= 0:
+        return False, "no two-sided quote"
+    if a < b:
+        return False, "crossed"
+    if not r.get("ltt") or not str(r["ltt"]).startswith(day):
+        return False, "stale (no trade today)"
+    if a < MIN_PREMIUM:
+        return False, "ask below Rs 2"
+    if a - b > MAX_SPREAD * a:
+        return False, "spread above 10 % of the ask"
+    if not BAND[0] <= a * qty <= BAND[1]:
+        return False, "lot outside Rs 600-8,000"
+    return True, ""
+
+
+def exit_v12(rows: list[dict], e: float, after: dict, eod_bid: float | None) -> dict:
+    """v12 on the recorded bids after the entry row. Returns reason, price, time, how it was decided."""
+    on, peak = False, None
+    for r in rows:
+        b = r.get("bid")
+        if not b:
+            continue
+        if not on:
+            if b <= STOP * e:
+                return {"reason": "stop", "price": b, "t": r["t"], "by": "rows", "src": r["src"]}
+            if b >= TRAIL_ON * e:
+                on, peak = True, b
+                continue
+        else:
+            peak = max(peak, b)
+            if b <= (1 - GAP) * peak:
+                return {"reason": "trail", "price": b, "t": r["t"], "by": "rows", "src": r["src"]}
+    lo, hi = (after.get("low_bid") or {}).get("price"), (after.get("peak_bid") or {}).get("price")
+    if not on and lo is not None and hi is not None and lo > STOP * e and hi < TRAIL_ON * e and eod_bid:
+        return {"reason": "eod", "price": eod_bid, "t": "15:20", "by": "extremes test", "src": "shadow_v10 fill"}
+    return {"reason": None, "price": None, "t": None,
+            "by": "unresolved (trail on at coverage end)" if on else "unresolved (extremes do not rule out a trigger)",
+            "src": None}
+
+
+def first_min_dip(rows: list[dict], t0: str, e: float) -> float | None:
+    w = [r["bid"] for r in rows if r.get("bid") and 0 < sec(r["t"]) - sec(t0) <= 60]
+    return round((min(w) / e - 1) * 100, 1) if w else None
+
+
+def walk_same(c: dict, probe: dict | None, t: str, spot: float | None) -> str:
+    """Would the live walk at time t have chosen this strike? From the probe's standing books (first 8 strikes)."""
+    if not probe or not spot:
+        return "unknown"
+    sig = next((s for s in probe["signals"] if s["symbol"] == c["symbol"]), None)
+    if not sig or not sig.get("strikes"):
+        return "unknown"
+    cols, book = probe["cols"], {}
+    for r in probe["rows"]:
+        d = dict(zip(cols, r))
+        if d["symbol"] == c["symbol"] and sec(d["t"]) <= sec(t):
+            book[d["strike"]] = d
+    path = walk_path(sig["strikes"], spot, sig["side"])
+
+    def q(k):
+        d = book.get(k)
+        if not d or not d["bid"] or not d["ask"]:
+            return None
+        return {"depth": {"bid": [[d["bid"], d["bid_qty"]]], "ask": [[d["ask"], d["ask_qty"]]]}, "lot_size": c["qty"]}
+    got = walk(sig["strikes"], spot, sig["side"], q)
+    if isinstance(got, tuple):
+        if got[0] == c["strike"]:
+            unseen = [k for k in path[:path.index(c["strike"])] if k not in book]
+            return "unknown" if unseen else "yes"
+        return f"no ({got[0]:g})"
+    return "unknown" if c["strike"] in path[PROBE_STRIKES:] else f"no ({got})"
+
+
+def net(c: dict, e: float, x: float) -> float:
+    return round((x - e) * c["qty"] - ch.round_trip(c["instrument"], "BUY", c["qty"], e, x)["total"], 2)
+
+
+# ------------------------------------------------------------------------------------------------ per trade
+def one(c: dict, obs: list[dict], probe: dict | None) -> dict:
+    day, qty, e15, t15 = c["opened_at"][:10], c["qty"], c["entry"]["price"], hhmmss(c["opened_at"])
+    rows = stream(c, obs, probe)
+    r_ = c["rule"]
+    eod = (r_.get("shadow_v10") or {}).get("fill")
+    after = c.get("after") or {}
+    m = {"day": day, "symbol": c["symbol"], "type": c["instrument"], "strike": c["strike"], "qty": qty,
+         "rows": len(rows), "probe_rows": sum(r["src"] == "probe" for r in rows),
+         "e15_time": t15, "e15_price": e15, "x15_time": hhmmss(c["closed_at"]), "x15_price": c["exit"]["price"],
+         "x15_reason": c["reason"].replace("fade_", ""), "net15": c["net_pnl"], "net15_pct": c["return_pct"],
+         "dip15_1min_pct": first_min_dip(rows, t15, e15)}
+    # the engine on the actual 09:15 entry (same execution assumptions as the 09:16 simulation); v12 checks the stop
+    # and the trail only from 09:16, so rows before 09:16:00 are not used
+    rp = exit_v12([r for r in rows if sec(r["t"]) >= max(math.floor(sec(t15)) + 1, sec(T16))], e15, after, eod)
+    m.update({"replay15_reason": rp["reason"], "replay15_price": rp["price"], "replay15_time": rp["t"],
+              "replay15_net": net(c, e15, rp["price"]) if rp["price"] else None})
+    if t15 >= T16:
+        m.update({"status": "unchanged", "e16_time": t15, "e16_price": e15, "e16_src": "actual", "e16_skipped": "",
+                  "size_ok": True, "x16_reason": m["x15_reason"], "x16_price": m["x15_price"], "x16_time": m["x15_time"],
+                  "x16_by": "actual", "net16": m["net15"], "net16_pct": m["net15_pct"], "dip16_1min_pct": m["dip15_1min_pct"],
+                  "walk_same": "n/a", "stand_e16_price": None, "stand_net16": None})
+        return m
+    skipped, ent = [], None
+    for r in rows:
+        if T16 <= r["t"] <= T16_LAST + ".999":
+            ok, why = eligible(r, day, qty)
+            if ok:
+                ent = r
+                break
+            skipped.append(f"{r['t'][:8]} {why}")
+    m["e16_skipped"] = "; ".join(skipped[:3]) + (f" (+{len(skipped) - 3})" if len(skipped) > 3 else "")
+    if ent is None:
+        m.update({"status": "unavailable: no eligible quote 09:16-09:20", "e16_time": None, "e16_price": None})
+        return m
+    e16, t16 = ent["ask"], ent["t"]
+    x = exit_v12([r for r in rows if sec(r["t"]) > sec(t16)], e16, after, eod)
+    spot = (c.get("entry_quote") or {}).get("spot") or r_.get("spot_at_entry")
+    pr = [r for r in (probe or {}).get("rows", []) if r[1] == c["symbol"] and r[3] == c["strike"] and r[0] <= t16]
+    if pr and pr[-1][13]:
+        spot = pr[-1][13]
+    m.update({"e16_time": t16[:8], "e16_price": e16, "e16_src": ent["src"], "size_ok": (ent.get("ask_qty") or 0) >= qty,
+              "e16_1s_source": ent["src"] == "probe" or ent.get("via") == "live best bid (1-s exit check)",
+              "e16_vs_e15_pct": round((e16 / e15 - 1) * 100, 1), "dip16_1min_pct": first_min_dip(rows, t16, e16),
+              "walk_same": walk_same(c, probe, t16, spot),
+              "x16_reason": x["reason"], "x16_price": x["price"], "x16_time": (x["t"] or "")[:8] or None, "x16_by": x["by"],
+              "x16_src": x["src"]})
+    if x["price"] is None:
+        m["status"] = "unavailable: exit " + x["by"]
+        return m
+    m["status"] = "available"
+    m["net16"] = net(c, e16, x["price"])
+    m["net16_pct"] = round(m["net16"] / (e16 * qty) * 100, 2)
+    m["diff_net"] = round(m["net16"] - m["net15"], 2)
+    m["exit_shift_min"] = round((sec(m["x16_time"] if x["t"] != "15:20" else "15:20:00") - sec(m["x15_time"])) / 60, 1)
+    # standing-book variant: the book in force at 09:16:00 if the probe was polling this contract
+    st_rows = [r for r in rows if r["src"] == "probe" and r["t"] <= T16]
+    if st_rows and eligible(st_rows[-1], day, qty)[0]:
+        s0 = st_rows[-1]
+        xs = exit_v12([r for r in rows if sec(r["t"]) > sec(T16)], s0["ask"], after, eod)
+        m["stand_e16_price"] = s0["ask"]
+        m["stand_net16"] = net(c, s0["ask"], xs["price"]) if xs["price"] else None
+    return m
+
+
+# ------------------------------------------------------------------------------------------------ summaries
+def summ(d: pd.DataFrame, net_col: str, pct_col: str, reason_col: str, label: str) -> dict:
+    v = d.dropna(subset=[net_col])
+    if v.empty:
+        return {"method": label, "n": 0}
+    w, l = v[v[net_col] > 0], v[v[net_col] < 0]
+    cum = v.sort_values(["day", "e15_time"])[net_col].cumsum()
+    return {"method": label, "n": len(v), "wins": len(w), "win %": round(len(w) / len(v) * 100, 1),
+            "total net Rs": round(v[net_col].sum()), "mean net %": round(v[pct_col].mean(), 2),
+            "median net %": round(v[pct_col].median(), 2), "avg win Rs": round(w[net_col].mean()) if len(w) else None,
+            "avg loss Rs": round(l[net_col].mean()) if len(l) else None,
+            "stop / trail / 15:20": f"{(v[reason_col] == 'stop').sum()} / {(v[reason_col] == 'trail').sum()} / "
+                                    f"{v[reason_col].isin(['eod', 'eod (15:20)']).sum()}",
+            "max drawdown Rs": round((cum - cum.cummax().clip(lower=0)).min())}
+
+
+def block(d: pd.DataFrame, title: str) -> list[str]:
+    a = d[d.status.isin(["available", "unchanged"])].copy()
+    a["replay15_pct"] = a.replay15_net / (a.e15_price * a.qty) * 100
+    rows = [summ(a, "net15", "net15_pct", "x15_reason", "09:15 actual (booked)"),
+            summ(a, "replay15_net", "replay15_pct", "replay15_reason", "09:15 replayed (same engine)"),
+            summ(a, "net16", "net16_pct", "x16_reason", "09:16 simulated")]
+    out = [f"\n### {title}\n", f"Signals {len(d)}; available pairs {len(a)} "
+           f"(changed {int((a.status == 'available').sum())}, unchanged {int((a.status == 'unchanged').sum())}); "
+           f"unavailable {len(d) - len(a)}.\n", md_table(pd.DataFrame(rows))]
+    if len(a) > 1:
+        dif = (a.net16_pct - a.net15_pct)
+        sd = stt.stdev(dif) if len(dif) > 1 else 0
+        ch_ = a[a.status == "available"]
+        out.append("\n" + md_table(pd.DataFrame([{
+            "09:16 minus 09:15 actual, total Rs": round((a.net16 - a.net15).sum()),
+            "mean pts (net %)": round(dif.mean(), 2), "paired t (scale only)": round(dif.mean() / (sd / math.sqrt(len(dif))), 2) if sd else None,
+            "09:16 better / worse / same": f"{int((a.net16 > a.net15).sum())} / {int((a.net16 < a.net15).sum())} / {int((a.net16 == a.net15).sum())}",
+            "09:16 minus 09:15 replayed, total Rs": round((a.net16 - a.replay15_net).sum()),
+            "mean entry diff % (changed)": round(ch_.e16_vs_e15_pct.mean(), 1) if len(ch_) else None,
+            "median 1-min dip 09:15 / 09:16 (changed)": f"{ch_.dip15_1min_pct.median()} / {ch_.dip16_1min_pct.median()}" if len(ch_) else None,
+            "median exit shift min (changed)": ch_.exit_shift_min.median() if len(ch_) else None}])))
+    return out
+
+
+def main() -> None:
+    led, od, pdir = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
+    stem = sys.argv[4] if len(sys.argv) > 4 else "S1_fade_0916_counterfactual"
+    L = json.loads(led.read_text(encoding="utf-8"))
+    v12 = [c for c in L["closed"] if (c.get("rule") or {}).get("version") == "v12" and "F" in c["rule"].get("arms", [])]
+    ms = []
+    for c in sorted(v12, key=lambda c: c["opened_at"]):
+        day = c["opened_at"][:10]
+        of, pf = od / f"{day}.jsonl", pdir / f"{day}.json"
+        obs = [json.loads(x) for x in of.read_text(encoding="utf-8").splitlines() if x.strip()] if of.exists() else []
+        probe = json.loads(pf.read_text(encoding="utf-8")) if pf.exists() else None
+        ms.append(one(c, obs, probe))
+    D = pd.DataFrame(ms)
+    ok = (D.status == "available") & (D.size_ok == True) & (D.x16_by == "rows")  # noqa: E712
+    D["comparable"] = (D.status == "unchanged") | (ok & (D.e16_src == "probe"))
+    # added after the first run (methodology "Changes"): also accept the server's own 1-second exit-check row
+    D["comparable_1s"] = (D.status == "unchanged") | (ok & (D.e16_1s_source == True))  # noqa: E712
+    m2829 = D.day.isin(["2026-10-28", "2026-10-29"])
+
+    def biggest(mask):
+        av = D[mask & (D.status == "available")]
+        return av.loc[av.diff_net.abs().idxmax(), "symbol"] if len(av) else None
+    big, big2829 = biggest(D.day >= "2026-10-27"), biggest(m2829)
+    out = ["# S1 fade · 09:15 vs 09:16 entry counterfactual: tables (scanner/fade_entry_0916_cf.py)\n",
+           f"Ledger saved_at {L.get('saved_at')}. Method: strategies/S1_fade_0916_entry_counterfactual.md. "
+           "09:16 prices are OBSERVED asks; 09:16 exits are SIMULATED at observed bids (not fills).\n",
+           "## Per trade\n",
+           md_table(D[["day", "symbol", "type", "strike", "qty", "status", "e15_time", "e15_price", "x15_reason", "x15_time",
+                       "x15_price", "net15", "e16_time", "e16_price", "e16_src", "size_ok", "walk_same", "x16_reason",
+                       "x16_time", "x16_price", "x16_by", "net16", "diff_net", "replay15_reason", "replay15_net",
+                       "dip15_1min_pct", "dip16_1min_pct", "comparable", "comparable_1s"]]),
+           "\n## Skipped rows before the 09:16 entry (first 3)\n",
+           md_table(D[D.e16_skipped.fillna("") != ""][["symbol", "e16_skipped"]]),
+           "\n## Groups\n"]
+    out += block(D[D.day >= "2026-10-27"], "All measured days, 27-29 Oct")
+    out += block(D, "All signals incl. ADANIENSOL (23 Oct)")
+    out += block(D[m2829], "28-29 Oct only (fresh books)")
+    out += block(D[D.day == "2026-10-27"], "27 Oct only (previous-day books)")
+    out += block(D[D.day == "2026-10-23"], "23 Oct ADANIENSOL only")
+    out += ["\n## Robustness\n"]
+    if big:
+        out += block(D[(D.day >= "2026-10-27") & (D.symbol != big)], f"27-29 Oct without the largest difference ({big})")
+    if big2829:
+        out += block(D[m2829 & (D.symbol != big2829)], f"28-29 Oct without the largest difference ({big2829})")
+    out += block(D[(D.day >= "2026-10-27") & D.comparable], "27-29 Oct, valid comparable quotes only (as committed)")
+    out += block(D[m2829 & D.comparable], "28-29 Oct, valid comparable quotes only (as committed)")
+    out += block(D[(D.day >= "2026-10-27") & D.comparable_1s], "27-29 Oct, comparable incl. 1-s exit-check rows (post hoc)")
+    out += block(D[m2829 & D.comparable_1s], "28-29 Oct, comparable incl. 1-s exit-check rows (post hoc)")
+    sb = D[D.stand_net16.notna()]
+    out += ["\n### Standing-book variant (book in force at 09:16:00, probe-polled contracts)\n",
+            md_table(sb[["day", "symbol", "e16_price", "stand_e16_price", "net16", "stand_net16", "net15"]]) if len(sb) else "none\n"]
+    (RES / f"{stem}.md").write_text("\n".join(out) + "\n", encoding="utf-8")
+    D.to_csv(RES / f"{stem}_trades.csv", index=False)
+    print(f"{len(D)} signals; {int((D.status == 'available').sum())} changed, {int((D.status == 'unchanged').sum())} "
+          f"unchanged, {int(D.status.str.startswith('unavailable').sum())} unavailable; largest diff {big}")
+
+
+if __name__ == "__main__":
+    main()

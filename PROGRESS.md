@@ -833,3 +833,10 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - **Workstream B:** index paper ledger + API + page on branch `index-paper` (13 tests; not merged or deployed; no
     live quote feed yet).
   - The fo venv now also has `requirements-server.txt` (pandas 2.3.3, as the server pins).
+- 2026-10-30: **S1 fade 09:15 vs 09:16 entry counterfactual** (read-only; method committed first
+  `strategies/S1_fade_0916_entry_counterfactual.md`, results `data/results/S1_fade_0916_counterfactual_2026-10-30_report.md`,
+  code `scanner/fade_entry_0916_cf.py`). 19 signals: 13 changed, 4 already after 09:16, 2 unavailable (ADANIENSOL,
+  BANDHANBNK: no eligible quote 09:16-09:20). 27-29 Oct: 09:16 −₹12,231 vs booked −₹27,429, but ₹12,247 of the gap is
+  27 Oct (previous-day books, already fixed). **28-29 Oct: +₹2,951 on 11 pairs (+2.4 pts, t 1.2; +₹1,478 without LT),
+  same stops (7) and wins (4).** Where the walk would keep the same strike at 09:16 (5 trades) the difference is −₹71:
+  most of the gain is a smaller stake after the first-minute fall. Verdict: too small to decide; no rule change.
