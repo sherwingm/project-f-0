@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.2,
    "upstox_minus_kotak_quote_time_s_median": -41.0
+  },
+  {
+   "at": "10:35:03",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.252,
+   "same_best_bid_pct": 61.8,
+   "same_best_ask_pct": 50.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.4,
+   "upstox_minus_kotak_quote_time_s_median": -66.0
   }
  ],
  "top_gaps": [
@@ -233,6 +247,13 @@
    "kotak": 25.0,
    "upstox": 24.4,
    "at": "09:30"
+  },
+  {
+   "contract": "COFORGE26NOV2180CE",
+   "gap_pct": 2.252,
+   "kotak": 22.2,
+   "upstox": 22.7,
+   "at": "10:35"
   },
   {
    "contract": "BLUESTARCO26NOV1620CE",
@@ -298,6 +319,13 @@
    "at": "10:10"
   },
   {
+   "contract": "HYUNDAI26NOV2000CE",
+   "gap_pct": 0.662,
+   "kotak": 22.65,
+   "upstox": 22.5,
+   "at": "10:35"
+  },
+  {
    "contract": "BANDHANBNK26NOV160CE",
    "gap_pct": 0.45,
    "kotak": 6.67,
@@ -338,30 +366,16 @@
    "kotak": 26.95,
    "upstox": 27.0,
    "at": "10:05"
-  },
-  {
-   "contract": "ABCAPITAL26NOVFUT",
-   "gap_pct": 0.125,
-   "kotak": 358.75,
-   "upstox": 358.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "BDL26NOVFUT",
-   "gap_pct": 0.101,
-   "kotak": 993.0,
-   "upstox": 992.0,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 825,
+  "rounds": 16,
+  "contract_quotes": 880,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 40.0,
+  "same_best_bid_pct": 42.75,
   "same_best_ask_pct": 40.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.5,
-  "upstox_minus_kotak_quote_time_s_median": -28.0
+  "upstox_minus_kotak_quote_time_s_median": -29.0
  }
 }
