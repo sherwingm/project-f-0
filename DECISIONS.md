@@ -265,3 +265,14 @@ Descriptive after the fixes:
 
 | S3 L1 · NIFTY long ATM straddle when India VIX > 22 and rising, 5 sessions (`strategies/S3_L1_vix_rising_long_straddle.md`, pre-registered at 9f07cdd9) | **Fail, closed** (2026-10-29) | First test on the new free years 2018-2021 (NSE daily bhavcopy 2018-20 added to `index-data`, 740 sessions, validated). Signal count 2018 → 2025-09 on NSE's official VIX: 146 days (109 in 2018-21), so the 30-day minimum was met. 30 trades: mean +7.8 % of the debit (+5.2 % at 2× costs) but t 0.64, median −15.8 %, 30 % won; one trade (Mar 2020, +254 %) makes the mean, and without it the mean is −0.6 %. Worst −₹41,409 against an average month of +₹4,788. Neighbours VIX 17.6 (−6.2 %), hold 4 (−1.6 %) and hold 6 (−12.3 %) are negative. The no-filter baseline is −5.0 %. 11 signals were skipped (March / May / Aug 2020): no expiry ≥ 10 days out had a 100-contract ATM pair. **Not validated:** the Oct 2022 → Sep 2024 window (about 2 signals) and the holdout were not read. **The ₹18k dataset is not bought** (L1 did not pass) |
 | S3 D6R · D6's weekly short straddle and monthly put-write on 2018-2021 (`strategies/S3_D6R_shortvol_2018_2021.md`, at 248f0130) | **Still loses** (2026-10-29) | Same rules as D6; spot = NSE's official close. Weekly ATM straddle −1.5 % of the credit (161 trades, 60 % won, t −0.20; 2018 monthly-only −38.9 %). Put k 0.94: −67.6 % (91 % won; March 2020 = −6,862 %). Put k 0.98: −17.1 % (81 % won). On % of margin the puts are slightly positive (+0.44 % / +0.86 % a month), because the big-premium months weigh more. On the 2021 overlap, the official close vs the 15:29 spot moves trades by 10.6 points on average. Plain option selling stays closed, and it is outside "long options only" anyway |
+
+## 2026-10-30 · S3 · buy-only, tested on 2024 → today (user decision)
+- **Buy options only** (the user, 2026-10-30): "only options buy no selling as I don't have the capital". New S3 pods are
+  long premium only; selling structures are not researched further.
+- **Window** (the user, 2026-10-29: "take the backtest from the 2024 to current"; 2026-10-30: "Test all this … don't
+  ask"): the four buy pods E1, Q1, B1, G1 run once on the whole 1-minute option era, **2024-10-01 → 2026-10-28** (the
+  latest stored session). The gate's halves are the old test window (2024-10-01 → 2025-09-30) and the old holdout
+  (2025-10-01 → 2026-10-28), so both must be positive. **The holdout is used up for these four pods**; the forward
+  check for any pass is paper trading (branch `index-paper`), not a new backtest window.
+- Everything else in "S3 · index options" stands (costs, slippage, gate, pages committed before the run). A pass does
+  not turn anything on.
