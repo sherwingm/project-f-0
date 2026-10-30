@@ -859,3 +859,15 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   (`strategies/S1_fade_0916_walk_choice_recorder.md`), writes the live walk's 09:16 choice and follows that contract
   to 15:21. It has 10 tests, including one that the choice matches the live entry on the same book. VM update after
   15:40.
+- 2026-10-30 afternoon: **S3 buy follow-ups** (the user: "Do all the things"; pre-registered 65721f06).
+  - **Spot store repaired** (data 62a23257, code e6ca79b2): Kotak's 09:15 bar was wrong (open off by up to ~16
+    points; first-minute high / low short); Upstox's public candles equal NSE's official open on 923 / 923 sessions
+    (was 35 %). Budget sessions 2025-02-01 / 2026-02-01 added; filler-only special sessions dropped. The nightly
+    recorder now repairs new days (`daily_extras` step `spot_upstox_repair`). Report `data/results/s3_spot_repair_2026-10-30.md`.
+  - **Feather cache bug fixed** (3bc25898): a test store could overwrite real cache copies. First run re-checked: lots
+    and VIX identical, so its numbers stood.
+  - **F1 re-run on the fixed data:** E1 31 trades −6.2 %, Q1 −2.6 %, B1 −2.5 %, G1 −4.3 %, P4 −2.6 %. All fail.
+  - **R2 SENSEX:** E1 −2.8 %, Q1 −8.4 %, B1 −3.4 % (t −2.4), G1 −2.3 %. All fail.
+  - **F3a gap-up hint on unseen NIFTY 2022-24 spot:** not supported (+0.03 % after up gaps, t 0.34).
+  - **F4 max up:** median peaks +6 % to +14 %, booked −9 % to −18 %.
+  - Workbook `data/results/S3_buy_pods_2026-10-30.xlsx`. DECISIONS f45e98f0 / 0f6878b5.
