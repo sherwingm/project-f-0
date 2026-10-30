@@ -926,3 +926,128 @@ def test_entry_probe_reuses_the_entry_ticks_quotes(fast):
     ft.entry_probe(t)
     assert q.many_calls == 1                                                                    # one call for both
     assert ft.entry_tick(datetime(2026, 10, 15, 15, 20, tzinfo=IST)) == 0                       # 15:20: the poll refuses
+
+
+# ---------------------------------------------------------------- the 09:16 walk-choice record (record only)
+def _obs_rows(lg, day="2026-10-15"):
+    import json
+    f = lg.dir / "observations" / f"{day}.jsonl"
+    return [json.loads(x) for x in f.read_text(encoding="utf-8").splitlines()] if f.exists() else []
+
+
+def test_walk_0916_records_the_choice_and_follows_it_trading_nothing(fast):
+    import json
+    lg, q, ft = fast
+    q.streaming = lambda: True
+    s = lambda h, m, sec=0: datetime(2026, 10, 15, h, m, sec, tzinfo=IST)                       # noqa: E731
+    assert ft.walk_0916(s(9, 15, 59)) == 0 and q.many_calls == 0                                 # before 09:16
+    assert ft.walk_0916(s(9, 16, 0)) == 3                                                        # 1220, 1200, 1180
+    p = ft._w16["picks"]["HCLTECH"]
+    assert p["status"] == "waiting" and p["tries"] == 1 and p["first_why"].startswith("no strike with")
+    q.set("PE", 1220.0, 17.0, 19.5)                                                              # spread above 10 %
+    q.set("PE", 1200.0, 12.0, 12.4)
+    ft.walk_0916(s(9, 16, 1))
+    assert p["status"] == "chosen" and p["strike"] == 1200.0 and p["ask"] == 12.4 and p["lots"] == 1
+    assert p["decided_at"] == "09:16:01.000" and p["id"] == "w0916:2026-10-15:HCLTECH"
+    assert [b[0] for b in p["book"]] == [1220.0, 1200.0, 1180.0] and p["book"][0][1:5] == [17.0, 5000, 19.5, 5000]
+    saved = json.loads((lg.dir / "walk_0916" / "2026-10-15.json").read_text(encoding="utf-8"))
+    assert saved["picks"]["HCLTECH"]["strike"] == 1200.0                                         # saved at once
+    assert ft.walk_0916(s(9, 16, 2)) == 1                                                        # follow only now
+    q.set("PE", 1200.0, 11.0, 11.3)
+    ft.walk_0916(s(11, 0))
+    ft.walk_0916(s(15, 20, 30))
+    rows = [r for r in _obs_rows(lg) if r["phase"] == "walk_0916"]
+    assert [(r["t"][11:19], r["bid"]) for r in rows] == [("09:16:01", 12.0), ("11:00:00", 11.0)]   # changes only
+    assert {r["ts"] for r in rows} == {"HCLTECH26OCT1200PE"} and rows[0]["id"] == p["id"]
+    assert ft.walk_0916(s(15, 21)) == 0                                                          # 15:21: ended, saved
+    saved = json.loads((lg.dir / "walk_0916" / "2026-10-15.json").read_text(encoding="utf-8"))
+    assert saved["ended"].startswith("2026-10-15T15:21") and saved["picks"]["HCLTECH"]["follow"]["polls"] == 4
+    assert saved["picks"]["HCLTECH"]["follow"]["last"] == "15:20:30.000"
+    assert not lg.state["positions"] and not lg.state.get("closed")                              # trades nothing
+    assert not (lg.state.get("rules") or {}).get("fade")
+
+
+def test_walk_0916_kotak_cadence_and_none_by_0920(fast):
+    lg, q, ft = fast                                                                             # no stream: Kotak
+    s = lambda m, sec: datetime(2026, 10, 15, 9, m, sec, tzinfo=IST)                             # noqa: E731
+    for k in (1180.0, 1200.0, 1220.0):
+        q.set("PE", k, 18.0, 18.5)
+        q.book[f"HCLTECH26OCT{int(k)}PE"]["timestamp"] = "2026-10-14 15:29:58"                   # yesterday's book
+    ft.walk_0916(s(16, 0))
+    ft.walk_0916(s(16, 5))                                                                       # within 10 s: no try
+    p = ft._w16["picks"]["HCLTECH"]
+    assert p["tries"] == 1 and p["last_why"].startswith("waiting for the first trade today (every quote")
+    ft.walk_0916(s(16, 10))
+    assert p["tries"] == 2 and q.many_calls == 2
+    ft.walk_0916(s(20, 1))                                                                       # 09:20:01: given up
+    assert p["status"] == "none by 09:20" and p["tries"] == 2
+    assert ft.walk_0916(s(20, 30)) == 0 and q.many_calls == 2                                    # nothing more
+
+
+def test_walk_0916_survives_a_restart_and_never_raises(fast, monkeypatch):
+    lg, q, ft = fast
+    q.streaming = lambda: True
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.walk_0916(datetime(2026, 10, 15, 9, 16, 0, tzinfo=IST))
+    ft2 = F.FadeTrader(lg, lambda: sig())                                                        # a restart
+    assert ft2.walk_0916(datetime(2026, 10, 15, 12, 0, tzinfo=IST)) == 1                         # follows on
+    p = ft2._w16["picks"]["HCLTECH"]
+    assert p["strike"] == 1220.0 and p["follow"]["polls"] == 2 and len(ft2._w16["restarts"]) == 1
+    monkeypatch.setattr(q, "get_many", lambda cs: 1 / 0)
+    assert ft2.walk_0916(datetime(2026, 10, 15, 12, 0, 1, tzinfo=IST)) == 0                      # logged, not raised
+
+
+@pytest.mark.parametrize("case", ["plain", "wide_first", "stale_all", "stale_pick", "never_fits", "sub2", "none"])
+def test_decide_0916_matches_the_live_entry(tmp_path, case):
+    q = CountingQuotes()
+    lg = PaperLedger(tmp_path, q, capital=500_000, clock=lambda: at(15, 9, 16))
+    s = sig()
+    s["signals"][0]["listing"] = {"1220": 3.0}
+    ft = F.FadeTrader(lg, lambda: s)
+    now = datetime(2026, 10, 15, 9, 16, 0, tzinfo=IST)
+    if case in ("plain", "stale_all", "stale_pick"):
+        for k in (1180.0, 1200.0, 1220.0):
+            q.set("PE", k, 18.0, 18.5)
+    if case in ("stale_all", "stale_pick"):
+        for k in ((1220.0,) if case == "stale_pick" else (1180.0, 1200.0, 1220.0)):
+            q.book[f"HCLTECH26OCT{int(k)}PE"]["timestamp"] = "2026-10-14 15:29:58"
+    if case == "wide_first":
+        q.set("PE", 1220.0, 15.0, 18.5)
+        q.set("PE", 1200.0, 12.0, 12.4)
+    if case == "never_fits":
+        q.set("PE", 1220.0, 18.0, 18.5, lot=5425)
+    if case == "sub2":
+        q.set("PE", 1220.0, 1.40, 1.45, lot=1000)
+    sg = s["signals"][0]
+    path = F.walk_path(sg["strikes"], 1225.0, "PE")
+    book = {k: q.book.get(f"HCLTECH26OCT{int(k)}PE") for k in path}
+    d = F.decide_0916(sg, 1225.0, book, now)
+    ft.entry_tick(now)                                                                           # the live entry
+    pos = lg.state["positions"]
+    rules = lg.state.get("rules") or {}
+    if d[0] == "chosen":
+        (p,) = pos
+        assert (p["strike"], p["entry"]["price"], p.get("lots", 1)) == (d[1], d[2], d[4])
+    else:
+        assert not pos
+        refused = [r for r in rules.get("refused") or [] if r["symbol"] == "HCLTECH"]
+        assert bool(refused) == (d[0] == "refused")
+        if d[0] == "refused":
+            assert refused[-1]["reason"] == d[1]
+        else:
+            assert rules["fade_wait"]["2026-10-15:HCLTECH"]["reason"] == d[1]
+    expect = {"plain": "chosen", "wide_first": "chosen", "stale_all": "waiting", "stale_pick": "waiting",
+              "never_fits": "refused", "sub2": "chosen", "none": "waiting"}
+    assert d[0] == expect[case]
+
+
+def test_walk_0916_follow_writes_price_changes_only(fast):
+    lg, q, ft = fast
+    q.streaming = lambda: True
+    q.set("PE", 1220.0, 18.0, 18.5)
+    ft.walk_0916(datetime(2026, 10, 15, 9, 16, 0, tzinfo=IST))
+    q.book["HCLTECH26OCT1220PE"]["depth"] = {"bid": [(18.0, 900)], "ask": [(18.5, 75)]}           # sizes only
+    ft.walk_0916(datetime(2026, 10, 15, 9, 16, 1, tzinfo=IST))
+    q.set("PE", 1220.0, 17.9, 18.4)
+    ft.walk_0916(datetime(2026, 10, 15, 9, 16, 2, tzinfo=IST))
+    assert [r["bid"] for r in _obs_rows(lg) if r["phase"] == "walk_0916"] == [18.0, 17.9]

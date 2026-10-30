@@ -246,10 +246,12 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   measurement-only: always write the first held quote, per-day after-exit extremes, store previous close / opening gap
   at entry. Check the 29 Oct observation file reached `paper-state`.
 - **09:15 vs 09:16 counterfactual done 30 Oct** (`data/results/S1_fade_0916_counterfactual_2026-10-30_report.md`): too small
-  to decide; 28-29 Oct +₹2,951 on 11 pairs, no stops avoided, gain mostly a smaller stake. Waiting for the user's
-  approval on the next step (re-run unchanged at 30 fresh-book trades; optionally record the walk's own 09:16 choice,
-  a server measurement change). Re-run: `python -m scanner.fade_entry_0916_cf <ledger> <observations_dir>
-  <entry_probe_dir> <stem>` on copies (probe files named <day>.json).
+  to decide; 28-29 Oct +₹2,951 on 11 pairs, no stops avoided, gain mostly a smaller stake. **Approved 30 Oct:** the
+  re-run's rules are pre-registered (`strategies/S1_fade_0916_rerun_prereg.md`). Run it once there are ≥ 30 fresh-book
+  pairs (trade day ≥ 28 Oct; 11 on 29 Oct): `python -m scanner.fade_entry_0916_cf <ledger> <observations_dir>
+  <entry_probe_dir> <stem> [walk_0916_dir]` on copies taken after the close. The decision table is at the top, and
+  its verdict is the answer: do not re-tune the thresholds. The walk-choice recorder (`walk_0916`, record only) feeds
+  check C3 from 2 Nov. Check that `data/walk_0916/<date>.json` reaches `paper-state`.
 - Review v12 vs v11/v10 at 30 closed v12 trades (19 now); report with and without ADANIENSOL. The below-Rs 2 rule's live
   trades as they come.
 - Hypotheses for live data (no rule change without the user), first answers in the 29 Oct checkpoint: recovery after the

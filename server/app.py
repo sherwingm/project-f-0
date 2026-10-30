@@ -278,6 +278,7 @@ def _fade_fast_loop() -> None:
                 state.fade.fast_tick(now)
                 state.fade.entry_tick(now)               # 1-second entries from 09:15:00 (DECISIONS.md 2026-10-22)
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
+                state.fade.walk_0916(now)                # record only, 09:16-15:21 (S1_fade_0916_walk_choice_recorder.md)
                 _phone_tick(now)
                 if state.stream is not None:
                     state.stream.write_candles(settings.data_dir)   # 1-second candles (server/upstox_stream.py)

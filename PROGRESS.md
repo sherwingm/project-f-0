@@ -851,3 +851,11 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - **G1 gap follow-through**: 35 trades, −1.3 %, 26 % won; halves +23.6 % / −12.7 %.
   - Hand checks vs raw minute files (E1 2026-03-18, G1 2025-03-24) match. Reads go through the new Feather cache
     (162a9a82, ~20-25 % faster). Results `data/results/S3_{E1,Q1,B1,G1}_report.md`.
+- 2026-10-30: **S1 fade 09:16 follow-up approved by the user ("Do it")**: the re-run's rules are pre-registered
+  (`strategies/S1_fade_0916_rerun_prereg.md`: P1-P4 + C1-C3, verdict at 30 fresh-book pairs, last look at 60), written
+  before any 30 Oct trade was seen. `scanner/fade_entry_0916_cf.py` prints the decision table (net % first) and
+  replays the recorded walk choice. On the 29 Oct copies its per-trade CSV is identical to 1ac0aa3b's, and today it
+  reads NOT A DECISION (11 pairs). A new record-only recorder, `server/fade.py` `walk_0916`
+  (`strategies/S1_fade_0916_walk_choice_recorder.md`), writes the live walk's 09:16 choice and follows that contract
+  to 15:21. It has 10 tests, including one that the choice matches the live entry on the same book. VM update after
+  15:40.

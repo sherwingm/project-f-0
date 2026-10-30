@@ -91,3 +91,13 @@ entries, both exits and the net difference.
    second), so the committed definition left only 1 changed trade.
 4. **Added a split by `walk_same`** (already a defined flag, item 4) after seeing that 5 of 13 changed trades would
    have been bought at a different strike.
+5. **30 Oct, with the re-run's pre-registration** (`strategies/S1_fade_0916_rerun_prereg.md`):
+   - the "28-29 Oct" groups became "fresh books" (trade day ≥ 2026-10-28), so later days join them;
+   - the summary tables show net % before rupees;
+   - the script adds the pre-registered decision table and the replay of the recorded walk choice
+     (`data/walk_0916`).
+   No computation changed: on the 29 Oct copies the per-trade CSV is identical to 1ac0aa3b's.
+6. **Bug fix (30 Oct, independent review):** `exit_v12` now compares against levels rounded to 4 dp, as live v12
+   does. Before, 1.10 × 3.00 = 3.3000000000000003, so a bid of exactly 3.30 did not switch the trail on. It also no
+   longer checks stops or trails on rows from 15:20:00, where live v12 sells at 15:20 instead. On the 29 Oct copies
+   the per-trade CSV is unchanged.

@@ -54,6 +54,11 @@ PROBE_FROM, PROBE_FAST_TO, PROBE_TO = time(9, 14, 50), time(9, 20), time(10, 0)
 PROBE_SLOW, PROBE_SAVE, PROBE_STRIKES = 10, 60, 8
 PROBE_COLS = ["t", "symbol", "side", "strike", "ask", "ask_qty", "bid", "bid_qty", "ltp", "ltt", "volume", "open",
               "atp", "underlying"]
+# the 09:16 walk-choice record (record only, strategies/S1_fade_0916_walk_choice_recorder.md): the choice is tried
+# 09:16:00-09:20:00.999 (the counterfactual's window), the chosen contract's book is followed to 15:21
+W16_FROM, W16_LAST, W16_TO = time(9, 16), time(9, 20, 1), time(15, 21)
+W16_DIR, W16_PHASE, W16_SOURCE = "walk_0916", "walk_0916", "live book (09:16 walk-choice record)"
+W16_SLOW_PICK, W16_SLOW, W16_SAVE = 10, 30, 1800        # Kotak only: try every 10 s, follow every 30 s; save each 30 min
 TICK = 0.01                                              # NSE stock-option tick since 2025-11-03 (Rs 0.05 before)
 SHADOW_FLOOR = 0.05                                      # the sub-Rs 2 shadow walk's floor, as pre-registered
 
@@ -408,6 +413,47 @@ def sub2_pick(strikes: list[float], spot: float, side: str, quote: Callable[[flo
     return "below-Rs 2 rule: no two-sided strike"
 
 
+def decide_0916(sig: dict, spot: float | None, book: dict[float, dict | None], now: datetime) -> tuple:
+    """FadeTrader._entries' decision on one book of the signal's walk path, without buying (the 09:16 walk-choice
+    record): the first-trade-today gates, the lot-size check, walk() and the below-Rs 2 rule, in _entries' order.
+    Returns ("chosen", strike, ask, lot, lots, sub2 or None), ("waiting", why) or ("refused", why).
+    Kept equal to _entries by tests/test_fade.py (test_decide_0916_matches_the_live_entry)."""
+    strikes, side = sig.get("strikes") or [], sig["side"]
+    if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+        return "waiting", "waiting for the first trade today (every quote is yesterday's)"
+
+    def sub2():
+        p = sub2_pick(strikes, spot, side, book.get, sig.get("listing") or {})
+        if isinstance(p, str):
+            return None
+        k, px, lot, lots, lc = p
+        if pk.not_traded_today(book.get(k), now):
+            return "waiting", f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
+        return "chosen", k, px, lot, lots, {"listing_close": lc, "lots": lots}
+    why = never_fits(lot_of(book), BAND, MIN_PREMIUM)
+    if why:
+        return sub2() or ("refused", why)
+    w = walk(strikes, spot, side, book.get)
+    if isinstance(w, str) and w.startswith(f"premium below Rs {MIN_PREMIUM:g} "):
+        s = sub2()
+        if s:
+            return s
+    if isinstance(w, str):
+        return "waiting", w
+    k, px, lot = w
+    if pk.not_traded_today(book.get(k), now):
+        return "waiting", f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
+    return "chosen", k, px, lot, 1, None
+
+
+def _level(q: dict | None) -> list:
+    """[bid, bid size, ask, ask size, last-trade time] of a quote (Nones without one)."""
+    d = (q or {}).get("depth") or {}
+    b, a = (d.get("bid") or [(None, None)])[0], (d.get("ask") or [(None, None)])[0]
+    ltt = (q or {}).get("timestamp")
+    return [b[0], b[1], a[0], a[1], ltt.strftime("%Y-%m-%d %H:%M:%S") if hasattr(ltt, "strftime") else ltt]
+
+
 class FadeTrader:
     def __init__(self, ledger, fade: Callable[[], dict | None], spot: Callable[[str], float | None] | None = None):
         self.ledger, self.fade = ledger, fade
@@ -421,6 +467,10 @@ class FadeTrader:
         self._probe: dict = {}                           # entry_probe's day: signals and changed quotes
         self._probe_seen: dict[str, tuple] = {}
         self._probe_last = self._probe_saved = 0.0
+        self._w16: dict = {}                             # walk_0916's day: each signal's 09:16 choice
+        self._w16_last: dict[str, float] = {}            # its follow: the last quote time per chosen contract
+        self._w16_seen: dict[str, tuple] = {}            # its follow: the last bid / ask written per chosen contract
+        self._w16_pick_last = self._w16_saved = 0.0
 
     def _state(self) -> dict:
         st = self.ledger.state.setdefault("rules", {"open": {}, "close": {}, "exits_checked": None, "refused": []})
@@ -564,6 +614,132 @@ class FadeTrader:
         p.parent.mkdir(parents=True, exist_ok=True)
         p.write_text(json.dumps(self._probe, separators=(",", ":"), default=str))
         self._probe_saved = now.timestamp() if not force else float("inf")
+
+    def walk_0916(self, now: datetime) -> int:
+        """Record only (strategies/S1_fade_0916_walk_choice_recorder.md): which contract the live entry would have
+        bought at 09:16, and that contract's book to 15:21, so v12 can be replayed on it after the close. From 09:16:00
+        to 09:20:00 each undecided signal of today goes through decide_0916 (the live entry decision) on one book of its
+        whole walk path, every second (every W16_SLOW_PICK s while prices come from Kotak); the first "chosen" is its
+        09:16 choice. Each chosen contract's bid/ask then goes into the observation record (phase "walk_0916", id
+        w0916:<date>:<symbol>) every second while streaming, else every W16_SLOW s, to 15:21. Trades nothing and never
+        touches the ledger's state. The choices go to data/walk_0916/<date>.json (mirrored to paper-state). Returns the
+        contracts quoted; a failure is logged, never raised, so the 1-second trading loop goes on."""
+        try:
+            return self._walk_0916(now)
+        except Exception as exc:  # noqa: BLE001 - a record must never stop the trading loop
+            log.warning("walk 09:16 record: %s", exc)
+            return 0
+
+    def _walk_0916(self, now: datetime) -> int:
+        t, today = now.time(), now.date().isoformat()
+        if not sessions.is_session(now.date()) or not (W16_FROM <= t < W16_TO):
+            if self._w16.get("date") and not self._w16.get("ended"):
+                self._w16["ended"] = now.isoformat(timespec="seconds")          # the day's last save, with the follow
+                if self._w16["picks"]:                          # no file on a day without fade signals
+                    self._w16_save(now)
+            return 0
+        if self._w16.get("date") != today:
+            self._w16, self._w16_last, self._w16_seen = self._w16_load(today, now), {}, {}
+        picks, stamp, stream = self._w16["picks"], now.strftime("%H:%M:%S.%f")[:-3], streaming(self.ledger)
+        changed, cs, todo = False, {}, {}
+        try_now = stream or now.timestamp() - self._w16_pick_last >= W16_SLOW_PICK - 0.5
+        for sig in self.signals(today):
+            sym = sig["symbol"]
+            p = picks.get(sym)
+            if p and p["status"] != "waiting":
+                continue
+            if t >= W16_LAST:                                   # 09:20:00 passed without a choice
+                p = picks.setdefault(sym, {"side": sig["side"], "tries": 0, "first_try": None, "first_why": None})
+                p.update(status="none by 09:20", ended_at=stamp)
+                changed = True
+                continue
+            if not try_now:
+                continue
+            spot = self.spot(sym) or sig.get("spot")
+            path = walk_path(sig.get("strikes") or [], spot, sig["side"])
+            todo[sym] = (sig, spot, path)
+            for k in path:
+                c = self._contract(sig, k)
+                cs[c["tradingsymbol"]] = c
+        due = [sym for sym, p in picks.items() if p["status"] == "chosen"
+               and (stream or now.timestamp() - self._w16_last.get(sym, 0.0) >= W16_SLOW - 0.5)]
+        for sym in due:
+            cs[picks[sym]["contract"]["tradingsymbol"]] = picks[sym]["contract"]
+        if cs:
+            at, have = self._tick_quotes                        # entry_tick's call this second covers waiting signals
+            got = {k: have[k] for k in cs if k in have} if abs(now.timestamp() - at) < 0.9 else {}
+            rest = [c for k, c in cs.items() if k not in got]
+            if rest:
+                many = getattr(self.ledger.quotes, "get_many", None)
+                got.update(many(rest) if many else {c["tradingsymbol"]: self.ledger.quotes.get(c) for c in rest})
+            if todo:
+                self._w16_pick_last = now.timestamp()
+            for sym, (sig, spot, path) in todo.items():
+                book = {k: got.get(tradingsymbol(sym, sig["side"], sig["expiry"], k)) for k in path}
+                d = decide_0916(sig, spot, book, now)
+                p = picks.setdefault(sym, {"side": sig["side"], "status": "waiting", "tries": 0, "first_try": stamp,
+                                           "first_why": None})
+                p["tries"] += 1
+                if d[0] == "waiting":
+                    p["first_why"] = p["first_why"] or d[1]
+                    p["last_why"] = d[1]
+                    continue
+                changed = True
+                if d[0] == "refused":
+                    p.update(status="refused", why=d[1], decided_at=stamp)
+                    continue
+                _, k, px, lot, lots, sub2 = d
+                p.update(status="chosen", decided_at=stamp, strike=k, ask=px, lot=lot, lots=lots, sub2=sub2, spot=spot,
+                         id=f"w0916:{today}:{sym}", contract=self._contract(sig, k, lot),
+                         quote=pk.entry_quote(book.get(k), now),
+                         book_cols=["strike", "bid", "bid_qty", "ask", "ask_qty", "ltt"],
+                         book=[[k_, *_level(book.get(k_))] for k_ in path],
+                         follow={"polls": 0, "no_quote": 0, "kotak_polls": 0, "first": None, "last": None})
+                self._w16_follow(sym, picks[sym], book.get(k), now, stamp, stream)   # the entry row
+            for sym in due:
+                p = picks[sym]
+                self._w16_follow(sym, p, got.get(p["contract"]["tradingsymbol"]), now, stamp, stream)
+        if changed or (picks and now.timestamp() - self._w16_saved >= W16_SAVE):
+            self._w16_save(now)
+        return len(cs)
+
+    def _w16_follow(self, sym: str, p: dict, q: dict | None, now: datetime, stamp: str, stream: bool) -> None:
+        f = p["follow"]
+        f["polls"] += 1
+        f["kotak_polls"] += int(not stream)
+        f["first"], f["last"] = f["first"] or stamp, stamp
+        self._w16_last[sym] = now.timestamp()
+        if not q:
+            f["no_quote"] += 1
+            return
+        lv = _level(q)
+        if self._w16_seen.get(sym) == (lv[0], lv[2]):           # only best bid / ask price changes (not sizes): small files
+            return
+        self._w16_seen[sym] = (lv[0], lv[2])
+        self.ledger.obs.add({"id": p["id"], "tradingsymbol": p["contract"]["tradingsymbol"]}, q, now, W16_SOURCE,
+                            phase=W16_PHASE)
+
+    def _w16_load(self, today: str, now: datetime) -> dict:
+        """Today's choices from disk when the server restarted during the day, else a new day."""
+        p = self.ledger.dir / W16_DIR / f"{today}.json"
+        if p.exists():
+            try:
+                d = json.loads(p.read_text(encoding="utf-8"))
+                if d.get("date") == today:
+                    d.pop("ended", None)
+                    d.setdefault("restarts", []).append(now.isoformat(timespec="seconds"))
+                    return d
+            except (OSError, ValueError) as exc:
+                log.warning("walk 09:16 record: %s unreadable (%s); a new file", p, exc)
+        return {"date": today, "rule": "strategies/S1_fade_0916_walk_choice_recorder.md", "picks": {}}
+
+    def _w16_save(self, now: datetime) -> None:
+        p = self.ledger.dir / W16_DIR / f"{self._w16['date']}.json"
+        p.parent.mkdir(parents=True, exist_ok=True)
+        tmp = p.with_suffix(".tmp")
+        tmp.write_text(json.dumps(self._w16, separators=(",", ":"), default=str), encoding="utf-8")
+        tmp.replace(p)
+        self._w16_saved = now.timestamp()
 
     def on_poll(self, now: datetime) -> None:
         with self.ledger.lock, self._lock:

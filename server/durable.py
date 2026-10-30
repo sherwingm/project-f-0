@@ -35,6 +35,7 @@ log = logging.getLogger("durable")
 LEDGER, ORDERS, QUEUE, SNAPSHOTS = "paper_ledger.json", "paper_orders.jsonl", "paper_queue.jsonl", "live_snapshots"
 COMPARE = "provider_compare"
 PROBE = "entry_probe"                                    # the fade entry probe's daily files (record only)
+WALK16 = "walk_0916"                                     # the fade's 09:16 walk-choice record (server/fade.py, record only)
 OBS = "observations"                                     # bid/ask record of open trades (server/peak.py), finished days only
 FAST_CHECK = 10          # seconds between checks
 SNAPSHOT_EVERY = 900     # seconds: the ledger's 15-minute snapshot when only marks changed
@@ -127,6 +128,8 @@ class Mirror:
             names += sorted(f"{OBS}/{f.name}" for f in (self.dir / OBS).glob("*.jsonl") if f.stem < today)
         if (self.dir / PROBE).is_dir():
             names += sorted(f"{PROBE}/{f.name}" for f in (self.dir / PROBE).glob("*.json"))
+        if (self.dir / WALK16).is_dir():
+            names += sorted(f"{WALK16}/{f.name}" for f in (self.dir / WALK16).glob("*.json"))
         return names
 
     def restore(self, snapshot_days: list[str] | None = None) -> list[str]:
