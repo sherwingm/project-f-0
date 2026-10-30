@@ -140,6 +140,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.7,
    "upstox_minus_kotak_quote_time_s_median": -30.0
+  },
+  {
+   "at": "10:10:02",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.687,
+   "same_best_bid_pct": 56.4,
+   "same_best_ask_pct": 56.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.2,
+   "upstox_minus_kotak_quote_time_s_median": -28.0
   }
  ],
  "top_gaps": [
@@ -221,6 +235,13 @@
    "at": "09:55"
   },
   {
+   "contract": "LT26NOV3900CE",
+   "gap_pct": 0.687,
+   "kotak": 43.65,
+   "upstox": 43.95,
+   "at": "10:10"
+  },
+  {
    "contract": "BANDHANBNK26NOV160CE",
    "gap_pct": 0.45,
    "kotak": 6.67,
@@ -275,23 +296,16 @@
    "kotak": 993.0,
    "upstox": 992.0,
    "at": "09:30"
-  },
-  {
-   "contract": "DIVISLAB26NOVFUT",
-   "gap_pct": 0.086,
-   "kotak": 9830.0,
-   "upstox": 9821.5,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 10,
-  "contract_quotes": 550,
+  "rounds": 11,
+  "contract_quotes": 605,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 42.75,
+  "same_best_bid_pct": 45.5,
   "same_best_ask_pct": 40.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 94.5,
-  "upstox_minus_kotak_quote_time_s_median": -20.5
+  "upstox_minus_kotak_quote_time_s_median": -23.0
  }
 }
