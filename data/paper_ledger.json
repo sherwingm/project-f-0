@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 287693.5999999999,
+ "cash": 262217.75999999995,
  "positions": [
   {
    "id": "P-1793072705438-19",
@@ -2855,6 +2855,555 @@
      "live best bid (feed poll)"
     ],
     "max_gap_s": 17.7
+   }
+  },
+  {
+   "id": "P-1793331902802-3",
+   "symbol": "GODREJCP",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 820.0,
+   "tradingsymbol": "GODREJCP26NOV820PE",
+   "lot_size": 500,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 500,
+   "entry": {
+    "price": 14.4,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 500,
+    "price": 14.4,
+    "value": 7200.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.56,
+    "sebi": 0.01,
+    "stamp": 0.22,
+    "gst": 4.06,
+    "total": 26.85
+   },
+   "entry_charges_open": 26.85,
+   "stop": null,
+   "max_loss_at_entry": 7226.85,
+   "margin": 0.0,
+   "opened_at": "2026-10-30T09:15:02+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.43,
+   "unrealised": -64.28,
+   "liquidation_value": 7162.57,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-30",
+    "filed": "2026-10-29",
+    "why": "net profit YoY +13.8 %, QoQ +3.6 %; revenue YoY +15.4 %",
+    "spot_at_entry": 836.98,
+    "np_yoy": 13.8,
+    "np_qoq": 3.6,
+    "rev_yoy": 15.4,
+    "shadow_np25": false,
+    "shadow_t100": {
+     "target": 28.8,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 11.52,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 15.84,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 15.84,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 14.4,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 14.1,
+    "bid_qty": 500,
+    "ask": 14.4,
+    "ask_qty": 500,
+    "ltp": 31.0,
+    "spread_pct": 2.11,
+    "spot": null,
+    "volume": 429500,
+    "oi": 228000,
+    "source": "upstox_stream",
+    "ltt": "2026-10-30 09:15:01",
+    "at": "2026-10-30T09:15:02+05:30",
+    "ltt_age_s": 1.8,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 14.4,
+    "at": "2026-10-30T09:15:02+05:30"
+   },
+   "trough": {
+    "price": 14.4,
+    "at": "2026-10-30T09:15:02+05:30"
+   },
+   "order": {
+    "decision_price": 14.4,
+    "limit": 14.85,
+    "tick": 0.05,
+    "placed_at": "2026-10-30T09:15:01+05:30",
+    "filled_at": "2026-10-30T09:15:02+05:30",
+    "wait_s": 1.2,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 14.4,
+      "qty": 500
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793331902841-5",
+   "symbol": "COALINDIA",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 380.0,
+   "tradingsymbol": "COALINDIA26NOV380PE",
+   "lot_size": 1350,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1350,
+   "entry": {
+    "price": 4.3,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 1350,
+    "price": 4.3,
+    "value": 5805.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.06,
+    "sebi": 0.01,
+    "stamp": 0.17,
+    "gst": 3.97,
+    "total": 26.21
+   },
+   "entry_charges_open": 26.21,
+   "stop": null,
+   "max_loss_at_entry": 5831.21,
+   "margin": 0.0,
+   "opened_at": "2026-10-30T09:15:02+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 34.75,
+   "unrealised": -60.96,
+   "liquidation_value": 5770.25,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-30",
+    "filed": "2026-10-29",
+    "why": "net profit YoY +261.2 %, QoQ +74.0 %; revenue YoY +199.6 %",
+    "spot_at_entry": 393.11,
+    "np_yoy": 261.2,
+    "np_qoq": 74.0,
+    "rev_yoy": 199.6,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 8.6,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 3.44,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 4.73,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 4.73,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 4.3,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 3.5,
+    "bid_qty": 1350,
+    "ask": 4.3,
+    "ask_qty": 1350,
+    "ltp": 3.95,
+    "spread_pct": 20.51,
+    "spot": null,
+    "volume": 17550,
+    "oi": 1576800,
+    "source": "upstox_stream",
+    "ltt": "2026-10-30 09:15:02",
+    "at": "2026-10-30T09:15:02+05:30",
+    "ltt_age_s": 0.8,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 4.3,
+    "at": "2026-10-30T09:15:02+05:30"
+   },
+   "trough": {
+    "price": 4.3,
+    "at": "2026-10-30T09:15:02+05:30"
+   },
+   "order": {
+    "decision_price": 3.9,
+    "limit": 4.3,
+    "tick": 0.05,
+    "placed_at": "2026-10-30T09:15:01+05:30",
+    "filled_at": "2026-10-30T09:15:02+05:30",
+    "wait_s": 1.2,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 4.3,
+      "qty": 1350
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793331903923-8",
+   "symbol": "BLUESTARCO",
+   "instrument": "PE",
+   "expiry": "2026-11-23",
+   "strike": 1540.0,
+   "tradingsymbol": "BLUESTARCO26NOV1540PE",
+   "lot_size": 325,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 325,
+   "entry": {
+    "price": 21.8,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "PE",
+    "side": "BUY",
+    "qty": 325,
+    "price": 21.8,
+    "value": 7085.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.52,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.05,
+    "total": 26.79
+   },
+   "entry_charges_open": 26.79,
+   "stop": null,
+   "max_loss_at_entry": 7111.79,
+   "margin": 0.0,
+   "opened_at": "2026-10-30T09:15:03+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.21,
+   "unrealised": -64.0,
+   "liquidation_value": 7047.79,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-30",
+    "filed": "2026-10-29",
+    "why": "net profit YoY +25.4 %, QoQ +20.9 %; revenue YoY +21.0 %",
+    "spot_at_entry": 1672.91,
+    "np_yoy": 25.4,
+    "np_qoq": 20.9,
+    "rev_yoy": 21.0,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 43.6,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 17.44,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 23.98,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 23.98,
+     "peak": null
+    },
+    "shadow_fd2": {
+     "market_hours": false,
+     "tagged": false
+    },
+    "best": 21.8,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 19.95,
+    "bid_qty": 650,
+    "ask": 21.8,
+    "ask_qty": 325,
+    "ltp": 35.0,
+    "spread_pct": 8.86,
+    "spot": null,
+    "volume": 145275,
+    "oi": 76375,
+    "source": "upstox_stream",
+    "ltt": "2026-10-30 09:15:02",
+    "at": "2026-10-30T09:15:03+05:30",
+    "ltt_age_s": 1.9,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 21.8,
+    "at": "2026-10-30T09:15:03+05:30"
+   },
+   "trough": {
+    "price": 21.8,
+    "at": "2026-10-30T09:15:03+05:30"
+   },
+   "order": {
+    "decision_price": 21.8,
+    "limit": 22.5,
+    "tick": 0.05,
+    "placed_at": "2026-10-30T09:15:02+05:30",
+    "filled_at": "2026-10-30T09:15:03+05:30",
+    "wait_s": 1.1,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 21.8,
+      "qty": 325
+     }
+    ],
+    "old_price": null
+   }
+  },
+  {
+   "id": "P-1793331907072-11",
+   "symbol": "AMBUJACEM",
+   "instrument": "CE",
+   "expiry": "2026-11-23",
+   "strike": 370.0,
+   "tradingsymbol": "AMBUJACEM26NOV370CE",
+   "lot_size": 1200,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1200,
+   "entry": {
+    "price": 4.4,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 1200,
+    "price": 4.4,
+    "value": 5280.0,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 1.88,
+    "sebi": 0.01,
+    "stamp": 0.16,
+    "gst": 3.94,
+    "total": 25.99
+   },
+   "entry_charges_open": 25.99,
+   "stop": null,
+   "max_loss_at_entry": 5305.99,
+   "margin": 0.0,
+   "opened_at": "2026-10-30T09:15:07+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 33.75,
+   "unrealised": -59.74,
+   "liquidation_value": 5246.25,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-10-30",
+    "filed": "2026-10-29",
+    "why": "net profit YoY -89.7 %, QoQ -64.2 %; revenue YoY +0.2 %",
+    "spot_at_entry": 354.71,
+    "np_yoy": -89.7,
+    "np_qoq": -64.2,
+    "rev_yoy": 0.2,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 8.8,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 3.52,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 4.84,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 4.84,
+     "peak": null
+    },
+    "shadow_fd2": null,
+    "best": 4.4,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 3.95,
+    "bid_qty": 2400,
+    "ask": 4.4,
+    "ask_qty": 1200,
+    "ltp": 4.05,
+    "spread_pct": 10.78,
+    "spot": null,
+    "volume": 21600,
+    "oi": 1237200,
+    "source": "upstox_stream",
+    "ltt": "2026-10-30 09:15:05",
+    "at": "2026-10-30T09:15:07+05:30",
+    "ltt_age_s": 2.1,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 4.4,
+    "at": "2026-10-30T09:15:07+05:30"
+   },
+   "trough": {
+    "price": 4.4,
+    "at": "2026-10-30T09:15:07+05:30"
+   },
+   "order": {
+    "decision_price": 4.4,
+    "limit": 4.85,
+    "tick": 0.05,
+    "placed_at": "2026-10-30T09:15:06+05:30",
+    "filled_at": "2026-10-30T09:15:07+05:30",
+    "wait_s": 1.0,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 4.4,
+      "qty": 1200
+     }
+    ],
+    "old_price": null
    }
   }
  ],
@@ -11077,6 +11626,11 @@
    "start_equity": 424801.83,
    "end_equity": 422291.86,
    "realised": -21600.16
+  },
+  "2026-10-30": {
+   "start_equity": 422291.86,
+   "end_equity": 422042.88,
+   "realised": 0.0
   }
  },
  "peak_equity": 563416.62,
@@ -11270,7 +11824,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-10-29T15:29:58+05:30",
+ "saved_at": "2026-10-30T09:15:07+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -11426,6 +11980,15 @@
      "A"
     ],
     "reason": "never fits: 1 lot is 6,500 shares, so Rs 8,000 allows at most Rs 1.23 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-10-30",
+    "symbol": "IEX",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 4,350 shares, so Rs 8,000 allows at most Rs 1.84 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -11464,10 +12027,20 @@
    "2026-10-29:HEROMOTOCO": "bought",
    "2026-10-29:BANDHANBNK": "bought",
    "2026-10-29:TVSMOTOR": "bought",
-   "2026-10-29:CUB": "bought"
+   "2026-10-29:CUB": "bought",
+   "2026-10-30:IEX": "refused",
+   "2026-10-30:GODREJCP": "bought",
+   "2026-10-30:COALINDIA": "bought",
+   "2026-10-30:BLUESTARCO": "bought",
+   "2026-10-30:AMBUJACEM": "bought"
   },
   "open_wait": {},
-  "fade_wait": {},
+  "fade_wait": {
+   "2026-10-30:CAMS": {
+    "reason": "waiting for the first trade today at 650 (the quote is yesterday's)",
+    "at": "2026-10-30T09:15:06+05:30"
+   }
+  },
   "fade_shadow_entries": [
    {
     "key": "2026-10-21:UNIONBANK",
@@ -11549,13 +12122,41 @@
     "net": -5488.9,
     "net_pct": -80.67,
     "real_bought": true
+   },
+   {
+    "key": "2026-10-30:IEX",
+    "date": "2026-10-30",
+    "symbol": "IEX",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 101.0,
+    "tradingsymbol": "IEX26NOV101PE",
+    "lot_size": 4350,
+    "entry": 1.83,
+    "bid_at_entry": 1.78,
+    "lot_cost": 7960.5,
+    "opened_at": "2026-10-30T09:15:00+05:30",
+    "refused": "never fits: 1 lot is 4,350 shares, so Rs 8,000 allows at most Rs 1.84 a share, below the Rs 2 floor",
+    "why": "net profit YoY +12.9 %, QoQ +3.3 %; revenue YoY +8.6 %",
+    "np_yoy": 12.9,
+    "spot_at_entry": 105.35,
+    "last_bid": 1.78,
+    "max_bid": 1.78,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
    }
   ],
   "fade_sub2_why": {
    "2026-10-23:SAGILITY": "below-Rs 2 rule: 1 lot at 45 costs more than Rs 8,000",
    "2026-10-27:MAHABANK": "below-Rs 2 rule: 1 lot at 75 costs more than Rs 8,000",
    "2026-10-29:CUB": "below-Rs 2 rule: 1 lot at 220 costs more than Rs 8,000",
-   "2026-10-29:BANDHANBNK": "below-Rs 2 rule: 1 lot at 155 costs more than Rs 8,000"
+   "2026-10-29:BANDHANBNK": "below-Rs 2 rule: 1 lot at 155 costs more than Rs 8,000",
+   "2026-10-30:IEX": "below-Rs 2 rule: 1 lot at 105 costs more than Rs 8,000"
   }
  }
 }
