@@ -2,7 +2,7 @@
 
 Pre-registered: `strategies/S3_Q1_squeeze_straddle.md` (page commit 00b7f0f8 2026-10-30T10:14:05+05:30). Engine `scanner/s3_engine.py`, runner `scanner/s3_pods.py`. Mean, t and halves on net % of the premium paid; rupees at 1 lot.
 
-Days 511. Primary cell: 34 trades. Not traded: 0 without prices.
+Days 512. Primary cell: 34 trades. Not traded: 0 without prices.
 
 ## Verdict: **FAIL**
 
@@ -16,44 +16,44 @@ Days 511. Primary cell: 34 trades. Not traded: 0 without prices.
 
 ## Primary cell (lookback 5 · pct 20 · hold 3)
 
-- Trades 34, **win rate 35 %**, stop hit 0 %.
-- Net per trade: **-2.2 % of the premium paid** (median -15.4 %), t -0.35; ₹-908 a trade (t -0.77), total ₹-30,875.
-- Average premium 300.2 points (₹20,433); fees ₹141 a trade; net -2.16 % of margin a trade.
-- Halves: +1.4 % / -5.3 %.
-- Worst day ₹-9,410; average month ₹-2,205; deepest drawdown ₹-49,788.
-- At 2x costs: -3.9 % of the premium paid.
-- Monte Carlo deepest drawdown (10,000 reshuffles): 5th pct ₹-73,768, median ₹-52,901, 95th ₹-36,468.
+- Trades 34, **win rate 32 %**, stop hit 0 %.
+- Net per trade: **-2.6 % of the premium paid** (median -15.7 %), t -0.42; ₹-984 a trade (t -0.83), total ₹-33,464.
+- Average premium 303.2 points (₹20,623); fees ₹142 a trade; net -2.59 % of margin a trade.
+- Halves: +1.0 % / -5.8 %.
+- Worst day ₹-9,410; average month ₹-2,390; deepest drawdown ₹-52,202.
+- At 2x costs: -4.3 % of the premium paid.
+- Monte Carlo deepest drawdown (10,000 reshuffles): 5th pct ₹-75,698, median ₹-54,581, 95th ₹-38,002.
 
 ## Grid (net % of the premium paid per trade · trades · win rate · t)
 
 | Cell | Result |
 |---|---|
-| lookback 5 · pct 20 · hold 3 | -2.2 % · 34 · 35 % · -0.3 |
-| lookback 5 · pct 16 · hold 3 | -0.3 % · 27 · 33 % · -0.0 |
-| lookback 5 · pct 24 · hold 3 | -4.3 % · 36 · 36 % · -0.8 |
-| lookback 4 · pct 20 · hold 3 | -8.7 % · 34 · 26 % · -1.5 |
-| lookback 6 · pct 20 · hold 3 | -1.5 % · 33 · 33 % · -0.2 |
-| lookback 5 · pct 20 · hold 2 | +1.8 % · 42 · 40 % · 0.4 |
-| lookback 5 · pct 20 · hold 4 | -8.5 % · 26 · 35 % · -1.3 |
+| lookback 5 · pct 20 · hold 3 | -2.6 % · 34 · 32 % · -0.4 |
+| lookback 5 · pct 16 · hold 3 | +1.0 % · 28 · 32 % · 0.1 |
+| lookback 5 · pct 24 · hold 3 | -6.9 % · 37 · 30 % · -1.4 |
+| lookback 4 · pct 20 · hold 3 | -10.4 % · 34 · 26 % · -1.9 |
+| lookback 6 · pct 20 · hold 3 | -0.8 % · 33 · 36 % · -0.1 |
+| lookback 5 · pct 20 · hold 2 | +0.6 % · 41 · 39 % · 0.1 |
+| lookback 5 · pct 20 · hold 4 | -9.5 % · 26 · 35 % · -1.4 |
 
 ## Primary cell without the VIX / event filters, by group (side report)
 
 | Group | Trades | Net % | Win rate |
 |---|---|---|---|
-| VIX <13 | 30 | -5.4 % | 33 % |
-| VIX 13-20 | 4 | +22.3 % | 50 % |
+| VIX <13 | 29 | -6.1 % | 31 % |
+| VIX 13-20 | 5 | +17.7 % | 40 % |
 | Fri | 6 | +10.8 % | 50 % |
-| Mon | 8 | -10.6 % | 25 % |
+| Mon | 7 | -10.3 % | 29 % |
 | Thu | 6 | -4.0 % | 33 % |
-| Tue | 9 | +0.7 % | 33 % |
-| Wed | 5 | -7.0 % | 40 % |
-| other day | 34 | -2.2 % | 35 % |
+| Tue | 9 | -2.3 % | 22 % |
+| Wed | 6 | -6.0 % | 33 % |
+| other day | 34 | -2.6 % | 32 % |
 
 ## Q1 side reports (not the gate)
 
 Window 2024-10-01 → 2026-10-28. Primary signals skipped: none.
 
-**Baseline (every 4th session, 3-session straddle, no filter):** 126 trades, -2.3 % of the premium a trade (median -10.6 %, t -0.66), win rate 35 %.
+**Baseline (every 4th session, 3-session straddle, no filter):** 127 trades, +1.0 % of the premium a trade (median -11.8 %, t 0.21), win rate 35 %.
 
 ## Primary trades
 
@@ -70,7 +70,7 @@ Window 2024-10-01 → 2026-10-28. Primary signals skipped: none.
 | 2025-07-24 | 2025-07-29 | B25100CE@128.24>14.78;B25100PE@122.16>313.08 | 14:45 | time | +5,659 | +30.1 % |
 | 2025-08-19 | 2025-08-22 | B24950CE@190.65>91.69;B24950PE@121.45>134.37 | 14:45 | time | -6,590 | -28.1 % |
 | 2025-08-25 | 2025-08-29 | B24950CE@168.39>4.78;B24950PE@106.13>466.65 | 14:45 | time | +14,597 | +70.9 % |
-| 2025-09-01 | 2025-09-04 | B24600CE@177.78>216.91;B24600PE@114.77>39.30 | 14:45 | time | -2,867 | -13.1 % |
+| 2025-09-02 | 2025-09-05 | B24600CE@160.75>185.32;B24600PE@108.54>33.18 | 14:45 | time | -3,944 | -19.5 % |
 | 2025-09-10 | 2025-09-15 | B24950CE@137.48>163.63;B24950PE@85.73>11.64 | 14:45 | time | -3,723 | -22.2 % |
 | 2025-09-16 | 2025-09-19 | B25200CE@163.76>192.03;B25200PE@97.13>19.60 | 14:45 | time | -3,828 | -19.6 % |
 | 2025-09-22 | 2025-09-25 | B25200CE@175.67>29.85;B25200PE@108.34>233.82 | 14:45 | time | -1,667 | -7.8 % |
@@ -84,7 +84,7 @@ Window 2024-10-01 → 2026-10-28. Primary signals skipped: none.
 | 2026-01-02 | 2026-01-07 | B26250CE@186.08>51.19;B26250PE@96.48>155.12 | 14:45 | time | -5,084 | -27.7 % |
 | 2026-01-08 | 2026-01-13 | B25950CE@191.55>59.10;B25950PE@136.93>288.05 | 14:45 | time | +1,066 | +5.0 % |
 | 2026-06-22 | 2026-06-25 | B24150CE@163.81>76.07;B24150PE@156.83>139.45 | 14:45 | time | -6,964 | -33.4 % |
-| 2026-07-07 | 2026-07-10 | B24450CE@136.38>22.49;B24450PE@130.00>266.26 | 14:45 | time | +1,316 | +7.6 % |
+| 2026-07-08 | 2026-07-13 | B23850CE@196.73>380.69;B23850PE@196.18>11.59 | 14:45 | time | -196 | -0.8 % |
 | 2026-07-29 | 2026-08-03 | B24250CE@132.16>339.30;B24250PE@129.70>5.32 | 14:45 | time | +5,235 | +30.8 % |
 | 2026-08-04 | 2026-08-07 | B24450CE@176.88>189.25;B24450PE@132.01>64.58 | 14:45 | time | -3,714 | -18.5 % |
 | 2026-08-11 | 2026-08-14 | B24450CE@173.92>69.40;B24450PE@120.00>98.06 | 14:45 | time | -8,343 | -43.7 % |

@@ -2,54 +2,62 @@
 
 Pre-registered: `strategies/S3_E1_event_straddle.md` (page commit 00b7f0f8 2026-10-30T10:14:05+05:30). Engine `scanner/s3_engine.py`, runner `scanner/s3_pods.py`. Mean, t and halves on net % of the premium paid; rupees at 1 lot.
 
-Days 30. Primary cell: 29 trades. Not traded: 1 without prices.
+Days 32. Primary cell: 31 trades. Not traded: 1 without prices.
 
 ## Verdict: **FAIL**
 
-- ✘ at least 30 trades
+- ✘ net mean > 0
+- ✘ net mean > 0 at 2x costs
+- ✘ t >= 2
+- ✘ positive in each half
+- ✘ worst day smaller than the average month
+- ✘ neighbours net positive
+- ✔ at least 30 trades
 
 ## Primary cell (E-1 → E 14:45)
 
-- Trades 29, **win rate 28 %**, stop hit 0 %.
-- Net per trade: **-5.0 % of the premium paid** (median -8.9 %), t -1.24; ₹-210 a trade (t -0.17), total ₹-6,079.
-- Average premium 362.7 points (₹23,388); fees ₹150 a trade; net -5.03 % of margin a trade.
-- Halves: +nan % / +nan %.
-- Worst day ₹-7,016; average month ₹-264; deepest drawdown ₹-31,501.
-- At 2x costs: -6.7 % of the premium paid.
-- Monte Carlo deepest drawdown (10,000 reshuffles): 5th pct ₹-47,408, median ₹-31,587, 95th ₹-21,307.
+- Trades 31, **win rate 26 %**, stop hit 0 %.
+- Net per trade: **-6.1 % of the premium paid** (median -8.9 %), t -1.55; ₹-738 a trade (t -0.60), total ₹-22,868.
+- Average premium 369.1 points (₹23,979); fees ₹150 a trade; net -6.15 % of margin a trade.
+- Halves: -11.3 % / -0.7 %.
+- Worst day ₹-15,607; average month ₹-994; deepest drawdown ₹-48,290.
+- At 2x costs: -7.8 % of the premium paid.
+- Monte Carlo deepest drawdown (10,000 reshuffles): 5th pct ₹-63,250, median ₹-44,643, 95th ₹-29,710.
 
 ## Grid (net % of the premium paid per trade · trades · win rate · t)
 
 | Cell | Result |
 |---|---|
-| E-1 → E 14:45 | -5.0 % · 29 · 28 % · -1.2 |
-| E-2 → E 14:45 | -7.1 % · 29 · 31 % · -1.9 |
-| E-1 → E+1 14:45 | -4.5 % · 29 · 38 % · -0.9 |
-| E-1 → E 12:00 | -2.5 % · 29 · 34 % · -0.7 |
+| E-1 → E 14:45 | -6.1 % · 31 · 26 % · -1.6 |
+| E-2 → E 14:45 | -7.0 % · 31 · 32 % · -1.8 |
+| E-1 → E+1 14:45 | -6.3 % · 31 · 35 % · -1.2 |
+| E-1 → E 12:00 | -3.1 % · 31 · 32 % · -1.0 |
 
 ## Primary cell without the VIX / event filters, by group (side report)
 
 | Group | Trades | Net % | Win rate |
 |---|---|---|---|
 | VIX <13 | 10 | -7.3 % | 30 % |
-| VIX 13-20 | 17 | -6.3 % | 24 % |
+| VIX 13-20 | 19 | -8.0 % | 21 % |
 | VIX >20 | 2 | +16.9 % | 50 % |
+| Fri | 2 | -22.4 % | 0 % |
 | Thu | 7 | -12.0 % | 29 % |
 | Tue | 8 | -4.7 % | 38 % |
 | Wed | 14 | -1.7 % | 21 % |
-| event day | 29 | -5.0 % | 28 % |
+| event day | 31 | -6.1 % | 26 % |
 
 ## E1 side reports (not the gate)
 
-Window 2024-10-01 → 2026-10-28; halves 2024-10-01 → 2025-09-30 and 2025-10-01 → 2026-10-28. Events 30; without a session in the store: [(datetime.date(2025, 2, 1), 'Budget'), (datetime.date(2026, 2, 1), 'Budget')].
+Window 2024-10-01 → 2026-10-28; halves 2024-10-01 → 2025-09-30 and 2025-10-01 → 2026-10-28. Events 32; without a session in the store: none.
 
 | Event type | Trades | Net % of premium | Median | Win rate |
 |---|---|---|---|---|
+| Budget | 2 | -22.4 % | -22.4 % | 0 % |
 | FOMC | 15 | -3.0 % | -6.2 % | 20 % |
 | RBI | 13 | -6.6 % | -14.3 % | 38 % |
 | US election | 1 | -14.3 % | -14.3 % | 0 % |
 
-**Baseline (ordinary session pairs, E-1 → E 14:45 (no event)):** 474 trades, -3.1 % of the premium a trade (median -8.6 %, t -2.57), win rate 32 %.
+**Baseline (ordinary session pairs, E-1 → E 14:45 (no event)):** 472 trades, -3.0 % of the premium a trade (median -8.6 %, t -2.53), win rate 32 %.
 
 ## Primary trades
 
@@ -60,6 +68,7 @@ Window 2024-10-01 → 2026-10-28; halves 2024-10-01 → 2025-09-30 and 2025-10-0
 | 2024-11-07 | 2024-11-08 | FOMC | B24200CE@188.84>131.09;B24200PE@164.72>152.88 | 14:45 | time | -1,852 | -20.9 % |
 | 2024-12-05 | 2024-12-06 | RBI | B24800CE@227.73>140.05;B24800PE@228.49>236.31 | 14:45 | time | -2,114 | -18.5 % |
 | 2025-01-29 | 2025-01-30 | FOMC | B23150CE@359.14>396.96;B23150PE@324.31>255.96 | 14:45 | time | -2,501 | -4.9 % |
+| 2025-01-31 | 2025-02-01 | Budget | B23500CE@283.61>154.57;B23500PE@231.35>154.37 | 14:45 | time | -15,607 | -40.4 % |
 | 2025-02-06 | 2025-02-07 | RBI | B23550CE@241.05>125.62;B23550PE@154.02>189.85 | 14:45 | time | -6,123 | -20.7 % |
 | 2025-03-19 | 2025-03-20 | FOMC | B22950CE@176.63>310.29;B22950PE@153.66>49.70 | 14:45 | time | +2,070 | +8.4 % |
 | 2025-04-08 | 2025-04-09 | RBI | B22600CE@351.15>200.44;B22600PE@304.77>364.57 | 14:45 | time | -7,016 | -14.3 % |
@@ -74,6 +83,7 @@ Window 2024-10-01 → 2026-10-28; halves 2024-10-01 → 2025-09-30 and 2025-10-0
 | 2025-12-04 | 2025-12-05 | RBI | B26000CE@119.59>195.42;B26000PE@93.57>26.42 | 14:45 | time | +517 | +3.2 % |
 | 2025-12-10 | 2025-12-11 | FOMC | B25750CE@152.21>203.93;B25750PE@110.05>43.93 | 14:45 | time | -1,219 | -6.2 % |
 | 2026-01-28 | 2026-01-29 | FOMC | B25250CE@235.32>313.13;B25250PE@191.55>108.11 | 14:45 | time | -526 | -1.9 % |
+| 2026-01-30 | 2026-02-01 | Budget | B25300CE@208.89>60.84;B25300PE@198.44>330.69 | 14:45 | time | -1,182 | -4.5 % |
 | 2026-02-05 | 2026-02-06 | RBI | B25600CE@157.99>140.94;B25600PE@116.73>79.20 | 14:45 | time | -3,677 | -20.6 % |
 | 2026-03-18 | 2026-03-19 | FOMC | B23800CE@205.87>31.69;B23800PE@232.86>745.85 | 14:45 | time | +21,818 | +76.5 % |
 | 2026-04-07 | 2026-04-08 | RBI | B23050CE@339.54>997.89;B23050PE@350.69>27.66 | 14:45 | time | +21,553 | +48.0 % |
