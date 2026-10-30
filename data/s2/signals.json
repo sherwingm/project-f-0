@@ -1,27 +1,27 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-29",
- "generated": "2026-10-30T01:33+05:30",
+ "session": "2026-10-30",
+ "generated": "2026-10-31T01:23+05:30",
  "signals": [
   {
-   "symbol": "HEROMOTOCO",
-   "close": 5105.0,
-   "price_pct": -4.09,
-   "oi_pct": 16.2,
-   "vol_ratio": 2.03,
-   "put": {
-    "expiry": "2026-11-23",
-    "strike": 4900.0,
-    "premium": 46.93,
-    "lot": 150,
-    "lot_cost": 7040,
-    "below_spot_pct": 4.02,
-    "contracts": 2971.0
-   }
+   "symbol": "SAGILITY",
+   "close": 42.08,
+   "price_pct": -5.78,
+   "oi_pct": 36.09,
+   "vol_ratio": 36.73,
+   "put": null,
+   "put_note": "premium below Rs 2"
   }
  ],
  "note": null,
  "history": [
+  {
+   "session": "2026-10-30",
+   "symbols": [
+    "SAGILITY"
+   ],
+   "note": null
+  },
   {
    "session": "2026-10-29",
    "symbols": [
