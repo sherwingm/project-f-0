@@ -276,3 +276,19 @@ Descriptive after the fixes:
   check for any pass is paper trading (branch `index-paper`), not a new backtest window.
 - Everything else in "S3 · index options" stands (costs, slippage, gate, pages committed before the run). A pass does
   not turn anything on.
+
+### S3 buy pods, 2024-10-01 → 2026-10-28 (2026-10-30; all four closed)
+Pages committed at 00b7f0f8 before the run; runner `scanner/s3_buy4.py` (36fbbfc6). Halves = old test window / old
+holdout. Two trades re-checked by hand against the raw minute files (E1 2026-03-18 straddle, G1 2025-03-24 call):
+fills, slippage, strike, lot and P&L match.
+
+| Pod | Verdict | Numbers |
+|---|---|---|
+| S3 E1 · long ATM straddle 14:45 E−1 → 14:45 E across RBI, Budget, FOMC (next session), US election (`strategies/S3_E1_event_straddle.md`) | **Closed: fail** | 32 events; both Budget sessions (2025-02-01 Sat, 2026-02-01 Sun) are missing from the spot store, 2024-12-18 has no 14:45 price → **29 trades (< 30)**. Win rate 28 %, −5.0 % of the premium a trade (median −8.9 %, t −1.24), total −₹6,079; 2× costs −6.7 %. Neighbours E−2 → E −7.1 %, E−1 → E+1 −4.5 %, exit 12:00 −2.5 %. FOMC −3.0 % (15), RBI −6.6 % (13). Two big winners (2026-03-19 FOMC +76.5 %, 2026-04-08 RBI +48.0 %) carry it; the other 27 average −10.0 %. Ordinary session pairs (baseline): −3.1 % (474 trades, t −2.57): options already price the event in |
+| S3 Q1 · long ATM straddle after a quiet spell (5-session range ≤ 20th pct, VIX ≤ 60-day median), 14:45 → 3 sessions (`strategies/S3_Q1_squeeze_straddle.md`) | **Closed: fail** | 34 trades, win rate 35 %, −2.2 % of the premium (median −15.4 %, t −0.35), total −₹30,875; halves +1.4 % / −5.3 %; worst −₹9,410 against an average month of −₹2,205. Neighbours −8.7 % to +1.8 % (hold 2 the only positive one, t 0.4). No-filter baseline −2.3 % (126 trades): the quiet filter adds nothing |
+| S3 B1 · 15-min opening-range breakout, ATM option volume ≥ 2× its 30-minute median, long ATM, 25 % stop + 25 % trail, out 15:15 (`strategies/S3_B1_orb_volume.md`; not independent of P4) | **Closed: fail** | 492 trades, win rate 29 %, −2.9 % of the premium (median −15.7 %, t −1.89), total −₹167,360; halves −3.2 % / −2.5 %; all 7 cells −2.7 % to −3.4 %. **The volume test is not selective:** 492 of the 498 first-breakout days pass it (the breakout minute nearly always has a volume burst); the no-volume baseline is −3.2 % |
+| S3 G1 · gap ≥ 0.5 % confirmed by the 09:29 close, long ATM in the gap's direction, 25 % stop + 25 % trail, out 15:15 (`strategies/S3_G1_gap_follow.md`) | **Closed: fail** | 87 big gaps, 35 confirmed → 35 trades, win rate 26 %, −1.3 % of the premium (median −16.1 %, t −0.16), total −₹3,376; halves +23.6 % / −12.7 %; neighbours −0.4 % to −7.1 %. Calls +12.0 % (17), puts −13.8 % (18): a split seen after the run, not promotable. No-confirmation baseline −1.3 % (87) |
+
+**Together:** no buy idea of the four makes money after costs on 2024-10 → 2026-10. Every primary has a median trade
+of −9 % to −16 %: a long option loses most days and needs a rare big move to pay, and the four signals do not pick
+those moves out better than chance. Nothing is promoted; nothing changes in S1, S2 or the paper system.
