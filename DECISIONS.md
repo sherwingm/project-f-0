@@ -292,3 +292,32 @@ fills, slippage, strike, lot and P&L match.
 **Together:** no buy idea of the four makes money after costs on 2024-10 → 2026-10. Every primary has a median trade
 of −9 % to −16 %: a long option loses most days and needs a rare big move to pay, and the four signals do not pick
 those moves out better than chance. Nothing is promoted; nothing changes in S1, S2 or the paper system.
+
+### S3 buy pods + P4 re-run on the repaired spot store (2026-10-30; supersedes the numbers above; all still closed)
+The spot store's 09:15 bar was wrong (Kotak; open off by up to ~16 points before 2025-09, high / low short) and the two
+Budget sessions were missing; repaired from Upstox's public candles, which equal NSE's official open on 923 / 923
+sessions (`data/results/s3_spot_repair_2026-10-30.md`, data 62a23257). Re-run with the same code (36fbbfc6) and pages,
+pre-registered in `strategies/S3_buy_followups_2026-10-30.md` F1. The first run's lots and VIX were also re-checked
+after a Feather-cache bug (3bc25898): identical to the clean files.
+
+| Pod | First run | Re-run | Verdict |
+|---|---|---|---|
+| E1 event straddle | 29 trades, −5.0 %, t −1.24 | **31 trades** (Budget days in), −6.2 %, median −8.9 %, t −1.55, 26 % won | fail |
+| Q1 squeeze straddle | 34, −2.2 %, t −0.35 | 34, −2.6 %, median −15.7 %, t −0.42 | fail |
+| B1 breakout + volume | 492, −2.9 %, t −1.89 | 488, −2.5 %, median −15.2 %, t −1.66 | fail |
+| G1 gap follow-through | 35, −1.3 %, t −0.16 | 33, −4.3 %, median −18.4 %, t −0.54 | fail |
+| P4 ORB long (test window 2024-10 → 2025-09) | −3.6 % | 58, −2.6 %, median −12.1 %, t −0.66 | fail |
+
+## 2026-10-30 · S1 fade · 09:16 entry: a pre-registered re-run and a walk-choice recorder (user decision)
+The user approved the three next steps from the 09:15 vs 09:16 counterfactual ("Do it", 30 Oct). None of them
+changes v12's entry, exit or sizing.
+- **Re-run at 30 fresh-book pairs, rules fixed now:** `strategies/S1_fade_0916_rerun_prereg.md`, written before any
+  30 Oct fade trade was looked at. A real effect needs all four: mean ≥ +5 pts of the premium, a date-clustered t
+  that clears the small-sample bar on ≥ 6 days, ≥ +2.5 pts without the largest pair, and ≥ 3 net stops avoided.
+  Three sign checks must not fail. CLOSE below +2 pts or t < 1; otherwise one more look at 60 pairs, and then
+  CLOSE. A PASS only leads to a proposal for a forward test.
+- **The walk's own 09:16 choice is recorded** (measurement only): `server/fade.py` `walk_0916`,
+  `strategies/S1_fade_0916_walk_choice_recorder.md`. It records which contract the live entry would have bought at
+  09:16 and that contract's book to 15:21 (observation phase `walk_0916`, choices in `data/walk_0916/<date>.json`,
+  mirrored to `paper-state`). It places no order and touches no ledger field. It goes live after the close on 30 Oct.
+- **Net % of the premium first, rupees second** in the re-run's tables: the two entries put different rupees at risk.
