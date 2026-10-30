@@ -840,3 +840,14 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   27 Oct (previous-day books, already fixed). **28-29 Oct: +₹2,951 on 11 pairs (+2.4 pts, t 1.2; +₹1,478 without LT),
   same stops (7) and wins (4).** Where the walk would keep the same strike at 09:16 (5 trades) the difference is −₹71:
   most of the gain is a smaller stake after the first-minute fall. Verdict: too small to decide; no rule change.
+- 2026-10-30: **S3 buy-only, 4 ideas on 2024-10 → 2026-10-28: all FAIL, closed** (the user: buy only, test from 2024
+  to today, no permission asks; DECISIONS dfd3e725 / 6a314203). Pages pre-registered at 00b7f0f8 before any run;
+  runner `scanner/s3_buy4.py` + 4 signal tests. Event dates checked against RBI's 2026-27 MPC calendar, the Fed's FOMC
+  calendar and NSE's Sunday Budget session.
+  - **E1 event straddle** (14:45 day before → 14:45 event day): 29 trades (< 30; both Budget sessions missing from
+    the spot store), −5.0 % a trade, 28 % won. Ordinary days −3.1 %.
+  - **Q1 squeeze straddle** (quiet 5 days + low VIX, hold 3): 34 trades, −2.2 %, 35 % won; no-filter −2.3 %.
+  - **B1 breakout + option volume**: 492 trades, −2.9 % (t −1.89); the volume test passes on 492 of 498 breakout days.
+  - **G1 gap follow-through**: 35 trades, −1.3 %, 26 % won; halves +23.6 % / −12.7 %.
+  - Hand checks vs raw minute files (E1 2026-03-18, G1 2025-03-24) match. Reads go through the new Feather cache
+    (162a9a82, ~20-25 % faster). Results `data/results/S3_{E1,Q1,B1,G1}_report.md`.
