@@ -5,9 +5,10 @@
     B1  opening-range breakout + option volume, long ATM  strategies/S3_B1_orb_volume.md
     G1  big-gap follow-through, long ATM                  strategies/S3_G1_gap_follow.md
 
-    INDEX_STORE=<index-data checkout>/data/index python -m scanner.s3_buy4 [E1 Q1 B1 G1]
+    INDEX_STORE=<index-data checkout>/data/index python -m scanner.s3_buy4 [--sensex] [E1 Q1 B1 G1]
 
 Writes data/results/S3_<pod>_report.md and S3_<pod>_trades.csv through `scanner.s3_pods.write_report` (the S3 gate).
+`--sensex`: R2, the same pods on SENSEX (strategies/S3_buy_followups_2026-10-30.md F2), written as S3_R2_<pod>_*.
 """
 from __future__ import annotations
 
@@ -22,12 +23,22 @@ from index_data import load as L
 from scanner import s3_regime as G
 from scanner.s3_engine import Leg, Spec, run_day, spot_at
 from scanner.s3_p1 import summary, t_stat, vix_at
-from scanner.s3_p4 import expiry_after
+from scanner.s3_p4 import expiry_after as p4_expiry_after
 from scanner.s3_pods import Pod, write_report
 
 WINDOW = (date(2024, 10, 1), date(2026, 10, 28))
 HALVES = ((date(2024, 10, 1), date(2025, 9, 30)), (date(2025, 10, 1), date(2026, 10, 28)))
-STEP = 50
+# the market of the run: NIFTY (the pods' pages) or SENSEX (R2: step 100, a fixed lot of 20, as R1)
+NIFTY = {"underlying": "NIFTY", "index": "NIFTY50", "step": 50, "lot": None, "prefix": "", "page_note": ""}
+R2 = {"underlying": "SENSEX", "index": "SENSEX", "step": 100, "lot": 20, "prefix": "R2_",
+      "page_note": "**R2 · SENSEX**, with the substitutions of `strategies/S3_buy_followups_2026-10-30.md` F2 (strike step "
+                   "100, lot fixed at 20, SENSEX spot / sessions / expiries; events, India VIX, window and gate unchanged)."}
+U = dict(NIFTY)
+
+
+def use(market: dict) -> None:
+    U.update(market)
+    _days_of.cache_clear()
 
 # ---------- E1 events (strategies/S3_E1_event_straddle.md) ----------
 RBI = [date(2024, 10, 9), date(2024, 12, 6), date(2025, 2, 7), date(2025, 4, 9), date(2025, 6, 6), date(2025, 8, 6),
@@ -42,20 +53,44 @@ US_ELECTION = [date(2024, 11, 6)]
 
 
 def sessions() -> list[date]:
-    return G.trading_days()
+    return G.trading_days(U["index"])
 
 
 @lru_cache(maxsize=None)
 def _days_of(expiry: date) -> frozenset:
-    return frozenset(L.trade_days("NIFTY", expiry))
+    return frozenset(L.trade_days(U["underlying"], expiry))
 
 
 def expiry_covering(entry: date, exit_day: date) -> date | None:
-    """The nearest NIFTY expiry strictly after the exit session with chain files on the entry and exit sessions."""
-    for e in L.expiries("NIFTY"):
+    """The nearest expiry strictly after the exit session with chain files on the entry and exit sessions."""
+    for e in L.expiries(U["underlying"]):
         if e > exit_day and entry in _days_of(e) and exit_day in _days_of(e):
             return e
     return None
+
+
+def expiry_after(day: date) -> date | None:
+    """The nearest weekly expiry with at least one session left after `day`, with a chain file on `day` (P4's rule;
+    NIFTY uses scanner.s3_p4.expiry_after itself)."""
+    if U["underlying"] == "NIFTY":
+        return p4_expiry_after(day)
+    for e in L.expiries(U["underlying"]):
+        if e > day and day in _days_of(e):
+            return e
+    return None
+
+
+def _run(sp: Spec, day: date, expiry: date, exit_day: date | None = None) -> dict:
+    return run_day(sp, day, expiry, underlying=U["underlying"], index=U["index"], exit_day=exit_day, lot=U["lot"])
+
+
+def _pod(name: str, title: str, page: str, **kw) -> Pod:
+    return Pod(name=U["prefix"] + name, title=f"{U['underlying']} {title}", page=page, underlying=U["underlying"],
+               index=U["index"], lot=U["lot"], **kw)
+
+
+def _note() -> list[str]:
+    return ["", U["page_note"]] if U["page_note"] else []
 
 
 def events(ses: list[date]) -> tuple[list[tuple[date, str]], list[tuple[date, str]]]:
@@ -76,7 +111,7 @@ def straddle(name: str, entry: date, exit_day: date, entry_t=(14, 45), exit_t=(1
     if e is None:
         return {"day": entry, "skip": "no expiry with chains on the entry and exit sessions"}
     sp = Spec(name, [Leg("BUY", "CE", 0), Leg("BUY", "PE", 0)], entry=entry_t, exit=exit_t, cost_mult=cm)
-    return {**run_day(sp, entry, e, exit_day=exit_day), "expiry": e}
+    return {**_run(sp, entry, e, exit_day=exit_day), "expiry": e}
 
 
 E1_CELLS = {"E-1 → E 14:45": (1, 0, (14, 45)), "E-2 → E 14:45": (2, 0, (14, 45)),
@@ -107,13 +142,13 @@ def run_e1() -> dict:
             continue
         base.append(straddle("baseline", ses[i - 1], d))
     bt = pd.DataFrame(base)
-    pod = Pod(name="E1", title="NIFTY long ATM straddle, 14:45 the session before an event → 14:45 on the event session",
-              page="strategies/S3_E1_event_straddle.md", cells=list(E1_CELLS), spec=None, primary=E1_PRIMARY,
+    pod = _pod("E1", "long ATM straddle, 14:45 the session before an event → 14:45 on the event session",
+               "strategies/S3_E1_event_straddle.md", cells=list(E1_CELLS), spec=None, primary=E1_PRIMARY,
               neighbours=[c for c in E1_CELLS if c != E1_PRIMARY], label=lambda c: c, skip_events=False,
               measure="premium")
     allt = pd.DataFrame(rows)
     p = allt[(allt["cell"] == E1_PRIMARY) & (allt["cost_mult"] == 1.0) & (allt["skip"].fillna("") == "")]
-    extra = ["", "## E1 side reports (not the gate)", "",
+    extra = _note() + ["", "## E1 side reports (not the gate)", "",
              f"Window {WINDOW[0]} → {WINDOW[1]}; halves {HALVES[0][0]} → {HALVES[0][1]} and {HALVES[1][0]} → {HALVES[1][1]}. "
              f"Events {len(evs)}; without a session in the store: {missing or 'none'}.", "",
              "| Event type | Trades | Net % of premium | Median | Win rate |", "|---|---|---|---|---|"]
@@ -160,7 +195,7 @@ def low_vix(day: date, close: pd.Series, early: pd.Series) -> bool:
 
 
 def run_q1() -> dict:
-    daily = G.daily()
+    daily = G.daily(U["index"])
     ses = list(daily.index)
     pos = {d: i for i, d in enumerate(ses)}
     close, early = vix_series()
@@ -191,12 +226,12 @@ def run_q1() -> dict:
     wses = [d for d in ses if WINDOW[0] <= d <= WINDOW[1]]
     for j in range(0, len(wses) - 3, 4):
         base.append(straddle("baseline", wses[j], wses[j + 3]))
-    pod = Pod(name="Q1", title="NIFTY long ATM straddle after a quiet spell, 14:45 → 14:45 three sessions later",
-              page="strategies/S3_Q1_squeeze_straddle.md", cells=cells, spec=None, primary=Q1_PRIMARY,
+    pod = _pod("Q1", "long ATM straddle after a quiet spell, 14:45 → 14:45 three sessions later",
+               "strategies/S3_Q1_squeeze_straddle.md", cells=cells, spec=None, primary=Q1_PRIMARY,
               neighbours=Q1_NEIGHBOURS, label=q1_label, skip_events=False, measure="premium")
     allt = pd.DataFrame(rows)
     p = allt[(allt["cell"] == q1_label(Q1_PRIMARY)) & (allt["cost_mult"] == 1.0) & (allt["skip"].fillna("") == "")]
-    extra = ["", "## Q1 side reports (not the gate)", "",
+    extra = _note() + ["", "## Q1 side reports (not the gate)", "",
              f"Window {WINDOW[0]} → {WINDOW[1]}. Primary signals skipped: {skipped or 'none'}."]
     extra += _baseline_line("every 4th session, 3-session straddle, no filter", pd.DataFrame(base))
     extra += _trade_table(p, ["exit_session"])
@@ -238,7 +273,7 @@ def b1_signal(day_spot: pd.DataFrame, chain: pd.DataFrame, minutes: int, mult: f
         side = "CE" if r.close > hi else ("PE" if r.close < lo else None)
         if side is None:
             continue
-        k = round(r.close / STEP) * STEP
+        k = round(r.close / U["step"]) * U["step"]
         if mult is None:
             return side, r.timestamp, k
         if (k, side) not in cache:
@@ -252,17 +287,18 @@ def b1_signal(day_spot: pd.DataFrame, chain: pd.DataFrame, minutes: int, mult: f
 
 
 def _long_one(name, day, expiry, side, k_signal, ent, stop, cm) -> dict:
-    s = spot_at(day, ent.hour, ent.minute)
+    s = spot_at(day, ent.hour, ent.minute, U["index"])
     if s is None:
         return {"day": day, "skip": "no spot at entry"}
-    off = int(round((k_signal - round(s / STEP) * STEP) / STEP)) if k_signal is not None else 0
+    st = U["step"]
+    off = int(round((k_signal - round(s / st) * st) / st)) if k_signal is not None else 0
     sp = Spec(name, [Leg("BUY", side, off)], entry=(ent.hour, ent.minute), exit=(15, 15), stop=stop, trail=TRAIL,
               cost_mult=cm)
-    return run_day(sp, day, expiry)
+    return _run(sp, day, expiry)
 
 
 def run_b1() -> dict:
-    sp = L.spot_1m(*WINDOW)
+    sp = L.spot_1m(*WINDOW, U["index"])
     sp["d"] = sp["timestamp"].dt.date
     rows, n, vc = [], 0, {}
     cells = [B1_PRIMARY] + B1_NEIGHBOURS + [B1_BASE]
@@ -271,7 +307,7 @@ def run_b1() -> dict:
             continue
         n += 1
         e = expiry_after(day)
-        chain = L.options_day("NIFTY", e, day) if e else None
+        chain = L.options_day(U["underlying"], e, day) if e else None
         sigs = {}
         for cell, cm in [(c, 1.0) for c in cells] + [(B1_PRIMARY, 2.0)]:
             o, m, stop = cell
@@ -291,10 +327,10 @@ def run_b1() -> dict:
             r = _long_one(b1_label(cell), day, e, side, k, ent, stop, cm)
             rows.append({**r, **base, "side": side, "signal": ts.strftime("%H:%M"), "vix": vix_at(day, ts.hour, ts.minute, vc)})
     allt = pd.DataFrame(rows)
-    pod = Pod(name="B1", title="NIFTY 15-min opening-range breakout confirmed by 2x option volume, long ATM, 25 % stop + 25 % trail",
-              page="strategies/S3_B1_orb_volume.md", cells=[B1_PRIMARY] + B1_NEIGHBOURS, spec=None, primary=B1_PRIMARY,
+    pod = _pod("B1", "15-min opening-range breakout confirmed by 2x option volume, long ATM, 25 % stop + 25 % trail",
+               "strategies/S3_B1_orb_volume.md", cells=[B1_PRIMARY] + B1_NEIGHBOURS, spec=None, primary=B1_PRIMARY,
               neighbours=B1_NEIGHBOURS, label=b1_label, skip_events=False, measure="premium")
-    extra = _directional_side(allt, b1_label(B1_PRIMARY), b1_label(B1_BASE), "first breakout, no volume test")
+    extra = _note() + _directional_side(allt, b1_label(B1_PRIMARY), b1_label(B1_BASE), "first breakout, no volume test")
     return write_report(pod, _no_none_skip(allt), n, WINDOW, HALVES, False, extra=extra)
 
 
@@ -331,8 +367,8 @@ def g1_signal(day_spot: pd.DataFrame, prev_close: float, gap_pct: float, confirm
 
 
 def run_g1() -> dict:
-    daily = G.daily()
-    sp = L.spot_1m(*WINDOW)
+    daily = G.daily(U["index"])
+    sp = L.spot_1m(*WINDOW, U["index"])
     sp["d"] = sp["timestamp"].dt.date
     rows, n, vc = [], 0, {}
     cells = [G1_PRIMARY] + G1_NEIGHBOURS + [G1_BASE]
@@ -357,10 +393,10 @@ def run_g1() -> dict:
             r = _long_one(g1_label(cell), day, e, side, None, ent, stop, cm)
             rows.append({**r, **base, "side": side, "gap_pct": round(gap, 2), "vix": vix_at(day, ent.hour, ent.minute, vc)})
     allt = pd.DataFrame(rows)
-    pod = Pod(name="G1", title="NIFTY big-gap (≥ 0.5 %) follow-through confirmed at 09:30, long ATM, 25 % stop + 25 % trail",
-              page="strategies/S3_G1_gap_follow.md", cells=[G1_PRIMARY] + G1_NEIGHBOURS, spec=None, primary=G1_PRIMARY,
+    pod = _pod("G1", "big-gap (≥ 0.5 %) follow-through confirmed at 09:30, long ATM, 25 % stop + 25 % trail",
+               "strategies/S3_G1_gap_follow.md", cells=[G1_PRIMARY] + G1_NEIGHBOURS, spec=None, primary=G1_PRIMARY,
               neighbours=G1_NEIGHBOURS, label=g1_label, skip_events=False, measure="premium")
-    extra = _directional_side(allt, g1_label(G1_PRIMARY), g1_label(G1_BASE), "every big gap, no confirmation")
+    extra = _note() + _directional_side(allt, g1_label(G1_PRIMARY), g1_label(G1_BASE), "every big gap, no confirmation")
     return write_report(pod, _no_none_skip(allt), n, WINDOW, HALVES, False, extra=extra)
 
 
@@ -411,5 +447,9 @@ def _trade_table(p: pd.DataFrame, cols: list[str]) -> list[str]:
 RUNS = {"E1": run_e1, "Q1": run_q1, "B1": run_b1, "G1": run_g1}
 
 if __name__ == "__main__":
-    for name in (sys.argv[1:] or list(RUNS)):
+    args = sys.argv[1:]
+    if "--sensex" in args:
+        use(R2)
+        args.remove("--sensex")
+    for name in (args or list(RUNS)):
         RUNS[name]()
