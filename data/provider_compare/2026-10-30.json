@@ -392,6 +392,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.2,
    "upstox_minus_kotak_quote_time_s_median": -46.0
+  },
+  {
+   "at": "11:40:05",
+   "contracts": 55,
+   "on_both": 55,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.418,
+   "same_best_bid_pct": 56.4,
+   "same_best_ask_pct": 47.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.5,
+   "upstox_minus_kotak_quote_time_s_median": -60.0
   }
  ],
  "top_gaps": [
@@ -443,6 +457,13 @@
    "kotak": 23.2,
    "upstox": 22.8,
    "at": "10:45"
+  },
+  {
+   "contract": "GMRAIRPORT26NOV88CE",
+   "gap_pct": 1.418,
+   "kotak": 2.82,
+   "upstox": 2.86,
+   "at": "11:40"
   },
   {
    "contract": "AXISBANK26NOV1220PE",
@@ -527,23 +548,16 @@
    "kotak": 6.67,
    "upstox": 6.64,
    "at": "09:30"
-  },
-  {
-   "contract": "LT26NOV3900CE",
-   "gap_pct": 0.421,
-   "kotak": 47.55,
-   "upstox": 47.35,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 28,
-  "contract_quotes": 1540,
+  "rounds": 29,
+  "contract_quotes": 1595,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.5,
-  "same_best_ask_pct": 44.55,
+  "same_best_ask_pct": 45.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.4,
-  "upstox_minus_kotak_quote_time_s_median": -32.5
+  "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
