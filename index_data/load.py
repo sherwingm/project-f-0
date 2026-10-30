@@ -31,22 +31,34 @@ FEATHER_CACHE = Path(__file__).resolve().parents[1] / "data" / "cache" / "index"
 def read_store(path, columns: list[str] | None = None) -> pd.DataFrame:
     """pd.read_parquet through a local Feather copy (built on the first read, reused while the Parquet is unchanged).
 
-    The Parquet on the index-data branch stays the master; the copy lives under data/cache/index/feather and is rebuilt
-    whenever the Parquet is newer. A frame Feather cannot hold (a non-default index) is read from the Parquet each time."""
-    p = Path(path)
-    try:
-        rel = p.absolute().relative_to(_store().absolute())
-    except ValueError:
-        rel = Path("_other") / p.absolute().as_posix().replace(":", "").lstrip("/")
-    f = (FEATHER_CACHE / rel).with_suffix(".feather")
-    if f.exists() and f.stat().st_mtime >= p.stat().st_mtime:
-        return pd.read_feather(f, columns=columns)
+    The Parquet on the index-data branch stays the master; the copy lives under data/cache/index/feather, keyed by the
+    Parquet's absolute path, and records that file's path, size and mtime (ns). It is used only when all three still
+    match, so a copy can never stand in for another file (fixed 2026-10-30: the copy was keyed by the path relative to
+    the store and trusted when newer, so a test's temporary store with the same relative path overwrote the real copy).
+    A frame Feather cannot hold (a non-default index) is read from the Parquet each time."""
+    import pyarrow as pa
+    import pyarrow.feather as pf
+
+    p = Path(path).absolute()
+    st = p.stat()
+    src = f"{p.as_posix()}|{st.st_size}|{st.st_mtime_ns}".encode()
+    f = (FEATHER_CACHE / p.as_posix().replace(":", "").lstrip("/")).with_suffix(".feather")
+    if f.exists():
+        try:
+            with pa.memory_map(str(f)) as mm:
+                ok = (pa.ipc.open_file(mm).schema.metadata or {}).get(b"src") == src
+            if ok:
+                return pd.read_feather(f, columns=columns)
+        except Exception:       # an unreadable or old-format copy: rebuild it
+            pass
     df = pd.read_parquet(p)
     if isinstance(df.index, pd.RangeIndex) and df.index.start == 0 and df.index.step == 1:
         try:
+            t = pa.Table.from_pandas(df, preserve_index=False)
+            t = t.replace_schema_metadata({**(t.schema.metadata or {}), b"src": src})
             f.parent.mkdir(parents=True, exist_ok=True)
             tmp = f.with_suffix(".tmp")
-            df.to_feather(tmp)
+            pf.write_feather(t, tmp)
             tmp.replace(f)
         except Exception:       # read-only folder or an unsupported column: the Parquet result is still right
             pass
