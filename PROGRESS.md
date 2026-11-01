@@ -876,3 +876,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   a second stop. **B2 pre-registered** (`strategies/S3_B2_accepted_breakout.md`): breakout must hold 15 closes, exit
   when it fails; stage A on unseen NIFTY 2022-24 spot (hurdle +0.10 % a trade), then options 2024-26 (in-sample,
   labelled), then forward 30 trades. Nothing computed yet.
+- 2026-11-01: **NIFTY 1-second recorder** on the live server (user decision; DECISIONS 2026-11-01): the Upstox stream
+  records NIFTY indices, the nearest future and ATM ± 10 strikes of 2 expiries to `data/candles_1s_index/` every
+  session from 2026-11-02. Record only. Copying the files into `index-data` is still to do.

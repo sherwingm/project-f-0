@@ -331,3 +331,15 @@ changes v12's entry, exit or sizing.
   09:16 and that contract's book to 15:21 (observation phase `walk_0916`, choices in `data/walk_0916/<date>.json`,
   mirrored to `paper-state`). It places no order and touches no ledger field. It goes live after the close on 30 Oct.
 - **Net % of the premium first, rupees second** in the re-run's tables: the two entries put different rupees at risk.
+
+## 2026-11-01 · NIFTY 1-second recorder on the live server (user decision, record only)
+- The user: "i want to do the same for the index as it was done for the websocket for stocks". The live server's
+  Upstox stream now also records NIFTY all session, 09:14-15:31: NIFTY 50, Nifty Bank and India VIX (last price), the
+  nearest NIFTY future, and CE / PE of the two nearest weekly expiries within 10 strikes of ATM (the strikes follow the
+  spot; a strike watched once stays watched to the close). About 90 contracts, against the 2,000-key cap.
+- Same 1-second candle rows as the stock options (`data/candles_1s`), in their own folder `data/candles_1s_index/`;
+  earlier days are gzipped. Code `server/index_recorder.py`; switch `INDEX_RECORD` (default on).
+- Measurement only: no orders, no paper trades, no change to S1 / S2 rules, entries, exits or ledgers. A failure is
+  logged and never stops the trading loop.
+- Not yet done: copying the files from the VM into the research store (`index-data`); the nightly Kotak 1-minute
+  recorder stays the source for S3 tests until then.

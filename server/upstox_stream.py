@@ -39,6 +39,7 @@ STALE_SECONDS = 15.0            # no message for this long during market hours: 
 CHAIN_EVERY, CHAIN_STOCKS = 10.0, 4     # Kotak option-chain sweep for the live PCR (same budget as 12 per 30 s)
 WATCH_FOR = 120.0               # a contract the trading loops asked about keeps its 1-second candles this long
 CANDLES = "candles_1s"          # data/candles_1s/<date>.jsonl (measurement only)
+CANDLES_INDEX = "candles_1s_index"   # NIFTY index / options / future (server/index_recorder.py), own file
 
 
 class Candles:
@@ -52,14 +53,14 @@ class Candles:
     snapshots of changes, not every exchange trade, so a candle is the best this feed can see, not a full tape."""
 
     def __init__(self):
-        self.watch: dict[str, tuple[str, float]] = {}     # instrument key -> (tradingsymbol, watched until)
+        self.watch: dict[str, tuple[str, float, str]] = {}   # instrument key -> (tradingsymbol, watched until, group)
         self.bars: dict[str, dict] = {}
         self.done: list[dict] = []
         self.vol: dict[str, float] = {}
 
-    def want(self, pairs: dict[str, str], now: float) -> None:
+    def want(self, pairs: dict[str, str], now: float, group: str = "") -> None:
         for ik, ts in pairs.items():
-            self.watch[ik] = (ts, now + WATCH_FOR)
+            self.watch[ik] = (ts, now + WATCH_FOR, group)
 
     def tick(self, ik: str, s: dict, now: float) -> None:
         w = self.watch.get(ik)
@@ -77,7 +78,7 @@ class Candles:
             b = None
         if b is None:
             v0 = self.vol.get(ik, vtt)
-            b = self.bars[ik] = {"s": sec, "ts": w[0], "o": ltp, "h": ltp, "l": ltp, "c": ltp, "bo": bid, "bh": bid,
+            b = self.bars[ik] = {"s": sec, "ts": w[0], "g": w[2], "o": ltp, "h": ltp, "l": ltp, "c": ltp, "bo": bid, "bh": bid,
                                  "bl": bid, "bc": bid, "a": ask, "n": 0, "v0": v0, "v1": vtt}
         if ltp:
             b["o"] = b["o"] or ltp
@@ -96,7 +97,7 @@ class Candles:
         if b["v1"] is not None:
             self.vol[ik] = b["v1"]
         v = (b["v1"] - b["v0"]) if b["v1"] is not None and b["v0"] is not None else None
-        self.done.append({"ts": b["ts"], "t": datetime.fromtimestamp(b["s"], IST).strftime("%H:%M:%S"),
+        self.done.append({"g": b["g"], "ts": b["ts"], "t": datetime.fromtimestamp(b["s"], IST).strftime("%H:%M:%S"),
                           "o": b["o"], "h": b["h"], "l": b["l"], "c": b["c"], "bo": b["bo"], "bh": b["bh"],
                           "bl": b["bl"], "bc": b["bc"], "a": b["a"], "n": b["n"], "v": v})
 
@@ -104,7 +105,7 @@ class Candles:
         """Every finished second (the current one stays open), and forget contracts no longer watched."""
         for ik in [ik for ik, b in self.bars.items() if b["s"] < int(now)]:
             self._close(ik)
-        for ik in [ik for ik, (_, until) in self.watch.items() if now > until]:
+        for ik in [ik for ik, (_, until, _) in self.watch.items() if now > until]:
             del self.watch[ik]
             self.vol.pop(ik, None)
         out, self.done = self.done, []
@@ -264,22 +265,29 @@ class UpstoxStream:
             s = self.state.get(key)
             return dict(s) if s else None
 
-    def watch(self, pairs: dict[str, str]) -> None:
-        """Build 1-second candles for these contracts ({instrument key: tradingsymbol}) for the next WATCH_FOR s."""
+    def watch(self, pairs: dict[str, str], group: str = "") -> None:
+        """Build 1-second candles for these contracts ({instrument key: tradingsymbol}) for the next WATCH_FOR s;
+        group "index" is written to CANDLES_INDEX instead of CANDLES."""
         with self.lock:
-            self.candles.want(pairs, time.time())
+            self.candles.want(pairs, time.time(), group)
 
     def write_candles(self, data_dir) -> int:
-        """Append the finished seconds to data/candles_1s/<date>.jsonl; returns the rows written."""
+        """Append the finished seconds to data/candles_1s/<date>.jsonl (group "index": data/candles_1s_index/);
+        returns the rows written."""
         from pathlib import Path
         with self.lock:
             rows = self.candles.take(time.time())
         if not rows:
             return 0
-        d = Path(data_dir) / CANDLES
-        d.mkdir(parents=True, exist_ok=True)
-        with open(d / f"{datetime.now(IST).date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
-            fh.write("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows))
+        day = datetime.now(IST).date().isoformat()
+        for sub, grp in ((CANDLES, ""), (CANDLES_INDEX, "index")):
+            part = [{k: v for k, v in r.items() if k != "g"} for r in rows if r["g"] == grp]
+            if not part:
+                continue
+            d = Path(data_dir) / sub
+            d.mkdir(parents=True, exist_ok=True)
+            with open(d / f"{day}.jsonl", "a", encoding="utf-8") as fh:
+                fh.write("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in part))
         return len(rows)
 
     def healthy(self, now: float | None = None) -> bool:

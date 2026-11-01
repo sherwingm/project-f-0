@@ -135,6 +135,7 @@ class State:
         self.fut_source = None              # provider.futures(symbols) -> {symbol: [near, next, ...]} when it has one
         self.upstox = None                  # server.upstox.UpstoxProvider (instrument keys) when the stream is on
         self.stream = None                  # server.upstox_stream.UpstoxStream
+        self.index_rec = None               # server.index_recorder.IndexRecorder (record only)
         self.version: dict | None = None    # server.version.deployed(), read once at start-up
 
     def load_scan(self, path: Path) -> None:
@@ -204,6 +205,9 @@ def startup() -> None:
             state.stream = UpstoxStream(settings.upstox_analytics_token)
             state.stream.start()
             provider = StreamingProvider(provider, state.upstox, state.stream)
+            if settings.index_record:
+                from server.index_recorder import IndexRecorder
+                state.index_rec = IndexRecorder(state.stream, state.upstox, settings.data_dir)
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols(),
                               fast_seconds=settings.live_fast_seconds)
         state.feed.start()
@@ -280,6 +284,11 @@ def _fade_fast_loop() -> None:
                 state.fade.entry_probe(now)              # record only, 09:14:50-10:00 (S1_v11_entry_probe.md)
                 state.fade.walk_0916(now)                # record only, 09:16-15:21 (S1_fade_0916_walk_choice_recorder.md)
                 _phone_tick(now)
+                if state.index_rec is not None:
+                    try:
+                        state.index_rec.tick(now)        # record only: NIFTY 1-second candles (server/index_recorder.py)
+                    except Exception as exc:  # noqa: BLE001 - never stops the trading loop
+                        log.warning("index recorder: %s", exc)
                 if state.stream is not None:
                     state.stream.write_candles(settings.data_dir)   # 1-second candles (server/upstox_stream.py)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits

@@ -25,6 +25,8 @@ no live feed, no commentary, and password-protected access.
     UPSTOX_STREAM         true | false (default true): with UPSTOX_ANALYTICS_TOKEN, prices come from the Upstox
                           WebSocket (server/upstox_stream.py) and the feed runs every LIVE_FAST_SECONDS (default 1);
                           Kotak answers whatever the stream does not have, and everything while it is down
+    INDEX_RECORD          true | false (default true): with the stream on, NIFTY 1-second candles (indices, nearest
+                          future, ATM +/- 10 strikes of 2 expiries) to data/candles_1s_index/ (server/index_recorder.py)
     FADE_FAST_SECONDS     the fade exit check on open fade contracts only (default 1 s; 0 = off)
     ANTHROPIC_API_KEY     enables the plain-language commentary endpoint
     COMMENTARY_MODEL      default claude-sonnet-4-6
@@ -97,6 +99,7 @@ class Settings:
     fade_fast_seconds: float = float(os.getenv("FADE_FAST_SECONDS", "1"))   # 0 = off
     paper_real_orders: bool = _bool("PAPER_REAL_ORDERS", True)   # rule trades fill as real orders (paper)
     upstox_stream: bool = _bool("UPSTOX_STREAM", True)      # Upstox WebSocket prices when the token is set
+    index_record: bool = _bool("INDEX_RECORD", True)        # NIFTY 1-second candles from the stream (server/index_recorder.py)
     live_fast_seconds: float = float(os.getenv("LIVE_FAST_SECONDS", "1"))   # the feed's interval while streaming
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")

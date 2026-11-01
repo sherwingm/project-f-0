@@ -93,6 +93,7 @@ class UpstoxProvider:
         self.session.headers.update({"Accept": "application/json", "Authorization": f"Bearer {token}"})
         self._eq: dict[str, dict] = {}        # symbol -> {"key": "NSE_EQ|ISIN", "isin": ...}
         self._fo: dict[tuple, dict] = {}      # (symbol, type, yy, MON, strike|None) -> {"key", "expiry", "lot_size"}
+        self._nifty: dict[tuple, str] = {}    # NIFTY (expiry ISO, CE|PE|FUT, strike|None) -> instrument key
         self._loaded = False
         self._chains: dict[str, dict] = {}    # symbol -> {"expiry", "ts", "strikes": {(strike, side): {...}}, "pcr"...}
         self._cursor = 0
@@ -126,6 +127,8 @@ class UpstoxProvider:
                     continue
                 d = datetime.fromtimestamp(int(exp) / 1000, tz=IST).date() if isinstance(exp, (int, float)) else datetime.strptime(str(exp)[:10], "%Y-%m-%d").date()
                 strike = float(r["strike_price"]) if typ != "FUT" and r.get("strike_price") is not None else None
+                if str(r["underlying_symbol"]) == "NIFTY":    # every weekly expiry, for server/index_recorder.py
+                    self._nifty[(d.isoformat(), typ, strike)] = r["instrument_key"]
                 k = (str(r["underlying_symbol"]), typ, d.strftime("%y"), MONTHS[d.month - 1], strike)
                 # stock derivatives expire monthly; keep the earliest expiry for a (symbol, yy, MON) just in case
                 cur = self._fo.get(k)
