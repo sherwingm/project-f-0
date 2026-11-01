@@ -2,7 +2,7 @@
 
     INDEX_STORE=<index-data checkout>/data/index python -m scanner.s3_buy_maxup
 
-For every primary trade in data/results/S3_{E1,Q1,B1,G1}_trades.csv: the highest combined value of the bought legs
+For every primary trade in data/results/S3_{E1,Q1,B1,G1,P4}_trades.csv: the highest combined value of the bought legs
 after the entry minute, as % above the entry fills paid (gross), while held (to the exit minute) and any time (to
 15:29 of the exit session). Marks follow scanner.s3_engine.simulate: each leg's last traded close carried forward; a
 minute where any leg's mark is older than MARK_STALE minutes is not counted. Writes S3_F4_maxup_report.md + _trades.csv.
@@ -21,7 +21,8 @@ from scanner.s3_pods import RES
 
 PAGE = "strategies/S3_buy_followups_2026-10-30.md"
 PRIMARY = {"E1": "E-1 → E 14:45", "Q1": "lookback 5 · pct 20 · hold 3",
-           "B1": "OR 15 min · volume 2x · stop 25 %", "G1": "gap 0.5 % · confirm 15 min · stop 25 %"}
+           "B1": "OR 15 min · volume 2x · stop 25 %", "G1": "gap 0.5 % · confirm 15 min · stop 25 %",
+           "P4": "OR 15 min · trail 25 % · stop 25 %"}            # P4 added 2026-11-01 (the user asked for all five)
 LEVELS = (10, 20, 50, 100)
 LEG = re.compile(r"([BS])(\d+(?:\.\d+)?)(CE|PE)@([\d.]+)>([\d.]+)")
 
@@ -29,7 +30,7 @@ LEG = re.compile(r"([BS])(\d+(?:\.\d+)?)(CE|PE)@([\d.]+)>([\d.]+)")
 def entry_minute(pod: str, r) -> tuple[int, int]:
     if pod in ("E1", "Q1"):
         return 14, 45
-    if pod == "B1":
+    if pod in ("B1", "P4"):
         t = pd.Timestamp(f"2000-01-01 {r.signal}") + timedelta(minutes=1)
         return t.hour, t.minute
     return 9, 30                                   # G1 primary: confirmation after 15 minutes
@@ -70,6 +71,8 @@ def max_up(chain: pd.DataFrame, legs, t_in, t_exit, t_end) -> dict:
 def run_pod(pod: str) -> pd.DataFrame:
     t = pd.read_csv(RES / f"S3_{pod}_trades.csv")
     t = t[(t["cell"] == PRIMARY[pod]) & (t["cost_mult"] == 1.0) & (t["skip"].fillna("") == "")].copy()
+    if "traded" in t:                              # P4: only the trades its VIX < 14 filter let through
+        t = t[t["traded"].astype(str) == "True"]
     rows = []
     for r in t.itertuples():
         day, exit_day, expiry = (date.fromisoformat(str(x)[:10]) for x in (r.day, r.exit_day, r.expiry))

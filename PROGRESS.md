@@ -721,7 +721,7 @@ are recorded?
 1. Check on Mon 19 Oct that the keep-awake runs (08:30), the 8 carried fade positions sell at the first poll (09:15), and the
    new day's fade trades (FEDERALBNK PE, UJJIVANSFB PE) sell at 15:20. Then the always-on VM (guide 17) or an external
    pinger as a second layer.
-2. Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30.
+2. ~~Renew `LEDGER_GITHUB_TOKEN` before 2026-10-30~~: stale (the token was replaced 23 Oct; backups still worked on 31 Oct; check its date in GitHub settings).
 3. S2: run screen B in the pre-registered order (cache parents → freeze financials → recount → screens).
 4. S1: keep the paper runs untouched; review v10 at 30 closed trades / 6 weeks.
 
