@@ -28,3 +28,6 @@ data/index/**/*.parquet
 data/index/recorded_tokens.json
 data/index/.upstox_token
 store/
+
+# live 1-second websocket candles copied from the VM (large; the VM keeps the originals)
+data/candles_1s/
