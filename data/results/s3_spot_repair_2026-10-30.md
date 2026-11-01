@@ -32,9 +32,13 @@ What was wrong:
 3. **Missing regular sessions:** the Budget sessions Sat 2025-02-01 and Sun 2026-02-01, 2022-06-16, and the special
    full Saturday session 2024-01-20 (SENSEX also 2022-07-29 and 2022-12-27).
 4. **Fake full days for short special sessions:** the DR-drill Saturday 2024-05-18 (two short sessions; stored as
-   373 rows, 69 % flat) and the Muhurat session 2025-10-21 (13:45-14:44 only; stored as 376 rows, 81 % flat filler at
-   the previous close, first bar with open above high), the 2022-10-24 Muhurat (80 flat rows) and a one-bar Saturday
-   2025-08-23.
+   373 rows, 69 % flat) and the Muhurat session 2025-10-21, the 2022-10-24 Muhurat (80 flat rows) and a one-bar
+   Saturday 2025-08-23.
+   **Diwali Muhurat, Tue 2025-10-21: trading only in the afternoon, never a full day.** The session window was about
+   13:30-15:30 IST (pre-open from 13:30, normal trading, then the closing period); the index minutes that actually
+   traded are **13:45-14:44** (Upstox's 60 bars). There was **no trading 09:15-13:30**. Kotak's store had a fake full
+   day 09:15-15:30 instead: 376 rows, 81 % of them flat filler at the previous close, the first bar's open above its
+   high. That day is therefore dropped from the S3 spot store (a 1-hour session is not a regular session).
 
 ## What was changed (every series, 2022-01 → 2026-10; Upstox has no minutes before 2022)
 
