@@ -871,3 +871,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - **F3a gap-up hint on unseen NIFTY 2022-24 spot:** not supported (+0.03 % after up gaps, t 0.34).
   - **F4 max up:** median peaks +6 % to +14 %, booked −9 % to −18 %.
   - Workbook `data/results/S3_buy_pods_2026-10-30.xlsx`. DECISIONS f45e98f0 / 0f6878b5.
+- 2026-11-01: **B1 deep dive** (af902d48, `data/results/S3_B1_deep_dive_2026-11-01.md`): NIFTY falls back into the
+  opening range on 435 of 488 breakout days (typically 5 min later); the volume test hardly filters; the trail acts as
+  a second stop. **B2 pre-registered** (`strategies/S3_B2_accepted_breakout.md`): breakout must hold 15 closes, exit
+  when it fails; stage A on unseen NIFTY 2022-24 spot (hurdle +0.10 % a trade), then options 2024-26 (in-sample,
+  labelled), then forward 30 trades. Nothing computed yet.
