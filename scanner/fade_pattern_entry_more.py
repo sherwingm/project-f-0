@@ -199,13 +199,14 @@ def rule_list(names: list[str], fam: dict[str, str]) -> list[tuple[int, ...]]:
     return out
 
 
-def build(f: pd.DataFrame) -> dict:
+def all_signs(f: pd.DataFrame) -> tuple[list, list[str], dict]:
+    """Per trade with option minutes: (row, candles to 15:29, candles to 15:19, 09:16 buy price, {sign: (family, bool array)})."""
     book = minute_book()
     nd = nifty()
     nd.index = pd.to_datetime(nd.index)
     start = str(f["day0"].min())
     nif, vix = spot_minutes("NIFTY50", start), spot_minutes("INDIAVIX", start)
-    keep, J, tabs, c2j, bases, missing, pre_, nodata = [], [], [], [], [], {"stock": 0, "Nifty": 0, "VIX": 0}, [], []
+    missing, pre_, nodata = {"stock": 0, "Nifty": 0, "VIX": 0}, [], []
     for r in f.itertuples():
         full = book.get((r.symbol, r.day0, r.side, float(r.strike)))
         if full is None:
@@ -235,6 +236,12 @@ def build(f: pd.DataFrame) -> dict:
         sg |= clock_signs(tt)
         pre_.append((r, full, c, e0, sg))
         nodata.append(", ".join(gap))
+    return pre_, nodata, missing
+
+
+def build(f: pd.DataFrame) -> dict:
+    pre_, nodata, missing = all_signs(f)
+    keep, J, tabs, c2j, bases = [], [], [], [], []
     fullest = max(pre_, key=lambda x: len(x[4]))[4]
     names = list(fullest)
     fam = {k: fullest[k][0] for k in names}
