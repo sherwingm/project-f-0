@@ -70,3 +70,11 @@ trades). Only a stage C pass can be proposed to the user as a paper strategy; no
 ## Look-ahead
 The range, the breakout and the acceptance use closes up to the signal minute; the fill is the next minute's close.
 The failure exit uses the close of minute t and fills at t + 1. No parameter is picked from B2's results.
+
+## Run order changed (the user, 2026-11-01, before any B2 number was computed)
+The user: run the option test first, 2024-10 → 2025-09, then 2025-10 → present, then the 2022-24 spot check. So:
+1. **Stage B runs first**, on 2024-10-01 → 2026-10-28; its two halves are exactly those two periods and are reported
+   one after the other.
+2. **Stage A runs after it, whatever B shows**, with its rules and hurdle unchanged. It stays the only window the idea
+   has not seen.
+3. **Verdict unchanged:** B2 goes to stage C only if both A and B pass. Nothing else in the rules changes.
