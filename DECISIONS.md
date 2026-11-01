@@ -343,3 +343,18 @@ changes v12's entry, exit or sizing.
   logged and never stops the trading loop.
 - Not yet done: copying the files from the VM into the research store (`index-data`); the nightly Kotak 1-minute
   recorder stays the source for S3 tests until then.
+
+### S3 B2 · accepted opening-range breakout: closed (2026-11-01)
+Page `strategies/S3_B2_accepted_breakout.md` (rules 58bb8114; run order changed by the user aa374ccd, before any number).
+Runner `scanner/s3_b2.py`; reports `data/results/S3_B2_report.md`, `S3_B2_stageA_report.md`.
+
+| Stage | Window | Trades | Result | Verdict |
+|---|---|---|---|---|
+| B · options | 2024-10-01 → 2025-09-30 | 213 | −6.7 % of the premium a trade, win rate 21 % | |
+| B · options | 2025-10-01 → 2026-10-28 | 217 | −0.9 %, win rate 23 % | |
+| B · options, whole window | 2024-10 → 2026-10 | 430 | −3.8 % (t −2.75), 2x costs −5.7 %; all 6 neighbours negative | **FAIL** |
+| A · NIFTY spot | 2022-01-03 → 2024-09-30 | 595 | +0.019 % NIFTY move a trade (t 1.26) against the +0.10 % hurdle | **FAIL** |
+
+Waiting 15 closes turned B1's breakout (+0.003 % on 2022-24 spot) into +0.019 %: a real but tiny change, about a fifth of
+what the option's costs and decay need. Exits: 262 breakouts failed (−11.5 % a trade), 62 stops (−29.3 %), 106 held
+to 15:15 (+30.4 %). B2 is closed; stage C does not run.

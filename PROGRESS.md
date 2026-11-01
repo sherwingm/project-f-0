@@ -879,3 +879,5 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-01: **NIFTY 1-second recorder** on the live server (user decision; DECISIONS 2026-11-01): the Upstox stream
   records NIFTY indices, the nearest future and ATM ± 10 strikes of 2 expiries to `data/candles_1s_index/` every
   session from 2026-11-02. Record only. Copying the files into `index-data` is still to do.
+- 2026-11-01: **B2 closed.** Options 2024-25 −6.7 %, 2025-26 −0.9 % (430 trades, −3.8 %, t −2.75); 2022-24 NIFTY spot
+  +0.019 % a trade against the +0.10 % hurdle. Run order was the user's (options first). DECISIONS 2026-11-01.
