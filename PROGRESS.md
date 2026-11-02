@@ -891,3 +891,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   any slippage or charges every buy idea is already <= 0 (P4 −0.6 %, B1 −0.5 %, B2 −1.8 %, P2 −24 %); costs are ~2 % a
   trade. Holding to 15:15 with no stop is no better. Leads, after the fact: 1-2 days to expiry is the worst bucket
   (−4 to −6 %); puts beat calls in P4 / B1 / B2 (largely the same days).
+- 2026-11-02: **S3 PUT1 (puts-only downside breakout) closed**: 2022-24 NIFTY spot, 362 trades, −0.006 % a trade
+  (t −0.17) against the +0.10 % hurdle; halves +0.014 / −0.028 %; calls +0.053 %. The 2024-26 put lead from the
+  execution audit did not hold on unseen years (`data/results/S3_PUT1_report.md`).

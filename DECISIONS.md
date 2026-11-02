@@ -373,3 +373,10 @@ Runner `scanner/s3_b2.py`; reports `data/results/S3_B2_report.md`, `S3_B2_stageA
 Waiting 15 closes turned B1's breakout (+0.003 % on 2022-24 spot) into +0.019 %: a real but tiny change, about a fifth of
 what the option's costs and decay need. Exits: 262 breakouts failed (−11.5 % a trade), 62 stops (−29.3 %), 106 held
 to 15:15 (+30.4 %). B2 is closed; stage C does not run.
+
+### S3 PUT1 · downside first breakout, puts only, 2022-24 NIFTY spot: closed (2026-11-02)
+Page `strategies/S3_PUT1_downside_breakout_spot.md` (c35b837f, before the run); runner `scanner/s3_put1.py`.
+**FAIL** on 4 of 5 checks: 362 trades, NIFTY's fall entry → 15:15 −0.006 % a trade (median −0.012 %, t −0.17; hurdle
++0.10 %), fell on 49 %; halves +0.014 % / −0.028 %; neighbours OR 12 −0.010 %, OR 18 +0.029 %. Side reports: calls under
+the same rules +0.053 % (t 1.63, also below the hurdle), puts with P4's filters +0.019 % (36), puts with the failure exit
+−0.010 %. The 2024-26 put advantage in P4 / B1 / B2 does not appear on the earlier years: the put lead is closed.
