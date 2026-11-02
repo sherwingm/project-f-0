@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.6,
    "upstox_minus_kotak_quote_time_s_median": -28.0
+  },
+  {
+   "at": "10:45:05",
+   "contracts": 59,
+   "on_both": 59,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.651,
+   "same_best_bid_pct": 54.4,
+   "same_best_ask_pct": 50.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.3,
+   "upstox_minus_kotak_quote_time_s_median": -31.0
   }
  ],
  "top_gaps": [
@@ -375,21 +389,21 @@
    "at": "09:45"
   },
   {
-   "contract": "LT26NOV3900CE",
-   "gap_pct": 0.552,
-   "kotak": 72.5,
-   "upstox": 72.9,
-   "at": "09:30"
+   "contract": "RELIANCE26NOV1250CE",
+   "gap_pct": 0.651,
+   "kotak": 30.7,
+   "upstox": 30.5,
+   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 1010,
+  "rounds": 18,
+  "contract_quotes": 1069,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 35.6,
-  "same_best_ask_pct": 39.0,
+  "same_best_bid_pct": 38.15,
+  "same_best_ask_pct": 39.85,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.6,
-  "upstox_minus_kotak_quote_time_s_median": -19.0
+  "upstox_minus_kotak_quote_time_s_median": -19.5
  }
 }
