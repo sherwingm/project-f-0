@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.3,
    "upstox_minus_kotak_quote_time_s_median": -33.0
+  },
+  {
+   "at": "11:25:06",
+   "contracts": 59,
+   "on_both": 59,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.12,
+   "same_best_bid_pct": 57.6,
+   "same_best_ask_pct": 59.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.2,
+   "upstox_minus_kotak_quote_time_s_median": -32.0
   }
  ],
  "top_gaps": [
@@ -466,6 +480,13 @@
    "at": "09:45"
   },
   {
+   "contract": "INDIGO26NOV5200CE",
+   "gap_pct": 1.12,
+   "kotak": 31.25,
+   "upstox": 30.9,
+   "at": "11:25"
+  },
+  {
    "contract": "ADANIPORTS26NOV1900CE",
    "gap_pct": 0.867,
    "kotak": 17.3,
@@ -473,35 +494,28 @@
    "at": "10:40"
   },
   {
+   "contract": "BPCL26NOV290PE",
+   "gap_pct": 0.855,
+   "kotak": 5.85,
+   "upstox": 5.9,
+   "at": "11:25"
+  },
+  {
    "contract": "TRENT26NOV3000PE",
    "gap_pct": 0.842,
    "kotak": 59.4,
    "upstox": 59.9,
    "at": "11:00"
-  },
-  {
-   "contract": "LT26NOV3900CE",
-   "gap_pct": 0.763,
-   "kotak": 91.7,
-   "upstox": 91.0,
-   "at": "10:25"
-  },
-  {
-   "contract": "DELHIVERY26NOV415CE",
-   "gap_pct": 0.714,
-   "kotak": 14.0,
-   "upstox": 13.9,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 1481,
+  "rounds": 26,
+  "contract_quotes": 1540,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 43.1,
-  "same_best_ask_pct": 45.8,
+  "same_best_bid_pct": 43.6,
+  "same_best_ask_pct": 46.65,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.3,
-  "upstox_minus_kotak_quote_time_s_median": -25.0
+  "oi_same_pct": 97.45,
+  "upstox_minus_kotak_quote_time_s_median": -25.5
  }
 }
