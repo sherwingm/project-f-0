@@ -518,6 +518,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.3,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "12:25:08",
+   "contracts": 59,
+   "on_both": 59,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.727,
+   "same_best_bid_pct": 55.9,
+   "same_best_ask_pct": 52.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.3,
+   "upstox_minus_kotak_quote_time_s_median": -37.0
   }
  ],
  "top_gaps": [
@@ -592,6 +606,13 @@
    "at": "09:20"
   },
   {
+   "contract": "COFORGE26NOV2180CE",
+   "gap_pct": 1.727,
+   "kotak": 31.85,
+   "upstox": 31.3,
+   "at": "12:25"
+  },
+  {
    "contract": "ADANIENT26NOV2600CE",
    "gap_pct": 1.567,
    "kotak": 73.4,
@@ -653,23 +674,16 @@
    "kotak": 5.85,
    "upstox": 5.9,
    "at": "11:25"
-  },
-  {
-   "contract": "TRENT26NOV3000PE",
-   "gap_pct": 0.842,
-   "kotak": 59.4,
-   "upstox": 59.9,
-   "at": "11:00"
   }
  ],
  "day": {
-  "rounds": 37,
-  "contract_quotes": 2187,
+  "rounds": 38,
+  "contract_quotes": 2246,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.8,
-  "same_best_ask_pct": 47.5,
+  "same_best_ask_pct": 48.35,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 96.6,
-  "upstox_minus_kotak_quote_time_s_median": -31.0
+  "oi_same_pct": 97.45,
+  "upstox_minus_kotak_quote_time_s_median": -31.5
  }
 }
