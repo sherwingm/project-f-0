@@ -56,6 +56,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.3,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "09:40:02",
+   "contracts": 59,
+   "on_both": 59,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.133,
+   "same_best_bid_pct": 44.1,
+   "same_best_ask_pct": 50.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.6,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -79,6 +93,13 @@
    "kotak": 12.1,
    "upstox": 11.7,
    "at": "09:30"
+  },
+  {
+   "contract": "COCHINSHIP26NOV1140PE",
+   "gap_pct": 3.133,
+   "kotak": 38.3,
+   "upstox": 37.1,
+   "at": "09:40"
   },
   {
    "contract": "APLAPOLLO26NOV2340CE",
@@ -191,23 +212,16 @@
    "kotak": 26.1,
    "upstox": 26.1,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1004.95,
-   "upstox": 1004.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 243,
+  "rounds": 5,
+  "contract_quotes": 302,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 21.95,
-  "same_best_ask_pct": 28.45,
+  "same_best_bid_pct": 22.6,
+  "same_best_ask_pct": 29.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.45,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 95.0,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
