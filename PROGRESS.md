@@ -886,3 +886,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   `index_data/pull_1s.py` (c88a9e93) copies each finished day to `<store>/nifty_1s/<day>.parquet` (29.5 MB), checked
   against the server's line count; local only (git-excluded, user's choice: too big for GitHub); the server keeps 7
   days. Nightly Windows task to be registered by the user (`scripts/pull_nifty_1s.cmd`).
+- 2026-11-02: **S3 execution audit** (the user: "our execution has some error"; descriptive,
+  `data/results/S3_execution_audit_2026-11-02.md`). 976 of 976 P4 / B1 / B2 fills match the raw minute files. Before
+  any slippage or charges every buy idea is already <= 0 (P4 −0.6 %, B1 −0.5 %, B2 −1.8 %, P2 −24 %); costs are ~2 % a
+  trade. Holding to 15:15 with no stop is no better. Leads, after the fact: 1-2 days to expiry is the worst bucket
+  (−4 to −6 %); puts beat calls in P4 / B1 / B2 (largely the same days).
