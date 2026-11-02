@@ -154,6 +154,25 @@ def not_traded_today(quote: dict | None, now: datetime) -> bool:
     return bool(quote) and ltt_age(quote.get("timestamp"), now)["stale_ltt_reason"] == "last trade before today's 09:15 open"
 
 
+OLD_BOOK_UNTIL = time(9, 30)             # the longest old book seen was 35 s; past this a missing field never holds a buy
+
+
+def yesterdays_book(quote: dict | None, now: datetime) -> bool:
+    """True while an Upstox stream quote still carries the previous session's book: yesterday's day volume and no
+    opening price for today (29 / 30 Oct 2026: JSWENERGY, GODREJCP, BLUESTARCO bought at 09:15 on yesterday's ask
+    after a trade of today had printed, so not_traded_today let them through). Today's book = today's open, or a day
+    volume of 0. Stream quotes only (Kotak's option quotes are not checked for these fields), and only to 09:30."""
+    if not quote or quote.get("source") != "upstox_stream" or now.time() >= OLD_BOOK_UNTIL:
+        return False
+    return bool(quote.get("volume")) and not (quote.get("ohlc") or {}).get("open")
+
+
+def old_book(quote: dict | None, now: datetime) -> bool:
+    """The bid / ask is not today's: the last trade is from before 09:15, or the stream still sends yesterday's book.
+    Buys wait for today's book (strategies/S1_paper_entry_todays_book.md)."""
+    return not_traded_today(quote, now) or yesterdays_book(quote, now)
+
+
 def entry_quote(quote: dict | None, now: datetime) -> dict | None:
     """The quote a rule trade was bought on: bid, ask, sizes, relative spread, last price and the stock's price."""
     if not quote:
@@ -165,5 +184,6 @@ def entry_quote(quote: dict | None, now: datetime) -> dict | None:
     return {"bid": b[0], "bid_qty": b[1], "ask": a[0], "ask_qty": a[1], "ltp": quote.get("last_price"),
             "spread_pct": round((a[0] - b[0]) / mid * 100, 2) if mid else None, "spot": quote.get("underlying"),
             "volume": quote.get("volume"), "oi": quote.get("open_interest"), "source": quote.get("source") or "kotak",
+            "day_open": (quote.get("ohlc") or {}).get("open"), "todays_book": not old_book(quote, now),
             "ltt": quote.get("timestamp"), "at": now.isoformat(timespec="seconds"),   # ltt: the quote's last trade
             **ltt_age(quote.get("timestamp"), now)}

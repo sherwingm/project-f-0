@@ -601,7 +601,7 @@ class PaperLedger:
     def _step_buy(self, o: dict, q: dict | None, now: datetime) -> None:
         o["tries"] += 1
         m = None
-        if q:
+        if q and not pk.old_book(q, now):                    # yesterday's bid / ask never fills (S1_paper_entry_todays_book.md)
             why = om.rejected(o["limit"], q.get("last_price"))
             if why:
                 self._cancel(o, now, why)

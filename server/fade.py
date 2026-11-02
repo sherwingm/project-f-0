@@ -419,7 +419,7 @@ def decide_0916(sig: dict, spot: float | None, book: dict[float, dict | None], n
     Returns ("chosen", strike, ask, lot, lots, sub2 or None), ("waiting", why) or ("refused", why).
     Kept equal to _entries by tests/test_fade.py (test_decide_0916_matches_the_live_entry)."""
     strikes, side = sig.get("strikes") or [], sig["side"]
-    if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+    if any(book.values()) and all(pk.old_book(q, now) for q in book.values() if q):
         return "waiting", "waiting for the first trade today (every quote is yesterday's)"
 
     def sub2():
@@ -427,7 +427,7 @@ def decide_0916(sig: dict, spot: float | None, book: dict[float, dict | None], n
         if isinstance(p, str):
             return None
         k, px, lot, lots, lc = p
-        if pk.not_traded_today(book.get(k), now):
+        if pk.old_book(book.get(k), now):
             return "waiting", f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
         return "chosen", k, px, lot, lots, {"listing_close": lc, "lots": lots}
     why = never_fits(lot_of(book), BAND, MIN_PREMIUM)
@@ -441,7 +441,7 @@ def decide_0916(sig: dict, spot: float | None, book: dict[float, dict | None], n
     if isinstance(w, str):
         return "waiting", w
     k, px, lot = w
-    if pk.not_traded_today(book.get(k), now):
+    if pk.old_book(book.get(k), now):
         return "waiting", f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
     return "chosen", k, px, lot, 1, None
 
@@ -805,7 +805,7 @@ class FadeTrader:
             self._tried[key] = now.timestamp()
             spot = self.spot(sig["symbol"]) or sig.get("spot")
             book = self._book(sig, walk_path(sig.get("strikes") or [], spot, sig["side"]))
-            if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+            if any(book.values()) and all(pk.old_book(q, now) for q in book.values() if q):
                 self._last_why[key] = w = "waiting for the first trade today (every quote is yesterday's)"
                 self._waiting(st, key, now, w)                   # no price of today yet: no buy and no refusal
                 continue
@@ -827,7 +827,7 @@ class FadeTrader:
                     self._shadow_entry(st, sig, key, now, spot, book.get, w)
                 continue
             k, px, lot = w
-            if pk.not_traded_today(book.get(k), now):           # yesterday's book: wait for today's first trade
+            if pk.old_book(book.get(k), now):           # yesterday's book: wait for today's first trade
                 self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
                 self._waiting(st, key, now, w)
                 continue
@@ -840,7 +840,7 @@ class FadeTrader:
             st.setdefault("fade_sub2_why", {})[key] = p
             return False
         k, px, lot, lots, lc = p
-        if pk.not_traded_today(book.get(k), now):               # yesterday's book: wait (True = handled for now)
+        if pk.old_book(book.get(k), now):               # yesterday's book: wait (True = handled for now)
             self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
             self._waiting(st, key, now, w)
             return True

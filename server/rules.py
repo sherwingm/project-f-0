@@ -266,7 +266,7 @@ class RuleTrader:
                 spot = self.spot(sig["symbol"]) or sig.get("spot")
                 strikes = sig.get("liquid_strikes") or ([sig["open_strike"]] if sig.get("open_strike") else [])
                 book = self._book(sig, path_up(strikes, spot))
-                if any(book.values()) and all(pk.not_traded_today(q, now) for q in book.values() if q):
+                if any(book.values()) and all(pk.old_book(q, now) for q in book.values() if q):
                     self._last_why[key] = w = "waiting for the first trade today (every quote is yesterday's)"
                     self._waiting(st, key, now, sig["arms"], w)  # no price of today yet: no buy and no refusal
                     continue
@@ -281,7 +281,7 @@ class RuleTrader:
                     self._waiting(st, key, now, sig["arms"], w)
                     continue                                     # try again next poll, until 15:20
                 k, px, lot = w
-                if pk.not_traded_today(book.get(k), now):       # yesterday's book: wait for today's first trade
+                if pk.old_book(book.get(k), now):               # yesterday's book: wait for today's book
                     self._last_why[key] = w = f"waiting for the first trade today at {k:g} (the quote is yesterday's)"
                     self._waiting(st, key, now, sig["arms"], w)
                     continue

@@ -1,7 +1,12 @@
 # Paper buys wait for today's order book (plan, not live)
 
-Status: **plan only**, written 1 Nov 2026 at the user's request ("Yes, plan the fix"). Nothing changes on the server until
-the user says go; deploy after 15:45, never in market hours.
+Status: **built 2 Nov 2026** (user: "build it with tests now, and deploy"); deploy after 15:45, never in market hours.
+As built (DECISIONS.md 2026-11-02): `old_book` is checked on Upstox stream quotes only and only before 09:30; the
+exits are unchanged (a trade is only bought on today's book, and the stream keeps that day's open); `entry_quote`
+records `todays_book` and `day_open` (not `todays_book_since`: the entry probe already records each second).
+Tests: `tests/test_todays_book.py`.
+
+Plan as written 1 Nov 2026 ("Yes, plan the fix"):
 
 ## The problem (data: `scanner/fade_live_retest.py`, `data/results/S1_fade_live_retest.xlsx`)
 For a few seconds after 09:15 the Upstox stream still sends the previous session's last bid / ask for an option, while

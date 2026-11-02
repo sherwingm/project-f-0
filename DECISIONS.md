@@ -344,6 +344,21 @@ changes v12's entry, exit or sizing.
 - Not yet done: copying the files from the VM into the research store (`index-data`); the nightly Kotak 1-minute
   recorder stays the source for S3 tests until then.
 
+## 2026-11-02 · Paper buys wait for today's order book (user decision)
+- The user: "build it with tests now, and deploy". Plan `strategies/S1_paper_entry_todays_book.md`.
+- Why: on 29 / 30 Oct three fade buys (JSWENERGY, GODREJCP, BLUESTARCO) filled at 09:15 on the previous session's
+  bid / ask after a trade of today had printed, so the 27 Oct last-trade check let them through. On the 23 live trades:
+  −3.5 % a trade as booked, −12.2 % on today's book.
+- Rule: a stream quote is on today's book once it shows today's open or a day volume of 0. `server/peak.py`
+  `old_book` (= the 27 Oct last-trade check, or the stream still showing yesterday's volume with no open). Used by the
+  fade entry walk, the below-₹2 rule, Arm A / B's 09:15 entries and the real-order fill. Stream quotes only (Kotak's
+  option quotes are not checked for these fields) and only before 09:30, so a missing field never holds a buy all day.
+  `entry_quote` records `todays_book` and `day_open`.
+- Exits unchanged: a trade is only bought on today's book and the stream keeps that day's open, so the 09:16 stop and
+  trail never see yesterday's book.
+- Not an S1 rule change: signal, walk, strike, spread and lot limits and exits are the same; some 09:15 buys come a
+  few seconds later. Probe check 28 – 30 Oct: the 3 old-book buys held back, 0 of 14 normal buys delayed.
+
 ### S3 B2 · accepted opening-range breakout: closed (2026-11-01)
 Page `strategies/S3_B2_accepted_breakout.md` (rules 58bb8114; run order changed by the user aa374ccd, before any number).
 Runner `scanner/s3_b2.py`; reports `data/results/S3_B2_report.md`, `S3_B2_stageA_report.md`.
