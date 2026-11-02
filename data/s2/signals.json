@@ -1,20 +1,51 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-10-30",
- "generated": "2026-10-31T01:23+05:30",
+ "session": "2026-11-02",
+ "generated": "2026-11-03T04:33+05:30",
  "signals": [
   {
-   "symbol": "SAGILITY",
-   "close": 42.08,
-   "price_pct": -5.78,
-   "oi_pct": 36.09,
-   "vol_ratio": 36.73,
-   "put": null,
-   "put_note": "premium below Rs 2"
+   "symbol": "SYRMA",
+   "close": 1512.0,
+   "price_pct": -6.97,
+   "oi_pct": 96.17,
+   "vol_ratio": 4.27,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 1400.0,
+    "premium": 19.48,
+    "lot": 325,
+    "lot_cost": 6331,
+    "below_spot_pct": 7.41,
+    "contracts": 1592.0
+   }
+  },
+  {
+   "symbol": "POLICYBZR",
+   "close": 931.0,
+   "price_pct": -6.91,
+   "oi_pct": 13.78,
+   "vol_ratio": 2.55,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 880.0,
+    "premium": 17.88,
+    "lot": 350,
+    "lot_cost": 6258,
+    "below_spot_pct": 5.48,
+    "contracts": 3991.0
+   }
   }
  ],
  "note": null,
  "history": [
+  {
+   "session": "2026-11-02",
+   "symbols": [
+    "SYRMA",
+    "POLICYBZR"
+   ],
+   "note": null
+  },
   {
    "session": "2026-10-30",
    "symbols": [
