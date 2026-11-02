@@ -4237,10 +4237,10 @@
     },
     "last": {
      "price": 19.9,
-     "at": "2026-11-02T09:18:18+05:30",
+     "at": "2026-11-02T09:18:30+05:30",
      "qty": 350
     },
-    "n": 142,
+    "n": 154,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)",
@@ -4456,7 +4456,7 @@
     "shadow_t100": {
      "target": 6.8,
      "hit_at": null,
-     "max_bid": 3.7
+     "max_bid": 3.9
     },
     "stop": {
      "level": 2.72,
@@ -4464,10 +4464,11 @@
      "min_bid": 2.9
     },
     "trail": {
-     "status": "open",
+     "status": "active",
      "start": 3.74,
      "gap": 0.02,
-     "peak": null
+     "peak": 3.9,
+     "started_at": "2026-11-02T09:18:24+05:30"
     },
     "shadow_v10": {
      "status": "open"
@@ -4476,9 +4477,10 @@
      "status": "open"
     },
     "shadow_trail": {
-     "status": "open",
+     "status": "active",
      "start": 3.74,
-     "peak": null
+     "peak": 3.9,
+     "started_at": "2026-11-02T09:18:24+05:30"
     },
     "shadow_fd2": {
      "market_hours": true,
@@ -4538,8 +4540,8 @@
      "qty": 6200
     },
     "peak": {
-     "price": 3.7,
-     "at": "2026-11-02T09:17:51+05:30",
+     "price": 3.9,
+     "at": "2026-11-02T09:18:24+05:30",
      "qty": 4650
     },
     "low": {
@@ -4548,11 +4550,11 @@
      "qty": 4650
     },
     "last": {
-     "price": 3.7,
-     "at": "2026-11-02T09:18:18+05:30",
+     "price": 3.9,
+     "at": "2026-11-02T09:18:30+05:30",
      "qty": 4650
     },
-    "n": 141,
+    "n": 153,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)",
@@ -4992,11 +4994,11 @@
      "qty": 700
     },
     "last": {
-     "price": 19.95,
-     "at": "2026-11-02T09:18:18+05:30",
-     "qty": 350
+     "price": 20.05,
+     "at": "2026-11-02T09:18:30+05:30",
+     "qty": 700
     },
-    "n": 92,
+    "n": 104,
     "missing": 0,
     "sources": [
      "live best bid (1-s exit check)",
@@ -18346,7 +18348,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-02T09:18:18+05:30",
+ "saved_at": "2026-11-02T09:18:30+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -18591,11 +18593,11 @@
   "fade_wait": {
    "2026-11-02:NAVINFLUOR": {
     "reason": "spread above 10 % of the ask (at 7000: bid 15.5, ask 19.75)",
-    "at": "2026-11-02T09:18:17+05:30"
+    "at": "2026-11-02T09:18:29+05:30"
    },
    "2026-11-02:SYRMA": {
     "reason": "spread above 10 % of the ask (at 1280: bid 2.55, ask 4.25)",
-    "at": "2026-11-02T09:18:17+05:30"
+    "at": "2026-11-02T09:18:29+05:30"
    }
   },
   "fade_shadow_entries": [
@@ -18724,7 +18726,7 @@
     "why": "net profit YoY +137.5 %, QoQ +1.1 %; revenue YoY +32.7 %",
     "np_yoy": 137.5,
     "spot_at_entry": 167.91,
-    "last_bid": 0.7,
+    "last_bid": 0.58,
     "max_bid": 1.52,
     "exit": null,
     "closed_at": null,
@@ -18751,7 +18753,7 @@
     "why": "net profit YoY +31.2 %, QoQ +277.8 %; revenue YoY +11.1 %",
     "np_yoy": 31.2,
     "spot_at_entry": 238.6,
-    "last_bid": 0.84,
+    "last_bid": 0.92,
     "max_bid": 2.13,
     "exit": null,
     "closed_at": null,
