@@ -14,6 +14,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.9,
    "upstox_minus_kotak_quote_time_s_median": -6.0
+  },
+  {
+   "at": "09:25:01",
+   "contracts": 61,
+   "on_both": 61,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.313,
+   "same_best_bid_pct": 21.3,
+   "same_best_ask_pct": 29.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.8,
+   "upstox_minus_kotak_quote_time_s_median": -19.0
   }
  ],
  "top_gaps": [
@@ -44,6 +58,20 @@
    "kotak": 7.83,
    "upstox": 7.95,
    "at": "09:20"
+  },
+  {
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 1.313,
+   "kotak": 41.9,
+   "upstox": 42.45,
+   "at": "09:25"
+  },
+  {
+   "contract": "APOLLOHOSP26NOVFUT",
+   "gap_pct": 0.054,
+   "kotak": 8380.0,
+   "upstox": 8384.5,
+   "at": "09:25"
   },
   {
    "contract": "ADANIGREEN26NOVFUT",
@@ -142,30 +170,16 @@
    "kotak": 1360.0,
    "upstox": 1360.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2750CE",
-   "gap_pct": 0.0,
-   "kotak": 22.1,
-   "upstox": 22.1,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIGREEN26NOV1320CE",
-   "gap_pct": 0.0,
-   "kotak": 42.0,
-   "upstox": 42.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 62,
+  "rounds": 2,
+  "contract_quotes": 123,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 22.6,
-  "same_best_ask_pct": 27.4,
+  "same_best_bid_pct": 21.95,
+  "same_best_ask_pct": 28.45,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.9,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "oi_same_pct": 91.85,
+  "upstox_minus_kotak_quote_time_s_median": -12.5
  }
 }
