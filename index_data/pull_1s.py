@@ -14,6 +14,8 @@ import argparse
 import gzip
 import io
 import json
+import os
+import shutil
 import subprocess
 import sys
 from datetime import date, datetime, time
@@ -30,10 +32,13 @@ REMOTE = "/home/ubuntu/fo_scanner/data/candles_1s_index"
 FOLDER = "nifty_1s"
 DONE_AFTER = time(15, 40)            # today's file is complete once the recorder stops (15:31) and the last write lands
 COLS = ["o", "h", "l", "c", "bo", "bh", "bl", "bc", "a", "n", "v"]
+# Git's ssh first: Windows' own OpenSSH (what a scheduled task finds on PATH) refuses the key file's permissions.
+GIT_SSH = r"C:\Program Files\Git\usr\bin\ssh.exe"
+SSH = os.getenv("PULL_SSH") or (GIT_SSH if Path(GIT_SSH).exists() else shutil.which("ssh") or "ssh")
 
 
 def _ssh(cmd: str, binary: bool = False):
-    r = subprocess.run(["ssh", "-o", "BatchMode=yes", "-o", "ConnectTimeout=20", HOST, cmd], capture_output=True,
+    r = subprocess.run([SSH,"-o", "BatchMode=yes", "-o", "ConnectTimeout=20", HOST, cmd], capture_output=True,
                        check=True, timeout=1800)
     return r.stdout if binary else r.stdout.decode()
 
