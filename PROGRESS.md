@@ -881,3 +881,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   session from 2026-11-02. Record only. Copying the files into `index-data` is still to do.
 - 2026-11-01: **B2 closed.** Options 2024-25 −6.7 %, 2025-26 −0.9 % (430 trades, −3.8 %, t −2.75); 2022-24 NIFTY spot
   +0.019 % a trade against the +0.10 % hurdle. Run order was the user's (options first). DECISIONS 2026-11-01.
+- 2026-11-02: **NIFTY 1-second recorder, first day + copy to this PC.** 2026-11-02 recorded 09:14-15:32: 1,875,487
+  rows (indices ~22.7k each, Nov future 18k, options 1.79 M), 294 MB raw / 44 MB gzip on the server.
+  `index_data/pull_1s.py` (c88a9e93) copies each finished day to `<store>/nifty_1s/<day>.parquet` (29.5 MB), checked
+  against the server's line count; local only (git-excluded, user's choice: too big for GitHub); the server keeps 7
+  days. Nightly Windows task to be registered by the user (`scripts/pull_nifty_1s.cmd`).
