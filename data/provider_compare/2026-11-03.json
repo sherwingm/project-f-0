@@ -420,6 +420,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -52.5
+  },
+  {
+   "at": "11:55:08",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.372,
+   "same_best_bid_pct": 50.8,
+   "same_best_ask_pct": 52.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -50.0
   }
  ],
  "top_gaps": [
@@ -429,6 +443,13 @@
    "kotak": 9.1,
    "upstox": 9.5,
    "at": "09:20"
+  },
+  {
+   "contract": "BANDHANBNK26NOV170CE",
+   "gap_pct": 4.372,
+   "kotak": 1.83,
+   "upstox": 1.91,
+   "at": "11:55"
   },
   {
    "contract": "GAIL26NOV182.5CE",
@@ -555,23 +576,16 @@
    "kotak": 13.9,
    "upstox": 14.0,
    "at": "10:25"
-  },
-  {
-   "contract": "MUTHOOTFIN26NOV2700CE",
-   "gap_pct": 0.707,
-   "kotak": 28.3,
-   "upstox": 28.5,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 30,
-  "contract_quotes": 1886,
+  "rounds": 31,
+  "contract_quotes": 1949,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 44.4,
   "same_best_ask_pct": 44.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -27.5
+  "upstox_minus_kotak_quote_time_s_median": -28.0
  }
 }
