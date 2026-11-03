@@ -182,6 +182,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -47.0
+  },
+  {
+   "at": "10:30:05",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.163,
+   "same_best_bid_pct": 49.2,
+   "same_best_ask_pct": 44.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -25.0
   }
  ],
  "top_gaps": [
@@ -226,6 +240,13 @@
    "kotak": 49.05,
    "upstox": 48.35,
    "at": "09:30"
+  },
+  {
+   "contract": "NTPC26NOV322.5CE",
+   "gap_pct": 1.163,
+   "kotak": 4.3,
+   "upstox": 4.35,
+   "at": "10:30"
   },
   {
    "contract": "ASIANPAINT26NOV2400CE",
@@ -317,23 +338,16 @@
    "kotak": 122.0,
    "upstox": 122.4,
    "at": "09:30"
-  },
-  {
-   "contract": "HINDUNILVR26NOV1940CE",
-   "gap_pct": 0.287,
-   "kotak": 34.9,
-   "upstox": 35.0,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 13,
-  "contract_quotes": 816,
+  "rounds": 14,
+  "contract_quotes": 879,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 39.7,
-  "same_best_ask_pct": 36.5,
+  "same_best_bid_pct": 40.5,
+  "same_best_ask_pct": 37.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -19.0
+  "upstox_minus_kotak_quote_time_s_median": -20.0
  }
 }
