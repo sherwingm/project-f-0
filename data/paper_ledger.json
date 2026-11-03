@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 184102.43999999997,
+ "cash": 176916.86999999997,
  "positions": [
   {
    "id": "P-1793072705460-21",
@@ -4624,6 +4624,143 @@
      "live best bid (feed poll)"
     ],
     "max_gap_s": 11.2
+   }
+  },
+  {
+   "id": "P-1793677502443-2",
+   "symbol": "ITC",
+   "instrument": "CE",
+   "expiry": "2026-11-23",
+   "strike": 272.5,
+   "tradingsymbol": "ITC26NOV272.5CE",
+   "lot_size": 1725,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 1725,
+   "entry": {
+    "price": 4.15,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_fade",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 1725,
+    "price": 4.15,
+    "value": 7158.75,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.54,
+    "sebi": 0.01,
+    "stamp": 0.21,
+    "gst": 4.06,
+    "total": 26.82
+   },
+   "entry_charges_open": 26.82,
+   "stop": null,
+   "max_loss_at_entry": 7185.57,
+   "margin": 0.0,
+   "opened_at": "2026-11-03T09:15:02+05:30",
+   "t2_date": "2026-11-19",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 37.35,
+   "unrealised": -64.17,
+   "liquidation_value": 7121.4,
+   "rule": {
+    "strategy": "fade",
+    "version": "v12",
+    "entry_mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "signal_date": "2026-11-03",
+    "filed": "2026-11-02",
+    "why": "net profit YoY -18.5 %, QoQ -6.2 %; revenue YoY +43.9 %",
+    "spot_at_entry": 266.4,
+    "np_yoy": -18.5,
+    "np_qoq": -6.2,
+    "rev_yoy": 43.9,
+    "shadow_np25": true,
+    "shadow_t100": {
+     "target": 8.3,
+     "hit_at": null,
+     "max_bid": null
+    },
+    "stop": {
+     "level": 3.32,
+     "from": "09:16",
+     "min_bid": null
+    },
+    "trail": {
+     "status": "open",
+     "start": 4.565,
+     "gap": 0.02,
+     "peak": null
+    },
+    "shadow_v10": {
+     "status": "open"
+    },
+    "shadow_v11": {
+     "status": "open"
+    },
+    "shadow_trail": {
+     "status": "open",
+     "start": 4.565,
+     "peak": null
+    },
+    "shadow_fd2": null,
+    "best": 4.15,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 3.8,
+    "bid_qty": 3450,
+    "ask": 4.15,
+    "ask_qty": 1725,
+    "ltp": 3.9,
+    "spread_pct": 8.81,
+    "spot": null,
+    "volume": 8625,
+    "oi": 1374825,
+    "source": "upstox_stream",
+    "day_open": 3.1,
+    "todays_book": true,
+    "ltt": "2026-11-03 09:15:01",
+    "at": "2026-11-03T09:15:02+05:30",
+    "ltt_age_s": 1.4,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 4.15,
+    "at": "2026-11-03T09:15:02+05:30"
+   },
+   "trough": {
+    "price": 4.15,
+    "at": "2026-11-03T09:15:02+05:30"
+   },
+   "order": {
+    "decision_price": 4.15,
+    "limit": 4.6,
+    "tick": 0.05,
+    "placed_at": "2026-11-03T09:15:01+05:30",
+    "filled_at": "2026-11-03T09:15:02+05:30",
+    "wait_s": 1.0,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 4.15,
+      "qty": 1725
+     }
+    ],
+    "old_price": null
    }
   }
  ],
@@ -19566,6 +19703,11 @@
    "start_equity": 441494.11,
    "end_equity": 459964.49,
    "realised": -16718.84
+  },
+  "2026-11-03": {
+   "start_equity": 459964.49,
+   "end_equity": 459900.32,
+   "realised": 0.0
   }
  },
  "peak_equity": 563416.62,
@@ -19759,7 +19901,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-02T15:29:53+05:30",
+ "saved_at": "2026-11-03T09:15:02+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -20003,7 +20145,8 @@
    "2026-11-02:SUNPHARMA": "bought",
    "2026-11-02:PHOENIXLTD": "bought",
    "2026-11-02:SYRMA": "bought",
-   "2026-11-02:NAVINFLUOR": "bought"
+   "2026-11-02:NAVINFLUOR": "bought",
+   "2026-11-03:ITC": "bought"
   },
   "open_wait": {},
   "fade_wait": {},
