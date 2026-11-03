@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -35.0
+  },
+  {
+   "at": "09:50:04",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.22,
+   "same_best_bid_pct": 44.4,
+   "same_best_ask_pct": 39.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -21.0
   }
  ],
  "top_gaps": [
@@ -200,6 +214,20 @@
    "at": "09:30"
   },
   {
+   "contract": "ADANIPORTS26NOV1900CE",
+   "gap_pct": 0.22,
+   "kotak": 22.75,
+   "upstox": 22.8,
+   "at": "09:50"
+  },
+  {
+   "contract": "DMART26NOV3300CE",
+   "gap_pct": 0.181,
+   "kotak": 82.85,
+   "upstox": 83.0,
+   "at": "09:50"
+  },
+  {
    "contract": "COFORGE26NOV2100PE",
    "gap_pct": 0.149,
    "kotak": 67.0,
@@ -212,30 +240,16 @@
    "kotak": 3530.1,
    "upstox": 3533.5,
    "at": "09:35"
-  },
-  {
-   "contract": "ANGELONE26NOVFUT",
-   "gap_pct": 0.05,
-   "kotak": 298.9,
-   "upstox": 298.75,
-   "at": "09:25"
-  },
-  {
-   "contract": "ASHOKLEY26NOVFUT",
-   "gap_pct": 0.033,
-   "kotak": 153.6,
-   "upstox": 153.55,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 376,
+  "rounds": 7,
+  "contract_quotes": 439,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 33.8,
-  "same_best_ask_pct": 33.35,
+  "same_best_bid_pct": 38.1,
+  "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.45,
-  "upstox_minus_kotak_quote_time_s_median": -9.5
+  "oi_same_pct": 95.2,
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
