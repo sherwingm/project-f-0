@@ -322,6 +322,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -28.0
+  },
+  {
+   "at": "11:20:07",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.849,
+   "same_best_bid_pct": 52.4,
+   "same_best_ask_pct": 44.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -54.0
   }
  ],
  "top_gaps": [
@@ -359,6 +373,13 @@
    "kotak": 2.9,
    "upstox": 2.96,
    "at": "11:05"
+  },
+  {
+   "contract": "BANKBARODA26NOV245CE",
+   "gap_pct": 1.849,
+   "kotak": 5.95,
+   "upstox": 6.06,
+   "at": "11:20"
   },
   {
    "contract": "INDIGO26NOV5200CE",
@@ -438,6 +459,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BHARTIARTL26NOV2020CE",
+   "gap_pct": 0.698,
+   "kotak": 42.95,
+   "upstox": 42.65,
+   "at": "11:20"
+  },
+  {
    "contract": "MAXHEALTH26NOV910CE",
    "gap_pct": 0.693,
    "kotak": 21.65,
@@ -450,30 +478,16 @@
    "kotak": 150.45,
    "upstox": 151.45,
    "at": "09:35"
-  },
-  {
-   "contract": "ASHOKLEY26NOV155CE",
-   "gap_pct": 0.476,
-   "kotak": 4.2,
-   "upstox": 4.18,
-   "at": "09:25"
-  },
-  {
-   "contract": "GAIL26NOV182.5CE",
-   "gap_pct": 0.474,
-   "kotak": 2.11,
-   "upstox": 2.1,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 23,
-  "contract_quotes": 1446,
+  "rounds": 24,
+  "contract_quotes": 1509,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.3,
-  "same_best_ask_pct": 41.3,
+  "same_best_bid_pct": 42.85,
+  "same_best_ask_pct": 41.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -22.0
+  "upstox_minus_kotak_quote_time_s_median": -23.5
  }
 }
