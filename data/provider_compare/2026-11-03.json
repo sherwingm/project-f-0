@@ -532,6 +532,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -58.0
+  },
+  {
+   "at": "12:35:11",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.254,
+   "same_best_bid_pct": 62.3,
+   "same_best_ask_pct": 52.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -57.0
   }
  ],
  "top_gaps": [
@@ -606,6 +620,13 @@
    "at": "09:30"
   },
   {
+   "contract": "SBICARD26NOV540CE",
+   "gap_pct": 1.254,
+   "kotak": 15.95,
+   "upstox": 15.75,
+   "at": "12:35"
+  },
+  {
    "contract": "NTPC26NOV322.5CE",
    "gap_pct": 1.163,
    "kotak": 4.3,
@@ -667,18 +688,11 @@
    "kotak": 24.6,
    "upstox": 24.4,
    "at": "11:30"
-  },
-  {
-   "contract": "COALINDIA26NOV410CE",
-   "gap_pct": 0.8,
-   "kotak": 6.25,
-   "upstox": 6.3,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 38,
-  "contract_quotes": 2390,
+  "rounds": 39,
+  "contract_quotes": 2453,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 47.6,
   "same_best_ask_pct": 46.0,
