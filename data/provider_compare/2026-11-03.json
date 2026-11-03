@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.7,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "10:20:05",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.833,
+   "same_best_bid_pct": 41.3,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -212,6 +226,13 @@
    "kotak": 117.6,
    "upstox": 118.65,
    "at": "09:35"
+  },
+  {
+   "contract": "GAIL26NOV182.5CE",
+   "gap_pct": 0.833,
+   "kotak": 3.6,
+   "upstox": 3.63,
+   "at": "10:20"
   },
   {
    "contract": "COALINDIA26NOV410CE",
@@ -289,23 +310,16 @@
    "kotak": 96.75,
    "upstox": 96.5,
    "at": "09:55"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1900CE",
-   "gap_pct": 0.22,
-   "kotak": 22.75,
-   "upstox": 22.8,
-   "at": "09:50"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 690,
+  "rounds": 12,
+  "contract_quotes": 753,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.1,
+  "same_best_bid_pct": 38.9,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -14.5
  }
 }
