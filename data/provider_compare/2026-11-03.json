@@ -280,6 +280,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -15.0
+  },
+  {
+   "at": "11:05:06",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.069,
+   "same_best_bid_pct": 36.5,
+   "same_best_ask_pct": 39.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -18.0
   }
  ],
  "top_gaps": [
@@ -310,6 +324,13 @@
    "kotak": 107.65,
    "upstox": 110.85,
    "at": "09:20"
+  },
+  {
+   "contract": "VMM26NOV91CE",
+   "gap_pct": 2.069,
+   "kotak": 2.9,
+   "upstox": 2.96,
+   "at": "11:05"
   },
   {
    "contract": "INDIGO26NOV5200CE",
@@ -415,21 +436,14 @@
    "kotak": 2.11,
    "upstox": 2.1,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1900CE",
-   "gap_pct": 0.376,
-   "kotak": 26.6,
-   "upstox": 26.5,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 1257,
+  "rounds": 21,
+  "contract_quotes": 1320,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 42.85,
-  "same_best_ask_pct": 40.5,
+  "same_best_bid_pct": 41.3,
+  "same_best_ask_pct": 39.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
   "upstox_minus_kotak_quote_time_s_median": -22.0
