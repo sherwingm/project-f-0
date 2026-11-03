@@ -266,6 +266,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -36.0
+  },
+  {
+   "at": "11:00:06",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.693,
+   "same_best_bid_pct": 46.0,
+   "same_best_ask_pct": 34.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -375,6 +389,13 @@
    "at": "09:25"
   },
   {
+   "contract": "MAXHEALTH26NOV910CE",
+   "gap_pct": 0.693,
+   "kotak": 21.65,
+   "upstox": 21.5,
+   "at": "11:00"
+  },
+  {
    "contract": "BSE26NOV3500CE",
    "gap_pct": 0.665,
    "kotak": 150.45,
@@ -401,21 +422,14 @@
    "kotak": 26.6,
    "upstox": 26.5,
    "at": "09:30"
-  },
-  {
-   "contract": "INDIGO26NOV5200CE",
-   "gap_pct": 0.342,
-   "kotak": 102.4,
-   "upstox": 102.05,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 19,
-  "contract_quotes": 1194,
+  "rounds": 20,
+  "contract_quotes": 1257,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.3,
-  "same_best_ask_pct": 41.3,
+  "same_best_bid_pct": 42.85,
+  "same_best_ask_pct": 40.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
   "upstox_minus_kotak_quote_time_s_median": -22.0
