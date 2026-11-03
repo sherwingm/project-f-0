@@ -894,3 +894,5 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-02: **S3 PUT1 (puts-only downside breakout) closed**: 2022-24 NIFTY spot, 362 trades, −0.006 % a trade
   (t −0.17) against the +0.10 % hurdle; halves +0.014 / −0.028 %; calls +0.053 %. The 2024-26 put lead from the
   execution audit did not hold on unseen years (`data/results/S3_PUT1_report.md`).
+
+- 2026-11-03 · S3 PUT1 rules on 2025-01 → 2026-10 NIFTY spot (descriptive, asked by the user; PUT1 stays closed): puts 229 trades +0.031 % a trade (t 0.84, fell 56 %), calls -0.000 %; 2025 puts +0.009 %, 2026 +0.057 %. Below the +0.10 % hurdle. `data/results/S3_PUT1_2025-26.md`, `scripts/s3_put1_2025_26.py`.
