@@ -33,7 +33,9 @@ and "Yes" to writing the rules down before any run. Buy only, 1 lot.
     paid − 1 % when the day's low reaches it, at the open − 1 % if the day opens below it;
   - a day that touched both counts as the stop;
   - otherwise the expiry day's closing price − 1 %.
-- **Costs:** 1 % slippage each way, charges from `server/charges.py`, 1 lot (bhavcopy lot of the contract).
+- **Costs:** 1 % slippage each way, charges from `server/charges.py`, 1 lot: the bhavcopy lot from 2024-07, and
+  before it the NSE lot used by D6 (`scanner/s3_d6_d7.lot_for`: 50, then 25 from 2024-04-26), since the 2022-24
+  bhavcopy lot column is empty. The lot moves ₹ figures and the flat fees only.
 - A day is skipped only if a needed row is missing or the put did not trade the evening before; every skip is
   listed.
 - **Max up** (the standing rule): the expiry day's high over the price paid, reported as mean, median and the share

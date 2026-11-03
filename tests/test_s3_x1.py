@@ -18,7 +18,7 @@ def _patch(monkeypatch, rows, spot=17_010.0):
     monkeypatch.setattr(X, "_rows", lambda day, ex: df[(df["TradDt"] == day) & (df["XpryDt"] == ex)])
     monkeypatch.setattr(X, "prev_session", lambda day: D0)
     monkeypatch.setattr(X, "_spot", lambda day, which: spot)
-    monkeypatch.setattr(X.L, "lot_on", lambda *a, **k: 50)
+    monkeypatch.setattr(X, "lot_for", lambda *a, **k: 50)
 
 
 def test_overnight_put_hits_the_target(monkeypatch):

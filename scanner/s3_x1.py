@@ -18,6 +18,7 @@ from functools import lru_cache
 import pandas as pd
 
 from index_data import load as L
+from scanner.s3_d6_d7 import lot_for
 from scanner.s3_p1 import t_stat
 from scanner.s3_pods import RES
 from server import charges
@@ -119,7 +120,7 @@ def trade(entry: str, ex: date, opt: str, offset: int, target: float | None, sto
         return {"skip": f"{k:.0f} {opt} did not trade"}
     fill = px0 * (1 + SLIP)
     op, hi, lo, cl = (float(r1[c].iloc[0]) for c in ("OpnPric", "HghPric", "LwPric", "ClsPric"))
-    lot = L.lot_on(ex, "NIFTY", ex)
+    lot = lot_for(d0, ex)                       # the bhavcopy lot from 2024-07; before it NSE's 50, then 25 from 2024-04-26
 
     def net_of(out):
         fees = charges.leg(opt, "BUY", lot, fill)["total"] + charges.leg(opt, "SELL", lot, out)["total"]
@@ -140,7 +141,7 @@ def collect(window, cells) -> pd.DataFrame:
     rows = []
     for ex in expiry_days(window):
         for c in cells:
-            rows.append({"day": ex, "cell": cell_name(c), **trade(*c)})
+            rows.append({"day": ex, "cell": cell_name(c), **trade(c[0], ex, *c[1:])})
     return pd.DataFrame(rows)
 
 

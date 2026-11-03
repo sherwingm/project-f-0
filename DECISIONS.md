@@ -380,3 +380,12 @@ Page `strategies/S3_PUT1_downside_breakout_spot.md` (c35b837f, before the run); 
 +0.10 %), fell on 49 %; halves +0.014 % / −0.028 %; neighbours OR 12 −0.010 %, OR 18 +0.029 %. Side reports: calls under
 the same rules +0.053 % (t 1.63, also below the hurdle), puts with P4's filters +0.019 % (36), puts with the failure exit
 −0.010 %. The 2024-26 put advantage in P4 / B1 / B2 does not appear on the earlier years: the put lead is closed.
+
+### S3 X1 · NIFTY expiry-day ATM put bought the evening before, +200 % target, 50 % stop, 2022-24: closed (2026-11-03)
+Page `strategies/S3_X1_expiry_day_buy.md` (7ae966db; 50 % stop added by the user before the run, 34e909c3); runner
+`scanner/s3_x1.py`, daily bhavcopy. **FAIL** on 5 of 6 checks: 142 trades, −8.9 % of the premium a trade (median
+−52.4 %, t −1.06), won 18 %; halves −2.1 % / −16.1 %; neighbours −19.8 % (+100 %), −3.2 % (+300 %), −17.3 % (1 out).
+Max up still large: mean +102 %, median +59 %, 39 % of days reached +100 %, yet the 50 % stop took 113 of 142 trades
+(26 at the open). Best case (target first on the 6 days that touched both) +1.7 %, t 0.18. Side: ATM call −16.1 %,
+open entry −7.9 %, no target −0.7 %, no stop −13.0 %. The lead is closed; the 2024-26 +17 % was in-sample. The user
+said after this run to stop using the 2022-24 data; it is not used again for this idea.

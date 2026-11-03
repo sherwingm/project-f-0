@@ -903,3 +903,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-03 · S3 X1 rule change before the run (the user: "Keep a 50% SL"): 50 % stop-loss on expiry day; a day
   that touched both stop and target counts as stopped (daily prices hide the order), target-first reported beside
   it. Page, `scanner/s3_x1.py`, 4 tests. Still nothing run on 2022-24.
+- 2026-11-03 · S3 X1 run once on 2022-24: **FAIL**, −8.9 % a trade (t −1.06), 50 % stop hit on 113 of 142 trades,
+  max up median +59 % (39 % of days ≥ +100 %). Fixes before any output: the expiry day passed to `trade`, lot from
+  D6's NSE history (bhavcopy lot column empty before 2024-07). The user: stop using 2022-24 data.
