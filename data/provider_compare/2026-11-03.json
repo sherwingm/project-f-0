@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "10:00:04",
+   "contracts": 62,
+   "on_both": 62,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.287,
+   "same_best_bid_pct": 37.1,
+   "same_best_ask_pct": 35.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -9.5
   }
  ],
  "top_gaps": [
@@ -235,6 +249,13 @@
    "at": "09:30"
   },
   {
+   "contract": "HINDUNILVR26NOV1940CE",
+   "gap_pct": 0.287,
+   "kotak": 34.9,
+   "upstox": 35.0,
+   "at": "10:00"
+  },
+  {
    "contract": "LT26NOV3900CE",
    "gap_pct": 0.258,
    "kotak": 96.75,
@@ -247,23 +268,16 @@
    "kotak": 22.75,
    "upstox": 22.8,
    "at": "09:50"
-  },
-  {
-   "contract": "DMART26NOV3300CE",
-   "gap_pct": 0.181,
-   "kotak": 82.85,
-   "upstox": 83.0,
-   "at": "09:50"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 502,
+  "rounds": 9,
+  "contract_quotes": 564,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.9,
+  "same_best_bid_pct": 38.1,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 96.0,
+  "oi_same_pct": 96.8,
   "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
