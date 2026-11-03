@@ -1,40 +1,40 @@
 {
  "recorder": {
-  "run_at": "2026-11-03T04:09:57+05:30",
-  "session": "2026-11-02",
+  "run_at": "2026-11-04T02:14:11+05:30",
+  "session": "2026-11-03",
   "expiry_check": {
    "bse_fo": {
-    "checked": 3375,
+    "checked": 3541,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 8991,
+    "checked": 9069,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 23440.8,
-    "contracts": 188,
-    "rows": 90123,
+    "spot": 23810.85,
+    "contracts": 192,
+    "rows": 22513,
     "expiries": [
      "2026-11-03",
      "2026-11-09"
     ]
    },
    "SENSEX": {
-    "spot": 75692.78,
-    "contracts": 300,
-    "rows": 99070,
+    "spot": 76917.85,
+    "contracts": 308,
+    "rows": 12887,
     "expiries": [
      "2026-11-05",
      "2026-11-12"
     ]
    },
    "BANKNIFTY": {
-    "spot": 55002.2,
-    "contracts": 220,
-    "rows": 32455,
+    "spot": 55540.05,
+    "contracts": 224,
+    "rows": 4906,
     "expiries": [
      "2026-11-23",
      "2026-12-29"
@@ -42,10 +42,10 @@
    }
   },
   "failures": [],
-  "chain_eod_rows": 708,
-  "calls": 745,
-  "runtime_s": 1345.6,
-  "contracts": 708
+  "chain_eod_rows": 724,
+  "calls": 772,
+  "runtime_s": 1350.1,
+  "contracts": 724
  },
  "recent_runs": [
   {
@@ -158,6 +158,14 @@
    "contracts": 708,
    "calls": 745,
    "runtime_s": 1345.6,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-11-04T02:14:11+05:30",
+   "session": "2026-11-03",
+   "contracts": 724,
+   "calls": 772,
+   "runtime_s": 1350.1,
    "failures": 0
   }
  ],
@@ -298,23 +306,23 @@
   },
   "spot_upstox_repair": {
    "NIFTY50": {
-    "bar_0915_replaced": 20,
-    "bar_0915_changed": 1,
-    "minutes_added": 0,
-    "days_added": 0,
-    "days_dropped": 0,
-    "days_kept_no_upstox": 1
-   },
-   "NIFTYBANK": {
-    "bar_0915_replaced": 21,
+    "bar_0915_replaced": 22,
     "bar_0915_changed": 2,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
     "days_kept_no_upstox": 0
    },
+   "NIFTYBANK": {
+    "bar_0915_replaced": 22,
+    "bar_0915_changed": 1,
+    "minutes_added": 0,
+    "days_added": 0,
+    "days_dropped": 0,
+    "days_kept_no_upstox": 0
+   },
    "SENSEX": {
-    "bar_0915_replaced": 21,
+    "bar_0915_replaced": 22,
     "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
@@ -322,7 +330,7 @@
     "days_kept_no_upstox": 0
    },
    "INDIAVIX": {
-    "bar_0915_replaced": 21,
+    "bar_0915_replaced": 22,
     "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
@@ -334,21 +342,16 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 5663,
+   "rows": 5833,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-02",
-  "runtime_s": 34
+  "day": "2026-11-03",
+  "runtime_s": 30
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-03",
+  "run_on": "2026-11-04",
   "days": {
-   "2026-10-26": {
-    "positions": 7,
-    "stock_rows": 1444,
-    "option_rows": 171
-   },
    "2026-10-27": {
     "positions": 16,
     "stock_rows": 3954,
@@ -372,14 +375,15 @@
    "2026-11-02": {
     "positions": 49,
     "stock_rows": 12634,
-    "option_rows": 9285
+    "option_rows": 9287
+   },
+   "2026-11-03": {
+    "positions": 43,
+    "stock_rows": 9739,
+    "option_rows": 0
    }
   },
-  "missing_tokens": [
-   "TECHM26OCT1820CE",
-   "WIPRO26OCT185CE",
-   "INDHOTEL26OCT780CE"
-  ],
-  "calls": 258
+  "missing_tokens": [],
+  "calls": 315
  }
 }
