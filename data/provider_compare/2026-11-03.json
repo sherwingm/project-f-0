@@ -910,6 +910,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.7,
    "upstox_minus_kotak_quote_time_s_median": -37.0
+  },
+  {
+   "at": "14:50:16",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.401,
+   "same_best_bid_pct": 57.1,
+   "same_best_ask_pct": 46.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -55.0
   }
  ],
  "top_gaps": [
@@ -1026,6 +1040,13 @@
    "at": "09:30"
   },
   {
+   "contract": "JSWSTEEL26NOV1340CE",
+   "gap_pct": 1.401,
+   "kotak": 17.85,
+   "upstox": 17.6,
+   "at": "14:50"
+  },
+  {
    "contract": "SBICARD26NOV540CE",
    "gap_pct": 1.254,
    "kotak": 15.95,
@@ -1045,23 +1066,16 @@
    "kotak": 78.0,
    "upstox": 78.9,
    "at": "11:30"
-  },
-  {
-   "contract": "ITC26NOV270CE",
-   "gap_pct": 1.099,
-   "kotak": 4.55,
-   "upstox": 4.6,
-   "at": "12:00"
   }
  ],
  "day": {
-  "rounds": 65,
-  "contract_quotes": 4089,
+  "rounds": 66,
+  "contract_quotes": 4152,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.8,
-  "same_best_ask_pct": 52.4,
+  "same_best_bid_pct": 51.6,
+  "same_best_ask_pct": 51.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -44.0
+  "oi_same_pct": 97.6,
+  "upstox_minus_kotak_quote_time_s_median": -45.5
  }
 }
