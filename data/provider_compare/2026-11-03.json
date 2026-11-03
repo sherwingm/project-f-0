@@ -854,6 +854,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -37.0
+  },
+  {
+   "at": "14:30:15",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.88,
+   "same_best_bid_pct": 41.3,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -14.0
   }
  ],
  "top_gaps": [
@@ -877,6 +891,13 @@
    "kotak": 4.07,
    "upstox": 3.9,
    "at": "09:55"
+  },
+  {
+   "contract": "SYRMA26NOV1500PE",
+   "gap_pct": 3.88,
+   "kotak": 61.85,
+   "upstox": 59.45,
+   "at": "14:30"
   },
   {
    "contract": "KFINTECH26NOV920CE",
@@ -989,23 +1010,16 @@
    "kotak": 4.7,
    "upstox": 4.65,
    "at": "12:00"
-  },
-  {
-   "contract": "ASIANPAINT26NOV2400CE",
-   "gap_pct": 1.017,
-   "kotak": 49.15,
-   "upstox": 48.65,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 61,
-  "contract_quotes": 3837,
+  "rounds": 62,
+  "contract_quotes": 3900,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 50.8,
-  "same_best_ask_pct": 52.4,
+  "same_best_ask_pct": 51.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -47.0
+  "upstox_minus_kotak_quote_time_s_median": -45.5
  }
 }
