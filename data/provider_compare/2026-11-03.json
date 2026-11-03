@@ -168,6 +168,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "10:25:05",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.719,
+   "same_best_bid_pct": 54.0,
+   "same_best_ask_pct": 47.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -47.0
   }
  ],
  "top_gaps": [
@@ -249,6 +263,13 @@
    "at": "09:40"
   },
   {
+   "contract": "KFINTECH26NOV920CE",
+   "gap_pct": 0.719,
+   "kotak": 13.9,
+   "upstox": 14.0,
+   "at": "10:25"
+  },
+  {
    "contract": "MUTHOOTFIN26NOV2700CE",
    "gap_pct": 0.707,
    "kotak": 28.3,
@@ -303,23 +324,16 @@
    "kotak": 34.9,
    "upstox": 35.0,
    "at": "10:00"
-  },
-  {
-   "contract": "LT26NOV3900CE",
-   "gap_pct": 0.258,
-   "kotak": 96.75,
-   "upstox": 96.5,
-   "at": "09:55"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 753,
+  "rounds": 13,
+  "contract_quotes": 816,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.9,
+  "same_best_bid_pct": 39.7,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -14.5
+  "upstox_minus_kotak_quote_time_s_median": -19.0
  }
 }
