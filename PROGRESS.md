@@ -896,3 +896,4 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   execution audit did not hold on unseen years (`data/results/S3_PUT1_report.md`).
 
 - 2026-11-03 · S3 PUT1 rules on 2025-01 → 2026-10 NIFTY spot (descriptive, asked by the user; PUT1 stays closed): puts 229 trades +0.031 % a trade (t 0.84, fell 56 %), calls -0.000 %; 2025 puts +0.009 %, 2026 +0.057 %. Below the +0.10 % hurdle. `data/results/S3_PUT1_2025-26.md`, `scripts/s3_put1_2025_26.py`.
+- 2026-11-03 · S3 PUT1 puts on REAL NIFTY option minutes 2024-10 → 2026-10 (descriptive; PUT1 stays closed): 259 trades, ATM weekly put, sold 15:15: mean -1.2 % of premium after costs (median -8.0 %, won 41 %, -₹66,730); max up mean +45 %, median +28 %; ≥ +100 % on 15 %, ≥ +400 % on none. Option minutes before Oct 2024 cannot be downloaded (Upstox / Kotak). `data/results/S3_PUT1_options.md`.
