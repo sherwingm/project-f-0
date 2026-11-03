@@ -28,9 +28,11 @@ OFFSETS, TARGETS = (0, 1, 2, 3, 4), (0.5, 1.0, 2.0, 3.0, None)
 DESIGN = (date(2024, 10, 1), date(2026, 10, 30))
 TEST = (date(2022, 1, 3), date(2024, 9, 30))
 HALVES = ((date(2022, 1, 3), date(2023, 5, 31)), (date(2023, 6, 1), date(2024, 9, 30)))
-PRIMARY = ("overnight", "PE", 0, 2.0)                           # entry, side, strikes out, target
-NEIGHBOURS = [("overnight", "PE", 0, 1.0), ("overnight", "PE", 0, 3.0), ("overnight", "PE", 1, 2.0)]
-SIDE = [("overnight", "CE", 0, 2.0), ("open", "PE", 0, 2.0), ("overnight", "PE", 0, None)]
+STOP = 0.5                                                      # the user, 2026-11-03: "Keep a 50% SL"
+PRIMARY = ("overnight", "PE", 0, 2.0, STOP)                     # entry, side, strikes out, target, stop
+NEIGHBOURS = [("overnight", "PE", 0, 1.0, STOP), ("overnight", "PE", 0, 3.0, STOP), ("overnight", "PE", 1, 2.0, STOP)]
+SIDE = [("overnight", "CE", 0, 2.0, STOP), ("open", "PE", 0, 2.0, STOP), ("overnight", "PE", 0, None, STOP),
+        ("overnight", "PE", 0, 2.0, None)]
 
 
 @lru_cache(maxsize=None)
@@ -75,13 +77,34 @@ def _spot(day: date, which: str) -> float | None:
 
 
 def cell_name(c) -> str:
-    return f"{c[0]} · {c[1]} · {c[2]} out · target {'none' if c[3] is None else f'{int(c[3] * 100)} %'}"
+    pct = lambda v: "none" if v is None else f"{int(v * 100)} %"
+    stop = c[4] if len(c) > 4 else None
+    return f"{c[0]} · {c[1]} · {c[2]} out · target {pct(c[3])}" + (f" · stop {pct(stop)}" if stop else "")
 
 
-def trade(entry: str, ex: date, opt: str, offset: int, target: float | None) -> dict:
+def _exit(entry, fill, op, hi, lo, cl, target, stop, stop_first: bool):
+    """The expiry-day exit price and why. Daily rows cannot say whether the low or the high came first, so a day that
+    touched both is resolved by stop_first (True: the stop, the worst case; False: the target)."""
+    T = None if target is None else fill * (1 + target)
+    S = None if stop is None else fill * (1 - stop)
+    if entry == "overnight":                                       # the day's first price can jump past either order
+        if T is not None and op >= T:
+            return max(T, op * (1 - SLIP)), "gap target"
+        if S is not None and op <= S:
+            return op * (1 - SLIP), "gap stop"
+    hit_t, hit_s = T is not None and hi >= T, S is not None and lo <= S
+    if hit_s and (stop_first or not hit_t):
+        return S * (1 - SLIP), "stop"
+    if hit_t:
+        return T, "target"
+    return cl * (1 - SLIP), "close"
+
+
+def trade(entry: str, ex: date, opt: str, offset: int, target: float | None, stop: float | None = None) -> dict:
     """One lot. entry 'overnight': the previous session's close, strike from its last spot minute; 'open': the expiry
-    day's open, strike from its first spot minute. Out at the target (the expiry day's high reaching it; at the open
-    when the day opens above it) or at the expiry day's close."""
+    day's open, strike from its first spot minute. Out at the stop (the day's low at fill × (1 − stop)), the target
+    (the day's high at fill × (1 + target)), the open when it is already past either, or the expiry day's close. A day
+    that touched both counts as the stop (worst case); the target-first result is kept as net_pct_best."""
     d0 = prev_session(ex) if entry == "overnight" else ex
     s = _spot(d0, "close" if entry == "overnight" else "open") if d0 else None
     if s is None:
@@ -95,25 +118,29 @@ def trade(entry: str, ex: date, opt: str, offset: int, target: float | None) -> 
     if not px0 or px0 <= 0 or r0["TtlTradgVol"].iloc[0] <= 0:
         return {"skip": f"{k:.0f} {opt} did not trade"}
     fill = px0 * (1 + SLIP)
-    op, hi, cl = (float(r1[c].iloc[0]) for c in ("OpnPric", "HghPric", "ClsPric"))
-    hit = target is not None and hi >= fill * (1 + target)
-    if hit:
-        out = max(fill * (1 + target), op * (1 - SLIP)) if entry == "overnight" else fill * (1 + target)
-    else:
-        out = cl * (1 - SLIP)
+    op, hi, lo, cl = (float(r1[c].iloc[0]) for c in ("OpnPric", "HghPric", "LwPric", "ClsPric"))
     lot = L.lot_on(ex, "NIFTY", ex)
-    fees = charges.leg(opt, "BUY", lot, fill)["total"] + charges.leg(opt, "SELL", lot, out)["total"]
-    net = (out - fill) * lot - fees
+
+    def net_of(out):
+        fees = charges.leg(opt, "BUY", lot, fill)["total"] + charges.leg(opt, "SELL", lot, out)["total"]
+        return (out - fill) * lot - fees, fees
+
+    out, why = _exit(entry, fill, op, hi, lo, cl, target, stop, True)
+    out_b, why_b = _exit(entry, fill, op, hi, lo, cl, target, stop, False)
+    (net, fees), (net_b, _) = net_of(out), net_of(out_b)
     return {"skip": "", "entry_day": d0, "spot": s, "strike": k, "paid": round(fill, 2), "exit": round(out, 2),
-            "hit": hit, "max_up_pct": (hi / fill - 1) * 100, "lot": lot, "fees_rs": round(fees, 2),
-            "net_rs": round(net, 2), "net_pct": net / (fill * lot) * 100}
+            "why": why, "hit": why in ("target", "gap target"), "both_touched": why != why_b,
+            "hit_best": why_b in ("target", "gap target"),
+            "max_up_pct": (hi / fill - 1) * 100, "lot": lot, "fees_rs": round(fees, 2),
+            "net_rs": round(net, 2), "net_pct": net / (fill * lot) * 100,
+            "net_rs_best": round(net_b, 2), "net_pct_best": net_b / (fill * lot) * 100}
 
 
 def collect(window, cells) -> pd.DataFrame:
     rows = []
     for ex in expiry_days(window):
         for c in cells:
-            rows.append({"day": ex, "cell": cell_name(c), **trade(c[0], ex, c[1], c[2], c[3])})
+            rows.append({"day": ex, "cell": cell_name(c), **trade(*c)})
     return pd.DataFrame(rows)
 
 
@@ -166,6 +193,11 @@ def run() -> dict:
               ""] + HEAD
     for tag, c in [("primary (gate)", PRIMARY), *(("neighbour (gate)", c) for c in NEIGHBOURS), *(("side", c) for c in SIDE)]:
         lines.append(_line(f"{tag}: {cell_name(c)}", ok[ok["cell"] == cell_name(c)]))
+    best = p.assign(net_pct=p["net_pct_best"], net_rs=p["net_rs_best"], hit=p["hit_best"])
+    lines += ["", f"Daily prices cannot show whether the low or the high came first. {p['both_touched'].sum()} of {len(p)} "
+              "primary days touched both the stop and the target; the gate counts them as stopped (worst case). "
+              "Target first instead (best case, not the gate):", "", *HEAD, _line("primary, target first", best), "",
+              "Primary exits: " + ", ".join(f"{k} {v}" for k, v in p["why"].value_counts().items())]
     lines += ["", "| Year | Trades | Mean net | Max up median | ≥ +100 % | Total ₹ |", "|---|---|---|---|---|---|"]
     for y, g in p.groupby(pd.to_datetime(p["day"]).dt.year):
         lines.append(f"| {y} | {len(g)} | {g['net_pct'].mean():+.1f} % | {g['max_up_pct'].median():+.0f} % | "

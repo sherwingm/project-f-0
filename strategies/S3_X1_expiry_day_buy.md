@@ -1,4 +1,4 @@
-# S3 X1 · NIFTY expiry-day option buy: ATM put bought the evening before, +200 % target (pre-registered 2026-11-03)
+# S3 X1 · NIFTY expiry-day option buy: ATM put bought the evening before, +200 % target, 50 % stop (pre-registered 2026-11-03)
 
 **Why:** the user, 2026-11-03: "we are going to trade on the expiry date near options too", with screenshots of
 the NIFTY 03 Nov 2026 23700 call (₹4.25 at 15:25 on 2 Nov → ₹59 on 3 Nov, +1,338 % against the previous close),
@@ -18,8 +18,9 @@ and "Yes" to writing the rules down before any run. Buy only, 1 lot.
 - NIFTY option daily rows from the NSE bhavcopy (`options_daily/NIFTY`): open, high, low, close, volume, lot.
 - Expiry days: every session where a NIFTY option expires and trades (from the bhavcopy, weekly and monthly).
 - Spot: NIFTY 50 1-minute (`index_data.load.spot_1m`) for the strike.
-- No option minutes exist before Oct 2024, so no stop-loss can be judged (the day's low may come before or after
-  its high). There is none.
+- No option minutes exist before Oct 2024, so the order of the day's low and high is unknown. A day that touched
+  both the stop and the target is counted as **stopped** (the worst case); the target-first result is reported
+  beside it, not used by the gate.
 
 ## Rules (no open parameters)
 - **Window:** 2022-01-03 → 2024-09-30. Halves: 2022-01-03 → 2023-05-31 and 2023-06-01 → 2024-09-30.
@@ -28,6 +29,9 @@ and "Yes" to writing the rules down before any run. Buy only, 1 lot.
 - **Exit on expiry day:**
   - a sell order resting at **+200 %** of the price paid: filled when the day's high reaches it, at the open − 1 %
     if the day opens above it;
+  - a **50 % stop-loss** (added by the user before the run, 2026-11-03: "Keep a 50% SL"): out at half the price
+    paid − 1 % when the day's low reaches it, at the open − 1 % if the day opens below it;
+  - a day that touched both counts as the stop;
   - otherwise the expiry day's closing price − 1 %.
 - **Costs:** 1 % slippage each way, charges from `server/charges.py`, 1 lot (bhavcopy lot of the contract).
 - A day is skipped only if a needed row is missing or the put did not trade the evening before; every skip is
@@ -41,12 +45,15 @@ and "Yes" to writing the rules down before any run. Buy only, 1 lot.
 3. t ≥ 2.
 4. Both halves positive.
 5. The worst trade (₹) is smaller than the average month's gain (₹).
-6. Neighbours positive: target +100 %; target +300 %; 1 strike out of the money (+200 %).
+6. Neighbours positive (all with the 50 % stop): target +100 %; target +300 %; 1 strike out of the money (+200 %).
 
 ## Reported, not part of the gate
 - The ATM call, same rules (the control).
 - The ATM put bought at the expiry day's **open** instead (+200 % target).
-- The ATM put with no target (held to the expiry close).
+- The ATM put with no target (stop only).
+- The ATM put with the target and no stop (the rule before the user's change).
+- The primary with target-first on days that touched both (the best case), and how many days that was.
+- Note: the 2024-26 design grid had no stop; the stop was added before any test-window run, not picked from data.
 - By year.
 
 ## After the run

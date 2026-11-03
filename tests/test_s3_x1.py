@@ -41,3 +41,21 @@ def test_strike_steps_out_of_the_money(monkeypatch):
     _patch(monkeypatch, [_row(D0, 16950, "PE", 20, 25, 30), _row(EX, 16950, "PE", 20, 40, 5)])
     assert X.trade("overnight", EX, "PE", 1, 2.0)["strike"] == 16950
     assert X.trade("overnight", EX, "CE", 0, 2.0)["skip"].startswith("no 17000 CE")
+
+
+def _low(day, k, opt, o, h, lo, c):
+    r = _row(day, k, opt, o, h, c)
+    r["LwPric"] = lo
+    return r
+
+
+def test_fifty_percent_stop_and_the_worst_case_when_both_are_touched(monkeypatch):
+    _patch(monkeypatch, [_row(D0, 17000, "PE", 40, 45, 50), _low(EX, 17000, "PE", 45, 60, 20, 30)])
+    t = X.trade("overnight", EX, "PE", 0, 2.0, 0.5)                     # low 20 under the stop 25.25: out there
+    assert t["why"] == "stop" and abs(t["exit"] - 50.5 * 0.5 * 0.99) < 0.01 and not t["both_touched"]
+    _patch(monkeypatch, [_row(D0, 17000, "PE", 40, 45, 50), _low(EX, 17000, "PE", 45, 200, 20, 30)])
+    t = X.trade("overnight", EX, "PE", 0, 2.0, 0.5)                     # touched both: the gate takes the stop
+    assert t["why"] == "stop" and t["both_touched"] and t["hit_best"] and t["net_pct_best"] > 100
+    _patch(monkeypatch, [_row(D0, 17000, "PE", 40, 45, 50), _low(EX, 17000, "PE", 20, 30, 15, 25)])
+    t = X.trade("overnight", EX, "PE", 0, 2.0, 0.5)                     # opened below the stop: out at the open
+    assert t["why"] == "gap stop" and abs(t["exit"] - 20 * 0.99) < 1e-9
