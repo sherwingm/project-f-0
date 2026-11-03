@@ -896,6 +896,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -74.0
+  },
+  {
+   "at": "14:45:16",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.479,
+   "same_best_bid_pct": 50.8,
+   "same_best_ask_pct": 49.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.7,
+   "upstox_minus_kotak_quote_time_s_median": -37.0
   }
  ],
  "top_gaps": [
@@ -954,6 +968,13 @@
    "kotak": 107.65,
    "upstox": 110.85,
    "at": "09:20"
+  },
+  {
+   "contract": "TATACONSUM26NOV1020CE",
+   "gap_pct": 2.479,
+   "kotak": 48.4,
+   "upstox": 49.6,
+   "at": "14:45"
   },
   {
    "contract": "INDIGO26NOV5200CE",
@@ -1031,23 +1052,16 @@
    "kotak": 4.55,
    "upstox": 4.6,
    "at": "12:00"
-  },
-  {
-   "contract": "ITC26NOV270PE",
-   "gap_pct": 1.064,
-   "kotak": 4.7,
-   "upstox": 4.65,
-   "at": "12:00"
   }
  ],
  "day": {
-  "rounds": 64,
-  "contract_quotes": 4026,
+  "rounds": 65,
+  "contract_quotes": 4089,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 51.6,
+  "same_best_bid_pct": 50.8,
   "same_best_ask_pct": 52.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -45.5
+  "upstox_minus_kotak_quote_time_s_median": -44.0
  }
 }
