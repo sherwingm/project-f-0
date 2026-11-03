@@ -588,6 +588,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -83.0
+  },
+  {
+   "at": "12:55:11",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.249,
+   "same_best_bid_pct": 57.1,
+   "same_best_ask_pct": 55.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -63.0
   }
  ],
  "top_gaps": [
@@ -625,6 +639,13 @@
    "kotak": 107.65,
    "upstox": 110.85,
    "at": "09:20"
+  },
+  {
+   "contract": "INDIGO26NOV5200CE",
+   "gap_pct": 2.249,
+   "kotak": 57.8,
+   "upstox": 56.5,
+   "at": "12:55"
   },
   {
    "contract": "VMM26NOV91CE",
@@ -718,28 +739,21 @@
    "at": "09:35"
   },
   {
-   "contract": "GAIL26NOV182.5CE",
-   "gap_pct": 0.833,
-   "kotak": 3.6,
-   "upstox": 3.63,
-   "at": "10:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2750CE",
-   "gap_pct": 0.813,
-   "kotak": 24.6,
-   "upstox": 24.4,
-   "at": "11:30"
+   "contract": "INDIGO26NOV5150CE",
+   "gap_pct": 0.842,
+   "kotak": 71.25,
+   "upstox": 70.65,
+   "at": "12:55"
   }
  ],
  "day": {
-  "rounds": 42,
-  "contract_quotes": 2642,
+  "rounds": 43,
+  "contract_quotes": 2705,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 48.4,
-  "same_best_ask_pct": 46.8,
+  "same_best_bid_pct": 49.2,
+  "same_best_ask_pct": 47.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -40.5
+  "upstox_minus_kotak_quote_time_s_median": -42.0
  }
 }
