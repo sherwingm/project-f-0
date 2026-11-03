@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -21.0
+  },
+  {
+   "at": "09:55:04",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.177,
+   "same_best_bid_pct": 39.7,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -107,6 +121,13 @@
    "kotak": 9.1,
    "upstox": 9.5,
    "at": "09:20"
+  },
+  {
+   "contract": "GAIL26NOV182.5CE",
+   "gap_pct": 4.177,
+   "kotak": 4.07,
+   "upstox": 3.9,
+   "at": "09:55"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -214,6 +235,13 @@
    "at": "09:30"
   },
   {
+   "contract": "LT26NOV3900CE",
+   "gap_pct": 0.258,
+   "kotak": 96.75,
+   "upstox": 96.5,
+   "at": "09:55"
+  },
+  {
    "contract": "ADANIPORTS26NOV1900CE",
    "gap_pct": 0.22,
    "kotak": 22.75,
@@ -226,30 +254,16 @@
    "kotak": 82.85,
    "upstox": 83.0,
    "at": "09:50"
-  },
-  {
-   "contract": "COFORGE26NOV2100PE",
-   "gap_pct": 0.149,
-   "kotak": 67.0,
-   "upstox": 66.9,
-   "at": "09:40"
-  },
-  {
-   "contract": "BSE26NOVFUT",
-   "gap_pct": 0.096,
-   "kotak": 3530.1,
-   "upstox": 3533.5,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 439,
+  "rounds": 8,
+  "contract_quotes": 502,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.1,
+  "same_best_bid_pct": 38.9,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 95.2,
+  "oi_same_pct": 96.0,
   "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
