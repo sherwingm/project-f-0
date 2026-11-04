@@ -320,6 +320,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -60.0
+  },
+  {
+   "at": "11:00:05",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.359,
+   "same_best_bid_pct": 41.3,
+   "same_best_ask_pct": 30.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -27.0
   }
  ],
  "top_gaps": [
@@ -465,13 +481,13 @@
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 1257,
+  "rounds": 21,
+  "contract_quotes": 1320,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 36.5,
-  "same_best_ask_pct": 37.3,
+  "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -22.0
+  "upstox_minus_kotak_quote_time_s_median": -23.0
  }
 }
