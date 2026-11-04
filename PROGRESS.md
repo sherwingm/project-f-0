@@ -913,3 +913,12 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   trades, t −0.74); expensive −9.0 % (t −1.41, claim 2 not confirmed); every 14:45 straddle −10.8 % (t −2.68). Two
   trades checked by hand against the raw minutes (fills and exits match). The console print crashed on "→" after
   the report was written; fixed by setting stdout to UTF-8 (output unchanged, not re-run).
+- 2026-11-04 · S3 B2 optimisation asked by the user ("option down 25 % make it 50 percentage and for 2025 to 2026 make
+  it to hold to check whether there is a next day breakout"), 2025-10 → 2026-10, **in-sample** (B2 already ran there),
+  `scanner/s3_b2_hold.py`, `data/results/S3_B2_hold_report.md`. 217 trades each: A B2 as run −0.9 % (matches B2's
+  half); B 50 % stop +0.5 % (t 0.21); C survivors held to next day 15:15 −1.0 %; D next day judged by its own
+  breakout +1.2 % (t 0.34). Halves for D +8.3 % / −5.3 %. The 61 overnight trades: sold day 1 15:15 +35.6 %, D +38.3 %,
+  C +30.3 %. 156 of 217 still end on the day-1 fail exit (−13.3 %). One D trade checked by hand (2026-06-29 PE).
+- 2026-11-04 · Max up of P4, B1, B2, PUT1 held vs without the exit (to 15:29), `scripts/s3_maxup_breakouts.py`,
+  `data/results/S3_maxup_breakouts.md`. Median held / without: P4 +14 / +26 %, B1 +14 / +23 %, B2 +8 / +20 %, PUT1
+  +25 / +25 % (PUT1 already holds to 15:15). B2 fail exits: median +3 % held, +13 % without.
