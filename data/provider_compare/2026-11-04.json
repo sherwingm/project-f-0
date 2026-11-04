@@ -528,6 +528,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -35.0
+  },
+  {
+   "at": "12:05:08",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.993,
+   "same_best_bid_pct": 47.6,
+   "same_best_ask_pct": 49.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -637,6 +653,13 @@
    "at": "09:30"
   },
   {
+   "contract": "TATASTEEL26NOV175PE",
+   "gap_pct": 0.993,
+   "kotak": 4.03,
+   "upstox": 4.07,
+   "at": "12:05"
+  },
+  {
    "contract": "MAXHEALTH26NOV920CE",
    "gap_pct": 0.936,
    "kotak": 32.05,
@@ -663,21 +686,14 @@
    "kotak": 31.0,
    "upstox": 30.75,
    "at": "11:50"
-  },
-  {
-   "contract": "ATHERENERG26NOV1800CE",
-   "gap_pct": 0.791,
-   "kotak": 50.6,
-   "upstox": 51.0,
-   "at": "11:20"
   }
  ],
  "day": {
-  "rounds": 33,
-  "contract_quotes": 2075,
+  "rounds": 34,
+  "contract_quotes": 2138,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 39.7,
-  "same_best_ask_pct": 41.3,
+  "same_best_bid_pct": 40.5,
+  "same_best_ask_pct": 42.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
   "upstox_minus_kotak_quote_time_s_median": -27.0
