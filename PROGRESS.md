@@ -941,4 +941,4 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   downside first breakout, ATM put of the nearest weekly, 50 % stop, held overnight, sold at the next 09:16. Forward
   only, from 2026-11-05, on the recorder's 1-second bid / ask (`<store>/nifty_1s`, copied by `index_data.pull_1s`).
   `python -m scanner.s3_g1_forward` re-books every session and writes `data/results/S3_G1_forward.md`. 4 tests.
-  About 5 trades a month expected (259 in two years), so 30 trades take roughly six months.
+  About 11 trades a month expected (259 in two years), so 30 trades take roughly three months.
