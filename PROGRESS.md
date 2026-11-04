@@ -958,3 +958,10 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   (calls) / 41-53 % (puts); stock options (closes only) 7-24 % / 10-29 %. Held to expiry the median is −100 % everywhere;
   NIFTY calls −19 to −32 % a trade, stock calls −27 to −50 %; "sell at +100 %" is worse than holding (it caps the
   +500 % tail). No rule chosen; a near-expiry build needs a direction signal on its own pre-registered page.
+- 2026-11-04 · Near-expiry signal screen (the user: "find the signal"; `scanner/near_expiry_signals.py`,
+  `data/results/near_expiry_signals.md`, `near_expiry_signals_2026-11-04.xlsx`). S3 test window only (entry days
+  2024-10 → 2025-09), NIFTY 09:20 buys 0-4 sessions out, net of charges; 9 entry-time features x terciles = 108 cells.
+  No positive cell reaches t 2 (best +68.9 % held, t 1.26); each is carried by its 3 best days (calls: 16-17 Apr,
+  15 May 2025), without them 24 of 25 turn negative. Strong avoids: puts with VIX > 15 (−66 %, t −7.4), puts after a
+  5-day rise / above the EMA (−53 to −55 %, t −4.2 / −4.3). Holdout not used. Only lead: G1's trades 1-3 days to expiry
+  +5.6 % / +19.2 % by half (4-5 days +9.4 % / −4.6 %), t 1.7 pooled, in-sample.
