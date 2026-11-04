@@ -937,3 +937,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   next open +8.4 % (t 1.72, median −14.2 %), both years positive (+7.0 % / +9.7 %)**; G2 +6.8 %, G3 +6.7 %. Of 191
   trades held overnight: gap down 100 (+65.8 % sold at open), up / flat 91 (−9.2 %); the gap is not known at 15:15.
   Gaps after a PUT1 day: down > 0.1 % on 74 of 191 (39 %) against 167 of 512 sessions (33 %). One G1 trade checked.
+- 2026-11-04 · S3 G1 pre-registered (the user: "Yes, pre-register G1"), `strategies/S3_G1_put_overnight.md`: PUT1's
+  downside first breakout, ATM put of the nearest weekly, 50 % stop, held overnight, sold at the next 09:16. Forward
+  only, from 2026-11-05, on the recorder's 1-second bid / ask (`<store>/nifty_1s`, copied by `index_data.pull_1s`).
+  `python -m scanner.s3_g1_forward` re-books every session and writes `data/results/S3_G1_forward.md`. 4 tests.
+  About 5 trades a month expected (259 in two years), so 30 trades take roughly six months.

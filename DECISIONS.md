@@ -399,3 +399,11 @@ positive (+7.7 %, 21 trades, t 0.41), not a rule and not rescued. **Claim 2 NOT 
 (172 trades) but t over expiries −1.41 (needed ≤ −2), so it does not become a filter. Every 14:45 straddle held to
 expiry lost −10.8 % (259 trades, t −2.68): in this year a bought straddle lost whether it looked cheap or dear. The
 design's +6.8 % was in-sample. The cheap-straddle lead is closed.
+
+### S3 G1 · NIFTY downside ORB put, held overnight, sold at the next open: pre-registered, forward test open (2026-11-04)
+Page `strategies/S3_G1_put_overnight.md`; runner `scanner/s3_g1_forward.py` (4 tests). Picked as the best of seven
+in-sample PUT1 variants on 2024-10 → 2026-10 option minutes (`data/results/S3_PUT1_hold_report.md`): +8.4 % of the
+premium a trade (t 1.72, 259 trades, both years positive). No unseen option history is left, so the only test is
+forward: sessions from 2026-11-05 out of the live 1-second recorder, bought at the real ask, sold at the real bid,
+50 % stop, out at the next session's 09:16. Verdict at 30 trades on the S3 buy gate. Research only; nothing is
+enabled, S1 / S2 and the live server untouched.
