@@ -960,3 +960,9 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-04 · G1-F forward track added (the user: "Yes, add G1-F"): same trades as G1, skipped on day-1 gap ≥ +0.3 %,
   range width 0.5-0.8 %, VIX ≥ 17 (all from the 1-second file at the signal; the previous close from the previous
   file). `scanner/s3_g1_forward.py` reports both tracks; 6 tests. Page section "Second track".
+- 2026-11-04 · G1 / G1-F live paper (the user: "make this live in the website ... the same as how the s1 do"):
+  `server/g1_live.py` (G1Trader: 1-minute NIFTY bars from the stream, opening range, first breakout, ask in at the
+  minute after the signal, 50 % stop on the bid, out at the next 09:16 bid; restart seeds bars from the recorder file),
+  ticked in the fast loop after the recorder; own ledger `data/g1_ledger.json` (git-ignored); `/api/index/g1`;
+  `/index` page shows today's status, the open position, trades and the Pods table. `G1_PAPER` switch. 5 tests
+  (`tests/test_g1_live.py`); full suite green. Previewed locally with a demo ledger (desktop and phone width).

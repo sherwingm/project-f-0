@@ -68,6 +68,15 @@ negative mean and increasing the doubt trade of positive mean help", then "Yes, 
 - **Gate:** the same six checks on G1-F's own first 30 trades (about 6 a month, so roughly five months). G1 and G1-F are
   judged apart; a G1-F pass with a G1 fail is reported as such, and neither is enabled automatically.
 
+## Live paper on the website (added 2026-11-04, the user: "make this live in the website ... the same as how the s1 do")
+- `server/g1_live.py` runs the same rules on the live server every second from the Upstox stream (the NIFTY recorder's
+  subscriptions), in its own paper ledger `data/g1_ledger.json`: bought at the live best ask, stop and exit at the live
+  best bid, charges from `server/charges.py`. G1-F is a flag on the same trade. Shown on `/index` (G1 section and Pods
+  table), API `/api/index/g1`. Paper only: no order is sent; the S1 account and rules are not touched. Switch:
+  `G1_PAPER` (default on).
+- The verdict still comes from `scanner/s3_g1_forward.py` on the recorder's 1-second files (the written record); the
+  live ledger is the same trade seen in real time and should match it. Any gap between the two is reported.
+
 ## After the verdict
 - **Pass:** a proposal to the user to run G1 as a paper strategy. Nothing is enabled automatically, and S1 / S2 are
   untouched.

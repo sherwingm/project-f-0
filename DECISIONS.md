@@ -411,3 +411,7 @@ enabled, S1 / S2 and the live server untouched.
 the day-1 opening gap is ≥ +0.3 %, the opening range is 0.5 % to under 0.8 % wide, or India VIX is ≥ 17 at the
 signal. In-sample 154 trades, +17.9 % on the ₹ paid, t 2.56, picked from nine bucket tables on the same data. Judged
 apart on its own first 30 trades.
+**G1 live paper on the website (2026-11-04, the user: "make this live in the website", then "the same as how the s1
+do"):** `server/g1_live.py` trades G1 / G1-F as paper on the live server from the next session, in its own ledger
+(`data/g1_ledger.json`), shown on `/index`. Paper only, no orders; S1 / S2 rules and the S1 paper account unchanged.
+The user lifted the "do not deploy research commits" rule for this change. The verdict is still the forward runner's.

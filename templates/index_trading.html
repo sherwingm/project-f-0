@@ -69,7 +69,7 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
   <button class="tbtn" type="button" id="theme" title="Light / dark" aria-label="Switch light or dark theme">◐</button>
 </header>
 <main id="main"></main>
-<footer class="disclaimer" role="note"><div><b>Read before using.</b> Data collection and research only — no index strategy is traded here, and nothing on this page can place an order. F&amp;O trading carries high risk including potential loss beyond capital invested.</div></footer>
+<footer class="disclaimer" role="note"><div><b>Read before using.</b> Data collection and research. The G1 pod is <b>paper only</b> (no real order is ever sent), and nothing on this page can place an order. F&amp;O trading carries high risk including potential loss beyond capital invested.</div></footer>
 <script>
 (() => {
   "use strict";
@@ -90,13 +90,41 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     : /^\d{4}$/.test(d) ? d : `${+d.slice(8, 10)} ${MON[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}`;
   const get = u => fetch(u, { credentials: "same-origin" }).then(r => r.ok ? r.json() : null).catch(() => null);
   let D = { loaded: false };
+  const pc = (v, dp = 1) => v == null ? "—" : `${num(v, dp)} %`;
+  const sg = v => v == null ? "—" : `<span class="${v < 0 ? "down" : "up"}">${v > 0 ? "+" : ""}${num(v, 1)} %</span>`;
+  const hm = s => s ? `${day(s.slice(0, 10))} ${s.slice(11, 19)}` : "—";
+
+  function g1Section() {
+    const g = D.g1;
+    let h = `<h2>G1 · NIFTY downside ORB put, held overnight <small>paper · rules: ${esc((g || {}).page || "strategies/S3_G1_put_overnight.md")}</small></h2>`;
+    if (!D.loaded) return h + `<p class="empty">Loading…</p>`;
+    if (!g || g.error) return h + `<p class="empty">${esc((g || {}).error || "Not reporting.")}</p>`;
+    h += `<p class="note">Opening range 09:15-09:29 · first close outside it from 09:30 to 13:00 · only a close below the low trades · ATM put of the nearest weekly, 1 lot (${num(g.lot)}), bought at the ask the minute after · sold at the bid at 50 % of the price paid, else at the next session's 09:16. <b>G1-F</b> counts the same trade only when the day-1 gap is under +0.3 %, the range is not 0.5-0.8 % wide and VIX is under 17.</p>`;
+    const td = g.today;
+    h += `<div class="kv"><div><small>Today</small><b>${esc(td ? td.status : "no session yet")}</b></div>${td && td.hi ? `<div><small>Opening range</small><b>${num(td.lo, 2)} – ${num(td.hi, 2)}</b></div>` : ""}${td && td.signal ? `<div><small>Signal</small><b>${esc(td.signal)} · gap ${td.gap_pct == null ? "—" : num(td.gap_pct, 2) + " %"} · width ${num(td.width_pct, 2)} % · VIX ${td.vix == null ? "—" : num(td.vix, 2)}</b></div>` : ""}</div>`;
+    const o = g.open;
+    h += `<h2>Open position</h2>` + (o ? `<div class="tw"><table><thead><tr><th>Bought</th><th>Contract</th><th>Paid (ask)</th><th>Bid now</th><th>Best bid</th><th>Unrealised</th><th>Stop at</th><th>G1-F</th></tr></thead><tbody>
+      <tr><td>${hm(o.bought_at)}</td><td><b>NIFTY ${day(o.expiry)} ${num(o.strike)} PE</b> × ${num(o.qty)}</td><td>₹${num(o.paid, 2)}</td><td>₹${num(o.mark, 2)}</td><td>₹${num(o.max_bid, 2)}</td><td class="${o.unrealised_rs < 0 ? "down" : "up"}">₹${num(o.unrealised_rs)}</td><td>₹${num(o.paid * 0.5, 2)}</td><td>${o.g1f_skip ? `<small>skips: ${esc(o.g1f_skip)}</small>` : "counts"}</td></tr></tbody></table></div>`
+      : `<p class="empty">None.</p>`);
+    const tr = g.trades || [];
+    h += `<h2>Trades <small>${tr.length} closed</small></h2>` + (tr.length ? `<div class="tw"><table><thead><tr><th>Day</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Net ₹</th><th>Net %</th><th>Max up</th><th>G1-F</th></tr></thead><tbody>${tr.map(t =>
+      `<tr><td>${day(t.day)} ${esc(t.signal)}</td><td>${day(t.expiry)} ${num(t.strike)} PE</td><td>₹${num(t.paid, 2)}</td><td>₹${num(t.sold, 2)}</td><td>${hm(t.sold_at)} <small>${esc(t.reason)}</small></td><td class="${t.net_rs < 0 ? "down" : "up"}">₹${num(t.net_rs)}</td><td>${sg(t.net_pct)}</td><td>${sg(t.max_up_pct)}</td><td>${t.g1f_skip ? `<small>skips</small>` : "counts"}</td></tr>`).join("")}</tbody></table></div>`
+      : `<p class="empty">No closed trade yet. The first possible entry is the first session the server runs this code.</p>`);
+    return h;
+  }
 
   function render() {
     const st = (D.status || {}).status || {}, cov = ((D.status || {}).coverage || {}).rows || [], rec = st.recorder;
     let h = `<h1>Index options · data</h1>
-      <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, collected every trading evening so index strategies ("pods") can be tested later. No strategy runs here yet.</p>
-      <div class="banner"><b>Data layer only.</b> Nothing is traded on this page. Large files live on the repository's <code>index-data</code> branch; this page reads the summaries.</div>`;
+      <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, and the index pods' paper trades. One pod runs: <b>G1</b>, the NIFTY downside opening-range put held overnight.</p>
+      <div class="banner"><b>Paper only.</b> G1 trades on the live bid / ask in its own paper ledger; no real order is sent, and the S1 account is separate. Large data files live on the repository's <code>index-data</code> branch.</div>`;
+    h += g1Section();
     if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
+    const tk = ((D.g1 || {}).tracks) || [];
+    h += `<h2>Pods <small>index strategies, paper results</small></h2>
+      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th></tr></thead>
+      <tbody>${tk.length ? tk.map(p => `<tr><td><b>${esc(p.pod)}</b></td><td>${esc(p.status)}</td><td>${num(p.trades)} / ${num(p.gate_at)}</td><td>${pc(p.won == null ? null : p.won * 100, 0)}</td><td>${sg(p.mean_pct)}</td><td>${sg(p.median_pct)}</td><td>${p.t == null ? "—" : num(p.t, 2)}</td><td class="${p.total_rs < 0 ? "down" : "up"}">₹${num(p.total_rs)}</td></tr>`).join("")
+        : `<tr><td colspan="8" style="text-align:left"><span class="muted">${esc((D.g1 || {}).error || "G1 paper is not reporting yet.")}</span></td></tr>`}</tbody></table></div>`;
     h += `<h2>Recorder health <small>nightly at 19:30 IST, GitHub Actions</small></h2>`;
     if (!rec) h += `<p class="empty">No recorder run yet.</p>`;
     else {
@@ -124,14 +152,12 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     if (rc && !rc.error) h += `<h2>Source reconciliation <small>Kotak vs Upstox on the same minutes</small></h2><div class="kv">
         <div><small>Matched minutes</small><b>${num(rc.matched_minutes)}</b></div><div><small>Mean |close diff|</small><b>${num(rc.mean_abs_close_diff, 4)}</b></div>
         <div><small>Max |close diff|</small><b>${num(rc.max_abs_close_diff, 2)}</b></div><div><small>Only in Kotak / Upstox</small><b>${num(rc.only_kotak)} / ${num(rc.only_upstox)}</b></div></div>`;
-    h += `<h2>Pods <small>index strategies; each will report its paper results here</small></h2>
-      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th></tr></thead>
-      <tbody><tr><td colspan="8" style="text-align:left"><span class="muted">No pods yet. The data layer comes first; a pod is added only with its own pre-registered rules.</span></td></tr></tbody></table></div>`;
     $("#main").innerHTML = h;
   }
   render();
-  Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile")])
-    .then(([s, e, p, r]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r }; render(); });
+  const load = () => Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile"), get("/api/index/g1")])
+    .then(([s, e, p, r, g]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r, g1: g }; render(); });
+  load(); setInterval(() => { if (!document.hidden) get("/api/index/g1").then(g => { if (g) { D.g1 = g; render(); } }); }, 15000);
 })();
 </script>
 </body>
