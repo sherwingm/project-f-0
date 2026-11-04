@@ -427,3 +427,21 @@ apart on its own first 30 trades.
 do"):** `server/g1_live.py` trades G1 / G1-F as paper on the live server from the next session, in its own ledger
 (`data/g1_ledger.json`), shown on `/index`. Paper only, no orders; S1 / S2 rules and the S1 paper account unchanged.
 The user lifted the "do not deploy research commits" rule for this change. The verdict is still the forward runner's.
+
+## 2026-11-04 · NT · Near Tighty, its own part (user decision)
+The user: "keep this as a seperate rule , i will name it as a near tighty dont mix with the nifty index , i will be a
+seperate part form it", then "Wait, then build". Near Tighty (NT) is a part of its own beside S1, S2 and S3, not an S3
+pod: own page `strategies/NT_near_tighty.md`, own paper ledger `data/nt_ledger.json` (`server/nt_live.py`), own
+website page `/near-tighty` and API `/api/near-tighty`, own results; it changes nothing in S1, S2, S3, G1 or `/index`.
+- **Rule:** G1's entry and exit (downside first breakout of the 09:15-09:29 range, ATM put of the nearest weekly at
+  the ask, 50 % stop on the bid, else sold at the next session's 09:16 bid), traded **only when that expiry is 1-3
+  sessions after the signal day**. No VIX / gap / trend filter.
+- **Why this rule:** the near-expiry studies (`data/results/near_expiry_maxup.md`, `near_expiry_signals.md`): +100 % is
+  common near expiry but holding or selling at +100 % loses, and no 09:20 feature picks the winners; G1's in-sample
+  trades 1-3 sessions out earned +5.6 % / +19.2 % by year (161, t 1.71), 4-5 sessions +9.4 % / −4.6 %. Found after
+  the fact, so forward only.
+- **Test:** paper on the live server from its first session, real bid / ask, charges, 1 lot; verdict at 30 trades on
+  the page's gate (about 4-5 months). Paper only; real orders only on a pass and a separate user decision.
+- **Overlap:** on 1-3-session days G1 takes the same put in its own ledger; each counts it once in its own record.
+- Kotak Neo allows these buys through the API (checked 2026-11-04: NIFTY options are cash-settled; limit orders only,
+  static IP, 10 orders a second).

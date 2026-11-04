@@ -981,3 +981,9 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   15 May 2025), without them 24 of 25 turn negative. Strong avoids: puts with VIX > 15 (−66 %, t −7.4), puts after a
   5-day rise / above the EMA (−53 to −55 %, t −4.2 / −4.3). Holdout not used. Only lead: G1's trades 1-3 days to expiry
   +5.6 % / +19.2 % by half (4-5 days +9.4 % / −4.6 %), t 1.7 pooled, in-sample.
+- 2026-11-04 · **Near Tighty (NT), its own part** (the user: "keep this as a seperate rule , i will name it as a near
+  tighty"). `strategies/NT_near_tighty.md` pre-registered; `server/nt_live.py` (G1's trader with a 1-3-sessions-to-
+  expiry condition, own ledger `data/nt_ledger.json`, own alerts), `server/nt_pages.py` + `templates/near_tighty.html`
+  → `/near-tighty`, `/api/near-tighty`; links from the Results and S2 pages. `server/g1_live.py` gained class
+  attributes and three hooks (`entry_skip`, `entry_note`, `tracks`) so a second strategy reuses it; G1 behaves the
+  same (its 5 tests pass). `NT_PAPER=true` by default. 5 tests (`tests/test_nt_live.py`).

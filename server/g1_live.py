@@ -84,10 +84,14 @@ def t_stat(x: list[float]) -> float | None:
 
 
 class G1Trader:
+    """One rule-trading paper ledger. A subclass (server/nt_live.py, Near Tighty) changes the class attributes and
+    the two hooks `entry_skip` / `entry_note` / `tracks`; the signal, entry, stop and exit stay exactly G1's."""
+    NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
+
     def __init__(self, stream, upstox, data_dir, lot: int = LOT):
         self.stream, self.upstox, self.lot = stream, upstox, lot
         self.dir = Path(data_dir)
-        self.file = self.dir / "g1_ledger.json"
+        self.file = self.dir / self.LEDGER
         self.lock = threading.Lock()
         self.state = self._load()
         self.day: date | None = None
@@ -101,11 +105,11 @@ class G1Trader:
     def _load(self) -> dict:
         try:
             st = json.loads(self.file.read_text(encoding="utf-8"))
-            if st.get("epoch") == EPOCH:
+            if st.get("epoch") == self.EPOCH:
                 return st
         except (OSError, ValueError):
             pass
-        return {"epoch": EPOCH, "open": None, "trades": [], "days": {}}
+        return {"epoch": self.EPOCH, "open": None, "trades": [], "days": {}}
 
     def _save(self) -> None:
         tmp = self.file.with_suffix(".tmp")
@@ -225,6 +229,11 @@ class G1Trader:
             st.update(phase="done", status="no NIFTY expiry after today in the instrument list: no trade")
             self._save()
             return
+        why = self.entry_skip(self.day, exp)
+        if why:
+            st.update(phase="done", status=why)
+            self._save()
+            return
         if ent <= now < ent + timedelta(minutes=1):            # the entry minute: keep every strike's last ask
             spot = (self.bars.get(ent.time()) or {}).get("c")
             if spot:
@@ -238,7 +247,7 @@ class G1Trader:
         if now < ent:
             return
         if self.state.get("open"):
-            st.update(phase="done", status="the previous G1 position is still open: no new trade")
+            st.update(phase="done", status=f"the previous {self.NAME} position is still open: no new trade")
             self._save()
             return
         spot = (self.bars.get(ent.time()) or {}).get("c")
@@ -257,10 +266,10 @@ class G1Trader:
                               "spot": spot, "g1f_skip": st["g1f_skip"], "gap_pct": st["gap_pct"],
                               "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid}
         st.update(phase="done", status=f"bought NIFTY {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
-                  + ("; G1-F counts it" if not st["g1f_skip"] else f"; G1-F skips ({st['g1f_skip']})"))
+                  + self.entry_note(st))
         self._save()
-        alerts.send(f"🟢 G1 paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})",
-                    key=f"g1-open-{self.day}", every=3600)
+        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})",
+                    key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
     def _manage_open(self, now: datetime) -> None:
         pos = self.state.get("open")
@@ -303,21 +312,32 @@ class G1Trader:
         self.state["open"] = None
         self.last_bid = None
         self._save()
-        alerts.send(f"{'🔴' if net < 0 else '✅'} G1 paper: sold NIFTY {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
-                    f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"g1-close-{pos['day']}", every=3600)
+        alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold NIFTY {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
+                    f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
+
+    # ------------------------------------------------------------ hooks
+    def entry_skip(self, day: date, expiry: str) -> str:
+        """"" to trade; else why this strategy takes no trade today (G1: never skips here)."""
+        return ""
+
+    def entry_note(self, st: dict) -> str:
+        return "; G1-F counts it" if not st["g1f_skip"] else f"; G1-F skips ({st['g1f_skip']})"
+
+    def tracks(self, trades: list) -> list:
+        return [("G1", trades), ("G1-F", [t for t in trades if not t.get("g1f_skip")])]
 
     # ------------------------------------------------------------ views
     def view(self) -> dict:
         with self.lock:
             st = json.loads(json.dumps(self.state, default=str))
         trades = st["trades"]
-        out = {"page": PAGE, "epoch": EPOCH, "lot": self.lot, "open": st["open"], "trades": trades[::-1],
+        out = {"page": self.PAGE, "epoch": self.EPOCH, "lot": self.lot, "open": st["open"], "trades": trades[::-1],
                "today": st["days"].get(datetime.now(IST).date().isoformat()), "tracks": []}
         if st["open"]:
             o = st["open"]
             exit_fee = ch.leg("PE", "SELL", o["qty"], o["mark"])["total"] if o.get("mark") else 0
             o["unrealised_rs"] = round((o["mark"] - o["paid"]) * o["qty"] - o["entry_fees"] - exit_fee, 2) if o.get("mark") else None
-        for name, sel in (("G1", trades), ("G1-F", [t for t in trades if not t.get("g1f_skip")])):
+        for name, sel in self.tracks(trades):
             x = [t["net_pct"] for t in sel]
             out["tracks"].append({
                 "pod": name, "trades": len(sel), "gate_at": 30,
