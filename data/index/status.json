@@ -1,40 +1,40 @@
 {
  "recorder": {
-  "run_at": "2026-11-04T02:14:11+05:30",
-  "session": "2026-11-03",
+  "run_at": "2026-11-05T02:13:32+05:30",
+  "session": "2026-11-04",
   "expiry_check": {
    "bse_fo": {
-    "checked": 3541,
+    "checked": 3733,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9069,
+    "checked": 9139,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 23810.85,
+    "spot": 23960.6,
     "contracts": 192,
-    "rows": 22513,
+    "rows": 81937,
     "expiries": [
-     "2026-11-03",
-     "2026-11-09"
+     "2026-11-09",
+     "2026-11-17"
     ]
    },
    "SENSEX": {
-    "spot": 76917.85,
+    "spot": 77301.4,
     "contracts": 308,
-    "rows": 12887,
+    "rows": 11118,
     "expiries": [
      "2026-11-05",
      "2026-11-12"
     ]
    },
    "BANKNIFTY": {
-    "spot": 55540.05,
+    "spot": 55913.6,
     "contracts": 224,
-    "rows": 4906,
+    "rows": 9769,
     "expiries": [
      "2026-11-23",
      "2026-12-29"
@@ -43,8 +43,8 @@
   },
   "failures": [],
   "chain_eod_rows": 724,
-  "calls": 772,
-  "runtime_s": 1350.1,
+  "calls": 785,
+  "runtime_s": 1376.6,
   "contracts": 724
  },
  "recent_runs": [
@@ -166,6 +166,14 @@
    "contracts": 724,
    "calls": 772,
    "runtime_s": 1350.1,
+   "failures": 0
+  },
+  {
+   "run_at": "2026-11-05T02:13:32+05:30",
+   "session": "2026-11-04",
+   "contracts": 724,
+   "calls": 785,
+   "runtime_s": 1376.6,
    "failures": 0
   }
  ],
@@ -307,14 +315,14 @@
   "spot_upstox_repair": {
    "NIFTY50": {
     "bar_0915_replaced": 22,
-    "bar_0915_changed": 2,
+    "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 0
+    "days_kept_no_upstox": 1
    },
    "NIFTYBANK": {
-    "bar_0915_replaced": 22,
+    "bar_0915_replaced": 23,
     "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
@@ -322,7 +330,7 @@
     "days_kept_no_upstox": 0
    },
    "SENSEX": {
-    "bar_0915_replaced": 22,
+    "bar_0915_replaced": 23,
     "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
@@ -330,8 +338,8 @@
     "days_kept_no_upstox": 0
    },
    "INDIAVIX": {
-    "bar_0915_replaced": 22,
-    "bar_0915_changed": 0,
+    "bar_0915_replaced": 23,
+    "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
@@ -342,48 +350,50 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 5833,
+   "rows": 5823,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-03",
+  "day": "2026-11-04",
   "runtime_s": 30
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-04",
+  "run_on": "2026-11-05",
   "days": {
-   "2026-10-27": {
-    "positions": 16,
-    "stock_rows": 3954,
-    "option_rows": 1802
-   },
    "2026-10-28": {
     "positions": 27,
     "stock_rows": 5661,
-    "option_rows": 4335
+    "option_rows": 4350
    },
    "2026-10-29": {
     "positions": 33,
     "stock_rows": 7173,
-    "option_rows": 4801
+    "option_rows": 4804
    },
    "2026-10-30": {
     "positions": 42,
     "stock_rows": 9022,
-    "option_rows": 7345
+    "option_rows": 7018
    },
    "2026-11-02": {
     "positions": 49,
     "stock_rows": 12634,
-    "option_rows": 9287
+    "option_rows": 9305
    },
    "2026-11-03": {
     "positions": 43,
     "stock_rows": 9739,
-    "option_rows": 0
+    "option_rows": 7284
+   },
+   "2026-11-04": {
+    "positions": 44,
+    "stock_rows": 10108,
+    "option_rows": 1814
    }
   },
-  "missing_tokens": [],
-  "calls": 315
+  "missing_tokens": [
+   "COALINDIA26NOV380PE"
+  ],
+  "calls": 354
  }
 }
