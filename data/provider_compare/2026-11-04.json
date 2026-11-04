@@ -16,6 +16,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.9,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "09:25:00",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.37,
+   "same_best_bid_pct": 39.7,
+   "same_best_ask_pct": 38.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.7,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -39,6 +55,27 @@
    "kotak": 21.1,
    "upstox": 21.4,
    "at": "09:20"
+  },
+  {
+   "contract": "ADANIPORTS26NOV1900CE",
+   "gap_pct": 1.37,
+   "kotak": 36.5,
+   "upstox": 37.0,
+   "at": "09:25"
+  },
+  {
+   "contract": "ADANIENT26NOV2800CE",
+   "gap_pct": 1.093,
+   "kotak": 18.3,
+   "upstox": 18.5,
+   "at": "09:25"
+  },
+  {
+   "contract": "MAXHEALTH26NOV920CE",
+   "gap_pct": 0.683,
+   "kotak": 29.3,
+   "upstox": 29.5,
+   "at": "09:25"
   },
   {
    "contract": "HDFCBANK26NOV730CE",
@@ -74,6 +111,13 @@
    "kotak": 1948.1,
    "upstox": 1947.8,
    "at": "09:20"
+  },
+  {
+   "contract": "ICICIBANK26NOVFUT",
+   "gap_pct": 0.007,
+   "kotak": 1433.6,
+   "upstox": 1433.5,
+   "at": "09:25"
   },
   {
    "contract": "ADANIENT26NOV2750CE",
@@ -130,44 +174,16 @@
    "kotak": 1.19,
    "upstox": 1.19,
    "at": "09:20"
-  },
-  {
-   "contract": "CHOLAFIN26NOV1720CE",
-   "gap_pct": 0.0,
-   "kotak": 16.9,
-   "upstox": 16.9,
-   "at": "09:20"
-  },
-  {
-   "contract": "COFORGE26NOV2180CE",
-   "gap_pct": 0.0,
-   "kotak": 25.3,
-   "upstox": 25.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "DELHIVERY26NOV440CE",
-   "gap_pct": 0.0,
-   "kotak": 3.35,
-   "upstox": 3.35,
-   "at": "09:20"
-  },
-  {
-   "contract": "DRREDDY26NOV1400CE",
-   "gap_pct": 0.0,
-   "kotak": 14.0,
-   "upstox": 14.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 63,
+  "rounds": 2,
+  "contract_quotes": 126,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.2,
-  "same_best_ask_pct": 23.8,
+  "same_best_bid_pct": 34.95,
+  "same_best_ask_pct": 30.95,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 88.9,
-  "upstox_minus_kotak_quote_time_s_median": -8.0
+  "oi_same_pct": 91.3,
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
