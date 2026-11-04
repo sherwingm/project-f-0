@@ -112,6 +112,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.7,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "09:55:03",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.953,
+   "same_best_bid_pct": 41.3,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -46.0
   }
  ],
  "top_gaps": [
@@ -130,11 +146,25 @@
    "at": "09:45"
   },
   {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.953,
+   "kotak": 12.8,
+   "upstox": 12.55,
+   "at": "09:55"
+  },
+  {
    "contract": "HDFCAMC26NOV2480CE",
    "gap_pct": 1.818,
    "kotak": 66.0,
    "upstox": 67.2,
    "at": "09:20"
+  },
+  {
+   "contract": "GAIL26NOV182.5CE",
+   "gap_pct": 1.481,
+   "kotak": 5.4,
+   "upstox": 5.48,
+   "at": "09:55"
   },
   {
    "contract": "HINDUNILVR26NOV1960PE",
@@ -240,30 +270,16 @@
    "kotak": 51.0,
    "upstox": 50.75,
    "at": "09:45"
-  },
-  {
-   "contract": "ADANIENT26NOV2800CE",
-   "gap_pct": 0.466,
-   "kotak": 21.45,
-   "upstox": 21.35,
-   "at": "09:30"
-  },
-  {
-   "contract": "MUTHOOTFIN26NOV2700CE",
-   "gap_pct": 0.46,
-   "kotak": 32.6,
-   "upstox": 32.45,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 440,
+  "rounds": 8,
+  "contract_quotes": 503,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
-  "same_best_ask_pct": 30.6,
+  "same_best_ask_pct": 33.55,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.7,
-  "upstox_minus_kotak_quote_time_s_median": -9.0
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
