@@ -445,3 +445,12 @@ website page `/near-tighty` and API `/api/near-tighty`, own results; it changes 
 - **Overlap:** on 1-3-session days G1 takes the same put in its own ledger; each counts it once in its own record.
 - Kotak Neo allows these buys through the API (checked 2026-11-04: NIFTY options are cash-settled; limit orders only,
   static IP, 10 orders a second).
+
+### S3 N1 · NIFTY near-expiry ORB, option 2 strikes out, sold the same day: pre-registered, forward test open (2026-11-05)
+Page `strategies/S3_N1_near_expiry_orb.md` (the user: "Yes, write the page"); code name `near_expiry` (the strategy
+exempt from `ALLOW_LOTTERY`, 2026-11-04). Expiry day and the session before only; first 09:15-09:29 range breakout
+09:30-13:00 picks call or put; strike 100 points out; 50 % stop; sold 15:15; no target. Led by the near-expiry max-up
+study (time to expiry alone has no edge; a +100 % target lowers the mean). Forward only from 2026-11-06 on the
+recorder's bid / ask; S3 buy gate at 30 trades (about four months). One in-sample history run is allowed as a
+description, never the verdict. Nothing runs on the live server and nothing is ordered.
+
