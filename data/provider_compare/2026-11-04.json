@@ -224,6 +224,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -23.0
+  },
+  {
+   "at": "10:30:04",
+   "contracts": 63,
+   "on_both": 62,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.935,
+   "same_best_bid_pct": 35.5,
+   "same_best_ask_pct": 40.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -21.0
   }
  ],
  "top_gaps": [
@@ -319,6 +335,13 @@
    "at": "09:30"
   },
   {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 0.935,
+   "kotak": 32.1,
+   "upstox": 31.8,
+   "at": "10:30"
+  },
+  {
    "contract": "LUPIN26NOV2040CE",
    "gap_pct": 0.864,
    "kotak": 46.3,
@@ -359,21 +382,14 @@
    "kotak": 40.65,
    "upstox": 40.4,
    "at": "10:05"
-  },
-  {
-   "contract": "KFINTECH26NOV920CE",
-   "gap_pct": 0.613,
-   "kotak": 24.45,
-   "upstox": 24.3,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 880,
+  "rounds": 15,
+  "contract_quotes": 942,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.9,
-  "same_best_ask_pct": 36.0,
+  "same_best_bid_pct": 35.5,
+  "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
   "upstox_minus_kotak_quote_time_s_median": -16.0
