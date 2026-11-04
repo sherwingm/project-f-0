@@ -192,6 +192,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "10:20:04",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.682,
+   "same_best_bid_pct": 31.7,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -308,6 +324,13 @@
    "at": "09:25"
   },
   {
+   "contract": "KFINTECH26NOV920CE",
+   "gap_pct": 0.682,
+   "kotak": 22.0,
+   "upstox": 21.85,
+   "at": "10:20"
+  },
+  {
    "contract": "PETRONET26NOV310CE",
    "gap_pct": 0.654,
    "kotak": 7.65,
@@ -327,20 +350,13 @@
    "kotak": 24.45,
    "upstox": 24.3,
    "at": "10:05"
-  },
-  {
-   "contract": "LT26NOV3900CE",
-   "gap_pct": 0.583,
-   "kotak": 120.05,
-   "upstox": 120.75,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 755,
+  "rounds": 13,
+  "contract_quotes": 818,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.9,
+  "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
