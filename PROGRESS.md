@@ -906,3 +906,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-03 · S3 X1 run once on 2022-24: **FAIL**, −8.9 % a trade (t −1.06), 50 % stop hit on 113 of 142 trades,
   max up median +59 % (39 % of days ≥ +100 %). Fixes before any output: the expiry day passed to `trade`, lot from
   D6's NSE history (bhavcopy lot column empty before 2024-07). The user: stop using 2022-24 data.
+- 2026-11-04 · S3 V1 (cheap-options straddle) pre-registered, `strategies/S3_V1_cheap_straddle.md`. Design
+  2024-10 → 2025-09 (`data/results/S3_V1_design.md`): expensive straddles (ratio10 ≥ 1.1) to expiry −29 % a trade;
+  cheap (ratio10 < 1.0, 14:45) +6.8 %, t over expiries 1.00. Test 2025-10 → 2026-10 not run yet.
