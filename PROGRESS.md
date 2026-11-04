@@ -950,3 +950,11 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   gap ≥ +0.3 % −11.0 % (52); OR width 0.5-0.8 % −15.6 % (44); VIX ≥ 17 −2.8 %; signal 09:45-11:29 +16.6 % (70).
   At 15:15 NIFTY back above the range low on 112 trades: holding −39.7 % vs selling −40.0 % (no gain from a 15:15
   filter); still below: holding adds +16.5 points (t 3.77) on 102 trades.
+- 2026-11-04 · Near-expiry buying (the user: "trade on the near expiry ... capture the trade more than 100%"). Kotak Neo
+  docs checked: buying near expiry is allowed through the API (NIFTY cash-settled; stock options: delivery margin from
+  4 sessions out, full margin from 12:00 on expiry day within 3 % of the price); our own `ALLOW_LOTTERY` /
+  `BLOCK_EXPIRY_DAY_ENTRIES` block it. Max-up study (`scanner/near_expiry_maxup.py`, `data/results/near_expiry_maxup.md`,
+  `near_expiry_maxup_2026-11-04.xlsx`; descriptive, in-sample): NIFTY 09:20 buys 0-4 sessions out touch +100 % in 30-36 %
+  (calls) / 41-53 % (puts); stock options (closes only) 7-24 % / 10-29 %. Held to expiry the median is −100 % everywhere;
+  NIFTY calls −19 to −32 % a trade, stock calls −27 to −50 %; "sell at +100 %" is worse than holding (it caps the
+  +500 % tail). No rule chosen; a near-expiry build needs a direction signal on its own pre-registered page.
