@@ -929,3 +929,11 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   Every variant: first half positive, second half negative (−2.5 % to −11.4 %). Looser exits raise the win rate (24 %
   → 39 %) but the losers get bigger (far fails −37 %, stops −53 %). Total ₹ negative in all (bigger premiums lost
   more). DTE 1 positive in every variant (+10 % to +24 %, t ≤ 1.64), not a rule. One far exit checked by hand.
+- 2026-11-04 · S3 PUT1 with B2's rules (the user: "try applying the rule i have said for b2 optimization") and the
+  next-open gap as a GIFT Nifty stand-in (the user: "why dont we use the gift nifty to check whether to hold or
+  sell"; no GIFT Nifty history is stored). 2024-10 → 2026-10 option minutes, **in-sample**, `scanner/s3_put1_hold.py`,
+  `data/results/S3_PUT1_hold_report.md`. 259 trades each: P0 PUT1 −1.2 % (matches); P1 50 % stop −1.5 %; P2 held to
+  next day 15:15 +6.6 % (median −50.9 %); P3 next day judged by its breakout +5.1 %; **G1 held overnight, sold at the
+  next open +8.4 % (t 1.72, median −14.2 %), both years positive (+7.0 % / +9.7 %)**; G2 +6.8 %, G3 +6.7 %. Of 191
+  trades held overnight: gap down 100 (+65.8 % sold at open), up / flat 91 (−9.2 %); the gap is not known at 15:15.
+  Gaps after a PUT1 day: down > 0.1 % on 74 of 191 (39 %) against 167 of 512 sessions (33 %). One G1 trade checked.
