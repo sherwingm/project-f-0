@@ -29,7 +29,7 @@ from __future__ import annotations
 import json
 import math
 import threading
-from dataclasses import dataclass, fields
+from dataclasses import dataclass, fields, replace
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -58,6 +58,16 @@ class Rules:
     def from_settings(cls, s=settings) -> "Rules":
         return cls(**{f.name: getattr(s, f.name if f.name.startswith(("lottery", "allow")) else "liq_" + f.name)
                       for f in fields(cls)})
+
+
+def exempt(strategy: str | None, s=settings) -> bool:
+    """True for a rule-trade strategy named in NEAR_EXPIRY_STRATEGIES: it skips ALLOW_LOTTERY and the expiry-day block."""
+    return bool(strategy) and strategy in s.near_expiry_strategies
+
+
+def rules_for(r: "Rules", strategy: str | None, s=settings) -> "Rules":
+    """`r` with cheap / near-expiry contracts allowed (the lottery fill rule) for an exempt strategy, else `r`."""
+    return replace(r, allow_lottery=True) if exempt(strategy, s) else r
 
 
 def classify(contract: dict, quote: dict | None, lots: int, sessions_to_expiry: int | None,

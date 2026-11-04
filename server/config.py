@@ -60,6 +60,9 @@ no live feed, no commentary, and password-protected access.
     LEDGER_GITHUB_TOKEN   (secret) mirror the paper account to a repo branch so restarts keep it (server/durable.py)
     LEDGER_GITHUB_REPO    sherwingm/project-f-0    LEDGER_GITHUB_BRANCH  paper-state
     BLOCK_EXPIRY_DAY_ENTRIES  true no new position on its own expiry day
+    NEAR_EXPIRY_STRATEGIES    near_expiry   comma-separated rule-trade strategy names (rule["strategy"]) exempt from
+                              ALLOW_LOTTERY and BLOCK_EXPIRY_DAY_ENTRIES (the user, 2026-11-04: "leave my own code
+                              rules only for this strategy"); every other strategy and every manual order keeps both
 """
 from __future__ import annotations
 
@@ -141,6 +144,8 @@ class Settings:
     ledger_github_repo: str = os.getenv("LEDGER_GITHUB_REPO", "sherwingm/project-f-0")
     ledger_github_branch: str = os.getenv("LEDGER_GITHUB_BRANCH", "paper-state")
     block_expiry_day_entries: bool = _bool("BLOCK_EXPIRY_DAY_ENTRIES", True)
+    near_expiry_strategies: frozenset = frozenset(
+        x.strip() for x in os.getenv("NEAR_EXPIRY_STRATEGIES", "near_expiry").split(",") if x.strip())
 
     @property
     def kite_ready(self) -> bool:

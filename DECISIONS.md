@@ -147,6 +147,18 @@ Closed before the S1 structure; not reopened except as a component of an S1 vers
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
 
+## 2026-11-04 · Near-expiry strategy exempt from our own near-expiry guards, that strategy only (user decision)
+The user, 2026-11-04: "leave my own code rules only for this strategy" (after the Kotak Neo docs showed near-expiry buying
+is allowed through the API). `NEAR_EXPIRY_STRATEGIES` (default `near_expiry`) names the rule-trade strategies
+(`rule["strategy"]`) that may trade cheap / near-expiry options: their exits use the lottery fill rule instead of the
+`ALLOW_LOTTERY` refusal (`server/liquidity.py` `rules_for`, used by `server/paper.py` `_auto_exit`). Rule entries
+(`buy_rule`) never went through `ALLOW_LOTTERY`, the expiry-day block or the manual T-2 exit, so nothing else changes.
+Unchanged for every other strategy (S1 fade, Arms A/B, G1 ...) and every manual order: `ALLOW_LOTTERY=false`,
+`BLOCK_EXPIRY_DAY_ENTRIES=true`, the per-trade risk cap, position counts, limit orders only. No near-expiry strategy
+exists yet; the study (`data/results/near_expiry_maxup.md`) found no edge from time to expiry alone, so it needs its own
+pre-registered page with a direction signal before it trades. Broker limits still apply (Kotak: strikes within 15 %
+of the index / 20 % of a stock, zero-OI strikes off on non-expiry days, delivery margin on stock options near expiry).
+
 ## 2026-10-22 · Daily loss halt removed (user decision)
 The user does not want loss halts. The 2 % daily halt (manual orders only; rule trades were never blocked) is removed,
 like the weekly one on 21 Oct: `server/risk.py` has no kill switch, an old `halts` latch is dropped, `DAILY_LOSS_HALT_PCT`

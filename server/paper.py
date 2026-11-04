@@ -48,7 +48,7 @@ from server import peak as pk
 from server import sessions
 from server.config import settings
 from server.fills import NoLiquidity, PaperQueue, fill
-from server.liquidity import Rules, classify
+from server.liquidity import Rules, classify, rules_for
 
 log = logging.getLogger(__name__)
 IST = sessions.IST
@@ -804,7 +804,9 @@ class PaperLedger:
     def _auto_exit(self, pos: dict, quote: dict, now: datetime, reason: str) -> bool:
         exit_side = "SELL" if pos["side"] == "BUY" else "BUY"
         c = {**{k: pos[k] for k in ("symbol", "instrument", "expiry", "strike", "tradingsymbol", "lot_size")}, "side": exit_side}
-        liq = classify(c, quote, pos["lots"], sessions.sessions_to_expiry(now, pos["expiry"]), rules=self.rules)
+        strategy = (pos.get("rule") or {}).get("strategy")      # NEAR_EXPIRY_STRATEGIES may sell near expiry
+        liq = classify(c, quote, pos["lots"], sessions.sessions_to_expiry(now, pos["expiry"]),
+                       rules=rules_for(self.rules or Rules.from_settings(), strategy))
         mode = MODE_FOR_CLASS.get(liq["class"], "penalty")
         try:
             f = fill(exit_side, pos["qty"], quote.get("depth"), self.tick, mode)
