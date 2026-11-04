@@ -922,3 +922,10 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-04 · Max up of P4, B1, B2, PUT1 held vs without the exit (to 15:29), `scripts/s3_maxup_breakouts.py`,
   `data/results/S3_maxup_breakouts.md`. Median held / without: P4 +14 / +26 %, B1 +14 / +23 %, B2 +8 / +20 %, PUT1
   +25 / +25 % (PUT1 already holds to 15:15). B2 fail exits: median +3 % held, +13 % without.
+- 2026-11-04 · S3 B2 looser fail exit (the user: "Yes, loosen fail exit"), 2025-10 → 2026-10, **in-sample**, 50 % stop,
+  `python -m scanner.s3_b2_hold loose`, `data/results/S3_B2_fail_report.md`. Rules: mid (a close past the range
+  middle), far (beyond the far edge), c5 (5 closes in a row inside), none; each out 15:15 or with D's overnight rule.
+  Best far · next breakout +3.4 % (t 0.60, median −28.6 %); all 8 between −2.0 % and +3.4 %, none with t above 0.6.
+  Every variant: first half positive, second half negative (−2.5 % to −11.4 %). Looser exits raise the win rate (24 %
+  → 39 %) but the losers get bigger (far fails −37 %, stops −53 %). Total ₹ negative in all (bigger premiums lost
+  more). DTE 1 positive in every variant (+10 % to +24 %, t ≤ 1.64), not a rule. One far exit checked by hand.

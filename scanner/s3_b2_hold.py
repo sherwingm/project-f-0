@@ -35,10 +35,38 @@ from scanner.s3_pods import RES
 WINDOW = (date(2025, 10, 1), date(2026, 10, 30))
 HALVES = ((date(2025, 10, 1), date(2026, 3, 31)), (date(2026, 4, 1), date(2026, 10, 30)))
 OR_MIN, ACCEPT = PRIMARY[0], PRIMARY[1]
-VARIANTS = {"A": (0.25, "day"), "B": (0.50, "day"), "C": (0.50, "next 15:15"), "D": (0.50, "next breakout")}
+VARIANTS = {"A": (0.25, "day", "edge"), "B": (0.50, "day", "edge"), "C": (0.50, "next 15:15", "edge"),
+            "D": (0.50, "next breakout", "edge")}
+# Looser fail exits (the user, 2026-11-04: "Yes, loosen fail exit"), each sold day 1 15:15 and with D's overnight rule.
+#   edge: a close back inside the range (B2)   mid: a close past the range's middle   far: a close beyond the far edge
+#   c5: 5 closes in a row back inside           none: no fail exit (50 % stop and time only)
+FAILS = ("mid", "far", "c5", "none")
+LOOSE = {f"{f} · {h}": (0.50, h, f) for f in FAILS for h in ("day", "next breakout")}
+NAMES = {"A": "A · stop 25 %, out 15:15 (B2)", "B": "B · stop 50 %, out 15:15",
+         "C": "C · stop 50 %, survivors held to next day 15:15", "D": "D · stop 50 %, next day judged by its breakout"}
 
 
-def day2_exit(g2: pd.DataFrame, side: str):
+def fail_exit(day_spot, side, entry, hi, lo, fail="edge"):
+    """(exit minute, reason) for a fail rule; 'edge' is B2's scanner.s3_b2.exit_minute."""
+    if fail == "edge":
+        return exit_minute(day_spot, side, entry, hi, lo)
+    d = day_spot[(day_spot["timestamp"] >= entry) & (day_spot["timestamp"].dt.time < EXIT)].reset_index(drop=True)
+    c, mid = d["close"], (hi + lo) / 2
+    if fail == "mid":
+        back = (c < mid) if side == "CE" else (c > mid)
+    elif fail == "far":
+        back = (c < lo) if side == "CE" else (c > hi)
+    elif fail == "c5":
+        inside = ((c < hi) if side == "CE" else (c > lo)).astype(int)
+        back = inside.rolling(5).sum() == 5
+    else:
+        back = pd.Series(False, index=d.index)
+    if back.any():
+        return d.loc[back.idxmax(), "timestamp"] + timedelta(minutes=1), "fail"
+    return entry.normalize() + timedelta(hours=15, minutes=15), "time"
+
+
+def day2_exit(g2: pd.DataFrame, side: str, fail: str = "edge"):
     """(exit minute, reason, same-way accepted breakout?) on the next session, by its own opening range."""
     t = g2["timestamp"].dt.time
     rng = g2[(t >= time(9, 15)) & (t < time(9, 30))]
@@ -52,17 +80,17 @@ def day2_exit(g2: pd.DataFrame, side: str):
     sg = signal(g2, OR_MIN, ACCEPT)
     ours = sg is not None and sg[0] == side
     if ours and (t_against is None or sg[1] < t_against):
-        ext, why = exit_minute(g2, side, sg[1] + timedelta(minutes=1), sg[2], sg[3])
+        ext, why = fail_exit(g2, side, sg[1] + timedelta(minutes=1), sg[2], sg[3], fail)
         return ext, ("d2 fail" if why == "fail" else "d2 time"), True
     if t_against is not None and (t_against.time() <= LAST_ACCEPT):
         return t_against + timedelta(minutes=1), "d2 against", ours
     return day + timedelta(hours=13, minutes=16), "d2 none", ours
 
 
-def trade(day, g, g2, nxt, e, sg, stop, hold, dte) -> dict:
+def trade(day, g, g2, nxt, e, sg, stop, hold, dte, fail="edge") -> dict:
     side, ts, hi, lo = sg
     ent = ts + timedelta(minutes=1)
-    ext, why = exit_minute(g, side, ent, hi, lo)
+    ext, why = fail_exit(g, side, ent, hi, lo, fail)
     exit_day, d2_ours = None, None
     if why == "time" and hold != "day":
         if nxt is None or g2 is None or nxt > e:
@@ -71,7 +99,7 @@ def trade(day, g, g2, nxt, e, sg, stop, hold, dte) -> dict:
         if hold == "next 15:15":
             ext, why = L.at(nxt, 15, 15), "d2 time"
         else:
-            ext, why, d2_ours = day2_exit(g2, side)
+            ext, why, d2_ours = day2_exit(g2, side, fail)
     s = spot_at(day, ent.hour, ent.minute, U["index"])
     if s is None:
         return {"day": day, "skip": "no spot at entry"}
@@ -92,7 +120,7 @@ def trade(day, g, g2, nxt, e, sg, stop, hold, dte) -> dict:
             "d2_ours": d2_ours, "max_up_pct": mu["max_up_held_pct"]}
 
 
-def collect() -> pd.DataFrame:
+def collect(variants=VARIANTS) -> pd.DataFrame:
     sp = L.spot_1m(WINDOW[0], WINDOW[1] + timedelta(days=10), U["index"])
     sp["d"] = sp["timestamp"].dt.date
     days = {d: g for d, g in sp.groupby("d") if len(g) >= G.MIN_BARS}
@@ -109,8 +137,8 @@ def collect() -> pd.DataFrame:
             continue
         nxt = ses[i + 1] if i + 1 < len(ses) else None
         dte = sum(1 for d in ses if day < d <= e)
-        for v, (stop, hold) in VARIANTS.items():
-            r = trade(day, days[day], days.get(nxt), nxt, e, sg, stop, hold, dte)
+        for v, (stop, hold, fail) in variants.items():
+            r = trade(day, days[day], days.get(nxt), nxt, e, sg, stop, hold, dte, fail)
             rows.append({**r, "variant": v, "day": day})
     return pd.DataFrame(rows)
 
@@ -131,8 +159,7 @@ def line(name, g) -> str:
 def report(df: pd.DataFrame) -> list[str]:
     ok = df[df["skip"].fillna("") == ""].copy()
     dd = pd.to_datetime(ok["day"]).dt.date
-    names = {"A": "A · stop 25 %, out 15:15 (B2)", "B": "B · stop 50 %, out 15:15",
-             "C": "C · stop 50 %, survivors held to next day 15:15", "D": "D · stop 50 %, next day judged by its breakout"}
+    names = NAMES
     out = [f"# S3 B2 optimisation · 50 % stop and overnight hold · {WINDOW[0]} → {WINDOW[1]}", "",
            "**In-sample:** B2 was already run on this window, so nothing here is a pass. Net after slippage and "
            "charges, % of the premium, 1 lot. Max up = the best value while held, % above the price paid.", "",
@@ -167,6 +194,42 @@ def report(df: pd.DataFrame) -> list[str]:
     return out
 
 
+def loose_report(df: pd.DataFrame) -> list[str]:
+    ok = df[df["skip"].fillna("") == ""].copy()
+    dd = pd.to_datetime(ok["day"]).dt.date
+    out = [f"# S3 B2 optimisation · looser fail exit · {WINDOW[0]} → {WINDOW[1]}", "",
+           "**In-sample** (B2 already ran here; 8 more variants tried, so the best one is flattered). 50 % stop. "
+           "Fail rules: mid = a close past the opening range's middle; far = a close beyond the far edge; c5 = 5 "
+           "closes in a row back inside; none = no fail exit. day = out 15:15; next breakout = D's overnight rule. "
+           "Net after slippage and charges, % of the premium, 1 lot. Max up while held.", "",
+           "## All variants", "", *HEAD]
+    out += [line(f"{v}", ok[ok["variant"] == v]) for v in ["B", "D", *LOOSE]]
+    out += ["", "## Halves", "", *HEAD]
+    for v in ["B", "D", *LOOSE]:
+        out += [line(f"{v} · {a} → {b}", ok[(ok["variant"] == v) & (dd >= a) & (dd <= b)]) for a, b in HALVES]
+    out += ["", "## By exit", "", *HEAD]
+    for v in LOOSE:
+        g = ok[ok["variant"] == v]
+        out += [line(f"{v} · {r}", x) for r, x in g.groupby("reason")]
+    out += ["", "## By days to expiry at entry (sessions left)", "", *HEAD]
+    band = lambda x: "4+" if x >= 4 else str(int(x))
+    for v in LOOSE:
+        g = ok[ok["variant"] == v]
+        out += [line(f"{v} · DTE {k}", x) for k, x in g.groupby(g["dte"].map(band))]
+    sk = df[df["skip"].fillna("") != ""]
+    out += ["", f"Skipped: {len(sk)} rows ({sk['skip'].str.split(' at ').str[0].value_counts().to_dict()})"]
+    return out
+
+
+def main_loose():
+    df = collect({k: VARIANTS[k] for k in ("B", "D")} | LOOSE)
+    df.to_csv(RES / "S3_B2_fail_trades.csv", index=False)
+    lines = loose_report(df)
+    (RES / "S3_B2_fail_report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    sys.stdout.reconfigure(encoding="utf-8")
+    print("\n".join(lines))
+
+
 def main():
     df = collect()
     df.to_csv(RES / "S3_B2_hold_trades.csv", index=False)
@@ -177,4 +240,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_loose() if "loose" in sys.argv[1:] else main()
