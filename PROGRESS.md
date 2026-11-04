@@ -950,3 +950,10 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   gap ≥ +0.3 % −11.0 % (52); OR width 0.5-0.8 % −15.6 % (44); VIX ≥ 17 −2.8 %; signal 09:45-11:29 +16.6 % (70).
   At 15:15 NIFTY back above the range low on 112 trades: holding −39.7 % vs selling −40.0 % (no gain from a 15:15
   filter); still below: holding adds +16.5 points (t 3.77) on 102 trades.
+- 2026-11-04 · G1 bucket filters (the user: skip the negative buckets, double the positive ones),
+  `scripts/s3_g1_filters.py`, `data/results/S3_G1_filters.md`, in-sample. Return on ₹ paid: G1 +5.5 % (259 trades);
+  skip day-1 gap ≥ +0.3 %, OR width 0.5-0.8 % and VIX ≥ 17 → +17.9 % (154 trades, t 2.56, worst −₹6,359, max
+  drawdown −₹31,108); plus 2 lots on signal 09:45-11:29 or VIX 12-14 → +21.9 % (239 lots, worst −₹12,415). Doubling
+  alone adds ₹ but little return on ₹ paid and raises drawdown. Each of the five filters kept its sign from year 1 to
+  year 2, with smaller sizes (OR width −31.4 % → −2.4 %). Re-picked on year 1 only (9 buckets) and applied to year 2:
+  +4.3 % → +7.0 % on ₹ paid, 54 of 131 trades kept.
