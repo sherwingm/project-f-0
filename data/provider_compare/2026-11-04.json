@@ -784,6 +784,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -35.0
+  },
+  {
+   "at": "13:25:11",
+   "contracts": 62,
+   "on_both": 61,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.085,
+   "same_best_bid_pct": 63.9,
+   "same_best_ask_pct": 63.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.7,
+   "upstox_minus_kotak_quote_time_s_median": -42.0
   }
  ],
  "top_gaps": [
@@ -886,6 +902,13 @@
    "at": "09:25"
   },
   {
+   "contract": "MAZDOCK26NOV1820PE",
+   "gap_pct": 1.085,
+   "kotak": 55.3,
+   "upstox": 54.7,
+   "at": "13:25"
+  },
+  {
    "contract": "MFSL26NOV1220CE",
    "gap_pct": 1.061,
    "kotak": 33.0,
@@ -919,20 +942,13 @@
    "kotak": 32.05,
    "upstox": 32.35,
    "at": "09:30"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1920CE",
-   "gap_pct": 0.935,
-   "kotak": 32.1,
-   "upstox": 31.8,
-   "at": "10:30"
   }
  ],
  "day": {
-  "rounds": 49,
-  "contract_quotes": 3080,
+  "rounds": 50,
+  "contract_quotes": 3141,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.9,
+  "same_best_bid_pct": 45.95,
   "same_best_ask_pct": 44.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
