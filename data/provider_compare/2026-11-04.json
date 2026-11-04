@@ -688,6 +688,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.5,
    "upstox_minus_kotak_quote_time_s_median": -52.0
+  },
+  {
+   "at": "12:55:10",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.037,
+   "same_best_bid_pct": 57.1,
+   "same_best_ask_pct": 61.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.7,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -804,6 +820,13 @@
    "at": "09:30"
   },
   {
+   "contract": "HCLTECH26NOV1420CE",
+   "gap_pct": 1.037,
+   "kotak": 33.75,
+   "upstox": 34.1,
+   "at": "12:55"
+  },
+  {
    "contract": "TATASTEEL26NOV175PE",
    "gap_pct": 0.993,
    "kotak": 4.03,
@@ -823,20 +846,13 @@
    "kotak": 32.1,
    "upstox": 31.8,
    "at": "10:30"
-  },
-  {
-   "contract": "LUPIN26NOV2040CE",
-   "gap_pct": 0.864,
-   "kotak": 46.3,
-   "upstox": 46.7,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 43,
-  "contract_quotes": 2702,
+  "rounds": 44,
+  "contract_quotes": 2765,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 42.9,
+  "same_best_bid_pct": 43.6,
   "same_best_ask_pct": 44.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
