@@ -942,3 +942,11 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   only, from 2026-11-05, on the recorder's 1-second bid / ask (`<store>/nifty_1s`, copied by `index_data.pull_1s`).
   `python -m scanner.s3_g1_forward` re-books every session and writes `data/results/S3_G1_forward.md`. 4 tests.
   About 11 trades a month expected (259 in two years), so 30 trades take roughly three months.
+- 2026-11-04 · G1 datasheet (the user: "give me the datasheet"), `scripts/s3_g1_datasheet.py` →
+  `data/results/S3_G1_datasheet.xlsx` (Summary with formulas and editable bucket edges; Trades: 259 rows, entry-known
+  features, hindsight, every variant). G1 with other stops (the user: "what is the result if we keep the sl of 20%"),
+  in-sample: 20 % +4.2 % (t 1.05, 177 stopped, won 27 %), 25 % +3.4 %, 30 % +7.4 %, 40 % +7.9 %, 50 % +8.4 %, none
+  +8.0 %; worst trade −₹13,324 at every stop (an overnight gap through it). Bucket views (in-sample, not rules): day-1
+  gap ≥ +0.3 % −11.0 % (52); OR width 0.5-0.8 % −15.6 % (44); VIX ≥ 17 −2.8 %; signal 09:45-11:29 +16.6 % (70).
+  At 15:15 NIFTY back above the range low on 112 trades: holding −39.7 % vs selling −40.0 % (no gain from a 15:15
+  filter); still below: holding adds +16.5 points (t 3.77) on 102 trades.
