@@ -64,6 +64,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.1,
    "upstox_minus_kotak_quote_time_s_median": -11.0
+  },
+  {
+   "at": "09:40:02",
+   "contracts": 64,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "MARICO26NOV910CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.864,
+   "same_best_bid_pct": 36.5,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
@@ -124,6 +140,13 @@
    "at": "09:30"
   },
   {
+   "contract": "LUPIN26NOV2040CE",
+   "gap_pct": 0.864,
+   "kotak": 46.3,
+   "upstox": 46.7,
+   "at": "09:40"
+  },
+  {
    "contract": "ADANIPORTS26NOV1900CE",
    "gap_pct": 0.775,
    "kotak": 45.15,
@@ -159,6 +182,13 @@
    "at": "09:35"
   },
   {
+   "contract": "LUPIN26NOV2040PE",
+   "gap_pct": 0.35,
+   "kotak": 42.8,
+   "upstox": 42.65,
+   "at": "09:40"
+  },
+  {
    "contract": "HDFCBANK26NOV730CE",
    "gap_pct": 0.346,
    "kotak": 14.45,
@@ -174,6 +204,13 @@
   },
   {
    "contract": "KFINTECH26NOV920CE",
+   "gap_pct": 0.246,
+   "kotak": 20.35,
+   "upstox": 20.3,
+   "at": "09:40"
+  },
+  {
+   "contract": "KFINTECH26NOV920CE",
    "gap_pct": 0.228,
    "kotak": 21.9,
    "upstox": 21.95,
@@ -185,37 +222,16 @@
    "kotak": 22.75,
    "upstox": 22.7,
    "at": "09:20"
-  },
-  {
-   "contract": "HINDUNILVR26NOV1960CE",
-   "gap_pct": 0.185,
-   "kotak": 27.0,
-   "upstox": 26.95,
-   "at": "09:20"
-  },
-  {
-   "contract": "INDUSTOWER26NOVFUT",
-   "gap_pct": 0.076,
-   "kotak": 396.0,
-   "upstox": 395.7,
-   "at": "09:30"
-  },
-  {
-   "contract": "INDIGO26NOVFUT",
-   "gap_pct": 0.035,
-   "kotak": 5077.9,
-   "upstox": 5079.7,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 252,
+  "rounds": 5,
+  "contract_quotes": 315,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 31.75,
-  "same_best_ask_pct": 28.6,
+  "same_best_bid_pct": 33.3,
+  "same_best_ask_pct": 30.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.9,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 93.7,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
