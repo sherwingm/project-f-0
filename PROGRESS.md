@@ -957,3 +957,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   alone adds ₹ but little return on ₹ paid and raises drawdown. Each of the five filters kept its sign from year 1 to
   year 2, with smaller sizes (OR width −31.4 % → −2.4 %). Re-picked on year 1 only (9 buckets) and applied to year 2:
   +4.3 % → +7.0 % on ₹ paid, 54 of 131 trades kept.
+- 2026-11-04 · G1-F forward track added (the user: "Yes, add G1-F"): same trades as G1, skipped on day-1 gap ≥ +0.3 %,
+  range width 0.5-0.8 %, VIX ≥ 17 (all from the 1-second file at the signal; the previous close from the previous
+  file). `scanner/s3_g1_forward.py` reports both tracks; 6 tests. Page section "Second track".

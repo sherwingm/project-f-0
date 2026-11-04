@@ -56,3 +56,25 @@ def test_waits_for_next_session_file():
     d1 = _day(date(2026, 11, 5), down_day, lambda i: 100.0)
     r = G.book(date(2026, 11, 5), d1, None, None)
     assert r["pending"] and r["skip"].startswith("waiting")
+
+
+def _with_vix(df, vix):
+    v = df[df["symbol"] == "NIFTY 50"].copy()
+    v["symbol"], v[["o", "h", "l", "c"]] = "INDIA VIX", vix
+    return pd.concat([df, v], ignore_index=True)
+
+
+def test_g1f_takes_a_quiet_day():
+    d1 = _with_vix(_day(date(2026, 11, 5), down_day, lambda i: 100.0), 13.0)
+    d2 = _day(date(2026, 11, 6), lambda i: 23900, lambda i: 150.0)
+    r = G.book(date(2026, 11, 5), d1, date(2026, 11, 6), d2, prev_close=24000.0)
+    assert r["g1f_skip"] == "" and r["vix_signal"] == 13.0
+    assert r["or_width_pct"] == pytest.approx(10 / 24000 * 100, abs=1e-3)
+
+
+def test_g1f_skips_gap_up_and_high_vix_and_missing_close():
+    d1 = _with_vix(_day(date(2026, 11, 5), down_day, lambda i: 100.0), 18.0)
+    r = G.book(date(2026, 11, 5), d1, None, None, prev_close=23900.0)      # open 24000 → +0.42 % gap
+    assert "day-1 gap" in r["g1f_skip"] and "VIX 18.00" in r["g1f_skip"]
+    r = G.book(date(2026, 11, 5), _day(date(2026, 11, 5), down_day, lambda i: 100.0), None, None)
+    assert "no previous close" in r["g1f_skip"] and "no VIX" in r["g1f_skip"]

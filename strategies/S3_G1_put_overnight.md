@@ -52,6 +52,22 @@ PUT1 were tried there; G1 was the best:
 Thirty trades are few: with the history's +8.4 % and spread, t ≥ 2 on 30 is unlikely even if the edge is real. A
 fail closes G1; it is not rescued by changing the stop, the exit minute or the window.
 
+## Second track: G1-F (added 2026-11-04, before any forward session exists)
+The user, after the datasheet (`data/results/S3_G1_datasheet.xlsx`, `S3_G1_filters.md`): "check whether removing the
+negative mean and increasing the doubt trade of positive mean help", then "Yes, add G1-F".
+- **Same trades as G1, but skip the day** when any of these holds at the signal (all known then):
+  1. **day-1 opening gap ≥ +0.3 %**: the 09:15 open against the previous session's last close;
+  2. **opening-range width 0.5 % to under 0.8 %**: (range high − range low) ÷ range low;
+  3. **India VIX ≥ 17** at the signal minute (its last 1-second print up to the end of that minute).
+- 1 lot (doubling was tried and not kept: it added ₹ and drawdown, not return on the ₹ paid). A day whose previous
+  close or VIX is missing is not traded by G1-F, and is listed.
+- **Seen before (disclosed):** in-sample on 2024-10 → 2026-10, G1-F was 154 trades, +18.3 % a trade, +17.9 % on the ₹
+  paid, t 2.56, worst −₹6,359; the three buckets were picked from nine tables on the same data. Picked on year 1
+  alone and applied to year 2, bucket filters lifted year 2 only from +4.3 % to +7.0 % on the ₹ paid. Each of the three
+  skip buckets was negative in both years.
+- **Gate:** the same six checks on G1-F's own first 30 trades (about 6 a month, so roughly five months). G1 and G1-F are
+  judged apart; a G1-F pass with a G1 fail is reported as such, and neither is enabled automatically.
+
 ## After the verdict
 - **Pass:** a proposal to the user to run G1 as a paper strategy. Nothing is enabled automatically, and S1 / S2 are
   untouched.
