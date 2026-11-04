@@ -114,7 +114,7 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
   }
 
   function render() {
-    const st = (D.status || {}).status || {}, cov = ((D.status || {}).coverage || {}).rows || [], rec = st.recorder;
+    const st = (D.status || {}).status || {}, rec = st.recorder;
     let h = `<h1>Index options · data</h1>
       <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, and the index pods' paper trades. One pod runs: <b>G1</b>, the NIFTY downside opening-range put held overnight.</p>
       <div class="banner"><b>Paper only.</b> G1 trades on the live bid / ask in its own paper ledger; no real order is sent, and the S1 account is separate. Large data files live on the repository's <code>index-data</code> branch.</div>`;
@@ -136,27 +136,11 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
           `<tr><td><b>${esc(k)}</b></td><td>${num(v.spot, 2)}</td><td>${num(v.contracts)}</td><td>${num(v.rows)}</td><td>${(v.expiries || []).map(day).join(", ") || "—"}</td></tr>`).join("")}</tbody></table></div>
         ${(rec.failures || []).length ? `<details><summary>Failures (${rec.failures.length})</summary><p class="note">${rec.failures.slice(0, 20).map(esc).join("<br>")}</p></details>` : ""}`;
     }
-    h += `<h2>Data coverage <small>what is stored, at which resolution, for which dates</small></h2>`;
-    h += cov.length ? `<div class="tw"><table><thead><tr><th>Dataset</th><th>Underlying</th><th>Resolution</th><th>Source</th><th>From</th><th>To</th><th>Files</th></tr></thead><tbody>${cov.map(r =>
-        `<tr><td>${esc(r.dataset)}</td><td><b>${esc(r.underlying)}</b></td><td>${esc(r.resolution)}</td><td>${esc(r.source)}</td><td>${day(r.first)}</td><td>${day(r.last)}</td><td>${num(r.files)}</td></tr>`).join("")}</tbody></table></div>`
-      : `<p class="empty">Coverage appears after the first recorder or backfill run.</p>`;
-    const nx = (D.expiries || {}).next || {};
-    h += `<h2>Next expiries</h2>` + (Object.keys(nx).length ? `<div class="exp">${Object.entries(nx).map(([k, v]) => `<span><b>${esc(k)}</b>: ${v.map(day).join(" · ")}</span>`).join("")}</div>` : `<p class="empty">Not built yet.</p>`);
-    const pr = D.probe || [];
-    h += `<h2>Expired-contract retention (Kotak) <small>NIFTY 19-Oct-2026 22650 CE, re-probed 20 Oct, 27 Oct and 19 Nov</small></h2>`;
-    h += pr.length ? `<div class="tw"><table><thead><tr><th>Probed on</th><th>1-min before expiry</th><th>Expiry day</th><th>5-min</th><th>Daily</th><th>Still listed</th><th>Verdict</th></tr></thead><tbody>${pr.map(p => { const c = p.checks || [];
-        const r = i => c[i] ? (c[i].error ? `<small>${esc(c[i].error).slice(0, 60)}</small>` : num(c[i].rows)) : "—";
-        return `<tr><td>${day(p.run_on)}</td><td>${r(0)}</td><td>${r(1)}</td><td>${r(2)}</td><td>${r(3)}</td><td>${esc(String((c[5] || {}).result ?? "—"))}</td><td><span class="pill ${p.verdict === "retained" ? "pass" : "fail"}">${esc(p.verdict)}</span></td></tr>`; }).join("")}</tbody></table></div>`
-      : `<p class="empty">First probe: 20 Oct 2026, 16:00 IST.</p>`;
-    const rc = D.reconcile;
-    if (rc && !rc.error) h += `<h2>Source reconciliation <small>Kotak vs Upstox on the same minutes</small></h2><div class="kv">
-        <div><small>Matched minutes</small><b>${num(rc.matched_minutes)}</b></div><div><small>Mean |close diff|</small><b>${num(rc.mean_abs_close_diff, 4)}</b></div>
-        <div><small>Max |close diff|</small><b>${num(rc.max_abs_close_diff, 2)}</b></div><div><small>Only in Kotak / Upstox</small><b>${num(rc.only_kotak)} / ${num(rc.only_upstox)}</b></div></div>`;
     $("#main").innerHTML = h;
   }
   render();
-  const load = () => Promise.all([get("/api/index/status"), get("/api/index/expiries"), get("/api/index/probe"), get("/api/index/reconcile"), get("/api/index/g1")])
-    .then(([s, e, p, r, g]) => { D = { loaded: true, status: s, expiries: e, probe: p, reconcile: r, g1: g }; render(); });
+  const load = () => Promise.all([get("/api/index/status"), get("/api/index/g1")])
+    .then(([s, g]) => { D = { loaded: true, status: s, g1: g }; render(); });
   load(); setInterval(() => { if (!document.hidden) get("/api/index/g1").then(g => { if (g) { D.g1 = g; render(); } }); }, 15000);
 })();
 </script>
