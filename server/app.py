@@ -136,6 +136,7 @@ class State:
         self.upstox = None                  # server.upstox.UpstoxProvider (instrument keys) when the stream is on
         self.stream = None                  # server.upstox_stream.UpstoxStream
         self.index_rec = None               # server.index_recorder.IndexRecorder (record only)
+        self.g1 = None                      # server.g1_live.G1Trader (S3 G1 paper, own ledger)
         self.version: dict | None = None    # server.version.deployed(), read once at start-up
 
     def load_scan(self, path: Path) -> None:
@@ -208,6 +209,9 @@ def startup() -> None:
             if settings.index_record:
                 from server.index_recorder import IndexRecorder
                 state.index_rec = IndexRecorder(state.stream, state.upstox, settings.data_dir)
+                if settings.g1_paper:
+                    from server.g1_live import G1Trader
+                    state.g1 = G1Trader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols(),
                               fast_seconds=settings.live_fast_seconds)
         state.feed.start()
@@ -289,6 +293,12 @@ def _fade_fast_loop() -> None:
                         state.index_rec.tick(now)        # record only: NIFTY 1-second candles (server/index_recorder.py)
                     except Exception as exc:  # noqa: BLE001 - never stops the trading loop
                         log.warning("index recorder: %s", exc)
+                if state.g1 is not None:
+                    try:
+                        state.g1.tick(now)               # S3 G1 / G1-F paper (server/g1_live.py), after the recorder
+                    except Exception as exc:  # noqa: BLE001 - never stops the trading loop
+                        log.warning("g1 paper: %s", exc)
+                        alerts.send(f"⚠️ G1 paper error: {exc}"[:300], key="g1-loop", every=900)
                 if state.stream is not None:
                     state.stream.write_candles(settings.data_dir)   # 1-second candles (server/upstox_stream.py)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits

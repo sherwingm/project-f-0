@@ -74,11 +74,24 @@ def chain():
     return read("chain_latest.json")
 
 
+def _g1():
+    from server.app import state                     # late import: the app module imports this router
+    return state.g1.view() if getattr(state, "g1", None) is not None else None
+
+
+@router.get("/g1")
+def g1():
+    """S3 G1 / G1-F live paper ledger (server/g1_live.py): open position, today's status, trades, both tracks."""
+    return _g1() or {"error": "G1 paper is not running on this server (it needs the Upstox stream)"}
+
+
 @router.get("/positions")
 def positions():
-    return {"pods": [], "positions": [], "note": "no index pods yet: data layer only (INDEX_DATA_PLAN.md)"}
+    v = _g1()
+    return {"pods": ["G1"] if v else [], "positions": [v["open"]] if v and v["open"] else []}
 
 
 @router.get("/results")
 def results():
-    return {"pods": [], "note": "no index pods yet: strategy results plug in here"}
+    v = _g1()
+    return {"pods": v["tracks"] if v else []}

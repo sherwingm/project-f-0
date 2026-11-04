@@ -419,3 +419,11 @@ premium a trade (t 1.72, 259 trades, both years positive). No unseen option hist
 forward: sessions from 2026-11-05 out of the live 1-second recorder, bought at the real ask, sold at the real bid,
 50 % stop, out at the next session's 09:16. Verdict at 30 trades on the S3 buy gate. Research only; nothing is
 enabled, S1 / S2 and the live server untouched.
+**G1-F added (2026-11-04, before any forward session):** a second track on the same trades that skips the day when
+the day-1 opening gap is ≥ +0.3 %, the opening range is 0.5 % to under 0.8 % wide, or India VIX is ≥ 17 at the
+signal. In-sample 154 trades, +17.9 % on the ₹ paid, t 2.56, picked from nine bucket tables on the same data. Judged
+apart on its own first 30 trades.
+**G1 live paper on the website (2026-11-04, the user: "make this live in the website", then "the same as how the s1
+do"):** `server/g1_live.py` trades G1 / G1-F as paper on the live server from the next session, in its own ledger
+(`data/g1_ledger.json`), shown on `/index`. Paper only, no orders; S1 / S2 rules and the S1 paper account unchanged.
+The user lifted the "do not deploy research commits" rule for this change. The verdict is still the forward runner's.

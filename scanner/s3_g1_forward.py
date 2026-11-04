@@ -24,6 +24,7 @@ from server import charges
 PAGE = "strategies/S3_G1_put_overnight.md"
 START = date(2026, 11, 5)
 STOP, LOT, STEP, GATE_N, QUOTE_AGE = 0.50, 65, 50, 30, 60
+GAP_MAX, WIDTH_SKIP, VIX_MAX = 0.3, (0.5, 0.8), 17.0      # G1-F skips (page: "Second track")
 FOLDER = STORE / "nifty_1s"
 
 
@@ -57,14 +58,39 @@ def last_quote(q: pd.DataFrame, minute: pd.Timestamp, col: str):
     return float(w[col].iloc[-1]), w["timestamp"].iloc[-1]
 
 
-def book(day: date, d1: pd.DataFrame, nxt: date | None, d2: pd.DataFrame | None) -> dict:
-    """One session's trade, a row with `skip`, or None (no downside first breakout)."""
+def g1f_skip(d1: pd.DataFrame, bars: pd.DataFrame, sig_min: pd.Timestamp, prev_close: float | None) -> tuple[str, dict]:
+    """("" or the reasons G1-F skips the day, the three filter values), all known at the signal minute."""
+    t = bars["timestamp"].dt.time
+    rng = bars[(t >= pd.Timestamp("09:15").time()) & (t < pd.Timestamp("09:30").time())]
+    hi, lo = float(rng["high"].max()), float(rng["low"].min())
+    width = (hi - lo) / lo * 100
+    gap = (float(bars["open"].iloc[0]) / prev_close - 1) * 100 if prev_close else None
+    vx = d1[(d1["symbol"] == "INDIA VIX") & (d1["timestamp"] < sig_min + pd.Timedelta(seconds=60))]["c"].dropna()
+    vix = float(vx.iloc[-1]) if len(vx) else None
+    why = []
+    if gap is None:
+        why.append("no previous close")
+    elif gap >= GAP_MAX:
+        why.append(f"day-1 gap {gap:+.2f} % ≥ +{GAP_MAX} %")
+    if WIDTH_SKIP[0] <= width < WIDTH_SKIP[1]:
+        why.append(f"range width {width:.2f} % in {WIDTH_SKIP[0]}-{WIDTH_SKIP[1]} %")
+    if vix is None:
+        why.append("no VIX")
+    elif vix >= VIX_MAX:
+        why.append(f"VIX {vix:.2f} ≥ {VIX_MAX:.0f}")
+    return "; ".join(why), {"day1_gap_pct": gap, "or_width_pct": round(width, 3), "vix_signal": vix}
+
+
+def book(day: date, d1: pd.DataFrame, nxt: date | None, d2: pd.DataFrame | None, prev_close: float | None = None) -> dict:
+    """One session's trade, a row with `skip`, or None (no downside first breakout). `g1f_skip` says whether the
+    G1-F track also takes it ("" = it does)."""
     bars = minute_bars(d1)
     sg = signal(bars, 15, None)
     if sg is None or sg[0] != "PE":
         return None
     ent = sg[1] + pd.Timedelta(minutes=1)
-    base = {"day": day, "signal": sg[1].strftime("%H:%M"), "entry": ent.strftime("%H:%M")}
+    fs, fv = g1f_skip(d1, bars, sg[1], prev_close)
+    base = {"day": day, "signal": sg[1].strftime("%H:%M"), "entry": ent.strftime("%H:%M"), "g1f_skip": fs, **fv}
     spot = bars.loc[bars["timestamp"] == ent, "close"]
     if spot.empty:
         return {**base, "skip": "no NIFTY bar at entry"}
@@ -115,7 +141,13 @@ def collect() -> pd.DataFrame:
         if day < START:
             continue
         nxt = ses[i + 1] if i + 1 < len(ses) else None
-        r = book(day, load(day), nxt, load(nxt) if nxt else None)
+        prev = ses[i - 1] if i else None
+        pc = None
+        if prev is not None:
+            n50 = load(prev)
+            n50 = n50[n50["symbol"] == "NIFTY 50"].sort_values("timestamp")["c"].dropna()
+            pc = float(n50.iloc[-1]) if len(n50) else None
+        r = book(day, load(day), nxt, load(nxt) if nxt else None, pc)
         if r is not None:
             rows.append(r)
     return pd.DataFrame(rows)
@@ -130,12 +162,8 @@ def gate(t: pd.DataFrame) -> list[tuple[str, bool]]:
             ("worst trade smaller than the average month", -t["net_rs"].min() < month)]
 
 
-def report(df: pd.DataFrame) -> list[str]:
-    ok = df[df.get("skip", pd.Series(dtype=str)).fillna("") == ""] if len(df) else df
-    out = [f"# S3 G1 forward · put held overnight, sold at the next open · from {START}", "",
-           f"Pre-registered: `{PAGE}`. Bought at the real ask, sold at the real bid (1-second recorder), charges "
-           f"from `server/charges.py`, {LOT} a lot. Verdict at the {GATE_N}th trade.", "",
-           f"Sessions in the store from {START}: {sum(1 for d in sessions() if d >= START)}; trades booked: {len(ok)}"]
+def track(name: str, ok: pd.DataFrame) -> list[str]:
+    out = ["", f"## {name}: {len(ok)} trades booked"]
     if len(ok):
         x = ok["net_pct"]
         out += [f"- Mean {x.mean():+.1f} % (median {x.median():+.1f} %, t {t_stat(x):.2f}), won {(x > 0).mean() * 100:.0f} %, "
@@ -144,19 +172,32 @@ def report(df: pd.DataFrame) -> list[str]:
                 f"≥ +100 % on {(ok['max_up_held_pct'] >= 100).sum()}"]
     if len(ok) >= GATE_N:
         ch = gate(ok)
-        out += ["", f"## Verdict: **{'PASS' if all(c for _, c in ch) else 'FAIL'}**", ""] + [f"- {'✔' if c else '✘'} {n}" for n, c in ch]
+        out += ["", f"Verdict: **{'PASS' if all(c for _, c in ch) else 'FAIL'}**", ""] + [f"- {'✔' if c else '✘'} {n}" for n, c in ch]
     else:
-        out += ["", f"Verdict: not yet ({len(ok)} of {GATE_N} trades)."]
+        out += [f"- Verdict: not yet ({len(ok)} of {GATE_N} trades)."]
+    return out
+
+
+def report(df: pd.DataFrame) -> list[str]:
+    ok = df[df["skip"].fillna("") == ""] if len(df) else df
+    out = [f"# S3 G1 forward · put held overnight, sold at the next open · from {START}", "",
+           f"Pre-registered: `{PAGE}`. Bought at the real ask, sold at the real bid (1-second recorder), charges "
+           f"from `server/charges.py`, {LOT} a lot. Each track's verdict at its {GATE_N}th trade.", "",
+           f"Sessions in the store from {START}: {sum(1 for d in sessions() if d >= START)}"]
+    out += track("G1 (every downside first breakout)", ok)
+    out += track("G1-F (skips day-1 gap ≥ +0.3 %, range width 0.5-0.8 %, VIX ≥ 17)",
+                 ok[ok["g1f_skip"].fillna("") == ""] if len(ok) else ok)
     if len(df):
-        out += ["", "| Day | Signal | Strike | Expiry | Paid (ask) | Sold (bid) | Exit | Net | Max up held | Gap |",
+        out += ["", "| Day | Signal | Strike | Paid (ask) | Sold (bid) | Exit | Net | Max up held | Next gap | G1-F |",
                 "|---|---|---|---|---|---|---|---|---|---|"]
         for r in df.itertuples():
-            if getattr(r, "skip", ""):
-                out.append(f"| {r.day} | {r.signal} | | | | | {r.skip} | | | |")
+            f = "takes it" if not r.g1f_skip else f"skips: {r.g1f_skip}"
+            if r.skip:
+                out.append(f"| {r.day} | {r.signal} | | | | {r.skip} | | | | {f} |")
             else:
-                out.append(f"| {r.day} | {r.signal} | {r.strike:.0f} | {r.expiry} | {r.paid:.2f} | {r.sold:.2f} | "
+                out.append(f"| {r.day} | {r.signal} | {r.strike:.0f} | {r.paid:.2f} | {r.sold:.2f} | "
                            f"{r.exit_day} {r.exit_at} {r.reason} | {r.net_pct:+.1f} % | {r.max_up_held_pct:+.0f} % | "
-                           f"{r.gap_pct:+.2f} % |")
+                           f"{r.gap_pct:+.2f} % | {f} |")
     return out
 
 

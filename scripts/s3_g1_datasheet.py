@@ -98,11 +98,32 @@ for r in g1.sort_values("day").itertuples():
 df = pd.DataFrame(rows)
 df.to_csv(RES / "S3_G1_datasheet.csv", index=False)
 
-# ---------- workbook ----------
+# ---------- workbook (the user, 2026-11-04: "make the g1 result in front ... make the excel optimizr") ----------
+from openpyxl.worksheet.datavalidation import DataValidation
+
+FRONT = ["Day", "G1 net %", "G1 net ₹", "G1 exit", "G1 max up held %", "Premium (₹/lot)"]
+ENTRY = ["Days to expiry", "Minutes after 09:30", "OR width %", "Breakout depth at signal %", "Day-1 gap at open %",
+         "Day-1 open → entry %", "Prev day return %", "Prev 5-day return %", "Prev close vs EMA20 %", "VIX at signal",
+         "VIX change since open", "VIX prev close", "Premium paid (₹/unit)", "Premium % of spot", "Spot at entry",
+         "Day-1 15:15 vs OR low %"]                      # numeric, known at entry (the last one at 15:15 on day 1)
+OPT = ["Opt lots", "Opt net ₹", "Opt paid ₹", "Opt net % if taken", "Opt equity ₹", "Opt peak ₹", "Opt drawdown ₹"]
+REST = [c for c in df.columns if c not in FRONT and c not in ENTRY]
+RULES = [("OR width %", "Yes", 0.5, 0.8, "Skip"), ("Day-1 gap at open %", "Yes", 0.3, None, "Skip"),
+         ("VIX at signal", "Yes", 17, None, "Skip"), ("Minutes after 09:30", "No", 15, 120, "Double"),
+         ("VIX at signal", "No", 12, 14, "Double"), ("Days to expiry", "No", None, None, "Skip"),
+         (None, "No", None, None, "Skip"), (None, "No", None, None, "Skip")]
+NR = len(RULES)
+cols = FRONT + OPT + ENTRY + REST + [f"Rule {k + 1}" for k in range(NR)]
+col = {c: get_column_letter(i + 1) for i, c in enumerate(cols)}
+LASTC = get_column_letter(len(cols))
+E0, E1 = col[ENTRY[0]], col[ENTRY[-1]]                 # the block the rules may look up (no circular reference)
+
 wb = Workbook()
 HDR = PatternFill("solid", fgColor="1F3864")
-SUB = PatternFill("solid", fgColor="D9E1F2")
-GRP = {"Known at entry": "E2EFDA", "After entry (hindsight)": "FCE4D6", "G1 result": "FFF2CC", "Other variants": "EDEDED"}
+YEL = PatternFill("solid", fgColor="FFFF00")
+GRP = {"G1 result": "FFF2CC", "Optimizer (formulas)": "DDEBF7", "Known at entry": "E2EFDA",
+       "After entry (hindsight)": "FCE4D6", "Other variants": "EDEDED", "Optimizer helpers": "F2F2F2",
+       "Trade details": "FFFFFF"}
 thin = Side(style="thin", color="BFBFBF")
 B = Border(left=thin, right=thin, top=thin, bottom=thin)
 pct = '+0.00"%";-0.00"%";0.00"%"'
@@ -112,18 +133,37 @@ fmt = {"Day": "yyyy-mm-dd", "Expiry": "yyyy-mm-dd", "G1 exit day": "yyyy-mm-dd",
        "Strike": "#,##0", "OR high": "#,##0.00", "OR low": "#,##0.00", "VIX at signal": "0.00",
        "VIX change since open": "+0.00;-0.00;0.00", "VIX prev close": "0.00", "Premium paid (₹/unit)": '"₹"#,##0.00',
        "Premium (₹/lot)": rs, "G1 net ₹": rs, "G1 charges ₹": rs, "Lot": "0", "Days to expiry": "0",
-       "Minutes after 09:30": "0"}
-group = {}
-for c in df.columns:
-    if c.startswith("G1 ") and c not in STOPS.values():
-        group[c] = "G1 result"
-    elif c.endswith("%") and c in ("PUT1 15:15 no stop %", "50 % stop, 15:15 %", "Next day 15:15 %",
-                                   "Next-day breakout rule %", "Gap down keep %", "Gap down sell %", *STOPS.values()):
-        group[c] = "Other variants"
-    elif c.startswith(("Day-1 entry", "Day-1 low", "Day-1 high", "Day-1 15:15", "Next-day")):
-        group[c] = "After entry (hindsight)"
-    else:
-        group[c] = "Known at entry"
+       "Minutes after 09:30": "0", "Opt lots": "0"}
+VARS = ["PUT1 15:15 no stop %", "50 % stop, 15:15 %", "Next day 15:15 %", "Next-day breakout rule %",
+        "Gap down keep %", "Gap down sell %", *STOPS.values()]
+
+
+def grp(c):
+    if c in OPT:
+        return "Optimizer (formulas)"
+    if c.startswith("Rule "):
+        return "Optimizer helpers"
+    if c in VARS:
+        return "Other variants"
+    if c in FRONT or c.startswith("G1 "):
+        return "G1 result"
+    if c in ENTRY or c in ("Weekday", "Month"):
+        return "Known at entry"
+    if c.startswith(("Day-1 entry", "Day-1 low", "Day-1 high", "Next-day")):
+        return "After entry (hindsight)"
+    return "Trade details"
+
+
+def number_format(c):
+    if c in fmt:
+        return fmt[c]
+    if c.endswith("₹"):
+        return rs
+    if c.endswith("%"):
+        return pct1 if ("net" in c or "max up" in c or c in VARS) else pct
+    return "General"
+
+
 notes = {
     "Days to expiry": "Sessions left after the signal day up to and including expiry.",
     "Breakout depth at signal %": "How far the signal minute closed below the opening-range low.",
@@ -131,6 +171,8 @@ notes = {
     "Next-day gap %": "Next session's 09:15 open against day 1's last close. What GIFT Nifty shows by 09:00. Not known at entry.",
     "G1 net %": "Net after slippage (0.5 %, 1 % before 09:30) and charges, % of premium paid.",
     "G1 max up held %": "Best minute close of the put while held, % above the price paid.",
+    "Day-1 15:15 vs OR low %": "Known at 15:15 on day 1 (when the overnight hold is decided), not at entry.",
+    "Opt lots": "Lots the Optimizer sheet's active rules give this trade: 0 = skipped.",
     "Gap down keep %": "G2: gap down → keep by the next-day breakout rule; gap up → sell at the open.",
     "Gap down sell %": "G3: gap down → sell at the open; gap up → keep by the next-day breakout rule.",
     "Next-day breakout rule %": "P3: next day's first breakout down → hold to 15:15; up → sell next minute; none by 13:00 → 13:16.",
@@ -138,45 +180,162 @@ notes = {
 
 ws = wb.active
 ws.title = "Summary"
+op = wb.create_sheet("Optimizer")
 tr = wb.create_sheet("Trades")
+lists = wb.create_sheet("Lists")
 n = len(df)
-cols = list(df.columns)
-col = {c: get_column_letter(i + 1) for i, c in enumerate(cols)}
-# trades sheet: row 1 group band, row 2 headers
+first, last = 3, n + 2
 for i, c in enumerate(cols, 1):
-    gcell = tr.cell(row=1, column=i, value=group[c])
-    gcell.fill = PatternFill("solid", fgColor=GRP[group[c]])
+    g_ = grp(c)
+    gcell = tr.cell(row=1, column=i, value=g_)
+    gcell.fill = PatternFill("solid", fgColor=GRP[g_])
     gcell.font = Font(name=FONT, bold=True, size=9)
     h = tr.cell(row=2, column=i, value=c)
-    h.fill, h.font = HDR, Font(name=FONT, bold=True, color="FFFFFF")
+    h.fill, h.font, h.border = HDR, Font(name=FONT, bold=True, color="FFFFFF"), B
     h.alignment = Alignment(wrap_text=True, vertical="center", horizontal="center")
-    h.border = B
     if c in notes:
         h.comment = Comment(notes[c], "Claude")
-    tr.column_dimensions[get_column_letter(i)].width = max(11, min(16, len(c) * 0.75 + 4))
+    tr.column_dimensions[get_column_letter(i)].width = 8 if c.startswith("Rule ") else max(11, min(16, len(c) * 0.75 + 4))
 tr.row_dimensions[2].height = 45
-for ri, row in enumerate(df.itertuples(index=False), 3):
-    for i, (c, v) in enumerate(zip(cols, row), 1):
-        v = None if isinstance(v, float) and np.isnan(v) else v
-        cell = tr.cell(row=ri, column=i, value=v)
+
+O = "Optimizer"
+for ri, row in enumerate(df.itertuples(index=False), first):
+    vals = dict(zip(df.columns, row))
+    for c in cols:
+        if c in vals:
+            v = vals[c]
+            v = None if isinstance(v, float) and np.isnan(v) else v
+        elif c.startswith("Rule "):
+            k = int(c.split()[1]) + 3                       # rule rows are rows 4.. of the Optimizer sheet
+            look = f"INDEX(${E0}{ri}:${E1}{ri},MATCH({O}!$A${k},${E0}$2:${E1}$2,0))"
+            lo_ = f'IF({O}!$C${k}="",-1E+99,{O}!$C${k})'
+            hi_ = f'IF({O}!$D${k}="",1E+99,{O}!$D${k})'
+            v = (f'=IF(OR({O}!$B${k}<>"Yes",{O}!$A${k}=""),"",IF(ISNUMBER({look}),IF(AND({look}>={lo_},{look}<{hi_}),'
+                 f'IF({O}!$E${k}="Double","D","S"),""),""))')
+        elif c == "Opt lots":
+            rr = f"${col['Rule 1']}{ri}:${col[f'Rule {NR}']}{ri}"
+            v = f'=IF(COUNTIF({rr},"S")>0,0,IF(COUNTIF({rr},"D")>0,{O}!$B$15,{O}!$B$14))'
+        elif c == "Opt net ₹":
+            v = f"={col['Opt lots']}{ri}*{col['G1 net ₹']}{ri}"
+        elif c == "Opt paid ₹":
+            v = f"={col['Opt lots']}{ri}*{col['Premium (₹/lot)']}{ri}"
+        elif c == "Opt net % if taken":
+            v = f'=IF({col["Opt lots"]}{ri}>0,{col["G1 net %"]}{ri},"")'
+        elif c == "Opt equity ₹":
+            v = f"={col['Opt net ₹']}{ri}" + (f"+{col['Opt equity ₹']}{ri - 1}" if ri > first else "")
+        elif c == "Opt peak ₹":
+            v = (f"=MAX({col['Opt peak ₹']}{ri - 1},{col['Opt equity ₹']}{ri})" if ri > first
+                 else f"=MAX(0,{col['Opt equity ₹']}{ri})")
+        else:                                              # Opt drawdown ₹
+            v = f"={col['Opt equity ₹']}{ri}-{col['Opt peak ₹']}{ri}"
+        cell = tr[f"{col[c]}{ri}"]
+        cell.value = v
         cell.font = Font(name=FONT, size=10)
         cell.border = B
-        cell.number_format = fmt.get(c, pct1 if c.endswith("%") and ("net" in c or "max up" in c or group[c] == "Other variants") else (pct if c.endswith("%") else "General"))
+        cell.number_format = number_format(c)
         if c == "G1 net %" and v is not None:
             cell.font = Font(name=FONT, size=10, bold=True, color="006100" if v > 0 else "9C0006")
-tr.freeze_panes = "B3"
-tr.auto_filter.ref = f"A2:{get_column_letter(len(cols))}{n + 2}"
-last = n + 2
-R = lambda c: f"Trades!${col[c]}$3:${col[c]}${last}"
+        if c == "Opt lots":
+            cell.font = Font(name=FONT, size=10, bold=True, color="1F3864")
+tr.freeze_panes = f"{col['Opt lots']}3"              # Day and the G1 result stay in view while scrolling
+tr.auto_filter.ref = f"A2:{LASTC}{last}"
+R = lambda c: f"Trades!${col[c]}${first}:${col[c]}${last}"
 
-# summary sheet
+for i, c in enumerate(ENTRY, 1):
+    lists.cell(row=i, column=1, value=c)
+for i, c in enumerate(("Yes", "No"), 1):
+    lists.cell(row=i, column=2, value=c)
+for i, c in enumerate(("Skip", "Double"), 1):
+    lists.cell(row=i, column=3, value=c)
+lists.sheet_state = "hidden"
+
+# ---------- Optimizer sheet ----------
+for c, w in zip("ABCDEFGHI", (30, 10, 11, 11, 11, 3, 36, 16, 18)):
+    op.column_dimensions[c].width = w
+op["A1"] = "G1 optimizer · switch filters on and off and see the result"
+op["A1"].font = Font(name=FONT, bold=True, size=14, color="1F3864")
+op["A2"] = ("Edit the yellow cells. A trade is skipped if any active Skip rule matches (From ≤ value < To; a blank "
+            "edge means no limit); otherwise it gets the doubled lots if any active Double rule matches. Only columns "
+            "known at entry are offered. In-sample: anything found here must be pre-registered and tested forward.")
+op["A2"].font = Font(name=FONT, italic=True, size=9)
+op["A2"].alignment = Alignment(wrap_text=True, vertical="top")
+op.merge_cells("A2:I2")
+op.row_dimensions[2].height = 40
+
+
+def ohead(r, c0, labels):
+    for j, t in enumerate(labels):
+        c = op.cell(row=r, column=c0 + j, value=t)
+        c.fill, c.font, c.border = HDR, Font(name=FONT, bold=True, color="FFFFFF"), B
+        c.alignment = Alignment(horizontal="center", wrap_text=True)
+
+
+def ocell(r, c, v, f="General", bold=False, inp=False):
+    x = op.cell(row=r, column=c, value=v)
+    x.font = Font(name=FONT, bold=bold, color="0000FF" if inp else None)
+    x.border, x.number_format = B, f
+    if inp:
+        x.fill = YEL
+    return x
+
+
+ohead(3, 1, ["Rule: column", "Active", "From ≥", "To <", "Action"])
+for k, (c, a, lo, hi, act) in enumerate(RULES, 4):
+    for j, (v, f) in enumerate(((c, "General"), (a, "General"), (lo, "0.00"), (hi, "0.00"), (act, "General")), 1):
+        ocell(k, j, v, f, inp=True)
+for dv, rng in ((DataValidation(type="list", formula1=f"=Lists!$A$1:$A${len(ENTRY)}", allow_blank=True), f"A4:A{3 + NR}"),
+                (DataValidation(type="list", formula1="=Lists!$B$1:$B$2"), f"B4:B{3 + NR}"),
+                (DataValidation(type="list", formula1="=Lists!$C$1:$C$2"), f"E4:E{3 + NR}")):
+    op.add_data_validation(dv)
+    dv.add(rng)
+assert 3 + NR < 13
+op.cell(row=13, column=1, value="Lot sizes").font = Font(name=FONT, bold=True)
+ocell(14, 1, "Lots on a normal trade")
+ocell(14, 2, 1, "0", inp=True)
+ocell(15, 1, "Lots when a Double rule matches")
+ocell(15, 2, 2, "0", inp=True)
+ocell(17, 1, "Preset: rules 1-3 on = G1-F (registered for the forward test). Turn all off = G1.").font = Font(name=FONT, italic=True, size=9)
+
+lots, onet, opaid, opct = R("Opt lots"), R("Opt net ₹"), R("Opt paid ₹"), R("Opt net % if taken")
+gnet, gpct, gpaid, day = R("G1 net ₹"), R("G1 net %"), R("Premium (₹/lot)"), R("Day")
+ohead(3, 7, ["Result", "Optimized", "G1 as registered"])
+Y2 = "DATE(2025,10,1)"
+res = [("Trades taken", f'COUNTIF({lots},">0")', f"COUNT({gpct})", "0"),
+       ("Lots", f"SUM({lots})", f"COUNT({gpct})", "0"),
+       ("Total net ₹", f"SUM({onet})", f"SUM({gnet})", rs),
+       ("Return on ₹ paid", f"SUM({onet})/SUM({opaid})", f"SUM({gnet})/SUM({gpaid})", "+0.0%;-0.0%"),
+       ("Mean net % a trade", f"AVERAGE({opct})", f"AVERAGE({gpct})", pct1),
+       ("Median net % a trade", f"MEDIAN({opct})", f"MEDIAN({gpct})", pct1),
+       ("t (mean ÷ standard error)", f"AVERAGE({opct})/(STDEV({opct})/SQRT(COUNT({opct})))",
+        f"AVERAGE({gpct})/(STDEV({gpct})/SQRT(COUNT({gpct})))", "0.00"),
+       ("Win rate", f'COUNTIF({opct},">0")/COUNT({opct})', f'COUNTIF({gpct},">0")/COUNT({gpct})', "0.0%"),
+       ("Worst trade ₹", f"MIN({onet})", f"MIN({gnet})", rs),
+       ("Best trade ₹", f"MAX({onet})", f"MAX({gnet})", rs),
+       ("Max drawdown ₹", f"MIN({R('Opt drawdown ₹')})", None, rs),
+       ("Year 1 return on ₹ paid (to 2025-09)", f'SUMIFS({onet},{day},"<"&{Y2})/SUMIFS({opaid},{day},"<"&{Y2})',
+        f'SUMIFS({gnet},{day},"<"&{Y2})/SUMIFS({gpaid},{day},"<"&{Y2})', "+0.0%;-0.0%"),
+       ("Year 2 return on ₹ paid (from 2025-10)", f'SUMIFS({onet},{day},">="&{Y2})/SUMIFS({opaid},{day},">="&{Y2})',
+        f'SUMIFS({gnet},{day},">="&{Y2})/SUMIFS({gpaid},{day},">="&{Y2})', "+0.0%;-0.0%")]
+for k, (lab, f1, f2, nf) in enumerate(res, 4):
+    ocell(k, 7, lab)
+    ocell(k, 8, f'=IFERROR({f1},"")', nf, bold=True)
+    if f2:
+        ocell(k, 9, f'=IFERROR({f2},"")', nf)
+    else:                                  # G1's drawdown is fixed (its lots never change): computed here
+        eq = df["G1 net ₹"].cumsum()
+        ocell(k, 9, round(float((eq - eq.cummax().clip(lower=0)).min()), 2), nf).comment = Comment(
+            "G1 as registered never changes, so this one is a fixed value computed in Python.", "Claude")
+op.freeze_panes = "A4"
+
+# ---------- Summary sheet ----------
 ws.column_dimensions["A"].width = 34
 for c in "BCDEFGH":
     ws.column_dimensions[c].width = 14
 ws["A1"] = "S3 G1 datasheet · NIFTY downside ORB put, held overnight, sold at the next open"
 ws["A1"].font = Font(name=FONT, bold=True, size=14, color="1F3864")
 ws["A2"] = ("In-sample, 2024-10-01 → 2026-10-28, real NIFTY option minutes. Best of 7 variants on the same data, so "
-            "flattered. Trades sheet: green columns were known at entry (usable as filters); orange ones are hindsight.")
+            "flattered. Optimizer sheet: switch filters and see the result. Trades sheet: the G1 result first, green "
+            "columns known at entry, orange ones hindsight.")
 ws["A2"].font = Font(name=FONT, italic=True, size=9)
 ws["A2"].alignment = Alignment(wrap_text=True)
 ws.merge_cells("A2:H2")

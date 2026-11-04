@@ -950,6 +950,22 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   gap ≥ +0.3 % −11.0 % (52); OR width 0.5-0.8 % −15.6 % (44); VIX ≥ 17 −2.8 %; signal 09:45-11:29 +16.6 % (70).
   At 15:15 NIFTY back above the range low on 112 trades: holding −39.7 % vs selling −40.0 % (no gain from a 15:15
   filter); still below: holding adds +16.5 points (t 3.77) on 102 trades.
+- 2026-11-04 · G1 bucket filters (the user: skip the negative buckets, double the positive ones),
+  `scripts/s3_g1_filters.py`, `data/results/S3_G1_filters.md`, in-sample. Return on ₹ paid: G1 +5.5 % (259 trades);
+  skip day-1 gap ≥ +0.3 %, OR width 0.5-0.8 % and VIX ≥ 17 → +17.9 % (154 trades, t 2.56, worst −₹6,359, max
+  drawdown −₹31,108); plus 2 lots on signal 09:45-11:29 or VIX 12-14 → +21.9 % (239 lots, worst −₹12,415). Doubling
+  alone adds ₹ but little return on ₹ paid and raises drawdown. Each of the five filters kept its sign from year 1 to
+  year 2, with smaller sizes (OR width −31.4 % → −2.4 %). Re-picked on year 1 only (9 buckets) and applied to year 2:
+  +4.3 % → +7.0 % on ₹ paid, 54 of 131 trades kept.
+- 2026-11-04 · G1-F forward track added (the user: "Yes, add G1-F"): same trades as G1, skipped on day-1 gap ≥ +0.3 %,
+  range width 0.5-0.8 %, VIX ≥ 17 (all from the 1-second file at the signal; the previous close from the previous
+  file). `scanner/s3_g1_forward.py` reports both tracks; 6 tests. Page section "Second track".
+- 2026-11-04 · G1 / G1-F live paper (the user: "make this live in the website ... the same as how the s1 do"):
+  `server/g1_live.py` (G1Trader: 1-minute NIFTY bars from the stream, opening range, first breakout, ask in at the
+  minute after the signal, 50 % stop on the bid, out at the next 09:16 bid; restart seeds bars from the recorder file),
+  ticked in the fast loop after the recorder; own ledger `data/g1_ledger.json` (git-ignored); `/api/index/g1`;
+  `/index` page shows today's status, the open position, trades and the Pods table. `G1_PAPER` switch. 5 tests
+  (`tests/test_g1_live.py`); full suite green. Previewed locally with a demo ledger (desktop and phone width).
 - 2026-11-04 · Near-expiry buying (the user: "trade on the near expiry ... capture the trade more than 100%"). Kotak Neo
   docs checked: buying near expiry is allowed through the API (NIFTY cash-settled; stock options: delivery margin from
   4 sessions out, full margin from 12:00 on expiry day within 3 % of the price); our own `ALLOW_LOTTERY` /
