@@ -909,3 +909,7 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-04 · S3 V1 (cheap-options straddle) pre-registered, `strategies/S3_V1_cheap_straddle.md`. Design
   2024-10 → 2025-09 (`data/results/S3_V1_design.md`): expensive straddles (ratio10 ≥ 1.1) to expiry −29 % a trade;
   cheap (ratio10 < 1.0, 14:45) +6.8 %, t over expiries 1.00. Test 2025-10 → 2026-10 not run yet.
+- 2026-11-04 · S3 V1 run once on 2025-10 → 2026-10: **FAIL** (all 6 checks), cheap straddles −10.9 % a trade (51
+  trades, t −0.74); expensive −9.0 % (t −1.41, claim 2 not confirmed); every 14:45 straddle −10.8 % (t −2.68). Two
+  trades checked by hand against the raw minutes (fills and exits match). The console print crashed on "→" after
+  the report was written; fixed by setting stdout to UTF-8 (output unchanged, not re-run).

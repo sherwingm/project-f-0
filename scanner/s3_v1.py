@@ -226,6 +226,8 @@ def run() -> dict:
 
 
 if __name__ == "__main__":
+    import sys
+    sys.stdout.reconfigure(encoding="utf-8")         # the Windows console is cp1252; the reports use → and ✔
     ap = argparse.ArgumentParser()
     ap.add_argument("--design", action="store_true")
     ap.add_argument("--run", action="store_true")

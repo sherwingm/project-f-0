@@ -389,3 +389,13 @@ Max up still large: mean +102 %, median +59 %, 39 % of days reached +100 %, yet 
 (26 at the open). Best case (target first on the 6 days that touched both) +1.7 %, t 0.18. Side: ATM call −16.1 %,
 open entry −7.9 %, no target −0.7 %, no stop −13.0 %. The lead is closed; the 2024-26 +17 % was in-sample. The user
 said after this run to stop using the 2022-24 data; it is not used again for this idea.
+
+### S3 V1 · NIFTY ATM straddle bought at 14:45 when ratio10 < 1.0 (cheap), held to expiry, 2025-10 → 2026-10: closed (2026-11-04)
+Page `strategies/S3_V1_cheap_straddle.md` (402cc7fe); runner `scanner/s3_v1.py`; report `data/results/S3_V1_report.md`.
+**Claim 1 FAIL** on all 6 checks: 51 trades (needed 60), −10.9 % of the premium a trade (median −27.8 %), t over 22
+expiries −0.74, won 39 %; halves −20.7 % / −4.6 %; 2× costs −13.1 %; every neighbour negative (ratio10 < 0.9 −15.4 %,
+< 1.1 −14.5 %, ratio5 < 1.0 −9.9 %, 09:45 −4.7 %). Max up mean +50 %, median +23 %, ≥ +100 % on 20 %. Only DTE 4+ was
+positive (+7.7 %, 21 trades, t 0.41), not a rule and not rescued. **Claim 2 NOT CONFIRMED:** ratio10 ≥ 1.1 lost −9.0 %
+(172 trades) but t over expiries −1.41 (needed ≤ −2), so it does not become a filter. Every 14:45 straddle held to
+expiry lost −10.8 % (259 trades, t −2.68): in this year a bought straddle lost whether it looked cheap or dear. The
+design's +6.8 % was in-sample. The cheap-straddle lead is closed.
