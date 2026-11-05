@@ -70,6 +70,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -17.5
+  },
+  {
+   "at": "09:45:05",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.12,
+   "same_best_bid_pct": 23.4,
+   "same_best_ask_pct": 20.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.9,
+   "upstox_minus_kotak_quote_time_s_median": -2.5
   }
  ],
  "top_gaps": [
@@ -207,21 +221,21 @@
    "at": "09:35"
   },
   {
-   "contract": "ADANIGREEN26NOVFUT",
-   "gap_pct": 0.107,
-   "kotak": 1405.2,
-   "upstox": 1406.7,
-   "at": "09:20"
+   "contract": "DIVISLAB26NOVFUT",
+   "gap_pct": 0.12,
+   "kotak": 10035.0,
+   "upstox": 10047.0,
+   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 322,
+  "rounds": 6,
+  "contract_quotes": 386,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.0,
-  "same_best_ask_pct": 29.7,
+  "same_best_bid_pct": 24.2,
+  "same_best_ask_pct": 27.95,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "oi_same_pct": 97.65,
+  "upstox_minus_kotak_quote_time_s_median": -5.0
  }
 }
