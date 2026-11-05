@@ -1,7 +1,7 @@
 {
  "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
- "last_session": "2026-11-04",
+ "last_session": "2026-11-05",
  "sessions": [
   {
    "session": "2026-10-13",
@@ -337,11 +337,237 @@
     "exited": [],
     "signals": []
    }
+  },
+  {
+   "session": "2026-11-05",
+   "A": {
+    "filled": [],
+    "exited": [],
+    "signals": [
+     "AUROPHARMA",
+     "BIOCON",
+     "BSE"
+    ]
+   },
+   "B": {
+    "filled": [],
+    "exited": [],
+    "signals": [
+     "AUROPHARMA",
+     "BIOCON"
+    ]
+   }
   }
  ],
  "arms": {
   "A": {
-   "pending": [],
+   "pending": [
+    {
+     "arm": "A",
+     "symbol": "AUROPHARMA",
+     "sector": "nifty pharma",
+     "signal_date": "2026-11-05",
+     "beat": 4.16,
+     "move": 4.69,
+     "expiry": "2026-11-23",
+     "spot": 1785.06,
+     "strikes": [
+      1320.0,
+      1400.0,
+      1440.0,
+      1460.0,
+      1480.0,
+      1500.0,
+      1520.0,
+      1540.0,
+      1560.0,
+      1580.0,
+      1600.0,
+      1620.0,
+      1640.0,
+      1660.0,
+      1680.0,
+      1700.0,
+      1720.0,
+      1740.0,
+      1760.0,
+      1780.0,
+      1800.0,
+      1820.0,
+      1840.0,
+      1860.0,
+      1880.0,
+      1900.0,
+      1920.0,
+      1940.0,
+      1960.0,
+      1980.0,
+      2000.0,
+      2020.0,
+      2040.0
+     ],
+     "open_strike": 1840.0,
+     "open_lot": 550,
+     "open_ref": 13.66,
+     "liquid_strikes": [
+      1580.0,
+      1600.0,
+      1620.0,
+      1640.0,
+      1660.0,
+      1680.0,
+      1700.0,
+      1720.0,
+      1740.0,
+      1760.0,
+      1780.0,
+      1800.0,
+      1820.0,
+      1840.0,
+      1860.0,
+      1880.0,
+      1920.0,
+      1960.0
+     ]
+    },
+    {
+     "arm": "A",
+     "symbol": "BIOCON",
+     "sector": "nifty pharma",
+     "signal_date": "2026-11-05",
+     "beat": 4.58,
+     "move": 5.1,
+     "expiry": "2026-11-23",
+     "spot": 362.0,
+     "strikes": [
+      280.0,
+      290.0,
+      300.0,
+      305.0,
+      310.0,
+      315.0,
+      320.0,
+      325.0,
+      330.0,
+      335.0,
+      340.0,
+      345.0,
+      350.0,
+      355.0,
+      360.0,
+      365.0,
+      370.0,
+      375.0,
+      380.0,
+      385.0,
+      390.0,
+      395.0,
+      400.0,
+      405.0,
+      410.0,
+      420.0,
+      430.0,
+      480.0
+     ],
+     "open_strike": 380.0,
+     "open_lot": 2500,
+     "open_ref": 2.76,
+     "liquid_strikes": [
+      320.0,
+      330.0,
+      335.0,
+      340.0,
+      345.0,
+      350.0,
+      355.0,
+      360.0,
+      365.0,
+      370.0,
+      375.0,
+      380.0,
+      385.0,
+      390.0,
+      395.0,
+      400.0,
+      405.0,
+      410.0,
+      420.0,
+      430.0
+     ]
+    },
+    {
+     "arm": "A",
+     "symbol": "BSE",
+     "sector": "nifty financial services",
+     "signal_date": "2026-11-05",
+     "beat": 2.23,
+     "move": 5.23,
+     "expiry": "2026-11-23",
+     "spot": 3790.0,
+     "strikes": [
+      2600.0,
+      2800.0,
+      2900.0,
+      2950.0,
+      3000.0,
+      3050.0,
+      3100.0,
+      3150.0,
+      3200.0,
+      3250.0,
+      3300.0,
+      3350.0,
+      3400.0,
+      3450.0,
+      3500.0,
+      3550.0,
+      3600.0,
+      3650.0,
+      3700.0,
+      3750.0,
+      3800.0,
+      3850.0,
+      3900.0,
+      3950.0,
+      4000.0,
+      4050.0,
+      4100.0,
+      4150.0,
+      4200.0,
+      4250.0,
+      4300.0,
+      4400.0
+     ],
+     "open_strike": 4050.0,
+     "open_lot": 200,
+     "open_ref": 35.9,
+     "liquid_strikes": [
+      3200.0,
+      3300.0,
+      3350.0,
+      3400.0,
+      3450.0,
+      3500.0,
+      3550.0,
+      3600.0,
+      3650.0,
+      3700.0,
+      3750.0,
+      3800.0,
+      3850.0,
+      3900.0,
+      3950.0,
+      4000.0,
+      4050.0,
+      4100.0,
+      4150.0,
+      4200.0,
+      4250.0,
+      4300.0,
+      4400.0
+     ]
+    }
+   ],
    "open": [
     {
      "arm": "A",
@@ -363,7 +589,7 @@
      "cost": 7785.25,
      "category": "mid",
      "best": 29.0,
-     "stall": 2,
+     "stall": 3,
      "fut0": 1983.0,
      "stock0": 1997.0,
      "path": [
@@ -394,6 +620,10 @@
       [
        "2026-11-04",
        17.75
+      ],
+      [
+       "2026-11-05",
+       26.65
       ]
      ],
      "exit_date": null,
@@ -413,9 +643,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 17.75,
-      "mark_pct": 8.3
+      "last_date": "2026-11-05",
+      "last_close": 26.65,
+      "mark_pct": 62.6
      }
     },
     {
@@ -437,8 +667,8 @@
      "entry_source": "vwap",
      "cost": 6512.5,
      "category": "large",
-     "best": 12.4,
-     "stall": 3,
+     "best": 12.8,
+     "stall": 0,
      "fut0": 1312.5,
      "stock0": 1310.0,
      "path": [
@@ -469,6 +699,10 @@
       [
        "2026-11-04",
        12.0
+      ],
+      [
+       "2026-11-05",
+       12.8
       ]
      ],
      "exit_date": null,
@@ -479,8 +713,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 19.0,
-      "h_peak_date": "2026-10-30",
+      "h_peak": 22.84,
+      "h_peak_date": "2026-11-05",
       "h_dip": -32.82,
       "h_dip_date": "2026-11-02",
       "a_peak": null,
@@ -488,9 +722,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 12.0,
-      "mark_pct": 15.16
+      "last_date": "2026-11-05",
+      "last_close": 12.8,
+      "mark_pct": 22.84
      }
     },
     {
@@ -513,7 +747,7 @@
      "cost": 7556.25,
      "category": "small",
      "best": 62.05,
-     "stall": 0,
+     "stall": 1,
      "fut0": 1654.6,
      "stock0": 1650.0,
      "path": [
@@ -540,6 +774,10 @@
       [
        "2026-11-04",
        62.05
+      ],
+      [
+       "2026-11-05",
+       45.3
       ]
      ],
      "exit_date": null,
@@ -559,9 +797,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 62.05,
-      "mark_pct": 207.94
+      "last_date": "2026-11-05",
+      "last_close": 45.3,
+      "mark_pct": 124.81
      }
     },
     {
@@ -583,7 +821,7 @@
      "entry_source": "vwap",
      "cost": 5353.25,
      "category": "small",
-     "best": 18.7,
+     "best": 29.25,
      "stall": 0,
      "fut0": 863.15,
      "stock0": 855.0,
@@ -611,6 +849,10 @@
       [
        "2026-11-04",
        18.7
+      ],
+      [
+       "2026-11-05",
+       29.25
       ]
      ],
      "exit_date": null,
@@ -621,8 +863,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 100.86,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 214.18,
+      "h_peak_date": "2026-11-05",
       "h_dip": -31.79,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -630,9 +872,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 18.7,
-      "mark_pct": 100.86
+      "last_date": "2026-11-05",
+      "last_close": 29.25,
+      "mark_pct": 214.18
      }
     },
     {
@@ -654,8 +896,8 @@
      "entry_source": "vwap",
      "cost": 6774.25,
      "category": "small",
-     "best": 7.75,
-     "stall": 2,
+     "best": 9.45,
+     "stall": 0,
      "fut0": 880.5,
      "stock0": 879.45,
      "path": [
@@ -682,6 +924,10 @@
       [
        "2026-11-04",
        5.15
+      ],
+      [
+       "2026-11-05",
+       9.45
       ]
      ],
      "exit_date": null,
@@ -692,8 +938,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 40.14,
-      "h_peak_date": "2026-11-02",
+      "h_peak": 70.89,
+      "h_peak_date": "2026-11-05",
       "h_dip": -6.87,
       "h_dip_date": "2026-11-04",
       "a_peak": null,
@@ -701,9 +947,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 5.15,
-      "mark_pct": -6.87
+      "last_date": "2026-11-05",
+      "last_close": 9.45,
+      "mark_pct": 70.89
      }
     },
     {
@@ -725,8 +971,8 @@
      "entry_source": "vwap",
      "cost": 7293.0,
      "category": "large",
-     "best": 53.75,
-     "stall": 1,
+     "best": 61.85,
+     "stall": 0,
      "fut0": 1003.8,
      "stock0": 1000.2,
      "path": [
@@ -753,6 +999,10 @@
       [
        "2026-11-04",
        52.5
+      ],
+      [
+       "2026-11-05",
+       61.85
       ]
      ],
      "exit_date": null,
@@ -763,8 +1013,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 305.35,
-      "h_peak_date": "2026-11-03",
+      "h_peak": 366.44,
+      "h_peak_date": "2026-11-05",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -772,9 +1022,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 52.5,
-      "mark_pct": 295.93
+      "last_date": "2026-11-05",
+      "last_close": 61.85,
+      "mark_pct": 366.44
      }
     },
     {
@@ -796,7 +1046,7 @@
      "entry_source": "vwap",
      "cost": 7801.5,
      "category": "large",
-     "best": 100.65,
+     "best": 183.1,
      "stall": 0,
      "fut0": 3855.1,
      "stock0": 3837.1,
@@ -820,6 +1070,10 @@
       [
        "2026-11-04",
        100.65
+      ],
+      [
+       "2026-11-05",
+       183.1
       ]
      ],
      "exit_date": null,
@@ -830,8 +1084,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 125.77,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 310.72,
+      "h_peak_date": "2026-11-05",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -839,9 +1093,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 100.65,
-      "mark_pct": 125.77
+      "last_date": "2026-11-05",
+      "last_close": 183.1,
+      "mark_pct": 310.72
      }
     },
     {
@@ -863,7 +1117,7 @@
      "entry_source": "vwap",
      "cost": 7165.71,
      "category": "large",
-     "best": 54.4,
+     "best": 71.9,
      "stall": 0,
      "fut0": 2579.9,
      "stock0": 2579.4,
@@ -883,6 +1137,10 @@
       [
        "2026-11-04",
        54.4
+      ],
+      [
+       "2026-11-05",
+       71.9
       ]
      ],
      "exit_date": null,
@@ -893,8 +1151,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 134.58,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 210.05,
+      "h_peak_date": "2026-11-05",
       "h_dip": -13.54,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -902,9 +1160,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 54.4,
-      "mark_pct": 134.58
+      "last_date": "2026-11-05",
+      "last_close": 71.9,
+      "mark_pct": 210.05
      }
     },
     {
@@ -927,7 +1185,7 @@
      "cost": 7704.5,
      "category": "large",
      "best": 33.55,
-     "stall": 0,
+     "stall": 1,
      "fut0": 1844.5,
      "stock0": 1850.0,
      "path": [
@@ -946,6 +1204,10 @@
       [
        "2026-11-04",
        33.55
+      ],
+      [
+       "2026-11-05",
+       25.5
       ]
      ],
      "exit_date": null,
@@ -965,9 +1227,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 33.55,
-      "mark_pct": 106.84
+      "last_date": "2026-11-05",
+      "last_close": 25.5,
+      "mark_pct": 57.21
      }
     },
     {
@@ -989,8 +1251,8 @@
      "entry_source": "vwap",
      "cost": 7344.0,
      "category": "small",
-     "best": 2.04,
-     "stall": 4,
+     "best": 2.39,
+     "stall": 0,
      "fut0": 154.82,
      "stock0": 154.33,
      "path": [
@@ -1009,6 +1271,10 @@
       [
        "2026-11-04",
        1.83
+      ],
+      [
+       "2026-11-05",
+       2.39
       ]
      ],
      "exit_date": null,
@@ -1019,8 +1285,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 0.0,
-      "h_peak_date": null,
+      "h_peak": 17.16,
+      "h_peak_date": "2026-11-05",
       "h_dip": -27.45,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -1028,9 +1294,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 1.83,
-      "mark_pct": -10.29
+      "last_date": "2026-11-05",
+      "last_close": 2.39,
+      "mark_pct": 17.16
      }
     },
     {
@@ -1052,8 +1318,8 @@
      "entry_source": "vwap",
      "cost": 6812.5,
      "category": "large",
-     "best": 18.0,
-     "stall": 1,
+     "best": 71.9,
+     "stall": 0,
      "fut0": 1595.4,
      "stock0": 1586.0,
      "path": [
@@ -1072,6 +1338,10 @@
       [
        "2026-11-04",
        16.3
+      ],
+      [
+       "2026-11-05",
+       71.9
       ]
      ],
      "exit_date": null,
@@ -1082,8 +1352,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 65.14,
-      "h_peak_date": "2026-11-03",
+      "h_peak": 559.63,
+      "h_peak_date": "2026-11-05",
       "h_dip": -28.44,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -1091,9 +1361,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 16.3,
-      "mark_pct": 49.54
+      "last_date": "2026-11-05",
+      "last_close": 71.9,
+      "mark_pct": 559.63
      }
     },
     {
@@ -1115,7 +1385,7 @@
      "entry_source": "vwap",
      "cost": 7744.0,
      "category": "large",
-     "best": 84.05,
+     "best": 150.6,
      "stall": 0,
      "fut0": 1912.7,
      "stock0": 1911.0,
@@ -1135,6 +1405,10 @@
       [
        "2026-11-04",
        84.05
+      ],
+      [
+       "2026-11-05",
+       150.6
       ]
      ],
      "exit_date": null,
@@ -1145,8 +1419,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 198.47,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 434.8,
+      "h_peak_date": "2026-11-05",
       "h_dip": -8.56,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -1154,9 +1428,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 84.05,
-      "mark_pct": 198.47
+      "last_date": "2026-11-05",
+      "last_close": 150.6,
+      "mark_pct": 434.8
      }
     },
     {
@@ -1178,7 +1452,7 @@
      "entry_source": "vwap",
      "cost": 6073.75,
      "category": "mid",
-     "best": 6.45,
+     "best": 9.65,
      "stall": 0,
      "fut0": 500.9,
      "stock0": 500.35,
@@ -1198,6 +1472,10 @@
       [
        "2026-11-04",
        6.45
+      ],
+      [
+       "2026-11-05",
+       9.65
       ]
      ],
      "exit_date": null,
@@ -1208,8 +1486,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 14.16,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 70.8,
+      "h_peak_date": "2026-11-05",
       "h_dip": -32.74,
       "h_dip_date": "2026-11-03",
       "a_peak": null,
@@ -1217,9 +1495,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 6.45,
-      "mark_pct": 14.16
+      "last_date": "2026-11-05",
+      "last_close": 9.65,
+      "mark_pct": 70.8
      }
     },
     {
@@ -1242,7 +1520,7 @@
      "cost": 6388.0,
      "category": "mid",
      "best": 53.15,
-     "stall": 0,
+     "stall": 1,
      "fut0": 1343.7,
      "stock0": 1333.7,
      "path": [
@@ -1261,6 +1539,10 @@
       [
        "2026-11-04",
        53.15
+      ],
+      [
+       "2026-11-05",
+       43.9
       ]
      ],
      "exit_date": null,
@@ -1280,9 +1562,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 53.15,
-      "mark_pct": 232.81
+      "last_date": "2026-11-05",
+      "last_close": 43.9,
+      "mark_pct": 174.89
      }
     },
     {
@@ -1304,8 +1586,8 @@
      "entry_source": "vwap",
      "cost": 7107.5,
      "category": "large",
-     "best": 63.6,
-     "stall": 1,
+     "best": 145.3,
+     "stall": 0,
      "fut0": 2334.1,
      "stock0": 2344.3,
      "path": [
@@ -1320,6 +1602,10 @@
       [
        "2026-11-04",
        63.25
+      ],
+      [
+       "2026-11-05",
+       145.3
       ]
      ],
      "exit_date": null,
@@ -1330,8 +1616,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 123.71,
-      "h_peak_date": "2026-11-03",
+      "h_peak": 411.08,
+      "h_peak_date": "2026-11-05",
       "h_dip": -15.23,
       "h_dip_date": "2026-11-02",
       "a_peak": null,
@@ -1339,9 +1625,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 63.25,
-      "mark_pct": 122.48
+      "last_date": "2026-11-05",
+      "last_close": 145.3,
+      "mark_pct": 411.08
      }
     },
     {
@@ -1363,7 +1649,7 @@
      "entry_source": "vwap",
      "cost": 6670.5,
      "category": "large",
-     "best": 136.65,
+     "best": 327.6,
      "stall": 0,
      "fut0": 4919.8,
      "stock0": 4919.9,
@@ -1379,6 +1665,10 @@
       [
        "2026-11-04",
        136.65
+      ],
+      [
+       "2026-11-05",
+       327.6
       ]
      ],
      "exit_date": null,
@@ -1389,8 +1679,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 207.29,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 636.68,
+      "h_peak_date": "2026-11-05",
       "h_dip": -0.61,
       "h_dip_date": "2026-11-02",
       "a_peak": null,
@@ -1398,9 +1688,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 136.65,
-      "mark_pct": 207.29
+      "last_date": "2026-11-05",
+      "last_close": 327.6,
+      "mark_pct": 636.68
      }
     },
     {
@@ -1423,7 +1713,7 @@
      "cost": 6927.5,
      "category": "mid",
      "best": 16.3,
-     "stall": 3,
+     "stall": 4,
      "fut0": 2362.8,
      "stock0": 2348.0,
      "path": [
@@ -1438,6 +1728,10 @@
       [
        "2026-11-04",
        8.8
+      ],
+      [
+       "2026-11-05",
+       10.95
       ]
      ],
      "exit_date": null,
@@ -1457,9 +1751,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 8.8,
-      "mark_pct": -46.01
+      "last_date": "2026-11-05",
+      "last_close": 10.95,
+      "mark_pct": -32.82
      }
     },
     {
@@ -1481,8 +1775,8 @@
      "entry_source": "vwap",
      "cost": 7324.75,
      "category": "small",
-     "best": 3.53,
-     "stall": 2,
+     "best": 6.0,
+     "stall": 0,
      "fut0": 414.25,
      "stock0": 412.0,
      "path": [
@@ -1493,6 +1787,10 @@
       [
        "2026-11-04",
        3.2
+      ],
+      [
+       "2026-11-05",
+       6.0
       ]
      ],
      "exit_date": null,
@@ -1503,8 +1801,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 0.0,
-      "h_peak_date": null,
+      "h_peak": 69.97,
+      "h_peak_date": "2026-11-05",
       "h_dip": -19.26,
       "h_dip_date": "2026-11-03",
       "a_peak": null,
@@ -1512,9 +1810,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 3.2,
-      "mark_pct": -9.35
+      "last_date": "2026-11-05",
+      "last_close": 6.0,
+      "mark_pct": 69.97
      }
     },
     {
@@ -1536,7 +1834,7 @@
      "entry_source": "vwap",
      "cost": 7649.25,
      "category": "large",
-     "best": 28.2,
+     "best": 31.45,
      "stall": 0,
      "fut0": 896.7,
      "stock0": 895.5,
@@ -1548,6 +1846,10 @@
       [
        "2026-11-04",
        28.2
+      ],
+      [
+       "2026-11-05",
+       31.45
       ]
      ],
      "exit_date": null,
@@ -1558,8 +1860,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 93.55,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 115.85,
+      "h_peak_date": "2026-11-05",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -1567,9 +1869,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 28.2,
-      "mark_pct": 93.55
+      "last_date": "2026-11-05",
+      "last_close": 31.45,
+      "mark_pct": 115.85
      }
     },
     {
@@ -1591,7 +1893,7 @@
      "entry_source": "vwap",
      "cost": 6063.75,
      "category": "large",
-     "best": 94.55,
+     "best": 173.85,
      "stall": 0,
      "fut0": 2528.4,
      "stock0": 2528.2,
@@ -1603,6 +1905,10 @@
       [
        "2026-11-04",
        94.55
+      ],
+      [
+       "2026-11-05",
+       173.85
       ]
      ],
      "exit_date": null,
@@ -1613,8 +1919,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 328.8,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 688.44,
+      "h_peak_date": "2026-11-05",
       "h_dip": -30.84,
       "h_dip_date": "2026-11-03",
       "a_peak": null,
@@ -1622,9 +1928,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 94.55,
-      "mark_pct": 328.8
+      "last_date": "2026-11-05",
+      "last_close": 173.85,
+      "mark_pct": 688.44
      }
     },
     {
@@ -1646,7 +1952,7 @@
      "entry_source": "vwap",
      "cost": 5225.5,
      "category": "mid",
-     "best": 15.65,
+     "best": 35.25,
      "stall": 0,
      "fut0": 2044.9,
      "stock0": 2048.7,
@@ -1658,6 +1964,10 @@
       [
        "2026-11-04",
        15.65
+      ],
+      [
+       "2026-11-05",
+       35.25
       ]
      ],
      "exit_date": null,
@@ -1668,8 +1978,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 4.82,
-      "h_peak_date": "2026-11-04",
+      "h_peak": 136.1,
+      "h_peak_date": "2026-11-05",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -1677,9 +1987,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 15.65,
-      "mark_pct": 4.82
+      "last_date": "2026-11-05",
+      "last_close": 35.25,
+      "mark_pct": 136.1
      }
     },
     {
@@ -1702,13 +2012,17 @@
      "cost": 6528.0,
      "category": "mid",
      "best": 5.44,
-     "stall": 1,
+     "stall": 2,
      "fut0": 889.3,
      "stock0": 890.0,
      "path": [
       [
        "2026-11-04",
        4.9
+      ],
+      [
+       "2026-11-05",
+       4.45
       ]
      ],
      "exit_date": null,
@@ -1721,16 +2035,16 @@
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
-      "h_dip": -9.93,
-      "h_dip_date": "2026-11-04",
+      "h_dip": -18.2,
+      "h_dip_date": "2026-11-05",
       "a_peak": null,
       "a_peak_date": null,
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 4.9,
-      "mark_pct": -9.93
+      "last_date": "2026-11-05",
+      "last_close": 4.45,
+      "mark_pct": -18.2
      }
     }
    ],
@@ -1960,6 +2274,10 @@
       [
        "2026-11-04",
        24.25
+      ],
+      [
+       "2026-11-05",
+       90.55
       ]
      ],
      "exit_date": "2026-10-26",
@@ -1974,14 +2292,14 @@
       "h_peak_date": "2026-10-16",
       "h_dip": -9.74,
       "h_dip_date": "2026-10-23",
-      "a_peak": 0.0,
-      "a_peak_date": null,
+      "a_peak": 53.06,
+      "a_peak_date": "2026-11-05",
       "a_dip": -59.01,
       "a_dip_date": "2026-11-04",
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 24.25,
-      "mark_pct": -59.01
+      "last_date": "2026-11-05",
+      "last_close": 90.55,
+      "mark_pct": 53.06
      },
      "charges": 63.4,
      "slippage": 422.85
@@ -2232,6 +2550,10 @@
       [
        "2026-11-04",
        32.6
+      ],
+      [
+       "2026-11-05",
+       41.85
       ]
      ],
      "exit_date": "2026-10-30",
@@ -2246,14 +2568,14 @@
       "h_peak_date": null,
       "h_dip": -53.39,
       "h_dip_date": "2026-10-30",
-      "a_peak": 195.02,
-      "a_peak_date": "2026-11-04",
+      "a_peak": 278.73,
+      "a_peak_date": "2026-11-05",
       "a_dip": 0.0,
       "a_dip_date": null,
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 32.6,
-      "mark_pct": 195.02
+      "last_date": "2026-11-05",
+      "last_close": 41.85,
+      "mark_pct": 278.73
      },
      "charges": 57.16,
      "slippage": 109.01
@@ -2309,6 +2631,10 @@
       [
        "2026-11-04",
        436.15
+      ],
+      [
+       "2026-11-05",
+       861.8
       ]
      ],
      "exit_date": "2026-10-30",
@@ -2323,14 +2649,14 @@
       "h_peak_date": "2026-10-27",
       "h_dip": -53.57,
       "h_dip_date": "2026-10-30",
-      "a_peak": 65.86,
-      "a_peak_date": "2026-11-04",
+      "a_peak": 227.72,
+      "a_peak_date": "2026-11-05",
       "a_dip": -12.23,
       "a_dip_date": "2026-11-02",
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 436.15,
-      "mark_pct": 65.86
+      "last_date": "2026-11-05",
+      "last_close": 861.8,
+      "mark_pct": 227.72
      },
      "charges": 56.03,
      "slippage": 192.51
@@ -2382,6 +2708,10 @@
       [
        "2026-11-04",
        10.25
+      ],
+      [
+       "2026-11-05",
+       10.3
       ]
      ],
      "exit_date": "2026-11-02",
@@ -2401,9 +2731,9 @@
       "a_dip": -76.67,
       "a_dip_date": "2026-11-03",
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 10.25,
-      "mark_pct": -51.7
+      "last_date": "2026-11-05",
+      "last_close": 10.3,
+      "mark_pct": -51.46
      },
      "charges": 56.05,
      "slippage": 205.94
@@ -2447,6 +2777,10 @@
       [
        "2026-11-04",
        1.22
+      ],
+      [
+       "2026-11-05",
+       2.61
       ]
      ],
      "exit_date": "2026-11-02",
@@ -2466,9 +2800,9 @@
       "a_dip": -72.08,
       "a_dip_date": "2026-11-03",
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 1.22,
-      "mark_pct": -53.96
+      "last_date": "2026-11-05",
+      "last_close": 2.61,
+      "mark_pct": -1.51
      },
      "charges": 54.89,
      "slippage": 261.56
@@ -2520,6 +2854,10 @@
       [
        "2026-11-04",
        16.3
+      ],
+      [
+       "2026-11-05",
+       12.8
       ]
      ],
      "exit_date": "2026-11-03",
@@ -2536,12 +2874,12 @@
       "h_dip_date": "2026-10-29",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -35.93,
-      "a_dip_date": "2026-11-04",
+      "a_dip": -49.69,
+      "a_dip_date": "2026-11-05",
       "above_exit": true,
-      "last_date": "2026-11-04",
-      "last_close": 16.3,
-      "mark_pct": -35.93
+      "last_date": "2026-11-05",
+      "last_close": 12.8,
+      "mark_pct": -49.69
      },
      "charges": 57.47,
      "slippage": 204.2
@@ -2589,6 +2927,10 @@
       [
        "2026-11-04",
        4.6
+      ],
+      [
+       "2026-11-05",
+       8.0
       ]
      ],
      "exit_date": "2026-11-04",
@@ -2603,14 +2945,14 @@
       "h_peak_date": null,
       "h_dip": -40.8,
       "h_dip_date": "2026-11-04",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 2.96,
+      "a_peak_date": "2026-11-05",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 4.6,
-      "mark_pct": -40.8
+      "above_exit": true,
+      "last_date": "2026-11-05",
+      "last_close": 8.0,
+      "mark_pct": 2.96
      },
      "charges": 58.82,
      "slippage": 351.12
@@ -2686,7 +3028,141 @@
    ]
   },
   "B": {
-   "pending": [],
+   "pending": [
+    {
+     "arm": "B",
+     "symbol": "AUROPHARMA",
+     "sector": "nifty pharma",
+     "signal_date": "2026-11-05",
+     "beat": 4.16,
+     "move": 4.69,
+     "expiry": "2026-11-23",
+     "spot": 1785.06,
+     "strikes": [
+      1320.0,
+      1400.0,
+      1440.0,
+      1460.0,
+      1480.0,
+      1500.0,
+      1520.0,
+      1540.0,
+      1560.0,
+      1580.0,
+      1600.0,
+      1620.0,
+      1640.0,
+      1660.0,
+      1680.0,
+      1700.0,
+      1720.0,
+      1740.0,
+      1760.0,
+      1780.0,
+      1800.0,
+      1820.0,
+      1840.0,
+      1860.0,
+      1880.0,
+      1900.0,
+      1920.0,
+      1940.0,
+      1960.0,
+      1980.0,
+      2000.0,
+      2020.0,
+      2040.0
+     ],
+     "open_strike": 1840.0,
+     "open_lot": 550,
+     "open_ref": 13.66,
+     "liquid_strikes": [
+      1580.0,
+      1600.0,
+      1620.0,
+      1640.0,
+      1660.0,
+      1680.0,
+      1700.0,
+      1720.0,
+      1740.0,
+      1760.0,
+      1780.0,
+      1800.0,
+      1820.0,
+      1840.0,
+      1860.0,
+      1880.0,
+      1920.0,
+      1960.0
+     ]
+    },
+    {
+     "arm": "B",
+     "symbol": "BIOCON",
+     "sector": "nifty pharma",
+     "signal_date": "2026-11-05",
+     "beat": 4.58,
+     "move": 5.1,
+     "expiry": "2026-11-23",
+     "spot": 362.0,
+     "strikes": [
+      280.0,
+      290.0,
+      300.0,
+      305.0,
+      310.0,
+      315.0,
+      320.0,
+      325.0,
+      330.0,
+      335.0,
+      340.0,
+      345.0,
+      350.0,
+      355.0,
+      360.0,
+      365.0,
+      370.0,
+      375.0,
+      380.0,
+      385.0,
+      390.0,
+      395.0,
+      400.0,
+      405.0,
+      410.0,
+      420.0,
+      430.0,
+      480.0
+     ],
+     "open_strike": 380.0,
+     "open_lot": 2500,
+     "open_ref": 2.76,
+     "liquid_strikes": [
+      320.0,
+      330.0,
+      335.0,
+      340.0,
+      345.0,
+      350.0,
+      355.0,
+      360.0,
+      365.0,
+      370.0,
+      375.0,
+      380.0,
+      385.0,
+      390.0,
+      395.0,
+      400.0,
+      405.0,
+      410.0,
+      420.0,
+      430.0
+     ]
+    }
+   ],
    "open": [
     {
      "arm": "B",
@@ -2708,7 +3184,7 @@
      "cost": 6927.5,
      "category": "mid",
      "best": 16.3,
-     "stall": 3,
+     "stall": 4,
      "fut0": 2362.8,
      "stock0": 2348.0,
      "path": [
@@ -2723,6 +3199,10 @@
       [
        "2026-11-04",
        8.8
+      ],
+      [
+       "2026-11-05",
+       10.95
       ]
      ],
      "exit_date": null,
@@ -2742,9 +3222,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-04",
-      "last_close": 8.8,
-      "mark_pct": -46.01
+      "last_date": "2026-11-05",
+      "last_close": 10.95,
+      "mark_pct": -32.82
      }
     }
    ],

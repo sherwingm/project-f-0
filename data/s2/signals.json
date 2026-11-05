@@ -1,10 +1,85 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-11-04",
- "generated": "2026-11-05T02:43+05:30",
- "signals": [],
+ "session": "2026-11-05",
+ "generated": "2026-11-06T02:53+05:30",
+ "signals": [
+  {
+   "symbol": "PIIND",
+   "close": 1770.0,
+   "price_pct": -19.07,
+   "oi_pct": 39.97,
+   "vol_ratio": 30.11,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 1760.0,
+    "premium": 41.14,
+    "lot": 175,
+    "lot_cost": 7200,
+    "below_spot_pct": 0.56,
+    "contracts": 14412.0
+   }
+  },
+  {
+   "symbol": "SOLARINDS",
+   "close": 18520.0,
+   "price_pct": -4.5,
+   "oi_pct": 11.2,
+   "vol_ratio": 2.12,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 18000.0,
+    "premium": 263.77,
+    "lot": 25,
+    "lot_cost": 6594,
+    "below_spot_pct": 2.81,
+    "contracts": 8327.0
+   }
+  },
+  {
+   "symbol": "OIL",
+   "close": 439.75,
+   "price_pct": -3.98,
+   "oi_pct": 18.33,
+   "vol_ratio": 5.83,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 410.0,
+    "premium": 5.25,
+    "lot": 1400,
+    "lot_cost": 7350,
+    "below_spot_pct": 6.77,
+    "contracts": 395.0
+   }
+  },
+  {
+   "symbol": "BHARATFORG",
+   "close": 1753.0,
+   "price_pct": -3.3,
+   "oi_pct": 18.39,
+   "vol_ratio": 4.75,
+   "put": {
+    "expiry": "2026-11-23",
+    "strike": 1680.0,
+    "premium": 14.29,
+    "lot": 500,
+    "lot_cost": 7145,
+    "below_spot_pct": 4.16,
+    "contracts": 1986.0
+   }
+  }
+ ],
  "note": null,
  "history": [
+  {
+   "session": "2026-11-05",
+   "symbols": [
+    "PIIND",
+    "SOLARINDS",
+    "OIL",
+    "BHARATFORG"
+   ],
+   "note": null
+  },
   {
    "session": "2026-11-04",
    "symbols": [],
