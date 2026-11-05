@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.9,
    "upstox_minus_kotak_quote_time_s_median": -2.5
+  },
+  {
+   "at": "09:50:05",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.55,
+   "same_best_bid_pct": 29.7,
+   "same_best_ask_pct": 29.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -16.5
   }
  ],
  "top_gaps": [
@@ -107,6 +121,20 @@
    "kotak": 9.5,
    "upstox": 9.65,
    "at": "09:20"
+  },
+  {
+   "contract": "INDIGO26NOV5200CE",
+   "gap_pct": 1.55,
+   "kotak": 274.25,
+   "upstox": 270.0,
+   "at": "09:50"
+  },
+  {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.351,
+   "kotak": 14.8,
+   "upstox": 14.6,
+   "at": "09:50"
   },
   {
    "contract": "ASHOKLEY26NOV165CE",
@@ -212,30 +240,16 @@
    "kotak": 36.45,
    "upstox": 36.4,
    "at": "09:25"
-  },
-  {
-   "contract": "BSE26NOV3750CE",
-   "gap_pct": 0.131,
-   "kotak": 114.9,
-   "upstox": 115.05,
-   "at": "09:35"
-  },
-  {
-   "contract": "DIVISLAB26NOVFUT",
-   "gap_pct": 0.12,
-   "kotak": 10035.0,
-   "upstox": 10047.0,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 386,
+  "rounds": 7,
+  "contract_quotes": 450,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 24.2,
-  "same_best_ask_pct": 27.95,
+  "same_best_bid_pct": 25.0,
+  "same_best_ask_pct": 29.7,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.65,
-  "upstox_minus_kotak_quote_time_s_median": -5.0
+  "oi_same_pct": 98.4,
+  "upstox_minus_kotak_quote_time_s_median": -6.0
  }
 }
