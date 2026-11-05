@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -16.5
+  },
+  {
+   "at": "09:55:05",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.788,
+   "same_best_bid_pct": 21.9,
+   "same_best_ask_pct": 29.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -21.5
   }
  ],
  "top_gaps": [
@@ -114,6 +128,13 @@
    "kotak": 315.8,
    "upstox": 325.0,
    "at": "09:20"
+  },
+  {
+   "contract": "HCLTECH26NOV1460PE",
+   "gap_pct": 1.788,
+   "kotak": 36.35,
+   "upstox": 37.0,
+   "at": "09:55"
   },
   {
    "contract": "MARICO26NOV910CE",
@@ -233,23 +254,16 @@
    "kotak": 36.0,
    "upstox": 35.95,
    "at": "09:35"
-  },
-  {
-   "contract": "ASTRAL26NOV1400PE",
-   "gap_pct": 0.137,
-   "kotak": 36.45,
-   "upstox": 36.4,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 450,
+  "rounds": 8,
+  "contract_quotes": 514,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.0,
+  "same_best_bid_pct": 24.2,
   "same_best_ask_pct": 29.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "upstox_minus_kotak_quote_time_s_median": -10.5
  }
 }
