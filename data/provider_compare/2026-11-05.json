@@ -28,6 +28,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.4,
    "upstox_minus_kotak_quote_time_s_median": -2.0
+  },
+  {
+   "at": "09:30:04",
+   "contracts": 65,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.83,
+   "same_best_bid_pct": 21.5,
+   "same_best_ask_pct": 26.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.5,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
@@ -67,6 +81,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BAJFINANCE26NOV1040CE",
+   "gap_pct": 0.83,
+   "kotak": 24.1,
+   "upstox": 24.3,
+   "at": "09:30"
+  },
+  {
    "contract": "ADANIPORTS26NOV1940CE",
    "gap_pct": 0.714,
    "kotak": 35.0,
@@ -88,11 +109,32 @@
    "at": "09:25"
   },
   {
+   "contract": "MUTHOOTFIN26NOV2700CE",
+   "gap_pct": 0.523,
+   "kotak": 162.55,
+   "upstox": 161.7,
+   "at": "09:30"
+  },
+  {
+   "contract": "JSWSTEEL26NOV1340CE",
+   "gap_pct": 0.409,
+   "kotak": 36.65,
+   "upstox": 36.5,
+   "at": "09:30"
+  },
+  {
    "contract": "LT26NOV3900CE",
    "gap_pct": 0.371,
    "kotak": 175.0,
    "upstox": 174.35,
    "at": "09:25"
+  },
+  {
+   "contract": "BAJAJFINSV26NOV1800CE",
+   "gap_pct": 0.294,
+   "kotak": 34.0,
+   "upstox": 33.9,
+   "at": "09:30"
   },
   {
    "contract": "ASTRAL26NOV1400PE",
@@ -142,44 +184,16 @@
    "kotak": 114.0,
    "upstox": 114.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6600CE",
-   "gap_pct": 0.0,
-   "kotak": 263.6,
-   "upstox": 263.6,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6600PE",
-   "gap_pct": 0.0,
-   "kotak": 195.6,
-   "upstox": 195.6,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 6664.0,
-   "upstox": 6664.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV390CE",
-   "gap_pct": 0.0,
-   "kotak": 9.5,
-   "upstox": 9.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 2,
-  "contract_quotes": 129,
+  "rounds": 3,
+  "contract_quotes": 194,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 24.05,
-  "same_best_ask_pct": 26.4,
+  "same_best_bid_pct": 23.1,
+  "same_best_ask_pct": 26.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.8,
-  "upstox_minus_kotak_quote_time_s_median": -3.0
+  "oi_same_pct": 95.4,
+  "upstox_minus_kotak_quote_time_s_median": -4.0
  }
 }
