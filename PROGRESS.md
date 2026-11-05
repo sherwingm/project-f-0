@@ -987,3 +987,25 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   → `/near-tighty`, `/api/near-tighty`; links from the Results and S2 pages. `server/g1_live.py` gained class
   attributes and three hooks (`entry_skip`, `entry_note`, `tracks`) so a second strategy reuses it; G1 behaves the
   same (its 5 tests pass). `NT_PAPER=true` by default. 5 tests (`tests/test_nt_live.py`).
+
+### 2026-11-05: independent expiry research done; XP expiry-day straddle forward log live
+- The user's brief: find expiry patterns that are known before the move. `expiry_research/` holds an independent
+  study: no S1/S2/S3 inputs, 2018 → 2026 data. The user approved using all years for this project.
+  - Steps: data audit; an expiry calendar checked against NSE / SEBI circulars; leak-free daily panels; a split
+    fixed in advance (discovery 2018-22, validation 2023-H1 2024, sealed final Jul 2024 →).
+  - Agents: five independent research agents, each with a skeptical reviewer.
+  - Tests: about 34,000.
+  - Result: **no direction edge** at D-2, after the close or at 15:15. Gaps, PCR, max pain, candles and ML are all at
+    chance level for direction. **Size is predictable** (a 5-day fall, call / put OI walls far apart, straddle per
+    √days to expiry): 11 of 13 size rules passed the one-time final test. But it is volatility clustering that a VIX
+    model matches, and a long NIFTY ATM straddle on those days loses net.
+  - Expiry-day same-day straddle: −7.2 % held to 15:15, though max up was +53 % mean / +27 % median and 21 % of days
+    reached +100 %.
+  - Report: `expiry_research/reports/FINAL_RESEARCH_REPORT.md`. Commit 7d47ae69e.
+- The user, "Test do it" → "Both": **XP forward log**, pre-registered in `expiry_research/FORWARD_TEST.md`.
+  - Trade: on NIFTY expiry days, buy the same-day ATM CE + PE at the 09:16 asks. Sell at a +20 % target on the
+    bids, else at 15:15; hold-to-15:15 is logged alongside.
+  - Gate: 40 expiry days.
+  - Code: `server/xp_live.py` (own ledger `data/xp_ledger.json`), `/api/index/xp`, an XP section on `/index`,
+    `XP_PAPER=true`. 5 tests. A log only: no orders; S1 / G1 / NT untouched.
+  - Commit 01d0602c1, deployed to the VM after the close on 2026-11-05. First possible log: Tue 2026-11-10.
