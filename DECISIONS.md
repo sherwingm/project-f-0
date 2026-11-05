@@ -454,3 +454,8 @@ study (time to expiry alone has no edge; a +100 % target lowers the mean). Forwa
 recorder's bid / ask; S3 buy gate at 30 trades (about four months). One in-sample history run is allowed as a
 description, never the verdict. Nothing runs on the live server and nothing is ordered.
 
+**N1 history run (2026-11-05, description only, not the verdict; `data/results/S3_N1_history.md`):** 2024-10-01 →
+2026-10-28, 208 trades: mean −24.0 % of the premium (median −52.5 %, t −4.63), won 19 %, −₹1,04,019, stopped 75 %;
+calls −27.9 %, puts −21.0 %; expiry day −39.3 % (won 5 %), day before −8.2 %; both halves negative. Max up while held
+median +39 %, ≥ +100 % on 25 %. By the page it neither passes nor fails N1; the forward test stays open unless the user
+closes it. Runner `scanner/s3_n1.py` (5 tests).

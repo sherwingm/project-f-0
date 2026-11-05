@@ -987,3 +987,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   → `/near-tighty`, `/api/near-tighty`; links from the Results and S2 pages. `server/g1_live.py` gained class
   attributes and three hooks (`entry_skip`, `entry_note`, `tracks`) so a second strategy reuses it; G1 behaves the
   same (its 5 tests pass). `NT_PAPER=true` by default. 5 tests (`tests/test_nt_live.py`).
+- 2026-11-05 · S3 N1 pre-registered (`strategies/S3_N1_near_expiry_orb.md`) and its runner `scanner/s3_n1.py`
+  (forward from 2026-11-06 on the recorder's bid / ask; `--history` once). History run, description only: 208 trades,
+  −24.0 % a trade (t −4.63), won 19 %, expiry day −39.3 %, day before −8.2 %; stopped 75 %.
