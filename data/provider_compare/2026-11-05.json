@@ -756,6 +756,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -54.0
+  },
+  {
+   "at": "13:50:17",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.544,
+   "same_best_bid_pct": 60.9,
+   "same_best_ask_pct": 48.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.9,
+   "upstox_minus_kotak_quote_time_s_median": -67.5
   }
  ],
  "top_gaps": [
@@ -851,6 +865,13 @@
    "at": "09:50"
   },
   {
+   "contract": "BANDHANBNK26NOV170CE",
+   "gap_pct": 1.544,
+   "kotak": 2.59,
+   "upstox": 2.63,
+   "at": "13:50"
+  },
+  {
    "contract": "JIOFIN26NOV227.5CE",
    "gap_pct": 1.541,
    "kotak": 6.49,
@@ -891,23 +912,16 @@
    "kotak": 41.6,
    "upstox": 42.1,
    "at": "10:10"
-  },
-  {
-   "contract": "PIIND26NOV1860CE",
-   "gap_pct": 1.189,
-   "kotak": 58.85,
-   "upstox": 59.55,
-   "at": "10:40"
   }
  ],
  "day": {
-  "rounds": 54,
-  "contract_quotes": 3454,
+  "rounds": 55,
+  "contract_quotes": 3518,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.3,
-  "same_best_ask_pct": 39.4,
+  "same_best_bid_pct": 39.1,
+  "same_best_ask_pct": 39.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -34.25
+  "upstox_minus_kotak_quote_time_s_median": -34.5
  }
 }
