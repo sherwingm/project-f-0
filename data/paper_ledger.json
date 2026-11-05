@@ -22252,7 +22252,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-04T15:29:56+05:30",
+ "saved_at": "2026-11-05T09:15:00+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -22469,6 +22469,15 @@
      "A"
     ],
     "reason": "no trade today at 2140 (the quote is yesterday's)"
+   },
+   {
+    "date": "2026-11-05",
+    "symbol": "NHPC",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 6,950 shares, so Rs 8,000 allows at most Rs 1.15 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -22529,10 +22538,28 @@
    "2026-11-02:NAVINFLUOR": "bought",
    "2026-11-03:ITC": "bought",
    "2026-11-04:SBIN": "bought",
-   "2026-11-04:LUPIN": "bought"
+   "2026-11-04:LUPIN": "bought",
+   "2026-11-05:NHPC": "refused"
   },
   "open_wait": {},
-  "fade_wait": {},
+  "fade_wait": {
+   "2026-11-05:ZYDUSLIFE": {
+    "reason": "waiting for the first trade today at 1240 (the quote is yesterday's)",
+    "at": "2026-11-05T09:15:00+05:30"
+   },
+   "2026-11-05:BIOCON": {
+    "reason": "waiting for the first trade today at 365 (the quote is yesterday's)",
+    "at": "2026-11-05T09:15:00+05:30"
+   },
+   "2026-11-05:NYKAA": {
+    "reason": "premium below Rs 2 (at 320: ask 1.95)",
+    "at": "2026-11-05T09:15:00+05:30"
+   },
+   "2026-11-05:APOLLOHOSP": {
+    "reason": "waiting for the first trade today at 8200 (the quote is yesterday's)",
+    "at": "2026-11-05T09:15:00+05:30"
+   }
+  },
   "fade_shadow_entries": [
    {
     "key": "2026-10-21:UNIONBANK",
@@ -22695,6 +22722,60 @@
     "net": -4178.72,
     "net_pct": -65.23,
     "real_bought": true
+   },
+   {
+    "key": "2026-11-05:NYKAA",
+    "date": "2026-11-05",
+    "symbol": "NYKAA",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 320.0,
+    "tradingsymbol": "NYKAA26NOV320PE",
+    "lot_size": 3125,
+    "entry": 1.95,
+    "bid_at_entry": 1.85,
+    "lot_cost": 6093.75,
+    "opened_at": "2026-11-05T09:15:00+05:30",
+    "refused": "premium below Rs 2 (at 320: ask 1.95)",
+    "why": "net profit YoY +206.8 %, QoQ +26.9 %; revenue YoY +28.1 %",
+    "np_yoy": 206.8,
+    "spot_at_entry": 355.5,
+    "last_bid": 1.85,
+    "max_bid": 1.85,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
+   },
+   {
+    "key": "2026-11-05:NHPC",
+    "date": "2026-11-05",
+    "symbol": "NHPC",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 74.0,
+    "tradingsymbol": "NHPC26NOV74PE",
+    "lot_size": 6950,
+    "entry": 0.83,
+    "bid_at_entry": 0.8,
+    "lot_cost": 5768.5,
+    "opened_at": "2026-11-05T09:15:00+05:30",
+    "refused": "never fits: 1 lot is 6,950 shares, so Rs 8,000 allows at most Rs 1.15 a share, below the Rs 2 floor",
+    "why": "net profit YoY +35.9 %, QoQ +40.7 %; revenue YoY +33.2 %",
+    "np_yoy": 35.9,
+    "spot_at_entry": 78.49,
+    "last_bid": 0.8,
+    "max_bid": 0.8,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
    }
   ],
   "fade_sub2_why": {
@@ -22706,7 +22787,9 @@
    "2026-10-30:CAMS": "below-Rs 2 rule: no two-sided strike",
    "2026-11-02:GAIL": "below-Rs 2 rule: 1 lot at 170 costs more than Rs 8,000",
    "2026-11-02:BANKBARODA": "below-Rs 2 rule: 1 lot at 237.5 costs more than Rs 8,000",
-   "2026-11-02:ABCAPITAL": "below-Rs 2 rule: no two-sided strike"
+   "2026-11-02:ABCAPITAL": "below-Rs 2 rule: no two-sided strike",
+   "2026-11-05:NYKAA": "below-Rs 2 rule: 1 lot at 350 costs more than Rs 8,000",
+   "2026-11-05:NHPC": "below-Rs 2 rule: 1 lot at 78 costs more than Rs 8,000"
   }
  }
 }
