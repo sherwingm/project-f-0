@@ -168,6 +168,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "10:20:07",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.369,
+   "same_best_bid_pct": 29.7,
+   "same_best_ask_pct": 31.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -23.0
   }
  ],
  "top_gaps": [
@@ -184,6 +198,13 @@
    "kotak": 315.8,
    "upstox": 325.0,
    "at": "09:20"
+  },
+  {
+   "contract": "KFINTECH26NOV920CE",
+   "gap_pct": 2.369,
+   "kotak": 29.55,
+   "upstox": 28.85,
+   "at": "10:20"
   },
   {
    "contract": "INDIANB26NOV870CE",
@@ -303,23 +324,16 @@
    "kotak": 24.1,
    "upstox": 24.3,
    "at": "09:30"
-  },
-  {
-   "contract": "INDIGO26NOV5400PE",
-   "gap_pct": 0.719,
-   "kotak": 132.05,
-   "upstox": 133.0,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 12,
-  "contract_quotes": 769,
+  "rounds": 13,
+  "contract_quotes": 833,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 24.2,
+  "same_best_bid_pct": 25.0,
   "same_best_ask_pct": 29.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -14.75
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
