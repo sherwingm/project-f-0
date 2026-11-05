@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -21.5
+  },
+  {
+   "at": "10:00:06",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.818,
+   "same_best_bid_pct": 45.3,
+   "same_best_ask_pct": 35.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -17.5
   }
  ],
  "top_gaps": [
@@ -128,6 +142,13 @@
    "kotak": 315.8,
    "upstox": 325.0,
    "at": "09:20"
+  },
+  {
+   "contract": "HINDPETRO26NOV390CE",
+   "gap_pct": 1.818,
+   "kotak": 11.0,
+   "upstox": 10.8,
+   "at": "10:00"
   },
   {
    "contract": "HCLTECH26NOV1460PE",
@@ -242,28 +263,21 @@
    "at": "09:25"
   },
   {
-   "contract": "BAJAJFINSV26NOV1800CE",
-   "gap_pct": 0.294,
-   "kotak": 34.0,
-   "upstox": 33.9,
-   "at": "09:30"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2060PE",
-   "gap_pct": 0.139,
-   "kotak": 36.0,
-   "upstox": 35.95,
-   "at": "09:35"
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 0.353,
+   "kotak": 42.5,
+   "upstox": 42.65,
+   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 514,
+  "rounds": 9,
+  "contract_quotes": 578,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 24.2,
+  "same_best_bid_pct": 25.0,
   "same_best_ask_pct": 29.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -10.5
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
