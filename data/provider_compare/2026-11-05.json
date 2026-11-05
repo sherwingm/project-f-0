@@ -630,6 +630,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "13:05:15",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.923,
+   "same_best_bid_pct": 29.7,
+   "same_best_ask_pct": 39.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -23.0
   }
  ],
  "top_gaps": [
@@ -688,6 +702,13 @@
    "kotak": 42.9,
    "upstox": 43.75,
    "at": "12:10"
+  },
+  {
+   "contract": "AUROPHARMA26NOV1760CE",
+   "gap_pct": 1.923,
+   "kotak": 39.0,
+   "upstox": 38.25,
+   "at": "13:05"
   },
   {
    "contract": "HINDPETRO26NOV390CE",
@@ -765,23 +786,16 @@
    "kotak": 5.1,
    "upstox": 5.16,
    "at": "09:25"
-  },
-  {
-   "contract": "COFORGE26NOV2180CE",
-   "gap_pct": 1.176,
-   "kotak": 34.0,
-   "upstox": 34.4,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 45,
-  "contract_quotes": 2878,
+  "rounds": 46,
+  "contract_quotes": 2942,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 37.5,
   "same_best_ask_pct": 37.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -33.5
+  "upstox_minus_kotak_quote_time_s_median": -33.25
  }
 }
