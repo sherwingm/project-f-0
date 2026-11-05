@@ -138,6 +138,7 @@ class State:
         self.index_rec = None               # server.index_recorder.IndexRecorder (record only)
         self.g1 = None                      # server.g1_live.G1Trader (S3 G1 paper, own ledger)
         self.nt = None                      # server.nt_live.NearTightyTrader (NT Near Tighty paper, own ledger)
+        self.xp = None                      # server.xp_live.ExpiryStraddleLogger (XP expiry straddle forward log, own ledger)
         self.version: dict | None = None    # server.version.deployed(), read once at start-up
 
     def load_scan(self, path: Path) -> None:
@@ -216,6 +217,9 @@ def startup() -> None:
                 if settings.nt_paper:
                     from server.nt_live import NearTightyTrader
                     state.nt = NearTightyTrader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
+                if settings.xp_paper:
+                    from server.xp_live import ExpiryStraddleLogger
+                    state.xp = ExpiryStraddleLogger(state.stream, state.upstox, settings.data_dir)   # log only, own ledger
         state.feed = LiveFeed(provider, state.scan or {"stocks": []}, settings.poll_seconds, state.fut_symbols(),
                               fast_seconds=settings.live_fast_seconds)
         state.feed.start()
@@ -309,6 +313,12 @@ def _fade_fast_loop() -> None:
                     except Exception as exc:  # noqa: BLE001 - never stops the trading loop
                         log.warning("near tighty paper: %s", exc)
                         alerts.send(f"⚠️ Near Tighty paper error: {exc}"[:300], key="nt-loop", every=900)
+                if state.xp is not None:
+                    try:
+                        state.xp.tick(now)               # XP expiry-day straddle forward log (server/xp_live.py)
+                    except Exception as exc:  # noqa: BLE001 - never stops the trading loop
+                        log.warning("xp log: %s", exc)
+                        alerts.send(f"⚠️ XP log error: {exc}"[:300], key="xp-loop", every=900)
                 if state.stream is not None:
                     state.stream.write_candles(settings.data_dir)   # 1-second candles (server/upstox_stream.py)
         except Exception as exc:  # noqa: BLE001 - the 30 s poll still checks the exits

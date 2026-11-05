@@ -105,6 +105,7 @@ class Settings:
     index_record: bool = _bool("INDEX_RECORD", True)        # NIFTY 1-second candles from the stream (server/index_recorder.py)
     g1_paper: bool = _bool("G1_PAPER", True)               # S3 G1 / G1-F live paper trades (server/g1_live.py), own ledger
     nt_paper: bool = _bool("NT_PAPER", True)               # NT Near Tighty live paper trades (server/nt_live.py), own ledger
+    xp_paper: bool = _bool("XP_PAPER", True)               # XP NIFTY expiry-day straddle forward log (server/xp_live.py), own ledger
     live_fast_seconds: float = float(os.getenv("LIVE_FAST_SECONDS", "1"))   # the feed's interval while streaming
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")
