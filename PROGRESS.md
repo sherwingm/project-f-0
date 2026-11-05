@@ -990,3 +990,11 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - 2026-11-05 · S3 N1 pre-registered (`strategies/S3_N1_near_expiry_orb.md`) and its runner `scanner/s3_n1.py`
   (forward from 2026-11-06 on the recorder's bid / ask; `--history` once). History run, description only: 208 trades,
   −24.0 % a trade (t −4.63), won 19 %, expiry day −39.3 %, day before −8.2 %; stopped 75 %.
+- 2026-11-05 · Expiry-day blasts (the user's SENSEX 05 Nov 79000 call screenshot, ₹12.75 → ₹309.95: "check how many have
+  these happens previous"). `scanner/expiry_blasts.py`, `data/results/expiry_blasts.md`, `expiry_blasts_2026-11-05.xlsx`.
+  From the 09:20 price (≥ ₹2, 0-10 strikes out, best of the day in hindsight): ≥ 10x on 14 of 108 NIFTY and 15 of 107
+  SENSEX expiry days (Oct 2024 → Oct 2026), ≥ 20x on 7 each. Needs a ≥ 1 % one-way index move after 09:20 (0 of 80
+  quiet days, 12 of 16 days ≥ 1.5 %). Of 29 10x days, 9 still ≥ 10x at 15:15, 10 below the 09:20 price. Daily
+  bhavcopy 2018 →: NIFTY 58 / BANKNIFTY 58 expiry days with an option ≥ 10x high/open; close ≥ 20x the previous close
+  on 11 / 10 days.
+
