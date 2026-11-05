@@ -322,6 +322,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "11:15:11",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.205,
+   "same_best_bid_pct": 43.8,
+   "same_best_ask_pct": 37.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -21.5
   }
  ],
  "top_gaps": [
@@ -340,11 +354,25 @@
    "at": "10:25"
   },
   {
+   "contract": "MARICO26NOV910CE",
+   "gap_pct": 3.205,
+   "kotak": 7.8,
+   "upstox": 8.05,
+   "at": "11:15"
+  },
+  {
    "contract": "INDIGO26NOV5150CE",
    "gap_pct": 2.913,
    "kotak": 315.8,
    "upstox": 325.0,
    "at": "09:20"
+  },
+  {
+   "contract": "MARICO26NOV930CE",
+   "gap_pct": 2.41,
+   "kotak": 4.15,
+   "upstox": 4.25,
+   "at": "11:15"
   },
   {
    "contract": "KFINTECH26NOV920CE",
@@ -450,28 +478,14 @@
    "kotak": 55.3,
    "upstox": 55.95,
    "at": "10:40"
-  },
-  {
-   "contract": "SBIN26NOV990PE",
-   "gap_pct": 1.136,
-   "kotak": 17.6,
-   "upstox": 17.4,
-   "at": "10:50"
-  },
-  {
-   "contract": "INFY26NOV1174CE",
-   "gap_pct": 1.115,
-   "kotak": 31.4,
-   "upstox": 31.05,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 23,
-  "contract_quotes": 1472,
+  "rounds": 24,
+  "contract_quotes": 1536,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.7,
-  "same_best_ask_pct": 31.2,
+  "same_best_bid_pct": 32.05,
+  "same_best_ask_pct": 32.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
   "upstox_minus_kotak_quote_time_s_median": -21.5
