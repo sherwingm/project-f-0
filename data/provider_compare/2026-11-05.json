@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -31.0
+  },
+  {
+   "at": "10:35:08",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.395,
+   "same_best_bid_pct": 34.4,
+   "same_best_ask_pct": 28.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -33.5
   }
  ],
  "top_gaps": [
@@ -284,6 +298,13 @@
    "at": "10:10"
   },
   {
+   "contract": "OFSS26NOV10250PE",
+   "gap_pct": 1.395,
+   "kotak": 265.2,
+   "upstox": 268.9,
+   "at": "10:35"
+  },
+  {
    "contract": "DRREDDY26NOV1400CE",
    "gap_pct": 1.351,
    "kotak": 14.8,
@@ -345,23 +366,16 @@
    "kotak": 145.6,
    "upstox": 144.25,
    "at": "10:05"
-  },
-  {
-   "contract": "ADANIENT26NOV2800CE",
-   "gap_pct": 0.875,
-   "kotak": 80.0,
-   "upstox": 79.3,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 961,
+  "rounds": 16,
+  "contract_quotes": 1025,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.1,
+  "same_best_bid_pct": 28.9,
   "same_best_ask_pct": 29.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -16.5
+  "upstox_minus_kotak_quote_time_s_median": -17.0
  }
 }
