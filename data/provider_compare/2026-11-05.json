@@ -700,6 +700,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -57.5
+  },
+  {
+   "at": "13:30:16",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.333,
+   "same_best_bid_pct": 31.2,
+   "same_best_ask_pct": 37.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -44.0
   }
  ],
  "top_gaps": [
@@ -816,6 +830,13 @@
    "at": "09:50"
   },
   {
+   "contract": "ATHERENERG26NOV1800CE",
+   "gap_pct": 1.333,
+   "kotak": 45.0,
+   "upstox": 44.4,
+   "at": "13:30"
+  },
+  {
    "contract": "ADANIENT26NOV2750CE",
    "gap_pct": 1.223,
    "kotak": 106.3,
@@ -835,18 +856,11 @@
    "kotak": 58.85,
    "upstox": 59.55,
    "at": "10:40"
-  },
-  {
-   "contract": "ASHOKLEY26NOV165CE",
-   "gap_pct": 1.176,
-   "kotak": 5.1,
-   "upstox": 5.16,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 50,
-  "contract_quotes": 3198,
+  "rounds": 51,
+  "contract_quotes": 3262,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 37.5,
   "same_best_ask_pct": 39.1,
