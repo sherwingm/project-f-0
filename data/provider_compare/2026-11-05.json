@@ -476,6 +476,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -70.0
+  },
+  {
+   "at": "12:10:13",
+   "contracts": 64,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.981,
+   "same_best_bid_pct": 54.7,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.9,
+   "upstox_minus_kotak_quote_time_s_median": -41.5
   }
  ],
  "top_gaps": [
@@ -527,6 +541,13 @@
    "kotak": 23.5,
    "upstox": 24.05,
    "at": "10:05"
+  },
+  {
+   "contract": "LUPIN26NOV1980PE",
+   "gap_pct": 1.981,
+   "kotak": 42.9,
+   "upstox": 43.75,
+   "at": "12:10"
   },
   {
    "contract": "HINDPETRO26NOV390CE",
@@ -611,23 +632,16 @@
    "kotak": 34.0,
    "upstox": 34.4,
    "at": "09:40"
-  },
-  {
-   "contract": "PIIND26NOV1860PE",
-   "gap_pct": 1.175,
-   "kotak": 55.3,
-   "upstox": 55.95,
-   "at": "10:40"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 2175,
+  "rounds": 35,
+  "contract_quotes": 2239,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.65,
+  "same_best_bid_pct": 34.9,
   "same_best_ask_pct": 34.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.4,
-  "upstox_minus_kotak_quote_time_s_median": -31.25
+  "upstox_minus_kotak_quote_time_s_median": -31.5
  }
 }
