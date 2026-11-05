@@ -1,0 +1,29 @@
+frozen sha256: 9b9490102276daaedde3519c7e55cbdde55088cacc4085d111c05670fe75aa4d
+candidates: 241
+label
+Rejected             179
+Suggestive            53
+Passed-validation      9
+label                 Passed-validation  Rejected  Suggestive
+ul        target                                             
+BANKNIFTY big_cc                      1         2          12
+          big_exc                     0         6           9
+          gap_abs                     0        20           0
+          gap_filled                  0        11           3
+          gap_up                      0         7           2
+          high_pc                     1        14           0
+          low_pc                      0        16           0
+          oc_up                       0         3           1
+          ret60_up                    0         3           0
+NIFTY     big_cc                      1         9           7
+          big_exc                     3         4          10
+          gap_abs                     0        18           4
+          gap_filled                  0        12           3
+          gap_up                      0         6           2
+          high_pc                     0        15           0
+          low_pc                      3        13           0
+          oc_up                       0         9           0
+          ret15_up                    0         6           0
+          ret30_up                    0         2           0
+          ret60_up                    0         3           0
+passed and robust: 9

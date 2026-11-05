@@ -1,0 +1,16 @@
+
+== 6. effect inside final-period VIX quintiles (check of the 'beyond VIX' claim) ==
+    id            label  raw_effect  resid_diff_logit  vix_strat_effect  p_perm_one_sided  flags_in_top_quintile  n_flag
+PPC032 Validated (size)      0.1514            0.1125            0.1174            0.0120                     37     117
+PPC062 Validated (size)     -0.0996           -0.0694           -0.0596            0.1359                      4      76
+PPC092 Validated (size)      0.3002            0.2423            0.2453            0.0005                     28      76
+PPC098 Validated (size)      0.3806            0.2622            0.3008            0.0005                     38      72
+PPC129         Rejected      0.0729            0.0544            0.0636            0.0945                     31     117
+  OC08         Rejected      0.1184            0.1085            0.1548            0.0070                    103     302
+  OC13 Validated (size)      0.1102            0.1026            0.0987            0.0335                     89     280
+  OC17 Validated (size)      0.1442            0.1608            0.1745            0.0015                     94     281
+  OC21 Validated (size)      0.1059            0.1104            0.1265            0.0060                     89     280
+ OC118 Validated (size)      0.0823            0.0046            0.0040            0.4818                     48     123
+  M143 Validated (size)      0.3548            0.1723            0.2609            0.0005                     59      71
+  M218 Validated (size)      0.1563            0.1402            0.1861            0.0020                      9     138
+  M220 Validated (size)      0.1484            0.1182            0.1739            0.0040                      7     126

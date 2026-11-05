@@ -1,0 +1,29 @@
+check,n,detail
+expired expiries that are not sessions,0,
+NIFTY: monthly without futures,0,
+NIFTY: weekly with futures,0,
+NIFTY: kind differs from plain last-expiry-of-month rule,2,2025-04-24(monthly);2025-04-30(weekly)
+NIFTY: unlinked ghosts,0,
+BANKNIFTY: monthly without futures,0,
+BANKNIFTY: weekly with futures,0,
+BANKNIFTY: kind differs from plain last-expiry-of-month rule,4,2024-01-25(monthly);2024-01-31(weekly);2024-04-24(monthly);2024-04-30(weekly)
+BANKNIFTY: unlinked ghosts,0,
+NIFTY: official regime days with no stored expiry nearby (missing expiries),0,
+NIFTY: monthly not on the holiday-adjusted last regime weekday,0,
+NIFTY: gaps > 8 calendar days between consecutive expired expiries,13,2018-01-25->2018-02-22;2018-02-22->2018-03-28;2018-03-28->2018-04-26;2018-04-26->2018-05-31;2018-05-31->2018-06-28;2018-06-28->2018-07-26;2018-07-26->2018-08-30;2018-08-30->2018-09-27;2018-09-27->2018-10-25;2018-10-25->2018-11-29;2018-11-29->2018-12-27;2018-12-27->2019-01-31;2019-01-31->2019-02-14
+NIFTY: shifted expiries (weekday differs from official regime),21,2018-03-28(holiday);2019-03-20(holiday);2019-08-14(holiday);2020-04-01(holiday);2021-03-10(holiday);2021-05-12(holiday);2021-08-18(holiday);2021-11-03(special session);2022-04-13(holiday);2023-01-25(holiday);2023-03-29(holiday);2023-06-28(holiday);2024-04-10(holiday);2024-08-14(holiday);2025-04-09(holiday);2025-04-30(holiday);2025-10-20(special session);2026-03-02(holiday);2026-03-30(holiday);2026-04-13(holiday);2026-10-19(holiday)
+NIFTY: shifted and unexplained by a holiday (mismatch vs official regime),0,
+BANKNIFTY: official regime days with no stored expiry nearby (missing expiries),0,
+BANKNIFTY: monthly not on the holiday-adjusted last regime weekday,0,
+BANKNIFTY: gaps > 8 calendar days between consecutive expired expiries,25,2018-11-06->2018-11-15;2024-11-13->2024-11-27;2024-11-27->2024-12-24;2024-12-24->2025-01-30;2025-01-30->2025-02-27;2025-02-27->2025-03-27;2025-03-27->2025-04-24;2025-04-24->2025-05-29;2025-05-29->2025-06-26;2025-06-26->2025-07-31;2025-07-31->2025-08-28;2025-08-28->2025-09-30;2025-09-30->2025-10-28;2025-10-28->2025-11-25;2025-11-25->2025-12-30;2025-12-30->2026-01-27;2026-01-27->2026-02-24;2026-02-24->2026-03-30;2026-03-30->2026-04-28;2026-04-28->2026-05-26;2026-05-26->2026-06-30;2026-06-30->2026-07-28;2026-07-28->2026-08-25;2026-08-25->2026-09-29;2026-09-29->2026-10-27
+BANKNIFTY: shifted expiries (weekday differs from official regime),22,2018-03-28(holiday);2018-09-12(holiday);2018-09-19(holiday);2018-10-17(holiday);2018-11-06(holiday);2019-03-20(holiday);2019-08-14(holiday);2020-04-01(holiday);2021-03-10(holiday);2021-05-12(holiday);2021-08-18(holiday);2021-11-03(special session);2022-04-13(holiday);2023-01-25(holiday);2023-03-29(holiday);2023-06-28(holiday);2024-04-16(holiday);2024-04-30(holiday);2024-07-16(holiday);2024-10-01(holiday);2024-12-24(holiday);2026-03-30(holiday)
+BANKNIFTY: shifted and unexplained by a holiday (mismatch vs official regime),0,
+SENSEX: official regime days with no stored expiry nearby (missing expiries),2,2024-10-25(weekly);2024-10-25(monthly)
+SENSEX: monthly not on the holiday-adjusted last regime weekday,0,
+SENSEX: kind differs from plain last-expiry-of-month rule,1,2024-10-31(weekly)
+SENSEX: gaps > 8 calendar days between consecutive expired expiries,2,2024-10-18->2024-10-31;2025-08-26->2025-09-04
+SENSEX: shifted expiries (weekday differs from official regime),7,2024-10-31(special session);2024-11-14(holiday);2025-10-01(holiday);2025-12-24(holiday);2026-01-14(holiday);2026-03-25(holiday);2026-05-27(holiday)
+SENSEX: shifted and unexplained by a holiday (mismatch vs official regime),0,
+NIFTY: real expiries in options_1m span without an options_1m folder,0,
+NIFTY: options_1m folders that are not real bhavcopy expiries,0,
+NIFTY: options_1m folders whose last day file is not the expiry,1,2026-10-27

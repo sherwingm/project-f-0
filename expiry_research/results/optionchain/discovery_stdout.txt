@@ -1,0 +1,192 @@
+NIFTY ALL discovery rows 1232
+NIFTY NW discovery rows 156
+NIFTY NM discovery rows 60
+NIFTY D2 discovery rows 216
+BANKNIFTY ALL discovery rows 1232
+BANKNIFTY NW discovery rows 201
+BANKNIFTY NM discovery rows 60
+BANKNIFTY D2 discovery rows 261
+family size (tests with a p-value): 1647  BH rejections: 158
+frozen candidates: 153
+      cand                                     id        kind underlying                       rule                     target    n      rate      base    effect             p          bh_q freeze_reason
+0     OC01          BANKNIFTY|ALL|iv|hi|range_big      bucket  BANKNIFTY              iv >= 22.6528                  range_big  411  0.827251  0.499594  0.327657  1.846283e-43  3.040828e-40    BH q<=0.10
+1     OC02              NIFTY|ALL|iv|hi|range_big      bucket      NIFTY              iv >= 15.6581                  range_big  411  0.785888  0.500406  0.285482  1.273469e-32  1.048702e-29    BH q<=0.10
+2     OC03          BANKNIFTY|ALL|iv|lo|range_big      bucket  BANKNIFTY                iv <= 15.59                  range_big  410  0.217073  0.499594 -0.282521  7.285834e-32  3.999923e-29    BH q<=0.10
+3     OC04               NIFTY|ALL|iv|hi|big_move      bucket      NIFTY              iv >= 15.6581                   big_move  411  0.727494  0.458976  0.268517  3.266313e-28  1.344905e-25    BH q<=0.10
+4     OC05           BANKNIFTY|ALL|iv|hi|big_move      bucket  BANKNIFTY              iv >= 22.6528                   big_move  411  0.900243  0.677498  0.222745  2.501685e-26  8.240552e-24    BH q<=0.10
+5     OC06              NIFTY|ALL|iv|lo|range_big      bucket      NIFTY              iv <= 11.6582                  range_big  411  0.253041  0.500406 -0.247365  1.480175e-24  4.063081e-22    BH q<=0.10
+6     OC07           BANKNIFTY|ALL|iv|lo|big_move      bucket  BANKNIFTY                iv <= 15.59                   big_move  410  0.436585  0.677498 -0.240913  1.472442e-23  3.464446e-21    BH q<=0.10
+7     OC08  BANKNIFTY|ALL|wall_width|hi|range_big      bucket  BANKNIFTY       wall_width >= 5.2894                  range_big  410  0.739024  0.499187  0.239837  5.229680e-23  1.076660e-20    BH q<=0.10
+8     OC09               NIFTY|ALL|iv|lo|big_move      bucket      NIFTY              iv <= 11.6582                   big_move  411  0.226277  0.458976 -0.232699  1.964476e-22  3.594991e-20    BH q<=0.10
+9     OC10            BANKNIFTY|ALL|iv|hi|gap_big      bucket  BANKNIFTY              iv >= 22.6528                    gap_big  411  0.725061  0.500406  0.224655  2.543113e-20  4.188507e-18    BH q<=0.10
+10    OC11   BANKNIFTY|ALL|wall_near|hi|range_big      bucket  BANKNIFTY       wall_near >= 1.70589                  range_big  410  0.721951  0.499187  0.222764  6.025024e-20  9.021105e-18    BH q<=0.10
+11    OC12            BANKNIFTY|ALL|iv|lo|gap_big      bucket  BANKNIFTY                iv <= 15.59                    gap_big  410  0.282927  0.500406 -0.217479  4.194261e-19  5.756624e-17    BH q<=0.10
+12    OC13       NIFTY|ALL|wall_near|hi|range_big      bucket      NIFTY       wall_near >= 1.83441                  range_big  411  0.703163  0.500406  0.202757  1.008556e-16  1.277762e-14    BH q<=0.10
+13    OC14                NIFTY|ALL|iv|hi|gap_big      bucket      NIFTY              iv >= 15.6581                    gap_big  411  0.700730  0.500406  0.200324  2.388960e-16  2.810441e-14    BH q<=0.10
+14    OC15    BANKNIFTY|ALL|wall_near|hi|big_move      bucket  BANKNIFTY       wall_near >= 1.70589                   big_move  410  0.853659  0.677236  0.176423  3.782640e-16  3.893755e-14    BH q<=0.10
+15    OC16   BANKNIFTY|ALL|wall_width|hi|big_move      bucket  BANKNIFTY       wall_width >= 5.2894                   big_move  410  0.853659  0.677236  0.176423  3.782640e-16  3.893755e-14    BH q<=0.10
+16    OC17      NIFTY|ALL|wall_width|hi|range_big      bucket      NIFTY      wall_width >= 6.03737                  range_big  411  0.693431  0.500406  0.193024  2.965056e-15  2.872616e-13    BH q<=0.10
+17    OC18                NIFTY|ALL|iv|lo|gap_big      bucket      NIFTY              iv <= 11.6582                    gap_big  411  0.309002  0.500406 -0.191404  4.600655e-15  4.209599e-13    BH q<=0.10
+18    OC19   BANKNIFTY|ALL|strad_chg|lo|range_big      bucket  BANKNIFTY     strad_chg <= -0.398609                  range_big  410  0.680488  0.499593  0.180895  1.506448e-13  1.305853e-11    BH q<=0.10
+19    OC20  BANKNIFTY|ALL|wall_width|lo|range_big      bucket  BANKNIFTY      wall_width <= 3.07684                  range_big  410  0.321951  0.499187 -0.177236  4.691639e-13  3.863565e-11    BH q<=0.10
+20    OC21        NIFTY|ALL|wall_near|hi|big_move      bucket      NIFTY       wall_near >= 1.83441                   big_move  411  0.635036  0.458976  0.176060  8.790400e-13  6.894185e-11    BH q<=0.10
+21    OC22    BANKNIFTY|ALL|strad_chg|lo|big_move      bucket  BANKNIFTY     strad_chg <= -0.398609                   big_move  410  0.826829  0.677787  0.149042  1.227571e-11  9.190041e-10    BH q<=0.10
+22    OC23    BANKNIFTY|ALL|wall_width|hi|gap_big      bucket  BANKNIFTY       wall_width >= 5.2894                    gap_big  410  0.660976  0.500000  0.160976  6.780154e-11  4.855180e-09    BH q<=0.10
+23    OC24      BANKNIFTY|ALL|mp_abs|hi|range_big      bucket  BANKNIFTY         mp_abs >= 0.579285                  range_big  411  0.659367  0.499594  0.159774  7.345761e-11  5.041028e-09    BH q<=0.10
+24    OC25       NIFTY|ALL|wall_width|hi|big_move      bucket      NIFTY      wall_width >= 6.03737                   big_move  411  0.618005  0.458976  0.159028  1.215514e-10  8.007804e-09    BH q<=0.10
+25    OC26              NIFTY|ALL|top3|hi|gap_big      bucket      NIFTY           top3 >= 0.245097                    gap_big  411  0.343066  0.500406 -0.157340  1.434035e-10  9.084063e-09    BH q<=0.10
+26    OC27      NIFTY|ALL|wall_width|lo|range_big      bucket      NIFTY      wall_width <= 2.89133                  range_big  410  0.343902  0.500406 -0.156504  1.894362e-10  1.155561e-08    BH q<=0.10
+27    OC28         NIFTY|ALL|wall_near|hi|gap_big      bucket      NIFTY       wall_near >= 1.83441                    gap_big  411  0.652068  0.500406  0.151662  7.166929e-10  4.215690e-08    BH q<=0.10
+28    OC29       NIFTY|ALL|wall_width|lo|big_move      bucket      NIFTY      wall_width <= 2.89133                   big_move  410  0.314634  0.458976 -0.144342  2.944739e-09  1.672409e-07    BH q<=0.10
+29    OC30     BANKNIFTY|ALL|wall_near|hi|gap_big      bucket  BANKNIFTY       wall_near >= 1.70589                    gap_big  410  0.643902  0.500000  0.143902  5.976195e-09  3.234349e-07    BH q<=0.10
+30    OC31   BANKNIFTY|ALL|wall_near|lo|range_big      bucket  BANKNIFTY      wall_near <= 0.789134                  range_big  410  0.356098  0.499187 -0.143089  6.087724e-09  3.234349e-07    BH q<=0.10
+31    OC32        NIFTY|ALL|wall_width|hi|gap_big      bucket      NIFTY      wall_width >= 6.03737                    gap_big  411  0.642336  0.500406  0.141930  8.460621e-09  4.354576e-07    BH q<=0.10
+32    OC33              NIFTY|ALL|top3|lo|gap_big      bucket      NIFTY           top3 <= 0.204028                    gap_big  411  0.639903  0.500406  0.139497  1.528175e-08  7.626984e-07    BH q<=0.10
+33    OC34   BANKNIFTY|ALL|wall_width|lo|big_move      bucket  BANKNIFTY      wall_width <= 3.07684                   big_move  410  0.543902  0.677236 -0.133333  2.343932e-08  1.135428e-06    BH q<=0.10
+34    OC35        NIFTY|ALL|wall_width|lo|gap_big      bucket      NIFTY      wall_width <= 2.89133                    gap_big  410  0.365854  0.500406 -0.134553  4.715280e-08  2.218876e-06    BH q<=0.10
+35    OC36          BANKNIFTY|ALL|top3|hi|gap_big      bucket  BANKNIFTY           top3 >= 0.251396                    gap_big  411  0.367397  0.500406 -0.133010  6.490588e-08  2.969444e-06    BH q<=0.10
+36    OC37                NIFTY|D2|iv|hi|big_move      bucket      NIFTY              iv >= 15.9955                   big_move   72  0.777778  0.465116  0.312661  8.071971e-08  3.593118e-06    BH q<=0.10
+37    OC38       BANKNIFTY|ALL|mp_abs|hi|big_move      bucket  BANKNIFTY         mp_abs >= 0.579285                   big_move  411  0.795620  0.677498  0.118122  1.137371e-07  4.929605e-06    BH q<=0.10
+38    OC39       NIFTY|ALL|wall_near|lo|range_big      bucket      NIFTY      wall_near <= 0.753906                  range_big  411  0.372263  0.500406 -0.128143  1.949316e-07  8.232113e-06    BH q<=0.10
+39    OC40           BANKNIFTY|D2|iv|hi|range_big      bucket  BANKNIFTY               iv >= 22.254                  range_big   87  0.770115  0.496154  0.273961  2.389849e-07  9.840205e-06    BH q<=0.10
+40    OC41        BANKNIFTY|ALL|top3|hi|range_big      bucket  BANKNIFTY           top3 >= 0.251396                  range_big  411  0.372263  0.499594 -0.127331  2.519952e-07  1.012283e-05    BH q<=0.10
+41    OC42             NIFTY|ALL|top3|hi|big_move      bucket      NIFTY           top3 >= 0.245097                   big_move  411  0.333333  0.458976 -0.125643  2.985543e-07  1.170759e-05    BH q<=0.10
+42    OC43       NIFTY|ALL|strad_chg|lo|range_big      bucket      NIFTY     strad_chg <= -0.294362                  range_big  410  0.626829  0.500814  0.126015  3.214895e-07  1.231379e-05    BH q<=0.10
+43    OC44            NIFTY|ALL|top3|hi|range_big      bucket      NIFTY           top3 >= 0.245097                  range_big  411  0.374696  0.500406 -0.125710  3.327329e-07  1.245480e-05    BH q<=0.10
+44    OC45         NIFTY|ALL|strad_chg|lo|gap_big      bucket      NIFTY     strad_chg <= -0.294362                    gap_big  410  0.624390  0.500000  0.124390  5.364562e-07  1.963430e-05    BH q<=0.10
+45    OC46    BANKNIFTY|ALL|wall_near|lo|big_move      bucket  BANKNIFTY      wall_near <= 0.789134                   big_move  410  0.558537  0.677236 -0.118699  5.984169e-07  2.142593e-05    BH q<=0.10
+46    OC47                NIFTY|D2|iv|lo|big_move      bucket      NIFTY              iv <= 11.5096                   big_move   72  0.180556  0.465116 -0.284561  6.416404e-07  2.248472e-05    BH q<=0.10
+47    OC48               NIFTY|D2|iv|lo|range_big      bucket      NIFTY              iv <= 11.5096                  range_big   72  0.208333  0.497674 -0.289341  6.663998e-07  2.286584e-05    BH q<=0.10
+48    OC49             NIFTY|ALL|top3|lo|big_move      bucket      NIFTY           top3 <= 0.204028                   big_move  411  0.579075  0.458976  0.120099  1.123279e-06  3.775594e-05    BH q<=0.10
+49    OC50            NIFTY|ALL|top3|lo|range_big      bucket      NIFTY           top3 <= 0.204028                  range_big  411  0.620438  0.500406  0.120032  1.199512e-06  3.951194e-05    BH q<=0.10
+50    OC51            BANKNIFTY|D2|iv|lo|big_move      bucket  BANKNIFTY              iv <= 15.6094                   big_move   87  0.413793  0.665385 -0.251592  1.882858e-06  6.080523e-05    BH q<=0.10
+51    OC52       NIFTY|ALL|vol_surge|hi|range_big      bucket      NIFTY       vol_surge >= 1.16411                  range_big  386  0.634715  0.514706  0.120009  2.523957e-06  7.994148e-05    BH q<=0.10
+52    OC53         BANKNIFTY|ALL|top3|hi|big_move      bucket  BANKNIFTY           top3 >= 0.251396                   big_move  411  0.566910  0.677498 -0.110588  3.089431e-06  9.600551e-05    BH q<=0.10
+53    OC54           BANKNIFTY|NW|iv|hi|range_big      bucket  BANKNIFTY              iv >= 21.9647                  range_big   67  0.776119  0.497512  0.278607  3.753548e-06  1.144832e-04    BH q<=0.10
+54    OC55             BANKNIFTY|D2|iv|lo|gap_big      bucket  BANKNIFTY              iv <= 15.6094                    gap_big   87  0.252874  0.496154 -0.243280  4.587822e-06  1.373844e-04    BH q<=0.10
+55    OC56               NIFTY|D2|iv|hi|range_big      bucket      NIFTY              iv >= 15.9955                  range_big   72  0.763889  0.497674  0.266214  4.842903e-06  1.424332e-04    BH q<=0.10
+56    OC57        NIFTY|ALL|wall_near|lo|big_move      bucket      NIFTY      wall_near <= 0.753906                   big_move  411  0.347932  0.458976 -0.111045  6.137398e-06  1.773385e-04    BH q<=0.10
+57    OC58           BANKNIFTY|NW|iv|lo|range_big      bucket  BANKNIFTY              iv <= 14.9195                  range_big   67  0.223881  0.497512 -0.273632  6.567888e-06  1.865054e-04    BH q<=0.10
+58    OC59        NIFTY|ALL|strad_chg|lo|big_move      bucket      NIFTY     strad_chg <= -0.294362                   big_move  410  0.570732  0.459283  0.111448  7.566432e-06  2.088734e-04    BH q<=0.10
+59    OC60             BANKNIFTY|D2|iv|hi|gap_big      bucket  BANKNIFTY               iv >= 22.254                    gap_big   87  0.735632  0.496154  0.239478  7.609230e-06  2.088734e-04    BH q<=0.10
+60    OC61             BANKNIFTY|NW|iv|hi|gap_big      bucket  BANKNIFTY              iv >= 21.9647                    gap_big   67  0.761194  0.497512  0.263682  1.296068e-05  3.499383e-04    BH q<=0.10
+61    OC62           BANKNIFTY|D2|iv|lo|range_big      bucket  BANKNIFTY              iv <= 15.6094                  range_big   87  0.264368  0.496154 -0.231786  1.328669e-05  3.529545e-04    BH q<=0.10
+62    OC63          BANKNIFTY|ALL|top3|lo|gap_big      bucket  BANKNIFTY           top3 <= 0.198935                    gap_big  410  0.607317  0.500406  0.106911  1.621161e-05  4.238179e-04    BH q<=0.10
+63    OC64        BANKNIFTY|ALL|mp_abs|hi|gap_big      bucket  BANKNIFTY         mp_abs >= 0.579285                    gap_big  411  0.605839  0.500406  0.105433  2.077930e-05  5.347423e-04    BH q<=0.10
+64    OC65         NIFTY|ALL|wall_near|lo|gap_big      bucket      NIFTY      wall_near <= 0.753906                    gap_big  411  0.396594  0.500406 -0.103812  2.614034e-05  6.623559e-04    BH q<=0.10
+65    OC66     BANKNIFTY|ALL|strad_chg|lo|gap_big      bucket  BANKNIFTY     strad_chg <= -0.398609                    gap_big  410  0.602439  0.500407  0.102032  3.924364e-05  9.793073e-04    BH q<=0.10
+66    OC67        NIFTY|D2|strad_chg|lo|range_big      bucket      NIFTY     strad_chg <= -0.328904                  range_big   72  0.736111  0.497674  0.238437  4.731815e-05  1.146073e-03    BH q<=0.10
+67    OC68                 NIFTY|D2|iv|hi|gap_big      bucket      NIFTY              iv >= 15.9955                    gap_big   72  0.736111  0.497674  0.238437  4.731815e-05  1.146073e-03    BH q<=0.10
+68    OC69            BANKNIFTY|D2|iv|hi|big_move      bucket  BANKNIFTY               iv >= 22.254                   big_move   87  0.862069  0.665385  0.196684  5.277027e-05  1.259603e-03    BH q<=0.10
+69    OC70       NIFTY|ALL|vol_surge|lo|range_big      bucket      NIFTY      vol_surge <= 0.910724                  range_big  385  0.412987  0.514706 -0.101719  6.704647e-05  1.577508e-03    BH q<=0.10
+70    OC71             BANKNIFTY|NW|iv|lo|gap_big      bucket  BANKNIFTY              iv <= 14.9195                    gap_big   67  0.253731  0.497512 -0.243781  6.828602e-05  1.584043e-03    BH q<=0.10
+71    OC72                 NIFTY|D2|iv|lo|gap_big      bucket      NIFTY              iv <= 11.5096                    gap_big   72  0.263889  0.497674 -0.233786  7.650308e-05  1.750008e-03    BH q<=0.10
+72    OC73     BANKNIFTY|NW|strad_chg|lo|big_move      bucket  BANKNIFTY     strad_chg <= -0.534546                   big_move   67  0.865672  0.645000  0.220672  9.355196e-05  2.084879e-03    BH q<=0.10
+73    OC74            BANKNIFTY|NW|iv|hi|big_move      bucket  BANKNIFTY              iv >= 21.9647                   big_move   67  0.865672  0.646766  0.218905  9.367397e-05  2.084879e-03    BH q<=0.10
+74    OC75                NIFTY|NW|iv|lo|big_move      bucket      NIFTY                iv <= 11.52                   big_move   52  0.192308  0.455128 -0.262821  1.207988e-04  2.652742e-03    BH q<=0.10
+75    OC76       NIFTY|NW|wall_width|hi|range_big      bucket      NIFTY      wall_width >= 4.25019                  range_big   52  0.769231  0.500000  0.269231  1.275388e-04  2.763900e-03    BH q<=0.10
+76    OC77     BANKNIFTY|D2|strad_chg|lo|big_move      bucket  BANKNIFTY     strad_chg <= -0.429498                   big_move   87  0.850575  0.665385  0.185190  1.449565e-04  3.062072e-03    BH q<=0.10
+77    OC78    BANKNIFTY|D2|strad_chg|lo|range_big      bucket  BANKNIFTY     strad_chg <= -0.429498                  range_big   87  0.701149  0.496154  0.204996  1.450162e-04  3.062072e-03    BH q<=0.10
+78    OC79            BANKNIFTY|NW|iv|lo|big_move      bucket  BANKNIFTY              iv <= 14.9195                   big_move   67  0.417910  0.646766 -0.228856  1.634292e-04  3.407188e-03    BH q<=0.10
+79    OC80    BANKNIFTY|ALL|wall_width|lo|gap_big      bucket  BANKNIFTY      wall_width <= 3.07684                    gap_big  410  0.407317  0.500000 -0.092683  2.042678e-04  4.205363e-03    BH q<=0.10
+80    OC81         NIFTY|D2|wall_width|lo|gap_big      bucket      NIFTY      wall_width <= 2.55213                    gap_big   72  0.277778  0.497674 -0.219897  2.100235e-04  4.270478e-03    BH q<=0.10
+81    OC82           BANKNIFTY|D2|top3|hi|gap_big      bucket  BANKNIFTY           top3 >= 0.238545                    gap_big   87  0.298851  0.496154 -0.197303  2.318916e-04  4.657628e-03    BH q<=0.10
+82    OC83    BANKNIFTY|NW|wall_width|hi|big_move      bucket  BANKNIFTY      wall_width >= 4.30937                   big_move   67  0.850746  0.646766  0.203980  2.857953e-04  5.671143e-03    BH q<=0.10
+83    OC84      BANKNIFTY|ALL|mp_abs|lo|range_big      bucket  BANKNIFTY         mp_abs <= 0.245851                  range_big  410  0.409756  0.499594 -0.089838  3.019516e-04  5.920409e-03    BH q<=0.10
+84    OC85    BANKNIFTY|NW|strad_chg|lo|range_big      bucket  BANKNIFTY     strad_chg <= -0.534546                  range_big   67  0.716418  0.495000  0.221418  3.257292e-04  6.238094e-03    BH q<=0.10
+85    OC86      BANKNIFTY|NW|strad_chg|lo|gap_big      bucket  BANKNIFTY     strad_chg <= -0.534546                    gap_big   67  0.716418  0.495000  0.221418  3.257292e-04  6.238094e-03    BH q<=0.10
+86    OC87        NIFTY|ALL|vol_surge|hi|big_move      bucket      NIFTY       vol_surge >= 1.16411                   big_move  386  0.556995  0.465398  0.091597  3.443310e-04  6.518542e-03    BH q<=0.10
+87    OC88        NIFTY|NW|wall_near|hi|range_big      bucket      NIFTY       wall_near >= 1.21162                  range_big   52  0.750000  0.500000  0.250000  4.095415e-04  7.578818e-03    BH q<=0.10
+88    OC89               NIFTY|NW|iv|lo|range_big      bucket      NIFTY                iv <= 11.52                  range_big   52  0.250000  0.500000 -0.250000  4.095415e-04  7.578818e-03    BH q<=0.10
+89    OC90     BANKNIFTY|ALL|wall_near|lo|gap_big      bucket  BANKNIFTY      wall_near <= 0.789134                    gap_big  410  0.412195  0.500000 -0.087805  4.404533e-04  8.060295e-03    BH q<=0.10
+90    OC91       BANKNIFTY|ALL|mp_abs|lo|big_move      bucket  BANKNIFTY         mp_abs <= 0.245851                   big_move  410  0.595122  0.677498 -0.082376  4.751434e-04  8.599574e-03    BH q<=0.10
+91    OC92         BANKNIFTY|NW|top3|hi|range_big      bucket  BANKNIFTY            top3 >= 0.23809                  range_big   67  0.283582  0.497512 -0.213930  5.270637e-04  9.334128e-03    BH q<=0.10
+92    OC93           BANKNIFTY|NW|top3|hi|gap_big      bucket  BANKNIFTY            top3 >= 0.23809                    gap_big   67  0.283582  0.497512 -0.213930  5.270637e-04  9.334128e-03    BH q<=0.10
+93    OC94         NIFTY|NW|wall_near|hi|big_move      bucket      NIFTY       wall_near >= 1.21162                   big_move   52  0.692308  0.455128  0.237179  7.021621e-04  1.204647e-02    BH q<=0.10
+94    OC95        NIFTY|NW|wall_width|hi|big_move      bucket      NIFTY      wall_width >= 4.25019                   big_move   52  0.692308  0.455128  0.237179  7.021621e-04  1.204647e-02    BH q<=0.10
+95    OC96                NIFTY|NW|iv|hi|big_move      bucket      NIFTY              iv >= 15.3922                   big_move   52  0.692308  0.455128  0.237179  7.021621e-04  1.204647e-02    BH q<=0.10
+96    OC97   BANKNIFTY|NW|wall_width|hi|range_big      bucket  BANKNIFTY      wall_width >= 4.30937                  range_big   67  0.701493  0.497512  0.203980  8.701856e-04  1.467072e-02    BH q<=0.10
+97    OC98          NIFTY|D2|wall_near|hi|gap_big      bucket      NIFTY       wall_near >= 1.53777                    gap_big   72  0.694444  0.497674  0.196770  8.729391e-04  1.467072e-02    BH q<=0.10
+98    OC99         NIFTY|ALL|vol_surge|lo|gap_big      bucket      NIFTY      vol_surge <= 0.910724                    gap_big  385  0.423377  0.506920 -0.083544  1.087744e-03  1.808319e-02    BH q<=0.10
+99   OC100        BANKNIFTY|ALL|top3|lo|range_big      bucket  BANKNIFTY           top3 <= 0.198935                  range_big  410  0.580488  0.499594  0.080894  1.097947e-03  1.808319e-02    BH q<=0.10
+100  OC101               NIFTY|NW|top3|hi|gap_big      bucket      NIFTY           top3 >= 0.245271                    gap_big   52  0.269231  0.500000 -0.230769  1.195120e-03  1.844378e-02    BH q<=0.10
+101  OC102       NIFTY|NW|wall_width|lo|range_big      bucket      NIFTY      wall_width <= 1.85026                  range_big   52  0.269231  0.500000 -0.230769  1.195120e-03  1.844378e-02    BH q<=0.10
+102  OC103               NIFTY|NW|iv|hi|range_big      bucket      NIFTY              iv >= 15.3922                  range_big   52  0.730769  0.500000  0.230769  1.195120e-03  1.844378e-02    BH q<=0.10
+103  OC104         NIFTY|NW|wall_width|lo|gap_big      bucket      NIFTY      wall_width <= 1.85026                    gap_big   52  0.269231  0.500000 -0.230769  1.195120e-03  1.844378e-02    BH q<=0.10
+104  OC105          BANKNIFTY|NW|top3|hi|big_move      bucket  BANKNIFTY            top3 >= 0.23809                   big_move   67  0.447761  0.646766 -0.199005  1.202222e-03  1.844378e-02    BH q<=0.10
+105  OC106         BANKNIFTY|D2|top3|hi|range_big      bucket  BANKNIFTY           top3 >= 0.238545                  range_big   87  0.321839  0.496154 -0.174315  1.202484e-03  1.844378e-02    BH q<=0.10
+106  OC107    BANKNIFTY|D2|wall_near|lo|range_big      bucket  BANKNIFTY      wall_near <= 0.794729                  range_big   87  0.321839  0.496154 -0.174315  1.202484e-03  1.844378e-02    BH q<=0.10
+107  OC108        NIFTY|NW|strad_chg|hi|range_big      bucket      NIFTY     strad_chg >= -0.266517                  range_big   52  0.269231  0.496774 -0.227543  1.209428e-03  1.844378e-02    BH q<=0.10
+108  OC109               NIFTY|D2|top3|hi|gap_big      bucket      NIFTY           top3 >= 0.233895                    gap_big   72  0.305556  0.497674 -0.192119  1.304673e-03  1.956393e-02    BH q<=0.10
+109  OC110     BANKNIFTY|D2|strad_chg|hi|big_move      bucket  BANKNIFTY     strad_chg >= -0.257855                   big_move   87  0.494253  0.665385 -0.171132  1.306638e-03  1.956393e-02    BH q<=0.10
+110  OC111            NIFTY|ALL|iv_chg|lo|gap_big      bucket      NIFTY        iv_chg <= -0.961921                    gap_big  337  0.590504  0.503953  0.086552  1.552560e-03  2.302206e-02    BH q<=0.10
+111  OC112        NIFTY|ALL|fut_oi_abs|hi|gap_big      bucket      NIFTY    fut_oi_abs >= 0.0360875                    gap_big  411  0.579075  0.500406  0.078669  1.565556e-03  2.302206e-02    BH q<=0.10
+112  OC113    BANKNIFTY|D2|wall_near|hi|range_big      bucket  BANKNIFTY       wall_near >= 1.58071                  range_big   87  0.666667  0.496154  0.170513  1.725481e-03  2.514927e-02    BH q<=0.10
+113  OC114         BANKNIFTY|ALL|top3|lo|big_move      bucket  BANKNIFTY           top3 <= 0.198935                   big_move  410  0.748780  0.677498  0.071283  1.803039e-03  2.604916e-02    BH q<=0.10
+114  OC115               NIFTY|D2|top3|lo|gap_big      bucket      NIFTY            top3 <= 0.18979                    gap_big   72  0.680556  0.497674  0.182881  2.034767e-03  2.914141e-02    BH q<=0.10
+115  OC116      BANKNIFTY|NW|wall_near|hi|gap_big      bucket  BANKNIFTY       wall_near >= 1.51417                    gap_big   67  0.686567  0.497512  0.189055  2.094680e-03  2.925505e-02    BH q<=0.10
+116  OC117    BANKNIFTY|NW|wall_near|hi|range_big      bucket  BANKNIFTY       wall_near >= 1.51417                  range_big   67  0.686567  0.497512  0.189055  2.094680e-03  2.925505e-02    BH q<=0.10
+117  OC118      BANKNIFTY|ALL|iv_chg|hi|range_big      bucket  BANKNIFTY         iv_chg >= 0.651378                  range_big  323  0.585139  0.498967  0.086172  2.166414e-03  2.982207e-02    BH q<=0.10
+118  OC119        BANKNIFTY|ALL|mp_abs|lo|gap_big      bucket  BANKNIFTY         mp_abs <= 0.245851                    gap_big  410  0.424390  0.500406 -0.076016  2.172828e-03  2.982207e-02    BH q<=0.10
+119  OC120    BANKNIFTY|D2|strad_chg|hi|range_big      bucket  BANKNIFTY     strad_chg >= -0.257855                  range_big   87  0.333333  0.496154 -0.162821  2.542563e-03  3.368282e-02    BH q<=0.10
+120  OC121   BANKNIFTY|D2|wall_width|lo|range_big      bucket  BANKNIFTY      wall_width <= 2.85885                  range_big   87  0.333333  0.496154 -0.162821  2.542563e-03  3.368282e-02    BH q<=0.10
+121  OC122       NIFTY|ALL|fut_oi_abs|hi|big_move      bucket      NIFTY    fut_oi_abs >= 0.0360875                   big_move  411  0.532847  0.458976  0.073870  2.942600e-03  3.816112e-02    BH q<=0.10
+122  OC123     BANKNIFTY|NW|strad_chg|hi|big_move      bucket  BANKNIFTY     strad_chg >= -0.338577                   big_move   67  0.462687  0.645000 -0.182313  2.992468e-03  3.850465e-02    BH q<=0.10
+123  OC124        NIFTY|NW|wall_width|lo|big_move      bucket      NIFTY      wall_width <= 1.85026                   big_move   52  0.250000  0.455128 -0.205128  3.130983e-03  3.997464e-02    BH q<=0.10
+124  OC125                 NIFTY|NW|iv|lo|gap_big      bucket      NIFTY                iv <= 11.52                    gap_big   52  0.288462  0.500000 -0.211538  3.185253e-03  4.004666e-02    BH q<=0.10
+125  OC126                 NIFTY|NW|iv|hi|gap_big      bucket      NIFTY              iv >= 15.3922                    gap_big   52  0.711538  0.500000  0.211538  3.185253e-03  4.004666e-02    BH q<=0.10
+126  OC127   BANKNIFTY|D2|wall_width|hi|range_big      bucket  BANKNIFTY      wall_width >= 5.27703                  range_big   87  0.655172  0.496154  0.159019  3.569369e-03  4.453598e-02    BH q<=0.10
+127  OC128          BANKNIFTY|D2|ST2_straddle_pnl  structural  BANKNIFTY  ST2_payoff_minus_cost_pct  ST2_payoff_minus_cost_pct  260  0.365385  0.000000 -0.232582  3.653586e-03  4.524404e-02    BH q<=0.10
+128  OC129         NIFTY|D2|strad_chg|lo|big_move      bucket      NIFTY     strad_chg <= -0.328904                   big_move   72  0.638889  0.465116  0.173773  4.244985e-03  5.217531e-02    BH q<=0.10
+129  OC130         NIFTY|ALL|vol_surge|hi|gap_big      bucket      NIFTY       vol_surge >= 1.16411                    gap_big  386  0.580311  0.506920  0.073390  4.308587e-03  5.256477e-02    BH q<=0.10
+130  OC131          BANKNIFTY|D2|top3|hi|big_move      bucket  BANKNIFTY           top3 >= 0.238545                   big_move   87  0.517241  0.665385 -0.148143  4.353868e-03  5.272662e-02    BH q<=0.10
+131  OC132             NIFTY|D2|top3|lo|range_big      bucket      NIFTY            top3 <= 0.18979                  range_big   72  0.666667  0.497674  0.168992  4.469169e-03  5.372790e-02    BH q<=0.10
+132  OC133        BANKNIFTY|ALL|iv_chg|hi|gap_big      bucket  BANKNIFTY         iv_chg >= 0.651378                    gap_big  323  0.591331  0.512397  0.078935  4.516016e-03  5.389767e-02    BH q<=0.10
+133  OC134    BANKNIFTY|NW|wall_width|lo|big_move      bucket  BANKNIFTY      wall_width <= 2.66172                   big_move   67  0.477612  0.646766 -0.169154  4.748658e-03  5.626648e-02    BH q<=0.10
+134  OC135         NIFTY|NW|strad_chg|lo|big_move      bucket      NIFTY     strad_chg <= -0.420923                   big_move   52  0.653846  0.451613  0.202233  4.825544e-03  5.676908e-02    BH q<=0.10
+135  OC136    BANKNIFTY|D2|wall_width|hi|big_move      bucket  BANKNIFTY      wall_width >= 5.27703                   big_move   87  0.804598  0.665385  0.139213  6.039335e-03  7.004778e-02    BH q<=0.10
+136  OC137     BANKNIFTY|D2|wall_near|hi|big_move      bucket  BANKNIFTY       wall_near >= 1.58071                   big_move   87  0.804598  0.665385  0.139213  6.039335e-03  7.004778e-02    BH q<=0.10
+137  OC138         NIFTY|D2|wall_near|lo|big_move      bucket      NIFTY      wall_near <= 0.723121                   big_move   72  0.305556  0.465116 -0.159561  6.496513e-03  7.482348e-02    BH q<=0.10
+138  OC139           NIFTY|ALL|fut_build|LB|cc_up      bucket      NIFTY            fut_build == LB                      cc_up  462  0.603896  0.540650  0.063246  6.729923e-03  7.657551e-02    BH q<=0.10
+139  OC140     BANKNIFTY|NW|wall_width|lo|gap_big      bucket  BANKNIFTY      wall_width <= 2.66172                    gap_big   67  0.328358  0.497512 -0.169154  6.786515e-03  7.657551e-02    BH q<=0.10
+140  OC141     BANKNIFTY|NW|wall_near|hi|big_move      bucket  BANKNIFTY       wall_near >= 1.51417                   big_move   67  0.805970  0.646766  0.159204  6.788114e-03  7.657551e-02    BH q<=0.10
+141  OC142    BANKNIFTY|ALL|strad_chg|hi|big_move      bucket  BANKNIFTY     strad_chg >= -0.224412                   big_move  410  0.614634  0.677787 -0.063153  6.996627e-03  7.784242e-02    BH q<=0.10
+142  OC143     BANKNIFTY|D2|wall_width|hi|gap_big      bucket  BANKNIFTY      wall_width >= 5.27703                    gap_big   87  0.643678  0.496154  0.147524  7.042211e-03  7.784242e-02    BH q<=0.10
+143  OC144      BANKNIFTY|D2|strad_chg|lo|gap_big      bucket  BANKNIFTY     strad_chg <= -0.429498                    gap_big   87  0.643678  0.496154  0.147524  7.042211e-03  7.784242e-02    BH q<=0.10
+144  OC145       BANKNIFTY|ALL|iv_hv|hi|range_big      bucket  BANKNIFTY           iv_hv >= 2.88141                  range_big  407  0.570025  0.503686  0.066339  7.430332e-03  8.158505e-02    BH q<=0.10
+145  OC146          NIFTY|NW|wall_near|lo|gap_big      bucket      NIFTY      wall_near <= 0.627839                    gap_big   52  0.307692  0.500000 -0.192308  7.787436e-03  8.438097e-02    BH q<=0.10
+146  OC147          NIFTY|NW|wall_near|hi|gap_big      bucket      NIFTY       wall_near >= 1.21162                    gap_big   52  0.692308  0.500000  0.192308  7.787436e-03  8.438097e-02    BH q<=0.10
+147  OC148           NIFTY|ALL|atmz_flow|hi|cc_up      bucket      NIFTY      atmz_flow >= 0.061504                      cc_up  411  0.605839  0.541024  0.064816  8.662449e-03  9.314724e-02    BH q<=0.10
+148  OC149    BANKNIFTY|D2|wall_width|lo|big_move      bucket  BANKNIFTY      wall_width <= 2.85885                   big_move   87  0.528736  0.665385 -0.136649  8.709578e-03  9.314724e-02    BH q<=0.10
+149  OC150         NIFTY|D2|wall_near|hi|big_move      bucket      NIFTY       wall_near >= 1.53777                   big_move   72  0.625000  0.465116  0.159884  8.870475e-03  9.365175e-02    BH q<=0.10
+150  OC151              NIFTY|D2|top3|lo|big_move      bucket      NIFTY            top3 <= 0.18979                   big_move   72  0.625000  0.465116  0.159884  8.870475e-03  9.365175e-02    BH q<=0.10
+151  OC152        BANKNIFTY|ALL|iv_hv|hi|big_move      bucket  BANKNIFTY           iv_hv >= 2.88141                   big_move  407  0.742015  0.682228  0.059787  9.074194e-03  9.519234e-02    BH q<=0.10
+152  OC153        NIFTY|D2|wall_near|hi|range_big      bucket      NIFTY       wall_near >= 1.53777                  range_big   72  0.652778  0.497674  0.155103  9.265773e-03  9.658689e-02    BH q<=0.10
+
+Top 25 by p (n>=30):
+                                         id    n      rate      base    effect             p          bh_q
+939           BANKNIFTY|ALL|iv|hi|range_big  411  0.827251  0.499594  0.327657  1.846283e-43  3.040828e-40
+114               NIFTY|ALL|iv|hi|range_big  411  0.785888  0.500406  0.285482  1.273469e-32  1.048702e-29
+940           BANKNIFTY|ALL|iv|lo|range_big  410  0.217073  0.499594 -0.282521  7.285834e-32  3.999923e-29
+116                NIFTY|ALL|iv|hi|big_move  411  0.727494  0.458976  0.268517  3.266313e-28  1.344905e-25
+941            BANKNIFTY|ALL|iv|hi|big_move  411  0.900243  0.677498  0.222745  2.501685e-26  8.240552e-24
+115               NIFTY|ALL|iv|lo|range_big  411  0.253041  0.500406 -0.247365  1.480175e-24  4.063081e-22
+942            BANKNIFTY|ALL|iv|lo|big_move  410  0.436585  0.677498 -0.240913  1.472442e-23  3.464446e-21
+987   BANKNIFTY|ALL|wall_width|hi|range_big  410  0.739024  0.499187  0.239837  5.229680e-23  1.076660e-20
+117                NIFTY|ALL|iv|lo|big_move  411  0.226277  0.458976 -0.232699  1.964476e-22  3.594991e-20
+937             BANKNIFTY|ALL|iv|hi|gap_big  411  0.725061  0.500406  0.224655  2.543113e-20  4.188507e-18
+995    BANKNIFTY|ALL|wall_near|hi|range_big  410  0.721951  0.499187  0.222764  6.025024e-20  9.021105e-18
+938             BANKNIFTY|ALL|iv|lo|gap_big  410  0.282927  0.500406 -0.217479  4.194261e-19  5.756624e-17
+170        NIFTY|ALL|wall_near|hi|range_big  411  0.703163  0.500406  0.202757  1.008556e-16  1.277762e-14
+112                 NIFTY|ALL|iv|hi|gap_big  411  0.700730  0.500406  0.200324  2.388960e-16  2.810441e-14
+997     BANKNIFTY|ALL|wall_near|hi|big_move  410  0.853659  0.677236  0.176423  3.782640e-16  3.893755e-14
+989    BANKNIFTY|ALL|wall_width|hi|big_move  410  0.853659  0.677236  0.176423  3.782640e-16  3.893755e-14
+162       NIFTY|ALL|wall_width|hi|range_big  411  0.693431  0.500406  0.193024  2.965056e-15  2.872616e-13
+113                 NIFTY|ALL|iv|lo|gap_big  411  0.309002  0.500406 -0.191404  4.600655e-15  4.209599e-13
+956    BANKNIFTY|ALL|strad_chg|lo|range_big  410  0.680488  0.499593  0.180895  1.506448e-13  1.305853e-11
+988   BANKNIFTY|ALL|wall_width|lo|range_big  410  0.321951  0.499187 -0.177236  4.691639e-13  3.863565e-11
+172         NIFTY|ALL|wall_near|hi|big_move  411  0.635036  0.458976  0.176060  8.790400e-13  6.894185e-11
+958     BANKNIFTY|ALL|strad_chg|lo|big_move  410  0.826829  0.677787  0.149042  1.227571e-11  9.190041e-10
+985     BANKNIFTY|ALL|wall_width|hi|gap_big  410  0.660976  0.500000  0.160976  6.780154e-11  4.855180e-09
+1011      BANKNIFTY|ALL|mp_abs|hi|range_big  411  0.659367  0.499594  0.159774  7.345761e-11  5.041028e-09
+164        NIFTY|ALL|wall_width|hi|big_move  411  0.618005  0.458976  0.159028  1.215514e-10  8.007804e-09

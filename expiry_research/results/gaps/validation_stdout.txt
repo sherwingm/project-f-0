@@ -1,0 +1,5 @@
+            id                                         rule_exact  d_effect  v_n  v_nB     v_rate     v_base  v_effect     v_p1    label
+      N_Fa_dir gap fill, |gap| in [0.1,0.5) %: gap up vs gap down  0.130120  171    67   0.678363   0.656716  0.021646 0.374499 Rejected
+ N_BD0_low_min     minute of session low: D0 vs ordinary sessions 72.966829   78   131 164.089744 143.213740 20.876003 0.153167 Rejected
+N_BDp1_low_min    minute of session low: D+1 vs ordinary sessions 74.257152   78   131 147.641026 143.213740  4.427285 0.414139 Rejected
+B_BDm1_abs_gap                  |gap| %: D-1 vs ordinary sessions -0.174316   78   131   0.344926   0.358840 -0.013914 0.384653 Rejected

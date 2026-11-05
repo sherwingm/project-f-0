@@ -1,0 +1,12 @@
+family sizes: {'context': 316, 'univariate': 19964, 'pair': 7889, 'tree': 349, 'validation': 233, 'walkforward': 792, 'wf_vixbase': 96} total 29639
+discovery family (BH over discovery stages): 28518 significant 3336
+BH over the whole log: significant 3452
+stage
+context          13
+pair           1572
+tree             24
+univariate     1725
+validation       11
+walkforward     103
+wf_vixbase        4
+written: hypotheses.csv, context_profile.csv, discovery_counts.csv, discovery_top_univariate.csv

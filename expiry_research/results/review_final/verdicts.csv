@@ -1,0 +1,12 @@
+item,verdict,evidence
+features_from_raw,confirmed,"65/65 sessions (5 x 13) feature, flag and t+1 target equal from raw spot_1m + bhavcopy; all 574/527/573 final rows flag-agree, max feature diff 7e-15 (feature_recompute.csv, flag_agreement_all_rows.csv)"
+thresholds_frozen,confirmed,"rule thresholds equal candidates_frozen.csv / thresholds.csv q67"
+gates_and_BH,confirmed,"n, k, base, one-sided p, gate 1, BH q (13 tests) and labels recomputed independently; all equal (gate_recompute.csv). OC08 fails half-effect by 0.15 pp (0.1184 vs 0.1199) - applied as written"
+oc13_oc21_duplicate,issue-low,"OC13 and OC21 have identical flags; two 'Validated' entries are one rule, not two confirmations"
+fills_by_hand,confirmed,"9 trades (8 + worst D0) match strike, expiry, 09:16 entry, exit minute, prices, charges, net %, max up to 1e-6 (fills_by_hand.csv)"
+look_ahead,confirmed,"trade_date > signal_date on all rows; strike from 09:15 open; no target exit before 09:17; no duplicate spot 09:15 rows on trade days"
+target_fill_same_minute,issue-low,"+20 % exit fills at the close of the minute that triggered it (313 hits, mean +19.3 %); a live order fills later; win rate 63 % is optimistic"
+tick_floor_slippage,issue-low,"139 expiry-day (a) trades exit a leg below Rs 2 where 0.5-1 % slippage is below one tick (0.05)"
+claim_every_rule_loses,issue-medium,"TRADEABILITY headline says every rule/expiry/exit loses; M220 exit iii is positive for both expiries at 0.5 % (+0.83 % n 72, +0.71 % n 97) and beats unflagged (+6.8 / +6.0 pp, p 0.09 / 0.06); line 74 'worth trading false for every rule' is not literally true (t 0.2, gone at 1 % slip)"
+beyond_vix,confirmed-mostly,"VIX-quintile stratified permutation agrees with the logistic residual test except PPC062 (p 0.14) and OC118 (p 0.48); OC13 weaker (p 0.034) (vix_stratified.csv)"
+strength_M143,issue-low,"59/71 flags in top VIX quintile, 51 % of flags in 3 months, 0 flags in 2025H2; raw +35.5 pp falls to +26 pp VIX-stratified"

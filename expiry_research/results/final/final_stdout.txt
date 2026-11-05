@@ -1,0 +1,254 @@
+== opening the sealed final period (once) ==
+NIFTY: open rows 1598, sealed rows 578 (2024-06-28 .. 2026-10-29), sealed split values {'final': 577, 'validation': 1}
+BANKNIFTY: open rows 1598, sealed rows 578 (2024-06-28 .. 2026-10-29), sealed split values {'final': 577, 'validation': 1}
+SENSEX: open rows 662, sealed rows 578 (2024-06-28 .. 2026-10-29), sealed split values {'final': 577, 'validation': 1}
+
+== frozen files ==
+  [ok] model frozen sha256 equals recorded 9b9490102276daae
+  [ok] PPC032 passed validation in its module Passed-validation
+  [ok] PPC062 passed validation in its module Passed-validation
+  [ok] PPC092 passed validation in its module Passed-validation
+  [ok] PPC098 passed validation in its module Passed-validation
+  [ok] PPC129 passed validation in its module Passed-validation
+  [ok] OC08 passed validation in its module Passed-validation
+  [ok] OC13 passed validation in its module Passed-validation
+  [ok] OC17 passed validation in its module Passed-validation
+  [ok] OC21 passed validation in its module Passed-validation
+  [ok] OC118 passed validation in its module Passed-validation
+  [ok] M143 passed validation in its module Passed-validation
+  [ok] M218 passed validation in its module Passed-validation
+  [ok] M220 passed validation in its module Passed-validation
+
+== rebuilding features with each module's own code ==
+
+== proof 1: rebuilt features equal the module's own values on validation rows ==
+  [ok] pricepath NIFTY f_mom5 n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY f_streak_close n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY o_cc n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY f_fut_vol_r20 n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY f_vix_close n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY usable n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY ctx_ALL n 366 diff 0 max 0.0
+  [ok] pricepath NIFTY t_big (labelled validation rows) n 365 diff 0
+  [ok] pricepath BANKNIFTY f_mom5 n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY f_streak_close n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY o_cc n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY f_fut_vol_r20 n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY f_vix_close n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY usable n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY ctx_ALL n 366 diff 0 max 0.0
+  [ok] pricepath BANKNIFTY t_big (labelled validation rows) n 365 diff 0
+  [ok] optionchain NIFTY wall_width vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY wall_near vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY iv_chg vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY iv_proxy vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY n_sess vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY f_vix_close vs features_NIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain NIFTY y_range_pct n 365 diff 0
+  [ok] optionchain NIFTY y_big_move_exc n 365 diff 0
+  [ok] optionchain BANKNIFTY wall_width vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY wall_near vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY iv_chg vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY iv_proxy vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY n_sess vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY f_vix_close vs features_BANKNIFTY.parquet n 366 diff 0 max 0.0
+  [ok] optionchain BANKNIFTY y_range_pct n 365 diff 0
+  [ok] optionchain BANKNIFTY y_big_move_exc n 365 diff 0
+  [ok] model NIFTY date_t n 366 diff 0 max nan
+  [ok] model NIFTY d_opt_near_straddle_daily n 366 diff 0 max 0.0
+  [ok] model NIFTY f_opt_near_pcr_oi n 366 diff 0 max 0.0
+  [ok] model NIFTY f_atr14_pct n 366 diff 0 max 0.0
+  [ok] model NIFTY f_vix_close n 366 diff 0 max 0.0
+  [ok] model NIFTY t_big_exc n 366 diff 0 max 0.0
+  [ok] model NIFTY t_low_pc n 366 diff 0 max 0.0
+  [ok] model NIFTY split n 366 diff 0 max nan
+  [ok] model BANKNIFTY date_t n 366 diff 0 max nan
+  [ok] model BANKNIFTY d_opt_near_straddle_daily n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY f_opt_near_pcr_oi n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY f_atr14_pct n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY f_vix_close n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY t_big_exc n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY t_low_pc n 366 diff 0 max 0.0
+  [ok] model BANKNIFTY split n 366 diff 0 max nan
+
+== proof 2: the final-test evaluation code reproduces each module's validation numbers ==
+  [ok] PPC032 validation n/rate/base/p n 45 vs 45, rate 0.4000 vs 0.4000, base 0.2137 vs 0.2137
+  [ok] PPC062 validation n/rate/base/p n 67 vs 67, rate 0.1194 vs 0.1194, base 0.2137 vs 0.2137
+  [ok] PPC092 validation n/rate/base/p n 38 vs 38, rate 0.6053 vs 0.6053, base 0.3973 vs 0.3973
+  [ok] PPC098 validation n/rate/base/p n 44 vs 44, rate 0.6136 vs 0.6136, base 0.3973 vs 0.3973
+  [ok] PPC129 validation n/rate/base/p n 87 vs 87, rate 0.5057 vs 0.5057, base 0.3973 vs 0.3973
+  [ok] OC08 frozen threshold q67 matches rule text 5.2894 vs 5.2894
+  [ok] OC08 validation n/k/base n 111 vs 111, k 42 vs 42, base 0.2253 vs 0.2253
+  [ok] OC08 discovery n/rate reproduced n 410 vs 410
+  [ok] OC13 frozen threshold q67 matches rule text 1.83441 vs 1.83441
+  [ok] OC13 validation n/k/base n 63 vs 63, k 30 vs 30, base 0.2500 vs 0.2500
+  [ok] OC13 discovery n/rate reproduced n 411 vs 411
+  [ok] OC17 frozen threshold q67 matches rule text 6.03737 vs 6.03737
+  [ok] OC17 validation n/k/base n 58 vs 58, k 25 vs 25, base 0.2500 vs 0.2500
+  [ok] OC17 discovery n/rate reproduced n 411 vs 411
+  [ok] OC21 frozen threshold q67 matches rule text 1.83441 vs 1.83441
+  [ok] OC21 validation n/k/base n 63 vs 63, k 24 vs 24, base 0.2115 vs 0.2115
+  [ok] OC21 discovery n/rate reproduced n 411 vs 411
+  [ok] OC118 frozen threshold q67 matches rule text 0.651378 vs 0.651378
+  [ok] OC118 validation n/k/base n 77 vs 77, k 27 vs 27, base 0.2077 vs 0.2077
+  [ok] OC118 discovery n/rate reproduced n 323 vs 323
+  [ok] M143 validation n/rate/base/p n 20 vs 20, rate 0.5500 vs 0.5500, base 0.2110 vs 0.2110
+  [ok] M218 validation n/rate/base/p n 120 vs 120, rate -0.2686 vs -0.2686, base -0.3896 vs -0.3896
+  [ok] M220 validation n/rate/base/p n 115 vs 115, rate -0.2671 vs -0.2671, base -0.3896 vs -0.3896
+
+all 85 code-path checks pass
+
+== FINAL PERIOD: one evaluation per candidate ==
+    id        ul  fin_rows  fin_n  fin_rate  fin_base  fin_effect  disc_effect  fin_p_one_sided   bh_q  gate1  gate2_bh            label
+PPC032     NIFTY       574    117    0.4615    0.3101      0.1514       0.2554           0.0004 0.0005   True      True Validated (size)
+PPC062     NIFTY       574     76    0.2105    0.3101     -0.0996      -0.1242           0.0365 0.0395   True      True Validated (size)
+PPC092 BANKNIFTY       574     76    0.6974    0.3972      0.3002       0.1840           0.0000 0.0000   True      True Validated (size)
+PPC098 BANKNIFTY       574     72    0.7778    0.3972      0.3806       0.1671           0.0000 0.0000   True      True Validated (size)
+PPC129 BANKNIFTY       574    117    0.4701    0.3972      0.0729       0.0918           0.0656 0.0656  False      True         Rejected
+  OC08 BANKNIFTY       574    302    0.3675    0.2491      0.1184       0.2398           0.0000 0.0000  False      True         Rejected
+  OC13     NIFTY       574    280    0.4464    0.3362      0.1102       0.2028           0.0001 0.0002   True      True Validated (size)
+  OC17     NIFTY       574    281    0.4804    0.3362      0.1442       0.1930           0.0000 0.0000   True      True Validated (size)
+  OC21     NIFTY       574    280    0.4143    0.3084      0.1059       0.1761           0.0001 0.0002   True      True Validated (size)
+ OC118 BANKNIFTY       527    123    0.3252    0.2429      0.0823       0.0862           0.0240 0.0284   True      True Validated (size)
+  M143     NIFTY       573     71    0.6620    0.3072      0.3548       0.2537           0.0000 0.0000   True      True Validated (size)
+  M218     NIFTY       573    138   -0.3207   -0.4769      0.1563       0.2122           0.0001 0.0001   True      True Validated (size)
+  M220     NIFTY       573    126   -0.3285   -0.4769      0.1484       0.2169           0.0003 0.0004   True      True Validated (size)
+    id  open_n  open_rate  open_base  open_effect  open_p_one_sided  vix_pred_flagged  resid_flagged  resid_unflagged  resid_diff  vix_p                 beyond_vix
+PPC032     117     0.3248     0.2160       0.1088            0.0042            0.3384         0.1231           0.0107      0.1125 0.0078              adds (p<0.05)
+PPC062      76     0.1316     0.2160      -0.0844            0.0439            0.2372        -0.0267           0.0428     -0.0694 0.0780 same sign, not significant
+PPC092      76     0.5263     0.3240       0.2023            0.0002            0.5695         0.1279          -0.1144      0.2423 0.0000              adds (p<0.05)
+PPC098      72     0.5417     0.3240       0.2176            0.0001            0.6307         0.1470          -0.1152      0.2622 0.0000              adds (p<0.05)
+PPC129     117     0.3504     0.3240       0.0264            0.3018            0.5091        -0.0390          -0.0934      0.0544 0.1292 same sign, not significant
+  OC08     302     0.3675     0.2491       0.1184            0.0000            0.3504         0.0172          -0.0913      0.1085 0.0004              adds (p<0.05)
+  OC13     280     0.4464     0.3362       0.1102            0.0001            0.3603         0.0861          -0.0164      0.1026 0.0029              adds (p<0.05)
+  OC17     281     0.4804     0.3362       0.1442            0.0000            0.3647         0.1157          -0.0451      0.1608 0.0000              adds (p<0.05)
+  OC21     280     0.2821     0.2160       0.0661            0.0054            0.3255         0.0888          -0.0217      0.1104 0.0011              adds (p<0.05)
+ OC118     123     0.3252     0.2429       0.0823            0.0240            0.3606        -0.0354          -0.0400      0.0046 0.4582 same sign, not significant
+  M143      71     0.4366     0.2147       0.2220            0.0000            0.4793         0.1827           0.0104      0.1723 0.0013              adds (p<0.05)
+  M218     138    -0.4211    -0.5040       0.0829            0.0042           -0.3581         0.0375          -0.1027      0.1402 0.0047              adds (p<0.05)
+  M220     126    -0.4131    -0.5040       0.0908            0.0036           -0.3546         0.0261          -0.0921      0.1182 0.0155              adds (p<0.05)
+flags_NIFTY.csv rows 577
+flags_BANKNIFTY.csv rows 576
+
+== Observed (a): expiry-day direction base rates ==
+  NIFTY discovery gap transition chi-square p 0.9127 (n 1232)
+  NIFTY final gap transition chi-square p 0.2769 (n 576)
+  BANKNIFTY discovery gap transition chi-square p 0.0077 (n 1232)
+  BANKNIFTY final gap transition chi-square p 0.8309 (n 576)
+  SENSEX discovery gap transition chi-square p 0.9457 (n 296)
+  SENSEX final gap transition chi-square p 0.5935 (n 576)
+       ul      split               group target    n   k   rate  ci_lo  ci_hi  p_vs_discovery  p_D0_vs_nonexp
+    NIFTY  discovery        all sessions gap_up 1232 737 0.5982 0.5706 0.6252             NaN             NaN
+    NIFTY  discovery        all sessions oc_pos 1232 597 0.4846 0.4568 0.5125             NaN             NaN
+    NIFTY  discovery t+1 expiry day (D0) gap_up  216 128 0.5926 0.5260 0.6559             NaN          0.8402
+    NIFTY  discovery t+1 expiry day (D0) oc_pos  216 104 0.4815 0.4158 0.5479             NaN          0.9100
+    NIFTY  discovery      t+1 not expiry gap_up 1015 609 0.6000 0.5695 0.6297             NaN             NaN
+    NIFTY  discovery      t+1 not expiry oc_pos 1015 493 0.4857 0.4551 0.5165             NaN             NaN
+    NIFTY validation        all sessions gap_up  365 204 0.5589 0.5076 0.6090          0.1800             NaN
+    NIFTY validation        all sessions oc_pos  365 176 0.4822 0.4314 0.5334          0.9361             NaN
+    NIFTY validation t+1 expiry day (D0) gap_up   78  40 0.5128 0.4039 0.6205          0.2224          0.3553
+    NIFTY validation t+1 expiry day (D0) oc_pos   78  36 0.4615 0.3553 0.5714          0.7624          0.6806
+    NIFTY validation      t+1 not expiry gap_up  287 164 0.5714 0.5136 0.6274          0.3842             NaN
+    NIFTY validation      t+1 not expiry oc_pos  287 140 0.4878 0.4305 0.5454          0.9501             NaN
+    NIFTY      final        all sessions gap_up  576 247 0.4288 0.3890 0.4696          0.0000             NaN
+    NIFTY      final        all sessions oc_pos  576 272 0.4722 0.4318 0.5130          0.6242             NaN
+    NIFTY      final t+1 expiry day (D0) gap_up  122  50 0.4098 0.3266 0.4986          0.0012          0.6067
+    NIFTY      final t+1 expiry day (D0) oc_pos  122  48 0.3934 0.3113 0.4821          0.1181          0.0550
+    NIFTY      final      t+1 not expiry gap_up  452 197 0.4358 0.3909 0.4819          0.0000             NaN
+    NIFTY      final      t+1 not expiry oc_pos  452 222 0.4912 0.4453 0.5371          0.8475             NaN
+BANKNIFTY  discovery        all sessions gap_up 1232 694 0.5633 0.5355 0.5908             NaN             NaN
+BANKNIFTY  discovery        all sessions oc_pos 1232 579 0.4700 0.4422 0.4979             NaN             NaN
+BANKNIFTY  discovery t+1 expiry day (D0) gap_up  261 144 0.5517 0.4911 0.6109             NaN          0.6707
+BANKNIFTY  discovery t+1 expiry day (D0) oc_pos  261 119 0.4559 0.3966 0.5166             NaN          0.6090
+BANKNIFTY  discovery      t+1 not expiry gap_up  971 550 0.5664 0.5351 0.5973             NaN             NaN
+BANKNIFTY  discovery      t+1 not expiry oc_pos  971 460 0.4737 0.4425 0.5052             NaN             NaN
+BANKNIFTY validation        all sessions gap_up  365 195 0.5342 0.4830 0.5848          0.3262             NaN
+BANKNIFTY validation        all sessions oc_pos  365 167 0.4575 0.4071 0.5088          0.6758             NaN
+BANKNIFTY validation t+1 expiry day (D0) gap_up   78  34 0.4359 0.3314 0.5464          0.0723          0.0496
+BANKNIFTY validation t+1 expiry day (D0) oc_pos   78  28 0.3590 0.2615 0.4697          0.1295          0.0488
+BANKNIFTY validation      t+1 not expiry gap_up  287 161 0.5610 0.5031 0.6172          0.8700             NaN
+BANKNIFTY validation      t+1 not expiry oc_pos  287 139 0.4843 0.4271 0.5420          0.7525             NaN
+BANKNIFTY      final        all sessions gap_up  576 229 0.3976 0.3584 0.4381          0.0000             NaN
+BANKNIFTY      final        all sessions oc_pos  576 279 0.4844 0.4438 0.5252          0.5676             NaN
+BANKNIFTY      final t+1 expiry day (D0) gap_up   44  12 0.2727 0.1635 0.4185          0.0006          0.0752
+BANKNIFTY      final t+1 expiry day (D0) oc_pos   44  20 0.4545 0.3171 0.5993          0.9863          0.6986
+BANKNIFTY      final      t+1 not expiry gap_up  530 217 0.4094 0.3684 0.4518          0.0000             NaN
+BANKNIFTY      final      t+1 not expiry oc_pos  530 257 0.4849 0.4426 0.5274          0.6789             NaN
+   SENSEX  discovery        all sessions gap_up  296 157 0.5304 0.4735 0.5865             NaN             NaN
+   SENSEX  discovery        all sessions oc_pos  296 150 0.5068 0.4501 0.5633             NaN             NaN
+   SENSEX  discovery t+1 expiry day (D0) gap_up    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX  discovery t+1 expiry day (D0) oc_pos    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX  discovery      t+1 not expiry gap_up    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX  discovery      t+1 not expiry oc_pos    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX validation        all sessions gap_up  365 188 0.5151 0.4639 0.5659          0.6947             NaN
+   SENSEX validation        all sessions oc_pos  365 180 0.4932 0.4422 0.5442          0.7279             NaN
+   SENSEX validation t+1 expiry day (D0) gap_up    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX validation t+1 expiry day (D0) oc_pos    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX validation      t+1 not expiry gap_up    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX validation      t+1 not expiry oc_pos    0   0    NaN    NaN    NaN             NaN             NaN
+   SENSEX      final        all sessions gap_up  576 255 0.4427 0.4027 0.4835          0.0140             NaN
+   SENSEX      final        all sessions oc_pos  576 259 0.4497 0.4095 0.4905          0.1096             NaN
+   SENSEX      final t+1 expiry day (D0) gap_up  106  49 0.4623 0.3703 0.5568             NaN          0.4661
+   SENSEX      final t+1 expiry day (D0) oc_pos  106  46 0.4340 0.3436 0.5290             NaN          0.6228
+   SENSEX      final      t+1 not expiry gap_up  395 167 0.4228 0.3750 0.4720             NaN             NaN
+   SENSEX      final      t+1 not expiry oc_pos  395 182 0.4608 0.4122 0.5101             NaN             NaN
+  discovery D0 NIFTY gap_up equals bias ref_discovery: True (n 216, 0.5926 vs 0.5926)
+  discovery D0 NIFTY oc_pos equals bias ref_discovery: True (n 216, 0.4815 vs 0.4815)
+  discovery D0 BANKNIFTY gap_up equals bias ref_discovery: True (n 261, 0.5517 vs 0.5517)
+  discovery D0 BANKNIFTY oc_pos equals bias ref_discovery: True (n 261, 0.4559 vs 0.4559)
+       ul     split labels prev  nxt   n   k   rate  ci_lo  ci_hi   base    diff      p  chi2_p
+    NIFTY discovery minute down down 299  73 0.2441 0.1989 0.2959 0.2427  0.0015 0.9463  0.9127
+    NIFTY discovery minute down flat 299  50 0.1672 0.1292 0.2137 0.1591  0.0081 0.6926  0.9127
+    NIFTY discovery minute down   up 299 176 0.5886 0.5321 0.6429 0.5982 -0.0096 0.7681  0.9127
+    NIFTY discovery minute flat down 196  45 0.2296 0.1762 0.2933 0.2427 -0.0131 0.7390  0.9127
+    NIFTY discovery minute flat flat 196  28 0.1429 0.1007 0.1987 0.1591 -0.0162 0.6251  0.9127
+    NIFTY discovery minute flat   up 196 123 0.6276 0.5580 0.6922 0.5982  0.0293 0.4235  0.9127
+    NIFTY discovery minute   up down 736 181 0.2459 0.2162 0.2783 0.2427  0.0032 0.8299  0.9127
+    NIFTY discovery minute   up flat 736 118 0.1603 0.1356 0.1886 0.1591  0.0012 0.9197  0.9127
+    NIFTY discovery minute   up   up 736 437 0.5938 0.5579 0.6287 0.5982 -0.0045 0.8216  0.9127
+    NIFTY     final minute down down 184  68 0.3696 0.3032 0.4413 0.3194  0.0501 0.1546  0.2769
+    NIFTY     final minute down flat 184  47 0.2554 0.1979 0.3230 0.2517  0.0037 0.9323  0.2769
+    NIFTY     final minute down   up 184  69 0.3750 0.3083 0.4468 0.4288 -0.0538 0.1569  0.2769
+    NIFTY     final minute flat down 145  39 0.2690 0.2034 0.3464 0.3194 -0.0505 0.2127  0.2769
+    NIFTY     final minute flat flat 145  40 0.2759 0.2096 0.3537 0.2517  0.0241 0.5035  0.2769
+    NIFTY     final minute flat   up 145  66 0.4552 0.3763 0.5363 0.4288  0.0264 0.5572  0.2769
+    NIFTY     final minute   up down 247  77 0.3117 0.2572 0.3720 0.3194 -0.0077 0.8379  0.2769
+    NIFTY     final minute   up flat 247  58 0.2348 0.1863 0.2915 0.2517 -0.0169 0.6078  0.2769
+    NIFTY     final minute   up   up 247 112 0.4534 0.3925 0.5158 0.4288  0.0246 0.4410  0.2769
+BANKNIFTY discovery minute down down 376 116 0.3085 0.2640 0.3569 0.3052  0.0033 0.9108  0.0077
+BANKNIFTY discovery minute down flat 376  38 0.1011 0.0745 0.1357 0.1315 -0.0304 0.0926  0.0077
+BANKNIFTY discovery minute down   up 376 222 0.5904 0.5400 0.6390 0.5633  0.0271 0.2987  0.0077
+BANKNIFTY discovery minute flat down 162  34 0.2099 0.1543 0.2789 0.3052 -0.0953 0.0080  0.0077
+BANKNIFTY discovery minute flat flat 162  30 0.1852 0.1329 0.2520 0.1315  0.0537 0.0479  0.0077
+BANKNIFTY discovery minute flat   up 162  98 0.6049 0.5281 0.6770 0.5633  0.0416 0.3037  0.0077
+BANKNIFTY discovery minute   up down 693 226 0.3261 0.2923 0.3619 0.3052  0.0209 0.2318  0.0077
+BANKNIFTY discovery minute   up flat 693  94 0.1356 0.1121 0.1632 0.1315  0.0041 0.7359  0.0077
+BANKNIFTY discovery minute   up   up 693 373 0.5382 0.5010 0.5750 0.5633 -0.0251 0.1929  0.0077
+BANKNIFTY     final minute down down 219  89 0.4064 0.3435 0.4725 0.3819  0.0244 0.4869  0.8309
+BANKNIFTY     final minute down flat 219  49 0.2237 0.1736 0.2834 0.2205  0.0033 0.9350  0.8309
+BANKNIFTY     final minute down   up 219  81 0.3699 0.3087 0.4355 0.3976 -0.0277 0.4476  0.8309
+BANKNIFTY     final minute flat down 128  48 0.3750 0.2959 0.4614 0.3819 -0.0069 0.9276  0.8309
+BANKNIFTY     final minute flat flat 128  29 0.2266 0.1626 0.3064 0.2205  0.0061 0.8318  0.8309
+BANKNIFTY     final minute flat   up 128  51 0.3984 0.3178 0.4850 0.3976  0.0009 1.0000  0.8309
+BANKNIFTY     final minute   up down 229  83 0.3624 0.3029 0.4265 0.3819 -0.0195 0.5865  0.8309
+BANKNIFTY     final minute   up flat 229  49 0.2140 0.1658 0.2716 0.2205 -0.0065 0.8734  0.8309
+BANKNIFTY     final minute   up   up 229  97 0.4236 0.3614 0.4883 0.3976  0.0260 0.4188  0.8309
+   SENSEX discovery minute down down 106  37 0.3491 0.2650 0.4436 0.3581 -0.0091 0.9194  0.9457
+   SENSEX discovery minute down flat 106  12 0.1132 0.0660 0.1875 0.1115  0.0017 0.8779  0.9457
+   SENSEX discovery minute down   up 106  57 0.5377 0.4432 0.6297 0.5304  0.0073 0.9226  0.9457
+   SENSEX discovery minute flat down  33  10 0.3030 0.1738 0.4734 0.3581 -0.0551 0.5888  0.9457
+   SENSEX discovery minute flat flat  33   4 0.1212 0.0482 0.2733 0.1115  0.0097 0.7820  0.9457
+   SENSEX discovery minute flat   up  33  19 0.5758 0.4081 0.7276 0.5304  0.0454 0.7279  0.9457
+   SENSEX discovery minute   up down 156  59 0.3782 0.3059 0.4564 0.3581  0.0201 0.6167  0.9457
+   SENSEX discovery minute   up flat 156  17 0.1090 0.0692 0.1676 0.1115 -0.0025 1.0000  0.9457
+   SENSEX discovery minute   up   up 156  80 0.5128 0.4350 0.5900 0.5304 -0.0176 0.6887  0.9457
+   SENSEX     final minute down down 177  61 0.3446 0.2786 0.4173 0.3073  0.0373 0.2899  0.5935
+   SENSEX     final minute down flat 177  46 0.2599 0.2009 0.3291 0.2500  0.0099 0.7945  0.5935
+   SENSEX     final minute down   up 177  70 0.3955 0.3264 0.4690 0.4427 -0.0472 0.2261  0.5935
+   SENSEX     final minute flat down 144  44 0.3056 0.2362 0.3850 0.3073 -0.0017 1.0000  0.5935
+   SENSEX     final minute flat flat 144  35 0.2431 0.1803 0.3192 0.2500 -0.0069 0.9234  0.5935
+   SENSEX     final minute flat   up 144  65 0.4514 0.3724 0.5329 0.4427  0.0087 0.8669  0.5935
+   SENSEX     final minute   up down 255  72 0.2824 0.2306 0.3405 0.3073 -0.0249 0.4157  0.5935
+   SENSEX     final minute   up flat 255  63 0.2471 0.1981 0.3035 0.2500 -0.0029 1.0000  0.5935
+   SENSEX     final minute   up   up 255 120 0.4706 0.4102 0.5318 0.4427  0.0279 0.3780  0.5935
+done

@@ -1,0 +1,43 @@
+ul,split,item,value,n,p
+NIFTY,validation,gap dir agreement minute vs official,0.8925619834710744,363,
+NIFTY,validation,confusion minute=down official=down,71.0,363,
+NIFTY,validation,confusion minute=down official=flat,12.0,363,
+NIFTY,validation,confusion minute=down official=up,0.0,363,
+NIFTY,validation,confusion minute=flat official=down,8.0,363,
+NIFTY,validation,confusion minute=flat official=flat,60.0,363,
+NIFTY,validation,confusion minute=flat official=up,9.0,363,
+NIFTY,validation,confusion minute=up official=down,0.0,363,
+NIFTY,validation,confusion minute=up official=flat,10.0,363,
+NIFTY,validation,confusion minute=up official=up,193.0,363,
+NIFTY,validation,rate up minute,0.559228650137741,363,
+NIFTY,validation,rate up official,0.5564738292011019,363,0.9404304551129389
+NIFTY,validation,rate flat minute,0.21212121212121213,363,
+NIFTY,validation,rate flat official,0.22589531680440772,363,0.6536539334040219
+NIFTY,validation,rate down minute,0.22865013774104684,363,
+NIFTY,validation,rate down official,0.21763085399449036,363,0.7214220745018611
+NIFTY,validation,"corr(minute-official close, y_gap minute)",0.02494605904274537,363,0.6356990697891576
+NIFTY,validation,slope y_gap on close noise,0.12910185228633386,363,
+NIFTY,validation,"corr(f_mom1, y_gap minute)",0.1081228545722622,363,0.039498868045070086
+NIFTY,validation,"corr(f_mom1, y_gap official)",0.08397710006987257,363,0.11020266952386293
+NIFTY,validation,share |gap| within 0.05 pp of the 0.1 % band edge,0.22038567493112948,363,
+BANKNIFTY,validation,gap dir agreement minute vs official,0.8650137741046832,363,
+BANKNIFTY,validation,confusion minute=down official=down,86.0,363,
+BANKNIFTY,validation,confusion minute=down official=flat,10.0,363,
+BANKNIFTY,validation,confusion minute=down official=up,1.0,363,
+BANKNIFTY,validation,confusion minute=flat official=down,13.0,363,
+BANKNIFTY,validation,confusion minute=flat official=flat,44.0,363,
+BANKNIFTY,validation,confusion minute=flat official=up,15.0,363,
+BANKNIFTY,validation,confusion minute=up official=down,0.0,363,
+BANKNIFTY,validation,confusion minute=up official=flat,10.0,363,
+BANKNIFTY,validation,confusion minute=up official=up,184.0,363,
+BANKNIFTY,validation,rate up minute,0.5344352617079889,363,
+BANKNIFTY,validation,rate up official,0.5509641873278237,363,0.6548788611992271
+BANKNIFTY,validation,rate flat minute,0.19834710743801653,363,
+BANKNIFTY,validation,rate flat official,0.1763085399449036,363,0.4466799034984408
+BANKNIFTY,validation,rate down minute,0.26721763085399447,363,
+BANKNIFTY,validation,rate down official,0.2727272727272727,363,0.8672138771639669
+BANKNIFTY,validation,"corr(minute-official close, y_gap minute)",0.0057717292019131275,363,0.9127362466671416
+BANKNIFTY,validation,slope y_gap on close noise,0.027200245530415227,363,
+BANKNIFTY,validation,"corr(f_mom1, y_gap minute)",0.17136645836428482,363,0.0010454930344421603
+BANKNIFTY,validation,"corr(f_mom1, y_gap official)",0.16208447744056487,363,0.0019484255950116198
+BANKNIFTY,validation,share |gap| within 0.05 pp of the 0.1 % band edge,0.19008264462809918,363,

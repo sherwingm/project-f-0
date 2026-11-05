@@ -1,0 +1,150 @@
+== 1. features / flags / targets recomputed from raw (5 sessions per candidate) ==
+   cid        ul       date     y_date                   feature     mine   theirs  feat_ok  flag_mine  flag_theirs  flag_ok   y_mine  y_theirs  y_ok  n_bars_t  f2_mine  f2_theirs
+PPC032     NIFTY 2026-04-28 2026-04-29                    f_mom5 -2.27344 -2.27344     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC032     NIFTY 2026-03-30 2026-04-01                    f_mom5 -3.26545 -3.26545     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC032     NIFTY 2025-07-14 2025-07-15                    f_mom5 -1.44510 -1.44510     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC032     NIFTY 2026-01-22 2026-01-23                    f_mom5 -1.35825 -1.35825     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+PPC032     NIFTY 2024-08-09 2024-08-12                    f_mom5 -1.35651 -1.35651     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC062     NIFTY 2026-07-17 2026-07-20            f_streak_close  3.00000  3.00000     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC062     NIFTY 2026-07-06 2026-07-07            f_streak_close  4.00000  4.00000     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC062     NIFTY 2024-07-05 2024-07-08            f_streak_close  3.00000  3.00000     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC062     NIFTY 2024-08-29 2024-08-30            f_streak_close  2.00000  2.00000     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC062     NIFTY 2024-08-16 2024-08-19            f_streak_close  2.00000  2.00000     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC092 BANKNIFTY 2026-02-19 2026-02-20                      o_cc -1.39734 -1.39734     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC092 BANKNIFTY 2026-09-15 2026-09-16                      o_cc -1.43411 -1.43411     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC092 BANKNIFTY 2025-05-08 2025-05-09                      o_cc -0.92078 -0.92078     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC092 BANKNIFTY 2026-02-13 2026-02-16                      o_cc -0.88638 -0.88638     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+PPC092 BANKNIFTY 2024-07-05 2024-07-08                      o_cc -0.88095 -0.88095     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC098 BANKNIFTY 2024-07-25 2024-07-26                    f_mom5 -3.18250 -3.18250     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC098 BANKNIFTY 2026-03-10 2026-03-11                    f_mom5 -4.76802 -4.76802     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC098 BANKNIFTY 2025-04-09 2025-04-11                    f_mom5 -2.11980 -2.11980     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC098 BANKNIFTY 2025-01-15 2025-01-16                    f_mom5 -2.11252 -2.11252     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+PPC098 BANKNIFTY 2025-09-01 2025-09-02                    f_mom5 -2.10154 -2.10154     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC129 BANKNIFTY 2024-12-13 2024-12-16             f_fut_vol_r20  1.88697  1.88697     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC129 BANKNIFTY 2024-08-16 2024-08-19             f_fut_vol_r20  1.29291  1.29291     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+PPC129 BANKNIFTY 2026-07-24 2026-07-27             f_fut_vol_r20  1.21131  1.21131     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+PPC129 BANKNIFTY 2025-11-26 2025-11-27             f_fut_vol_r20  1.20168  1.20168     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+PPC129 BANKNIFTY 2025-09-24 2025-09-25             f_fut_vol_r20  1.20133  1.20133     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC08 BANKNIFTY 2024-11-25 2024-11-26                wall_width  7.66292  7.66292     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC08 BANKNIFTY 2024-10-09 2024-10-10                wall_width 37.19058 37.19058     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC08 BANKNIFTY 2026-09-22 2026-09-23                wall_width  5.33660  5.33660     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC08 BANKNIFTY 2026-07-28 2026-07-29                wall_width  5.28926  5.28926     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC08 BANKNIFTY 2026-07-08 2026-07-09                wall_width  5.27926  5.27926     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC13     NIFTY 2026-04-29 2026-04-30                 wall_near  3.48989  3.48989     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  OC13     NIFTY 2026-03-27 2026-03-30                 wall_near  5.09952  5.09952     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  OC13     NIFTY 2025-07-04 2025-07-07                 wall_near  1.83683  1.83683     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC13     NIFTY 2026-02-13 2026-02-16                 wall_near  1.80888  1.80888     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+  OC13     NIFTY 2025-02-19 2025-02-20                 wall_near  1.80847  1.80847     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC17     NIFTY 2025-03-25 2025-03-26                wall_width  8.47237  8.47237     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  OC17     NIFTY 2025-04-24 2025-04-25                wall_width  6.18683  6.18683     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  OC17     NIFTY 2024-07-29 2024-07-30                wall_width  6.03842  6.03842     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC17     NIFTY 2024-10-09 2024-10-10                wall_width  5.99531  5.99531     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC17     NIFTY 2026-01-23 2026-01-27                wall_width  5.98388  5.98388     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+  OC21     NIFTY 2026-10-28 2026-10-29                 wall_near  5.73223  5.73223     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  OC21     NIFTY 2025-06-03 2025-06-04                 wall_near  2.19411  2.19411     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC21     NIFTY 2025-07-04 2025-07-07                 wall_near  1.83683  1.83683     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  OC21     NIFTY 2026-02-13 2026-02-16                 wall_near  1.80888  1.80888     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  OC21     NIFTY 2025-02-19 2025-02-20                 wall_near  1.80847  1.80847     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+ OC118 BANKNIFTY 2025-06-12 2025-06-13                    iv_chg  0.92181  0.92181     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+ OC118 BANKNIFTY 2026-02-20 2026-02-23                    iv_chg  1.68881  1.68881     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+ OC118 BANKNIFTY 2026-05-07 2026-05-08                    iv_chg  0.65294  0.65294     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+ OC118 BANKNIFTY 2025-08-08 2025-08-11                    iv_chg  0.64506  0.64506     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+ OC118 BANKNIFTY 2025-02-17 2025-02-18                    iv_chg  0.63668  0.63668     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  M143     NIFTY 2025-05-08 2025-05-09 d_opt_near_straddle_daily  0.86377  0.86377     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  M143     NIFTY 2025-01-30 2025-01-31 d_opt_near_straddle_daily  0.99675  0.99675     True       True         True     True  1.00000   1.00000  True       375      NaN        NaN
+  M143     NIFTY 2026-05-12 2026-05-13 d_opt_near_straddle_daily  0.77221  0.77221     True       True         True     True  0.00000   0.00000  True       375      NaN        NaN
+  M143     NIFTY 2025-01-21 2025-01-22 d_opt_near_straddle_daily  0.76698  0.76698     True      False        False     True  0.00000   0.00000  True       375      NaN        NaN
+  M143     NIFTY 2025-04-16 2025-04-17 d_opt_near_straddle_daily  0.76408  0.76408     True      False        False     True  1.00000   1.00000  True       375      NaN        NaN
+  M218     NIFTY 2024-09-23 2024-09-24 d_opt_near_straddle_daily  0.54150  0.54150     True       True         True     True -0.16699  -0.16699  True       375  1.38567    1.38567
+  M218     NIFTY 2025-06-25 2025-06-26 d_opt_near_straddle_daily  0.53772  0.53772     True       True         True     True  0.09332   0.09332  True       375  1.12963    1.12963
+  M218     NIFTY 2024-12-05 2024-12-06 d_opt_near_straddle_daily  0.66675  0.66675     True       True         True     True -0.32751  -0.32751  True       375  1.13643    1.13643
+  M218     NIFTY 2026-02-23 2026-02-24 d_opt_near_straddle_daily  0.66643  0.66643     True      False        False     True -1.46281  -1.46281  True       375  0.97648    0.97648
+  M218     NIFTY 2024-07-24 2024-07-25 d_opt_near_straddle_daily  0.66996  0.66996     True      False        False     True -0.93937  -0.93937  True       375  0.75503    0.75503
+  M220     NIFTY 2026-06-24 2026-06-25               f_atr14_pct  1.04913  1.04913     True       True         True     True  0.10890   0.10890  True       375  1.20886    1.20886
+  M220     NIFTY 2025-11-13 2025-11-14               f_atr14_pct  0.79726  0.79726     True       True         True     True -0.55014  -0.55014  True       375  1.05748    1.05748
+  M220     NIFTY 2026-06-16 2026-06-17               f_atr14_pct  1.22549  1.22549     True       True         True     True -0.10086  -0.10086  True       375  1.02938    1.02938
+  M220     NIFTY 2026-02-20 2026-02-23               f_atr14_pct  1.23126  1.23126     True      False        False     True  0.16995   0.16995  True       375  0.87208    0.87208
+  M220     NIFTY 2025-01-07 2025-01-08               f_atr14_pct  1.23203  1.23203     True      False        False     True -0.83458  -0.83458  True       375  0.69326    0.69326
+feature ok 65/65, flag ok 65/65, target ok 65/65
+   cid  rows  mine_present  flag_agree  feat_maxdiff
+PPC032   574           574         574  8.881784e-16
+PPC062   574           574         574  0.000000e+00
+PPC092   574           574         574  4.440892e-16
+PPC098   574           574         574  1.776357e-15
+PPC129   574           572         572  4.440892e-16
+  OC08   574           574         574  7.105427e-15
+  OC13   574           574         574  1.776357e-15
+  OC17   574           574         574  3.552714e-15
+  OC21   574           574         574  1.776357e-15
+ OC118   527           527         527  1.776357e-15
+  M143   573           573         573  2.220446e-16
+  M218   573           573         573  2.220446e-16
+  M220   573           573         573  4.440892e-16
+
+== 2. gates and BH recomputed ==
+    id   n     k  rows     rate     base      eff  half_disc       p  p_ok  n_ok  gate1  gate1_ok       q  q_ok            label  label_ok
+PPC032 117  54.0   574  0.46154  0.31010  0.15143    0.12769 0.00042  True  True   True      True 0.00055  True Validated (size)      True
+PPC062  76  16.0   574  0.21053  0.31010 -0.09958    0.06208 0.03645  True  True   True      True 0.03949  True Validated (size)      True
+PPC092  76  53.0   574  0.69737  0.39721  0.30016    0.09200 0.00000  True  True   True      True 0.00000  True Validated (size)      True
+PPC098  72  56.0   574  0.77778  0.39721  0.38057    0.08356 0.00000  True  True   True      True 0.00000  True Validated (size)      True
+PPC129 117  55.0   574  0.47009  0.39721  0.07287    0.04588 0.06557  True  True  False      True 0.06557  True         Rejected      True
+  OC08 302 111.0   574  0.36755  0.24913  0.11842    0.11992 0.00000  True  True  False      True 0.00001  True         Rejected      True
+  OC13 280 125.0   574  0.44643  0.33624  0.11019    0.10138 0.00008  True  True   True      True 0.00015  True Validated (size)      True
+  OC17 281 135.0   574  0.48043  0.33624  0.14419    0.09651 0.00000  True  True   True      True 0.00000  True Validated (size)      True
+  OC21 280 116.0   574  0.41429  0.30836  0.10592    0.08803 0.00011  True  True   True      True 0.00019  True Validated (size)      True
+ OC118 123  40.0   527  0.32520  0.24288  0.08232    0.04309 0.02403  True  True   True      True 0.02840  True Validated (size)      True
+  M143  71  47.0   573  0.66197  0.30716  0.35482    0.12686 0.00000  True  True   True      True 0.00000  True Validated (size)      True
+  M218 138   NaN   573 -0.32067 -0.47693  0.15627    0.10612 0.00006  True  True   True      True 0.00013  True Validated (size)      True
+  M220 126   NaN   573 -0.32853 -0.47693  0.14840    0.10843 0.00026  True  True   True      True 0.00038  True Validated (size)      True
+OC13 flags == OC21 flags: True
+BH q without OC21: {'PPC032': np.float64(0.0006), 'PPC062': np.float64(0.0398), 'PPC092': np.float64(0.0), 'PPC098': np.float64(0.0), 'PPC129': np.float64(0.0656), 'OC08': np.float64(0.0), 'OC13': np.float64(0.0001), 'OC17': np.float64(0.0), 'OC118': np.float64(0.0288), 'M143': np.float64(0.0), 'M218': np.float64(0.0001), 'M220': np.float64(0.0004)}
+
+== 3. eight trades recomputed by hand from options_1m ==
+                        0           1            2           3           4            5           6           7           8
+trade_date     2026-09-15  2026-01-20   2026-02-25  2026-08-06  2025-12-01   2026-05-04  2026-06-23  2025-04-21  2024-10-24
+ctx                    D0          D0        other       other         D-1          D-1          D0       other          D0
+exp_choice              a           a            b           a           b            a           b           a           a
+exit               i_1515    ii_tgt20  iii_d2_0916      i_1515    ii_tgt20  iii_d2_0916      i_1515    ii_tgt20    ii_tgt20
+spot_0915        23576.15     25580.3      25512.6     24641.0     26325.8     24063.55     24071.3    23949.15     24412.7
+K                   23600       25600        25500       24650       26350        24050       24050       23950       24400
+K_theirs          23600.0     25600.0      25500.0     24650.0     26350.0      24050.0     24050.0     23950.0     24400.0
+expiry         2026-09-15  2026-01-20   2026-03-02  2026-08-11  2025-12-02   2026-05-05  2026-06-30  2025-04-24  2024-10-24
+expiry_theirs  2026-09-15  2026-01-20   2026-03-02  2026-08-11  2025-12-02   2026-05-05  2026-06-30  2025-04-24  2024-10-24
+ce_in                20.2        40.9        200.8       130.9       59.85       249.75       159.4      170.95       110.5
+ce_in_t              20.2        40.9        200.8       130.9       59.85       249.75       159.4      170.95       110.5
+pe_in              114.25       76.75        121.0      121.25       90.75        65.55       138.4      160.69        44.8
+pe_in_t            114.25       76.75        121.0      121.25       90.75        65.55       138.4      160.69        44.8
+exit_hm             15:15       09:27        09:16       15:15       11:46        09:16       15:15       15:15       15:15
+exit_hm_t           15:15       09:27        09:16       15:15       11:46        09:16       15:15       15:15       15:15
+ce_out               1.05       22.85        166.9      148.45        20.0        59.75        84.3      254.25         1.4
+ce_out_t             1.05       22.85        166.9      148.45        20.0        59.75        84.3      254.25         1.4
+pe_out             408.35       130.3       104.25       106.0       178.3         83.2       271.6        57.5         0.3
+pe_out_t           408.35       130.3       104.25       106.0       178.3         83.2       271.6        57.5         0.3
+charges            148.98       116.8       137.43       133.3      127.96        121.4       147.2      150.16       96.22
+charges_t          148.98       116.8       137.43       133.3      127.96        121.4       147.2      150.16       96.22
+net              196.7823     26.0843     -18.0586     -1.8914     28.5961     -56.1465     16.3903     -8.4566   -101.3808
+net_t            196.7823     26.0843     -18.0586     -1.8914     28.5961     -56.1465     16.3903     -8.4566   -101.3808
+maxup            224.2469     30.1742       5.7955     13.5039     31.6733       7.2788     21.8435      7.5232      0.7083
+maxup_t          224.2469     30.1742       5.7955     13.5039     31.6733       7.2788     21.8435      7.5232      0.7083
+ok                   True        True         True        True        True         True        True        True        True
+all fills ok: True
+
+== 4. look-ahead / timing ==
+trade_date > signal_date on all rows: True
+exit_date >= trade_date: True
+target exits before 09:17: 0 ; distribution of first hits (top): {'09:35': 7, '11:03': 6, '09:40': 5, '10:47': 5, '10:58': 5}
+trade days with >1 spot 09:15 row: 0 ; of these strike ambiguous: 0
+
+== 5. claim checks ==
+positive mean cells in summary_signals (any group):
+exp_choice        exit  slip        group  n  mean     t
+         a iii_d2_0916   0.5 M220|flagged 72 0.828 0.176
+         b iii_d2_0916   0.5 M220|flagged 97 0.707 0.197
+positive mean cells in summary_expiry:
+Empty DataFrame
+Columns: [exp_choice, exit, slip, group, n, mean, t]
+Index: []
+D0 same-day 15:15: n 107, maxup>=100 22, mean maxup 52.7, median 27.1, mean net -7.21, median net -25.86, mean maxup_net 48.6
+  of those reaching +100 %: mean net at 15:15 108.6, positive 20
+D0 +20 % target: n 107, hit 64, win 0.626, mean -8.08, median 17.51, worst -101.4
+D0 same-day premium Rs median 8074, charges median 110.7

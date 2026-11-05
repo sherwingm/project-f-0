@@ -1,0 +1,72 @@
+    id        ul                   rule context   n  rate  base  effect     p
+PPC023     NIFTY   o_range_pct >= 1.613      W0  32 0.719 0.389   0.330 0.000
+PPC023     NIFTY   o_range_pct >= 1.613      M0  16 0.812 0.487   0.325 0.011
+PPC023     NIFTY   o_range_pct >= 1.613       X 219 0.689 0.400   0.289 0.000
+PPC025     NIFTY        o_cc <= -0.6788      W0  30 0.667 0.389   0.278 0.002
+PPC025     NIFTY        o_cc <= -0.6788      M0  17 0.882 0.487   0.395 0.001
+PPC025     NIFTY        o_cc <= -0.6788       X 247 0.636 0.400   0.236 0.000
+PPC026     NIFTY        o_cc <= -0.6788      W0  30 0.667 0.389   0.278 0.002
+PPC026     NIFTY        o_cc <= -0.6788      M0  17 0.882 0.487   0.395 0.001
+PPC026     NIFTY        o_cc <= -0.6788       X 247 0.636 0.400   0.236 0.000
+PPC032     NIFTY       f_mom5 <= -1.383      W0  37 0.568 0.389   0.179 0.029
+PPC032     NIFTY       f_mom5 <= -1.383      M0  17 0.706 0.487   0.219 0.090
+PPC032     NIFTY       f_mom5 <= -1.383       X 236 0.678 0.400   0.278 0.000
+PPC033     NIFTY       f_mom5 <= -1.383      W0  37 0.568 0.389   0.179 0.029
+PPC033     NIFTY       f_mom5 <= -1.383      M0  17 0.706 0.487   0.219 0.090
+PPC033     NIFTY       f_mom5 <= -1.383       X 236 0.678 0.400   0.278 0.000
+PPC039     NIFTY  f_dist_low20 <= 1.797      W0  40 0.500 0.389   0.111 0.194
+PPC039     NIFTY  f_dist_low20 <= 1.797      M0  21 0.619 0.487   0.132 0.277
+PPC039     NIFTY  f_dist_low20 <= 1.797       X 276 0.529 0.400   0.129 0.000
+PPC055     NIFTY    f_vix_chg1 >= 3.274      W0  24 0.583 0.389   0.194 0.060
+PPC055     NIFTY    f_vix_chg1 >= 3.274      M0  22 0.500 0.487   0.013 1.000
+PPC055     NIFTY    f_vix_chg1 >= 3.274       X 272 0.515 0.400   0.115 0.000
+PPC056     NIFTY    f_vix_chg1 >= 3.274      W0  24 0.583 0.389   0.194 0.060
+PPC056     NIFTY    f_vix_chg1 >= 3.274      M0  22 0.500 0.487   0.013 1.000
+PPC056     NIFTY    f_vix_chg1 >= 3.274       X 272 0.515 0.400   0.115 0.000
+PPC057     NIFTY f_fut_vol_r20 >= 1.207      W0  40 0.550 0.389   0.161 0.050
+PPC057     NIFTY f_fut_vol_r20 >= 1.207      M0  24 0.500 0.487   0.013 1.000
+PPC057     NIFTY f_fut_vol_r20 >= 1.207       X 265 0.513 0.400   0.113 0.000
+PPC058     NIFTY f_fut_vol_r20 >= 1.207      W0  40 0.550 0.389   0.161 0.050
+PPC058     NIFTY f_fut_vol_r20 >= 1.207      M0  24 0.500 0.487   0.013 1.000
+PPC058     NIFTY f_fut_vol_r20 >= 1.207       X 265 0.513 0.400   0.113 0.000
+PPC062     NIFTY    f_streak_close >= 3      W0  46 0.283 0.389  -0.106 0.173
+PPC062     NIFTY    f_streak_close >= 3      M0  14 0.286 0.487  -0.201 0.182
+PPC062     NIFTY    f_streak_close >= 3       X 243 0.288 0.400  -0.112 0.000
+PPC089 BANKNIFTY   o_range_pct >= 2.405      W0  43 0.907 0.613   0.294 0.000
+PPC089 BANKNIFTY   o_range_pct >= 2.405      M0  11 1.000 0.641   0.359 0.010
+PPC089 BANKNIFTY   o_range_pct >= 2.405       X 210 0.900 0.612   0.288 0.000
+PPC090 BANKNIFTY   o_range_pct >= 2.405      W0  43 0.907 0.613   0.294 0.000
+PPC090 BANKNIFTY   o_range_pct >= 2.405      M0  11 1.000 0.641   0.359 0.010
+PPC090 BANKNIFTY   o_range_pct >= 2.405       X 210 0.900 0.612   0.288 0.000
+PPC092 BANKNIFTY        o_cc <= -0.9088      W0  37 0.730 0.613   0.117 0.177
+PPC092 BANKNIFTY        o_cc <= -0.9088      M0  15 0.867 0.641   0.226 0.103
+PPC092 BANKNIFTY        o_cc <= -0.9088       X 232 0.841 0.612   0.229 0.000
+PPC093 BANKNIFTY        o_cc <= -0.9088      W0  37 0.730 0.613   0.117 0.177
+PPC093 BANKNIFTY        o_cc <= -0.9088      M0  15 0.867 0.641   0.226 0.103
+PPC093 BANKNIFTY        o_cc <= -0.9088       X 232 0.841 0.612   0.229 0.000
+PPC094 BANKNIFTY   o_gap_pct <= -0.3022      W0  45 0.733 0.613   0.120 0.125
+PPC094 BANKNIFTY   o_gap_pct <= -0.3022      M0  19 0.789 0.641   0.148 0.234
+PPC094 BANKNIFTY   o_gap_pct <= -0.3022       X 236 0.775 0.612   0.163 0.000
+PPC095 BANKNIFTY   o_gap_pct <= -0.3022      W0  45 0.733 0.613   0.120 0.125
+PPC095 BANKNIFTY   o_gap_pct <= -0.3022      M0  19 0.789 0.641   0.148 0.234
+PPC095 BANKNIFTY   o_gap_pct <= -0.3022       X 236 0.775 0.612   0.163 0.000
+PPC098 BANKNIFTY       f_mom5 <= -2.116      W0  48 0.708 0.613   0.095 0.186
+PPC098 BANKNIFTY       f_mom5 <= -2.116      M0  13 0.692 0.641   0.051 0.781
+PPC098 BANKNIFTY       f_mom5 <= -2.116       X 228 0.838 0.612   0.226 0.000
+PPC099 BANKNIFTY       f_mom5 <= -2.116      W0  48 0.708 0.613   0.095 0.186
+PPC099 BANKNIFTY       f_mom5 <= -2.116      M0  13 0.692 0.641   0.051 0.781
+PPC099 BANKNIFTY       f_mom5 <= -2.116       X 228 0.838 0.612   0.226 0.000
+PPC129 BANKNIFTY f_fut_vol_r20 >= 1.211      W0  61 0.672 0.613   0.059 0.361
+PPC129 BANKNIFTY f_fut_vol_r20 >= 1.211      M0  11 0.636 0.641  -0.005 1.000
+PPC129 BANKNIFTY f_fut_vol_r20 >= 1.211       X 258 0.709 0.612   0.097 0.001
+PPC130 BANKNIFTY f_fut_vol_r20 >= 1.211      W0  61 0.672 0.613   0.059 0.361
+PPC130 BANKNIFTY f_fut_vol_r20 >= 1.211      M0  11 0.636 0.641  -0.005 1.000
+PPC130 BANKNIFTY f_fut_vol_r20 >= 1.211       X 258 0.709 0.612   0.097 0.001
+PPC134 BANKNIFTY   f_streak_close <= -3      W0  27 0.593 0.613  -0.020 0.845
+PPC134 BANKNIFTY   f_streak_close <= -3      M0   7 0.429 0.641  -0.212 0.259
+PPC134 BANKNIFTY   f_streak_close <= -3       X 148 0.757 0.612   0.145 0.000
+                grp   n  range_n  cc_n  persist    up
+     monthly_expiry  10    0.881 0.512    0.500 0.500
+              other 122    0.965 0.610    0.541 0.549
+thursday_not_expiry  36    0.965 0.510    0.611 0.722
+  weekly_expiry_wed  33    1.014 0.600    0.485 0.485

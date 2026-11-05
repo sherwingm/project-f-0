@@ -1,0 +1,13 @@
+underlying,expiry,why,weekday,bhav_first_traded,bhav_last_traded,last_eq_expiry,futures_listed,opt_vol_on_expiry,regime_day,regime_day_is_session,ghost_rows,ghost_last_traded,cal_present,cal_kind,cal_shifted,cal_last_traded,cal_has_futures,cal_quarterly,cal_relabelled_from
+NIFTY,2019-02-14,first NIFTY weekly,Thursday,2019-02-11,2019-02-14,True,False,3221193.0,,,0,,True,weekly,False,2019-02-14,False,False,
+NIFTY,2023-03-29,"holiday shift (Ram Navami), quarterly",Wednesday,2022-12-22,2023-03-29,True,True,133932731.0,2023-03-30,False,4654,2022-12-21,True,monthly,True,2023-03-29,True,True,2023-03-30
+BANKNIFTY,2023-06-28,late holiday shift (Bakri Id),Wednesday,2023-06-28,2023-06-28,True,True,285581732.0,2023-06-29,False,18011,2023-06-27,True,monthly,True,2023-06-28,True,True,2023-06-29
+BANKNIFTY,2023-09-06,first BANKNIFTY Wednesday weekly,Wednesday,2023-09-04,2023-09-06,True,False,485379312.0,,,0,,True,weekly,False,2023-09-06,False,False,2023-09-07
+BANKNIFTY,2024-03-27,first BANKNIFTY last-Wednesday monthly,Wednesday,2024-03-01,2024-03-27,True,True,527944550.0,,,0,,True,monthly,False,2024-03-27,True,True,2024-03-28
+BANKNIFTY,2024-11-13,last BANKNIFTY weekly,Wednesday,2024-10-10,2024-11-13,True,False,710224659.0,,,0,,True,weekly,False,2024-11-13,False,False,
+BANKNIFTY,2025-01-30,BANKNIFTY monthly back to Thursday,Thursday,2025-01-02,2025-01-30,True,True,188647757.0,,,0,,True,monthly,False,2025-01-30,True,False,2025-01-29
+NIFTY,2025-08-28,last NIFTY Thursday monthly,Thursday,2025-05-30,2025-08-28,True,True,253056220.0,,,0,,True,monthly,False,2025-08-28,True,False,
+NIFTY,2025-09-02,first NIFTY Tuesday weekly,Tuesday,2025-07-25,2025-09-02,True,False,345607365.0,,,0,,True,weekly,False,2025-09-02,False,False,
+NIFTY,2025-09-30,first NIFTY Tuesday monthly (quarterly),Tuesday,2025-08-01,2025-09-30,True,True,259596230.0,,,0,,True,monthly,False,2025-09-30,True,True,2025-09-25
+NIFTY,2025-10-20,Muhurat shift,Monday,2025-09-17,2025-10-20,True,False,311031142.0,2025-10-21,True,0,,True,weekly,True,2025-10-20,False,False,
+NIFTY,2026-03-30,holiday shift (31-Mar-2026),Monday,2025-12-29,2026-03-30,True,True,354166476.0,2026-03-31,False,2588,2025-12-26,True,monthly,True,2026-03-30,True,True,2026-03-26;2026-03-31

@@ -1,0 +1,105 @@
+underlying,check,value,note
+NIFTY,reproduce_iv,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+NIFTY,reproduce_iv_chg,0.0,max |mine - theirs|; non-null mine 1299 theirs 1299
+NIFTY,reproduce_strad_chg,0.0,max |mine - theirs|; non-null mine 1593 theirs 1593
+NIFTY,reproduce_wall_width,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+NIFTY,reproduce_wall_near,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+NIFTY,reproduce_mp_abs,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+NIFTY,reproduce_vol_surge,0.0,max |mine - theirs|; non-null mine 1522 theirs 1522
+NIFTY,panel_straddle_chg1_is_same_expiry_diff,0.0,f_opt_near_straddle_chg1 vs my straddle_pct diff with same near expiry
+NIFTY,near_expiry_after_t,0.9987492182614134,share of rows with near expiry > t
+NIFTY,NW_near_expiry_eq_tplus1,1.0,NW rows 216
+NIFTY,spearman_iv_vs_f_vix_close,0.8586409693495667,ALL disc+val
+NIFTY,spearman_iv_vs_n_sess,0.03825066263357767,ALL disc+val
+NIFTY,spearman_iv_vs_o_range_pct,0.601386054785895,ALL disc+val
+NIFTY,spearman_iv_vs_f_hv10,0.713749137642451,ALL disc+val
+NIFTY,spearman_wall_width_vs_f_vix_close,0.5402819460242022,ALL disc+val
+NIFTY,spearman_wall_width_vs_n_sess,0.27506237987788623,ALL disc+val
+NIFTY,spearman_wall_width_vs_o_range_pct,0.4043019954998359,ALL disc+val
+NIFTY,spearman_wall_width_vs_f_hv10,0.4669675865571368,ALL disc+val
+NIFTY,spearman_wall_near_vs_f_vix_close,0.49765707187558933,ALL disc+val
+NIFTY,spearman_wall_near_vs_n_sess,0.1579982001981093,ALL disc+val
+NIFTY,spearman_wall_near_vs_o_range_pct,0.39269872461709615,ALL disc+val
+NIFTY,spearman_wall_near_vs_f_hv10,0.4232710860106817,ALL disc+val
+NIFTY,spearman_mp_abs_vs_f_vix_close,0.23016096084204163,ALL disc+val
+NIFTY,spearman_mp_abs_vs_n_sess,0.21389474315630244,ALL disc+val
+NIFTY,spearman_mp_abs_vs_o_range_pct,0.28608991452550514,ALL disc+val
+NIFTY,spearman_mp_abs_vs_f_hv10,0.20825838918055325,ALL disc+val
+NIFTY,spearman_strad_chg_vs_f_vix_close,-0.374633384382241,ALL disc+val
+NIFTY,spearman_strad_chg_vs_n_sess,0.3320656181953142,ALL disc+val
+NIFTY,spearman_strad_chg_vs_o_range_pct,-0.16612843161051513,ALL disc+val
+NIFTY,spearman_strad_chg_vs_f_hv10,-0.34440178528722243,ALL disc+val
+NIFTY,spearman_vol_surge_vs_f_vix_close,0.13455510795994477,ALL disc+val
+NIFTY,spearman_vol_surge_vs_n_sess,-0.02951515723851537,ALL disc+val
+NIFTY,spearman_vol_surge_vs_o_range_pct,0.468785791408415,ALL disc+val
+NIFTY,spearman_vol_surge_vs_f_hv10,0.14195649869636326,ALL disc+val
+NIFTY,spearman_iv_chg_vs_f_vix_close,-0.049658998249727575,ALL disc+val
+NIFTY,spearman_iv_chg_vs_n_sess,0.06462259776528731,ALL disc+val
+NIFTY,spearman_iv_chg_vs_o_range_pct,0.017754751976815933,ALL disc+val
+NIFTY,spearman_iv_chg_vs_f_hv10,-0.08546940966747356,ALL disc+val
+NIFTY,strad_chg_mean_by_weekday_of_t,,Fri -0.176; Mon -0.217; Sat nan; Thu -0.209; Tue -0.271; Wed -0.306
+BANKNIFTY,reproduce_iv,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+BANKNIFTY,reproduce_iv_chg,0.0,max |mine - theirs|; non-null mine 1254 theirs 1254
+BANKNIFTY,reproduce_strad_chg,0.0,max |mine - theirs|; non-null mine 1593 theirs 1593
+BANKNIFTY,reproduce_wall_width,0.0,max |mine - theirs|; non-null mine 1596 theirs 1596
+BANKNIFTY,reproduce_wall_near,0.0,max |mine - theirs|; non-null mine 1596 theirs 1596
+BANKNIFTY,reproduce_mp_abs,0.0,max |mine - theirs|; non-null mine 1597 theirs 1597
+BANKNIFTY,reproduce_vol_surge,0.0,max |mine - theirs|; non-null mine 1578 theirs 1578
+BANKNIFTY,panel_straddle_chg1_is_same_expiry_diff,0.0,f_opt_near_straddle_chg1 vs my straddle_pct diff with same near expiry
+BANKNIFTY,near_expiry_after_t,0.9987492182614134,share of rows with near expiry > t
+BANKNIFTY,NW_near_expiry_eq_tplus1,1.0,NW rows 261
+BANKNIFTY,spearman_iv_vs_f_vix_close,0.841679965383947,ALL disc+val
+BANKNIFTY,spearman_iv_vs_n_sess,0.014002256064335791,ALL disc+val
+BANKNIFTY,spearman_iv_vs_o_range_pct,0.6602313964309231,ALL disc+val
+BANKNIFTY,spearman_iv_vs_f_hv10,0.7794637784514704,ALL disc+val
+BANKNIFTY,spearman_wall_width_vs_f_vix_close,0.4675845896586019,ALL disc+val
+BANKNIFTY,spearman_wall_width_vs_n_sess,0.0995554324115786,ALL disc+val
+BANKNIFTY,spearman_wall_width_vs_o_range_pct,0.4787446876234925,ALL disc+val
+BANKNIFTY,spearman_wall_width_vs_f_hv10,0.49225056542173945,ALL disc+val
+BANKNIFTY,spearman_wall_near_vs_f_vix_close,0.4453479942337033,ALL disc+val
+BANKNIFTY,spearman_wall_near_vs_n_sess,0.018341182022333376,ALL disc+val
+BANKNIFTY,spearman_wall_near_vs_o_range_pct,0.44787030079099166,ALL disc+val
+BANKNIFTY,spearman_wall_near_vs_f_hv10,0.45654527401229306,ALL disc+val
+BANKNIFTY,spearman_mp_abs_vs_f_vix_close,0.3597262709308565,ALL disc+val
+BANKNIFTY,spearman_mp_abs_vs_n_sess,0.0005772914411162533,ALL disc+val
+BANKNIFTY,spearman_mp_abs_vs_o_range_pct,0.4883493435773758,ALL disc+val
+BANKNIFTY,spearman_mp_abs_vs_f_hv10,0.33729523943967293,ALL disc+val
+BANKNIFTY,spearman_strad_chg_vs_f_vix_close,-0.41582822452133233,ALL disc+val
+BANKNIFTY,spearman_strad_chg_vs_n_sess,0.28543045834626163,ALL disc+val
+BANKNIFTY,spearman_strad_chg_vs_o_range_pct,-0.2462968430139741,ALL disc+val
+BANKNIFTY,spearman_strad_chg_vs_f_hv10,-0.40438193657521326,ALL disc+val
+BANKNIFTY,spearman_vol_surge_vs_f_vix_close,-0.013967701369091904,ALL disc+val
+BANKNIFTY,spearman_vol_surge_vs_n_sess,0.014688197560345414,ALL disc+val
+BANKNIFTY,spearman_vol_surge_vs_o_range_pct,0.35934969832384767,ALL disc+val
+BANKNIFTY,spearman_vol_surge_vs_f_hv10,0.03188033075778554,ALL disc+val
+BANKNIFTY,spearman_iv_chg_vs_f_vix_close,0.012125990432067786,ALL disc+val
+BANKNIFTY,spearman_iv_chg_vs_n_sess,0.09630795876895955,ALL disc+val
+BANKNIFTY,spearman_iv_chg_vs_o_range_pct,0.038156497895141375,ALL disc+val
+BANKNIFTY,spearman_iv_chg_vs_f_hv10,-0.05932303947536234,ALL disc+val
+BANKNIFTY,strad_chg_mean_by_weekday_of_t,,Fri -0.216; Mon -0.294; Sat nan; Thu -0.292; Tue -0.405; Wed -0.438
+BANKNIFTY,OC01_threshold_eq_disc_quantile,0.0,mine 22.6528; target median diff 0
+NIFTY,OC02_threshold_eq_disc_quantile,0.0,mine 15.6581; target median diff 0
+NIFTY,OC04_threshold_eq_disc_quantile,0.0,mine 15.6581; target median diff 0
+BANKNIFTY,OC08_threshold_eq_disc_quantile,0.0,mine 5.2894; target median diff 0
+BANKNIFTY,OC10_threshold_eq_disc_quantile,0.0,mine 22.6528; target median diff 0
+BANKNIFTY,OC11_threshold_eq_disc_quantile,0.0,mine 1.70589; target median diff 0
+NIFTY,OC13_threshold_eq_disc_quantile,0.0,mine 1.83441; target median diff 0
+NIFTY,OC17_threshold_eq_disc_quantile,0.0,mine 6.03737; target median diff 0
+NIFTY,OC21_threshold_eq_disc_quantile,0.0,mine 1.83441; target median diff 0
+BANKNIFTY,OC22_threshold_eq_disc_quantile,0.0,mine -0.398609; target median diff 0
+BANKNIFTY,OC24_threshold_eq_disc_quantile,0.0,mine 0.579285; target median diff 0
+NIFTY,OC25_threshold_eq_disc_quantile,0.0,mine 6.03737; target median diff 0
+NIFTY,OC39_threshold_eq_disc_quantile,0.0,mine 0.753906; target median diff 0
+NIFTY,OC43_threshold_eq_disc_quantile,5.551115123125783e-17,mine -0.294362; target median diff 0
+NIFTY,OC52_threshold_eq_disc_quantile,2.220446049250313e-16,mine 1.16411; target median diff 0
+NIFTY,OC59_threshold_eq_disc_quantile,5.551115123125783e-17,mine -0.294362; target median diff 0
+NIFTY,OC94_threshold_eq_disc_quantile,0.0,mine 1.21162; target median diff 1.1e-16
+BANKNIFTY,OC97_threshold_eq_disc_quantile,0.0,mine 4.30937; target median diff 0
+BANKNIFTY,OC118_threshold_eq_disc_quantile,0.0,mine 0.651378; target median diff 0
+-,frozen_has_no_validation_columns,0.0,"cand,id,kind,underlying,ctx,signal,bucket,rule,decision_time,target,n,k,rate,ci_lo,ci_hi,base,effect,p,bh_q,freeze_reason,cond_mean,base_mean"
+-,mtime_thresholds.csv,1793844384.8392813,
+-,mtime_hypotheses.csv,1793844384.8350935,
+-,mtime_candidates_frozen.csv,1793844384.9526618,
+-,mtime_validation.csv,1793844516.0965364,
+-,family_rows_with_p,1647.0,expected 2 UL x 4 ctx x 192 bucket + 6 x 19 structural = 1650
+-,bh_recomputed_max_abs_diff_q,0.001812892350824491,NaN p set to 1 in my recompute only for the length; compared on non-NaN rows

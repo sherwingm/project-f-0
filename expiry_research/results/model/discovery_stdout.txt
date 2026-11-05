@@ -1,0 +1,31 @@
+context tests: 330
+NIFTY D2 cumulative tests: 5136
+NIFTY TCLOSE cumulative tests: 9939
+NIFTY T1515 cumulative tests: 14512
+BANKNIFTY D2 cumulative tests: 19324
+BANKNIFTY TCLOSE cumulative tests: 24140
+BANKNIFTY T1515 cumulative tests: 28709
+discovery family size (tests with a p-value): 28518 of 28709 rows
+BH-significant at 10 %: 3336
+frozen candidates: 241 sha256 9b9490102276daaedde3519c7e55cbdde55088cacc4085d111c05670fe75aa4d
+ul         target    
+BANKNIFTY  big_cc        15
+           big_exc       15
+           gap_abs       20
+           gap_filled    14
+           gap_up         9
+           high_pc       15
+           low_pc        16
+           oc_up          4
+           ret60_up       3
+NIFTY      big_cc        17
+           big_exc       17
+           gap_abs       22
+           gap_filled    15
+           gap_up         8
+           high_pc       15
+           low_pc        16
+           oc_up          9
+           ret15_up       6
+           ret30_up       2
+           ret60_up       3
