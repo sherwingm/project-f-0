@@ -336,6 +336,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.5,
    "upstox_minus_kotak_quote_time_s_median": -65.5
+  },
+  {
+   "at": "11:20:12",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.238,
+   "same_best_bid_pct": 43.9,
+   "same_best_ask_pct": 37.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.5,
+   "upstox_minus_kotak_quote_time_s_median": -58.5
   }
  ],
  "top_gaps": [
@@ -460,6 +474,13 @@
   },
   {
    "contract": "BSE26NOV4000CE",
+   "gap_pct": 1.238,
+   "kotak": 32.3,
+   "upstox": 31.9,
+   "at": "11:20"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
    "gap_pct": 1.164,
    "kotak": 34.35,
    "upstox": 33.95,
@@ -471,23 +492,16 @@
    "kotak": 4.3,
    "upstox": 4.25,
    "at": "10:40"
-  },
-  {
-   "contract": "AXISBANK26NOV1280PE",
-   "gap_pct": 1.078,
-   "kotak": 23.2,
-   "upstox": 23.45,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 1587,
+  "rounds": 25,
+  "contract_quotes": 1653,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
-  "same_best_ask_pct": 29.0,
+  "same_best_ask_pct": 29.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 96.2,
-  "upstox_minus_kotak_quote_time_s_median": -27.5
+  "oi_same_pct": 96.9,
+  "upstox_minus_kotak_quote_time_s_median": -29.5
  }
 }
