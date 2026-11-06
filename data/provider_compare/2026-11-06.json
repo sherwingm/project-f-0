@@ -224,6 +224,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.0,
    "upstox_minus_kotak_quote_time_s_median": -38.5
+  },
+  {
+   "at": "10:40:10",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.163,
+   "same_best_bid_pct": 36.4,
+   "same_best_ask_pct": 28.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.0,
+   "upstox_minus_kotak_quote_time_s_median": -47.0
   }
  ],
  "top_gaps": [
@@ -326,11 +340,25 @@
    "at": "10:10"
   },
   {
+   "contract": "POWERGRID26NOV255PE",
+   "gap_pct": 1.163,
+   "kotak": 4.3,
+   "upstox": 4.25,
+   "at": "10:40"
+  },
+  {
    "contract": "AXISBANK26NOV1280PE",
    "gap_pct": 1.078,
    "kotak": 23.2,
    "upstox": 23.45,
    "at": "09:30"
+  },
+  {
+   "contract": "JSWENERGY26NOV530CE",
+   "gap_pct": 1.042,
+   "kotak": 9.6,
+   "upstox": 9.7,
+   "at": "10:40"
   },
   {
    "contract": "ADANIPORTS26NOV1900CE",
@@ -352,30 +380,16 @@
    "kotak": 34.75,
    "upstox": 34.45,
    "at": "09:30"
-  },
-  {
-   "contract": "BHEL26NOV400PE",
-   "gap_pct": 0.837,
-   "kotak": 11.95,
-   "upstox": 11.85,
-   "at": "09:35"
-  },
-  {
-   "contract": "ICICIBANK26NOV1520PE",
-   "gap_pct": 0.753,
-   "kotak": 26.55,
-   "upstox": 26.35,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 16,
-  "contract_quotes": 1060,
+  "rounds": 17,
+  "contract_quotes": 1126,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 27.3,
-  "same_best_ask_pct": 26.55,
+  "same_best_bid_pct": 28.8,
+  "same_best_ask_pct": 27.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.5,
-  "upstox_minus_kotak_quote_time_s_median": -20.5
+  "upstox_minus_kotak_quote_time_s_median": -22.5
  }
 }
