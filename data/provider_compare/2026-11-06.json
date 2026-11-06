@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.0,
    "upstox_minus_kotak_quote_time_s_median": -5.0
+  },
+  {
+   "at": "09:35:06",
+   "contracts": 67,
+   "on_both": 67,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.63,
+   "same_best_bid_pct": 29.9,
+   "same_best_ask_pct": 31.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.5,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -81,6 +95,13 @@
    "at": "09:30"
   },
   {
+   "contract": "BANDHANBNK26NOV170CE",
+   "gap_pct": 1.63,
+   "kotak": 1.84,
+   "upstox": 1.87,
+   "at": "09:35"
+  },
+  {
    "contract": "ADANIPORTS26NOV1900CE",
    "gap_pct": 1.598,
    "kotak": 37.55,
@@ -116,11 +137,25 @@
    "at": "09:30"
   },
   {
+   "contract": "BHEL26NOV400PE",
+   "gap_pct": 0.837,
+   "kotak": 11.95,
+   "upstox": 11.85,
+   "at": "09:35"
+  },
+  {
    "contract": "UNOMINDA26NOV1260PE",
    "gap_pct": 0.743,
    "kotak": 13.45,
    "upstox": 13.55,
    "at": "09:20"
+  },
+  {
+   "contract": "BHEL26NOV400CE",
+   "gap_pct": 0.667,
+   "kotak": 15.0,
+   "upstox": 15.1,
+   "at": "09:35"
   },
   {
    "contract": "BANDHANBNK26NOV170CE",
@@ -135,6 +170,13 @@
    "kotak": 26.75,
    "upstox": 26.6,
    "at": "09:30"
+  },
+  {
+   "contract": "BIOCON26NOV360CE",
+   "gap_pct": 0.513,
+   "kotak": 9.75,
+   "upstox": 9.8,
+   "at": "09:35"
   },
   {
    "contract": "BSE26NOV4000CE",
@@ -156,44 +198,16 @@
    "kotak": 203.0,
    "upstox": 203.6,
    "at": "09:30"
-  },
-  {
-   "contract": "ASTRAL26NOVFUT",
-   "gap_pct": 0.256,
-   "kotak": 1251.5,
-   "upstox": 1248.3,
-   "at": "09:25"
-  },
-  {
-   "contract": "BANKINDIA26NOVFUT",
-   "gap_pct": 0.24,
-   "kotak": 137.55,
-   "upstox": 137.88,
-   "at": "09:30"
-  },
-  {
-   "contract": "BANKBARODA26NOVFUT",
-   "gap_pct": 0.162,
-   "kotak": 246.95,
-   "upstox": 246.55,
-   "at": "09:30"
-  },
-  {
-   "contract": "BDL26NOVFUT",
-   "gap_pct": 0.086,
-   "kotak": 1050.5,
-   "upstox": 1051.4,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 203,
+  "rounds": 4,
+  "contract_quotes": 270,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 23.5,
-  "same_best_ask_pct": 19.1,
+  "same_best_bid_pct": 24.45,
+  "same_best_ask_pct": 22.25,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 88.2,
-  "upstox_minus_kotak_quote_time_s_median": -9.5
+  "oi_same_pct": 89.6,
+  "upstox_minus_kotak_quote_time_s_median": -9.75
  }
 }
