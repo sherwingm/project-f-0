@@ -896,6 +896,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -53.5
+  },
+  {
+   "at": "14:40:23",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.497,
+   "same_best_bid_pct": 25.8,
+   "same_best_ask_pct": 31.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -36.5
   }
  ],
  "top_gaps": [
@@ -1012,6 +1026,13 @@
    "at": "09:20"
   },
   {
+   "contract": "BANDHANBNK26NOV170CE",
+   "gap_pct": 1.497,
+   "kotak": 3.34,
+   "upstox": 3.39,
+   "at": "14:40"
+  },
+  {
    "contract": "ADANIPORTS26NOV1920CE",
    "gap_pct": 1.404,
    "kotak": 32.05,
@@ -1031,23 +1052,16 @@
    "kotak": 32.45,
    "upstox": 32.0,
    "at": "12:10"
-  },
-  {
-   "contract": "ICICIBANK26NOV1520CE",
-   "gap_pct": 1.379,
-   "kotak": 29.0,
-   "upstox": 29.4,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 64,
-  "contract_quotes": 4221,
+  "rounds": 65,
+  "contract_quotes": 4287,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 37.9,
   "same_best_ask_pct": 40.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.0,
-  "upstox_minus_kotak_quote_time_s_median": -53.75
+  "upstox_minus_kotak_quote_time_s_median": -53.5
  }
 }
