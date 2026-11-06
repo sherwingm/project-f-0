@@ -24169,7 +24169,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-05T15:29:55+05:30",
+ "saved_at": "2026-11-06T09:15:05+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -24395,6 +24395,24 @@
      "F"
     ],
     "reason": "never fits: 1 lot is 6,950 shares, so Rs 8,000 allows at most Rs 1.15 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-11-06",
+    "symbol": "MOTHERSON",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 6,150 shares, so Rs 8,000 allows at most Rs 1.30 a share, below the Rs 2 floor"
+   },
+   {
+    "date": "2026-11-06",
+    "symbol": "NBCC",
+    "mode": "fade",
+    "arms": [
+     "F"
+    ],
+    "reason": "never fits: 1 lot is 6,500 shares, so Rs 8,000 allows at most Rs 1.23 a share, below the Rs 2 floor"
    }
   ],
   "fade": {
@@ -24463,10 +24481,53 @@
    "2026-11-05:AUROPHARMA": "bought",
    "2026-11-05:ZYDUSLIFE": "bought",
    "2026-11-05:APOLLOHOSP": "bought",
-   "2026-11-05:CUMMINSIND": "bought"
+   "2026-11-05:CUMMINSIND": "bought",
+   "2026-11-06:MOTHERSON": "refused",
+   "2026-11-06:NBCC": "refused"
   },
   "open_wait": {},
-  "fade_wait": {},
+  "fade_wait": {
+   "2026-11-06:UNOMINDA": {
+    "reason": "waiting for the first trade today at 1260 (the quote is yesterday's)",
+    "at": "2026-11-06T09:15:05+05:30"
+   },
+   "2026-11-06:TIINDIA": {
+    "reason": "waiting for the first trade today (every quote is yesterday's)",
+    "at": "2026-11-06T09:15:05+05:30"
+   },
+   "2026-11-06:BHARTIARTL": {
+    "reason": "premium below Rs 2 (at 1900: ask 1.85)",
+    "at": "2026-11-06T09:15:05+05:30"
+   },
+   "2026-11-06:TITAN": {
+    "reason": "waiting for the first trade today at 4650 (the quote is yesterday's)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:GLENMARK": {
+    "reason": "spread above 10 % of the ask (at 2760: bid 2.55, ask 7.0)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:ONGC": {
+    "reason": "waiting for the first trade today at 227.5 (the quote is yesterday's)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:GODFRYPHLP": {
+    "reason": "spread above 10 % of the ask (at 2100: bid 3.6, ask 7.65)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:BRITANNIA": {
+    "reason": "waiting for the first trade today at 4800 (the quote is yesterday's)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:PRESTIGE": {
+    "reason": "waiting for the first trade today (every quote is yesterday's)",
+    "at": "2026-11-06T09:15:04+05:30"
+   },
+   "2026-11-06:MPHASIS": {
+    "reason": "waiting for the first trade today at 2350 (the quote is yesterday's)",
+    "at": "2026-11-06T09:15:04+05:30"
+   }
+  },
   "fade_shadow_entries": [
    {
     "key": "2026-10-21:UNIONBANK",
@@ -24683,6 +24744,87 @@
     "net": -4084.14,
     "net_pct": -70.8,
     "real_bought": false
+   },
+   {
+    "key": "2026-11-06:MOTHERSON",
+    "date": "2026-11-06",
+    "symbol": "MOTHERSON",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 155.0,
+    "tradingsymbol": "MOTHERSON26NOV155PE",
+    "lot_size": 6150,
+    "entry": 1.18,
+    "bid_at_entry": 1.15,
+    "lot_cost": 7257.0,
+    "opened_at": "2026-11-06T09:15:04+05:30",
+    "refused": "never fits: 1 lot is 6,150 shares, so Rs 8,000 allows at most Rs 1.30 a share, below the Rs 2 floor",
+    "why": "net profit YoY +44.0 %, QoQ +13.2 %; revenue YoY +26.9 %",
+    "np_yoy": 44.0,
+    "spot_at_entry": 167.99,
+    "last_bid": 1.15,
+    "max_bid": 1.15,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
+   },
+   {
+    "key": "2026-11-06:NBCC",
+    "date": "2026-11-06",
+    "symbol": "NBCC",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 76.0,
+    "tradingsymbol": "NBCC26NOV76PE",
+    "lot_size": 6500,
+    "entry": 1.11,
+    "bid_at_entry": 1.05,
+    "lot_cost": 7215.0,
+    "opened_at": "2026-11-06T09:15:04+05:30",
+    "refused": "never fits: 1 lot is 6,500 shares, so Rs 8,000 allows at most Rs 1.23 a share, below the Rs 2 floor",
+    "why": "net profit YoY +33.9 %, QoQ +32.8 %; revenue YoY +16.7 %",
+    "np_yoy": 33.9,
+    "spot_at_entry": 80.33,
+    "last_bid": 1.05,
+    "max_bid": 1.05,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
+   },
+   {
+    "key": "2026-11-06:BHARTIARTL",
+    "date": "2026-11-06",
+    "symbol": "BHARTIARTL",
+    "side": "PE",
+    "expiry": "2026-11-23",
+    "strike": 1820.0,
+    "tradingsymbol": "BHARTIARTL26NOV1820PE",
+    "lot_size": 475,
+    "entry": 1.55,
+    "bid_at_entry": 1.45,
+    "lot_cost": 736.25,
+    "opened_at": "2026-11-06T09:15:05+05:30",
+    "refused": "premium below Rs 2 (at 1900: ask 1.85)",
+    "why": "net profit YoY +23.8 %, QoQ +7.0 %; revenue YoY +16.7 %",
+    "np_yoy": 23.8,
+    "spot_at_entry": 2057.85,
+    "last_bid": 1.45,
+    "max_bid": 1.45,
+    "exit": null,
+    "closed_at": null,
+    "late": false,
+    "charges": null,
+    "net": null,
+    "net_pct": null,
+    "real_bought": false
    }
   ],
   "fade_sub2_why": {
@@ -24696,7 +24838,10 @@
    "2026-11-02:BANKBARODA": "below-Rs 2 rule: 1 lot at 237.5 costs more than Rs 8,000",
    "2026-11-02:ABCAPITAL": "below-Rs 2 rule: no two-sided strike",
    "2026-11-05:NYKAA": "below-Rs 2 rule: 1 lot at 345 costs more than Rs 8,000",
-   "2026-11-05:NHPC": "below-Rs 2 rule: 1 lot at 78 costs more than Rs 8,000"
+   "2026-11-05:NHPC": "below-Rs 2 rule: 1 lot at 78 costs more than Rs 8,000",
+   "2026-11-06:MOTHERSON": "below-Rs 2 rule: 1 lot at 167.5 costs more than Rs 8,000",
+   "2026-11-06:NBCC": "below-Rs 2 rule: 1 lot at 80 costs more than Rs 8,000",
+   "2026-11-06:BHARTIARTL": "below-Rs 2 rule: 1 lot at 2060 costs more than Rs 8,000"
   }
  }
 }
