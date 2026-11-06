@@ -980,6 +980,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -16.5
+  },
+  {
+   "at": "15:10:25",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 5.455,
+   "same_best_bid_pct": 33.3,
+   "same_best_ask_pct": 36.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -996,6 +1010,13 @@
    "kotak": 9.75,
    "upstox": 10.45,
    "at": "09:25"
+  },
+  {
+   "contract": "DELHIVERY26NOV440CE",
+   "gap_pct": 5.455,
+   "kotak": 5.5,
+   "upstox": 5.8,
+   "at": "15:10"
   },
   {
    "contract": "PGEL26NOV580CE",
@@ -1110,28 +1131,21 @@
    "at": "14:40"
   },
   {
-   "contract": "ADANIPORTS26NOV1920CE",
-   "gap_pct": 1.404,
-   "kotak": 32.05,
-   "upstox": 31.6,
-   "at": "09:25"
-  },
-  {
-   "contract": "LAURUSLABS26NOV2320PE",
-   "gap_pct": 1.393,
-   "kotak": 61.0,
-   "upstox": 60.15,
-   "at": "10:15"
+   "contract": "ADANIENT26NOV2800CE",
+   "gap_pct": 1.449,
+   "kotak": 51.75,
+   "upstox": 51.0,
+   "at": "15:10"
   }
  ],
  "day": {
-  "rounds": 70,
-  "contract_quotes": 4616,
+  "rounds": 71,
+  "contract_quotes": 4682,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 39.4,
   "same_best_ask_pct": 40.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.0,
-  "upstox_minus_kotak_quote_time_s_median": -47.25
+  "upstox_minus_kotak_quote_time_s_median": -47.0
  }
 }
