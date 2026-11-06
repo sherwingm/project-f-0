@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.5,
    "upstox_minus_kotak_quote_time_s_median": -24.5
+  },
+  {
+   "at": "10:00:07",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.379,
+   "same_best_bid_pct": 33.3,
+   "same_best_ask_pct": 31.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.5
   }
  ],
  "top_gaps": [
@@ -179,6 +193,13 @@
    "at": "09:25"
   },
   {
+   "contract": "ICICIBANK26NOV1520CE",
+   "gap_pct": 1.379,
+   "kotak": 29.0,
+   "upstox": 29.4,
+   "at": "10:00"
+  },
+  {
    "contract": "AXISBANK26NOV1280PE",
    "gap_pct": 1.078,
    "kotak": 23.2,
@@ -214,6 +235,13 @@
    "at": "09:35"
   },
   {
+   "contract": "ICICIBANK26NOV1520PE",
+   "gap_pct": 0.753,
+   "kotak": 26.55,
+   "upstox": 26.35,
+   "at": "10:00"
+  },
+  {
    "contract": "UNOMINDA26NOV1260PE",
    "gap_pct": 0.743,
    "kotak": 13.45,
@@ -240,30 +268,16 @@
    "kotak": 32.0,
    "upstox": 32.2,
    "at": "09:50"
-  },
-  {
-   "contract": "BAJFINANCE26NOV1050PE",
-   "gap_pct": 0.561,
-   "kotak": 26.75,
-   "upstox": 26.6,
-   "at": "09:30"
-  },
-  {
-   "contract": "BIOCON26NOV360CE",
-   "gap_pct": 0.513,
-   "kotak": 9.75,
-   "upstox": 9.8,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 534,
+  "rounds": 9,
+  "contract_quotes": 600,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.6,
-  "same_best_ask_pct": 21.95,
+  "same_best_bid_pct": 25.8,
+  "same_best_ask_pct": 22.7,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.45,
-  "upstox_minus_kotak_quote_time_s_median": -14.75
+  "oi_same_pct": 92.5,
+  "upstox_minus_kotak_quote_time_s_median": -13.5
  }
 }
