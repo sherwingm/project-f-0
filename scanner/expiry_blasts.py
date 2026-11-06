@@ -28,7 +28,8 @@ from scanner.near_expiry_maxup import RES
 
 STEP = {"NIFTY": 50, "SENSEX": 100}
 SPOT = {"NIFTY": "NIFTY50", "SENSEX": "SENSEX"}
-LEVELS = (5, 10, 20)
+LEVELS = (2, 3, 5, 10, 20)                    # 2x / 3x added 2026-11-06 (the user: "Check for 2x")
+OPTS: list[dict] = []                         # one row per option bought at 09:20 (expiry_blasts_options.csv)
 MIN_PX = 2.0
 
 
@@ -64,6 +65,10 @@ def minute_days(u: str) -> pd.DataFrame:
                 if g.empty:
                     continue
                 m = g["high"].max() / px
+                o1515 = L.price_at(ch, kk, opt, L.at(ex, 15, 15), stale=30)
+                OPTS.append({"index": u, "expiry_day": ex, "opt": opt, "otm": k, "strike": kk, "paid": px, "x": m,
+                             "peak_at": g.loc[g["high"].idxmax(), "timestamp"].strftime("%H:%M"),
+                             "x_1515": None if o1515 is None else o1515 / px})
                 for lv in LEVELS:
                     counts[f"{opt}_{lv}x"] += m >= lv
                 if m > best[opt][0]:
@@ -112,6 +117,7 @@ def daily(u: str) -> pd.DataFrame:
 def main():
     a = pd.concat([minute_days(u) for u in ("NIFTY", "SENSEX")], ignore_index=True)
     a.to_csv(RES / "expiry_blasts_days.csv", index=False)
+    pd.DataFrame(OPTS).to_csv(RES / "expiry_blasts_options.csv", index=False)
     b = pd.concat([daily(u) for u in ("NIFTY", "BANKNIFTY")], ignore_index=True)
     b.to_csv(RES / "expiry_blasts_daily.csv", index=False)
     print(len(a), len(b))

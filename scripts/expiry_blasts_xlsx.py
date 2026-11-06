@@ -52,31 +52,46 @@ def main() -> None:
     wb = Workbook()
     s = wb.active
     s.title = "Summary"
-    s.append(["Index", "Expiry days", "Best option ≥ 5x", "≥ 10x", "≥ 20x", "Median best multiple", "Share ≥ 10x"])
+    s.append(["Index", "Expiry days", "Best option ≥ 2x", "≥ 3x", "≥ 5x", "≥ 10x", "≥ 20x", "Median best multiple",
+              "Share ≥ 2x", "Share ≥ 10x", "Call and put both ≥ 2x"])
     for u, g in a.groupby("index"):
         r = s.max_row + 1
-        s.append([u, len(g), int((g["best"] >= 5).sum()), int((g["best"] >= 10).sum()), int((g["best"] >= 20).sum()),
-                  g["best"].median(), f"=D{r}/B{r}"])
-    style(s, [12, 10, 12, 9, 9, 12, 10], {6: "0.0\"x\"", 7: "0%"})
+        s.append([u, len(g)] + [int((g["best"] >= lv).sum()) for lv in (2, 3, 5, 10, 20)]
+                 + [g["best"].median(), f"=C{r}/B{r}", f"=F{r}/B{r}",
+                    int(((g["best_CE_x"] >= 2) & (g["best_PE_x"] >= 2)).sum())])
+    style(s, [12, 10, 12, 8, 8, 8, 8, 12, 10, 10, 12], {8: "0.0\"x\"", 9: "0%", 10: "0%"})
     s.append([])
     s.append(["By the index's biggest one-way move after 09:20 (both indices)"])
     s.cell(s.max_row, 1).font = Font(name="Arial", size=10, bold=True)
     hdr = s.max_row + 1
-    s.append(["One-way move", "Expiry days", "≥ 10x days", "Share ≥ 10x", "Median best multiple"])
+    s.append(["One-way move", "Expiry days", "≥ 10x days", "Share ≥ 10x", "Median best multiple", "≥ 2x days",
+              "Share ≥ 2x"])
     for c in s[hdr]:
         c.font, c.fill = BOLD, HEAD
-    for lo, hi, lab in ((0, 0.5, "under 0.5 %"), (0.5, 1, "0.5-1 %"), (1, 1.5, "1-1.5 %"), (1.5, 2, "1.5-2 %"),
+    for lo, hi, lab in ((0, 0.25, "under 0.25 %"), (0.25, 0.5, "0.25-0.5 %"), (0.5, 1, "0.5-1 %"), (1, 1.5, "1-1.5 %"), (1.5, 2, "1.5-2 %"),
                         (2, 99, "2 % or more")):
         g = a[(a["one_way"] >= lo) & (a["one_way"] < hi)]
         r = s.max_row + 1
-        s.append([lab, len(g), int((g["best"] >= 10).sum()), f"=IF(B{r}=0,0,C{r}/B{r})", g["best"].median()])
-        s.cell(r, 4).number_format, s.cell(r, 5).number_format = "0%", "0.0\"x\""
+        s.append([lab, len(g), int((g["best"] >= 10).sum()), f"=IF(B{r}=0,0,C{r}/B{r})", g["best"].median(),
+                  int((g["best"] >= 2).sum()), f"=IF(B{r}=0,0,F{r}/B{r})"])
+        s.cell(r, 4).number_format, s.cell(r, 5).number_format, s.cell(r, 7).number_format = "0%", "0.0\"x\"", "0%"
         for c in s[r]:
             c.font = FONT
     tb = a[a["best"] >= 10]
     s.append([])
+    o = pd.read_csv(RES / "expiry_blasts_options.csv")
+    o["held"] = o["x_1515"] - 1
+    o["cap2"] = np.where(o["x"] >= 2, 1.0, o["held"])
     notes = [
         "What it means",
+        f"2x is common: the best option of the day doubled from 09:20 on {int((a[a['index']=='NIFTY']['best']>=2).sum())} of "
+        f"{int((a['index']=='NIFTY').sum())} NIFTY and {int((a[a['index']=='SENSEX']['best']>=2).sum())} of "
+        f"{int((a['index']=='SENSEX').sum())} SENSEX expiry days; every day the index moved ≥ 1 % one way had one.",
+        "A single fixed option (one side, one strike, chosen at 09:20) doubles on 30-49 % of expiry days (NIFTY calls "
+        "~30-36 %, NIFTY puts ~43-49 % near the money, SENSEX ~38-47 %), but is still ≥ 2x at 15:15 on only 5-23 %.",
+        "Selling at 2x if touched, else at 15:15, averages −8 % to −58 % a trade for calls and +8 % (at the money) to "
+        "−75 % (10 strikes out) for puts, before charges and slippage (sheet 2x by strike). Puts doing better is this "
+        "two-year window, not a rule.",
         f"About 1 expiry day in 7 has an option that goes 10x from its 09:20 price (NIFTY {int((a[a['index']=='NIFTY']['best']>=10).sum())} "
         f"of {int((a['index']=='NIFTY').sum())}, SENSEX {int((a[a['index']=='SENSEX']['best']>=10).sum())} of "
         f"{int((a['index']=='SENSEX').sum())}, Oct 2024 → Oct 2026). With weekly NIFTY and SENSEX expiries that is ~2 a month.",
@@ -93,6 +108,16 @@ def main() -> None:
         s.append([n])
         s.cell(s.max_row, 1).font = Font(name="Arial", size=10, bold=(i == 0))
 
+    x2 = wb.create_sheet("2x by strike")
+    x2.append(["Index", "Option", "Strikes out", "Days", "Median paid 09:20 (₹)", "Doubled (≥ 2x)", "Tripled (≥ 3x)",
+               "Still ≥ 2x at 15:15", "Held to 15:15, mean", "Held to 15:15, median", "Sell at 2x else 15:15, mean"])
+    for (u, opt, k), g in o.groupby(["index", "opt", "otm"]):
+        x2.append([u, "Call" if opt == "CE" else "Put", int(k), len(g), g["paid"].median(), (g["x"] >= 2).mean(),
+                   (g["x"] >= 3).mean(), (g["x_1515"] >= 2).mean(), g["held"].mean(), g["held"].median(),
+                   g["cap2"].mean()])
+    style(x2, [9, 7, 9, 7, 11, 10, 10, 11, 11, 11, 13],
+          {5: "₹#,##0.00", 6: "0%", 7: "0%", 8: "0%", 9: "0%", 10: "0%", 11: "0%"})
+
     how = wb.create_sheet("How it's calculated")
     for x, y in [
         ("How it's calculated", ""),
@@ -100,6 +125,9 @@ def main() -> None:
                           "calls and puts 0-10 strikes out of the money from the 09:20 spot (NIFTY 50-point, SENSEX 100-point "
                           "steps), only options priced ≥ ₹2 at 09:20. Multiple = highest minute high after 09:20 ÷ the 09:20 "
                           "price. 'Best' = the largest multiple of the day across those strikes (hindsight)."),
+        ("2x by strike", "Every option 0-10 strikes out, both sides, one row per index / side / distance: how often it "
+                         "doubled after 09:20, how often it was still ≥ 2x at 15:15, and a 'sell at 2x if touched, else "
+                         "15:15' result (before charges and slippage). File expiry_blasts_options.csv."),
         ("At 15:15", "The same best option's 15:15 price ÷ its 09:20 price: what was left if not sold at the peak."),
         ("Index move", "Close vs the previous close; one-way = the larger of the rise or fall from the 09:20 spot."),
         ("Daily part", "NSE daily bhavcopy, NIFTY and BANKNIFTY, every expiry day 2018 → 2026: per option the day's high ÷ "
@@ -148,6 +176,8 @@ def main() -> None:
     for r in range(2, y.max_row + 1):
         for c in y[r]:
             c.font = Font(name="Arial", size=10, bold=y.cell(r, 2).value == "Total")
+    wb._sheets.sort(key=lambda w: ["Summary", "2x by strike", "How it's calculated"].index(w.title)
+                    if w.title in ("Summary", "2x by strike", "How it's calculated") else 3)
     wb.save(OUT)
 
     md = ["# Expiry-day option blasts (2026-11-05, descriptive)", "",

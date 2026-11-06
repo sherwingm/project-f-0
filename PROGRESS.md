@@ -997,4 +997,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   quiet days, 12 of 16 days ≥ 1.5 %). Of 29 10x days, 9 still ≥ 10x at 15:15, 10 below the 09:20 price. Daily
   bhavcopy 2018 →: NIFTY 58 / BANKNIFTY 58 expiry days with an option ≥ 10x high/open; close ≥ 20x the previous close
   on 11 / 10 days.
+- 2026-11-06 · Expiry blasts at 2x (the user: "Check for 2x"). Best option of the day ≥ 2x from 09:20 on 87 of 108 NIFTY
+  and 84 of 107 SENSEX expiry days (every ≥ 1 % one-way day; 58 % of 0.25-0.5 % days). One fixed option doubles on
+  30-49 % of days but is still ≥ 2x at 15:15 on 5-23 %; "sell at 2x else 15:15" calls −8 to −58 %, puts +8 % ATM to
+  −75 % far out, before charges. `data/results/expiry_blasts_options.csv`, sheet "2x by strike".
 
