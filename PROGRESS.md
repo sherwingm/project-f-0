@@ -1001,4 +1001,9 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   and 84 of 107 SENSEX expiry days (every ≥ 1 % one-way day; 58 % of 0.25-0.5 % days). One fixed option doubles on
   30-49 % of days but is still ≥ 2x at 15:15 on 5-23 %; "sell at 2x else 15:15" calls −8 to −58 %, puts +8 % ATM to
   −75 % far out, before charges. `data/results/expiry_blasts_options.csv`, sheet "2x by strike".
+- 2026-11-06 · Expiry-day profit in ₹ (the user: "how much profit we are taking from it"). `scripts/expiry_blasts_pnl.py`,
+  sheet "Profit (₹)": ₹10,000 into one option at 09:20 every expiry day, Oct 2024 → Oct 2026, slippage + charges.
+  Sell at 2x else 15:15 loses on 14 of 16 index / side / strike cells (NIFTY 2-out call −₹2.89 lakh on 100 trades,
+  SENSEX −₹1.18 lakh); only ATM puts positive (+₹64k NIFTY, +₹69k SENSEX; a period effect). Call + put every day loses
+  under every rule. The hindsight ceiling (sold at the exact top) would be +₹11-28 lakh per cell.
 
