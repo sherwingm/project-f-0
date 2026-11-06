@@ -476,6 +476,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.4,
    "upstox_minus_kotak_quote_time_s_median": -66.0
+  },
+  {
+   "at": "12:10:15",
+   "contracts": 65,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.387,
+   "same_best_bid_pct": 46.2,
+   "same_best_ask_pct": 50.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.9,
+   "upstox_minus_kotak_quote_time_s_median": -87.0
   }
  ],
  "top_gaps": [
@@ -592,6 +606,13 @@
    "at": "10:15"
   },
   {
+   "contract": "MAXHEALTH26NOV910CE",
+   "gap_pct": 1.387,
+   "kotak": 32.45,
+   "upstox": 32.0,
+   "at": "12:10"
+  },
+  {
    "contract": "ICICIBANK26NOV1520CE",
    "gap_pct": 1.379,
    "kotak": 29.0,
@@ -611,23 +632,16 @@
    "kotak": 30.85,
    "upstox": 30.45,
    "at": "10:45"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 1.238,
-   "kotak": 32.3,
-   "upstox": 31.9,
-   "at": "11:20"
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 2245,
+  "rounds": 35,
+  "contract_quotes": 2310,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.3,
+  "same_best_bid_pct": 34.8,
   "same_best_ask_pct": 31.8,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.0,
-  "upstox_minus_kotak_quote_time_s_median": -39.75
+  "upstox_minus_kotak_quote_time_s_median": -41.0
  }
 }
