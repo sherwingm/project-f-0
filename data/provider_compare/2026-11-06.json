@@ -252,6 +252,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.0,
    "upstox_minus_kotak_quote_time_s_median": -43.5
+  },
+  {
+   "at": "10:50:11",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.703,
+   "same_best_bid_pct": 37.9,
+   "same_best_ask_pct": 31.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -33.5
   }
  ],
  "top_gaps": [
@@ -282,6 +296,13 @@
    "kotak": 35.3,
    "upstox": 36.5,
    "at": "09:25"
+  },
+  {
+   "contract": "DELHIVERY26NOV440CE",
+   "gap_pct": 2.703,
+   "kotak": 3.7,
+   "upstox": 3.8,
+   "at": "10:50"
   },
   {
    "contract": "BSE26NOV4000CE",
@@ -387,23 +408,16 @@
    "kotak": 9.6,
    "upstox": 9.7,
    "at": "10:40"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1900CE",
-   "gap_pct": 0.933,
-   "kotak": 48.25,
-   "upstox": 48.7,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 1192,
+  "rounds": 19,
+  "contract_quotes": 1258,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.35,
+  "same_best_bid_pct": 29.9,
   "same_best_ask_pct": 27.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.5,
-  "upstox_minus_kotak_quote_time_s_median": -23.5
+  "upstox_minus_kotak_quote_time_s_median": -24.5
  }
 }
