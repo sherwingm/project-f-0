@@ -77,6 +77,13 @@ negative mean and increasing the doubt trade of positive mean help", then "Yes, 
 - The verdict still comes from `scanner/s3_g1_forward.py` on the recorder's 1-second files (the written record); the
   live ledger is the same trade seen in real time and should match it. Any gap between the two is reported.
 
+## G1-F is the main track (2026-11-06)
+The user: "make the g1-f as main". From 2026-11-06 G1-F is the main track: shown first on `/index` (G1 is the
+baseline beside it), and the open / close alerts say whether G1-F counts the trade. Nothing else changes: the rules, the
+skip filters, the paper ledger (every G1 trade is still recorded with its G1-F flag), and the two separate gates (30
+trades each). Paper only; no real order, and no change to S1 or S2. A G1-F pass with a G1 fail (or the reverse) is still
+reported as it is.
+
 ## After the verdict
 - **Pass:** a proposal to the user to run G1 as a paper strategy. Nothing is enabled automatically, and S1 / S2 are
   untouched.

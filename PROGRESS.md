@@ -1009,3 +1009,8 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   - Code: `server/xp_live.py` (own ledger `data/xp_ledger.json`), `/api/index/xp`, an XP section on `/index`,
     `XP_PAPER=true`. 5 tests. A log only: no orders; S1 / G1 / NT untouched.
   - Commit 01d0602c1, deployed to the VM after the close on 2026-11-05. First possible log: Tue 2026-11-10.
+
+### 2026-11-06: G1-F made the main track (user: "make the g1-f as main")
+- `/index` now leads with G1-F; G1 is shown as the baseline (Pods table order: "G1-F (main)", "G1 (baseline)").
+  The buy alert says whether G1-F counts the trade. The ledger, the rules, the filters and both 30-trade gates are
+  unchanged. Paper only. Strategy page, DECISIONS and this log updated.

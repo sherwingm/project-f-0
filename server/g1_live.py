@@ -12,6 +12,8 @@ Rules (the page; the same as scanner/s3_g1_forward.py, which stays the record fo
     paid (any second, both days), else at the last bid of the next session's 09:16 minute.
     G1-F takes the same trade only when, at the signal, the day-1 opening gap < +0.3 %, the range width is not in
     0.5 %-0.8 % and India VIX < 17. One position serves both tracks; each trade says whether G1-F counts it.
+    G1-F is the MAIN track from 2026-11-06 (the user: "make the g1-f as main"): shown first on the page, and the alert
+    says whether G1-F counts the trade. The ledger still records every G1 trade, so G1's own gate is unchanged.
 A restart in the session rebuilds today's minute bars from the recorder's own file (data/candles_1s_index/<day>.jsonl).
 """
 from __future__ import annotations
@@ -268,7 +270,8 @@ class G1Trader:
         st.update(phase="done", status=f"bought NIFTY {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
                   + self.entry_note(st))
         self._save()
-        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})",
+        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
+                    + self.entry_note(st),
                     key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
     def _manage_open(self, now: datetime) -> None:
@@ -324,7 +327,7 @@ class G1Trader:
         return "; G1-F counts it" if not st["g1f_skip"] else f"; G1-F skips ({st['g1f_skip']})"
 
     def tracks(self, trades: list) -> list:
-        return [("G1", trades), ("G1-F", [t for t in trades if not t.get("g1f_skip")])]
+        return [("G1-F (main)", [t for t in trades if not t.get("g1f_skip")]), ("G1 (baseline)", trades)]
 
     # ------------------------------------------------------------ views
     def view(self) -> dict:

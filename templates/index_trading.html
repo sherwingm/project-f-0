@@ -96,7 +96,7 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
 
   function g1Section() {
     const g = D.g1;
-    let h = `<h2>G1 · NIFTY downside ORB put, held overnight <small>paper · rules: ${esc((g || {}).page || "strategies/S3_G1_put_overnight.md")}</small></h2>`;
+    let h = `<h2>G1-F (main) · NIFTY downside ORB put, held overnight <small>G1 = same trade without the skip filters · paper · rules: ${esc((g || {}).page || "strategies/S3_G1_put_overnight.md")}</small></h2>`;
     if (!D.loaded) return h + `<p class="empty">Loading…</p>`;
     if (!g || g.error) return h + `<p class="empty">${esc((g || {}).error || "Not reporting.")}</p>`;
     h += `<p class="note">Opening range 09:15-09:29 · first close outside it from 09:30 to 13:00 · only a close below the low trades · ATM put of the nearest weekly, 1 lot (${num(g.lot)}), bought at the ask the minute after · sold at the bid at 50 % of the price paid, else at the next session's 09:16. <b>G1-F</b> counts the same trade only when the day-1 gap is under +0.3 %, the range is not 0.5-0.8 % wide and VIX is under 17.</p>`;
@@ -134,7 +134,7 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
   function render() {
     const st = (D.status || {}).status || {}, rec = st.recorder;
     let h = `<h1>Index options · data</h1>
-      <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, and the index pods' paper trades. Pods: <b>G1</b>, the NIFTY downside opening-range put held overnight, and <b>XP</b>, a forward log of the NIFTY expiry-day straddle.</p>
+      <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, and the index pods' paper trades. Main: <b>G1-F</b>, the NIFTY downside opening-range put held overnight with three skip filters (G1 is the same trade without them, kept as the baseline). Also: <b>XP</b>, a forward log of the NIFTY expiry-day straddle.</p>
       <div class="banner"><b>Paper only.</b> G1 trades on the live bid / ask in its own paper ledger; no real order is sent, and the S1 account is separate. Large data files live on the repository's <code>index-data</code> branch.</div>`;
     h += g1Section();
     h += xpSection();
