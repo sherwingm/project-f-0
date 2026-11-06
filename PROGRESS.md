@@ -1014,3 +1014,10 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 - `/index` now leads with G1-F; G1 is shown as the baseline (Pods table order: "G1-F (main)", "G1 (baseline)").
   The buy alert says whether G1-F counts the trade. The ledger, the rules, the filters and both 30-trade gates are
   unchanged. Paper only. Strategy page, DECISIONS and this log updated.
+
+### 2026-11-06: G1 / G1-F live exit changed to the next session's close (user; 50 % stop kept)
+- `server/g1_live.py`: `HOLD_TO_CLOSE` (G1 True, Near Tighty False so NT keeps its 09:16 exit): sell at the best bid at the
+  first quote from 15:29 of the next session; a missed close sells at the first bid of the following session. 6 G1 tests +
+  5 NT tests pass. Strategy page, DECISIONS and the /index note updated. Deployed after the close (server clock, not the PC's).
+- Same day: max up after entry with no exit for G1 / G1-F, SENSEX puts and the call mirror in `g1_research/`
+  (commits 23892d7d0, 07ade1de4).

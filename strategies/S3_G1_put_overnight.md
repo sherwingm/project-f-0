@@ -77,6 +77,19 @@ negative mean and increasing the doubt trade of positive mean help", then "Yes, 
 - The verdict still comes from `scanner/s3_g1_forward.py` on the recorder's 1-second files (the written record); the
   live ledger is the same trade seen in real time and should match it. Any gap between the two is reported.
 
+## Exit change: hold to the next session's close (2026-11-06, before any live trade)
+The user: "keep the next day close rule as live", then chose "next-day close, keep the 50 % stop". From 2026-11-06 the live
+paper exit of G1 / G1-F is: the 50 % stop as before (any second, both days), else sell at the best bid at the first quote of
+the next session's **15:29 minute** (the close) instead of the last bid of the 09:16 minute. If the server misses that close,
+it sells at the first bid of the following session and says so. The entry, the filters and the 30-trade gates are
+unchanged, and the gates count only trades under this exit (there were 0 live trades before the change).
+- Why: the user's measure is max up after entry, not the exit. Through the next close 38 % of G1-F history trades (31 % of G1)
+  reached +100 %, against 23 % (20 %) by 09:16 (`g1_research/`). It is a peak measure, not a booked result: in history
+  holding to the next day booked about the same or a little less than the 09:16 exit (PUT1 held to next-day 15:15 +6.6 %
+  vs G1 +8.4 %, descriptive, same trades).
+- The 2025 → 2026 history results quoted for G1 / G1-F elsewhere on this page still describe the 09:16 exit. Near Tighty
+  (its own part) keeps the 09:16 exit.
+
 ## G1-F is the main track (2026-11-06)
 The user: "make the g1-f as main". From 2026-11-06 G1-F is the main track: shown first on `/index` (G1 is the
 baseline beside it), and the open / close alerts say whether G1-F counts the trade. Nothing else changes: the rules, the

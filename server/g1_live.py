@@ -9,7 +9,8 @@ Rules (the page; the same as scanner/s3_g1_forward.py, which stays the record fo
     opening range 09:15-09:29; the first 1-minute close outside it from 09:30 to 13:00; only a close below the low
     trades; buy 1 lot of the ATM put (strike nearest the entry minute's close) of the nearest weekly expiry after
     today, at the last ask of the minute after the signal minute; sell at the bid when it is <= 50 % of the price
-    paid (any second, both days), else at the last bid of the next session's 09:16 minute.
+    paid (any second, both days), else (from 2026-11-06, the user) at the best bid at the first quote of the next
+    session's 15:29 minute (the close). Before that date the exit was the last bid of the next 09:16 minute.
     G1-F takes the same trade only when, at the signal, the day-1 opening gap < +0.3 %, the range width is not in
     0.5 %-0.8 % and India VIX < 17. One position serves both tracks; each trade says whether G1-F counts it.
     G1-F is the MAIN track from 2026-11-06 (the user: "make the g1-f as main"): shown first on the page, and the alert
@@ -34,6 +35,7 @@ IST = sessions.IST
 SPOT_KEY, VIX_KEY = "NSE_INDEX|Nifty 50", "NSE_INDEX|India VIX"
 STEP, LOT, STOP = 50, 65, 0.50
 OR_FROM, OR_TO, LAST_SIGNAL, EXIT_MIN = time(9, 15), time(9, 30), time(13, 0), time(9, 16)
+CLOSE_MIN = time(15, 29)                    # G1: the next session's last minute (the close)
 GAP_MAX, WIDTH_SKIP, VIX_MAX = 0.3, (0.5, 0.8), 17.0
 QUOTE_AGE = 60.0
 EPOCH = "2026-11-05 G1 live paper"
@@ -89,6 +91,7 @@ class G1Trader:
     """One rule-trading paper ledger. A subclass (server/nt_live.py, Near Tighty) changes the class attributes and
     the two hooks `entry_skip` / `entry_note` / `tracks`; the signal, entry, stop and exit stay exactly G1's."""
     NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
+    HOLD_TO_CLOSE = True      # G1 / G1-F (2026-11-06, the user): hold to the next session's close; a subclass may say False
 
     def __init__(self, stream, upstox, data_dir, lot: int = LOT):
         self.stream, self.upstox, self.lot = stream, upstox, lot
@@ -289,6 +292,15 @@ class G1Trader:
                 self._close(pos, bid, now, "stop")
                 return
         if now.date().isoformat() <= pos["day"]:
+            return
+        if self.HOLD_TO_CLOSE:
+            pos.setdefault("hold_day", now.date().isoformat())
+            if now.date().isoformat() > pos["hold_day"]:           # the close was missed (server down): first bid
+                if bid:
+                    self._close(pos, bid, now, "next close missed (server was down): sold at the first bid")
+                return
+            if now.time() >= CLOSE_MIN and bid:
+                self._close(pos, bid, now, "next close")
             return
         m = now.time()
         if m < EXIT_MIN:
