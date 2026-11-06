@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.4,
    "upstox_minus_kotak_quote_time_s_median": -22.5
+  },
+  {
+   "at": "09:55:07",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.419,
+   "same_best_bid_pct": 33.3,
+   "same_best_ask_pct": 27.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.5,
+   "upstox_minus_kotak_quote_time_s_median": -24.5
   }
  ],
  "top_gaps": [
@@ -114,6 +128,13 @@
    "kotak": 9.75,
    "upstox": 10.45,
    "at": "09:25"
+  },
+  {
+   "contract": "PGEL26NOV580CE",
+   "gap_pct": 3.419,
+   "kotak": 5.85,
+   "upstox": 5.65,
+   "at": "09:55"
   },
   {
    "contract": "ASTRAL26NOV1260CE",
@@ -233,23 +254,16 @@
    "kotak": 9.75,
    "upstox": 9.8,
    "at": "09:35"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.406,
-   "kotak": 36.95,
-   "upstox": 37.1,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 468,
+  "rounds": 8,
+  "contract_quotes": 534,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.4,
-  "same_best_ask_pct": 21.2,
+  "same_best_bid_pct": 25.6,
+  "same_best_ask_pct": 21.95,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.4,
-  "upstox_minus_kotak_quote_time_s_median": -12.5
+  "oi_same_pct": 92.45,
+  "upstox_minus_kotak_quote_time_s_median": -14.75
  }
 }
