@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.0,
    "upstox_minus_kotak_quote_time_s_median": -47.0
+  },
+  {
+   "at": "10:45:10",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.333,
+   "same_best_bid_pct": 42.4,
+   "same_best_ask_pct": 47.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.0,
+   "upstox_minus_kotak_quote_time_s_median": -43.5
   }
  ],
  "top_gaps": [
@@ -333,6 +347,20 @@
    "at": "10:00"
   },
   {
+   "contract": "RECLTD26NOV300PE",
+   "gap_pct": 1.333,
+   "kotak": 7.5,
+   "upstox": 7.6,
+   "at": "10:45"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
+   "gap_pct": 1.297,
+   "kotak": 30.85,
+   "upstox": 30.45,
+   "at": "10:45"
+  },
+  {
    "contract": "BSE26NOV4000CE",
    "gap_pct": 1.164,
    "kotak": 34.35,
@@ -366,30 +394,16 @@
    "kotak": 48.25,
    "upstox": 48.7,
    "at": "09:40"
-  },
-  {
-   "contract": "ADANIGREEN26NOV1400CE",
-   "gap_pct": 0.874,
-   "kotak": 45.75,
-   "upstox": 45.35,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1920CE",
-   "gap_pct": 0.863,
-   "kotak": 34.75,
-   "upstox": 34.45,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 1126,
+  "rounds": 18,
+  "contract_quotes": 1192,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.8,
+  "same_best_bid_pct": 29.35,
   "same_best_ask_pct": 27.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.5,
-  "upstox_minus_kotak_quote_time_s_median": -22.5
+  "upstox_minus_kotak_quote_time_s_median": -23.5
  }
 }
