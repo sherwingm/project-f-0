@@ -966,6 +966,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -22.0
+  },
+  {
+   "at": "15:05:25",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.204,
+   "same_best_bid_pct": 53.0,
+   "same_best_ask_pct": 57.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -16.5
   }
  ],
  "top_gaps": [
@@ -996,6 +1010,13 @@
    "kotak": 35.3,
    "upstox": 36.5,
    "at": "09:25"
+  },
+  {
+   "contract": "MAXHEALTH26NOV920CE",
+   "gap_pct": 3.204,
+   "kotak": 29.65,
+   "upstox": 30.6,
+   "at": "15:05"
   },
   {
    "contract": "PHOENIXLTD26NOV2200CE",
@@ -1101,23 +1122,16 @@
    "kotak": 61.0,
    "upstox": 60.15,
    "at": "10:15"
-  },
-  {
-   "contract": "MAXHEALTH26NOV910CE",
-   "gap_pct": 1.387,
-   "kotak": 32.45,
-   "upstox": 32.0,
-   "at": "12:10"
   }
  ],
  "day": {
-  "rounds": 69,
-  "contract_quotes": 4550,
+  "rounds": 70,
+  "contract_quotes": 4616,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 39.4,
   "same_best_ask_pct": 40.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.0,
-  "upstox_minus_kotak_quote_time_s_median": -47.5
+  "upstox_minus_kotak_quote_time_s_median": -47.25
  }
 }
