@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.5,
    "upstox_minus_kotak_quote_time_s_median": -58.5
+  },
+  {
+   "at": "11:25:12",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.153,
+   "same_best_bid_pct": 25.8,
+   "same_best_ask_pct": 36.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.5,
+   "upstox_minus_kotak_quote_time_s_median": -78.0
   }
  ],
  "top_gaps": [
@@ -380,6 +394,13 @@
    "kotak": 35.3,
    "upstox": 36.5,
    "at": "09:25"
+  },
+  {
+   "contract": "BRITANNIA26NOV4750PE",
+   "gap_pct": 3.153,
+   "kotak": 111.0,
+   "upstox": 107.5,
+   "at": "11:25"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -485,23 +506,16 @@
    "kotak": 34.35,
    "upstox": 33.95,
    "at": "10:10"
-  },
-  {
-   "contract": "POWERGRID26NOV255PE",
-   "gap_pct": 1.163,
-   "kotak": 4.3,
-   "upstox": 4.25,
-   "at": "10:40"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 1653,
+  "rounds": 26,
+  "contract_quotes": 1719,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
-  "same_best_ask_pct": 29.2,
+  "same_best_ask_pct": 30.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 96.9,
-  "upstox_minus_kotak_quote_time_s_median": -29.5
+  "oi_same_pct": 96.95,
+  "upstox_minus_kotak_quote_time_s_median": -30.75
  }
 }
