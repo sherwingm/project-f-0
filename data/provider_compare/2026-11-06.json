@@ -14,9 +14,44 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 85.3,
    "upstox_minus_kotak_quote_time_s_median": -10.0
+  },
+  {
+   "at": "09:25:05",
+   "contracts": 68,
+   "on_both": 68,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 9.831,
+   "same_best_bid_pct": 14.9,
+   "same_best_ask_pct": 19.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.2,
+   "upstox_minus_kotak_quote_time_s_median": -9.5
   }
  ],
  "top_gaps": [
+  {
+   "contract": "ASTRAL26NOV1260PE",
+   "gap_pct": 9.831,
+   "kotak": 47.3,
+   "upstox": 51.95,
+   "at": "09:25"
+  },
+  {
+   "contract": "AUROPHARMA26NOV1880CE",
+   "gap_pct": 7.179,
+   "kotak": 9.75,
+   "upstox": 10.45,
+   "at": "09:25"
+  },
+  {
+   "contract": "ASTRAL26NOV1260CE",
+   "gap_pct": 3.399,
+   "kotak": 35.3,
+   "upstox": 36.5,
+   "at": "09:25"
+  },
   {
    "contract": "BSE26NOV4000CE",
    "gap_pct": 2.597,
@@ -32,6 +67,13 @@
    "at": "09:20"
   },
   {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 1.404,
+   "kotak": 32.05,
+   "upstox": 31.6,
+   "at": "09:25"
+  },
+  {
    "contract": "ADANIGREEN26NOV1400CE",
    "gap_pct": 0.874,
    "kotak": 45.75,
@@ -44,6 +86,41 @@
    "kotak": 13.45,
    "upstox": 13.55,
    "at": "09:20"
+  },
+  {
+   "contract": "BANDHANBNK26NOV170CE",
+   "gap_pct": 0.625,
+   "kotak": 1.6,
+   "upstox": 1.59,
+   "at": "09:25"
+  },
+  {
+   "contract": "ASIANPAINT26NOV2400CE",
+   "gap_pct": 0.342,
+   "kotak": 87.75,
+   "upstox": 88.05,
+   "at": "09:25"
+  },
+  {
+   "contract": "ASTRAL26NOVFUT",
+   "gap_pct": 0.256,
+   "kotak": 1251.5,
+   "upstox": 1248.3,
+   "at": "09:25"
+  },
+  {
+   "contract": "ASHOKLEY26NOVFUT",
+   "gap_pct": 0.072,
+   "kotak": 165.93,
+   "upstox": 165.81,
+   "at": "09:25"
+  },
+  {
+   "contract": "AUBANK26NOVFUT",
+   "gap_pct": 0.044,
+   "kotak": 910.7,
+   "upstox": 910.3,
+   "at": "09:25"
   },
   {
    "contract": "ADANIPORTS26NOVFUT",
@@ -93,79 +170,16 @@
    "kotak": 212.8,
    "upstox": 212.8,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV395CE",
-   "gap_pct": 0.0,
-   "kotak": 8.85,
-   "upstox": 8.85,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV395PE",
-   "gap_pct": 0.0,
-   "kotak": 9.3,
-   "upstox": 9.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 394.75,
-   "upstox": 394.75,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOV1440CE",
-   "gap_pct": 0.0,
-   "kotak": 43.5,
-   "upstox": 43.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOV1440PE",
-   "gap_pct": 0.0,
-   "kotak": 44.4,
-   "upstox": 44.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENSOL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1442.0,
-   "upstox": 1442.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2700CE",
-   "gap_pct": 0.0,
-   "kotak": 84.95,
-   "upstox": 84.95,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2700PE",
-   "gap_pct": 0.0,
-   "kotak": 75.1,
-   "upstox": 75.1,
-   "at": "09:20"
-  },
-  {
-   "contract": "ADANIENT26NOV2750CE",
-   "gap_pct": 0.0,
-   "kotak": 60.8,
-   "upstox": 60.8,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 68,
+  "rounds": 2,
+  "contract_quotes": 136,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 23.5,
-  "same_best_ask_pct": 17.6,
+  "same_best_bid_pct": 19.2,
+  "same_best_ask_pct": 18.35,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 85.3,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 86.75,
+  "upstox_minus_kotak_quote_time_s_median": -9.75
  }
 }
