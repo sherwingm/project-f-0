@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.5,
    "upstox_minus_kotak_quote_time_s_median": -75.0
+  },
+  {
+   "at": "11:35:13",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.185,
+   "same_best_bid_pct": 37.9,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.0,
+   "upstox_minus_kotak_quote_time_s_median": -77.5
   }
  ],
  "top_gaps": [
@@ -408,6 +422,13 @@
    "kotak": 35.3,
    "upstox": 36.5,
    "at": "09:25"
+  },
+  {
+   "contract": "PHOENIXLTD26NOV2200CE",
+   "gap_pct": 3.185,
+   "kotak": 15.7,
+   "upstox": 15.2,
+   "at": "11:35"
   },
   {
    "contract": "BRITANNIA26NOV4750PE",
@@ -513,23 +534,16 @@
    "kotak": 32.3,
    "upstox": 31.9,
    "at": "11:20"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 1.164,
-   "kotak": 34.35,
-   "upstox": 33.95,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 1785,
+  "rounds": 28,
+  "contract_quotes": 1851,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
-  "same_best_ask_pct": 29.2,
+  "same_best_ask_pct": 30.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.0,
-  "upstox_minus_kotak_quote_time_s_median": -32.0
+  "upstox_minus_kotak_quote_time_s_median": -32.75
  }
 }
