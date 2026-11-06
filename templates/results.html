@@ -77,6 +77,11 @@ h2 small { font-weight:400; font-size:12px; }
 .tag.ce { background:var(--bull-soft); color:var(--bull); } .tag.pe { background:var(--bear-soft); color:var(--bear); }
 .pc .sub { font-size:12px; color:var(--muted); margin-top:-6px; }
 .chips { display:flex; gap:6px; flex-wrap:wrap; }
+.pfbar .museg { margin:0; }
+.pfbar { display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin:0 0 10px; }
+.pfbar select { font:600 12px Inter,sans-serif; background:var(--raise); color:var(--ink); border:1px solid var(--line-strong); border-radius:8px; padding:5px 8px; }
+tr.dayrow td { background:var(--raise); text-align:left; padding:8px 10px; border-top:2px solid var(--line-strong); font-size:12.5px; }
+tr.dayrow small { color:var(--muted); margin-left:8px; }
 .chip { font:600 11px Inter,sans-serif; border-radius:999px; padding:2px 9px; background:var(--raise); border:1px solid var(--line-strong); color:var(--ink); white-space:nowrap; }
 .chip.in { border-color:var(--bull); color:var(--bull); } .chip.out { border-color:var(--unc); color:var(--unc); }
 .px { display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:8px; }
@@ -388,9 +393,46 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     if (r) return `stop ${rs(e / 2)} at a close · no new high ${r.stall || 0}/5 · by ${day(tMinus1(p.expiry))}`;
     return `stop ${rs(p.stop)} · auto-exit ${day(p.t2_date)}`;
   }
-  function openTable(rows) {
+  // ---- paper filters and day-wise grouping (the user, 2026-11-06: "give filter here, mostly ... day wise arrangement")
+  const PF0 = { arm: "all", opt: "all", res: "all", group: "bought", day: "all" };
+  let PF = { ...PF0, ...ls.get("fo_pf", {}) };
+  const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const wday = d => `${WD[new Date(d + "T00:00:00").getDay()]} ${day(d)}`;
+  const armOf = x => { const r = x.rule || {}; return r.strategy === "fade" ? ["F"] : (r.arms || []); };
+  const dayOf = (x, g) => String((g === "sold" ? x.closed_at || x.opened_at : x.opened_at) || "").slice(0, 10);
+  function pfApply(rows, closed) {
+    return rows.filter(x => (PF.arm === "all" || armOf(x).includes(PF.arm))
+      && (PF.opt === "all" || x.instrument === PF.opt)
+      && (!closed || PF.res === "all" || (PF.res === "win" ? (x.net_pnl || 0) > 0 : (x.net_pnl || 0) <= 0))
+      && (PF.day === "all" || dayOf(x, closed && PF.group === "sold" ? "sold" : "bought") === PF.day));
+  }
+  function byDay(rows, group, cols, sumFn, rowFn) {
+    if (!group || group === "none") return rows.map(rowFn).join("");
+    const g = {};
+    rows.forEach(x => { const d = dayOf(x, group); (g[d] = g[d] || []).push(x); });
+    return Object.keys(g).sort().reverse().map(d => {
+      const xs = g[d].slice().sort((a, b) => String(b.opened_at).localeCompare(String(a.opened_at)));
+      return `<tr class="dayrow"><td colspan="${cols}"><b>${d ? wday(d) : "—"}</b> ${sumFn(xs)}</td></tr>` + xs.map(rowFn).join("");
+    }).join("");
+  }
+  const closedDaySum = xs => { const n = xs.reduce((a, c) => a + (c.net_pnl || 0), 0), w = xs.filter(c => (c.net_pnl || 0) > 0).length;
+    return `<small>${xs.length} trade${xs.length > 1 ? "s" : ""} · won ${w} · lost ${xs.length - w} · net <span class="${dir(n)}">${srs(n, 0)}</span></small>`; };
+  const openDaySum = xs => { const b = xs.reduce((a, p) => a + p.entry.price * p.qty, 0), u = xs.reduce((a, p) => a + (p.unrealised || 0), 0);
+    return `<small>${xs.length} bought · paid ${rs(b, 0)} · if sold now <span class="${dir(u)}">${srs(u, 0)}</span></small>`; };
+  function pfBar(closed, all) {
+    const seg = (k, opts) => `<span class="museg" role="group">${opts.map(([v, n]) => `<button type="button" data-pf="${k}:${v}" aria-pressed="${PF[k] === v}">${n}</button>`).join("")}</span>`;
+    const days = [...new Set(all.map(x => dayOf(x, closed && PF.group === "sold" ? "sold" : "bought")).filter(Boolean))].sort().reverse();
+    const on = ["arm", "opt", "res", "day"].some(k => PF[k] !== PF0[k]);
+    return `<div class="pfbar">${seg("arm", [["all", "All arms"], ["A", "Arm A"], ["B", "Arm B"], ["F", "Arm F · fade"]])}
+      ${seg("opt", [["all", "CE + PE"], ["CE", "CE"], ["PE", "PE"]])}
+      ${closed ? seg("res", [["all", "Won + lost"], ["win", "Won"], ["loss", "Lost"]]) : ""}
+      ${seg("group", closed ? [["bought", "By buy day"], ["sold", "By sell day"], ["none", "No grouping"]] : [["bought", "By buy day"], ["none", "No grouping"]])}
+      <select data-pfday aria-label="Day"><option value="all">All days</option>${days.map(d => `<option value="${d}"${PF.day === d ? " selected" : ""}>${wday(d)}</option>`).join("")}</select>
+      ${on ? `<button type="button" class="btn" data-pf="reset:1">Clear filters</button>` : ""}</div>`;
+  }
+  function openTable(rows, group) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Lots", "Entry", "Now", "Buy value", "Value now", "Max up", "Max dip",
-      "P&amp;L at last", "If sold now (MTM)", "Exit rule", ""].map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(p => {
+      "P&amp;L at last", "If sold now (MTM)", "Exit rule", ""].map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${byDay(rows, group, 13, openDaySum, p => {
         const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
         const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
         const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price, r = p.rule;
@@ -401,16 +443,16 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="${dir(chg(tr, e))}">${tr != null ? pct(chg(tr, e)) + ` <small>${rs(tr)}</small>` : "—"}</td>
           <td class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</td><td class="${dir(p.unrealised)}">${srs(p.unrealised, 2)} <small>bid ${rs(bid)}</small></td>
           <td class="l" style="white-space:nowrap"><small>${exitShort(p)}</small></td>
-          <td><button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button><p class="err" data-cerr="${esc(p.id)}" hidden></p></td></tr>`; }).join("")}</tbody></table></div>`;
+          <td><button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button><p class="err" data-cerr="${esc(p.id)}" hidden></p></td></tr>`; })}</tbody></table></div>`;
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
                    rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
                    fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)",
                    fade_stop: "Fade: \u221220 % stop", fade_trail: "Fade v12: trail (2 % below the peak)" };
-  function closedTable(rows, shadows) {
+  function closedTable(rows, shadows, group) {
     return `<div class="tw"><table><thead><tr>${["Option", "Overall max up", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].concat(shadows ? ["v10 shadow ₹", "Trail shadow ₹"] : []).map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="4">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
-      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="net at the peak bid minus the net we got: what the exit left behind">Left behind</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
+      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="net at the peak bid minus the net we got: what the exit left behind">Left behind</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${byDay(rows, group, shadows ? 19 : 17, closedDaySum, c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough, pc = c.peak_capture;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && todayIso() <= a.until;
@@ -426,7 +468,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>
-          <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; }).join("")}</tbody></table></div>`;
+          <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; })}</tbody></table></div>`;
   }
   // scoreboard maths, shared by the paper account and the Arm F tiles
   // Arm F counts from S1 v11's day 0 (2026-10-21, the user's decision): rule.version "v11". The v10 fade trades before it
@@ -598,14 +640,19 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     },
     openPositions() {
       const w = paperWait("Open positions"); if (w) return panel("Open positions", w);
-      return panel(`Open positions · ${P.positions.length}`, P.positions.length ? openTable(P.positions)
+      const op = pfApply(P.positions, false), grp = PF.group === "sold" ? "bought" : PF.group;
+      return panel(`Open positions · ${op.length}${op.length !== P.positions.length ? ` of ${P.positions.length}` : ""}`, P.positions.length
+        ? pfBar(false, P.positions) + (op.length ? openTable(op, grp) : empty("No open position matches these filters."))
         : empty("No open positions. The rule trades of the next session are bought at 09:15 and at 15:20 automatically."), { sub: P.positions.length ? "tap a row for why it was bought" : "" });
     },
     closedTrades() {
       const w = paperWait("Closed trades"); if (w) return panel("Closed trades", w);
       const main = P.trades.filter(x => !oldFade(x)), old = P.trades.filter(oldFade);
       const side = old.length ? `<details><summary>Side record: ${old.length} v10 fade trades before 21 Oct (old 15:20 exit), booked ${srs(old.reduce((a, c) => a + (c.net_pnl || 0), 0))}</summary>${closedTable(old)}</details>` : "";
-      return panel(`Closed trades \u00b7 ${main.length}`, (main.length ? closedTable(main) : empty("None yet. Fade trades count from v11's day 0 (21 Oct)."))
+      const shown = pfApply(main, true), tot = shown.reduce((a, c) => a + (c.net_pnl || 0), 0);
+      return panel(`Closed trades \u00b7 ${shown.length}${shown.length !== main.length ? ` of ${main.length}` : ""}`, (main.length ? pfBar(true, main)
+          + (shown.length ? `<p class="note" style="margin:0 0 8px">Shown: ${shown.length} trades · won ${shown.filter(c => (c.net_pnl || 0) > 0).length} · net <span class="${dir(tot)}">${srs(tot, 0)}</span></p>` + closedTable(shown, false, PF.group)
+             : empty("No closed trade matches these filters.")) : empty("None yet. Fade trades count from v11's day 0 (21 Oct)."))
         + side, { sub: "net of fills and charges \u00b7 after the sale the option is followed until its T-2 day" });
     },
     refusals() {
@@ -1019,11 +1066,16 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   $("#main").addEventListener("click", e => {
     const mu = e.target.closest("[data-mu]");
     if (mu) { muMode = mu.dataset.mu; try { localStorage.setItem("fo_mu", muMode); } catch (err) { /* private mode */ } render(); return; }
+    const pf = e.target.closest("[data-pf]");
+    if (pf) { const [k, v] = pf.dataset.pf.split(":");
+      PF = k === "reset" ? { ...PF0, group: PF.group } : { ...PF, [k]: v, ...(k === "group" ? { day: "all" } : {}) };
+      ls.set("fo_pf", PF); render(); return; }
     if (e.target.closest("button, a, summary, input")) return;
     const el = e.target.closest("[data-why]"); if (!el) return;
     const key = el.dataset.why;
     if (openWhy(key)) { const sym = key.startsWith("sig:") ? key.slice(4) : ((P.positions.concat(P.trades)).find(x => x.id === key.slice(key.indexOf(":") + 1)) || {}).symbol; setHash(tab, sym); }
   });
+  $("#main").addEventListener("change", e => { if (e.target.matches("[data-pfday]")) { PF = { ...PF, day: e.target.value }; ls.set("fo_pf", PF); render(); } });
   $("#main").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("[data-why]")) e.target.click(); });
 
   async function closePos(id, btn) {
