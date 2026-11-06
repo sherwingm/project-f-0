@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.9,
    "upstox_minus_kotak_quote_time_s_median": -35.0
+  },
+  {
+   "at": "10:15:08",
+   "contracts": 65,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.459,
+   "same_best_bid_pct": 36.9,
+   "same_best_ask_pct": 29.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.8,
+   "upstox_minus_kotak_quote_time_s_median": -32.0
   }
  ],
  "top_gaps": [
@@ -193,6 +207,13 @@
    "at": "09:20"
   },
   {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 2.459,
+   "kotak": 12.2,
+   "upstox": 12.5,
+   "at": "10:15"
+  },
+  {
    "contract": "LAURUSLABS26NOV2540CE",
    "gap_pct": 1.961,
    "kotak": 10.2,
@@ -219,6 +240,13 @@
    "kotak": 32.05,
    "upstox": 31.6,
    "at": "09:25"
+  },
+  {
+   "contract": "LAURUSLABS26NOV2320PE",
+   "gap_pct": 1.393,
+   "kotak": 61.0,
+   "upstox": 60.15,
+   "at": "10:15"
   },
   {
    "contract": "ICICIBANK26NOV1520CE",
@@ -282,30 +310,16 @@
    "kotak": 13.45,
    "upstox": 13.55,
    "at": "09:20"
-  },
-  {
-   "contract": "BHEL26NOV400CE",
-   "gap_pct": 0.667,
-   "kotak": 15.0,
-   "upstox": 15.1,
-   "at": "09:35"
-  },
-  {
-   "contract": "BANDHANBNK26NOV170CE",
-   "gap_pct": 0.625,
-   "kotak": 1.6,
-   "upstox": 1.59,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 731,
+  "rounds": 12,
+  "contract_quotes": 796,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.8,
-  "same_best_ask_pct": 25.4,
+  "same_best_bid_pct": 27.3,
+  "same_best_ask_pct": 26.35,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.9,
-  "upstox_minus_kotak_quote_time_s_median": -17.0
+  "oi_same_pct": 93.2,
+  "upstox_minus_kotak_quote_time_s_median": -17.75
  }
 }
