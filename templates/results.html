@@ -299,7 +299,45 @@ details summary { padding:4px 0; } details summary:hover { color:var(--ink); }
   .tabs button { padding:8px 2px; } .panel { padding:14px; } .ws h1 { font-size:19px; }
   .mu-cmp b { font-size:22px; } .mu-row { grid-template-columns:78px minmax(0,1fr) 40px 56px; }
 }
-@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+
+/* ===== motion (7 Nov 2026, the visualize skill's `animate` rules for dashboards): motion only where it says
+   something. A redraw flashes each live cell whose number moved (green up, red down) and ticks the big numbers to
+   their new value; a tab switch cross-fades; the Max up bars grow once per page load; the live dot breathes while the
+   market is open; buttons answer a press; the drawer and search slide in; sections open smoothly. No entrance on
+   the frame, no stagger on lists, transform / opacity only. Reduced motion: values change at once, nothing moves. */
+:root { --m-fast:160ms; --m-base:260ms; --ease-out:cubic-bezier(0.16, 1, 0.3, 1); --ease-std:cubic-bezier(0.4, 0, 0.2, 1); }
+.dot.on { animation:live 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate; }
+@keyframes live { from { opacity:.55; } to { opacity:1; } }
+.btn, .tbtn, .tlink, .museg button, .tabs button, .pfbar button {
+  transition:transform 80ms var(--ease-std), background-color var(--m-fast) var(--ease-std), border-color var(--m-fast) var(--ease-std), color var(--m-fast) var(--ease-std), box-shadow var(--m-base) var(--ease-std); }
+.btn:active, .tbtn:active, .tlink:active, .museg button:active, .tabs button:active, .pfbar button:active { transform:scale(.97); }
+tbody tr { transition:background-color 100ms var(--ease-std); }
+tr[data-why]:active td { background:var(--raise); }
+td.fx-up { animation:fx-up 1.4s var(--ease-std); } td.fx-down { animation:fx-down 1.4s var(--ease-std); }
+@keyframes fx-up { from { background-color:var(--bull-soft); box-shadow:inset 0 -2px 0 var(--bull); } to { background-color:transparent; box-shadow:inset 0 -2px 0 transparent; } }
+@keyframes fx-down { from { background-color:var(--bear-soft); box-shadow:inset 0 -2px 0 var(--bear); } to { background-color:transparent; box-shadow:inset 0 -2px 0 transparent; } }
+#main.fx-in { animation:fx-in 200ms var(--ease-std); }
+@keyframes fx-in { from { opacity:0; } to { opacity:1; } }
+.fx-hero .mu-track i { transform-origin:left center; animation:fx-grow 700ms var(--ease-out) both; }
+@keyframes fx-grow { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+.scrim { transition:opacity var(--m-base) var(--ease-std); }
+.sheet { transition:transform var(--m-base) var(--ease-out), opacity var(--m-fast) var(--ease-std); }
+.pal { transition:transform 220ms var(--ease-out), opacity var(--m-fast) var(--ease-std); }
+@starting-style {
+  .scrim { opacity:0; }
+  .sheet { opacity:0; transform:translate(-50%, 28px); }
+  .pal { opacity:0; transform:translateX(-50%) scale(.97); }
+}
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  :root { interpolate-size:allow-keywords; }
+  details::details-content { block-size:0; overflow:clip; transition:block-size var(--m-base) var(--ease-std), content-visibility var(--m-base) allow-discrete; transition-behavior:allow-discrete; }
+  details[open]::details-content { block-size:auto; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .btn, .tbtn, .tlink, .museg button, .tabs button, .pfbar button, tbody tr, .scrim, .sheet, .pal { transition-duration:0.01ms !important; }
+  .dot.on, td.fx-up, td.fx-down, #main.fx-in, .fx-hero .mu-track i { animation:none !important; }
+  details::details-content { transition:none !important; }
+}
 </style>
 </head>
 <body>
@@ -1147,9 +1185,54 @@ details summary { padding:4px 0; } details summary:hover { color:var(--ink); }
     if (x) openWhy(x.why); else setTab(tab, h.s);
   }
 
+  // ---- motion on data updates (see the motion block in the styles): a redraw of the same tab flashes each row cell
+  // whose number moved and ticks the big numbers from the old value to the new; a tab switch cross-fades; the Max up
+  // bars grow once per page load. Reduced motion: nothing moves.
+  const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const NUM = /[+−-]?\d[\d,]*(?:\.\d+)?/;
+  const numIn = t => { const m = NUM.exec(t || ""); return m ? parseFloat(m[0].replace(/,/g, "").replace("−", "-")) : null; };
+  const BIG = ".mu-cmp b, .mu-row b, .tile b";
+  const ptitle = p => ((p.querySelector("h2") || {}).textContent || "").replace(/\d+/g, "#").slice(0, 30);
+  let heroDone = false;
+  function snapshot() {
+    const s = new Map();
+    $$("#main section.panel").forEach(p => {                         // keyed by panel too: one trade sits in several tables
+      const pt = ptitle(p);
+      $$("tr[data-why]", p).forEach(tr => [...tr.cells].forEach((td, i) => s.set(`${pt}|${tr.dataset.why}|${i}`, td.textContent)));
+      $$(BIG, p).forEach((b, i) => s.set(`${pt}#${i}`, b.textContent));
+    });
+    return s;
+  }
+  function tickTo(el, from) {                                        // keeps the element's own sign, grouping, decimals and unit
+    const txt = el.textContent, m = NUM.exec(txt), to = numIn(txt);
+    if (!m || from == null || to == null || from === to || el.children.length) return;
+    const dp = (m[0].split(".")[1] || "").length, grp = m[0].includes(","), plus = m[0].startsWith("+"), minus = txt.includes("−") ? "−" : "-";
+    const pre = txt.slice(0, m.index), post = txt.slice(m.index + m[0].length);
+    const fmt = v => (v < 0 ? minus : v > 0 && plus ? "+" : "") + Math.abs(v).toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp, useGrouping: grp });
+    const t0 = performance.now(), ease = k => 1 - Math.pow(1 - k, 3);
+    const step = now => { const k = Math.min(1, (now - t0) / 500); el.textContent = k < 1 ? pre + fmt(from + (to - from) * ease(k)) + post : txt; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function motion(prev, switched) {
+    if (calm()) return;
+    const m = $("#main");
+    if (switched) { m.classList.remove("fx-in"); void m.offsetWidth; m.classList.add("fx-in"); }
+    if (!heroDone && $("#main .mu-track i")) { heroDone = true; m.classList.add("fx-hero"); setTimeout(() => m.classList.remove("fx-hero"), 900); }
+    if (!prev) return;
+    $$("#main section.panel").forEach(p => {
+      const pt = ptitle(p);
+      $$("tr[data-why]", p).forEach(tr => [...tr.cells].forEach((td, i) => {
+        const o = prev.get(`${pt}|${tr.dataset.why}|${i}`); if (o == null || o === td.textContent) return;
+        const a = numIn(o), b = numIn(td.textContent); if (a != null && b != null && a !== b) td.classList.add(b > a ? "fx-up" : "fx-down");
+      }));
+      $$(BIG, p).forEach((b, i) => { const o = prev.get(`${pt}#${i}`); if (o != null && o !== b.textContent) tickTo(b, numIn(o)); });
+    });
+  }
+
   let drawn = "";                                                    // the tab on screen, so a redraw keeps its open <details>
   function render() {
     const w = WORKSPACES[tab], sum = d => ((d.querySelector("summary") || {}).textContent || "").replace(/\d+/g, "#");
+    const prev = drawn === tab ? snapshot() : null, switched = !!drawn && drawn !== tab;
     const keep = drawn === tab ? $$("#main details").filter(d => d.open).map(sum) : [];
     const sx = drawn === tab ? $$("#main .tw").map(t => t.scrollLeft) : [];   // and each table's sideways scroll
     $("#main").innerHTML = `<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
@@ -1158,6 +1241,7 @@ details summary { padding:4px 0; } details summary:hover { color:var(--ink); }
     if (keep.length) $$("#main details").forEach(d => { if (keep.includes(sum(d))) d.open = true; });
     if (sx.some(Boolean)) $$("#main .tw").forEach((t, i) => { if (sx[i]) t.scrollLeft = sx[i]; });
     $$("[data-close]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); closePos(b.dataset.close, b); }));
+    motion(prev, switched);
   }
   $("#main").addEventListener("click", e => {
     const mu = e.target.closest("[data-mu]");
