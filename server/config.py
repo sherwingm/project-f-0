@@ -132,6 +132,7 @@ class Settings:
     fill_tick: float = float(os.getenv("FILL_TICK", "0.05"))
     paper_queue_fill_at: str = os.getenv("PAPER_QUEUE_FILL_AT", "09:20")
     nse_holidays: str = os.getenv("NSE_HOLIDAYS", "")
+    special_sessions: str = os.getenv("SPECIAL_SESSIONS", "")   # full Saturday / Sunday sessions NSE announces (index programs only; server/sessions.py)
     # ---- paper engine: ledger (server/paper.py)
     paper_capital: float = float(os.getenv("PAPER_CAPITAL", "500000"))
     margin_estimate_pct: float = float(os.getenv("MARGIN_ESTIMATE_PCT", "18"))

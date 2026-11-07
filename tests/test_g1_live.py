@@ -136,3 +136,11 @@ def test_missed_close_sells_at_the_first_bid_next_session(g1):
     st.put(24000, 130.0, 131.0)
     tr.tick(datetime.combine(d3, time(9, 20), IST))
     assert tr.state["open"] is None and "missed" in tr.state["trades"][0]["reason"]
+
+
+def test_g1_runs_on_an_announced_saturday_session(g1, monkeypatch):
+    tr, st = g1
+    sat = date(2026, 11, 7)
+    monkeypatch.setattr(G.sessions, "special_sessions", lambda: {sat})
+    run(tr, sat, time(9, 15), time(9, 45), before=down_day(st))
+    assert tr.state["open"] is not None and tr.state["open"]["entry"] == "09:41"

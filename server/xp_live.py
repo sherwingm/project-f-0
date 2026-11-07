@@ -73,7 +73,7 @@ class ExpiryStraddleLogger:
         with self.lock:
             if now.date() != self.day:
                 self.day, self.asks, self.ltps = now.date(), {}, {}
-            if not sessions.is_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
+            if not sessions.is_index_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
                 return
             pos = self.state.get("open")
             if pos and pos["day"] != self.day.isoformat():         # cannot happen (closed at 15:15); never carry

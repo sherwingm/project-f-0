@@ -1021,3 +1021,16 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   5 NT tests pass. Strategy page, DECISIONS and the /index note updated. Deployed after the close (server clock, not the PC's).
 - Same day: max up after entry with no exit for G1 / G1-F, SENSEX puts and the call mirror in `g1_research/`
   (commits 23892d7d0, 07ade1de4).
+
+### 2026-11-07: calendar fix, weekend special sessions for the index programs (user: "do calender fix")
+- NSE sometimes holds a full Saturday / Sunday session (Budget Sunday 1 Feb 2026; 2024-01-20 and 2025-02-01 were Saturdays).
+  The server calendar counted weekdays only, so G1 / G1-F, NT, XP and the NIFTY recorder would have idled on one.
+- `server/sessions.py`: `is_index_session(d)` = a normal session OR an announced full weekend session
+  (`SPECIAL_SESSIONS` env or `data/special_sessions.json`, empty now); a holiday always wins. Used by `g1_live.py`
+  (so NT too), `xp_live.py` and `index_recorder.py`. `is_session` is unchanged, so S1 / S2 timing and fills are not
+  touched. The one-hour evening Muhurat session (Sun 8 Nov 2026) is not listed: G1's 09:15 range does not fit it, and
+  8 Nov stays a holiday in `data/nse_holidays.json`.
+- 5 new tests (`tests/test_special_sessions.py`, one Saturday G1 test); the whole suite passes. To use it: add the date
+  to `data/special_sessions.json` once NSE announces a weekend session.
+- Also noted: Tue 10 Nov 2026 is a holiday, so the NIFTY weekly expiry moves to Mon 9 Nov; the XP log's first day is
+  Mon 9 Nov (it reads the expiry from the option list), not Tue 10 Nov as first written.

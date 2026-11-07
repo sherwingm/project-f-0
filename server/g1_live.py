@@ -165,9 +165,9 @@ class G1Trader:
             if now.date() != self.day:
                 self.day, self.bars, self.vix, self.asks, self.last_bid = now.date(), {}, [], {}, None
                 self.prev_close = None
-                if sessions.is_session(now.date()) and now.time() > OR_FROM:
+                if sessions.is_index_session(now.date()) and now.time() > OR_FROM:
                     self._seed(now)
-            if not sessions.is_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
+            if not sessions.is_index_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
                 return
             sp = self.stream.get(SPOT_KEY)
             px = _ltp(sp)

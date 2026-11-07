@@ -1,4 +1,5 @@
-"""NSE session calendar for the paper engine: weekdays, minus any dates listed in NSE_HOLIDAYS.
+"""NSE session calendar for the paper engine: weekdays, minus any dates listed in NSE_HOLIDAYS. is_index_session also
+    counts announced full weekend sessions (SPECIAL_SESSIONS / data/special_sessions.json) for the index programs.
 
     sessions_to_expiry(today, expiry)  sessions after `today` up to and including expiry day
                                        (expiry day itself = 0, the day before = 1, T-2 = 2)
@@ -52,6 +53,42 @@ def holidays() -> set[date]:
 def is_session(d, hol: set[date] | None = None) -> bool:
     d = _d(d)
     return d.weekday() < 5 and d not in (holidays() if hol is None else hol)
+
+
+SPECIAL_FILE = Path(__file__).resolve().parents[1] / "data" / "special_sessions.json"
+_special_cache: tuple[float, frozenset] = (-1.0, frozenset())
+
+
+def _file_special() -> frozenset:
+    """data/special_sessions.json {"special_sessions": ["YYYY-MM-DD", ...]}: full Saturday / Sunday sessions NSE has
+    announced (e.g. a Budget Sunday); cached by mtime."""
+    global _special_cache
+    try:
+        mt = SPECIAL_FILE.stat().st_mtime
+    except OSError:
+        return frozenset()
+    if mt != _special_cache[0]:
+        try:
+            days = json.loads(SPECIAL_FILE.read_text(encoding="utf-8")).get("special_sessions") or []
+            _special_cache = (mt, frozenset(_d(x) for x in days))
+        except (OSError, ValueError):
+            return _special_cache[1]
+    return _special_cache[1]
+
+
+def special_sessions() -> set[date]:
+    """SPECIAL_SESSIONS plus data/special_sessions.json. A one-hour evening Muhurat session is NOT listed here."""
+    return {_d(s.strip()) for s in settings.special_sessions.split(",") if s.strip()} | set(_file_special())
+
+
+def is_index_session(d, hol: set[date] | None = None) -> bool:
+    """A normal session (weekday, not a holiday) or an announced full weekend session. Used by the index programs only
+    (G1 / G1-F, NT, XP and the NIFTY recorder); `is_session` stays weekday-only, so S1 / S2 timing is unchanged.
+    A holiday always wins over a special session."""
+    d = _d(d)
+    if (is_session(d) if hol is None else is_session(d, hol)):
+        return True
+    return d in special_sessions() and d not in (holidays() if hol is None else hol)
 
 
 def sessions_to_expiry(today, expiry, hol: set[date] | None = None) -> int:
