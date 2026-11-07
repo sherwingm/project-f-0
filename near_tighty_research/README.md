@@ -12,6 +12,9 @@ from the overall index / NIFTY optimisation. Anything related to Near Tighty is 
 | `results/nt_maxup_summary.csv` | the same by days to expiry, NT vs not NT, and the two halves |
 | `reports/NT_MAXUP.md` | the plain-English result |
 | `scripts/nt_maxup.py` | reproduces both files (`INDEX_STORE=../fo-index-data/data/index`) |
+| `reports/NT_TARGETS.md` | which sell-at level (1.5x-10x) books the best result, NT, history (2026-11-07) |
+| `data/nt_target_trades.csv`, `results/nt_target_summary.csv` | per trade and per level / window: sold price, reason, net, max up |
+| `scripts/nt_targets.py` | reproduces both |
 
 ## Related Near Tighty files that live elsewhere (not moved)
 - `strategies/NT_near_tighty.md`: the pre-registered rules and gate.

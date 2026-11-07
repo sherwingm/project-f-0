@@ -1063,4 +1063,9 @@ server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, scor
   Sell at 2x else 15:15 loses on 14 of 16 index / side / strike cells (NIFTY 2-out call −₹2.89 lakh on 107 trades,
   SENSEX −₹1.18 lakh); only ATM puts positive (+₹64k NIFTY, +₹69k SENSEX; a period effect). Call + put every day loses
   under every rule. The hindsight ceiling (sold at the exact top) would be +₹11-28 lakh per cell.
+- 2026-11-07 · Near Tighty targets (the user: "show me the 2x, 3x etc which makes the good returns"), in
+  `near_tighty_research/` (`reports/NT_TARGETS.md`). History, 160 NT trades, 50 % stop kept: sell at next 09:16 with no
+  target +12.6 % (t 1.73, +₹1.08 lakh); 5x +12.0 %, 3x +7.9 %, 2x +4.9 %, 1.5x −3.8 %: a lower target gives money back.
+  Top 5 trades make more than the total (mean +3.1 % without them). Next 09:16 beats the next close for NT (+12.6 % vs
+  +5.7 %; stop hit 42 % vs 61 %). Nothing changed live.
 
