@@ -1041,3 +1041,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 
 ## 7 Nov 2026 (index chat): breakout score 0-7, history check
 Pre-registered g1_research/SCORE_PREREG.md, then ran scripts/g1_score.py on the 259 history signals. Result (SCORE_RESULT.md): the score does not rank max up (rho +0.06 discovery, +0.09 validation, high vs low p 0.25) = Rejected as a predictor; it stays a record only (no filter, no size). Hidden: prev 5-day and EMA20 items overlap (0.59), two items point the wrong way, hump shape (3-4 points best). Nothing changed live.
+
+## 7 Nov 2026 (index chat): breakout score wired live, record only
+server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, score %, percentile (history 259 + live so far) and the running average; kept on the day record and the trade; added to the buy alert. It never gates a trade; any failure is swallowed. Near Tighty is not scored (SCORE=False). Daily closes for the two trend items come from Upstox v3 day candles (checked on the VM: matches history, 0.287 / -0.778). Deployed Sat 7 Nov 18:19 IST (ed98cb1ef), all endpoints 200, PAPER=true. First live score at the first G1 signal (Mon 9 Nov earliest).

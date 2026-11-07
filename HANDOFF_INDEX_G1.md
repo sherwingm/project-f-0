@@ -47,6 +47,8 @@ VM shell, never printed), `PAPER=true`, no errors in `journalctl -u fo-scanner -
   (`SPECIAL_SESSIONS` env or `data/special_sessions.json`, empty now) for G1 / NT / XP / the NIFTY recorder; `is_session` is
   unchanged so S1 / S2 are untouched; a holiday always wins. Add a date when NSE announces a weekend session.
 
+- **Breakout score (7 Nov, record only):** `server/g1_score.py`; score 0-7 + % + percentile + running avg on every G1 signal (ledger day + trade + buy alert); never gates a trade; NT not scored. History check: no link to max up (SCORE_RESULT.md); judge again at 30 live signals, max up first by band. VM at `ed98cb1ef`.
+
 ## Research done this chat (all history, in-sample unless stated; folders are separate, do not mix)
 - `expiry_research/` (independent project, all years 2018-2026, sealed final period Jul 2024 →): **no direction edge** at
   any decision time (gap transitions, 5 sessions before expiry, option chain / OI, ML all ~chance, AUC 0.44-0.56). Size of
