@@ -1,0 +1,29 @@
+loading raw data ...
+NIFTY: bhavcopy rows 4,635,778, duplicate keys 0
+BANKNIFTY: bhavcopy rows 3,073,898, duplicate keys 0
+building panels ...
+NIFTY: open 1599 rows x 173 cols, 2018-01-01 .. 2024-06-28; sealed 578 rows (577 final + 1 edge row)
+  open rows per split: {'discovery': 1233, 'validation': 366}
+  open src: {'index_close_daily': 938, 'spot_1m': 661}
+  open split_edge rows: ['2022-12-30', '2024-06-28']
+BANKNIFTY: open 1599 rows x 173 cols, 2018-01-01 .. 2024-06-28; sealed 578 rows (577 final + 1 edge row)
+  open rows per split: {'discovery': 1233, 'validation': 366}
+  open src: {'index_close_daily': 938, 'spot_1m': 661}
+  open split_edge rows: ['2022-12-30', '2024-06-28']
+SENSEX: open 663 rows x 109 cols, 2021-10-20 .. 2024-06-28; sealed 578 rows (577 final + 1 edge row)
+  open rows per split: {'discovery': 297, 'validation': 366}
+  open src: {'spot_1m': 662, 'spot_1m_short': 1}
+  open split_edge rows: ['2022-12-30', '2024-06-28']
+underlying                        field  n_days  median_abs_pct  p99_abs_pct  max_abs_pct  n_over_0_1pct  n_over_0_5pct  gap_dir_agree_share
+     NIFTY                         open     660        0.000000     0.000000     0.000000              0              0                  NaN
+     NIFTY                         high     660        0.002753     0.055595     0.173467              3              0                  NaN
+     NIFTY                          low     660        0.003109     0.053227     0.353650              2              0                  NaN
+     NIFTY                        close     660        0.049100     0.264982     0.529228            133              2                  NaN
+     NIFTY gap_pct (minute vs official)     659        0.049247     0.265555     0.534761            133              2             0.895296
+ BANKNIFTY                         open     660        0.000000     0.000000     0.000000              0              0                  NaN
+ BANKNIFTY                         high     660        0.004281     0.076361     0.314037              5              0                  NaN
+ BANKNIFTY                          low     660        0.005158     0.102105     0.130358              7              0                  NaN
+ BANKNIFTY                        close     660        0.068195     0.388958     0.751068            218              2                  NaN
+ BANKNIFTY gap_pct (minute vs official)     659        0.068424     0.387049     0.759687            219              2             0.884674
+gap report rows (open splits): 9
+{'BANKNIFTY': 4, 'NIFTY': 4, 'SENSEX': 1}

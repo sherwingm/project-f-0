@@ -1,0 +1,191 @@
+          n_subsets  same_sign  min_effect  max_effect                                    verdict
+id                                                                                               
+BIAS-C01        7.0        6.0   -0.258237    0.033954  Untestable (context absent in validation)
+BIAS-C02        7.0        6.0   -0.258237    0.042430  Untestable (context absent in validation)
+BIAS-C03        9.0        8.0   -0.168794    0.042863  Untestable (context absent in validation)
+BIAS-C04        9.0        8.0   -0.168794    0.070136  Untestable (context absent in validation)
+BIAS-C05       16.0       15.0   -0.012100    0.147601                                   Rejected
+BIAS-C06       16.0       15.0   -0.023140    0.100024                                   Rejected
+BIAS-C07       14.0       13.0   -0.017049    0.151639                                   Rejected
+BIAS-C08       14.0       14.0    0.006555    0.127828                                   Rejected
+BIAS-C09        9.0        5.0   -0.135122    0.020508  Untestable (context absent in validation)
+BIAS-C10        7.0        6.0   -0.055209    0.203348                                   Rejected
+BIAS-C11        6.0        6.0    0.118893    0.180748                                   Rejected
+BIAS-C12        9.0        6.0   -0.135122    0.053353  Untestable (context absent in validation)
+BIAS-C13       12.0       12.0    0.019168    0.151332                                   Rejected
+BIAS-C14       12.0       11.0   -0.008219    0.153469                                   Rejected
+      id underlying                     check      subset   n  value  base  effect  same_sign  small_n
+BIAS-C01      NIFTY                  per year        2018 172  0.978 0.996  -0.018       True    False
+BIAS-C01      NIFTY                  per year        2019  23  0.971 1.089  -0.118       True     True
+BIAS-C01      NIFTY                  per year        2020   0    NaN 1.805     NaN      False     True
+BIAS-C01      NIFTY                  per year        2021   0    NaN 1.189     NaN      False     True
+BIAS-C01      NIFTY                  per year        2022   0    NaN 1.194     NaN      False     True
+BIAS-C01      NIFTY                  per year        2023   0    NaN 0.802     NaN      False     True
+BIAS-C01      NIFTY                  per year        2024   0    NaN 1.060     NaN      False     True
+BIAS-C01      NIFTY per days to t+1 (weekend)          1d 145  0.980 1.151  -0.171       True    False
+BIAS-C01      NIFTY per days to t+1 (weekend)        2-3d  47  0.970 1.228  -0.258       True    False
+BIAS-C01      NIFTY per days to t+1 (weekend)         4d+   3  0.926 1.325  -0.398       True     True
+BIAS-C01      NIFTY         neighbour context         D-5  13  0.937 1.172  -0.236       True     True
+BIAS-C02      NIFTY                  per year        2018 160  0.982 0.996  -0.014       True    False
+BIAS-C02      NIFTY                  per year        2019  22  0.943 1.089  -0.146       True     True
+BIAS-C02      NIFTY                  per year        2020   0    NaN 1.805     NaN      False     True
+BIAS-C02      NIFTY                  per year        2021   0    NaN 1.189     NaN      False     True
+BIAS-C02      NIFTY                  per year        2022   0    NaN 1.194     NaN      False     True
+BIAS-C02      NIFTY                  per year        2023   0    NaN 0.802     NaN      False     True
+BIAS-C02      NIFTY                  per year        2024   0    NaN 1.060     NaN      False     True
+BIAS-C02      NIFTY per days to t+1 (weekend)          1d 134  0.980 1.151  -0.172       True    False
+BIAS-C02      NIFTY per days to t+1 (weekend)        2-3d  47  0.970 1.228  -0.258       True    False
+BIAS-C02      NIFTY per days to t+1 (weekend)         4d+   1  1.002 1.325  -0.323       True     True
+BIAS-C02      NIFTY         neighbour context         D-5  13  0.937 1.172  -0.236       True     True
+BIAS-C03      NIFTY                  per year        2018 160  0.288 0.324  -0.036       True    False
+BIAS-C03      NIFTY                  per year        2019  22  0.318 0.348  -0.030       True     True
+BIAS-C03      NIFTY                  per year        2020   0    NaN 0.644     NaN      False     True
+BIAS-C03      NIFTY                  per year        2021   0    NaN 0.457     NaN      False     True
+BIAS-C03      NIFTY                  per year        2022   0    NaN 0.518     NaN      False     True
+BIAS-C03      NIFTY                  per year        2023   0    NaN 0.180     NaN      False     True
+BIAS-C03      NIFTY                  per year        2024   0    NaN 0.281     NaN      False     True
+BIAS-C03      NIFTY per days to t+1 (weekend)          1d 134  0.284 0.378  -0.094       True    False
+BIAS-C03      NIFTY per days to t+1 (weekend)        2-3d  47  0.298 0.467  -0.169       True    False
+BIAS-C03      NIFTY per days to t+1 (weekend)         4d+   1  1.000 0.619   0.381      False     True
+BIAS-C03      NIFTY         neighbour context         D-5  13  0.308 0.403  -0.096       True     True
+BIAS-C04      NIFTY                  per year        2018 172  0.308 0.324  -0.016       True    False
+BIAS-C04      NIFTY                  per year        2019  23  0.348 0.348  -0.001       True     True
+BIAS-C04      NIFTY                  per year        2020   0    NaN 0.644     NaN      False     True
+BIAS-C04      NIFTY                  per year        2021   0    NaN 0.457     NaN      False     True
+BIAS-C04      NIFTY                  per year        2022   0    NaN 0.518     NaN      False     True
+BIAS-C04      NIFTY                  per year        2023   0    NaN 0.180     NaN      False     True
+BIAS-C04      NIFTY                  per year        2024   0    NaN 0.281     NaN      False     True
+BIAS-C04      NIFTY per days to t+1 (weekend)          1d 145  0.310 0.378  -0.067       True    False
+BIAS-C04      NIFTY per days to t+1 (weekend)        2-3d  47  0.298 0.467  -0.169       True    False
+BIAS-C04      NIFTY per days to t+1 (weekend)         4d+   3  0.667 0.619   0.048      False     True
+BIAS-C04      NIFTY         neighbour context         D-5  13  0.308 0.403  -0.096       True     True
+BIAS-C05      NIFTY                  per year        2018  12  0.583 0.324   0.260       True     True
+BIAS-C05      NIFTY                  per year        2019  45  0.467 0.348   0.118       True    False
+BIAS-C05      NIFTY                  per year        2020  51  0.706 0.644   0.062       True    False
+BIAS-C05      NIFTY                  per year        2021  52  0.558 0.457   0.100       True    False
+BIAS-C05      NIFTY                  per year        2022  51  0.608 0.518   0.090       True    False
+BIAS-C05      NIFTY                  per year        2023  51  0.196 0.180   0.016       True    False
+BIAS-C05      NIFTY                  per year        2024  26  0.192 0.281  -0.089      False     True
+BIAS-C05      NIFTY per days to t+1 (weekend)          1d  55  0.382 0.378   0.004       True    False
+BIAS-C05      NIFTY per days to t+1 (weekend)        2-3d 215  0.488 0.467   0.022       True    False
+BIAS-C05      NIFTY per days to t+1 (weekend)         4d+  18  0.722 0.619   0.103       True     True
+BIAS-C05      NIFTY         neighbour context         D-2 294  0.391 0.403  -0.012      False    False
+BIAS-C05      NIFTY         neighbour context         D-4 218  0.417 0.403   0.014       True    False
+BIAS-C06      NIFTY                  per year        2018  12  0.333 0.156   0.178       True     True
+BIAS-C06      NIFTY                  per year        2019  45  0.267 0.189   0.078       True    False
+BIAS-C06      NIFTY                  per year        2020  51  0.451 0.400   0.051       True    False
+BIAS-C06      NIFTY                  per year        2021  52  0.327 0.259   0.068       True    False
+BIAS-C06      NIFTY                  per year        2022  51  0.412 0.312   0.100       True    False
+BIAS-C06      NIFTY                  per year        2023  51  0.118 0.090   0.027       True    False
+BIAS-C06      NIFTY                  per year        2024  26  0.077 0.140  -0.064      False     True
+BIAS-C06      NIFTY per days to t+1 (weekend)          1d  55  0.182 0.205  -0.023      False    False
+BIAS-C06      NIFTY per days to t+1 (weekend)        2-3d 215  0.307 0.284   0.023       True    False
+BIAS-C06      NIFTY per days to t+1 (weekend)         4d+  18  0.500 0.429   0.071       True     True
+BIAS-C06      NIFTY         neighbour context         D-2 294  0.235 0.228   0.007       True    False
+BIAS-C06      NIFTY         neighbour context         D-4 218  0.234 0.228   0.006       True    False
+BIAS-C07      NIFTY                  per year        2018  12  0.583 0.324   0.260       True     True
+BIAS-C07      NIFTY                  per year        2019  32  0.500 0.348   0.152       True    False
+BIAS-C07      NIFTY                  per year        2020  41  0.707 0.644   0.063       True    False
+BIAS-C07      NIFTY                  per year        2021  38  0.526 0.457   0.069       True    False
+BIAS-C07      NIFTY                  per year        2022  40  0.575 0.518   0.057       True    False
+BIAS-C07      NIFTY                  per year        2023  36  0.194 0.180   0.014       True    False
+BIAS-C07      NIFTY                  per year        2024  17  0.176 0.281  -0.105      False     True
+BIAS-C07      NIFTY per days to t+1 (weekend)          1d   3  0.667 0.378   0.289       True     True
+BIAS-C07      NIFTY per days to t+1 (weekend)        2-3d 212  0.481 0.467   0.014       True    False
+BIAS-C07      NIFTY per days to t+1 (weekend)         4d+   1  1.000 0.619   0.381       True     True
+BIAS-C07      NIFTY         neighbour context         D-2 290  0.386 0.403  -0.017      False    False
+BIAS-C07      NIFTY         neighbour context         D-4  13  0.308 0.403  -0.096      False     True
+BIAS-C08      NIFTY                  per year        2018  12  0.333 0.156   0.178       True     True
+BIAS-C08      NIFTY                  per year        2019  32  0.312 0.189   0.124       True    False
+BIAS-C08      NIFTY                  per year        2020  41  0.463 0.400   0.063       True    False
+BIAS-C08      NIFTY                  per year        2021  38  0.289 0.259   0.030       True    False
+BIAS-C08      NIFTY                  per year        2022  40  0.425 0.312   0.113       True    False
+BIAS-C08      NIFTY                  per year        2023  36  0.111 0.090   0.021       True    False
+BIAS-C08      NIFTY                  per year        2024  17  0.059 0.140  -0.082      False     True
+BIAS-C08      NIFTY per days to t+1 (weekend)          1d   3  0.667 0.205   0.462       True     True
+BIAS-C08      NIFTY per days to t+1 (weekend)        2-3d 212  0.302 0.284   0.018       True    False
+BIAS-C08      NIFTY per days to t+1 (weekend)         4d+   1  0.000 0.429  -0.429      False     True
+BIAS-C08      NIFTY         neighbour context         D-2 290  0.234 0.228   0.007       True    False
+BIAS-C08      NIFTY         neighbour context         D-4  13  0.077 0.228  -0.151      False     True
+BIAS-C09      NIFTY                  per year        2018 172  0.163 0.156   0.007      False    False
+BIAS-C09      NIFTY                  per year        2019  23  0.217 0.189   0.029      False     True
+BIAS-C09      NIFTY                  per year        2020   0    NaN 0.400     NaN      False     True
+BIAS-C09      NIFTY                  per year        2021   0    NaN 0.259     NaN      False     True
+BIAS-C09      NIFTY                  per year        2022   0    NaN 0.312     NaN      False     True
+BIAS-C09      NIFTY                  per year        2023   0    NaN 0.090     NaN      False     True
+BIAS-C09      NIFTY                  per year        2024   0    NaN 0.140     NaN      False     True
+BIAS-C09      NIFTY per days to t+1 (weekend)          1d 145  0.179 0.205  -0.026       True    False
+BIAS-C09      NIFTY per days to t+1 (weekend)        2-3d  47  0.149 0.284  -0.135       True    False
+BIAS-C09      NIFTY per days to t+1 (weekend)         4d+   3  0.000 0.429  -0.429       True     True
+BIAS-C09      NIFTY         neighbour context         D-5  13  0.077 0.228  -0.151       True     True
+BIAS-C12      NIFTY                  per year        2018 160  0.162 0.156   0.007      False    False
+BIAS-C12      NIFTY                  per year        2019  22  0.227 0.189   0.039      False     True
+BIAS-C12      NIFTY                  per year        2020   0    NaN 0.400     NaN      False     True
+BIAS-C12      NIFTY                  per year        2021   0    NaN 0.259     NaN      False     True
+BIAS-C12      NIFTY                  per year        2022   0    NaN 0.312     NaN      False     True
+BIAS-C12      NIFTY                  per year        2023   0    NaN 0.090     NaN      False     True
+BIAS-C12      NIFTY                  per year        2024   0    NaN 0.140     NaN      False     True
+BIAS-C12      NIFTY per days to t+1 (weekend)          1d 134  0.179 0.205  -0.026       True    False
+BIAS-C12      NIFTY per days to t+1 (weekend)        2-3d  47  0.149 0.284  -0.135       True    False
+BIAS-C12      NIFTY per days to t+1 (weekend)         4d+   1  0.000 0.429  -0.429       True     True
+BIAS-C12      NIFTY         neighbour context         D-5  13  0.077 0.228  -0.151       True     True
+BIAS-C13      NIFTY                  per year        2018   0    NaN 0.156     NaN      False     True
+BIAS-C13      NIFTY                  per year        2019  23  0.261 0.189   0.072       True     True
+BIAS-C13      NIFTY                  per year        2020  32  0.438 0.400   0.037       True    False
+BIAS-C13      NIFTY                  per year        2021  28  0.321 0.259   0.062       True     True
+BIAS-C13      NIFTY                  per year        2022  30  0.433 0.312   0.122       True    False
+BIAS-C13      NIFTY                  per year        2023  30  0.133 0.090   0.043       True    False
+BIAS-C13      NIFTY                  per year        2024  12  0.083 0.140  -0.057      False     True
+BIAS-C13      NIFTY per days to t+1 (weekend)          1d   0    NaN 0.205     NaN      False     True
+BIAS-C13      NIFTY per days to t+1 (weekend)        2-3d 155  0.303 0.284   0.019       True    False
+BIAS-C13      NIFTY per days to t+1 (weekend)         4d+   0    NaN 0.429     NaN      False     True
+BIAS-C13      NIFTY         neighbour context  weekly|D-2 213  0.254 0.228   0.026       True    False
+BIAS-C13      NIFTY         neighbour context  weekly|D-4   0    NaN 0.228     NaN      False     True
+BIAS-C14      NIFTY                  per year        2018   0    NaN 0.324     NaN      False     True
+BIAS-C14      NIFTY                  per year        2019  23  0.435 0.348   0.086       True     True
+BIAS-C14      NIFTY                  per year        2020  32  0.688 0.644   0.043       True    False
+BIAS-C14      NIFTY                  per year        2021  28  0.607 0.457   0.150       True     True
+BIAS-C14      NIFTY                  per year        2022  30  0.533 0.518   0.015       True    False
+BIAS-C14      NIFTY                  per year        2023  30  0.233 0.180   0.053       True    False
+BIAS-C14      NIFTY                  per year        2024  12  0.167 0.281  -0.114      False     True
+BIAS-C14      NIFTY per days to t+1 (weekend)          1d   0    NaN 0.378     NaN      False     True
+BIAS-C14      NIFTY per days to t+1 (weekend)        2-3d 155  0.477 0.467   0.011       True    False
+BIAS-C14      NIFTY per days to t+1 (weekend)         4d+   0    NaN 0.619     NaN      False     True
+BIAS-C14      NIFTY         neighbour context  weekly|D-2 213  0.408 0.403   0.005       True    False
+BIAS-C14      NIFTY         neighbour context  weekly|D-4   0    NaN 0.403     NaN      False     True
+BIAS-C10  BANKNIFTY                  per year        2018   9  0.667 0.508   0.158       True     True
+BIAS-C10  BANKNIFTY                  per year        2019   9  0.889 0.570   0.319       True     True
+BIAS-C10  BANKNIFTY                  per year        2020   9  1.000 0.896   0.104       True     True
+BIAS-C10  BANKNIFTY                  per year        2021  10  1.000 0.700   0.300       True     True
+BIAS-C10  BANKNIFTY                  per year        2022  10  0.800 0.709   0.091       True     True
+BIAS-C10  BANKNIFTY                  per year        2023   9  0.333 0.369  -0.036      False     True
+BIAS-C10  BANKNIFTY                  per year        2024   5  0.400 0.455  -0.055      False     True
+BIAS-C10  BANKNIFTY per days to t+1 (weekend)          1d   7  0.286 0.594  -0.309      False     True
+BIAS-C10  BANKNIFTY per days to t+1 (weekend)        2-3d  54  0.815 0.670   0.145       True    False
+BIAS-C10  BANKNIFTY per days to t+1 (weekend)         4d+   0    NaN 0.714     NaN      False     True
+BIAS-C10  BANKNIFTY         neighbour context monthly|D-2  77  0.558 0.614  -0.055      False    False
+BIAS-C10  BANKNIFTY         neighbour context monthly|D-4   3  0.333 0.614  -0.280      False     True
+BIAS-C11  BANKNIFTY                  per year        2018  12  0.583 0.275   0.309       True     True
+BIAS-C11  BANKNIFTY                  per year        2019  12  0.333 0.320   0.014       True     True
+BIAS-C11  BANKNIFTY                  per year        2020  12  0.833 0.588   0.245       True     True
+BIAS-C11  BANKNIFTY                  per year        2021  12  0.500 0.368   0.132       True     True
+BIAS-C11  BANKNIFTY                  per year        2022  12  0.667 0.417   0.250       True     True
+BIAS-C11  BANKNIFTY                  per year        2023  12  0.250 0.197   0.053       True     True
+BIAS-C11  BANKNIFTY                  per year        2024   6  0.167 0.240  -0.073      False     True
+BIAS-C11  BANKNIFTY per days to t+1 (weekend)          1d  68  0.471 0.334   0.137       True    False
+BIAS-C11  BANKNIFTY per days to t+1 (weekend)        2-3d   5  0.400 0.409  -0.009      False     True
+BIAS-C11  BANKNIFTY per days to t+1 (weekend)         4d+   5  1.000 0.429   0.571       True     True
+
+whole family: 5400 tests (discovery 4275, validation 1125); BH q<0.10: 615
+                                    n  q10
+family               split                
+auc                  discovery    540  135
+candidate_validation validation     8    0
+label                discovery     12    0
+                     validation    12    2
+mining_real          discovery   2328  265
+ref                  discovery   1061   71
+                     validation  1016   16
+regime               disc+val      10    1
+                     discovery    334  118
+                     validation    79    7

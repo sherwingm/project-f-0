@@ -23,6 +23,8 @@ class NearTightyTrader(G1Trader):
     NAME, LEDGER = "Near Tighty", "nt_ledger.json"
     EPOCH = "2026-11-05 Near Tighty live paper"
     PAGE = "strategies/NT_near_tighty.md"
+    SCORE = False             # the G1 breakout score is not applied to Near Tighty
+    HOLD_TO_CLOSE = False     # Near Tighty keeps G1's original exit (next 09:16); the 2026-11-06 change is G1 / G1-F only
 
     def entry_skip(self, day: date, expiry: str) -> str:
         n = sessions.sessions_to_expiry(day, date.fromisoformat(expiry))

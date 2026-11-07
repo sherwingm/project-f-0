@@ -1,0 +1,16 @@
+check,value,ok
+sha256 of frozen file == validation.csv frozen_sha256,bc4be3b42948e22c,True
+mtime reports/lld/pricepath.md,07:36:13.103835,
+mtime scripts/pricepath_common.py,07:31:41.929924,
+mtime scripts/pricepath_discovery.py,07:36:41.185297,
+mtime results/pricepath/candidates_frozen.csv,07:36:56.806340,
+mtime results/pricepath/hypotheses.csv,07:36:56.792246,
+mtime scripts/pricepath_validate.py,07:37:42.993587,
+mtime results/pricepath/validation.csv,07:38:10.619159,
+mtime scripts/pricepath_extras.py,07:40:25.871441,
+family rows part A: expected from script loops,343 vs 343,True
+family rows part B: expected from script loops,256 vs 256,True
+family rows part C1: expected from script loops,1296 vs 1296,True
+family rows part C2 (data-dependent pairs),36,
+family size used for BH (p not NaN),1899,
+BH recomputed == their bh_sig,154,True

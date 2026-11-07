@@ -1,0 +1,18 @@
+NIFTY: validation usable rows 365; VIX terciles (discovery cuts) {'low': 319, 'mid': 31, 'high': 15}
+BANKNIFTY: validation usable rows 365; VIX terciles (discovery cuts) {'low': 319, 'mid': 31, 'high': 15}
+      id underlying       level      target direction  disc_effect  val_n  val_rate  val_base  val_effect  val_p_one_sided                                   verdict
+BIAS-C01      NIFTY        D-6+ y_range_pct     lower      -0.2798      0       NaN    0.8872         NaN              NaN Untestable (context absent in validation)
+BIAS-C02      NIFTY        D-6+ y_range_pct     lower      -0.2796      0       NaN    0.8872         NaN              NaN Untestable (context absent in validation)
+BIAS-C03      NIFTY        D-6+     big_exc     lower      -0.1682      0       NaN    0.2137         NaN              NaN Untestable (context absent in validation)
+BIAS-C04      NIFTY        D-6+     big_exc     lower      -0.1466      0       NaN    0.2137         NaN              NaN Untestable (context absent in validation)
+BIAS-C05      NIFTY         D-3     big_exc    higher       0.1283     77    0.1948    0.2137     -0.0189           0.6998                                  Rejected
+BIAS-C06      NIFTY         D-3      big_cc    higher       0.1011     77    0.1039    0.1068     -0.0030           0.5878                                  Rejected
+BIAS-C07      NIFTY         D-3     big_exc    higher       0.1234     53    0.1887    0.2137     -0.0250           0.7226                                  Rejected
+BIAS-C08      NIFTY         D-3      big_cc    higher       0.1104     53    0.0943    0.1068     -0.0125           0.6813                                  Rejected
+BIAS-C09      NIFTY        D-6+      big_cc     lower      -0.0946      0       NaN    0.1068         NaN              NaN Untestable (context absent in validation)
+BIAS-C10  BANKNIFTY monthly|D-3     big_exc    higher       0.1946     14    0.3571    0.3973     -0.0401           0.7136                                  Rejected
+BIAS-C11  BANKNIFTY monthly|D+1      big_cc    higher       0.1889     18    0.2222    0.2110      0.0113           0.5454                                  Rejected
+BIAS-C12      NIFTY        D-6+      big_cc     lower      -0.0935      0       NaN    0.1068         NaN              NaN Untestable (context absent in validation)
+BIAS-C13      NIFTY  weekly|D-3      big_cc    higher       0.1079     42    0.1190    0.1068      0.0122           0.4707                                  Rejected
+BIAS-C14      NIFTY  weekly|D-3     big_exc    higher       0.1158     42    0.2143    0.2137      0.0006           0.5568                                  Rejected
+validation tests logged: 1125

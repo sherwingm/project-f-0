@@ -21,6 +21,7 @@ import threading
 from datetime import date, datetime, time
 from pathlib import Path
 
+from server import sessions
 from server.upstox_stream import CANDLES_INDEX
 
 log = logging.getLogger(__name__)
@@ -71,7 +72,7 @@ class IndexRecorder:
         if now.date() != self.day:
             self.day, self.pairs = now.date(), {}
             threading.Thread(target=self._gzip, args=(now.date(),), name="index-gzip", daemon=True).start()
-        if now.weekday() >= 5 or not OPEN <= now.time() <= CLOSE or now.timestamp() - self._last < EVERY:
+        if (now.weekday() >= 5 and not sessions.is_index_session(now.date())) or not OPEN <= now.time() <= CLOSE or now.timestamp() - self._last < EVERY:
             return
         self._last = now.timestamp()
         new = dict(INDICES)

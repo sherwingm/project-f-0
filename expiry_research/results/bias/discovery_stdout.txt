@@ -1,0 +1,91 @@
+NIFTY: open rows 1599, VIX tercile cuts (discovery) [15.7, 19.8]
+  discovery rows 1233, split_edge 1, unusable 1
+BANKNIFTY: open rows 1599, VIX tercile cuts (discovery) [15.7, 19.8]
+  discovery rows 1233, split_edge 1, unusable 1
+
+Mining null: 200 rules x 6 targets per UL, 200 week-block permutations x 2 variants ...
+      variant        ul             metric  null_mean  null_p50  null_p95  null_p99     real  emp_p  n_perm
+         week     NIFTY              n_p05    44.8300   43.0000   70.0000   89.0700 204.0000 0.0050     200
+         week     NIFTY              n_q10     0.1400    0.0000    1.0000    4.0000 148.0000 0.0050     200
+         week     NIFTY          best_edge     0.2414    0.2372    0.2934    0.3154   0.4380 0.0050     200
+         week     NIFTY n_q10_dir_in_mixed     0.0200    0.0000    0.0000    1.0000   8.0000 0.0050     200
+         week     NIFTY     n_q10_dir_only     0.0500    0.0000    0.0000    1.0100   0.0000 1.0000     200
+         week     NIFTY          n_p05_dir    27.6550   26.0000   46.0500   55.0100  31.0000 0.3333     200
+         week     NIFTY          n_q10_vol     0.1200    0.0000    1.0000    4.0000 140.0000 0.0050     200
+         week BANKNIFTY              n_p05    44.5350   43.0000   66.0500   76.0300 169.0000 0.0050     200
+         week BANKNIFTY              n_q10     0.1300    0.0000    1.0000    4.0100 117.0000 0.0050     200
+         week BANKNIFTY          best_edge     0.2257    0.2259    0.2679    0.2889   0.3836 0.0050     200
+         week BANKNIFTY n_q10_dir_in_mixed     0.0400    0.0000    0.0000    1.0000   4.0000 0.0100     200
+         week BANKNIFTY     n_q10_dir_only     0.0650    0.0000    0.0000    1.0000   0.0000 1.0000     200
+         week BANKNIFTY          n_p05_dir    27.6650   27.0000   45.0000   51.0300  16.0000 0.9104     200
+         week BANKNIFTY          n_q10_vol     0.0900    0.0000    0.0500    2.0200 113.0000 0.0050     200
+         week      BOTH              n_p05    89.3650   86.0000  128.1500  156.0200 373.0000 0.0050     200
+         week      BOTH              n_q10     0.1650    0.0000    1.0000    4.0000 265.0000 0.0050     200
+week_same_len     NIFTY              n_p05    45.0500   45.0000   65.0000   72.0200 204.0000 0.0050     200
+week_same_len     NIFTY              n_q10     0.0800    0.0000    1.0000    2.0000 148.0000 0.0050     200
+week_same_len     NIFTY          best_edge     0.2419    0.2406    0.2880    0.3053   0.4380 0.0050     200
+week_same_len     NIFTY n_q10_dir_in_mixed     0.0150    0.0000    0.0000    1.0000   8.0000 0.0050     200
+week_same_len     NIFTY     n_q10_dir_only     0.0150    0.0000    0.0000    1.0000   0.0000 1.0000     200
+week_same_len     NIFTY          n_p05_dir    26.1900   25.5000   41.0500   49.0100  31.0000 0.3134     200
+week_same_len     NIFTY          n_q10_vol     0.0650    0.0000    0.0000    2.0000 140.0000 0.0050     200
+week_same_len BANKNIFTY              n_p05    36.3850   36.0000   53.0500   57.0200 169.0000 0.0050     200
+week_same_len BANKNIFTY              n_q10     0.0250    0.0000    0.0000    1.0000 117.0000 0.0050     200
+week_same_len BANKNIFTY          best_edge     0.2148    0.2105    0.2560    0.2825   0.3836 0.0050     200
+week_same_len BANKNIFTY n_q10_dir_in_mixed     0.0050    0.0000    0.0000    0.0000   4.0000 0.0050     200
+week_same_len BANKNIFTY     n_q10_dir_only     0.0100    0.0000    0.0000    0.0100   0.0000 1.0000     200
+week_same_len BANKNIFTY          n_p05_dir    22.0600   21.0000   34.0500   45.0000  16.0000 0.8259     200
+week_same_len BANKNIFTY          n_q10_vol     0.0200    0.0000    0.0000    1.0000 113.0000 0.0050     200
+week_same_len      BOTH              n_p05    81.4350   81.0000  108.0500  120.0500 373.0000 0.0050     200
+week_same_len      BOTH              n_q10     0.0400    0.0000    0.0000    1.0000 265.0000 0.0050     200
+     dir_only     NIFTY              n_p05   199.0250  197.0000  215.1000  225.0400 204.0000 0.2736     200
+     dir_only     NIFTY              n_q10   145.6950  145.0000  154.0000  161.0300 148.0000 0.2736     200
+     dir_only     NIFTY          best_edge     0.4380    0.4380    0.4380    0.4380   0.4380 1.0000     200
+     dir_only     NIFTY n_q10_dir_in_mixed     5.7900    5.0000   12.0000   18.0200   8.0000 0.2736     200
+     dir_only     NIFTY     n_q10_dir_only     0.0100    0.0000    0.0000    0.0100   0.0000 1.0000     200
+     dir_only     NIFTY          n_p05_dir    26.0250   24.0000   42.1000   52.0400  31.0000 0.2736     200
+     dir_only     NIFTY          n_q10_vol   139.9050  140.0000  142.0000  143.0100 140.0000 0.5871     200
+     dir_only BANKNIFTY              n_p05   178.6250  178.0000  193.0500  202.0200 169.0000 0.8955     200
+     dir_only BANKNIFTY              n_q10   117.0950  117.0000  125.0000  126.0400 117.0000 0.5423     200
+     dir_only BANKNIFTY          best_edge     0.3836    0.3836    0.3836    0.3836   0.3836 1.0000     200
+     dir_only BANKNIFTY n_q10_dir_in_mixed     4.4100    4.0000   11.0000   12.0300   4.0000 0.5423     200
+     dir_only BANKNIFTY     n_q10_dir_only     0.0600    0.0000    0.0500    1.0100   0.0000 1.0000     200
+     dir_only BANKNIFTY          n_p05_dir    25.6250   25.0000   40.0500   49.0200  16.0000 0.8955     200
+     dir_only BANKNIFTY          n_q10_vol   112.6850  113.0000  114.0000  114.0100 113.0000 0.5423     200
+     dir_only      BOTH              n_p05   377.6500  376.5000  404.1000  415.0000 373.0000 0.6119     200
+     dir_only      BOTH              n_q10   263.0850  262.0000  273.0500  280.0300 265.0000 0.3184     200
+
+hypotheses logged (discovery): 4275  by family: {'mining_real': 2328, 'ref': 1061, 'auc': 540, 'regime': 334, 'label': 12}
+AUC flags |AUC-0.5|>0.15: 32
+       ul                      feature  target      auc  n1  n0
+    NIFTY                f_dist_high20 big_exc 0.285557 565 648
+    NIFTY                f_dist_high55 big_exc 0.297626 546 632
+    NIFTY                       f_hv10 big_exc 0.703309 566 656
+    NIFTY                       f_hv20 big_exc 0.696738 565 647
+    NIFTY                  f_atr14_pct big_exc 0.719604 566 652
+    NIFTY                  f_vix_close big_exc 0.729348 566 666
+    NIFTY              f_vix_pctile_1y big_exc 0.656640 566 666
+    NIFTY                    f_fut_vol big_exc 0.716357 565 666
+    NIFTY  f_opt_near_maxpain_dist_pct big_exc 0.655706 565 666
+    NIFTY f_opt_near_callwall_dist_pct big_exc 0.672436 565 666
+    NIFTY       f_opt_mon_straddle_pct big_exc 0.652707 565 666
+    NIFTY   f_opt_mon_maxpain_dist_pct big_exc 0.674529 565 666
+    NIFTY  f_opt_mon_callwall_dist_pct big_exc 0.668425 565 666
+    NIFTY              f1515_range_pct big_exc 0.670125 151 143
+    NIFTY                     f1515_rv big_exc 0.695086 151 143
+    NIFTY               f1515_vix_1514 big_exc 0.689179 152 143
+BANKNIFTY                f_dist_high20 big_exc 0.287530 830 383
+BANKNIFTY                f_dist_high55 big_exc 0.293230 804 374
+BANKNIFTY                       f_hv10 big_exc 0.743526 834 388
+BANKNIFTY                       f_hv20 big_exc 0.750533 830 382
+BANKNIFTY                  f_atr14_pct big_exc 0.768627 831 387
+BANKNIFTY                  f_vix_close big_exc 0.753832 835 397
+BANKNIFTY                    f_fut_vol big_exc 0.732433 834 397
+BANKNIFTY         f_opt_near_n_strikes big_exc 0.678491 834 397
+BANKNIFTY      f_opt_near_straddle_pct big_exc 0.734212 834 397
+BANKNIFTY f_opt_near_callwall_dist_pct big_exc 0.677781 834 397
+BANKNIFTY          f_opt_mon_n_strikes big_exc 0.667162 834 397
+BANKNIFTY       f_opt_mon_straddle_pct big_exc 0.663538 834 397
+BANKNIFTY  f_opt_mon_callwall_dist_pct big_exc 0.655175 834 397
+BANKNIFTY              f1515_range_pct big_exc 0.669275 208  86
+BANKNIFTY                     f1515_rv big_exc 0.753019 208  86
+BANKNIFTY               f1515_vix_1514 big_exc 0.743741 209  86

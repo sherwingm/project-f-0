@@ -1,0 +1,27 @@
+ul,column,rows_compared,max_abs_diff,rows_diff_gt_1e6,panel_only
+NIFTY,o_cc,1598,0.0,0,0
+NIFTY,o_range_pct,1598,0.0,0,0
+NIFTY,o_gap_pct,1598,0.0,0,0
+NIFTY,f_mom5,1594,0.0,0,0
+NIFTY,f_dist_low20,1580,0.0,0,0
+NIFTY,f_dist_high20,1580,0.0,0,0
+NIFTY,f_dist_low20_dict_def,1579,11.66158886585229,419,1
+NIFTY,f_dist_high20_dict_def,1579,5.136499323156663,486,1
+NIFTY,f_vix_chg1,1598,0.0,0,0
+NIFTY,f_fut_vol_r20,1582,0.0,0,0
+NIFTY,f_streak_close,1598,0.0,0,0
+NIFTY,y_max_exc == next o_max_exc,1598,0.0,0,0
+BANKNIFTY,o_cc,1598,0.0,0,0
+BANKNIFTY,o_range_pct,1598,0.0,0,0
+BANKNIFTY,o_gap_pct,1598,0.0,0,0
+BANKNIFTY,f_mom5,1594,0.0,0,0
+BANKNIFTY,f_dist_low20,1580,0.0,0,0
+BANKNIFTY,f_dist_high20,1580,0.0,0,0
+BANKNIFTY,f_dist_low20_dict_def,1579,10.94037616240464,408,1
+BANKNIFTY,f_dist_high20_dict_def,1579,6.3578443125328565,451,1
+BANKNIFTY,f_vix_chg1,1598,0.0,0,0
+BANKNIFTY,f_fut_vol_r20,1582,0.0,0,0
+BANKNIFTY,f_streak_close,1598,0.0,0,0
+BANKNIFTY,y_max_exc == next o_max_exc,1598,0.0,0,0
+both,frozen thresholds == discovery quantile (own),140,0.0,0,0
+both,condition columns violating decision time,157,,0,0

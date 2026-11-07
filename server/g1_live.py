@@ -9,9 +9,12 @@ Rules (the page; the same as scanner/s3_g1_forward.py, which stays the record fo
     opening range 09:15-09:29; the first 1-minute close outside it from 09:30 to 13:00; only a close below the low
     trades; buy 1 lot of the ATM put (strike nearest the entry minute's close) of the nearest weekly expiry after
     today, at the last ask of the minute after the signal minute; sell at the bid when it is <= 50 % of the price
-    paid (any second, both days), else at the last bid of the next session's 09:16 minute.
+    paid (any second, both days), else (from 2026-11-06, the user) at the best bid at the first quote of the next
+    session's 15:29 minute (the close). Before that date the exit was the last bid of the next 09:16 minute.
     G1-F takes the same trade only when, at the signal, the day-1 opening gap < +0.3 %, the range width is not in
     0.5 %-0.8 % and India VIX < 17. One position serves both tracks; each trade says whether G1-F counts it.
+    G1-F is the MAIN track from 2026-11-06 (the user: "make the g1-f as main"): shown first on the page, and the alert
+    says whether G1-F counts the trade. The ledger still records every G1 trade, so G1's own gate is unchanged.
 A restart in the session rebuilds today's minute bars from the recorder's own file (data/candles_1s_index/<day>.jsonl).
 """
 from __future__ import annotations
@@ -21,21 +24,25 @@ import logging
 import math
 import os
 import threading
+import time as time_mod
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 from server import alerts, sessions
 from server import charges as ch
+from server import g1_score
 
-log = logging.getLogger("g1")
+log =logging.getLogger("g1")
 IST = sessions.IST
 SPOT_KEY, VIX_KEY = "NSE_INDEX|Nifty 50", "NSE_INDEX|India VIX"
 STEP, LOT, STOP = 50, 65, 0.50
 OR_FROM, OR_TO, LAST_SIGNAL, EXIT_MIN = time(9, 15), time(9, 30), time(13, 0), time(9, 16)
+CLOSE_MIN = time(15, 29)                    # G1: the next session's last minute (the close)
 GAP_MAX, WIDTH_SKIP, VIX_MAX = 0.3, (0.5, 0.8), 17.0
 QUOTE_AGE = 60.0
 EPOCH = "2026-11-05 G1 live paper"
 PAGE = "strategies/S3_G1_put_overnight.md"
+SCORE_KEYS = ("score", "score_pct", "score_band", "score_items", "score_missing", "score_pctile", "score_avg_pct", "score_inputs")
 
 
 def _best(s: dict | None) -> tuple[float | None, float | None]:
@@ -87,6 +94,8 @@ class G1Trader:
     """One rule-trading paper ledger. A subclass (server/nt_live.py, Near Tighty) changes the class attributes and
     the two hooks `entry_skip` / `entry_note` / `tracks`; the signal, entry, stop and exit stay exactly G1's."""
     NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
+    SCORE = True              # the 0-7 breakout score (record only); Near Tighty is not scored here
+    HOLD_TO_CLOSE = True      # G1 / G1-F (2026-11-06, the user): hold to the next session's close; a subclass may say False
 
     def __init__(self, stream, upstox, data_dir, lot: int = LOT):
         self.stream, self.upstox, self.lot = stream, upstox, lot
@@ -100,6 +109,7 @@ class G1Trader:
         self.asks: dict[float, tuple[datetime, float]] = {}     # strike -> (seen at, ask) during the entry minute
         self.last_bid: tuple[datetime, float] | None = None
         self.prev_close: float | None = None
+        self._closes: tuple | None = None                  # (day, daily closes or None, fetched at): for the score
 
     # ------------------------------------------------------------ ledger
     def _load(self) -> dict:
@@ -160,9 +170,9 @@ class G1Trader:
             if now.date() != self.day:
                 self.day, self.bars, self.vix, self.asks, self.last_bid = now.date(), {}, [], {}, None
                 self.prev_close = None
-                if sessions.is_session(now.date()) and now.time() > OR_FROM:
+                if sessions.is_index_session(now.date()) and now.time() > OR_FROM:
                     self._seed(now)
-            if not sessions.is_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
+            if not sessions.is_index_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
                 return
             sp = self.stream.get(SPOT_KEY)
             px = _ltp(sp)
@@ -209,7 +219,7 @@ class G1Trader:
                     vix = next((v for t, v in reversed(self.vix) if t < end), None)
                     st.update(phase="entry", signal=f"{m:%H:%M}", signal_close=c, entry=f"{ent:%H:%M}",
                               gap_pct=None if gap is None else round(gap, 3), width_pct=round(width, 3), vix=vix,
-                              g1f_skip=g1f_check(gap, width, vix),
+                              g1f_skip=g1f_check(gap, width, vix), **self._score(lo, c, m, width, gap, vix),
                               status=f"downside breakout at {m:%H:%M} ({c:,.2f} < {lo:,.2f}): buying at {ent:%H:%M}")
                     self._save()
                     phase = "entry"
@@ -264,11 +274,13 @@ class G1Trader:
                               "bought_at": seen[0].isoformat(timespec="seconds"), "expiry": exp, "strike": k,
                               "key": self._key(exp, k), "paid": paid, "qty": self.lot, "entry_fees": round(fees, 2),
                               "spot": spot, "g1f_skip": st["g1f_skip"], "gap_pct": st["gap_pct"],
-                              "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid}
+                              "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid,
+                              **{k: st[k] for k in SCORE_KEYS if k in st}}
         st.update(phase="done", status=f"bought NIFTY {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
                   + self.entry_note(st))
         self._save()
-        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})",
+        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
+                    + self.entry_note(st) + self._score_text(st),
                     key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
     def _manage_open(self, now: datetime) -> None:
@@ -286,6 +298,15 @@ class G1Trader:
                 self._close(pos, bid, now, "stop")
                 return
         if now.date().isoformat() <= pos["day"]:
+            return
+        if self.HOLD_TO_CLOSE:
+            pos.setdefault("hold_day", now.date().isoformat())
+            if now.date().isoformat() > pos["hold_day"]:           # the close was missed (server down): first bid
+                if bid:
+                    self._close(pos, bid, now, "next close missed (server was down): sold at the first bid")
+                return
+            if now.time() >= CLOSE_MIN and bid:
+                self._close(pos, bid, now, "next close")
             return
         m = now.time()
         if m < EXIT_MIN:
@@ -315,6 +336,25 @@ class G1Trader:
         alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold NIFTY {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
                     f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
 
+    # ------------------------------------------------------------ score (record only)
+    def _score(self, lo: float, close: float, m: time, width: float, gap: float | None, vix: float | None) -> dict:
+        """The 0-7 breakout score of this signal (g1_research/SCORE_PREREG.md). Record only: nothing here gates a trade."""
+        if not self.SCORE:
+            return {}
+        try:
+            now = time_mod.monotonic()
+            if self._closes is None or self._closes[0] != self.day or (self._closes[1] is None and now - self._closes[2] > 60):
+                self._closes = (self.day, g1_score.daily_closes(self.upstox, self.day), now)
+            f = g1_score.features(lo, close, m, width, gap, vix, self._closes[1])
+            before = [d["score"] for k, d in sorted(self.state["days"].items()) if k < self.day.isoformat() and "score" in d]
+            return g1_score.stamp(f, before)
+        except Exception as exc:  # noqa: BLE001 - a record must never stop the trade
+            log.warning("g1 score failed (%s)", exc)
+            return {}
+
+    def _score_text(self, st: dict) -> str:
+        return "; " + g1_score.line(st) if "score" in st else ""
+
     # ------------------------------------------------------------ hooks
     def entry_skip(self, day: date, expiry: str) -> str:
         """"" to trade; else why this strategy takes no trade today (G1: never skips here)."""
@@ -324,7 +364,7 @@ class G1Trader:
         return "; G1-F counts it" if not st["g1f_skip"] else f"; G1-F skips ({st['g1f_skip']})"
 
     def tracks(self, trades: list) -> list:
-        return [("G1", trades), ("G1-F", [t for t in trades if not t.get("g1f_skip")])]
+        return [("G1-F (main)", [t for t in trades if not t.get("g1f_skip")]), ("G1 (baseline)", trades)]
 
     # ------------------------------------------------------------ views
     def view(self) -> dict:
@@ -339,8 +379,11 @@ class G1Trader:
             o["unrealised_rs"] = round((o["mark"] - o["paid"]) * o["qty"] - o["entry_fees"] - exit_fee, 2) if o.get("mark") else None
         for name, sel in self.tracks(trades):
             x = [t["net_pct"] for t in sel]
+            mu = [t["max_up_pct"] for t in sel if t.get("max_up_pct") is not None]
             out["tracks"].append({
                 "pod": name, "trades": len(sel), "gate_at": 30,
+                "max_up_mean": sum(mu) / len(mu) if mu else None, "max_up_median": median(mu),     # the lead measure
+                "max_up_100": sum(v >= 100 for v in mu) / len(mu) if mu else None,
                 "won": sum(v > 0 for v in x) / len(x) if x else None,
                 "mean_pct": sum(x) / len(x) if x else None,
                 "median_pct": median(x),

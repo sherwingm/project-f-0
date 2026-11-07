@@ -1,0 +1,55 @@
+check,ok,detail
+raw NIFTY 2019-02-14 first trade day,True,2019-02-11
+raw NIFTY nearest listed expiry on 2019-02-01,True,"['2019-02-28', '2019-03-28', '2019-04-25']"
+raw NIFTY nearest listed expiry on 2019-02-08,True,"['2019-02-28', '2019-03-28', '2019-04-25']"
+NIFTY calendar known_from <= raw first trade day (bhavcopy rows),True,"434 rows, 0 with known_from later than raw first trade"
+BANKNIFTY calendar known_from <= raw first trade day (bhavcopy rows),True,"389 rows, 0 with known_from later than raw first trade"
+NIFTY sessions next_expiry: raw-listed on the row date,False,"2181 non-blank, 3 point to an expiry first traded after the row date (2023-06-23..2023-06-27)"
+NIFTY sessions next_weekly: raw-listed on the row date,True,"1906 non-blank, 0 point to an expiry first traded after the row date"
+NIFTY sessions next_monthly: raw-listed on the row date,False,"2181 non-blank, 23 point to an expiry first traded after the row date (2023-05-26..2023-06-27)"
+"NIFTY next_expiry == nearest raw-listed, 2019-02-01..08",True,
+BANKNIFTY sessions next_expiry: raw-listed on the row date,False,"2181 non-blank, 9 point to an expiry first traded after the row date (2023-06-23..2025-01-01)"
+BANKNIFTY sessions next_weekly: raw-listed on the row date,False,"1697 non-blank, 6 point to an expiry first traded after the row date (2023-08-25..2023-09-01)"
+BANKNIFTY sessions next_monthly: raw-listed on the row date,False,"2181 non-blank, 28 point to an expiry first traded after the row date (2023-05-26..2025-01-01)"
+NIFTY sessions weekly countdown blank before 2019-02-11,True,"275 rows; non-blank next_weekly 0, sessions 0"
+panel NIFTY cal_sessions_to_weekly blank before 2019-02-11,True,non-null 0 of 274
+panel NIFTY cal_next_sessions_to_weekly blank for t < 2019-02-11,True,non-null 0 of 274
+NIFTY panel cal_sessions_to_expiry == sessions sessions_to_next_expiry,True,0 differ
+NIFTY panel cal_sessions_to_weekly == sessions sessions_to_next_weekly,True,0 differ
+NIFTY panel cal_sessions_to_monthly == sessions sessions_to_next_monthly,True,0 differ
+NIFTY panel cal_days_to_expiry == sessions cal_days_to_next_expiry,True,0 differ
+NIFTY panel cal_next_sessions_to_expiry: blank when t+1's next_expiry not raw-listed by t,False,"5 such rows, 4 non-blank"
+NIFTY panel cal_next_days_to_expiry: blank when t+1's next_expiry not raw-listed by t,False,"5 such rows, 4 non-blank"
+NIFTY panel cal_next_upcoming_kind: blank when t+1's next_expiry not raw-listed by t,False,"5 such rows, 4 non-blank"
+NIFTY panel cal_next_sessions_to_weekly: blank when t+1's next_weekly not raw-listed by t,True,"1 such rows, 0 non-blank"
+NIFTY panel cal_next_sessions_to_monthly: blank when t+1's next_monthly not raw-listed by t,False,"24 such rows, 24 non-blank"
+NIFTY panel cal_next_is_expiry blank when t+1 is an expiry not listed by t,False,1 such rows
+BANKNIFTY panel cal_sessions_to_expiry == sessions sessions_to_next_expiry,True,0 differ
+BANKNIFTY panel cal_sessions_to_weekly == sessions sessions_to_next_weekly,True,0 differ
+BANKNIFTY panel cal_sessions_to_monthly == sessions sessions_to_next_monthly,True,0 differ
+BANKNIFTY panel cal_days_to_expiry == sessions cal_days_to_next_expiry,True,0 differ
+BANKNIFTY panel cal_next_sessions_to_expiry: blank when t+1's next_expiry not raw-listed by t,False,"6 such rows, 6 non-blank"
+BANKNIFTY panel cal_next_days_to_expiry: blank when t+1's next_expiry not raw-listed by t,False,"6 such rows, 6 non-blank"
+BANKNIFTY panel cal_next_upcoming_kind: blank when t+1's next_expiry not raw-listed by t,False,"6 such rows, 6 non-blank"
+BANKNIFTY panel cal_next_sessions_to_weekly: blank when t+1's next_weekly not raw-listed by t,False,"7 such rows, 7 non-blank"
+BANKNIFTY panel cal_next_sessions_to_monthly: blank when t+1's next_monthly not raw-listed by t,False,"25 such rows, 25 non-blank"
+BANKNIFTY panel cal_next_is_expiry blank when t+1 is an expiry not listed by t,False,1 such rows
+NIFTY open: no row with date >= 2024-07-01,True,"1599 rows 2018-01-01..2024-06-28, splits {'discovery': 1233, 'validation': 366}"
+NIFTY open: no label of a final session,True,1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+NIFTY open: row before the edge keeps labels,True,2024-06-27 non-null labels 21/21
+NIFTY schema open == sealed,True,
+NIFTY sealed = final rows + edge row,True,"577 final 2024-07-01..2026-10-29, edge ['2024-06-28']"
+NIFTY open + final dates disjoint and cover a contiguous session list,True,1599 + 577 = 2176; sessions file 2181 rows 2018-01-01..2026-10-29
+BANKNIFTY open: no row with date >= 2024-07-01,True,"1599 rows 2018-01-01..2024-06-28, splits {'discovery': 1233, 'validation': 366}"
+BANKNIFTY open: no label of a final session,True,1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+BANKNIFTY open: row before the edge keeps labels,True,2024-06-27 non-null labels 21/21
+BANKNIFTY schema open == sealed,True,
+BANKNIFTY sealed = final rows + edge row,True,"577 final 2024-07-01..2026-10-29, edge ['2024-06-28']"
+BANKNIFTY open + final dates disjoint and cover a contiguous session list,True,1599 + 577 = 2176; sessions file 2181 rows 2018-01-01..2026-10-29
+SENSEX open: no row with date >= 2024-07-01,True,"663 rows 2021-10-20..2024-06-28, splits {'validation': 366, 'discovery': 297}"
+SENSEX open: no label of a final session,True,1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+SENSEX open: row before the edge keeps labels,True,2024-06-27 non-null labels 21/21
+SENSEX schema open == sealed,True,
+SENSEX sealed = final rows + edge row,True,"577 final 2024-07-01..2026-10-29, edge ['2024-06-28']"
+SENSEX open + final dates disjoint and cover a contiguous session list,True,663 + 577 = 1240; sessions file 513 rows 2024-10-04..2026-10-29
+no CSV outside data/sealed holds final-period y_ values,True,[]

@@ -34,6 +34,7 @@ are recorded?
 | Screen B (run 2026-10-18) + order-book proxy + QIP | Parent indicators and market backdrop: not run (the pinned futures series failed the pre-registered hourly check); sector rotation, gap fill, weak results: 0 of 8 tests pass; order wins and QIP: no fall | No new way to catch a fall; weak results tend to **rise** after day 0 (the fade's call side again), not fall |
 
 ## How we work
+- **Reporting default (the user, 2026-11-07):** every result leads with the max up after entry: the share of trades reaching +50 / +100 / +200 %, the mean max up and the median max up, then the booked result (win %, average, median, total ₹). Max up is the measure; no exit rule is judged by it. Split by days held (and by days to expiry where it matters).
 - **The core idea tracker above is updated with every step**, alongside the detailed log.
 - **S1 and S2 are kept separate**: their own specs (`strategies/S1_*`, `strategies/S2_*`), modules, pages, paper
   records and sections below. One commit never mixes S1 and S2 changes.
@@ -987,6 +988,62 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   → `/near-tighty`, `/api/near-tighty`; links from the Results and S2 pages. `server/g1_live.py` gained class
   attributes and three hooks (`entry_skip`, `entry_note`, `tracks`) so a second strategy reuses it; G1 behaves the
   same (its 5 tests pass). `NT_PAPER=true` by default. 5 tests (`tests/test_nt_live.py`).
+
+### 2026-11-05: independent expiry research done; XP expiry-day straddle forward log live
+- The user's brief: find expiry patterns that are known before the move. `expiry_research/` holds an independent
+  study: no S1/S2/S3 inputs, 2018 → 2026 data. The user approved using all years for this project.
+  - Steps: data audit; an expiry calendar checked against NSE / SEBI circulars; leak-free daily panels; a split
+    fixed in advance (discovery 2018-22, validation 2023-H1 2024, sealed final Jul 2024 →).
+  - Agents: five independent research agents, each with a skeptical reviewer.
+  - Tests: about 34,000.
+  - Result: **no direction edge** at D-2, after the close or at 15:15. Gaps, PCR, max pain, candles and ML are all at
+    chance level for direction. **Size is predictable** (a 5-day fall, call / put OI walls far apart, straddle per
+    √days to expiry): 11 of 13 size rules passed the one-time final test. But it is volatility clustering that a VIX
+    model matches, and a long NIFTY ATM straddle on those days loses net.
+  - Expiry-day same-day straddle: −7.2 % held to 15:15, though max up was +53 % mean / +27 % median and 21 % of days
+    reached +100 %.
+  - Report: `expiry_research/reports/FINAL_RESEARCH_REPORT.md`. Commit 7d47ae69e.
+- The user, "Test do it" → "Both": **XP forward log**, pre-registered in `expiry_research/FORWARD_TEST.md`.
+  - Trade: on NIFTY expiry days, buy the same-day ATM CE + PE at the 09:16 asks. Sell at a +20 % target on the
+    bids, else at 15:15; hold-to-15:15 is logged alongside.
+  - Gate: 40 expiry days.
+  - Code: `server/xp_live.py` (own ledger `data/xp_ledger.json`), `/api/index/xp`, an XP section on `/index`,
+    `XP_PAPER=true`. 5 tests. A log only: no orders; S1 / G1 / NT untouched.
+  - Commit 01d0602c1, deployed to the VM after the close on 2026-11-05. First possible log: Tue 2026-11-10.
+
+### 2026-11-06: G1-F made the main track (user: "make the g1-f as main")
+- `/index` now leads with G1-F; G1 is shown as the baseline (Pods table order: "G1-F (main)", "G1 (baseline)").
+  The buy alert says whether G1-F counts the trade. The ledger, the rules, the filters and both 30-trade gates are
+  unchanged. Paper only. Strategy page, DECISIONS and this log updated.
+
+### 2026-11-06: G1 / G1-F live exit changed to the next session's close (user; 50 % stop kept)
+- `server/g1_live.py`: `HOLD_TO_CLOSE` (G1 True, Near Tighty False so NT keeps its 09:16 exit): sell at the best bid at the
+  first quote from 15:29 of the next session; a missed close sells at the first bid of the following session. 6 G1 tests +
+  5 NT tests pass. Strategy page, DECISIONS and the /index note updated. Deployed after the close (server clock, not the PC's).
+- Same day: max up after entry with no exit for G1 / G1-F, SENSEX puts and the call mirror in `g1_research/`
+  (commits 23892d7d0, 07ade1de4).
+
+### 2026-11-07: calendar fix, weekend special sessions for the index programs (user: "do calender fix")
+- NSE sometimes holds a full Saturday / Sunday session (Budget Sunday 1 Feb 2026; 2024-01-20 and 2025-02-01 were Saturdays).
+  The server calendar counted weekdays only, so G1 / G1-F, NT, XP and the NIFTY recorder would have idled on one.
+- `server/sessions.py`: `is_index_session(d)` = a normal session OR an announced full weekend session
+  (`SPECIAL_SESSIONS` env or `data/special_sessions.json`, empty now); a holiday always wins. Used by `g1_live.py`
+  (so NT too), `xp_live.py` and `index_recorder.py`. `is_session` is unchanged, so S1 / S2 timing and fills are not
+  touched. The one-hour evening Muhurat session (Sun 8 Nov 2026) is not listed: G1's 09:15 range does not fit it, and
+  8 Nov stays a holiday in `data/nse_holidays.json`.
+- 5 new tests (`tests/test_special_sessions.py`, one Saturday G1 test); the whole suite passes. To use it: add the date
+  to `data/special_sessions.json` once NSE announces a weekend session.
+- Also noted: Tue 10 Nov 2026 is a holiday, so the NIFTY weekly expiry moves to Mon 9 Nov; the XP log's first day is
+  Mon 9 Nov (it reads the expiry from the option list), not Tue 10 Nov as first written.
+
+### 2026-11-07: handoff for the index chat
+- `HANDOFF_INDEX_G1.md` written (state, house rules, live system, research results, open items); pointer added at the top of `HANDOFF.md`.
+
+## 7 Nov 2026 (index chat): breakout score 0-7, history check
+Pre-registered g1_research/SCORE_PREREG.md, then ran scripts/g1_score.py on the 259 history signals. Result (SCORE_RESULT.md): the score does not rank max up (rho +0.06 discovery, +0.09 validation, high vs low p 0.25) = Rejected as a predictor; it stays a record only (no filter, no size). Hidden: prev 5-day and EMA20 items overlap (0.59), two items point the wrong way, hump shape (3-4 points best). Nothing changed live.
+
+## 7 Nov 2026 (index chat): breakout score wired live, record only
+server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, score %, percentile (history 259 + live so far) and the running average; kept on the day record and the trade; added to the buy alert. It never gates a trade; any failure is swallowed. Near Tighty is not scored (SCORE=False). Daily closes for the two trend items come from Upstox v3 day candles (checked on the VM: matches history, 0.287 / -0.778). Deployed Sat 7 Nov 18:19 IST (ed98cb1ef), all endpoints 200, PAPER=true. First live score at the first G1 signal (Mon 9 Nov earliest).
 - 2026-11-05 · S3 N1 pre-registered (`strategies/S3_N1_near_expiry_orb.md`) and its runner `scanner/s3_n1.py`
   (forward from 2026-11-06 on the recorder's bid / ask; `--history` once). History run, description only: 208 trades,
   −24.0 % a trade (t −4.63), won 19 %, expiry day −39.3 %, day before −8.2 %; stopped 75 %.

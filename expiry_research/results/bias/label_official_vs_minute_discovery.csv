@@ -1,0 +1,43 @@
+ul,split,item,value,n,p
+NIFTY,discovery,gap dir agreement minute vs official,0.9006849315068494,292,
+NIFTY,discovery,confusion minute=down official=down,93.0,292,
+NIFTY,discovery,confusion minute=down official=flat,2.0,292,
+NIFTY,discovery,confusion minute=down official=up,0.0,292,
+NIFTY,discovery,confusion minute=flat official=down,4.0,292,
+NIFTY,discovery,confusion minute=flat official=flat,25.0,292,
+NIFTY,discovery,confusion minute=flat official=up,12.0,292,
+NIFTY,discovery,confusion minute=up official=down,0.0,292,
+NIFTY,discovery,confusion minute=up official=flat,11.0,292,
+NIFTY,discovery,confusion minute=up official=up,145.0,292,
+NIFTY,discovery,rate up minute,0.5342465753424658,292,
+NIFTY,discovery,rate up official,0.5376712328767124,292,0.9338710614164897
+NIFTY,discovery,rate flat minute,0.1404109589041096,292,
+NIFTY,discovery,rate flat official,0.13013698630136986,292,0.7166287231681656
+NIFTY,discovery,rate down minute,0.3253424657534247,292,
+NIFTY,discovery,rate down official,0.3321917808219178,292,0.8601569415250494
+NIFTY,discovery,"corr(minute-official close, y_gap minute)",-0.06309347808598015,292,0.28255906926759744
+NIFTY,discovery,slope y_gap on close noise,-0.42998137227992855,292,
+NIFTY,discovery,"corr(f_mom1, y_gap minute)",-0.005293545871148588,292,0.9282325497627748
+NIFTY,discovery,"corr(f_mom1, y_gap official)",0.02832731232007114,292,0.6297506606872887
+NIFTY,discovery,share |gap| within 0.05 pp of the 0.1 % band edge,0.1404109589041096,292,
+BANKNIFTY,discovery,gap dir agreement minute vs official,0.910958904109589,292,
+BANKNIFTY,discovery,confusion minute=down official=down,100.0,292,
+BANKNIFTY,discovery,confusion minute=down official=flat,7.0,292,
+BANKNIFTY,discovery,confusion minute=down official=up,1.0,292,
+BANKNIFTY,discovery,confusion minute=flat official=down,5.0,292,
+BANKNIFTY,discovery,confusion minute=flat official=flat,14.0,292,
+BANKNIFTY,discovery,confusion minute=flat official=up,6.0,292,
+BANKNIFTY,discovery,confusion minute=up official=down,2.0,292,
+BANKNIFTY,discovery,confusion minute=up official=flat,5.0,292,
+BANKNIFTY,discovery,confusion minute=up official=up,152.0,292,
+BANKNIFTY,discovery,rate up minute,0.5445205479452054,292,
+BANKNIFTY,discovery,rate up official,0.5445205479452054,292,1.0
+BANKNIFTY,discovery,rate flat minute,0.08561643835616438,292,
+BANKNIFTY,discovery,rate flat official,0.08904109589041095,292,0.8834680662378352
+BANKNIFTY,discovery,rate down minute,0.3698630136986301,292,
+BANKNIFTY,discovery,rate down official,0.3664383561643836,292,0.9316274916844329
+BANKNIFTY,discovery,"corr(minute-official close, y_gap minute)",-0.09921399077585821,292,0.09059352093194084
+BANKNIFTY,discovery,slope y_gap on close noise,-0.5583351467076278,292,
+BANKNIFTY,discovery,"corr(f_mom1, y_gap minute)",0.00781268225324995,292,0.8942467089204124
+BANKNIFTY,discovery,"corr(f_mom1, y_gap official)",0.061864625383430384,292,0.2920576956081528
+BANKNIFTY,discovery,share |gap| within 0.05 pp of the 0.1 % band edge,0.08561643835616438,292,

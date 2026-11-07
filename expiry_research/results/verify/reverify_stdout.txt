@@ -1,0 +1,101 @@
+PASS raw NIFTY 2019-02-14 first trade day | 2019-02-11
+PASS raw NIFTY nearest listed expiry on 2019-02-01 | ['2019-02-28', '2019-03-28', '2019-04-25']
+PASS raw NIFTY nearest listed expiry on 2019-02-08 | ['2019-02-28', '2019-03-28', '2019-04-25']
+PASS NIFTY calendar known_from <= raw first trade day (bhavcopy rows) | 434 rows, 0 with known_from later than raw first trade
+  NIFTY: known_from != raw first on 13 rows: [['2023-03-29', '2022-04-01', '2022-12-22'], ['2023-06-28', '2018-06-29', '2023-06-28'], ['2025-09-30', '2024-09-27', '2025-08-01'], ['2025-12-30', '2021-01-01', '2025-08-01'], ['2026-03-30', '2025-03-28', '2025-12-29'], ['2026-06-30', '2021-06-25', '2025-08-01'], ['2026-12-29', '2021-12-31', '2025-08-01'], ['2027-06-29', '2022-07-01', '2025-08-01'], ['2027-12-28', '2022-12-30', '2025-08-01'], ['2028-06-27', '2023-06-30', '2025-08-01']]
+  NIFTY: blank known_from on bhavcopy rows: 0 []
+PASS BANKNIFTY calendar known_from <= raw first trade day (bhavcopy rows) | 389 rows, 0 with known_from later than raw first trade
+  BANKNIFTY: known_from != raw first on 18 rows: [['2023-03-29', '2022-04-01', '2022-12-22'], ['2023-06-28', '2022-07-01', '2023-06-28'], ['2023-09-06', '2023-08-04', '2023-09-04'], ['2023-09-13', '2023-08-11', '2023-09-04'], ['2023-09-20', '2023-08-18', '2023-09-04'], ['2023-10-04', '2023-08-25', '2023-09-04'], ['2024-03-27', '2023-03-31', '2024-03-01'], ['2024-04-24', '2024-01-29', '2024-03-01'], ['2024-06-26', '2023-06-30', '2024-03-01'], ['2024-09-25', '2023-09-29', '2024-03-01']]
+  BANKNIFTY: blank known_from on bhavcopy rows: 0 []
+  known_from blank by source: {'bhavcopy': '0/823', 'expiries.parquet': '16/16', 'options_1m folder': '109/109'}
+FAIL NIFTY sessions next_expiry: raw-listed on the row date | 2181 non-blank, 3 point to an expiry first traded after the row date (2023-06-23..2023-06-27)
+PASS NIFTY sessions next_weekly: raw-listed on the row date | 1906 non-blank, 0 point to an expiry first traded after the row date
+FAIL NIFTY sessions next_monthly: raw-listed on the row date | 2181 non-blank, 23 point to an expiry first traded after the row date (2023-05-26..2023-06-27)
+  NIFTY: next_expiry != nearest raw-listed expiry on 3 of 2177 rows; [['2023-06-23', '2023-06-28', '2023-06-29'], ['2023-06-26', '2023-06-28', '2023-06-29'], ['2023-06-27', '2023-06-28', '2023-06-29']]
+PASS NIFTY next_expiry == nearest raw-listed, 2019-02-01..08 | 
+FAIL BANKNIFTY sessions next_expiry: raw-listed on the row date | 2181 non-blank, 9 point to an expiry first traded after the row date (2023-06-23..2025-01-01)
+FAIL BANKNIFTY sessions next_weekly: raw-listed on the row date | 1697 non-blank, 6 point to an expiry first traded after the row date (2023-08-25..2023-09-01)
+FAIL BANKNIFTY sessions next_monthly: raw-listed on the row date | 2181 non-blank, 28 point to an expiry first traded after the row date (2023-05-26..2025-01-01)
+  BANKNIFTY: next_expiry != nearest raw-listed expiry on 9 of 2177 rows; [['2023-06-23', '2023-06-28', '2023-06-29'], ['2023-06-26', '2023-06-28', '2023-06-29'], ['2023-06-27', '2023-06-28', '2023-06-29'], ['2023-09-01', '2023-09-06', '2023-09-07'], ['2024-12-26', '2025-01-30', '2025-01-29'], ['2024-12-27', '2025-01-30', '2025-01-29'], ['2024-12-30', '2025-01-30', '2025-01-29'], ['2024-12-31', '2025-01-30', '2025-01-29']]
+PASS NIFTY sessions weekly countdown blank before 2019-02-11 | 275 rows; non-blank next_weekly 0, sessions 0
+      date next_expiry  sessions_to_next_expiry  cal_days_to_next_expiry next_expiry_kind next_weekly  sessions_to_next_weekly next_monthly  sessions_to_next_monthly
+2019-01-28  2019-01-31                      3.0                        3          monthly         NaN                      NaN   2019-01-31                       3.0
+2019-01-29  2019-01-31                      2.0                        2          monthly         NaN                      NaN   2019-01-31                       2.0
+2019-01-30  2019-01-31                      1.0                        1          monthly         NaN                      NaN   2019-01-31                       1.0
+2019-01-31  2019-01-31                      0.0                        0          monthly         NaN                      NaN   2019-01-31                       0.0
+2019-02-01  2019-02-28                     19.0                       27          monthly         NaN                      NaN   2019-02-28                      19.0
+2019-02-04  2019-02-28                     18.0                       24          monthly         NaN                      NaN   2019-02-28                      18.0
+2019-02-05  2019-02-28                     17.0                       23          monthly         NaN                      NaN   2019-02-28                      17.0
+2019-02-06  2019-02-28                     16.0                       22          monthly         NaN                      NaN   2019-02-28                      16.0
+2019-02-07  2019-02-28                     15.0                       21          monthly         NaN                      NaN   2019-02-28                      15.0
+2019-02-08  2019-02-28                     14.0                       20          monthly         NaN                      NaN   2019-02-28                      14.0
+2019-02-11  2019-02-14                      3.0                        3           weekly  2019-02-14                      3.0   2019-02-28                      13.0
+2019-02-12  2019-02-14                      2.0                        2           weekly  2019-02-14                      2.0   2019-02-28                      12.0
+2019-02-13  2019-02-14                      1.0                        1           weekly  2019-02-14                      1.0   2019-02-28                      11.0
+2019-02-14  2019-02-14                      0.0                        0           weekly  2019-02-14                      0.0   2019-02-28                      10.0
+2019-02-15  2019-02-21                      4.0                        6           weekly  2019-02-21                      4.0   2019-02-28                       9.0
+PASS panel NIFTY cal_sessions_to_weekly blank before 2019-02-11 | non-null 0 of 274
+PASS panel NIFTY cal_next_sessions_to_weekly blank for t < 2019-02-11 | non-null 0 of 274
+      date  cal_sessions_to_expiry  cal_days_to_expiry cal_upcoming_kind  cal_sessions_to_weekly cal_next_date  cal_next_is_expiry cal_next_kind  cal_next_sessions_to_expiry  cal_next_days_to_expiry cal_next_upcoming_kind  cal_next_sessions_to_weekly
+2019-01-28                     3.0                   3           monthly                     NaN    2019-01-29               False          none                          2.0                      2.0                monthly                          NaN
+2019-01-29                     2.0                   2           monthly                     NaN    2019-01-30               False          none                          1.0                      1.0                monthly                          NaN
+2019-01-30                     1.0                   1           monthly                     NaN    2019-01-31                True       monthly                          0.0                      0.0                monthly                          NaN
+2019-01-31                     0.0                   0           monthly                     NaN    2019-02-01               False          none                         19.0                     27.0                monthly                          NaN
+2019-02-01                    19.0                  27           monthly                     NaN    2019-02-04               False          none                         18.0                     24.0                monthly                          NaN
+2019-02-04                    18.0                  24           monthly                     NaN    2019-02-05               False          none                         17.0                     23.0                monthly                          NaN
+2019-02-05                    17.0                  23           monthly                     NaN    2019-02-06               False          none                         16.0                     22.0                monthly                          NaN
+2019-02-06                    16.0                  22           monthly                     NaN    2019-02-07               False          none                         15.0                     21.0                monthly                          NaN
+2019-02-07                    15.0                  21           monthly                     NaN    2019-02-08               False          none                         14.0                     20.0                monthly                          NaN
+2019-02-08                    14.0                  20           monthly                     NaN    2019-02-11               False          none                          NaN                      NaN                   None                          NaN
+2019-02-11                     3.0                   3            weekly                     3.0    2019-02-12               False          none                          2.0                      2.0                 weekly                          2.0
+2019-02-12                     2.0                   2            weekly                     2.0    2019-02-13               False          none                          1.0                      1.0                 weekly                          1.0
+2019-02-13                     1.0                   1            weekly                     1.0    2019-02-14                True        weekly                          0.0                      0.0                 weekly                          0.0
+2019-02-14                     0.0                   0            weekly                     0.0    2019-02-15               False          none                          4.0                      6.0                 weekly                          4.0
+2019-02-15                     4.0                   6            weekly                     4.0    2019-02-18               False          none                          3.0                      3.0                 weekly                          3.0
+PASS NIFTY panel cal_sessions_to_expiry == sessions sessions_to_next_expiry | 0 differ
+PASS NIFTY panel cal_sessions_to_weekly == sessions sessions_to_next_weekly | 0 differ
+PASS NIFTY panel cal_sessions_to_monthly == sessions sessions_to_next_monthly | 0 differ
+PASS NIFTY panel cal_days_to_expiry == sessions cal_days_to_next_expiry | 0 differ
+FAIL NIFTY panel cal_next_sessions_to_expiry: blank when t+1's next_expiry not raw-listed by t | 5 such rows, 4 non-blank
+FAIL NIFTY panel cal_next_days_to_expiry: blank when t+1's next_expiry not raw-listed by t | 5 such rows, 4 non-blank
+FAIL NIFTY panel cal_next_upcoming_kind: blank when t+1's next_expiry not raw-listed by t | 5 such rows, 4 non-blank
+PASS NIFTY panel cal_next_sessions_to_weekly: blank when t+1's next_weekly not raw-listed by t | 1 such rows, 0 non-blank
+FAIL NIFTY panel cal_next_sessions_to_monthly: blank when t+1's next_monthly not raw-listed by t | 24 such rows, 24 non-blank
+FAIL NIFTY panel cal_next_is_expiry blank when t+1 is an expiry not listed by t | 1 such rows
+PASS BANKNIFTY panel cal_sessions_to_expiry == sessions sessions_to_next_expiry | 0 differ
+PASS BANKNIFTY panel cal_sessions_to_weekly == sessions sessions_to_next_weekly | 0 differ
+PASS BANKNIFTY panel cal_sessions_to_monthly == sessions sessions_to_next_monthly | 0 differ
+PASS BANKNIFTY panel cal_days_to_expiry == sessions cal_days_to_next_expiry | 0 differ
+FAIL BANKNIFTY panel cal_next_sessions_to_expiry: blank when t+1's next_expiry not raw-listed by t | 6 such rows, 6 non-blank
+FAIL BANKNIFTY panel cal_next_days_to_expiry: blank when t+1's next_expiry not raw-listed by t | 6 such rows, 6 non-blank
+FAIL BANKNIFTY panel cal_next_upcoming_kind: blank when t+1's next_expiry not raw-listed by t | 6 such rows, 6 non-blank
+FAIL BANKNIFTY panel cal_next_sessions_to_weekly: blank when t+1's next_weekly not raw-listed by t | 7 such rows, 7 non-blank
+FAIL BANKNIFTY panel cal_next_sessions_to_monthly: blank when t+1's next_monthly not raw-listed by t | 25 such rows, 25 non-blank
+FAIL BANKNIFTY panel cal_next_is_expiry blank when t+1 is an expiry not listed by t | 1 such rows
+SENSEX calendar sources: {'options_1m folder': 109, 'expiries.parquet': 16} known_from non-blank: 0
+PASS NIFTY open: no row with date >= 2024-07-01 | 1599 rows 2018-01-01..2024-06-28, splits {'discovery': 1233, 'validation': 366}
+PASS NIFTY open: no label of a final session | 1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+PASS NIFTY open: row before the edge keeps labels | 2024-06-27 non-null labels 21/21
+PASS NIFTY schema open == sealed | 
+PASS NIFTY sealed = final rows + edge row | 577 final 2024-07-01..2026-10-29, edge ['2024-06-28']
+PASS NIFTY open + final dates disjoint and cover a contiguous session list | 1599 + 577 = 2176; sessions file 2181 rows 2018-01-01..2026-10-29
+  NIFTY: sessions-file days (from panel start) not in open+final: 5 ['2018-11-07', '2021-11-04', '2022-10-24', '2024-11-01', '2025-10-21']
+  NIFTY: sealed rows 578; y_ null counts (stats only): min 1 max 206 of 578
+PASS BANKNIFTY open: no row with date >= 2024-07-01 | 1599 rows 2018-01-01..2024-06-28, splits {'discovery': 1233, 'validation': 366}
+PASS BANKNIFTY open: no label of a final session | 1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+PASS BANKNIFTY open: row before the edge keeps labels | 2024-06-27 non-null labels 21/21
+PASS BANKNIFTY schema open == sealed | 
+PASS BANKNIFTY sealed = final rows + edge row | 577 final 2024-07-01..2026-10-29, edge ['2024-06-28']
+PASS BANKNIFTY open + final dates disjoint and cover a contiguous session list | 1599 + 577 = 2176; sessions file 2181 rows 2018-01-01..2026-10-29
+  BANKNIFTY: sessions-file days (from panel start) not in open+final: 5 ['2018-11-07', '2021-11-04', '2022-10-24', '2024-11-01', '2025-10-21']
+  BANKNIFTY: sealed rows 578; y_ null counts (stats only): min 1 max 183 of 578
+PASS SENSEX open: no row with date >= 2024-07-01 | 663 rows 2021-10-20..2024-06-28, splits {'validation': 366, 'discovery': 297}
+PASS SENSEX open: no label of a final session | 1 row(s) with y_date >= 2024-07-01: ['2024-06-28'] -> ['2024-07-01']
+PASS SENSEX open: row before the edge keeps labels | 2024-06-27 non-null labels 21/21
+PASS SENSEX schema open == sealed | 
+PASS SENSEX sealed = final rows + edge row | 577 final 2024-07-01..2026-10-29, edge ['2024-06-28']
+PASS SENSEX open + final dates disjoint and cover a contiguous session list | 663 + 577 = 1240; sessions file 513 rows 2024-10-04..2026-10-29
+  SENSEX: sessions-file days (from panel start) not in open+final: 2 ['2024-11-01', '2025-10-21']
+  SENSEX: sealed rows 578; y_ null counts (stats only): min 1 max 204 of 578
+PASS no CSV outside data/sealed holds final-period y_ values | []
+38 of 54 checks pass

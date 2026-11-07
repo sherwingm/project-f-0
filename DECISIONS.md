@@ -147,6 +147,9 @@ Closed before the S1 structure; not reopened except as a component of an S1 vers
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
 
+## 2026-11-07 · Reporting default: max up first (user decision)
+**Reporting default (the user, 2026-11-07):** every result leads with the max up after entry: the share of trades reaching +50 / +100 / +200 %, the mean max up and the median max up, then the booked result (win %, average, median, total ₹). Max up is the measure; no exit rule is judged by it. Split by days held (and by days to expiry where it matters). It is descriptive and changes no rule, no gate and no live behaviour. The live `/index` Pods table now shows max up average, median and the share ≥ +100 % before the booked columns.
+
 ## 2026-11-04 · Near-expiry strategy exempt from our own near-expiry guards, that strategy only (user decision)
 The user, 2026-11-04: "leave my own code rules only for this strategy" (after the Kotak Neo docs showed near-expiry buying
 is allowed through the API). `NEAR_EXPIRY_STRATEGIES` (default `near_expiry`) names the rule-trade strategies
@@ -209,6 +212,9 @@ are hypotheses until our data confirms them. S3 is separate from S1 and S2; noth
 
 | Pod | Status | Record |
 |---|---|---|
+| S3 G1 / G1-F · exit changed to the next session's close (`strategies/S3_G1_put_overnight.md`) | **From 2026-11-06** (user decision; 50 % stop kept; before any live trade) | Peak measure reaches +100 % on 38 % (G1-F) vs 23 % at 09:16; booked history about equal or slightly lower; paper only; Near Tighty unchanged |
+| S3 G1-F · main track of the index put (`strategies/S3_G1_put_overnight.md`) | **Main from 2026-11-06** (user decision "make the g1-f as main") | Display and alerts only; the ledger still records every G1 trade with its G1-F flag; G1 kept as the baseline; both gates (30 trades each) unchanged; paper only |
+| XP · NIFTY expiry-day same-day ATM straddle, 09:16 asks, +20 % target else 15:15 (`expiry_research/FORWARD_TEST.md`) | **Forward log** from 2026-11-05 (user decision "Both"), verdict at 40 expiry days; no orders | Independent expiry study (`expiry_research/reports/FINAL_RESEARCH_REPORT.md`): no direction edge; size predictable but not tradeable as a long straddle; expiry-day straddle −7.2 % to 15:15, max up +53 % mean |
 | S3 P1 · NIFTY expiry-day iron fly, 11:15, combined stop 30 %, out 14:45, VIX 13-20 (`strategies/S3_P1_expiry_day_fly.md`) | **Closed**: failed the gate (2026-10-23) | Test window 2024-10 → 2025-09, 53 expiry days → 37 trades (1 without prices, 2 event days, 13 VIX outside 13-20). Win rate 41 %, stop hit 49 %. Net −4.9 % of the credit a trade (median −33.7 %, t −0.68), −₹438 a trade at 1 lot, total −₹16,188; halves +0.3 % / −15.7 %; 2× costs −14.6 %; worst day −₹3,544 against an average month of −₹1,799. Neighbours (stop 25 / 35 %, 10:00) all negative; every fly cell in the grid negative (−1.6 % to −20 %). Side report, not promotable (picked after seeing the grid, all t < 1): the short straddle with a 20-35 % stop is about zero to +5.6 % (best 10:00 with a 25 % stop, +5.6 %, t 0.7). Fees are large at 1 lot (8 orders ≈ ₹190-240 against a credit of ~₹1,400-7,000). Holdout not run (`data/results/S3_P1_report.md`) |
 | S3 P2 · NIFTY expiry-day long ATM straddle, 14:45 → 15:25, no stop or target (`strategies/S3_P2_expiry_last30_straddle.md`) | **Closed**: failed the gate (2026-10-23) | Test window 2024-10 → 2025-09, 53 expiry days → 52 trades (1 without prices). Win rate 27 %; the index moved more than the premium paid on 38 % of days. Net −35.8 % of the premium a trade (median −50.5 %), t −3.17; −₹286 a trade at 1 lot, total −₹14,853; halves −65.2 % / −8.5 %; 2× costs −47.4 %. Every grid cell negative (−25 % to −39 %, t −2.5 to −4.2), targets included. The last-half-hour variance (1.31x) is far smaller than what the expiry-day straddle charges for it. Side note, not promotable (seen after the run): the mirror trade (selling it) would have earned before costs, which a new pod could only test on its own pre-registered page. Holdout not run (`data/results/S3_P2_report.md`) |
 | S3 P2s · NIFTY expiry-day short iron fly ±4, 14:45 → 15:25, combined stop 30 % (`strategies/S3_P2s_expiry_last40_short.md`; not independent of P2) | **Closed**: failed the gate (2026-10-23) | Test window, 53 expiry days → 50 trades (1 without prices, 2 event days). Win rate 50 %, stop hit 42 %. Net −9.2 % of the credit a trade (median 0.0 %), t −1.03; −₹34 a trade, total −₹1,714; halves −8.0 % / −10.3 %; 2× costs −33.4 %. The mirror of P2 does not carry over: fees (8 orders ≈ ₹193 on a ₹1,561 credit) and minute-close stops on a ~27-point credit eat it; every fly cell (±2, ±4) is negative. Side report, not promotable (108 cells, picked after the run): the naked short straddle without a stop is +13.8 % at 14:45 → 15:25 (t 1.3) and +18.7 % at 14:30 → 15:15 (t 2.4, the best of 108 cells). Holdout not run (`data/results/S3_P2s_report.md`) |
@@ -445,6 +451,9 @@ website page `/near-tighty` and API `/api/near-tighty`, own results; it changes 
 - **Overlap:** on 1-3-session days G1 takes the same put in its own ledger; each counts it once in its own record.
 - Kotak Neo allows these buys through the API (checked 2026-11-04: NIFTY options are cash-settled; limit orders only,
   static IP, 10 orders a second).
+
+### 7 Nov 2026 - G1 breakout score (record only)
+Score 0-7 (7 entry-time items), score %, expanding percentile. Verdict on history: Rejected as a predictor of max up (validation rho +0.09, p 0.25); kept as a record only; re-judge at 30 live signals, max up first, by band. See g1_research/SCORE_RESULT.md.
 
 ### S3 N1 · NIFTY near-expiry ORB, option 2 strikes out, sold the same day: pre-registered, forward test open (2026-11-05)
 Page `strategies/S3_N1_near_expiry_orb.md` (the user: "Yes, write the page"); code name `near_expiry` (the strategy

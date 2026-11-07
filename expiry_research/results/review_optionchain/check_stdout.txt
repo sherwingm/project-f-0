@@ -1,0 +1,239 @@
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_check.py:55: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  nb[i] = np.busday_count((t + pd.Timedelta(days=1)).date(), (e + pd.Timedelta(days=1)).date())
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_check.py:55: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  nb[i] = np.busday_count((t + pd.Timedelta(days=1)).date(), (e + pd.Timedelta(days=1)).date())
+           ul                                               check     n  max_abs_diff  share_panel_nonnull_own_null
+0       NIFTY  straddle_chg1 panel vs own (prev row, same expiry)  1299      0.000000                      0.183865
+1       NIFTY   weekday count minus real session count (holidays)  1595      3.000000                      0.171357
+2       NIFTY               NW rows: near expiry != cal_next_date   216      0.000000                           NaN
+3       NIFTY                         spearman(iv,lvix) discovery  1232      0.846924                           NaN
+4       NIFTY                         spearman(iv,lrng) discovery  1231      0.582404                           NaN
+5       NIFTY                         spearman(iv,latr) discovery  1218      0.801278                           NaN
+6       NIFTY                        spearman(iv,n_bus) discovery  1232     -0.038485                           NaN
+7       NIFTY                 spearman(wall_width,lvix) discovery  1232      0.501569                           NaN
+8       NIFTY                 spearman(wall_width,lrng) discovery  1231      0.383927                           NaN
+9       NIFTY                 spearman(wall_width,latr) discovery  1218      0.498699                           NaN
+10      NIFTY                spearman(wall_width,n_bus) discovery  1232      0.229577                           NaN
+11      NIFTY                  spearman(wall_near,lvix) discovery  1232      0.448515                           NaN
+12      NIFTY                  spearman(wall_near,lrng) discovery  1231      0.369153                           NaN
+13      NIFTY                  spearman(wall_near,latr) discovery  1218      0.442718                           NaN
+14      NIFTY                 spearman(wall_near,n_bus) discovery  1232      0.141832                           NaN
+15      NIFTY                     spearman(mp_abs,lvix) discovery  1232      0.085670                           NaN
+16      NIFTY                     spearman(mp_abs,lrng) discovery  1231      0.208697                           NaN
+17      NIFTY                     spearman(mp_abs,latr) discovery  1218      0.112786                           NaN
+18      NIFTY                    spearman(mp_abs,n_bus) discovery  1232      0.240180                           NaN
+19      NIFTY                  spearman(strad_chg,lvix) discovery  1229     -0.384653                           NaN
+20      NIFTY                  spearman(strad_chg,lrng) discovery  1229     -0.182664                           NaN
+21      NIFTY                  spearman(strad_chg,latr) discovery  1216     -0.405765                           NaN
+22      NIFTY                 spearman(strad_chg,n_bus) discovery  1229      0.380684                           NaN
+23      NIFTY                  spearman(vol_surge,lvix) discovery  1157      0.149327                           NaN
+24      NIFTY                  spearman(vol_surge,lrng) discovery  1157      0.482052                           NaN
+25      NIFTY                  spearman(vol_surge,latr) discovery  1157      0.166861                           NaN
+26      NIFTY                 spearman(vol_surge,n_bus) discovery  1157     -0.043094                           NaN
+27      NIFTY                     spearman(iv_chg,lvix) discovery  1013     -0.055382                           NaN
+28      NIFTY                     spearman(iv_chg,lrng) discovery  1013      0.006516                           NaN
+29      NIFTY                     spearman(iv_chg,latr) discovery  1000     -0.099222                           NaN
+30      NIFTY                    spearman(iv_chg,n_bus) discovery  1013      0.109960                           NaN
+31  BANKNIFTY  straddle_chg1 panel vs own (prev row, same expiry)  1254      0.000000                      0.212008
+32  BANKNIFTY   weekday count minus real session count (holidays)  1594      2.000000                      0.126954
+33  BANKNIFTY               NW rows: near expiry != cal_next_date   261      0.000000                           NaN
+34  BANKNIFTY                         spearman(iv,lvix) discovery  1232      0.833281                           NaN
+35  BANKNIFTY                         spearman(iv,lrng) discovery  1231      0.650325                           NaN
+36  BANKNIFTY                         spearman(iv,latr) discovery  1218      0.867730                           NaN
+37  BANKNIFTY                        spearman(iv,n_bus) discovery  1232      0.019917                           NaN
+38  BANKNIFTY                 spearman(wall_width,lvix) discovery  1231      0.536583                           NaN
+39  BANKNIFTY                 spearman(wall_width,lrng) discovery  1230      0.533384                           NaN
+40  BANKNIFTY                 spearman(wall_width,latr) discovery  1217      0.599033                           NaN
+41  BANKNIFTY                spearman(wall_width,n_bus) discovery  1231      0.100367                           NaN
+42  BANKNIFTY                  spearman(wall_near,lvix) discovery  1231      0.439431                           NaN
+43  BANKNIFTY                  spearman(wall_near,lrng) discovery  1230      0.443511                           NaN
+44  BANKNIFTY                  spearman(wall_near,latr) discovery  1217      0.489150                           NaN
+45  BANKNIFTY                 spearman(wall_near,n_bus) discovery  1231      0.074350                           NaN
+46  BANKNIFTY                     spearman(mp_abs,lvix) discovery  1232      0.312444                           NaN
+47  BANKNIFTY                     spearman(mp_abs,lrng) discovery  1231      0.457775                           NaN
+48  BANKNIFTY                     spearman(mp_abs,latr) discovery  1218      0.306619                           NaN
+49  BANKNIFTY                    spearman(mp_abs,n_bus) discovery  1232      0.001409                           NaN
+50  BANKNIFTY                  spearman(strad_chg,lvix) discovery  1230     -0.390017                           NaN
+51  BANKNIFTY                  spearman(strad_chg,lrng) discovery  1230     -0.262696                           NaN
+52  BANKNIFTY                  spearman(strad_chg,latr) discovery  1217     -0.454601                           NaN
+53  BANKNIFTY                 spearman(strad_chg,n_bus) discovery  1230      0.279167                           NaN
+54  BANKNIFTY                  spearman(vol_surge,lvix) discovery  1213     -0.030295                           NaN
+55  BANKNIFTY                  spearman(vol_surge,lrng) discovery  1213      0.344212                           NaN
+56  BANKNIFTY                  spearman(vol_surge,latr) discovery  1213     -0.006515                           NaN
+57  BANKNIFTY                 spearman(vol_surge,n_bus) discovery  1213      0.022579                           NaN
+58  BANKNIFTY                     spearman(iv_chg,lvix) discovery   969      0.015762                           NaN
+59  BANKNIFTY                     spearman(iv_chg,lrng) discovery   969      0.003989                           NaN
+60  BANKNIFTY                     spearman(iv_chg,latr) discovery   959     -0.067174                           NaN
+61  BANKNIFTY                    spearman(iv_chg,n_bus) discovery   969      0.146090                           NaN
+     cand     my_thr  their_thr  disc_n  their_disc_n  disc_rate  disc_base  disc_effect  their_disc_effect        disc_p  val_n  their_val_n  val_rate  val_base  val_effect  their_val_effect     val_p  pass_recomputed  their_passed
+0    OC01  22.653262  22.652824     411           411   0.827251   0.499594     0.327657           0.327657  1.846283e-43     12           12  0.833333  0.225275    0.608059          0.608059  0.000014             True          True
+1    OC02  15.658420  15.658117     411           411   0.785888   0.500406     0.285482           0.285482  1.273469e-32     17           17  0.705882  0.250000    0.455882          0.455882  0.000100             True          True
+2    OC04  15.658420  15.658117     411           411   0.727494   0.458976     0.268517           0.268517  3.266313e-28     17           17  0.470588  0.211538    0.259050          0.259050  0.015350             True          True
+3    OC08   5.289397   5.289397     410           410   0.739024   0.499187     0.239837           0.239837  5.229680e-23    111          111  0.378378  0.225275    0.153104          0.153104  0.000196             True          True
+4    OC10  22.653262  22.652824     411           411   0.725061   0.500406     0.224655           0.224655  2.543113e-20     12           12  0.750000  0.346154    0.403846          0.403846  0.005155             True          True
+5    OC11   1.705892   1.705892     410           410   0.721951   0.499187     0.222764           0.222764  6.025024e-20     79           79  0.367089  0.225275    0.141814          0.141814  0.003019             True          True
+6    OC13   1.834408   1.834408     411           411   0.703163   0.500406     0.202757           0.202757  1.008556e-16     63           63  0.476190  0.250000    0.226190          0.226190  0.000086             True          True
+7    OC17   6.037371   6.037371     411           411   0.693431   0.500406     0.193024           0.193024  2.965056e-15     58           58  0.431034  0.250000    0.181034          0.181034  0.001965             True          True
+8    OC21   1.834408   1.834408     411           411   0.635036   0.458976     0.176060           0.176060  8.790400e-13     63           63  0.380952  0.211538    0.169414          0.169414  0.001593             True          True
+9    OC22  -0.398609  -0.398609     410           410   0.826829   0.677787     0.149042           0.149042  1.227571e-11     37           37  0.621622  0.395028    0.226594          0.226594  0.004430             True          True
+10   OC24   0.579285   0.579285     411           411   0.659367   0.499594     0.159774           0.159774  7.345761e-11     39           39  0.410256  0.225275    0.184982          0.184982  0.007468             True          True
+11   OC25   6.037371   6.037371     411           411   0.618005   0.458976     0.159028           0.159028  1.215514e-10     58           58  0.344828  0.211538    0.133289          0.133289  0.013172             True          True
+12   OC39   0.753906   0.753906     411           411   0.372263   0.500406    -0.128143          -0.128143  1.949316e-07    225          225  0.182222  0.250000   -0.067778         -0.067778  0.009810             True          True
+13   OC43  -0.294362  -0.294362     410           410   0.626829   0.500814     0.126015           0.126015  3.214895e-07     36           36  0.472222  0.247934    0.224288          0.224288  0.002898             True          True
+14   OC52   1.164114   1.164114     386           386   0.634715   0.514706     0.120009           0.120009  2.523957e-06     99           99  0.353535  0.250000    0.103535          0.103535  0.013970             True          True
+15   OC59  -0.294362  -0.294362     410           410   0.570732   0.459283     0.111448           0.111448  7.566432e-06     36           36  0.472222  0.209366    0.262856          0.262856  0.000387             True          True
+16   OC94   1.211621   1.211621      52            52   0.692308   0.455128     0.237179           0.237179  7.021621e-04     10           10  0.500000  0.216667    0.283333          0.283333  0.045105             True          True
+17   OC97   4.309375   4.309375      67            67   0.701493   0.497512     0.203980           0.203980  8.701856e-04     21           21  0.476190  0.283333    0.192857          0.192857  0.047324             True          True
+18  OC118   0.651391   0.651378     323           323   0.585139   0.498967     0.086172           0.086172  2.166414e-03     77           77  0.350649  0.207746    0.142903          0.142903  0.002618             True          True
+   cand  val_effect_iv_realsessions  val_n_iv_realsessions
+0  OC01                    0.609576                   12.0
+1  OC02                    0.482645                   15.0
+2  OC04                    0.321212                   15.0
+4  OC10                    0.404696                   12.0
+     cand            period     n  n_bucket  coef_bucket_raw         p_raw  coef_bucket_controlled        se  p_controlled_two_sided  p_controlled_one_sided  same_sign
+0    OC01              disc  1217       411         2.240859  2.660978e-50                0.514711  0.217894                0.018167                0.009083       True
+1    OC01               val   364        12         2.967560  1.590153e-04                1.090230  0.898013                0.224730                0.112365       True
+2    OC01  val_oos_residual   364        12              NaN           NaN                0.136487       NaN                0.276624                0.138312       True
+3    OC02              disc  1217       411         1.871159  2.825612e-40                0.386837  0.199862                0.052927                0.026463       True
+4    OC02               val   364        17         2.097007  1.279537e-04                0.854080  0.672147                0.203845                0.101922       True
+5    OC02  val_oos_residual   364        17              NaN           NaN                0.110183       NaN                0.335145                0.167572       True
+6    OC04              disc  1217       411         1.690017  1.314485e-36                0.414433  0.192063                0.030944                0.015472       True
+7    OC04               val   364        17         1.275731  1.139677e-02                0.200761  0.647426                0.756492                0.378246       True
+8    OC04  val_oos_residual   364        17              NaN           NaN               -0.063479       NaN                0.594561                0.702719      False
+9    OC08              disc  1216       410         1.521404  5.816858e-30                0.306493  0.169960                0.071336                0.035668       True
+10   OC08               val   364       111         1.175976  6.490196e-06                0.571695  0.313117                0.067877                0.033939       True
+11   OC08  val_oos_residual   364       111              NaN           NaN                0.058688       NaN                0.232138                0.116069       True
+12   OC10              disc  1217       411         1.408369  1.353468e-26                0.393131  0.197508                0.046541                0.023271       True
+13   OC10               val   364        12         1.796023  7.906115e-03                1.691678  0.815388                0.038015                0.019008       True
+14   OC10  val_oos_residual   364        12              NaN           NaN                0.073956       NaN                0.582641                0.291321       True
+15   OC11              disc  1216       409         1.408878  1.407320e-26                0.313432  0.164160                0.056223                0.028112       True
+16   OC11               val   364        79         0.931718  8.277073e-04                0.135771  0.345984                0.694747                0.347374       True
+17   OC11  val_oos_residual   364        79              NaN           NaN                0.036182       NaN                0.516925                0.258462       True
+18   OC13              disc  1217       407         1.279024  1.050228e-22                0.389483  0.158405                0.013941                0.006971       True
+19   OC13               val   364        63         1.274455  1.122335e-05                0.771880  0.363687                0.033806                0.016903       True
+20   OC13  val_oos_residual   364        63              NaN           NaN                0.085131       NaN                0.213850                0.106925       True
+21   OC17              disc  1217       408         1.218033  5.053781e-21                0.322818  0.162037                0.046343                0.023172       True
+22   OC17               val   364        58         1.013352  7.118551e-04                0.666223  0.394801                0.091509                0.045754       True
+23   OC17  val_oos_residual   364        58              NaN           NaN                0.058082       NaN                0.382123                0.191061       True
+24   OC21              disc  1217       407         1.090423  5.872710e-18                0.270439  0.152779                0.076704                0.038352       True
+25   OC21               val   364        63         1.057629  4.293305e-04                0.737530  0.375050                0.049242                0.024621       True
+26   OC21  val_oos_residual   364        63              NaN           NaN                0.035113       NaN                0.601525                0.300763       True
+27   OC22              disc  1216       410         1.124657  4.647452e-14                0.179942  0.185591                0.332263                0.166132       True
+28   OC22               val   362        37         1.031955  3.938186e-03                0.805475  0.416529                0.053141                0.026570       True
+29   OC22  val_oos_residual   362        37              NaN           NaN                0.124064       NaN                0.147067                0.073533       True
+30   OC24              disc  1217       408         0.982687  8.158802e-15                0.206499  0.161026                0.199704                0.099852       True
+31   OC24               val   364        39         1.004268  4.502835e-03               -0.132160  0.460371                0.774056                0.612972      False
+32   OC24  val_oos_residual   364        39              NaN           NaN               -0.030788       NaN                0.672597                0.663702      False
+33   OC25              disc  1217       408         0.971189  8.339277e-15                0.102787  0.156611                0.511619                0.255809       True
+34   OC25               val   364        58         0.832548  7.787102e-03                0.514632  0.402106                0.200601                0.100300       True
+35   OC25  val_oos_residual   364        58              NaN           NaN                0.004289       NaN                0.947975                0.473988       True
+36   OC39              disc  1217       410        -0.805597  9.571954e-11               -0.009084  0.150302                0.951807                0.475904       True
+37   OC39               val   364       225        -0.924750  1.823186e-04               -0.380916  0.322600                0.237694                0.118847       True
+38   OC39  val_oos_residual   364       225              NaN           NaN               -0.011508       NaN                0.806754                0.403377       True
+39   OC43              disc  1215       410         0.750730  1.568210e-09               -0.067572  0.157130                0.667166                0.666417      False
+40   OC43               val   363        36         1.135649  1.573381e-03                0.381002  0.436889                0.383165                0.191582       True
+41   OC43  val_oos_residual   363        36              NaN           NaN                0.100216       NaN                0.212392                0.106196       True
+42   OC52              disc  1156       386         0.734820  9.699936e-09                0.345731  0.165215                0.036384                0.018192       True
+43   OC52               val   364        99         0.713447  5.786845e-03                0.252526  0.311170                0.417058                0.208529       True
+44   OC52  val_oos_residual   364        99              NaN           NaN                0.032332       NaN                0.545946                0.272973       True
+45   OC59              disc  1215       410         0.649059  1.266948e-07               -0.060954  0.152585                0.689542                0.655229      False
+46   OC59               val   363        36         1.402224  1.145466e-04                1.002475  0.430277                0.019815                0.009907       True
+47   OC59  val_oos_residual   363        36              NaN           NaN                0.160169       NaN                0.068549                0.034275       True
+48   OC94              disc   156        52         1.489688  4.512331e-05                0.564669  0.427712                0.186765                0.093383       True
+49   OC94               val    60        10         1.658227  2.519646e-02                1.302088  0.975198                0.181810                0.090905       True
+50   OC94  val_oos_residual    60        10              NaN           NaN                0.133972       NaN                0.465094                0.232547       True
+51   OC97              disc   198        67         1.272619  7.427731e-05                0.124837  0.393509                0.751062                0.375531       True
+52   OC97               val    60        21         1.424515  1.838251e-02                1.031561  0.763408                0.176613                0.088306       True
+53   OC97  val_oos_residual    60        21              NaN           NaN                0.127137       NaN                0.321326                0.160663       True
+54  OC118              disc   958       321         0.525736  1.475471e-04                0.338650  0.170910                0.047541                0.023770       True
+55  OC118               val   284        77         1.082864  4.126048e-04                0.911625  0.351900                0.009581                0.004791       True
+56  OC118  val_oos_residual   284        77              NaN           NaN                0.145177       NaN                0.012677                0.006338       True
+           ul  ctx                             rule     target      period    n      rate      base    effect
+0       NIFTY  ALL  o_range_pct >= disc q67 (1.282)  range_big   discovery  411  0.746959  0.500406  0.246552
+1       NIFTY  ALL  o_range_pct >= disc q67 (1.282)  range_big  validation   48  0.458333  0.252055  0.206279
+2       NIFTY  ALL  o_range_pct >= disc q67 (1.282)   big_move   discovery  411  0.671533  0.459789  0.211744
+3       NIFTY  ALL  o_range_pct >= disc q67 (1.282)   big_move  validation   48  0.333333  0.213699  0.119635
+4       NIFTY  ALL  o_range_pct >= disc q67 (1.282)    gap_big   discovery  411  0.656934  0.499594  0.157340
+5       NIFTY  ALL  o_range_pct >= disc q67 (1.282)    gap_big  validation   48  0.395833  0.342466  0.053368
+6       NIFTY  ALL   f_vix_close >= disc q67 (19.8)  range_big   discovery  412  0.747573  0.500000  0.247573
+7       NIFTY  ALL   f_vix_close >= disc q67 (19.8)  range_big  validation   16  0.437500  0.252055  0.185445
+8       NIFTY  ALL   f_vix_close >= disc q67 (19.8)   big_move   discovery  412  0.686893  0.459416  0.227478
+9       NIFTY  ALL   f_vix_close >= disc q67 (19.8)   big_move  validation   16  0.312500  0.213699  0.098801
+10      NIFTY  ALL   f_vix_close >= disc q67 (19.8)    gap_big   discovery  412  0.665049  0.500000  0.165049
+11      NIFTY  ALL   f_vix_close >= disc q67 (19.8)    gap_big  validation   16  0.437500  0.342466  0.095034
+12      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)  range_big   discovery  406  0.761084  0.504105  0.256979
+13      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)  range_big  validation   14  0.357143  0.252055  0.105088
+14      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)   big_move   discovery  406  0.701970  0.464696  0.237274
+15      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)   big_move  validation   14  0.214286  0.213699  0.000587
+16      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)    gap_big   discovery  406  0.662562  0.502463  0.160099
+17      NIFTY  ALL  f_atr14_pct >= disc q67 (1.449)    gap_big  validation   14  0.428571  0.342466  0.086106
+18      NIFTY   NW  o_range_pct >= disc q67 (1.278)  range_big   discovery   52  0.769231  0.500000  0.269231
+19      NIFTY   NW  o_range_pct >= disc q67 (1.278)  range_big  validation    9  0.777778  0.366667  0.411111
+20      NIFTY   NW  o_range_pct >= disc q67 (1.278)   big_move   discovery   52  0.673077  0.455128  0.217949
+21      NIFTY   NW  o_range_pct >= disc q67 (1.278)   big_move  validation    9  0.444444  0.216667  0.227778
+22      NIFTY   NW  o_range_pct >= disc q67 (1.278)    gap_big   discovery   52  0.692308  0.500000  0.192308
+23      NIFTY   NW  o_range_pct >= disc q67 (1.278)    gap_big  validation    9  0.333333  0.266667  0.066667
+24      NIFTY   NW  f_vix_close >= disc q67 (20.53)  range_big   discovery   52  0.730769  0.500000  0.230769
+25      NIFTY   NW  f_vix_close >= disc q67 (20.53)  range_big  validation    1  1.000000  0.366667  0.633333
+26      NIFTY   NW  f_vix_close >= disc q67 (20.53)   big_move   discovery   52  0.615385  0.455128  0.160256
+27      NIFTY   NW  f_vix_close >= disc q67 (20.53)   big_move  validation    1  1.000000  0.216667  0.783333
+28      NIFTY   NW  f_vix_close >= disc q67 (20.53)    gap_big   discovery   52  0.634615  0.500000  0.134615
+29      NIFTY   NW  f_vix_close >= disc q67 (20.53)    gap_big  validation    1  0.000000  0.266667 -0.266667
+30      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)  range_big   discovery   52  0.769231  0.500000  0.269231
+31      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)  range_big  validation    3  0.333333  0.366667 -0.033333
+32      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)   big_move   discovery   52  0.711538  0.455128  0.256410
+33      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)   big_move  validation    3  0.333333  0.216667  0.116667
+34      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)    gap_big   discovery   52  0.634615  0.500000  0.134615
+35      NIFTY   NW  f_atr14_pct >= disc q67 (1.521)    gap_big  validation    3  0.666667  0.266667  0.400000
+36  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)  range_big   discovery  411  0.754258  0.500406  0.253852
+37  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)  range_big  validation   40  0.525000  0.227397  0.297603
+38  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)   big_move   discovery  411  0.858881  0.678310  0.180570
+39  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)   big_move  validation   40  0.600000  0.397260  0.202740
+40  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)    gap_big   discovery  411  0.700730  0.500406  0.200324
+41  BANKNIFTY  ALL  o_range_pct >= disc q67 (1.892)    gap_big  validation   40  0.500000  0.347945  0.152055
+42  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)  range_big   discovery  412  0.793689  0.500000  0.293689
+43  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)  range_big  validation   16  0.375000  0.227397  0.147603
+44  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)   big_move   discovery  412  0.895631  0.677760  0.217871
+45  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)   big_move  validation   16  0.437500  0.397260  0.040240
+46  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)    gap_big   discovery  412  0.696602  0.500000  0.196602
+47  BANKNIFTY  ALL   f_vix_close >= disc q67 (19.8)    gap_big  validation   16  0.437500  0.347945  0.089555
+48  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)  range_big   discovery  406  0.802956  0.503284  0.299672
+49  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)  range_big  validation   23  0.260870  0.227397  0.033472
+50  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)   big_move   discovery  406  0.906404  0.682266  0.224138
+51  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)   big_move  validation   23  0.434783  0.397260  0.037522
+52  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)    gap_big   discovery  406  0.719212  0.504105  0.215107
+53  BANKNIFTY  ALL  f_atr14_pct >= disc q67 (2.051)    gap_big  validation   23  0.304348  0.347945 -0.043597
+54  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)  range_big   discovery   67  0.791045  0.497512  0.293532
+55  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)  range_big  validation    6  0.833333  0.283333  0.550000
+56  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)   big_move   discovery   67  0.820896  0.646766  0.174129
+57  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)   big_move  validation    6  0.833333  0.500000  0.333333
+58  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)    gap_big   discovery   67  0.671642  0.497512  0.174129
+59  BANKNIFTY   NW  o_range_pct >= disc q67 (1.795)    gap_big  validation    6  0.500000  0.266667  0.233333
+60  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)  range_big   discovery   67  0.701493  0.497512  0.203980
+61  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)  range_big  validation    3  0.333333  0.283333  0.050000
+62  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)   big_move   discovery   67  0.820896  0.646766  0.174129
+63  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)   big_move  validation    3  0.666667  0.500000  0.166667
+64  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)    gap_big   discovery   67  0.761194  0.497512  0.263682
+65  BANKNIFTY   NW  f_vix_close >= disc q67 (19.58)    gap_big  validation    3  0.333333  0.266667  0.066667
+66  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)  range_big   discovery   66  0.757576  0.500000  0.257576
+67  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)  range_big  validation    4  0.500000  0.283333  0.216667
+68  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)   big_move   discovery   66  0.893939  0.651515  0.242424
+69  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)   big_move  validation    4  0.750000  0.500000  0.250000
+70  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)    gap_big   discovery   66  0.803030  0.500000  0.303030
+71  BANKNIFTY   NW  f_atr14_pct >= disc q67 (2.066)    gap_big  validation    4  0.250000  0.266667 -0.016667
+                                                   check         ul      period    n      rate      base    effect         p     ci_lo     ci_hi
+0                     OBS-MP closer vs mirror point (NW)      NIFTY   discovery  156  0.205128  0.224359 -0.019231  0.807195       NaN       NaN
+1   OBS-MP direction agreement |dist|>=0.25% (NW) vs 50%      NIFTY   discovery   87  0.459770  0.500000 -0.040230  0.520292       NaN       NaN
+2                     OBS-MP closer vs mirror point (NW)      NIFTY  validation   60  0.283333  0.233333  0.050000  0.720100       NaN       NaN
+3   OBS-MP direction agreement |dist|>=0.25% (NW) vs 50%      NIFTY  validation   22  0.545455  0.500000  0.045455  0.831812       NaN       NaN
+4                                OC139 NIFTY LB -> cc up      NIFTY   discovery  462  0.603896  0.540650  0.063246  0.006730       NaN       NaN
+5                                OC139 NIFTY LB -> cc up      NIFTY  validation  140  0.557143  0.565934 -0.008791  0.864754       NaN       NaN
+6                    ST2 D-2 straddle payoff-cost % spot      NIFTY   discovery  215 -0.089377  0.000000 -0.089377  0.217395 -0.212091  0.043467
+7                    ST2 D-2 straddle payoff-cost % spot      NIFTY  validation   77 -0.033716  0.000000 -0.033716  0.630422 -0.150380  0.076960
+8                     OBS-MP closer vs mirror point (NW)  BANKNIFTY   discovery  201  0.243781  0.203980  0.039801  0.460792       NaN       NaN
+9   OBS-MP direction agreement |dist|>=0.25% (NW) vs 50%  BANKNIFTY   discovery  124  0.532258  0.500000  0.032258  0.529769       NaN       NaN
+10                    OBS-MP closer vs mirror point (NW)  BANKNIFTY  validation   60  0.183333  0.183333  0.000000  1.000000       NaN       NaN
+11  OBS-MP direction agreement |dist|>=0.25% (NW) vs 50%  BANKNIFTY  validation   18  0.666667  0.500000  0.166667  0.237885       NaN       NaN
+12                   ST2 D-2 straddle payoff-cost % spot  BANKNIFTY   discovery  260 -0.232582  0.000000 -0.232582  0.003654 -0.391330 -0.075878
+13                   ST2 D-2 straddle payoff-cost % spot  BANKNIFTY  validation   77 -0.041576  0.000000 -0.041576  0.677379 -0.231328  0.089867
+{'rows': 1650, 'with_p': 1647, 'bucket': 1536, 'structural': 18, 'straddle_cond': 96, 'expected_bucket': 1536, 'bh_q_recomputed_max_abs_diff': 1.923808334858279e-15}

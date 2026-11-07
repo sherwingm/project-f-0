@@ -85,6 +85,17 @@ def g1():
     return _g1() or {"error": "G1 paper is not running on this server (it needs the Upstox stream)"}
 
 
+def _xp():
+    from server.app import state                     # late import: the app module imports this router
+    return state.xp.view() if getattr(state, "xp", None) is not None else None
+
+
+@router.get("/xp")
+def xp():
+    """XP NIFTY expiry-day straddle forward log (server/xp_live.py; expiry_research/FORWARD_TEST.md)."""
+    return _xp() or {"error": "XP log is not running on this server (it needs the Upstox stream)"}
+
+
 @router.get("/positions")
 def positions():
     v = _g1()
@@ -93,5 +104,5 @@ def positions():
 
 @router.get("/results")
 def results():
-    v = _g1()
-    return {"pods": v["tracks"] if v else []}
+    v, x = _g1(), _xp()
+    return {"pods": (v["tracks"] if v else []) + (x["tracks"] if x else [])}

@@ -1,0 +1,10 @@
+check,lag,n,median_abs_pct
+vix_daily close(d) vs minute VIX 15:29 close(d+lag),-1,772,2.6884040464025762
+vix_daily close(d) vs minute VIX 15:29 close(d+lag),0,773,0.35842293906811484
+vix_daily close(d) vs minute VIX 15:29 close(d+lag),1,773,2.7936990076627977
+NIFTY |fut close(t)/px_close(t)-1|,0,2172,0.19821222637264602
+NIFTY |fut close(t)/px_close(t+1)-1|,1,2171,0.5444049178045307
+NIFTY |fut close(t)/px_close(t-1)-1|,-1,2171,0.6017873189508194
+BANKNIFTY |fut close(t)/px_close(t)-1|,0,2172,0.24743828307983717
+BANKNIFTY |fut close(t)/px_close(t+1)-1|,1,2171,0.6885239794582221
+BANKNIFTY |fut close(t)/px_close(t-1)-1|,-1,2171,0.692367913134273

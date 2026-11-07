@@ -1,0 +1,30 @@
+.....................                                                    [100%]
+============================== warnings summary ===============================
+expiry_research/tests/test_panel_leakage.py: 44 warnings
+  C:\Users\sherw\project-f-0\expiry_research\tests\test_panel_leakage.py:59: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+    lo = (pd.Timestamp(t) - pd.Timedelta(days=lookback_days)).strftime("%Y-%m-%d")
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=================================== PASSES ====================================
+=========================== short test summary info ===========================
+PASSED expiry_research/tests/test_calendar.py::test_known_expiries
+PASSED expiry_research/tests/test_calendar.py::test_no_nifty_weekly_before_launch
+PASSED expiry_research/tests/test_calendar.py::test_every_expiry_is_a_full_session
+PASSED expiry_research/tests/test_calendar.py::test_one_monthly_per_month
+PASSED expiry_research/tests/test_calendar.py::test_futures_only_on_monthlies
+PASSED expiry_research/tests/test_calendar.py::test_banknifty_weekly_end
+PASSED expiry_research/tests/test_calendar.py::test_weekday_regimes_hold_or_are_explained
+PASSED expiry_research/tests/test_calendar.py::test_nifty_tuesday_regime
+PASSED expiry_research/tests/test_calendar.py::test_weekly_gaps
+PASSED expiry_research/tests/test_calendar.py::test_session_tags_consistent
+PASSED expiry_research/tests/test_calendar.py::test_tags_point_only_to_known_expiries
+PASSED expiry_research/tests/test_calendar.py::test_nifty_weekly_launch_not_counted_before_listing
+PASSED expiry_research/tests/test_calendar.py::test_sessions_unique_and_sorted
+PASSED expiry_research/tests/test_panel_leakage.py::test_a_features_known_at_tclose
+PASSED expiry_research/tests/test_panel_leakage.py::test_a_f1515_known_at_1515
+PASSED expiry_research/tests/test_panel_leakage.py::test_b_labels_from_next_session_raw
+PASSED expiry_research/tests/test_panel_leakage.py::test_b_label_is_next_rows_outcome
+PASSED expiry_research/tests/test_panel_leakage.py::test_c_dictionary_complete
+PASSED expiry_research/tests/test_panel_leakage.py::test_d_no_feature_copies_a_label
+PASSED expiry_research/tests/test_panel_leakage.py::test_e_final_period_sealed
+PASSED expiry_research/tests/test_panel_leakage.py::test_e_cal_tags_use_known_expiries_only

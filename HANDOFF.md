@@ -1,5 +1,7 @@
 # Handoff (2026-10-27, 09:00 IST)
 
+> **Index chat (G1 / G1-F, expiry research, index max up) has its own handoff: `HANDOFF_INDEX_G1.md` (2026-11-07).**
+
 Repo: `sherwingm/project-f-0` (**public**, kept so by the user: free Actions minutes, Pages, token-free raw files;
 never commit secrets), local clone `C:\Users\sherw\project-f-0`. Records: `PROGRESS.md`, `DECISIONS.md` (rule and
 result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT.md`.

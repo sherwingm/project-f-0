@@ -75,13 +75,15 @@ def test_buys_at_the_ask_after_a_downside_breakout_and_sells_at_the_next_0916_bi
 
     def d2(t):
         st.spot(23900.0, 23990.0)
-        st.put(24000, 150.0 if t.time() < time(9, 16, 50) else 151.0, 152.0)
+        st.put(24000, 150.0 if t.time() < time(15, 0) else 180.0, 182.0)
     run(tr, D2, time(9, 15), time(9, 18), before=d2)
+    assert tr.state["open"] is not None                      # not sold at 09:16 any more (G1 holds to the close)
+    run(tr, D2, time(15, 20), time(15, 30), before=d2)
     assert tr.state["open"] is None
     t = tr.state["trades"][0]
-    assert t["reason"] == "next open" and t["sold"] == 151.0 and t["sold_at"].startswith("2026-11-06T09:16:5")
-    assert t["gross_rs"] == pytest.approx((151.0 - 100.5) * 65)
-    assert t["net_rs"] < t["gross_rs"] and t["max_up_pct"] > 49
+    assert t["reason"] == "next close" and t["sold"] == 180.0 and t["sold_at"].startswith("2026-11-06T15:29")
+    assert t["gross_rs"] == pytest.approx((180.0 - 100.5) * 65)
+    assert t["net_rs"] < t["gross_rs"] and t["max_up_pct"] > 70
     v = tr.view()
     assert [x["trades"] for x in v["tracks"]] == [1, 1]
     assert "PE24000" in st.wanted
@@ -121,3 +123,24 @@ def test_ledger_survives_a_restart(g1, tmp_path):
     run(tr, D1, time(9, 15), time(9, 45), before=down_day(st))
     again = G.G1Trader(st, Upstox(), tmp_path)
     assert again.state["open"]["paid"] == 100.5
+
+
+def test_missed_close_sells_at_the_first_bid_next_session(g1):
+    tr, st = g1
+    run(tr, D1, time(9, 15), time(9, 45), before=down_day(st))
+    st.spot(23900.0)
+    st.put(24000, 120.0, 121.0)
+    tr.tick(datetime.combine(D2, time(9, 20), IST))          # first tick of the next session: hold day set
+    assert tr.state["open"]["hold_day"] == D2.isoformat()
+    d3 = date(2026, 11, 9)                                   # the server was down at D2's close
+    st.put(24000, 130.0, 131.0)
+    tr.tick(datetime.combine(d3, time(9, 20), IST))
+    assert tr.state["open"] is None and "missed" in tr.state["trades"][0]["reason"]
+
+
+def test_g1_runs_on_an_announced_saturday_session(g1, monkeypatch):
+    tr, st = g1
+    sat = date(2026, 11, 7)
+    monkeypatch.setattr(G.sessions, "special_sessions", lambda: {sat})
+    run(tr, sat, time(9, 15), time(9, 45), before=down_day(st))
+    assert tr.state["open"] is not None and tr.state["open"]["entry"] == "09:41"

@@ -1,0 +1,86 @@
+    id        ul         ctx       their_label             verdict  val_n  open_val_p1  voladj_disc_p  voladj_val_p  voladj_open_val_p
+PPC023     NIFTY         ALL Passed-validation weaker-than-claimed     20        0.035          0.056         0.079              0.262
+PPC025     NIFTY         ALL Passed-validation weaker-than-claimed     47        0.036          0.000         0.000              0.086
+PPC026     NIFTY           X Passed-validation weaker-than-claimed     35        0.029          0.000         0.014              0.106
+PPC032     NIFTY         ALL Passed-validation               holds     45        0.004          0.000         0.015              0.026
+PPC033     NIFTY           X Passed-validation               holds     39        0.003          0.000         0.016              0.037
+PPC039     NIFTY           X Passed-validation               holds     77        0.017          0.000         0.077              0.038
+PPC043     NIFTY           X        Suggestive weaker-than-claimed      8        0.342          0.822         0.699              0.829
+PPC044     NIFTY          W0        Suggestive weaker-than-claimed      2        1.000          0.770         0.325              0.893
+PPC049     NIFTY          W0        Suggestive weaker-than-claimed      3        1.000          0.325         0.483              0.923
+PPC052     NIFTY         ALL        Suggestive weaker-than-claimed      6        0.258          0.195         0.458              0.708
+PPC053     NIFTY           X        Suggestive weaker-than-claimed      5        0.164          0.355         0.643              0.590
+PPC054     NIFTY          W0        Suggestive weaker-than-claimed      0          NaN          0.996           NaN                NaN
+PPC055     NIFTY         ALL Passed-validation weaker-than-claimed     71        0.181          0.003         0.070              0.304
+PPC056     NIFTY           X Passed-validation weaker-than-claimed     57        0.227          0.016         0.144              0.491
+PPC057     NIFTY         ALL Passed-validation weaker-than-claimed     85        0.096          0.001         0.012              0.217
+PPC058     NIFTY           X Passed-validation weaker-than-claimed     68        0.076          0.001         0.143              0.274
+PPC062     NIFTY         ALL Passed-validation               holds     67        0.010          0.002         0.043              0.018
+PPC064     NIFTY         ALL        Suggestive weaker-than-claimed      1        0.164          0.023         0.190              0.231
+PPC065     NIFTY         ALL        Suggestive weaker-than-claimed      1        0.164          0.057         0.190              0.231
+PPC066     NIFTY         ALL        Suggestive weaker-than-claimed      1        0.164          0.002         0.190              0.231
+PPC067     NIFTY         ALL        Suggestive weaker-than-claimed      1        0.164          0.633         0.190              0.231
+PPC068     NIFTY         ALL        Suggestive weaker-than-claimed      1        0.164          0.576         0.190              0.231
+PPC070     NIFTY          W0        Suggestive weaker-than-claimed      2        1.000          0.562         0.325              0.893
+PPC071     NIFTY           X        Suggestive weaker-than-claimed      1        0.150          0.172         0.190              0.231
+PPC072     NIFTY           X        Suggestive weaker-than-claimed      1        0.150          0.115         0.190              0.231
+PPC073     NIFTY           X        Suggestive weaker-than-claimed      1        0.150          0.013         0.190              0.231
+PPC074     NIFTY           X        Suggestive weaker-than-claimed      1        0.150          0.867         0.190              0.231
+PPC075     NIFTY           X        Suggestive weaker-than-claimed      1        0.150          0.567         0.190              0.231
+PPC076     NIFTY           X        Suggestive weaker-than-claimed      8        0.342          0.864         0.699              0.829
+PPC089 BANKNIFTY         ALL Passed-validation weaker-than-claimed     17        0.002          0.048         0.046              0.033
+PPC090 BANKNIFTY           X Passed-validation weaker-than-claimed     14        0.011          0.052         0.127              0.090
+PPC091 BANKNIFTY          W0        Suggestive weaker-than-claimed      3        0.072          0.913         0.060              0.066
+PPC092 BANKNIFTY         ALL Passed-validation               holds     38        0.004          0.001         0.011              0.010
+PPC093 BANKNIFTY           X Passed-validation               holds     30        0.004          0.001         0.007              0.007
+PPC094 BANKNIFTY         ALL Passed-validation weaker-than-claimed     53        0.127          0.007         0.007              0.127
+PPC095 BANKNIFTY           X Passed-validation weaker-than-claimed     39        0.325          0.017         0.016              0.368
+PPC098 BANKNIFTY         ALL Passed-validation               holds     44        0.007          0.022         0.010              0.045
+PPC099 BANKNIFTY           X Passed-validation weaker-than-claimed     34        0.018          0.002         0.016              0.094
+PPC100 BANKNIFTY         ALL        Suggestive weaker-than-claimed      9        0.001          0.132         0.011              0.008
+PPC101 BANKNIFTY           X        Suggestive weaker-than-claimed      5        0.036          0.111         0.082              0.066
+PPC102 BANKNIFTY          W0        Suggestive weaker-than-claimed      3        0.072          0.293         0.060              0.066
+PPC112 BANKNIFTY           X        Suggestive weaker-than-claimed      7        0.699          0.850         0.692              0.851
+PPC113 BANKNIFTY          W0        Suggestive weaker-than-claimed      3        0.376          0.333         0.055              0.306
+PPC119 BANKNIFTY         ALL        Suggestive weaker-than-claimed      0          NaN          0.932           NaN                NaN
+PPC120 BANKNIFTY           X        Suggestive weaker-than-claimed      0          NaN          0.691           NaN                NaN
+PPC121 BANKNIFTY          W0        Suggestive weaker-than-claimed      0          NaN          0.371           NaN                NaN
+PPC124 BANKNIFTY         ALL        Suggestive weaker-than-claimed      6        0.316          0.270         0.665              0.862
+PPC125 BANKNIFTY           X        Suggestive weaker-than-claimed      4        0.372          0.184         0.902              0.791
+PPC126 BANKNIFTY          W0        Suggestive weaker-than-claimed      1        0.417          0.302         0.238              0.296
+PPC129 BANKNIFTY         ALL Passed-validation               holds     87        0.005          0.007         0.044              0.016
+PPC130 BANKNIFTY           X Passed-validation weaker-than-claimed     75        0.043          0.001         0.112              0.151
+PPC134 BANKNIFTY           X Passed-validation weaker-than-claimed     31        0.675          0.003         0.045              0.718
+PPC135 BANKNIFTY         ALL        Suggestive weaker-than-claimed      0          NaN          0.520           NaN                NaN
+PPC136 BANKNIFTY         ALL        Suggestive weaker-than-claimed      1        0.332          0.411         0.238              0.296
+PPC137 BANKNIFTY         ALL        Suggestive weaker-than-claimed      0          NaN          0.811           NaN                NaN
+PPC138 BANKNIFTY           X        Suggestive weaker-than-claimed      0          NaN          0.348           NaN                NaN
+PPC139 BANKNIFTY           X        Suggestive weaker-than-claimed      0          NaN          0.263           NaN                NaN
+PPC140 BANKNIFTY           X        Suggestive weaker-than-claimed      0          NaN          0.939           NaN                NaN
+PPC009     NIFTY monthly D-3 Passed-validation             refuted     18          NaN            NaN           NaN                NaN
+verdict
+weaker-than-claimed    50
+holds                   8
+refuted                 1
+     split                         test               variant  n   value    comp    diff  placebo_lo  placebo_hi  p_two  p_one_lower  median  comp_median  p_mannwhitney  neg_rate  comp_neg_rate  p_negrate  n_comp
+ discovery             calendar_shuffle             as_frozen 60 -0.3775  0.0439 -0.4214     -0.2247      0.3124 0.0015       0.0010     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+ discovery             calendar_shuffle       drop_2020-03-23 59 -0.1639  0.0474 -0.2113     -0.2394      0.3206 0.1535       0.0770     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+ discovery             calendar_shuffle       drop_march_2020 59 -0.1639  0.1058 -0.2697     -0.1491      0.3601 0.0395       0.0200     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+ discovery             welch_vs_matched             as_frozen 60 -0.3775  0.0536 -0.4311     -0.8878      0.1328 0.1194       0.0597 -0.1254       0.2298         0.0900    0.5167         0.3978     0.1067   181.0
+ discovery             welch_vs_matched       drop_2020-03-23 59 -0.1639  0.0536 -0.2175     -0.4475      0.1197 0.2115       0.1057 -0.0515       0.2298         0.1290    0.5085         0.3978     0.1353   181.0
+validation             calendar_shuffle             as_frozen 18 -0.0265  0.2576 -0.2841     -0.0677      0.6122 0.0955       0.0480     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+validation             welch_vs_matched             as_frozen 18 -0.0265  0.2000 -0.2265     -0.2732      0.2202 0.1617       0.0808 -0.0900       0.2394         0.1476    0.6111         0.3889     0.1003    54.0
+ discovery           weekday_split_o_cc                Monday 52 -0.3287     NaN     NaN     -0.9137      0.2562    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+ discovery           weekday_split_o_cc            not Monday  8 -0.6948     NaN     NaN     -1.3389     -0.0507    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+ discovery        welch_o_oc_vs_matched  open-to-close of D-3 60 -0.3432 -0.1098 -0.2333         NaN         NaN 0.1195          NaN     NaN          NaN            NaN       NaN            NaN        NaN   182.0
+validation           weekday_split_o_cc                Monday 10  0.1342     NaN     NaN     -0.2522      0.5205    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+validation           weekday_split_o_cc            not Monday  8 -0.2274     NaN     NaN     -0.5398      0.0851    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+validation        welch_o_oc_vs_matched  open-to-close of D-3 18 -0.0903 -0.0483 -0.0419         NaN         NaN    NaN       0.3723     NaN          NaN            NaN       NaN            NaN        NaN    54.0
+validation calendar_shuffle_seed_spread 10 seeds x 2000 draws 18     NaN     NaN     NaN      0.0260      0.0440    NaN       0.0335     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2018 12 -0.1589     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2019 12  0.3128     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2020 12 -1.3896     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2021 12 -0.2494     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2022 12 -0.4025     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2023 12 -0.1248     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN
+   by_year                 mean_by_year                  2024  6  0.1700     NaN     NaN         NaN         NaN    NaN          NaN     NaN          NaN            NaN       NaN            NaN        NaN     NaN

@@ -1,0 +1,357 @@
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_checks.py:61: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  d1 = (P["date"] + pd.Timedelta(days=1)).values.astype("datetime64[D]")
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_checks.py:62: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  e1 = (P["ne"] + pd.Timedelta(days=1)).values.astype("datetime64[D]")
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_checks.py:61: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  d1 = (P["date"] + pd.Timedelta(days=1)).values.astype("datetime64[D]")
+C:\Users\sherw\project-f-0\expiry_research\scripts\review_optionchain_checks.py:62: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`). Please use a specific unit instead.
+  e1 = (P["ne"] + pd.Timedelta(days=1)).values.astype("datetime64[D]")
+    underlying                                    check         value                                                                                                                                           note
+0        NIFTY                             reproduce_iv  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+1        NIFTY                         reproduce_iv_chg  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1299 theirs 1299
+2        NIFTY                      reproduce_strad_chg  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1593 theirs 1593
+3        NIFTY                     reproduce_wall_width  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+4        NIFTY                      reproduce_wall_near  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+5        NIFTY                         reproduce_mp_abs  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+6        NIFTY                      reproduce_vol_surge  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1522 theirs 1522
+7        NIFTY  panel_straddle_chg1_is_same_expiry_diff  0.000000e+00                                                                         f_opt_near_straddle_chg1 vs my straddle_pct diff with same near expiry
+8        NIFTY                      near_expiry_after_t  9.987492e-01                                                                                                             share of rows with near expiry > t
+9        NIFTY                 NW_near_expiry_eq_tplus1  1.000000e+00                                                                                                                                    NW rows 216
+10       NIFTY               spearman_iv_vs_f_vix_close  8.586410e-01                                                                                                                                   ALL disc+val
+11       NIFTY                    spearman_iv_vs_n_sess  3.825066e-02                                                                                                                                   ALL disc+val
+12       NIFTY               spearman_iv_vs_o_range_pct  6.013861e-01                                                                                                                                   ALL disc+val
+13       NIFTY                    spearman_iv_vs_f_hv10  7.137491e-01                                                                                                                                   ALL disc+val
+14       NIFTY       spearman_wall_width_vs_f_vix_close  5.402819e-01                                                                                                                                   ALL disc+val
+15       NIFTY            spearman_wall_width_vs_n_sess  2.750624e-01                                                                                                                                   ALL disc+val
+16       NIFTY       spearman_wall_width_vs_o_range_pct  4.043020e-01                                                                                                                                   ALL disc+val
+17       NIFTY            spearman_wall_width_vs_f_hv10  4.669676e-01                                                                                                                                   ALL disc+val
+18       NIFTY        spearman_wall_near_vs_f_vix_close  4.976571e-01                                                                                                                                   ALL disc+val
+19       NIFTY             spearman_wall_near_vs_n_sess  1.579982e-01                                                                                                                                   ALL disc+val
+20       NIFTY        spearman_wall_near_vs_o_range_pct  3.926987e-01                                                                                                                                   ALL disc+val
+21       NIFTY             spearman_wall_near_vs_f_hv10  4.232711e-01                                                                                                                                   ALL disc+val
+22       NIFTY           spearman_mp_abs_vs_f_vix_close  2.301610e-01                                                                                                                                   ALL disc+val
+23       NIFTY                spearman_mp_abs_vs_n_sess  2.138947e-01                                                                                                                                   ALL disc+val
+24       NIFTY           spearman_mp_abs_vs_o_range_pct  2.860899e-01                                                                                                                                   ALL disc+val
+25       NIFTY                spearman_mp_abs_vs_f_hv10  2.082584e-01                                                                                                                                   ALL disc+val
+26       NIFTY        spearman_strad_chg_vs_f_vix_close -3.746334e-01                                                                                                                                   ALL disc+val
+27       NIFTY             spearman_strad_chg_vs_n_sess  3.320656e-01                                                                                                                                   ALL disc+val
+28       NIFTY        spearman_strad_chg_vs_o_range_pct -1.661284e-01                                                                                                                                   ALL disc+val
+29       NIFTY             spearman_strad_chg_vs_f_hv10 -3.444018e-01                                                                                                                                   ALL disc+val
+30       NIFTY        spearman_vol_surge_vs_f_vix_close  1.345551e-01                                                                                                                                   ALL disc+val
+31       NIFTY             spearman_vol_surge_vs_n_sess -2.951516e-02                                                                                                                                   ALL disc+val
+32       NIFTY        spearman_vol_surge_vs_o_range_pct  4.687858e-01                                                                                                                                   ALL disc+val
+33       NIFTY             spearman_vol_surge_vs_f_hv10  1.419565e-01                                                                                                                                   ALL disc+val
+34       NIFTY           spearman_iv_chg_vs_f_vix_close -4.965900e-02                                                                                                                                   ALL disc+val
+35       NIFTY                spearman_iv_chg_vs_n_sess  6.462260e-02                                                                                                                                   ALL disc+val
+36       NIFTY           spearman_iv_chg_vs_o_range_pct  1.775475e-02                                                                                                                                   ALL disc+val
+37       NIFTY                spearman_iv_chg_vs_f_hv10 -8.546941e-02                                                                                                                                   ALL disc+val
+38       NIFTY           strad_chg_mean_by_weekday_of_t           NaN                                                                            Fri -0.176; Mon -0.217; Sat nan; Thu -0.209; Tue -0.271; Wed -0.306
+39   BANKNIFTY                             reproduce_iv  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+40   BANKNIFTY                         reproduce_iv_chg  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1254 theirs 1254
+41   BANKNIFTY                      reproduce_strad_chg  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1593 theirs 1593
+42   BANKNIFTY                     reproduce_wall_width  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1596 theirs 1596
+43   BANKNIFTY                      reproduce_wall_near  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1596 theirs 1596
+44   BANKNIFTY                         reproduce_mp_abs  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1597 theirs 1597
+45   BANKNIFTY                      reproduce_vol_surge  0.000000e+00                                                                                            max |mine - theirs|; non-null mine 1578 theirs 1578
+46   BANKNIFTY  panel_straddle_chg1_is_same_expiry_diff  0.000000e+00                                                                         f_opt_near_straddle_chg1 vs my straddle_pct diff with same near expiry
+47   BANKNIFTY                      near_expiry_after_t  9.987492e-01                                                                                                             share of rows with near expiry > t
+48   BANKNIFTY                 NW_near_expiry_eq_tplus1  1.000000e+00                                                                                                                                    NW rows 261
+49   BANKNIFTY               spearman_iv_vs_f_vix_close  8.416800e-01                                                                                                                                   ALL disc+val
+50   BANKNIFTY                    spearman_iv_vs_n_sess  1.400226e-02                                                                                                                                   ALL disc+val
+51   BANKNIFTY               spearman_iv_vs_o_range_pct  6.602314e-01                                                                                                                                   ALL disc+val
+52   BANKNIFTY                    spearman_iv_vs_f_hv10  7.794638e-01                                                                                                                                   ALL disc+val
+53   BANKNIFTY       spearman_wall_width_vs_f_vix_close  4.675846e-01                                                                                                                                   ALL disc+val
+54   BANKNIFTY            spearman_wall_width_vs_n_sess  9.955543e-02                                                                                                                                   ALL disc+val
+55   BANKNIFTY       spearman_wall_width_vs_o_range_pct  4.787447e-01                                                                                                                                   ALL disc+val
+56   BANKNIFTY            spearman_wall_width_vs_f_hv10  4.922506e-01                                                                                                                                   ALL disc+val
+57   BANKNIFTY        spearman_wall_near_vs_f_vix_close  4.453480e-01                                                                                                                                   ALL disc+val
+58   BANKNIFTY             spearman_wall_near_vs_n_sess  1.834118e-02                                                                                                                                   ALL disc+val
+59   BANKNIFTY        spearman_wall_near_vs_o_range_pct  4.478703e-01                                                                                                                                   ALL disc+val
+60   BANKNIFTY             spearman_wall_near_vs_f_hv10  4.565453e-01                                                                                                                                   ALL disc+val
+61   BANKNIFTY           spearman_mp_abs_vs_f_vix_close  3.597263e-01                                                                                                                                   ALL disc+val
+62   BANKNIFTY                spearman_mp_abs_vs_n_sess  5.772914e-04                                                                                                                                   ALL disc+val
+63   BANKNIFTY           spearman_mp_abs_vs_o_range_pct  4.883493e-01                                                                                                                                   ALL disc+val
+64   BANKNIFTY                spearman_mp_abs_vs_f_hv10  3.372952e-01                                                                                                                                   ALL disc+val
+65   BANKNIFTY        spearman_strad_chg_vs_f_vix_close -4.158282e-01                                                                                                                                   ALL disc+val
+66   BANKNIFTY             spearman_strad_chg_vs_n_sess  2.854305e-01                                                                                                                                   ALL disc+val
+67   BANKNIFTY        spearman_strad_chg_vs_o_range_pct -2.462968e-01                                                                                                                                   ALL disc+val
+68   BANKNIFTY             spearman_strad_chg_vs_f_hv10 -4.043819e-01                                                                                                                                   ALL disc+val
+69   BANKNIFTY        spearman_vol_surge_vs_f_vix_close -1.396770e-02                                                                                                                                   ALL disc+val
+70   BANKNIFTY             spearman_vol_surge_vs_n_sess  1.468820e-02                                                                                                                                   ALL disc+val
+71   BANKNIFTY        spearman_vol_surge_vs_o_range_pct  3.593497e-01                                                                                                                                   ALL disc+val
+72   BANKNIFTY             spearman_vol_surge_vs_f_hv10  3.188033e-02                                                                                                                                   ALL disc+val
+73   BANKNIFTY           spearman_iv_chg_vs_f_vix_close  1.212599e-02                                                                                                                                   ALL disc+val
+74   BANKNIFTY                spearman_iv_chg_vs_n_sess  9.630796e-02                                                                                                                                   ALL disc+val
+75   BANKNIFTY           spearman_iv_chg_vs_o_range_pct  3.815650e-02                                                                                                                                   ALL disc+val
+76   BANKNIFTY                spearman_iv_chg_vs_f_hv10 -5.932304e-02                                                                                                                                   ALL disc+val
+77   BANKNIFTY           strad_chg_mean_by_weekday_of_t           NaN                                                                            Fri -0.216; Mon -0.294; Sat nan; Thu -0.292; Tue -0.405; Wed -0.438
+78   BANKNIFTY          OC01_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 22.6528; target median diff 0
+79       NIFTY          OC02_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 15.6581; target median diff 0
+80       NIFTY          OC04_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 15.6581; target median diff 0
+81   BANKNIFTY          OC08_threshold_eq_disc_quantile  0.000000e+00                                                                                                              mine 5.2894; target median diff 0
+82   BANKNIFTY          OC10_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 22.6528; target median diff 0
+83   BANKNIFTY          OC11_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 1.70589; target median diff 0
+84       NIFTY          OC13_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 1.83441; target median diff 0
+85       NIFTY          OC17_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 6.03737; target median diff 0
+86       NIFTY          OC21_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 1.83441; target median diff 0
+87   BANKNIFTY          OC22_threshold_eq_disc_quantile  0.000000e+00                                                                                                           mine -0.398609; target median diff 0
+88   BANKNIFTY          OC24_threshold_eq_disc_quantile  0.000000e+00                                                                                                            mine 0.579285; target median diff 0
+89       NIFTY          OC25_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 6.03737; target median diff 0
+90       NIFTY          OC39_threshold_eq_disc_quantile  0.000000e+00                                                                                                            mine 0.753906; target median diff 0
+91       NIFTY          OC43_threshold_eq_disc_quantile  5.551115e-17                                                                                                           mine -0.294362; target median diff 0
+92       NIFTY          OC52_threshold_eq_disc_quantile  2.220446e-16                                                                                                             mine 1.16411; target median diff 0
+93       NIFTY          OC59_threshold_eq_disc_quantile  5.551115e-17                                                                                                           mine -0.294362; target median diff 0
+94       NIFTY          OC94_threshold_eq_disc_quantile  0.000000e+00                                                                                                       mine 1.21162; target median diff 1.1e-16
+95   BANKNIFTY          OC97_threshold_eq_disc_quantile  0.000000e+00                                                                                                             mine 4.30937; target median diff 0
+96   BANKNIFTY         OC118_threshold_eq_disc_quantile  0.000000e+00                                                                                                            mine 0.651378; target median diff 0
+97           -         frozen_has_no_validation_columns  0.000000e+00  cand,id,kind,underlying,ctx,signal,bucket,rule,decision_time,target,n,k,rate,ci_lo,ci_hi,base,effect,p,bh_q,freeze_reason,cond_mean,base_mean
+98           -                     mtime_thresholds.csv  1.793844e+09                                                                                                                                               
+99           -                     mtime_hypotheses.csv  1.793844e+09                                                                                                                                               
+100          -              mtime_candidates_frozen.csv  1.793844e+09                                                                                                                                               
+101          -                     mtime_validation.csv  1.793845e+09                                                                                                                                               
+102          -                       family_rows_with_p  1.647000e+03                                                                                  expected 2 UL x 4 ctx x 192 bucket + 6 x 19 structural = 1650
+103          -             bh_recomputed_max_abs_diff_q  1.812892e-03                                                                   NaN p set to 1 in my recompute only for the length; compared on non-NaN rows
+     cand               split    n    k      rate      base    effect   p_one_sided pass_rule_mine
+0    OC01           discovery  411  340  0.827251  0.499594  0.327657  1.396893e-43            NaN
+1    OC01          validation   12   10  0.833333  0.225275  0.608059  1.405616e-05           True
+2    OC01  validation(theirs)   12   10  0.833333  0.225275  0.608059  1.405616e-05            NaN
+3    OC02           discovery  411  323  0.785888  0.500406  0.285482  7.571997e-33            NaN
+4    OC02          validation   17   12  0.705882  0.250000  0.455882  9.989017e-05           True
+5    OC02  validation(theirs)   17   12  0.705882  0.250000  0.455882  9.989017e-05            NaN
+6    OC04           discovery  411  299  0.727494  0.458976  0.268517  2.268490e-28            NaN
+7    OC04          validation   17    8  0.470588  0.211538  0.259050  1.535015e-02           True
+8    OC04  validation(theirs)   17    8  0.470588  0.211538  0.259050  1.535015e-02            NaN
+9    OC08           discovery  410  303  0.739024  0.499187  0.239837  3.139510e-23            NaN
+10   OC08          validation  111   42  0.378378  0.225275  0.153104  1.962017e-04           True
+11   OC08  validation(theirs)  111   42  0.378378  0.225275  0.153104  1.962017e-04            NaN
+12   OC10           discovery  411  298  0.725061  0.500406  0.224655  1.462425e-20            NaN
+13   OC10          validation   12    9  0.750000  0.346154  0.403846  5.155022e-03           True
+14   OC10  validation(theirs)   12    9  0.750000  0.346154  0.403846  5.155022e-03            NaN
+15   OC11           discovery  410  296  0.721951  0.499187  0.222764  3.557512e-20            NaN
+16   OC11          validation   79   29  0.367089  0.225275  0.141814  3.018802e-03           True
+17   OC11  validation(theirs)   79   29  0.367089  0.225275  0.141814  3.018802e-03            NaN
+18   OC13           discovery  411  289  0.703163  0.500406  0.202757  5.728406e-17            NaN
+19   OC13          validation   63   30  0.476190  0.250000  0.226190  8.578399e-05           True
+20   OC13  validation(theirs)   63   30  0.476190  0.250000  0.226190  8.578399e-05            NaN
+21   OC17           discovery  411  285  0.693431  0.500406  0.193024  1.674767e-15            NaN
+22   OC17          validation   58   25  0.431034  0.250000  0.181034  1.965227e-03           True
+23   OC17  validation(theirs)   58   25  0.431034  0.250000  0.181034  1.965227e-03            NaN
+24   OC21           discovery  411  261  0.635036  0.458976  0.176060  5.469418e-13            NaN
+25   OC21          validation   63   24  0.380952  0.211538  0.169414  1.593409e-03           True
+26   OC21  validation(theirs)   63   24  0.380952  0.211538  0.169414  1.593409e-03            NaN
+27   OC22           discovery  410  339  0.826829  0.677787  0.149042  7.015886e-12            NaN
+28   OC22          validation   37   23  0.621622  0.395028  0.226594  4.430027e-03           True
+29   OC22  validation(theirs)   37   23  0.621622  0.395028  0.226594  4.430027e-03            NaN
+30   OC24           discovery  411  271  0.659367  0.499594  0.159774  4.498456e-11            NaN
+31   OC24          validation   39   16  0.410256  0.225275  0.184982  7.468256e-03           True
+32   OC24  validation(theirs)   39   16  0.410256  0.225275  0.184982  7.468256e-03            NaN
+33   OC25           discovery  411  254  0.618005  0.458976  0.159028  6.881623e-11            NaN
+34   OC25          validation   58   20  0.344828  0.211538  0.133289  1.317178e-02           True
+35   OC25  validation(theirs)   58   20  0.344828  0.211538  0.133289  1.317178e-02            NaN
+36   OC39           discovery  411  153  0.372263  0.500406 -0.128143  1.150017e-07            NaN
+37   OC39          validation  225   41  0.182222  0.250000 -0.067778  9.810500e-03           True
+38   OC39  validation(theirs)  225   41  0.182222  0.250000 -0.067778  9.810500e-03            NaN
+39   OC43           discovery  410  257  0.626829  0.500814  0.126015  1.884080e-07            NaN
+40   OC43          validation   36   17  0.472222  0.247934  0.224288  2.898292e-03           True
+41   OC43  validation(theirs)   36   17  0.472222  0.247934  0.224288  2.898292e-03            NaN
+42   OC52           discovery  386  245  0.634715  0.514706  0.120009  1.308049e-06            NaN
+43   OC52          validation   99   35  0.353535  0.250000  0.103535  1.396982e-02           True
+44   OC52  validation(theirs)   99   35  0.353535  0.250000  0.103535  1.396982e-02            NaN
+45   OC59           discovery  410  234  0.570732  0.459283  0.111448  3.900795e-06            NaN
+46   OC59          validation   36   17  0.472222  0.209366  0.262856  3.870950e-04           True
+47   OC59  validation(theirs)   36   17  0.472222  0.209366  0.262856  3.870950e-04            NaN
+48   OC94           discovery   52   36  0.692308  0.455128  0.237179  4.713531e-04            NaN
+49   OC94          validation   10    5  0.500000  0.216667  0.283333  4.510460e-02           True
+50   OC94  validation(theirs)   10    5  0.500000  0.216667  0.283333  4.510460e-02            NaN
+51   OC97           discovery   67   47  0.701493  0.497512  0.203980  5.674555e-04            NaN
+52   OC97          validation   21   10  0.476190  0.283333  0.192857  4.732359e-02           True
+53   OC97  validation(theirs)   21   10  0.476190  0.283333  0.192857  4.732359e-02            NaN
+54  OC118           discovery  323  189  0.585139  0.498967  0.086172  1.151844e-03            NaN
+55  OC118          validation   77   27  0.350649  0.207746  0.142903  2.617728e-03           True
+56  OC118  validation(theirs)   77   27  0.350649  0.207746  0.142903  2.617728e-03            NaN
+     cand underlying  ctx      signal bucket     target  n_disc  n_val  disc_raw_effect  disc_resid_effect  disc_resid_se  disc_resid_p  disc_bucket_pred  disc_bucket_obs  val_raw_effect  val_resid_effect  val_resid_se  val_resid_p  val_bucket_pred  val_bucket_obs  disc_logit_bucket_coef  disc_logit_bucket_z  disc_logit_bucket_p  val_logit_bucket_coef  val_logit_bucket_z  val_logit_bucket_p
+0    OC01  BANKNIFTY  ALL          iv     hi  range_big     411     12           0.3236             0.0572         0.0235        0.0151            0.7893           0.8273          0.6081            0.1006        0.1223       0.4108           0.7363          0.8333                  0.6775               3.2322               0.0012                 1.1361              1.3039              0.1923
+1    OC02      NIFTY  ALL          iv     hi  range_big     411     17           0.2810             0.0480         0.0249        0.0541            0.7541           0.7859          0.4559            0.0857        0.1106       0.4388           0.6155          0.7059                  0.5042               2.5603               0.0105                 0.8794              1.3155              0.1883
+2    OC04      NIFTY  ALL          iv     hi   big_move     411     17           0.2644             0.0453         0.0264        0.0862            0.6975           0.7275          0.2590           -0.0766        0.1165       0.5110           0.5584          0.4706                  0.4462               2.3466               0.0189                 0.1933              0.2945              0.7684
+3    OC08  BANKNIFTY  ALL  wall_width     hi  range_big     410    111           0.2357             0.0510         0.0242        0.0349            0.7052           0.7390          0.1531            0.0537        0.0489       0.2728           0.3413          0.3784                  0.3825               2.3141               0.0207                 0.6127              1.9875              0.0469
+4    OC10  BANKNIFTY  ALL          iv     hi    gap_big     411     12           0.2214             0.0418         0.0272        0.1247            0.6974           0.7251          0.4038            0.1097        0.1314       0.4039           0.6136          0.7500                  0.4237               2.1952               0.0282                 1.6518              2.0991              0.0358
+5    OC11  BANKNIFTY  ALL   wall_near     hi  range_big     409     79           0.2204             0.0579         0.0245        0.0180            0.6852           0.7237          0.1418            0.0351        0.0556       0.5278           0.3398          0.3671                  0.4082               2.5463               0.0109                 0.2178              0.6486              0.5166
+6    OC13      NIFTY  ALL   wall_near     hi  range_big     410     63           0.2000             0.0652         0.0259        0.0119            0.6616           0.7049          0.2262            0.0909        0.0670       0.1749           0.3923          0.4762                  0.4434               2.8071               0.0050                 0.8630              2.3760              0.0175
+7    OC17      NIFTY  ALL  wall_width     hi  range_big     408     58           0.1936             0.0574         0.0257        0.0256            0.6604           0.6985          0.1810            0.0424        0.0668       0.5252           0.3866          0.4310                  0.3951               2.4895               0.0128                 0.6849              1.7464              0.0807
+8    OC21      NIFTY  ALL   wall_near     hi   big_move     410     63           0.1735             0.0422         0.0266        0.1136            0.6086           0.6366          0.1694            0.0354        0.0660       0.5922           0.3665          0.3810                  0.2702               1.7670               0.0772                 0.7801              2.0978              0.0359
+9    OC22  BANKNIFTY  ALL   strad_chg     lo   big_move     410     37           0.1449             0.0339         0.0235        0.1488            0.8043           0.8268          0.2266            0.1314        0.0847       0.1209           0.5223          0.6216                  0.3011               1.6571               0.0975                 0.8132              1.9857              0.0471
+10   OC24  BANKNIFTY  ALL      mp_abs     hi  range_big     410     39           0.1573             0.0132         0.0248        0.5933            0.6522           0.6610          0.1850           -0.0464        0.0701       0.5080           0.4519          0.4103                  0.0989               0.5978               0.5500                -0.1142             -0.2447              0.8067
+11   OC25      NIFTY  ALL  wall_width     hi   big_move     408     58           0.1594             0.0170         0.0269        0.5267            0.6112           0.6225          0.1333           -0.0040        0.0650       0.9511           0.3630          0.3448                  0.1109               0.7182               0.4727                 0.4861              1.2030              0.2290
+12   OC39      NIFTY  ALL   wall_near     lo  range_big     409    225          -0.1308            -0.0052         0.0275        0.8506            0.3775           0.3741         -0.0678           -0.0137        0.0468       0.7700           0.1787          0.1822                 -0.0319              -0.2122               0.8320                -0.4212             -1.3353              0.1818
+13   OC43      NIFTY  ALL   strad_chg     lo  range_big     410     36           0.1219            -0.0039         0.0265        0.8816            0.6294           0.6268          0.2243            0.1230        0.0799       0.1239           0.3539          0.4722                 -0.0259              -0.1667               0.8676                 0.4988              1.1765              0.2394
+14   OC52      NIFTY  ALL   vol_surge     hi  range_big     385     99           0.1212             0.0406         0.0266        0.1270            0.6093           0.6364          0.1035            0.0195        0.0537       0.7171           0.3345          0.3535                  0.2717               1.6843               0.0921                 0.2337              0.7597              0.4474
+15   OC59      NIFTY  ALL   strad_chg     lo   big_move     410     36           0.1077            -0.0087         0.0273        0.7500            0.5765           0.5707          0.2629            0.1693        0.0844       0.0449           0.3362          0.4722                 -0.0543              -0.3578               0.7205                 1.2773              3.0250              0.0025
+16   OC94      NIFTY   NW   wall_near     hi   big_move      52     10           0.2372             0.0789         0.0734        0.2819            0.6397           0.6923          0.2833            0.1420        0.1646       0.3881           0.3743          0.5000                  0.5364               1.2143               0.2246                 1.8154              1.6547              0.0980
+17   OC97  BANKNIFTY   NW  wall_width     hi  range_big      67     21           0.1990             0.0194         0.0627        0.7567            0.6886           0.7015          0.1929            0.1837        0.1308       0.1601           0.2914          0.4762                  0.1369               0.3445               0.7305                 1.0998              1.4283              0.1532
+18  OC118  BANKNIFTY  ALL      iv_chg     hi  range_big     322     77           0.0844             0.0461         0.0284        0.1048            0.5563           0.5870          0.1429            0.1482        0.0612       0.0154           0.2972          0.3506                  0.2793               1.6606               0.0968                 0.9509              2.6891              0.0072
+                                                                      claim underlying       split    n    rate  base_all_rows  effect       p   ci_lo   ci_hi
+0                        OBS-MP closer on weekly eve (t+1 close vs t close)      NIFTY   discovery  156  0.2051         0.2667 -0.0615  0.0857     NaN     NaN
+1                        OBS-MP closer on weekly eve (t+1 close vs t close)      NIFTY  validation   60  0.2833         0.2507  0.0326  0.5527     NaN     NaN
+2   D-2 ATM straddle settle -> official close of expiry (payoff - cost, pp)      NIFTY   discovery  215 -0.0894         0.0000 -0.0894  0.2174 -0.2121  0.0435
+3   D-2 ATM straddle settle -> official close of expiry (payoff - cost, pp)      NIFTY  validation   77 -0.0337         0.0000 -0.0337  0.6304 -0.1504  0.0770
+4      D-1 weekly ATM straddle settle -> official close (payoff - cost, pp)      NIFTY   discovery  156 -0.0660         0.0000 -0.0660  0.3044 -0.1705  0.0486
+5      D-1 weekly ATM straddle settle -> official close (payoff - cost, pp)      NIFTY  validation   60 -0.1294         0.0000 -0.1294  0.0106 -0.2188 -0.0203
+6                        OBS-MP closer on weekly eve (t+1 close vs t close)  BANKNIFTY   discovery  201  0.2438         0.2366  0.0072  0.8036     NaN     NaN
+7                        OBS-MP closer on weekly eve (t+1 close vs t close)  BANKNIFTY  validation   60  0.1833         0.2094 -0.0260  0.7512     NaN     NaN
+8   D-2 ATM straddle settle -> official close of expiry (payoff - cost, pp)  BANKNIFTY   discovery  260 -0.2326         0.0000 -0.2326  0.0037 -0.3913 -0.0759
+9   D-2 ATM straddle settle -> official close of expiry (payoff - cost, pp)  BANKNIFTY  validation   77 -0.0416         0.0000 -0.0416  0.6774 -0.2313  0.0899
+10     D-1 weekly ATM straddle settle -> official close (payoff - cost, pp)  BANKNIFTY   discovery  201 -0.1431         0.0000 -0.1431  0.0362 -0.2562 -0.0276
+11     D-1 weekly ATM straddle settle -> official close (payoff - cost, pp)  BANKNIFTY  validation   60 -0.1068         0.0000 -0.1068  0.2270 -0.2759  0.0665
+cand   check                    
+OC01   drop_top_outcomes            2/2 min_eff +0.385 max_eff +0.390
+       range_t_tercile              3/3 min_eff +0.199 max_eff +0.365
+       regime                       2/2 min_eff +0.365 max_eff +0.504
+       t1_is_expiry                 2/2 min_eff +0.352 max_eff +0.400
+       threshold                    4/4 min_eff +0.351 max_eff +0.481
+       val_vix_tercile_disc_cuts    2/3 min_eff +0.157 max_eff +0.425
+       vix_tercile                  2/3 min_eff +0.112 max_eff +0.303
+       year                         7/7 min_eff +0.089 max_eff +0.833
+OC02   drop_top_outcomes            2/2 min_eff +0.329 max_eff +0.337
+       range_t_tercile              3/3 min_eff +0.135 max_eff +0.320
+       regime                       2/2 min_eff +0.326 max_eff +0.329
+       t1_is_expiry                 2/2 min_eff +0.309 max_eff +0.346
+       threshold                    4/4 min_eff +0.315 max_eff +0.433
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.094 max_eff +0.312
+       vix_tercile                  2/3 min_eff +0.113 max_eff +0.206
+       year                         7/7 min_eff +0.167 max_eff +0.633
+OC04   drop_top_outcomes            2/2 min_eff +0.294 max_eff +0.311
+       range_t_tercile              3/3 min_eff +0.149 max_eff +0.282
+       regime                       2/2 min_eff +0.305 max_eff +0.322
+       t1_is_expiry                 2/2 min_eff +0.303 max_eff +0.317
+       threshold                    4/4 min_eff +0.293 max_eff +0.380
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.003 max_eff +0.438
+       vix_tercile                  2/3 min_eff +0.104 max_eff +0.186
+       year                         7/7 min_eff +0.124 max_eff +0.416
+OC08   drop_top_outcomes            2/2 min_eff +0.209 max_eff +0.221
+       range_t_tercile              3/3 min_eff +0.088 max_eff +0.143
+       regime                       2/2 min_eff +0.095 max_eff +0.261
+       t1_is_expiry                 2/2 min_eff +0.222 max_eff +0.241
+       threshold                    4/4 min_eff +0.199 max_eff +0.331
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.004 max_eff +0.375
+       vix_tercile                  3/3 min_eff +0.040 max_eff +0.129
+       year                         7/7 min_eff +0.096 max_eff +0.401
+OC10   drop_top_outcomes            2/2 min_eff +0.243 max_eff +0.256
+       range_t_tercile              3/3 min_eff +0.108 max_eff +0.229
+       regime                       2/2 min_eff +0.246 max_eff +0.383
+       t1_is_expiry                 2/2 min_eff +0.246 max_eff +0.320
+       threshold                    4/4 min_eff +0.232 max_eff +0.292
+       val_vix_tercile_disc_cuts    2/3 min_eff +0.314 max_eff +0.363
+       vix_tercile                  2/3 min_eff +0.067 max_eff +0.253
+       year                         7/7 min_eff +0.017 max_eff +0.411
+OC11   drop_top_outcomes            2/2 min_eff +0.211 max_eff +0.224
+       range_t_tercile              3/3 min_eff +0.097 max_eff +0.131
+       regime                       2/2 min_eff +0.087 max_eff +0.250
+       t1_is_expiry                 2/2 min_eff +0.166 max_eff +0.242
+       threshold                    4/4 min_eff +0.196 max_eff +0.285
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.112 max_eff +0.125
+       vix_tercile                  3/3 min_eff +0.067 max_eff +0.110
+       year                         7/7 min_eff +0.078 max_eff +0.307
+OC118  drop_top_outcomes            2/2 min_eff +0.098 max_eff +0.106
+       range_t_tercile              3/3 min_eff +0.049 max_eff +0.083
+       regime                       2/2 min_eff +0.101 max_eff +0.106
+       t1_is_expiry                 2/2 min_eff +0.050 max_eff +0.129
+       threshold                    4/4 min_eff +0.055 max_eff +0.218
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.092 max_eff +0.169
+       vix_tercile                  3/3 min_eff +0.047 max_eff +0.135
+       year                         7/7 min_eff +0.016 max_eff +0.173
+OC13   drop_top_outcomes            2/2 min_eff +0.219 max_eff +0.225
+       range_t_tercile              3/3 min_eff +0.094 max_eff +0.199
+       regime                       2/2 min_eff +0.183 max_eff +0.243
+       t1_is_expiry                 2/2 min_eff +0.221 max_eff +0.310
+       threshold                    4/4 min_eff +0.192 max_eff +0.267
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.017 max_eff +0.213
+       vix_tercile                  3/3 min_eff +0.085 max_eff +0.139
+       year                         7/7 min_eff +0.064 max_eff +0.467
+OC17   drop_top_outcomes            2/2 min_eff +0.204 max_eff +0.212
+       range_t_tercile              3/3 min_eff +0.104 max_eff +0.188
+       regime                       2/2 min_eff +0.181 max_eff +0.232
+       t1_is_expiry                 2/2 min_eff +0.217 max_eff +0.251
+       threshold                    4/4 min_eff +0.198 max_eff +0.253
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.021 max_eff +0.147
+       vix_tercile                  3/3 min_eff +0.057 max_eff +0.124
+       year                         7/7 min_eff +0.076 max_eff +0.319
+OC21   drop_top_outcomes            2/2 min_eff +0.177 max_eff +0.194
+       range_t_tercile              3/3 min_eff +0.101 max_eff +0.170
+       regime                       2/2 min_eff +0.120 max_eff +0.219
+       t1_is_expiry                 2/2 min_eff +0.182 max_eff +0.326
+       threshold                    4/4 min_eff +0.157 max_eff +0.219
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.051 max_eff +0.249
+       vix_tercile                  3/3 min_eff +0.055 max_eff +0.104
+       year                         7/7 min_eff +0.077 max_eff +0.287
+OC22   drop_top_outcomes            2/2 min_eff +0.196 max_eff +0.197
+       range_t_tercile              3/3 min_eff +0.068 max_eff +0.231
+       regime                       2/2 min_eff +0.179 max_eff +0.224
+       t1_is_expiry                 2/2 min_eff +0.156 max_eff +0.217
+       threshold                    4/4 min_eff +0.168 max_eff +0.259
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.067 max_eff +0.562
+       vix_tercile                  3/3 min_eff +0.038 max_eff +0.119
+       year                         7/7 min_eff +0.027 max_eff +0.214
+OC24   drop_top_outcomes            2/2 min_eff +0.183 max_eff +0.196
+       range_t_tercile              3/3 min_eff +0.013 max_eff +0.199
+       regime                       2/2 min_eff +0.185 max_eff +0.189
+       t1_is_expiry                 2/2 min_eff +0.193 max_eff +0.202
+       threshold                    4/4 min_eff +0.136 max_eff +0.330
+       val_vix_tercile_disc_cuts    2/3 min_eff +0.000 max_eff +0.625
+       vix_tercile                  3/3 min_eff +0.057 max_eff +0.099
+       year                         7/7 min_eff +0.064 max_eff +0.250
+OC25   drop_top_outcomes            2/2 min_eff +0.157 max_eff +0.175
+       range_t_tercile              3/3 min_eff +0.091 max_eff +0.143
+       regime                       2/2 min_eff +0.134 max_eff +0.198
+       t1_is_expiry                 2/2 min_eff +0.168 max_eff +0.324
+       threshold                    4/4 min_eff +0.171 max_eff +0.247
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.021 max_eff +0.300
+       vix_tercile                  3/3 min_eff +0.045 max_eff +0.069
+       year                         7/7 min_eff +0.080 max_eff +0.223
+OC39   drop_top_outcomes            2/2 min_eff -0.133 max_eff -0.120
+       range_t_tercile              3/3 min_eff -0.211 max_eff -0.013
+       regime                       2/2 min_eff -0.159 max_eff -0.028
+       t1_is_expiry                 2/2 min_eff -0.148 max_eff -0.109
+       threshold                    4/4 min_eff -0.146 max_eff -0.133
+       val_vix_tercile_disc_cuts    3/3 min_eff -0.438 max_eff -0.027
+       vix_tercile                  3/3 min_eff -0.188 max_eff -0.007
+       year                         7/7 min_eff -0.197 max_eff -0.033
+OC43   drop_top_outcomes            2/2 min_eff +0.164 max_eff +0.168
+       range_t_tercile              3/3 min_eff +0.050 max_eff +0.165
+       regime                       2/2 min_eff +0.110 max_eff +0.167
+       t1_is_expiry                 2/2 min_eff +0.157 max_eff +0.173
+       threshold                    4/4 min_eff +0.138 max_eff +0.254
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.131 max_eff +0.562
+       vix_tercile                  3/3 min_eff +0.031 max_eff +0.087
+       year                         7/7 min_eff +0.063 max_eff +0.300
+OC52   drop_top_outcomes            2/2 min_eff +0.128 max_eff +0.128
+       range_t_tercile              2/3 min_eff -0.048 max_eff +0.125
+       regime                       2/2 min_eff +0.111 max_eff +0.235
+       t1_is_expiry                 2/2 min_eff +0.125 max_eff +0.126
+       threshold                    4/4 min_eff +0.103 max_eff +0.149
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.095 max_eff +0.103
+       vix_tercile                  3/3 min_eff +0.043 max_eff +0.124
+       year                         7/7 min_eff +0.042 max_eff +0.269
+OC59   drop_top_outcomes            2/2 min_eff +0.155 max_eff +0.159
+       range_t_tercile              3/3 min_eff +0.074 max_eff +0.110
+       regime                       2/2 min_eff +0.033 max_eff +0.164
+       t1_is_expiry                 2/2 min_eff +0.155 max_eff +0.161
+       threshold                    4/4 min_eff +0.130 max_eff +0.249
+       val_vix_tercile_disc_cuts    3/3 min_eff +0.205 max_eff +0.688
+       vix_tercile                  3/3 min_eff +0.025 max_eff +0.175
+       year                         7/7 min_eff +0.017 max_eff +0.258
+OC94   drop_top_outcomes            2/2 min_eff +0.248 max_eff +0.264
+       range_t_tercile              3/3 min_eff +0.092 max_eff +0.347
+       regime                       1/1 min_eff +0.272 max_eff +0.272
+       t1_is_expiry                 1/1 min_eff +0.272 max_eff +0.272
+       threshold                    4/4 min_eff +0.241 max_eff +0.314
+       val_vix_tercile_disc_cuts    2/3 min_eff +0.000 max_eff +0.167
+       vix_tercile                  3/3 min_eff +0.047 max_eff +0.166
+       year                         5/6 min_eff -0.125 max_eff +0.400
+OC97   drop_top_outcomes            2/2 min_eff +0.178 max_eff +0.198
+       range_t_tercile              3/3 min_eff +0.032 max_eff +0.333
+       regime                       2/2 min_eff +0.134 max_eff +0.225
+       t1_is_expiry                 1/1 min_eff +0.199 max_eff +0.199
+       threshold                    4/4 min_eff +0.165 max_eff +0.288
+       val_vix_tercile_disc_cuts    2/3 min_eff -0.071 max_eff +0.222
+       vix_tercile                  3/3 min_eff +0.079 max_eff +0.125
+       year                         6/7 min_eff -0.075 max_eff +0.575

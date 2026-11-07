@@ -77,6 +77,11 @@ h2 small { font-weight:400; font-size:12px; }
 .tag.ce { background:var(--bull-soft); color:var(--bull); } .tag.pe { background:var(--bear-soft); color:var(--bear); }
 .pc .sub { font-size:12px; color:var(--muted); margin-top:-6px; }
 .chips { display:flex; gap:6px; flex-wrap:wrap; }
+.pfbar .museg { margin:0; }
+.pfbar { display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin:0 0 10px; }
+.pfbar select { font:600 12px Inter,sans-serif; background:var(--raise); color:var(--ink); border:1px solid var(--line-strong); border-radius:8px; padding:5px 8px; }
+tr.dayrow td { background:var(--raise); text-align:left; padding:8px 10px; border-top:2px solid var(--line-strong); font-size:12.5px; }
+tr.dayrow small { color:var(--muted); margin-left:8px; }
 .chip { font:600 11px Inter,sans-serif; border-radius:999px; padding:2px 9px; background:var(--raise); border:1px solid var(--line-strong); color:var(--ink); white-space:nowrap; }
 .chip.in { border-color:var(--bull); color:var(--bull); } .chip.out { border-color:var(--unc); color:var(--unc); }
 .px { display:grid; grid-template-columns:1fr auto 1fr; align-items:end; gap:8px; }
@@ -198,6 +203,173 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   .cards { grid-template-columns:1fr; }
   .px .entry b { font-size:23px; }
   :root { --disc:64px; }
+}
+
+/* ===== design pass (7 Nov 2026): look only, no content or data change. From the dashboard-design skill: one clear
+   hierarchy, quiet colour (a hue only where the number is good or bad), tables that scan, width that grows with the
+   screen. Every colour is a token from /tokens.css, so light and dark both work; delete this block to undo it. */
+:root { --pad:clamp(14px,2.2vw,40px); --edge:color-mix(in srgb, var(--line) 55%, var(--line-strong) 45%); }
+body { letter-spacing:.003em; }
+main { padding:20px var(--pad) 28px; }
+::-webkit-scrollbar { height:10px; width:10px; } ::-webkit-scrollbar-thumb { background:var(--line-strong); border-radius:6px; border:2px solid transparent; background-clip:content-box; }
+::-webkit-scrollbar-track { background:transparent; }
+
+/* top bar: glass, clearer brand, tabs that read as the main navigation */
+.top { background:color-mix(in srgb, var(--panel) 86%, transparent); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); padding:10px var(--pad); gap:12px; }
+.brand { font-size:16px; letter-spacing:-.01em; }
+.tabs { padding:4px; border-radius:12px; background:var(--surface); }
+.tabs button { padding:7px 16px; border-radius:9px; font-size:13px; transition:background .15s, color .15s; }
+.tabs button:hover { color:var(--ink); }
+.tabs button[aria-selected="true"] { background:var(--raise); box-shadow:inset 0 -2px 0 var(--c), 0 1px 2px rgba(0,0,0,.25); }
+.tlink, .tbtn { transition:border-color .15s, background .15s; } .tlink:hover, .tbtn:hover { border-color:var(--accent); background:var(--raise); }
+
+/* header and panels: the title leads, the explanation steps back */
+.ws h1 { font-size:22px; letter-spacing:-.015em; }
+.ws p, .note { color:var(--muted); line-height:1.6; max-width:120ch; }
+.ws p { font-size:13px; }
+.panels { gap:18px; }
+.panel { padding:16px 20px 20px; border-color:var(--edge); box-shadow:0 1px 0 rgba(255,255,255,.025) inset, 0 10px 28px -14px rgba(0,0,0,.55); }
+.panel > header { margin:0 0 14px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+h2 { font-size:15.5px; font-weight:650; letter-spacing:-.005em; }
+h2 small { font-size:12.5px; color:var(--muted); }
+.panel.flat > header { border-bottom:0; padding-bottom:0; }
+
+/* tables: calmer rules, a header that anchors, rows that light up under the pointer */
+.tw { border-color:var(--edge); border-radius:var(--r-md); background:color-mix(in srgb, var(--surface) 70%, var(--panel)); }
+th { background:color-mix(in srgb, var(--raise) 55%, transparent); color:var(--muted); font-size:10.5px; letter-spacing:.06em; padding:10px 12px; border-bottom:1px solid var(--edge); }
+td { padding:10px 12px; border-bottom:1px solid color-mix(in srgb, var(--line) 80%, transparent); }
+tbody tr { transition:background .12s; } tbody tr:hover td { background:color-mix(in srgb, var(--raise) 70%, transparent); }
+td.up, td.down, .up b, .down b, td .up, td .down { font-weight:600; }
+td small { color:var(--muted); }
+/* the grey detail under a number (time, price) stacks under it instead of beside it: the wide tables then fit a wide
+   screen without sideways scrolling. The first column keeps its own layout. */
+@media (min-width:1600px) {
+  .tw td:not(:first-child) small { display:block; white-space:normal; line-height:1.3; margin-top:2px; }
+  .tw td:last-child:not(.l) { white-space:normal; min-width:130px; }
+}
+.tw table { --cellx:9px; } .tw th, .tw td { padding-left:var(--cellx); padding-right:var(--cellx); }
+.tw th { white-space:normal; line-height:1.25; }
+.tw table:has(tbody td:nth-child(18)) { --cellx:6px; }              /* the 18-19 column fade tables */
+.sb .tw table { --cellx:7px; } .sb .tw th { padding:9px 7px; } .sb .tw td:first-child { white-space:normal; min-width:96px; }
+tr.dayrow td { background:var(--raise); border-top:1px solid var(--edge); border-bottom:1px solid var(--edge); padding:9px 12px; font-size:13px; letter-spacing:.005em; }
+tr.dayrow:hover td { background:var(--raise); }
+th.g { border-left:1px solid var(--edge); } td.gl { border-left:1px solid var(--edge); }
+td:first-child b { letter-spacing:.01em; }
+
+/* tags and chips: a tinted fill instead of a hard outline */
+.arm { border:0; font-size:10.5px; padding:3px 8px; border-radius:7px; background:var(--raise); }
+.arm.a { background:color-mix(in srgb, var(--arm-a) 16%, transparent); } .arm.b { background:color-mix(in srgb, var(--arm-b) 16%, transparent); }
+.arm.f { background:color-mix(in srgb, var(--arm-f) 16%, transparent); }
+.chip { border:0; padding:3px 10px; background:var(--raise); }
+.chip.in { background:var(--bull-soft); } .chip.out { background:var(--unc-soft); }
+.tag { padding:3px 10px; }
+
+/* the Max up panel: big numbers, thick bars */
+.mu-ladder, .mu-cmp > div { border-color:var(--edge); background:color-mix(in srgb, var(--surface) 75%, var(--panel)); }
+.mu-ladder { padding:16px 18px; }
+.mu-ladder h4, .mu-cmp small { font-size:10.5px; letter-spacing:.07em; }
+.mu-row { grid-template-columns:96px minmax(0,1fr) 48px 72px; padding:6px 0; }
+.mu-lbl { font-size:12.5px; color:var(--ink); }
+.mu-track { height:12px; border-radius:6px; background:color-mix(in srgb, var(--line) 80%, transparent); }
+.mu-track i { border-radius:6px; background:linear-gradient(90deg, color-mix(in srgb, var(--bull) 70%, transparent), var(--bull)); }
+.mu-row b { font-size:14px; }
+.mu-cmp { gap:10px; } .mu-cmp > div { padding:14px 16px; }
+.mu-cmp b { font-size:28px; letter-spacing:-.02em; margin:4px 0; }
+.mu-cmp em { font-size:11.5px; line-height:1.4; }
+.museg { border-color:var(--edge); border-radius:10px; } .museg button { padding:7px 14px; }
+.mubar { height:8px; border-radius:4px; }
+
+/* tiles, scoreboard cards, position cards */
+.tiles { gap:10px; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); }
+.tile { padding:14px 16px; border-color:var(--edge); border-radius:var(--r-md); }
+.tile b { font-size:23px; letter-spacing:-.02em; display:block; margin-top:4px; }
+.facts > div { border-color:var(--edge); padding:12px 14px; }
+.pc { border-color:var(--edge); border-radius:16px; box-shadow:0 10px 28px -16px rgba(0,0,0,.6); }
+.empty { padding:18px 20px; border-color:var(--line-strong); font-size:13px; }
+details summary { padding:4px 0; } details summary:hover { color:var(--ink); }
+.sb h3 { font-size:13.5px; margin:0 0 8px; }
+
+/* wide screens: the layout adds columns instead of stretching a few */
+@media (min-width:1700px) {
+  .sb { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .mu-hero { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
+}
+@media (max-width:760px) {
+  .top { position:static; }                                          /* four wrapped rows: let it scroll away, not stick */
+  .tabs button { padding:8px 2px; } .panel { padding:14px; } .ws h1 { font-size:19px; }
+  .mu-cmp b { font-size:22px; } .mu-row { grid-template-columns:78px minmax(0,1fr) 40px 56px; }
+}
+
+/* ===== motion (7 Nov 2026, the visualize skill's `animate` rules for dashboards): motion only where it says
+   something. A redraw flashes each live cell whose number moved (green up, red down) and ticks the big numbers to
+   their new value; a tab switch cross-fades; the Max up bars grow once per page load; the live dot breathes while the
+   market is open; buttons answer a press; the drawer and search slide in; sections open smoothly. No entrance on
+   the frame, no stagger on lists, transform / opacity only. Reduced motion: values change at once, nothing moves. */
+:root { --m-fast:160ms; --m-base:260ms; --ease-out:cubic-bezier(0.16, 1, 0.3, 1); --ease-std:cubic-bezier(0.4, 0, 0.2, 1); }
+.dot.on { animation:live 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite alternate; }
+@keyframes live { from { opacity:.55; } to { opacity:1; } }
+.btn, .tbtn, .tlink, .museg button, .tabs button, .pfbar button {
+  transition:transform 80ms var(--ease-std), background-color var(--m-fast) var(--ease-std), border-color var(--m-fast) var(--ease-std), color var(--m-fast) var(--ease-std), box-shadow var(--m-base) var(--ease-std); }
+.btn:active, .tbtn:active, .tlink:active, .museg button:active, .tabs button:active, .pfbar button:active { transform:scale(.97); }
+tbody tr { transition:background-color 100ms var(--ease-std); }
+tr[data-why]:active td { background:var(--raise); }
+td.fx-up { animation:fx-up 1.4s var(--ease-std); } td.fx-down { animation:fx-down 1.4s var(--ease-std); }
+@keyframes fx-up { from { background-color:var(--bull-soft); box-shadow:inset 0 -2px 0 var(--bull); } to { background-color:transparent; box-shadow:inset 0 -2px 0 transparent; } }
+@keyframes fx-down { from { background-color:var(--bear-soft); box-shadow:inset 0 -2px 0 var(--bear); } to { background-color:transparent; box-shadow:inset 0 -2px 0 transparent; } }
+#main.fx-in { animation:fx-in 200ms var(--ease-std); }
+@keyframes fx-in { from { opacity:0; } to { opacity:1; } }
+.fx-hero .mu-track i { transform-origin:left center; animation:fx-grow 700ms var(--ease-out) both; }
+@keyframes fx-grow { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+.scrim { transition:opacity var(--m-base) var(--ease-std); }
+.sheet { transition:transform var(--m-base) var(--ease-out), opacity var(--m-fast) var(--ease-std); }
+.pal { transition:transform 220ms var(--ease-out), opacity var(--m-fast) var(--ease-std); }
+@starting-style {
+  .scrim { opacity:0; }
+  .sheet { opacity:0; transform:translate(-50%, 28px); }
+  .pal { opacity:0; transform:translateX(-50%) scale(.97); }
+}
+@supports (interpolate-size: allow-keywords) and selector(::details-content) {
+  :root { interpolate-size:allow-keywords; }
+  details::details-content { block-size:0; overflow:clip; transition:block-size var(--m-base) var(--ease-std), content-visibility var(--m-base) allow-discrete; transition-behavior:allow-discrete; }
+  details[open]::details-content { block-size:auto; }
+}
+/* ===== the trade page (#view/<trade>, opened in a new tab from any row) */
+.view { display:flex; flex-direction:column; gap:18px; }
+.view .back { align-self:flex-start; }
+.view .details h3 { font-size:22px; margin:0 0 4px; display:flex; gap:8px; align-items:center; flex-wrap:wrap; letter-spacing:-.01em; }
+.view .details h3 span:not(.arm):not(.tag) { color:var(--muted); font-weight:600; }
+.view .why { background:var(--surface); border:1px solid var(--edge); border-left:3px solid var(--c, var(--accent)); border-radius:var(--r-sm); padding:10px 14px; margin:12px 0 0; font-size:13px; line-height:1.55; }
+.view .kv { display:grid; grid-template-columns:repeat(auto-fill,minmax(330px,1fr)); gap:8px; margin:14px 0 0; }
+.kvp { display:flex; justify-content:space-between; align-items:baseline; gap:14px; background:var(--surface); border:1px solid var(--edge); border-radius:10px; padding:9px 12px; }
+.kvp dt { color:var(--muted); font-size:12px; } .kvp dd { margin:0; font:500 13px "JetBrains Mono",monospace; text-align:right; }
+.view .tiles { margin:0 0 14px; }
+.chart { background:color-mix(in srgb, var(--surface) 70%, var(--panel)); border:1px solid var(--edge); border-radius:var(--r-md); padding:14px 14px 8px; margin:0 0 10px; }
+.plot { position:relative; height:clamp(220px, 34vh, 380px); touch-action:pan-y; cursor:crosshair; }
+.plot svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
+.pl { fill:none; stroke-width:2; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
+.pl.held { stroke:var(--c, var(--accent)); } .pl.after { stroke:var(--muted); stroke-dasharray:5 4; }
+.lv { position:absolute; left:0; right:0; border-top:1px dashed var(--line-strong); pointer-events:none; }
+.lv span { position:absolute; right:4px; top:-10px; font:600 10.5px "JetBrains Mono",monospace; color:var(--muted); background:var(--surface); padding:1px 6px; border-radius:5px; }
+.lv.entry, .lv.stop { } .lv.entry span, .lv.stop span { right:auto; left:4px; }
+.lv.entry { border-top:1px solid color-mix(in srgb, var(--ink) 55%, transparent); } .lv.entry span { color:var(--ink); }
+.lv.stop { border-color:var(--bear); } .lv.stop span { color:var(--bear); }
+.lv.peak { border-color:var(--bull); } .lv.peak span { color:var(--bull); }
+.lv.trail { border-color:var(--unc); } .lv.trail span { color:var(--unc); }
+.lv.exit, .lv.now { border-color:var(--accent); } .lv.exit span, .lv.now span { color:var(--accent); top:4px; }
+.dm { position:absolute; top:0; bottom:0; border-left:1px dotted var(--line-strong); pointer-events:none; }
+.dm span { position:absolute; bottom:4px; left:5px; font-size:10.5px; color:var(--muted); white-space:nowrap; }
+.dm.sold { border-left:1px solid var(--accent); } .dm.sold span { bottom:auto; top:4px; color:var(--accent); font-weight:600; }
+.xh { position:absolute; top:0; bottom:0; width:0; border-left:1px solid var(--line-strong); pointer-events:none; }
+.xh i { position:absolute; left:-5px; width:10px; height:10px; border-radius:50%; background:var(--c, var(--accent)); transform:translateY(-50%); box-shadow:0 0 0 3px var(--panel); }
+.xh .tip { position:absolute; top:6px; left:10px; background:var(--raise); border:1px solid var(--line-strong); border-radius:9px; padding:7px 10px; font:12px/1.45 "JetBrains Mono",monospace; white-space:nowrap; box-shadow:var(--shadow); }
+.xh.flip .tip { left:auto; right:10px; }
+.ax { display:flex; justify-content:space-between; font:11px "JetBrains Mono",monospace; color:var(--muted); padding:8px 2px 0; }
+tr[data-why] { cursor:pointer; }
+
+@media (prefers-reduced-motion:reduce) {
+  .btn, .tbtn, .tlink, .museg button, .tabs button, .pfbar button, tbody tr, .scrim, .sheet, .pal { transition-duration:0.01ms !important; }
+  .dot.on, td.fx-up, td.fx-down, #main.fx-in, .fx-hero .mu-track i { animation:none !important; }
+  details::details-content { transition:none !important; }
 }
 </style>
 </head>
@@ -388,9 +560,46 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     if (r) return `stop ${rs(e / 2)} at a close · no new high ${r.stall || 0}/5 · by ${day(tMinus1(p.expiry))}`;
     return `stop ${rs(p.stop)} · auto-exit ${day(p.t2_date)}`;
   }
-  function openTable(rows) {
+  // ---- paper filters and day-wise grouping (the user, 2026-11-06: "give filter here, mostly ... day wise arrangement")
+  const PF0 = { arm: "all", opt: "all", res: "all", group: "bought", day: "all" };
+  let PF = { ...PF0, ...ls.get("fo_pf", {}) };
+  const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const wday = d => `${WD[new Date(d + "T00:00:00").getDay()]} ${day(d)}`;
+  const armOf = x => { const r = x.rule || {}; return r.strategy === "fade" ? ["F"] : (r.arms || []); };
+  const dayOf = (x, g) => String((g === "sold" ? x.closed_at || x.opened_at : x.opened_at) || "").slice(0, 10);
+  function pfApply(rows, closed) {
+    return rows.filter(x => (PF.arm === "all" || armOf(x).includes(PF.arm))
+      && (PF.opt === "all" || x.instrument === PF.opt)
+      && (!closed || PF.res === "all" || (PF.res === "win" ? (x.net_pnl || 0) > 0 : (x.net_pnl || 0) <= 0))
+      && (PF.day === "all" || dayOf(x, closed && PF.group === "sold" ? "sold" : "bought") === PF.day));
+  }
+  function byDay(rows, group, cols, sumFn, rowFn) {
+    if (!group || group === "none") return rows.map(rowFn).join("");
+    const g = {};
+    rows.forEach(x => { const d = dayOf(x, group); (g[d] = g[d] || []).push(x); });
+    return Object.keys(g).sort().reverse().map(d => {
+      const xs = g[d].slice().sort((a, b) => String(b.opened_at).localeCompare(String(a.opened_at)));
+      return `<tr class="dayrow"><td colspan="${cols}"><b>${d ? wday(d) : "—"}</b> ${sumFn(xs)}</td></tr>` + xs.map(rowFn).join("");
+    }).join("");
+  }
+  const closedDaySum = xs => { const n = xs.reduce((a, c) => a + (c.net_pnl || 0), 0), w = xs.filter(c => (c.net_pnl || 0) > 0).length;
+    return `<small>${xs.length} trade${xs.length > 1 ? "s" : ""} · won ${w} · lost ${xs.length - w} · net <span class="${dir(n)}">${srs(n, 0)}</span></small>`; };
+  const openDaySum = xs => { const b = xs.reduce((a, p) => a + p.entry.price * p.qty, 0), u = xs.reduce((a, p) => a + (p.unrealised || 0), 0);
+    return `<small>${xs.length} bought · paid ${rs(b, 0)} · if sold now <span class="${dir(u)}">${srs(u, 0)}</span></small>`; };
+  function pfBar(closed, all) {
+    const seg = (k, opts) => `<span class="museg" role="group">${opts.map(([v, n]) => `<button type="button" data-pf="${k}:${v}" aria-pressed="${PF[k] === v}">${n}</button>`).join("")}</span>`;
+    const days = [...new Set(all.map(x => dayOf(x, closed && PF.group === "sold" ? "sold" : "bought")).filter(Boolean))].sort().reverse();
+    const on = ["arm", "opt", "res", "day"].some(k => PF[k] !== PF0[k]);
+    return `<div class="pfbar">${seg("arm", [["all", "All arms"], ["A", "Arm A"], ["B", "Arm B"], ["F", "Arm F · fade"]])}
+      ${seg("opt", [["all", "CE + PE"], ["CE", "CE"], ["PE", "PE"]])}
+      ${closed ? seg("res", [["all", "Won + lost"], ["win", "Won"], ["loss", "Lost"]]) : ""}
+      ${seg("group", closed ? [["bought", "By buy day"], ["sold", "By sell day"], ["none", "No grouping"]] : [["bought", "By buy day"], ["none", "No grouping"]])}
+      <select data-pfday aria-label="Day"><option value="all">All days</option>${days.map(d => `<option value="${d}"${PF.day === d ? " selected" : ""}>${wday(d)}</option>`).join("")}</select>
+      ${on ? `<button type="button" class="btn" data-pf="reset:1">Clear filters</button>` : ""}</div>`;
+  }
+  function openTable(rows, group) {
     return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Lots", "Entry", "Now", "Buy value", "Value now", "Max up", "Max dip",
-      "P&amp;L at last", "If sold now (MTM)", "Exit rule", ""].map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${rows.map(p => {
+      "P&amp;L at last", "If sold now (MTM)", "Exit rule", ""].map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${byDay(rows, group, 13, openDaySum, p => {
         const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
         const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
         const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price, r = p.rule;
@@ -401,16 +610,16 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="${dir(chg(tr, e))}">${tr != null ? pct(chg(tr, e)) + ` <small>${rs(tr)}</small>` : "—"}</td>
           <td class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</td><td class="${dir(p.unrealised)}">${srs(p.unrealised, 2)} <small>bid ${rs(bid)}</small></td>
           <td class="l" style="white-space:nowrap"><small>${exitShort(p)}</small></td>
-          <td><button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button><p class="err" data-cerr="${esc(p.id)}" hidden></p></td></tr>`; }).join("")}</tbody></table></div>`;
+          <td><button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button><p class="err" data-cerr="${esc(p.id)}" hidden></p></td></tr>`; })}</tbody></table></div>`;
   }
   const REASON = { stop: "Stop", forced_t2: "T-2 auto-exit", manual: "Closed by you", expired_no_quote: "Expired", exit: "Closed by you",
                    rule_stop: "Rule: 50% stop", rule_decay: "Rule: 5 days no new high", rule_t1: "Rule: T-1",
                    fade_eod: "Fade: sold at 15:20", fade_late: "Fade: sold next session (missed 15:20)",
                    fade_stop: "Fade: \u221220 % stop", fade_trail: "Fade v12: trail (2 % below the peak)" };
-  function closedTable(rows, shadows) {
+  function closedTable(rows, shadows, group) {
     return `<div class="tw"><table><thead><tr>${["Option", "Overall max up", "Bought", "Sold", "Entry", "Buy value", "Exit", "Net ₹", "Net %"].concat(shadows ? ["v10 shadow ₹", "Trail shadow ₹"] : []).map(h => `<th rowspan="2">${h}</th>`).join("")}
       <th class="g" colspan="4">While held</th><th class="g" colspan="3">After we sold (to T-2)</th><th rowspan="2">Why sold</th></tr>
-      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="net at the peak bid minus the net we got: what the exit left behind">Left behind</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${rows.map(c => {
+      <tr><th class="g" title="highest last traded price">Max up <small>(last price)</small></th><th>Max dip</th><th title="highest best bid seen while held: what a sell could have filled at">Peak bid <small>(sellable)</small></th><th title="net at the peak bid minus the net we got: what the exit left behind">Left behind</th><th class="g">Max up</th><th>Max dip</th><th>Last</th></tr></thead><tbody>${byDay(rows, group, shadows ? 19 : 17, closedDaySum, c => {
         const e = c.entry.price, a = c.after || {}, hp = c.held_peak, ht = c.held_trough, pc = c.peak_capture;
         const ap = a.peak && a.peak.price, at = a.trough && a.trough.price, al = a.last && a.last.price;
         const following = a.until && todayIso() <= a.until;
@@ -426,7 +635,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
           <td class="gl ${dir(chg(ap, e))}">${ap != null ? pct(chg(ap, e)) + ` <small>${when(a.peak.at)}</small>` : (following ? "following…" : "—")}</td>
           <td class="${dir(chg(at, e))}">${at != null ? pct(chg(at, e)) + ` <small>${when(a.trough.at)}</small>` : "—"}</td>
           <td>${al != null ? rs(al) : "—"}${following ? ` <small>until ${day(a.until)}</small>` : ""}</td>
-          <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; }).join("")}</tbody></table></div>`;
+          <td>${esc(REASON[c.reason] || c.reason || "")}</td></tr>`; })}</tbody></table></div>`;
   }
   // scoreboard maths, shared by the paper account and the Arm F tiles
   // Arm F counts from S1 v11's day 0 (2026-10-21, the user's decision): rule.version "v11". The v10 fade trades before it
@@ -598,14 +807,19 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     },
     openPositions() {
       const w = paperWait("Open positions"); if (w) return panel("Open positions", w);
-      return panel(`Open positions · ${P.positions.length}`, P.positions.length ? openTable(P.positions)
+      const op = pfApply(P.positions, false), grp = PF.group === "sold" ? "bought" : PF.group;
+      return panel(`Open positions · ${op.length}${op.length !== P.positions.length ? ` of ${P.positions.length}` : ""}`, P.positions.length
+        ? pfBar(false, P.positions) + (op.length ? openTable(op, grp) : empty("No open position matches these filters."))
         : empty("No open positions. The rule trades of the next session are bought at 09:15 and at 15:20 automatically."), { sub: P.positions.length ? "tap a row for why it was bought" : "" });
     },
     closedTrades() {
       const w = paperWait("Closed trades"); if (w) return panel("Closed trades", w);
       const main = P.trades.filter(x => !oldFade(x)), old = P.trades.filter(oldFade);
       const side = old.length ? `<details><summary>Side record: ${old.length} v10 fade trades before 21 Oct (old 15:20 exit), booked ${srs(old.reduce((a, c) => a + (c.net_pnl || 0), 0))}</summary>${closedTable(old)}</details>` : "";
-      return panel(`Closed trades \u00b7 ${main.length}`, (main.length ? closedTable(main) : empty("None yet. Fade trades count from v11's day 0 (21 Oct)."))
+      const shown = pfApply(main, true), tot = shown.reduce((a, c) => a + (c.net_pnl || 0), 0);
+      return panel(`Closed trades \u00b7 ${shown.length}${shown.length !== main.length ? ` of ${main.length}` : ""}`, (main.length ? pfBar(true, main)
+          + (shown.length ? `<p class="note" style="margin:0 0 8px">Shown: ${shown.length} trades · won ${shown.filter(c => (c.net_pnl || 0) > 0).length} · net <span class="${dir(tot)}">${srs(tot, 0)}</span></p>` + closedTable(shown, false, PF.group)
+             : empty("No closed trade matches these filters.")) : empty("None yet. Fade trades count from v11's day 0 (21 Oct)."))
         + side, { sub: "net of fills and charges \u00b7 after the sale the option is followed until its T-2 day" });
     },
     refusals() {
@@ -939,12 +1153,82 @@ td.mu-g { white-space:nowrap; font-weight:600; }
             fade ? ["Trail shadow (−20 % stop + trail, +10 % / 5 %)", trailText(r, e, p.closed_at ? p.net_pnl : null)] : null])}
       ${fade && fadeMove != null ? `<p class="note">${fadeMove > 0 ? "The stock moved against the headline after entry: what the fade bets on." : "The stock kept moving with the numbers after entry: in the backtest the option then won only 4-5 % of the time."}</p>` : ""}` };
   }
-  function openWhy(key) {
-    const w = whyHtml(key); if (!w) return false;
-    $("#overlay").innerHTML = `<div class="scrim" data-dismiss></div><div class="sheet" role="dialog" aria-modal="true" aria-label="Why this trade" style="--c:${w.c}">
-      <div class="grab"></div><button class="btn ghost x" type="button" data-dismiss aria-label="Close">✕</button>${w.h}</div>`;
-    $(".sheet .x").focus();
-    return true;
+  // ---- the trade page (#view/<key>; a row opens it in a new tab): the option's recorded best bid as a chart with the
+  // entry / stop / trail / peak / exit lines and a hover read-out, the stop-to-peak gauge, and every detail as a grid
+  let VIEW = location.hash.startsWith("#view/") ? decodeURIComponent(location.hash.slice(6)) : null;
+  const viewUrl = key => location.pathname + location.search + "#view/" + encodeURIComponent(key);
+  const PATH = {};                                                    // trade id -> recorded rows, refreshed on every redraw
+  const tradeOf = key => { const i = key.indexOf(":"), k = key.slice(0, i), id = key.slice(i + 1);
+    return k === "pos" ? P.positions.find(x => x.id === id) : k === "trade" ? P.trades.find(x => x.id === id) : null; };
+  function levels(p) {                                                // the price lines: Arm A / B's stop is half the entry at a close
+    const r = p.rule || {}, e = p.entry.price, ab = r.strategy !== "fade" && (r.arms || []).some(a => a === "A" || a === "B");
+    const hb = p.held_bid || {}, pc = p.peak_capture || {};
+    return { e, stop: (r.stop && r.stop.level) || (ab ? e / 2 : null), trail: r.trail && r.trail.start,
+             pk: pc.peak_bid || (hb.peak && hb.peak.price) || null, low: pc.low_bid || (hb.low && hb.low.price) || null,
+             now: p.closed_at ? (p.exit || {}).price : ((p.mark || {}).bid ?? (p.mark || {}).price), closed: !!p.closed_at };
+  }
+  function viewHtml(key) {
+    const back = `<a class="tlink back" href="${location.pathname}#${tab}">← All trades</a>`;
+    if (!live()) return back + notLive("The trade page");
+    if (!P.loaded) return back + loading();
+    const w = whyHtml(key);
+    if (!w) return back + empty("This trade is not in the paper account any more.");
+    const details = w.h.replace(/<dt>/g, `<div class="kvp"><dt>`).replace(/<\/dd>/g, "</dd></div>");
+    const p = tradeOf(key);
+    if (!p) return `<div class="view" style="--c:${w.c}">${back}<section class="panel details">${details}</section></div>`;
+    const L = levels(p);
+    const tiles = [tile("Entry", rs(L.e)), tile(L.closed ? "Exit" : "Bid now", rs(L.now), dir(chg(L.now, L.e))),
+      tile(L.closed ? "Net" : "If sold now", L.closed ? srs(p.net_pnl) : srs(p.unrealised), dir(L.closed ? p.net_pnl : p.unrealised)),
+      tile("Peak bid", L.pk ? pct(chg(L.pk, L.e)) : "—", dir(chg(L.pk, L.e))), tile("Low bid", L.low ? pct(chg(L.low, L.e)) : "—", dir(chg(L.low, L.e))),
+      L.stop ? tile(L.closed ? "Stop" : "Stop is", L.closed ? rs(L.stop) : pct(chg(L.stop, L.now)) + " away", L.closed ? "" : "down") : ""].join("");
+    return `<div class="view" style="--c:${w.c}">${back}
+      <section class="panel"><header><h2>Price <small>best bid at every change while held · the hour after the sale dashed · point at the line to read it</small></h2></header>
+        <div class="tiles">${tiles}</div>
+        <div class="chart" id="vchart" data-id="${esc(p.id)}">${loading()}</div>
+        ${rail(L.e, L.now, L.pk, L.low, L.stop)}</section>
+      <section class="panel details">${details}</section></div>`;
+  }
+  async function drawView() {
+    const box = $("#vchart"), p = VIEW && tradeOf(VIEW); if (!box || !p) return;
+    const id = box.dataset.id;
+    if (PATH[id]) plot(box, PATH[id], p);
+    try { PATH[id] = ((await getJson("/api/paper/path/" + encodeURIComponent(id))) || {}).rows || []; }
+    catch (e) { if (!PATH[id]) box.innerHTML = empty("No price record: " + esc(e.message)); return; }
+    const b2 = $("#vchart"); if (b2 && b2.dataset.id === id) plot(b2, PATH[id], p);
+  }
+  function plot(box, rows, p) {
+    const L = levels(p), pts = rows.filter(r => r.bid > 0 && r.t);
+    if (pts.length < 2) { box.innerHTML = empty("No recorded bids for this trade (the record starts 23 Oct 2026)."); return; }
+    // x: trading time with the nights squeezed out (each session 09:15 - 15:45 side by side)
+    const days = [...new Set(pts.map(r => r.t.slice(0, 10)))];
+    const X = r => days.indexOf(r.t.slice(0, 10)) * 390 + Math.min(390, Math.max(0, +r.t.slice(11, 13) * 60 + +r.t.slice(14, 16) + +r.t.slice(17, 19) / 60 - 555));
+    const xs = pts.map(X), x0 = xs[0], xr = (xs[xs.length - 1] - x0) || 1;
+    const ys = pts.map(r => r.bid).concat([L.e, L.stop, L.trail, L.pk, L.now].filter(v => v > 0));
+    let lo = Math.min(...ys), hi = Math.max(...ys); const pad = (hi - lo) * 0.08 || 0.5; lo -= pad; hi += pad;
+    const W = 1000, H = 300, sx = x => (x - x0) / xr * W, sy = v => H - (v - lo) / (hi - lo) * H, top = v => (sy(v) / H * 100).toFixed(2) + "%";
+    const seg = keep => { const i0 = pts.findIndex(keep); if (i0 < 0) return "";
+      return pts.map((r, i) => [r, i]).filter(([r, i]) => keep(r) || i === i0 - 1).map(([r, i]) => `${sx(xs[i]).toFixed(1)},${sy(r.bid).toFixed(1)}`).join(" "); };
+    const held = seg(r => r.phase !== "after_exit"), after = seg(r => r.phase === "after_exit");
+    const lv = (v, cls, lab) => v > 0 && v >= lo && v <= hi ? `<div class="lv ${cls}" style="top:${top(v)}"><span>${lab} ${rs(v)}</span></div>` : "";
+    const marks = days.slice(1).map((d, k) => { const x = (k + 1) * 390; return x > x0 && x < x0 + xr ? `<div class="dm" style="left:${(sx(x) / W * 100).toFixed(2)}%"><span>${day(d)}</span></div>` : ""; }).join("");
+    const iSold = pts.findIndex(r => r.phase === "after_exit");
+    const sold = iSold > 0 ? `<div class="dm sold" style="left:${(sx(xs[iSold]) / W * 100).toFixed(2)}%"><span>sold ${when(pts[iSold].t).slice(-8)}</span></div>` : "";
+    box.innerHTML = `<div class="plot">${sold}<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="best bid from ${rs(pts[0].bid)} to ${rs(pts[pts.length - 1].bid)}">
+        <polyline class="pl held" points="${held}"/>${after ? `<polyline class="pl after" points="${after}"/>` : ""}</svg>
+        ${lv(L.stop, "stop", "stop")}${lv(L.trail, "trail", "trail on")}${lv(L.e, "entry", "entry")}${lv(L.pk, "peak", "peak")}${lv(L.now, L.closed ? "exit" : "now", L.closed ? "exit" : "now")}
+        ${marks}<div class="xh" hidden><i></i><div class="tip"></div></div></div>
+      <div class="ax"><span>${when(pts[0].t)}</span><span>${pts.length} quotes</span><span>${when(pts[pts.length - 1].t)}</span></div>`;
+    const plotEl = $(".plot", box), xh = $(".xh", box);
+    const read = ev => {
+      const b = plotEl.getBoundingClientRect(), fx = Math.min(1, Math.max(0, (ev.clientX - b.left) / b.width)), want = x0 + fx * xr;
+      let i = xs.findIndex(x => x >= want); if (i < 0) i = xs.length - 1; if (i > 0 && want - xs[i - 1] < xs[i] - want) i--;
+      const r = pts[i], f = sx(xs[i]) / W;
+      xh.hidden = false; xh.style.left = (f * 100).toFixed(2) + "%"; xh.classList.toggle("flip", f > 0.7);
+      $("i", xh).style.top = top(r.bid);
+      $(".tip", xh).innerHTML = `<b>${when(r.t)}</b><br>bid ${rs(r.bid)} <span class="${dir(chg(r.bid, L.e))}">${pct(chg(r.bid, L.e))}</span><br><small>ask ${rs(r.ask)}${r.phase === "after_exit" ? " · after the sale" : ""}</small>`;
+    };
+    plotEl.addEventListener("pointermove", read); plotEl.addEventListener("pointerdown", read);
+    plotEl.addEventListener("pointerleave", () => { xh.hidden = true; });
   }
   const closeOverlay = () => { $("#overlay").innerHTML = ""; };
 
@@ -969,8 +1253,8 @@ td.mu-g { white-space:nowrap; font-weight:600; }
       list = all.filter(x => !t || x.sym.toUpperCase().includes(t)).slice(0, 40); sel = Math.min(sel, Math.max(0, list.length - 1));
       ul.innerHTML = list.length ? list.map((x, i) => `<li role="option" data-i="${i}" aria-selected="${i === sel}"><b>${esc(x.sym)}</b> <span class="muted">${esc(x.label)}</span><small>${WORKSPACES[x.tab].tab}</small></li>`).join("")
         : `<li class="muted">${all.length ? "No match" : "Nothing to search yet"}</li>`; };
-    const go = i => { const x = list[i]; if (!x) return; closeOverlay(); setTab(x.tab, x.why ? null : x.sym);
-      if (x.why) { setHash(x.tab, x.sym); openWhy(x.why); } };
+    const go = i => { const x = list[i]; if (!x) return; closeOverlay();
+      if (x.why) location.hash = "#view/" + encodeURIComponent(x.why); else setTab(x.tab, x.sym); };
     q.addEventListener("input", () => { sel = 0; draw(); });
     q.addEventListener("keydown", e => { if (e.key === "ArrowDown") { sel = Math.min(sel + 1, list.length - 1); draw(); e.preventDefault(); }
       else if (e.key === "ArrowUp") { sel = Math.max(sel - 1, 0); draw(); e.preventDefault(); } else if (e.key === "Enter") go(sel); });
@@ -990,23 +1274,78 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   let tab = parseHash().t;
   if (!TABS.includes(tab)) tab = SERVER.orders ? "paper" : "armf";
   function setTab(t, focusSym) {
-    tab = t; setHash(t, null);
+    tab = t; VIEW = null; document.title = "F&O Live Results"; setHash(t, null);
     $$("#tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.tab === t));
     render();
     if (focusSym) { const el = $$("#main td:first-child b, #main .nm").find(n => n.textContent.trim().toUpperCase().startsWith(focusSym));
       if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" }); (el.closest("tr,article") || el).animate([{ background: "var(--unc-soft)" }, { background: "transparent" }], 1600); } }
   }
   $("#tabs").addEventListener("click", e => { const b = e.target.closest("[data-tab]"); if (b) setTab(b.dataset.tab); });
-  addEventListener("hashchange", () => { const h = parseHash(); if (TABS.includes(h.t) && h.t !== tab) setTab(h.t); });
-  function openFromHash() {
+  addEventListener("hashchange", () => {
+    if (location.hash.startsWith("#view/")) { VIEW = decodeURIComponent(location.hash.slice(6)); render(); scrollTo(0, 0); return; }
+    const h = parseHash(); if (TABS.includes(h.t) && (h.t !== tab || VIEW)) setTab(h.t);
+  });
+  function openFromHash() {                                          // an old #paper/POLYCAB link opens that trade's page
+    if (VIEW) return;
     const h = parseHash(); if (!h.s) return;
     const x = index().find(i => i.tab === tab && i.sym.toUpperCase() === h.s && i.why);
-    if (x) openWhy(x.why); else setTab(tab, h.s);
+    if (x) location.hash = "#view/" + encodeURIComponent(x.why); else setTab(tab, h.s);
+  }
+
+  // ---- motion on data updates (see the motion block in the styles): a redraw of the same tab flashes each row cell
+  // whose number moved and ticks the big numbers from the old value to the new; a tab switch cross-fades; the Max up
+  // bars grow once per page load. Reduced motion: nothing moves.
+  const calm = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const NUM = /[+−-]?\d[\d,]*(?:\.\d+)?/;
+  const numIn = t => { const m = NUM.exec(t || ""); return m ? parseFloat(m[0].replace(/,/g, "").replace("−", "-")) : null; };
+  const BIG = ".mu-cmp b, .mu-row b, .tile b";
+  const ptitle = p => ((p.querySelector("h2") || {}).textContent || "").replace(/\d+/g, "#").slice(0, 30);
+  let heroDone = false;
+  function snapshot() {
+    const s = new Map();
+    $$("#main section.panel").forEach(p => {                         // keyed by panel too: one trade sits in several tables
+      const pt = ptitle(p);
+      $$("tr[data-why]", p).forEach(tr => [...tr.cells].forEach((td, i) => s.set(`${pt}|${tr.dataset.why}|${i}`, td.textContent)));
+      $$(BIG, p).forEach((b, i) => s.set(`${pt}#${i}`, b.textContent));
+    });
+    return s;
+  }
+  function tickTo(el, from) {                                        // keeps the element's own sign, grouping, decimals and unit
+    const txt = el.textContent, m = NUM.exec(txt), to = numIn(txt);
+    if (!m || from == null || to == null || from === to || el.children.length) return;
+    const dp = (m[0].split(".")[1] || "").length, grp = m[0].includes(","), plus = m[0].startsWith("+"), minus = txt.includes("−") ? "−" : "-";
+    const pre = txt.slice(0, m.index), post = txt.slice(m.index + m[0].length);
+    const fmt = v => (v < 0 ? minus : v > 0 && plus ? "+" : "") + Math.abs(v).toLocaleString("en-IN", { minimumFractionDigits: dp, maximumFractionDigits: dp, useGrouping: grp });
+    const t0 = performance.now(), ease = k => 1 - Math.pow(1 - k, 3);
+    const step = now => { const k = Math.min(1, (now - t0) / 500); el.textContent = k < 1 ? pre + fmt(from + (to - from) * ease(k)) + post : txt; if (k < 1) requestAnimationFrame(step); };
+    requestAnimationFrame(step);
+  }
+  function motion(prev, switched) {
+    if (calm()) return;
+    const m = $("#main");
+    if (switched) { m.classList.remove("fx-in"); void m.offsetWidth; m.classList.add("fx-in"); }
+    if (!heroDone && $("#main .mu-track i")) { heroDone = true; m.classList.add("fx-hero"); setTimeout(() => m.classList.remove("fx-hero"), 900); }
+    if (!prev) return;
+    $$("#main section.panel").forEach(p => {
+      const pt = ptitle(p);
+      $$("tr[data-why]", p).forEach(tr => [...tr.cells].forEach((td, i) => {
+        const o = prev.get(`${pt}|${tr.dataset.why}|${i}`); if (o == null || o === td.textContent) return;
+        const a = numIn(o), b = numIn(td.textContent); if (a != null && b != null && a !== b) td.classList.add(b > a ? "fx-up" : "fx-down");
+      }));
+      $$(BIG, p).forEach((b, i) => { const o = prev.get(`${pt}#${i}`); if (o != null && o !== b.textContent) tickTo(b, numIn(o)); });
+    });
   }
 
   let drawn = "";                                                    // the tab on screen, so a redraw keeps its open <details>
   function render() {
+    if (VIEW) {                                                      // the trade page
+      $("#main").innerHTML = viewHtml(VIEW); drawn = "view"; drawView();
+      $$("#tabs button").forEach(b => b.setAttribute("aria-selected", "false"));
+      const p = tradeOf(VIEW); if (p) document.title = `${p.symbol} ${num(p.strike, 0)} ${p.instrument === "PE" ? "PUT" : "CALL"} · F&O`;
+      return;
+    }
     const w = WORKSPACES[tab], sum = d => ((d.querySelector("summary") || {}).textContent || "").replace(/\d+/g, "#");
+    const prev = drawn === tab ? snapshot() : null, switched = !!drawn && drawn !== tab;
     const keep = drawn === tab ? $$("#main details").filter(d => d.open).map(sum) : [];
     const sx = drawn === tab ? $$("#main .tw").map(t => t.scrollLeft) : [];   // and each table's sideways scroll
     $("#main").innerHTML = `<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
@@ -1015,15 +1354,21 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     if (keep.length) $$("#main details").forEach(d => { if (keep.includes(sum(d))) d.open = true; });
     if (sx.some(Boolean)) $$("#main .tw").forEach((t, i) => { if (sx[i]) t.scrollLeft = sx[i]; });
     $$("[data-close]").forEach(b => b.addEventListener("click", e => { e.stopPropagation(); closePos(b.dataset.close, b); }));
+    motion(prev, switched);
   }
   $("#main").addEventListener("click", e => {
     const mu = e.target.closest("[data-mu]");
     if (mu) { muMode = mu.dataset.mu; try { localStorage.setItem("fo_mu", muMode); } catch (err) { /* private mode */ } render(); return; }
+    const pf = e.target.closest("[data-pf]");
+    if (pf) { const [k, v] = pf.dataset.pf.split(":");
+      PF = k === "reset" ? { ...PF0, group: PF.group } : { ...PF, [k]: v, ...(k === "group" ? { day: "all" } : {}) };
+      ls.set("fo_pf", PF); render(); return; }
     if (e.target.closest("button, a, summary, input")) return;
     const el = e.target.closest("[data-why]"); if (!el) return;
     const key = el.dataset.why;
-    if (openWhy(key)) { const sym = key.startsWith("sig:") ? key.slice(4) : ((P.positions.concat(P.trades)).find(x => x.id === key.slice(key.indexOf(":") + 1)) || {}).symbol; setHash(tab, sym); }
+    if (whyHtml(key)) window.open(viewUrl(key), "_blank", "noopener");  // the trade's own page, in a new tab
   });
+  $("#main").addEventListener("change", e => { if (e.target.matches("[data-pfday]")) { PF = { ...PF, day: e.target.value }; ls.set("fo_pf", PF); render(); } });
   $("#main").addEventListener("keydown", e => { if (e.key === "Enter" && e.target.matches("[data-why]")) e.target.click(); });
 
   async function closePos(id, btn) {
@@ -1056,7 +1401,7 @@ td.mu-g { white-space:nowrap; font-weight:600; }
     }
     setTimeout(refreshSlow, 600000);
   }
-  setTab(tab);
+  if (VIEW) render(); else setTab(tab);                             // a #view/<trade> link opens straight on the trade page
   refresh();
   setTimeout(refreshSlow, 600000);
 })();

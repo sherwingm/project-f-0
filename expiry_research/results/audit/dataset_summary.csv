@@ -1,0 +1,17 @@
+dataset,resolution,first,last,n_sessions,n_rows,n_dup,n_nan_price,n_nonpos_price,n_ohlc_bad,note
+options_daily/NIFTY,daily (bhavcopy),2018-01-01,2026-10-29,2177.0,4635778,0.0,0.0,0.0,0.0,rows in wrong month file: 0; settle<=0: 109244; traded rows with a zero OHLC: 0; UndrlygPric NaN rows: 3676295
+options_daily/BANKNIFTY,daily (bhavcopy),2018-01-01,2026-10-29,2177.0,3073898,0.0,0.0,0.0,0.0,rows in wrong month file: 0; settle<=0: 29144; traded rows with a zero OHLC: 0; UndrlygPric NaN rows: 2475283
+index_close_daily/INDIAVIX,daily,2018-01-01,2025-09-30,1913.0,1913,0.0,2.0,0.0,0.0,
+index_close_daily/NIFTY50,daily,2018-01-01,2025-09-30,1913.0,1913,0.0,0.0,0.0,0.0,
+index_close_daily/NIFTYBANK,daily,2018-01-01,2025-09-30,1913.0,1913,0.0,0.0,0.0,0.0,
+vix_daily,daily,2008-03-03,2026-10-23,4567.0,4567,0.0,1.0,0.0,0.0,close outside 5-100: 0
+spot_1m/NIFTY50,1 minute,2021-10-20,2026-10-29,1241.0,466220,0.0,0.0,0.0,0.0,"bars outside 09:15-15:29: 1199; median bars/day 376; short days (<370 bars): 2; sources {'kotak': 462675, 'upstox': 3545}"
+spot_1m/NIFTYBANK,1 minute,2021-10-20,2026-10-29,1241.0,466170,0.0,0.0,0.0,0.0,"bars outside 09:15-15:29: 1196; median bars/day 376; short days (<370 bars): 3; sources {'kotak': 462259, 'upstox': 3911}"
+spot_1m/SENSEX,1 minute,2021-10-20,2026-10-29,1241.0,466194,0.0,0.0,0.0,0.0,"bars outside 09:15-15:29: 1196; median bars/day 376; short days (<370 bars): 2; sources {'kotak': 461128, 'upstox': 5066}"
+spot_1m/INDIAVIX,1 minute,2021-10-20,2026-10-29,1242.0,466351,0.0,0.0,0.0,0.0,"bars outside 09:15-15:29: 1238; median bars/day 376; short days (<370 bars): 3; sources {'kotak': 463217, 'upstox': 3134}"
+options_1m/NIFTY,1 minute per option,2024-08-02,2026-10-28,555.0,119471465,279435.0,0.0,0.0,,"columns: ['close', 'high', 'low', 'oi', 'open', 'option_type', 'source', 'strike', 'timestamp', 'token', 'trading_symbol', 'volume']; bid/ask-like columns: none; distinct schemas: 1"
+options_1m/SENSEX,1 minute per option,2024-09-06,2026-10-28,528.0,64990371,328775.0,0.0,24937.0,,"columns: ['close', 'high', 'low', 'oi', 'open', 'option_type', 'source', 'strike', 'timestamp', 'token', 'trading_symbol', 'volume']; bid/ask-like columns: none; distinct schemas: 1"
+nifty_1s,1 second,2026-11-02,2026-11-04,3.0,5782734,,,,,"columns: ['timestamp', 'symbol', 'kind', 'expiry', 'strike', 'o', 'h', 'l', 'c', 'bo', 'bh', 'bl', 'bc', 'a', 'n', 'v']; kinds {'CE': 2771721, 'PE': 2750252, 'INDEX': 204591, 'FUT': 56170}; bid (bo..bc) non-null share 0.964; ask (a) non-null share 0.965"
+chain_eod,end-of-day chain snapshot,2026-10-16,2026-10-29,9.0,6264,,,,,"columns: ['date', 'underlying', 'expiry', 'token', 'trading_symbol', 'strike', 'option_type', 'ltp', 'bid', 'ask', 'oi', 'volume', 'quote_time']; bid non-null 2727/6264, ask non-null 2791/6264; underlyings ['BANKNIFTY', 'NIFTY', 'SENSEX']"
+instruments,daily contract master,2026-10-16,2026-10-29,10.0,124294,,,,,"columns: ['token', 'exch_seg', 'trading_symbol', 'underlying', 'inst_type', 'expiry', 'strike', 'option_type', 'lot_size', 'listing_date', 'neosymbol']"
+expiries.parquet,listed expiries,2026-10-19,2031-06-26,,49,0.0,,,,"only current/future listed expiries; underlyings ['BANKNIFTY', 'FINNIFTY', 'MIDCPNIFTY', 'NIFTY', 'SENSEX']"

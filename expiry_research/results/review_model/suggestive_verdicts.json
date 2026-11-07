@@ -1,0 +1,320 @@
+[
+{
+"id": "M000",
+"verdict": "holds",
+"recomputed": "disc n85 eff +0.268 p 1e-06 (matches); val n5 eff +0.208 p1 0.25; VIX twin l1_f_vix_close >= 20.20, rule-within-twin eff +0.216 (p 0.00)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M001",
+"verdict": "holds",
+"recomputed": "disc n89 eff +0.235 p 1e-05 (matches); val n6 eff +0.308 p1 0.09; VIX twin l1_f_vix_close >= 19.87, rule-within-twin eff +0.096 (p 0.15)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M002",
+"verdict": "holds",
+"recomputed": "disc n54 eff +0.297 p 2e-05 (matches); val n2 eff +0.308 p1 0.35; VIX twin l1_f_vix_close >= 21.82, rule-within-twin eff +0.020 (p 0.87)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M003",
+"verdict": "holds",
+"recomputed": "disc n409 eff +0.201 p 2e-16 (matches); val n9 eff +0.233 p1 0.10; VIX twin l1_f_vix_close >= 19.81, rule-within-twin eff +0.035 (p 0.20)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M004",
+"verdict": "holds",
+"recomputed": "disc n410 eff +0.202 p 2e-16 (matches); val n15 eff +0.123 p1 0.19; VIX twin l1_f_vix_close >= 19.81, rule-within-twin eff +0.000 (p 1.00)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M007",
+"verdict": "holds",
+"recomputed": "disc n95 eff +0.179 p 0.0005 (matches); val n8 eff -0.086 p1 0.85; VIX twin f1515_vix_1514 >= 20.04, rule-within-twin eff +0.047 (p 0.42)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M008",
+"verdict": "holds",
+"recomputed": "disc n95 eff +0.179 p 0.0005 (matches); val n9 eff -0.100 p1 0.88; VIX twin f1515_vix_1514 >= 20.04, rule-within-twin eff +0.030 (p 0.65)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M009",
+"verdict": "holds",
+"recomputed": "disc n38 eff +0.372 p 5e-06 (matches); val n1 eff +0.808 p1 0.19; VIX twin f_vix_close >= 23.28, rule-within-twin eff +0.075 (p 0.55)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M010",
+"verdict": "holds",
+"recomputed": "disc n39 eff +0.353 p 1e-05 (matches); val n2 eff +0.308 p1 0.35; VIX twin f_vix_close >= 23.21, rule-within-twin eff +0.066 (p 0.56)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M011",
+"verdict": "holds",
+"recomputed": "disc n37 eff +0.363 p 1e-05 (matches); val n2 eff +0.308 p1 0.35; VIX twin f_vix_close >= 23.33, rule-within-twin eff +0.058 (p 0.68)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M012",
+"verdict": "holds",
+"recomputed": "disc n410 eff +0.195 p 2e-15 (matches); val n15 eff +0.123 p1 0.19; VIX twin f_vix_close >= 19.81, rule-within-twin eff +0.000 (p 1.00)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M014",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n380 eff +0.199 p 6e-15 (matches); val n13 eff -0.057 p1 0.79; VIX twin f_vix_close >= 20.15, rule-within-twin eff +0.029 (p 0.34)",
+"reasons": "validation n 13 (10-19) already contradicts it (opposite sign or < half the discovery effect); it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M015",
+"verdict": "holds",
+"recomputed": "disc n86 eff +0.234 p 7e-07 (matches); val n3 eff +0.205 p1 0.44; VIX twin l1_f_vix_close >= 20.18, rule-within-twin eff +0.053 (p 0.33)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M017",
+"verdict": "holds",
+"recomputed": "disc n114 eff +0.198 p 2e-06 (matches); val n8 eff +0.413 p1 0.02; VIX twin l1_f_vix_close >= 18.46, rule-within-twin eff +0.043 (p 0.32)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M018",
+"verdict": "holds",
+"recomputed": "disc n458 eff +0.216 p 6e-28 (matches); val n4 eff +0.604 p1 0.02; VIX twin l1_f_vix_close >= 19.26, rule-within-twin eff +0.036 (p 0.03)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M019",
+"verdict": "holds",
+"recomputed": "disc n476 eff +0.212 p 1e-27 (matches); val n3 eff +0.604 p1 0.06; VIX twin l1_f_vix_close >= 19.04, rule-within-twin eff +0.035 (p 0.03)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M020",
+"verdict": "holds",
+"recomputed": "disc n499 eff +0.208 p 3e-27 (matches); val n7 eff +0.463 p1 0.02; VIX twin l1_f_vix_close >= 18.78, rule-within-twin eff +0.034 (p 0.04)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M024",
+"verdict": "holds",
+"recomputed": "disc n87 eff +0.235 p 4e-07 (matches); val n4 eff +0.288 p1 0.26; VIX twin f_vix_close >= 19.71, rule-within-twin eff +0.042 (p 0.50)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M027",
+"verdict": "holds",
+"recomputed": "disc n458 eff +0.226 p 1e-30 (matches); val n4 eff +0.354 p1 0.17; VIX twin f_vix_close >= 19.28, rule-within-twin eff +0.041 (p 0.01)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M028",
+"verdict": "holds",
+"recomputed": "disc n475 eff +0.219 p 2e-29 (matches); val n3 eff +0.270 p1 0.35; VIX twin f_vix_close >= 19.10, rule-within-twin eff +0.039 (p 0.02)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M029",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n451 eff +0.225 p 2e-29 (matches); val n10 eff +0.105 p1 0.35; VIX twin f_vix_close >= 19.32, rule-within-twin eff +0.047 (p 0.00)",
+"reasons": "validation n 10 (10-19) already contradicts it (opposite sign or < half the discovery effect); it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M052",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n53 eff -0.189 p 0.005 (matches); val n16 eff +0.006 p1 0.62; VIX twin l1_f_vix_close >= 21.91, rule-within-twin eff -0.128 (p 0.38)",
+"reasons": "validation n 16 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M056",
+"verdict": "holds",
+"recomputed": "disc n292 eff -0.091 p 0.001 (matches); val n7 eff +0.130 p1 0.89; VIX twin l1_f_vix_close >= 21.22, rule-within-twin eff -0.068 (p 0.11)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M057",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n309 eff -0.084 p 0.002 (matches); val n14 eff +0.059 p1 0.78; VIX twin l1_f_vix_close >= 20.96, rule-within-twin eff -0.026 (p 0.50)",
+"reasons": "validation n 14 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M068",
+"verdict": "holds",
+"recomputed": "disc n55 eff -0.220 p 0.0009 (matches); val n7 eff +0.293 p1 0.98; VIX twin f_vix_close >= 21.88, rule-within-twin eff -0.151 (p 0.16)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M069",
+"verdict": "holds",
+"recomputed": "disc n54 eff -0.209 p 0.002 (matches); val n5 eff +0.236 p1 0.94; VIX twin f_vix_close >= 21.91, rule-within-twin eff -0.151 (p 0.17)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M107",
+"verdict": "holds",
+"recomputed": "disc n61 eff -0.177 p 0.006 (matches); val n15 eff -0.092 p1 0.33; VIX twin f_vix_close >= 21.31, rule-within-twin eff -0.037 (p 0.84)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M113",
+"verdict": "holds",
+"recomputed": "disc n33 eff +0.356 p 2e-05 (matches); val n3 eff +0.256 p1 0.21; VIX twin l1_f_vix_close >= 24.24, rule-within-twin eff +0.180 (p 0.09)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M114",
+"verdict": "holds",
+"recomputed": "disc n39 eff +0.311 p 5e-05 (matches); val n2 eff +0.423 p1 0.15; VIX twin l1_f_vix_close >= 23.27, rule-within-twin eff +0.154 (p 0.10)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M115",
+"verdict": "holds",
+"recomputed": "disc n39 eff +0.311 p 5e-05 (matches); val n3 eff +0.256 p1 0.21; VIX twin l1_f_vix_close >= 23.27, rule-within-twin eff +0.154 (p 0.10)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M116",
+"verdict": "holds",
+"recomputed": "disc n369 eff +0.204 p 5e-17 (matches); val n12 eff +0.227 p1 0.03; VIX twin l1_f_vix_close >= 20.27, rule-within-twin eff +0.063 (p 0.05)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M117",
+"verdict": "holds",
+"recomputed": "disc n326 eff +0.203 p 5e-15 (matches); val n17 eff +0.190 p1 0.03; VIX twin l1_f_vix_close >= 20.69, rule-within-twin eff +0.060 (p 0.10)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M124",
+"verdict": "holds",
+"recomputed": "disc n42 eff +0.265 p 0.0004 (matches); val n7 eff +0.066 p1 0.43; VIX twin f_vix_close >= 22.82, rule-within-twin eff +0.199 (p 0.14)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M127",
+"verdict": "holds",
+"recomputed": "disc n369 eff +0.186 p 2e-14 (matches); val n12 eff +0.143 p1 0.13; VIX twin f_vix_close >= 20.27, rule-within-twin eff +0.054 (p 0.08)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M130",
+"verdict": "holds",
+"recomputed": "disc n39 eff +0.432 p 3e-08 (matches); val n3 eff +0.064 p1 0.61; VIX twin l1_f_vix_close >= 23.27, rule-within-twin eff +0.104 (p 0.15)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M131",
+"verdict": "holds",
+"recomputed": "disc n39 eff +0.432 p 3e-08 (matches); val n2 eff +0.231 p1 0.47; VIX twin l1_f_vix_close >= 23.27, rule-within-twin eff +0.104 (p 0.15)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M132",
+"verdict": "holds",
+"recomputed": "disc n33 eff +0.442 p 1e-07 (matches); val n3 eff +0.064 p1 0.61; VIX twin l1_f_vix_close >= 24.24, rule-within-twin eff +0.104 (p 0.24)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M133",
+"verdict": "holds",
+"recomputed": "disc n369 eff +0.258 p 1e-23 (matches); val n12 eff +0.287 p1 0.03; VIX twin l1_f_vix_close >= 20.27, rule-within-twin eff +0.079 (p 0.01)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M136",
+"verdict": "holds",
+"recomputed": "disc n104 eff +0.249 p 2e-07 (matches); val n2 eff +0.287 p1 0.38; VIX twin f1515_vix_1514 >= 19.67, rule-within-twin eff +0.108 (p 0.04)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M137",
+"verdict": "holds",
+"recomputed": "disc n97 eff +0.253 p 4e-07 (matches); val n10 eff +0.189 p1 0.14; VIX twin f1515_vix_1514 >= 19.99, rule-within-twin eff +0.073 (p 0.20)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M139",
+"verdict": "holds",
+"recomputed": "disc n73 eff +0.286 p 8e-07 (matches); val n8 eff +0.231 p1 0.14; VIX twin f_vix_close >= 20.60, rule-within-twin eff +0.140 (p 0.03)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M141",
+"verdict": "holds",
+"recomputed": "disc n60 eff +0.299 p 3e-06 (matches); val n9 eff +0.286 p1 0.07; VIX twin f_vix_close >= 21.40, rule-within-twin eff +0.140 (p 0.08)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M142",
+"verdict": "holds",
+"recomputed": "disc n369 eff +0.280 p 1e-27 (matches); val n12 eff +0.204 p1 0.09; VIX twin f_vix_close >= 20.27, rule-within-twin eff +0.095 (p 0.00)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label; it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M144",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n414 eff +0.248 p 2e-24 (matches); val n10 eff +0.087 p1 0.36; VIX twin f_vix_close >= 19.78, rule-within-twin eff +0.050 (p 0.05)",
+"reasons": "validation n 10 (10-19) already contradicts it (opposite sign or < half the discovery effect); it is a high-VIX/high-IV restatement (volatility clustering)"
+},
+{
+"id": "M149",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n39 eff -0.200 p 6e-06 (matches); val n17 eff +0.009 p1 0.59; VIX twin l1_f_vix_close <= 19.24, rule-within-twin eff -0.015 (p 0.64)",
+"reasons": "validation n 17 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M159",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n61 eff -0.287 p 3e-19 (matches); val n17 eff -0.047 p1 0.15; VIX twin f_vix_close <= 16.22, rule-within-twin eff -0.037 (p 0.09)",
+"reasons": "validation n 17 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M162",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n39 eff -0.189 p 0.0001 (matches); val n14 eff -0.019 p1 0.33; VIX twin f_vix_close <= 20.61, rule-within-twin eff -0.060 (p 0.03)",
+"reasons": "validation n 14 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M163",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n32 eff -0.135 p 0.01 (matches); val n15 eff +0.001 p1 0.51; VIX twin f_vix_close <= 18.19, rule-within-twin eff -0.005 (p 0.87)",
+"reasons": "validation n 15 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M177",
+"verdict": "weaker-than-claimed",
+"recomputed": "disc n54 eff -0.185 p 0.007 (matches); val n18 eff -0.077 p1 0.30; VIX twin f_vix_close >= 21.91, rule-within-twin eff -0.218 (p 0.22)",
+"reasons": "validation n 18 (10-19) already contradicts it (opposite sign or < half the discovery effect)"
+},
+{
+"id": "M178",
+"verdict": "holds",
+"recomputed": "disc n54 eff -0.183 p 0.008 (matches); val n14 eff -0.101 p1 0.28; VIX twin f_vix_close >= 21.92, rule-within-twin eff -0.144 (p 0.31)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M179",
+"verdict": "holds",
+"recomputed": "disc n53 eff -0.177 p 0.01 (matches); val n5 eff -0.144 p1 0.38; VIX twin f_vix_close >= 21.98, rule-within-twin eff -0.074 (p 0.54)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M182",
+"verdict": "holds",
+"recomputed": "disc n42 eff -0.217 p 0.005 (matches); val n12 eff -0.115 p1 0.29; VIX twin l1_f_vix_close >= 23.00, rule-within-twin eff -0.222 (p 0.06)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+},
+{
+"id": "M189",
+"verdict": "holds",
+"recomputed": "disc n51 eff -0.180 p 0.01 (matches); val n2 eff +0.385 p1 1.00; VIX twin f_vix_close >= 22.09, rule-within-twin eff -0.141 (p 0.22)",
+"reasons": "recomputed exactly, no leak; Suggestive (untested, val n<20) is the right label"
+}
+]

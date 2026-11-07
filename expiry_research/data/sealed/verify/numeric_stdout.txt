@@ -1,0 +1,319 @@
+NIFTY 2020-03-30 prev 2020-03-27 next 2020-03-31 y_date 2020-03-31
+NIFTY 2020-11-23 prev 2020-11-20 next 2020-11-24 y_date 2020-11-24
+NIFTY 2021-01-07 prev 2021-01-06 next 2021-01-08 y_date 2021-01-08
+NIFTY 2022-10-20 prev 2022-10-19 next 2022-10-21 y_date 2022-10-21
+NIFTY 2024-07-10 prev 2024-07-09 next 2024-07-11 y_date 2024-07-11
+NIFTY 2024-10-23 prev 2024-10-22 next 2024-10-24 y_date 2024-10-24
+NIFTY 2026-07-08 prev 2026-07-07 next 2026-07-09 y_date 2026-07-09
+NIFTY 2026-07-14 prev 2026-07-13 next 2026-07-15 y_date 2026-07-15
+BANKNIFTY 2020-10-14 prev 2020-10-13 next 2020-10-15 y_date 2020-10-15
+BANKNIFTY 2022-07-15 prev 2022-07-14 next 2022-07-18 y_date 2022-07-18
+BANKNIFTY 2022-12-14 prev 2022-12-13 next 2022-12-15 y_date 2022-12-15
+BANKNIFTY 2025-07-02 prev 2025-07-01 next 2025-07-03 y_date 2025-07-03
+    underlying        date                        field               mine              panel  match                                     note
+0        NIFTY  2020-03-30                          src  index_close_daily  index_close_daily   True                                         
+1        NIFTY  2020-03-30                      px_open            8385.95            8385.95   True                                         
+2        NIFTY  2020-03-30                      px_high             8576.0             8576.0   True                                         
+3        NIFTY  2020-03-30                       px_low             8244.0             8244.0   True                                         
+4        NIFTY  2020-03-30                     px_close             8281.1             8281.1   True                                         
+5        NIFTY  2020-03-30            px_close_official             8281.1             8281.1   True                                         
+6        NIFTY  2020-03-30  close_vs_official_pct(info)                0.0                  0   True  info: minute 15:29 close vs official...
+7        NIFTY  2020-03-30                    o_gap_pct          -3.167345          -3.167345   True                                         
+8        NIFTY  2020-03-30                    y_gap_pct            2.99779            2.99779   True                                         
+9        NIFTY  2020-03-30                 y_gap_filled              False              False   True                                         
+10       NIFTY  2020-03-30                      y_ret30                NaN                NaN   True                   no minute data for t+1
+11       NIFTY  2020-03-30                 f_fut_expiry         2020-04-30         2020-04-30   True                                         
+12       NIFTY  2020-03-30                     f_fut_oi           10246950         10246950.0   True                                         
+13       NIFTY  2020-03-30                  f_fut_close            8290.15            8290.15   True                                         
+14       NIFTY  2020-03-30                  f_futall_oi           11965800         11965800.0   True                                         
+15       NIFTY  2020-03-30            f_opt_near_expiry         2020-04-01         2020-04-01   True                                         
+16       NIFTY  2020-03-30            f_opt_near_pcr_oi           0.631822           0.631822   True                                         
+17       NIFTY  2020-03-30           f_opt_near_maxpain             8500.0             8500.0   True                                         
+18       NIFTY  2020-03-30        f_opt_near_atm_strike             8300.0             8300.0   True                                         
+19       NIFTY  2020-03-30      f_opt_near_straddle_pct           5.778822           5.778822   True                                         
+20       NIFTY  2020-03-30             f_opt_mon_expiry         2020-04-30         2020-04-30   True                                         
+21       NIFTY  2020-03-30             f_opt_mon_pcr_oi           1.128171           1.128171   True                                         
+22       NIFTY  2020-03-30            f_opt_mon_maxpain             9000.0             9000.0   True                                         
+23       NIFTY  2020-03-30         f_opt_mon_atm_strike             8300.0             8300.0   True                                         
+24       NIFTY  2020-03-30       f_opt_mon_straddle_pct          16.453128          16.453128   True                                         
+25       NIFTY  2020-11-23                          src  index_close_daily  index_close_daily   True                                         
+26       NIFTY  2020-11-23                      px_open            12960.3            12960.3   True                                         
+27       NIFTY  2020-11-23                      px_high           12968.85           12968.85   True                                         
+28       NIFTY  2020-11-23                       px_low            12825.7            12825.7   True                                         
+29       NIFTY  2020-11-23                     px_close           12926.45           12926.45   True                                         
+30       NIFTY  2020-11-23            px_close_official           12926.45           12926.45   True                                         
+31       NIFTY  2020-11-23  close_vs_official_pct(info)                0.0                  0   True  info: minute 15:29 close vs official...
+32       NIFTY  2020-11-23                    o_gap_pct           0.787383           0.787383   True                                         
+33       NIFTY  2020-11-23                    y_gap_pct           0.589102           0.589102   True                                         
+34       NIFTY  2020-11-23                 y_gap_filled              False              False   True                                         
+35       NIFTY  2020-11-23                      y_ret30                NaN                NaN   True                   no minute data for t+1
+36       NIFTY  2020-11-23                 f_fut_expiry         2020-11-26         2020-11-26   True                                         
+37       NIFTY  2020-11-23                     f_fut_oi           10343475         10343475.0   True                                         
+38       NIFTY  2020-11-23                  f_fut_close           12934.35           12934.35   True                                         
+39       NIFTY  2020-11-23                  f_futall_oi           13935675         13935675.0   True                                         
+40       NIFTY  2020-11-23            f_opt_near_expiry         2020-11-26         2020-11-26   True                                         
+41       NIFTY  2020-11-23            f_opt_near_pcr_oi           1.316623           1.316623   True                                         
+42       NIFTY  2020-11-23           f_opt_near_maxpain            12800.0            12800.0   True                                         
+43       NIFTY  2020-11-23        f_opt_near_atm_strike            12950.0            12950.0   True                                         
+44       NIFTY  2020-11-23      f_opt_near_straddle_pct           1.356908           1.356908   True                                         
+45       NIFTY  2020-11-23             f_opt_mon_expiry         2020-11-26         2020-11-26   True                                         
+46       NIFTY  2020-11-23             f_opt_mon_pcr_oi           1.316623           1.316623   True                                         
+47       NIFTY  2020-11-23            f_opt_mon_maxpain            12800.0            12800.0   True                                         
+48       NIFTY  2020-11-23         f_opt_mon_atm_strike            12950.0            12950.0   True                                         
+49       NIFTY  2020-11-23       f_opt_mon_straddle_pct           1.356908           1.356908   True                                         
+50       NIFTY  2021-01-07                          src  index_close_daily  index_close_daily   True                                         
+51       NIFTY  2021-01-07                      px_open           14253.75           14253.75   True                                         
+52       NIFTY  2021-01-07                      px_high           14256.25           14256.25   True                                         
+53       NIFTY  2021-01-07                       px_low            14123.1            14123.1   True                                         
+54       NIFTY  2021-01-07                     px_close           14137.35           14137.35   True                                         
+55       NIFTY  2021-01-07            px_close_official           14137.35           14137.35   True                                         
+56       NIFTY  2021-01-07  close_vs_official_pct(info)                0.0                  0   True  info: minute 15:29 close vs official...
+57       NIFTY  2021-01-07                    o_gap_pct           0.759919           0.759919   True                                         
+58       NIFTY  2021-01-07                    y_gap_pct           0.856243           0.856243   True                                         
+59       NIFTY  2021-01-07                 y_gap_filled              False              False   True                                         
+60       NIFTY  2021-01-07                      y_ret30                NaN                NaN   True                   no minute data for t+1
+61       NIFTY  2021-01-07                 f_fut_expiry         2021-01-28         2021-01-28   True                                         
+62       NIFTY  2021-01-07                     f_fut_oi         12308100.0         12308100.0   True                                         
+63       NIFTY  2021-01-07                  f_fut_close            14191.1            14191.1   True                                         
+64       NIFTY  2021-01-07                  f_futall_oi         13371150.0         13371150.0   True                                         
+65       NIFTY  2021-01-07            f_opt_near_expiry         2021-01-14         2021-01-14   True                                         
+66       NIFTY  2021-01-07            f_opt_near_pcr_oi           0.788321           0.788321   True                                         
+67       NIFTY  2021-01-07           f_opt_near_maxpain            14200.0            14200.0   True                                         
+68       NIFTY  2021-01-07        f_opt_near_atm_strike            14150.0            14150.0   True                                         
+69       NIFTY  2021-01-07      f_opt_near_straddle_pct           1.823185           1.823185   True                                         
+70       NIFTY  2021-01-07             f_opt_mon_expiry         2021-01-28         2021-01-28   True                                         
+71       NIFTY  2021-01-07             f_opt_mon_pcr_oi           1.667877           1.667877   True                                         
+72       NIFTY  2021-01-07            f_opt_mon_maxpain            13900.0            13900.0   True                                         
+73       NIFTY  2021-01-07         f_opt_mon_atm_strike            14150.0            14150.0   True                                         
+74       NIFTY  2021-01-07       f_opt_mon_straddle_pct           3.517279           3.517279   True                                         
+75       NIFTY  2022-10-20                          src            spot_1m            spot_1m   True                                         
+76       NIFTY  2022-10-20                      px_open            17423.1            17423.1   True                                         
+77       NIFTY  2022-10-20                      px_high            17584.1            17584.1   True                                         
+78       NIFTY  2022-10-20                       px_low            17421.5            17421.5   True                                         
+79       NIFTY  2022-10-20                     px_close            17564.1            17564.1   True                                         
+80       NIFTY  2022-10-20            px_close_official           17563.95           17563.95   True                                         
+81       NIFTY  2022-10-20  close_vs_official_pct(info)           0.000854                  0   True  info: minute 15:29 close vs official...
+82       NIFTY  2022-10-20                    o_gap_pct          -0.532928          -0.532928   True                                         
+83       NIFTY  2022-10-20                    y_gap_pct           0.334489           0.334489   True                                         
+84       NIFTY  2022-10-20                 y_gap_filled               True               True   True                                         
+85       NIFTY  2022-10-20                      y_ret30           0.093912           0.093912   True                                         
+86       NIFTY  2022-10-20               y_gap_fill_min              294.0              294.0   True                                         
+87       NIFTY  2022-10-20                 f_fut_expiry         2022-10-27         2022-10-27   True                                         
+88       NIFTY  2022-10-20                     f_fut_oi           11338400         11338400.0   True                                         
+89       NIFTY  2022-10-20                  f_fut_close            17540.7            17540.7   True                                         
+90       NIFTY  2022-10-20                  f_futall_oi           15158700         15158700.0   True                                         
+91       NIFTY  2022-10-20            f_opt_near_expiry         2022-10-27         2022-10-27   True                                         
+92       NIFTY  2022-10-20            f_opt_near_pcr_oi           1.173525           1.173525   True                                         
+93       NIFTY  2022-10-20           f_opt_near_maxpain            17450.0            17450.0   True                                         
+94       NIFTY  2022-10-20        f_opt_near_atm_strike            17550.0            17550.0   True                                         
+95       NIFTY  2022-10-20      f_opt_near_straddle_pct            1.56484            1.56484   True                                         
+96       NIFTY  2022-10-20             f_opt_mon_expiry         2022-10-27         2022-10-27   True                                         
+97       NIFTY  2022-10-20             f_opt_mon_pcr_oi           1.173525           1.173525   True                                         
+98       NIFTY  2022-10-20            f_opt_mon_maxpain            17450.0            17450.0   True                                         
+99       NIFTY  2022-10-20         f_opt_mon_atm_strike            17550.0            17550.0   True                                         
+100      NIFTY  2022-10-20       f_opt_mon_straddle_pct            1.56484            1.56484   True                                         
+101      NIFTY  2024-07-10                          src            spot_1m            spot_1m   True                                         
+102      NIFTY  2024-07-10                      px_open           24459.85           24459.85   True                                         
+103      NIFTY  2024-07-10                      px_high           24461.05           24461.05   True                                         
+104      NIFTY  2024-07-10                       px_low            24142.6            24142.6   True                                         
+105      NIFTY  2024-07-10                     px_close            24313.1            24313.1   True                                         
+106      NIFTY  2024-07-10            px_close_official           24324.45           24324.45   True                                         
+107      NIFTY  2024-07-10  close_vs_official_pct(info)          -0.046661                  0   True  info: minute 15:29 close vs official...
+108      NIFTY  2024-07-10                    o_gap_pct           0.173236           0.173236   True                                         
+109      NIFTY  2024-07-10                    y_gap_pct           0.343231           0.343231   True                                         
+110      NIFTY  2024-07-10                 y_gap_filled               True               True   True                                         
+111      NIFTY  2024-07-10                      y_ret30          -0.230565          -0.230565   True                                         
+112      NIFTY  2024-07-10               y_gap_fill_min               23.0               23.0   True                                         
+113      NIFTY  2024-07-10                 f_fut_expiry         2024-07-25         2024-07-25   True                                         
+114      NIFTY  2024-07-10                     f_fut_oi           14068000         14068000.0   True                                         
+115      NIFTY  2024-07-10                  f_fut_close           24355.05           24355.05   True                                         
+116      NIFTY  2024-07-10                  f_futall_oi           15788100         15788100.0   True                                         
+117      NIFTY  2024-07-10            f_opt_near_expiry         2024-07-11         2024-07-11   True                                         
+118      NIFTY  2024-07-10            f_opt_near_pcr_oi           0.735726           0.735726   True                                         
+119      NIFTY  2024-07-10           f_opt_near_maxpain            24300.0            24300.0   True                                         
+120      NIFTY  2024-07-10        f_opt_near_atm_strike            24300.0            24300.0   True                                         
+121      NIFTY  2024-07-10      f_opt_near_straddle_pct           0.559575           0.559575   True                                         
+122      NIFTY  2024-07-10             f_opt_mon_expiry         2024-07-25         2024-07-25   True                                         
+123      NIFTY  2024-07-10             f_opt_mon_pcr_oi           1.447806           1.447806   True                                         
+124      NIFTY  2024-07-10            f_opt_mon_maxpain            24200.0            24200.0   True                                         
+125      NIFTY  2024-07-10         f_opt_mon_atm_strike            24300.0            24300.0   True                                         
+126      NIFTY  2024-07-10       f_opt_mon_straddle_pct           2.308426           2.308426   True                                         
+127      NIFTY  2024-10-23                          src            spot_1m            spot_1m   True                                         
+128      NIFTY  2024-10-23                      px_open           24378.15           24378.15   True                                         
+129      NIFTY  2024-10-23                      px_high           24603.95           24603.95   True                                         
+130      NIFTY  2024-10-23                       px_low            24378.1            24378.1   True                                         
+131      NIFTY  2024-10-23                     px_close            24436.0            24436.0   True                                         
+132      NIFTY  2024-10-23            px_close_official            24435.5            24435.5   True                                         
+133      NIFTY  2024-10-23  close_vs_official_pct(info)           0.002046                  0   True  info: minute 15:29 close vs official...
+134      NIFTY  2024-10-23                    o_gap_pct          -0.423172          -0.423172   True                                         
+135      NIFTY  2024-10-23                    y_gap_pct          -0.095351          -0.095351   True                                         
+136      NIFTY  2024-10-23                 y_gap_filled               True               True   True                                         
+137      NIFTY  2024-10-23                      y_ret30           -0.20686           -0.20686   True                                         
+138      NIFTY  2024-10-23               y_gap_fill_min                0.0                0.0   True                                         
+139      NIFTY  2024-10-23                 f_fut_expiry         2024-10-31         2024-10-31   True                                         
+140      NIFTY  2024-10-23                     f_fut_oi           12892425         12892425.0   True                                         
+141      NIFTY  2024-10-23                  f_fut_close           24482.65           24482.65   True                                         
+142      NIFTY  2024-10-23                  f_futall_oi           15687350         15687350.0   True                                         
+143      NIFTY  2024-10-23            f_opt_near_expiry         2024-10-24         2024-10-24   True                                         
+144      NIFTY  2024-10-23            f_opt_near_pcr_oi           0.614288           0.614288   True                                         
+145      NIFTY  2024-10-23           f_opt_near_maxpain            24550.0            24550.0   True                                         
+146      NIFTY  2024-10-23        f_opt_near_atm_strike            24450.0            24450.0   True                                         
+147      NIFTY  2024-10-23      f_opt_near_straddle_pct            0.64761            0.64761   True                                         
+148      NIFTY  2024-10-23             f_opt_mon_expiry         2024-10-31         2024-10-31   True                                         
+149      NIFTY  2024-10-23             f_opt_mon_pcr_oi           0.915677           0.915677   True                                         
+150      NIFTY  2024-10-23            f_opt_mon_maxpain            25000.0            25000.0   True                                         
+151      NIFTY  2024-10-23         f_opt_mon_atm_strike            24450.0            24450.0   True                                         
+152      NIFTY  2024-10-23       f_opt_mon_straddle_pct           1.521321           1.521321   True                                         
+153      NIFTY  2026-07-08                          src            spot_1m            spot_1m   True                                         
+154      NIFTY  2026-07-08                      px_open           24259.55           24259.55   True                                         
+155      NIFTY  2026-07-08                      px_high           24299.75           24299.75   True                                         
+156      NIFTY  2026-07-08                       px_low           23807.25           23807.25   True                                         
+157      NIFTY  2026-07-08                     px_close            23894.9            23894.9   True                                         
+158      NIFTY  2026-07-08                    o_gap_pct          -0.386594          -0.386594   True                                         
+159      NIFTY  2026-07-08                    y_gap_pct           0.142499           0.142499   True                                         
+160      NIFTY  2026-07-08                 y_gap_filled              False              False   True                                         
+161      NIFTY  2026-07-08                      y_ret30           0.496888           0.496888   True                                         
+162      NIFTY  2026-07-08                 f_fut_expiry         2026-07-28         2026-07-28   True                                         
+163      NIFTY  2026-07-08                     f_fut_oi           17167930         17167930.0   True                                         
+164      NIFTY  2026-07-08                  f_fut_close            23912.2            23912.2   True                                         
+165      NIFTY  2026-07-08                  f_futall_oi           19346860         19346860.0   True                                         
+166      NIFTY  2026-07-08            f_opt_near_expiry         2026-07-14         2026-07-14   True                                         
+167      NIFTY  2026-07-08            f_opt_near_pcr_oi           0.605451           0.605451   True                                         
+168      NIFTY  2026-07-08           f_opt_near_maxpain            24100.0            24100.0   True                                         
+169      NIFTY  2026-07-08        f_opt_near_atm_strike            23900.0            23900.0   True                                         
+170      NIFTY  2026-07-08      f_opt_near_straddle_pct           1.571674           1.571674   True                                         
+171      NIFTY  2026-07-08             f_opt_mon_expiry         2026-07-28         2026-07-28   True                                         
+172      NIFTY  2026-07-08             f_opt_mon_pcr_oi           1.090553           1.090553   True                                         
+173      NIFTY  2026-07-08            f_opt_mon_maxpain            24200.0            24200.0   True                                         
+174      NIFTY  2026-07-08         f_opt_mon_atm_strike            23900.0            23900.0   True                                         
+175      NIFTY  2026-07-08       f_opt_mon_straddle_pct           2.670654           2.670654   True                                         
+176      NIFTY  2026-07-14                          src            spot_1m            spot_1m   True                                         
+177      NIFTY  2026-07-14                      px_open            24068.0            24068.0   True                                         
+178      NIFTY  2026-07-14                      px_high            24156.4            24156.4   True                                         
+179      NIFTY  2026-07-14                       px_low            24023.9            24023.9   True                                         
+180      NIFTY  2026-07-14                     px_close           24034.05           24034.05   True                                         
+181      NIFTY  2026-07-14                    o_gap_pct          -0.591257          -0.591257   True                                         
+182      NIFTY  2026-07-14                    y_gap_pct           0.215528           0.215528   True                                         
+183      NIFTY  2026-07-14                 y_gap_filled               True               True   True                                         
+184      NIFTY  2026-07-14                      y_ret30           0.453586           0.453586   True                                         
+185      NIFTY  2026-07-14               y_gap_fill_min              222.0              222.0   True                                         
+186      NIFTY  2026-07-14                 f_fut_expiry         2026-07-28         2026-07-28   True                                         
+187      NIFTY  2026-07-14                     f_fut_oi           16419325         16419325.0   True                                         
+188      NIFTY  2026-07-14                  f_fut_close            24024.2            24024.2   True                                         
+189      NIFTY  2026-07-14                  f_futall_oi           18750225         18750225.0   True                                         
+190      NIFTY  2026-07-14            f_opt_near_expiry         2026-07-21         2026-07-21   True                                         
+191      NIFTY  2026-07-14            f_opt_near_pcr_oi           0.858629           0.858629   True                                         
+192      NIFTY  2026-07-14           f_opt_near_maxpain            24100.0            24100.0   True                                         
+193      NIFTY  2026-07-14        f_opt_near_atm_strike            24050.0            24050.0   True                                         
+194      NIFTY  2026-07-14      f_opt_near_straddle_pct           1.448986           1.448986   True                                         
+195      NIFTY  2026-07-14             f_opt_mon_expiry         2026-07-28         2026-07-28   True                                         
+196      NIFTY  2026-07-14             f_opt_mon_pcr_oi           1.061707           1.061707   True                                         
+197      NIFTY  2026-07-14            f_opt_mon_maxpain            24200.0            24200.0   True                                         
+198      NIFTY  2026-07-14         f_opt_mon_atm_strike            24050.0            24050.0   True                                         
+199      NIFTY  2026-07-14       f_opt_mon_straddle_pct           2.064779           2.064779   True                                         
+200  BANKNIFTY  2020-10-14                          src  index_close_daily  index_close_daily   True                                         
+201  BANKNIFTY  2020-10-14                      px_open           23353.15           23353.15   True                                         
+202  BANKNIFTY  2020-10-14                      px_high            23962.7            23962.7   True                                         
+203  BANKNIFTY  2020-10-14                       px_low           23149.45           23149.45   True                                         
+204  BANKNIFTY  2020-10-14                     px_close           23874.65           23874.65   True                                         
+205  BANKNIFTY  2020-10-14            px_close_official           23874.65           23874.65   True                                         
+206  BANKNIFTY  2020-10-14  close_vs_official_pct(info)                0.0                  0   True  info: minute 15:29 close vs official...
+207  BANKNIFTY  2020-10-14                    o_gap_pct          -0.591899          -0.591899   True                                         
+208  BANKNIFTY  2020-10-14                    y_gap_pct           0.191416           0.191416   True                                         
+209  BANKNIFTY  2020-10-14                 y_gap_filled               True               True   True                                         
+210  BANKNIFTY  2020-10-14                      y_ret30                NaN                NaN   True                   no minute data for t+1
+211  BANKNIFTY  2020-10-14                 f_fut_expiry         2020-10-29         2020-10-29   True                                         
+212  BANKNIFTY  2020-10-14                     f_fut_oi            1701475          1701475.0   True                                         
+213  BANKNIFTY  2020-10-14                  f_fut_close           23951.05           23951.05   True                                         
+214  BANKNIFTY  2020-10-14                  f_futall_oi            1849250          1849250.0   True                                         
+215  BANKNIFTY  2020-10-14            f_opt_near_expiry         2020-10-15         2020-10-15   True                                         
+216  BANKNIFTY  2020-10-14            f_opt_near_pcr_oi           0.906742           0.906742   True                                         
+217  BANKNIFTY  2020-10-14           f_opt_near_maxpain            23700.0            23700.0   True                                         
+218  BANKNIFTY  2020-10-14        f_opt_near_atm_strike            23900.0            23900.0   True                                         
+219  BANKNIFTY  2020-10-14      f_opt_near_straddle_pct           1.748088           1.748088   True                                         
+220  BANKNIFTY  2020-10-14             f_opt_mon_expiry         2020-10-29         2020-10-29   True                                         
+221  BANKNIFTY  2020-10-14             f_opt_mon_pcr_oi           1.001488           1.001488   True                                         
+222  BANKNIFTY  2020-10-14            f_opt_mon_maxpain            23000.0            23000.0   True                                         
+223  BANKNIFTY  2020-10-14         f_opt_mon_atm_strike            23900.0            23900.0   True                                         
+224  BANKNIFTY  2020-10-14       f_opt_mon_straddle_pct           5.433797           5.433797   True                                         
+225  BANKNIFTY  2022-07-15                          src            spot_1m            spot_1m   True                                         
+226  BANKNIFTY  2022-07-15                      px_open           34734.45           34734.45   True                                         
+227  BANKNIFTY  2022-07-15                      px_high            34896.1            34896.1   True                                         
+228  BANKNIFTY  2022-07-15                       px_low            34465.0            34465.0   True                                         
+229  BANKNIFTY  2022-07-15                     px_close           34698.25           34698.25   True                                         
+230  BANKNIFTY  2022-07-15            px_close_official           34682.65           34682.65   True                                         
+231  BANKNIFTY  2022-07-15  close_vs_official_pct(info)           0.044979                  0   True  info: minute 15:29 close vs official...
+232  BANKNIFTY  2022-07-15                    o_gap_pct           0.260795           0.260795   True                                         
+233  BANKNIFTY  2022-07-15                    y_gap_pct           0.413854           0.413854   True                                         
+234  BANKNIFTY  2022-07-15                 y_gap_filled              False              False   True                                         
+235  BANKNIFTY  2022-07-15                      y_ret30           0.032863           0.032863   True                                         
+236  BANKNIFTY  2022-07-15                 f_fut_expiry         2022-07-28         2022-07-28   True                                         
+237  BANKNIFTY  2022-07-15                     f_fut_oi            2095075          2095075.0   True                                         
+238  BANKNIFTY  2022-07-15                  f_fut_close            34782.3            34782.3   True                                         
+239  BANKNIFTY  2022-07-15                  f_futall_oi            2518050          2518050.0   True                                         
+240  BANKNIFTY  2022-07-15            f_opt_near_expiry         2022-07-21         2022-07-21   True                                         
+241  BANKNIFTY  2022-07-15            f_opt_near_pcr_oi           0.810404           0.810404   True                                         
+242  BANKNIFTY  2022-07-15           f_opt_near_maxpain            34700.0            34700.0   True                                         
+243  BANKNIFTY  2022-07-15        f_opt_near_atm_strike            34700.0            34700.0   True                                         
+244  BANKNIFTY  2022-07-15      f_opt_near_straddle_pct           1.895629           1.895629   True                                         
+245  BANKNIFTY  2022-07-15             f_opt_mon_expiry         2022-07-28         2022-07-28   True                                         
+246  BANKNIFTY  2022-07-15             f_opt_mon_pcr_oi           0.961494           0.961494   True                                         
+247  BANKNIFTY  2022-07-15            f_opt_mon_maxpain            34700.0            34700.0   True                                         
+248  BANKNIFTY  2022-07-15         f_opt_mon_atm_strike            34700.0            34700.0   True                                         
+249  BANKNIFTY  2022-07-15       f_opt_mon_straddle_pct           2.893518           2.893518   True                                         
+250  BANKNIFTY  2022-12-14                          src            spot_1m            spot_1m   True                                         
+251  BANKNIFTY  2022-12-14                      px_open            44078.6            44078.6   True                                         
+252  BANKNIFTY  2022-12-14                      px_high            44151.5            44151.5   True                                         
+253  BANKNIFTY  2022-12-14                       px_low           43988.25           43988.25   True                                         
+254  BANKNIFTY  2022-12-14                     px_close           44012.35           44012.35   True                                         
+255  BANKNIFTY  2022-12-14            px_close_official            44049.1            44049.1   True                                         
+256  BANKNIFTY  2022-12-14  close_vs_official_pct(info)           -0.08343                  0   True  info: minute 15:29 close vs official...
+257  BANKNIFTY  2022-12-14                    o_gap_pct           0.374252           0.374252   True                                         
+258  BANKNIFTY  2022-12-14                    y_gap_pct          -0.164158          -0.164158   True                                         
+259  BANKNIFTY  2022-12-14                 y_gap_filled               True               True   True                                         
+260  BANKNIFTY  2022-12-14                      y_ret30           0.317819           0.317819   True                                         
+261  BANKNIFTY  2022-12-14               y_gap_fill_min                0.0                0.0   True                                         
+262  BANKNIFTY  2022-12-14                 f_fut_expiry         2022-12-29         2022-12-29   True                                         
+263  BANKNIFTY  2022-12-14                     f_fut_oi            3037825          3037825.0   True                                         
+264  BANKNIFTY  2022-12-14                  f_fut_close            44166.2            44166.2   True                                         
+265  BANKNIFTY  2022-12-14                  f_futall_oi            3516150          3516150.0   True                                         
+266  BANKNIFTY  2022-12-14            f_opt_near_expiry         2022-12-15         2022-12-15   True                                         
+267  BANKNIFTY  2022-12-14            f_opt_near_pcr_oi           1.207382           1.207382   True                                         
+268  BANKNIFTY  2022-12-14           f_opt_near_maxpain            44000.0            44000.0   True                                         
+269  BANKNIFTY  2022-12-14        f_opt_near_atm_strike            44000.0            44000.0   True                                         
+270  BANKNIFTY  2022-12-14      f_opt_near_straddle_pct           0.694578           0.694578   True                                         
+271  BANKNIFTY  2022-12-14             f_opt_mon_expiry         2022-12-29         2022-12-29   True                                         
+272  BANKNIFTY  2022-12-14             f_opt_mon_pcr_oi           1.089057           1.089057   True                                         
+273  BANKNIFTY  2022-12-14            f_opt_mon_maxpain            43300.0            43300.0   True                                         
+274  BANKNIFTY  2022-12-14         f_opt_mon_atm_strike            44000.0            44000.0   True                                         
+275  BANKNIFTY  2022-12-14       f_opt_mon_straddle_pct           2.117928           2.117928   True                                         
+276  BANKNIFTY  2025-07-02                          src            spot_1m            spot_1m   True                                         
+277  BANKNIFTY  2025-07-02                      px_open            57558.2            57558.2   True                                         
+278  BANKNIFTY  2025-07-02                      px_high            57628.4            57628.4   True                                         
+279  BANKNIFTY  2025-07-02                       px_low            56834.1            56834.1   True                                         
+280  BANKNIFTY  2025-07-02                     px_close           56972.15           56972.15   True                                         
+281  BANKNIFTY  2025-07-02            px_close_official            56999.2            56999.2   True                                         
+282  BANKNIFTY  2025-07-02  close_vs_official_pct(info)          -0.047457                  0   True  info: minute 15:29 close vs official...
+283  BANKNIFTY  2025-07-02                    o_gap_pct            0.20107            0.20107   True                                         
+284  BANKNIFTY  2025-07-02                    y_gap_pct           0.137348           0.137348   True                                         
+285  BANKNIFTY  2025-07-02                 y_gap_filled               True               True   True                                         
+286  BANKNIFTY  2025-07-02                      y_ret30          -0.052936          -0.052936   True                                         
+287  BANKNIFTY  2025-07-02               y_gap_fill_min                8.0                8.0   True                                         
+288  BANKNIFTY  2025-07-02                 f_fut_expiry         2025-07-31         2025-07-31   True                                         
+289  BANKNIFTY  2025-07-02                     f_fut_oi            2148720          2148720.0   True                                         
+290  BANKNIFTY  2025-07-02                  f_fut_close            57317.0            57317.0   True                                         
+291  BANKNIFTY  2025-07-02                  f_futall_oi            2396065          2396065.0   True                                         
+292  BANKNIFTY  2025-07-02            f_opt_near_expiry         2025-07-31         2025-07-31   True                                         
+293  BANKNIFTY  2025-07-02            f_opt_near_pcr_oi           0.960533           0.960533   True                                         
+294  BANKNIFTY  2025-07-02           f_opt_near_maxpain            57000.0            57000.0   True                                         
+295  BANKNIFTY  2025-07-02        f_opt_near_atm_strike            57000.0            57000.0   True                                         
+296  BANKNIFTY  2025-07-02      f_opt_near_straddle_pct           2.942403           2.942403   True                                         
+297  BANKNIFTY  2025-07-02             f_opt_mon_expiry         2025-07-31         2025-07-31   True                                         
+298  BANKNIFTY  2025-07-02             f_opt_mon_pcr_oi           0.960533           0.960533   True                                         
+299  BANKNIFTY  2025-07-02            f_opt_mon_maxpain            57000.0            57000.0   True                                         
+300  BANKNIFTY  2025-07-02         f_opt_mon_atm_strike            57000.0            57000.0   True                                         
+301  BANKNIFTY  2025-07-02       f_opt_mon_straddle_pct           2.942403           2.942403   True                                         
+TOTAL 302 MISMATCH 0
+Empty DataFrame
+Columns: [underlying, date, field, mine, panel, match, note]
+Index: []

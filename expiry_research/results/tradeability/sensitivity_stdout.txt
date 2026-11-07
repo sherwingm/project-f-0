@@ -1,0 +1,39 @@
+target hits 314: moved to next minute 314, kept 0
+
+=== mean net %, slip 0.5: run / tick floor / next-minute target fill / both ===
+exp_choice        exit        group   n  mean_net  mean_tick  mean_nextmin  mean_both  win_net  win_both
+         a      i_1515    EVERY_DAY 503     -4.59      -4.60         -4.59      -4.60     0.31      0.31
+         a      i_1515           D0 107     -7.21      -7.25         -7.21      -7.25     0.36      0.36
+         a      i_1515          D-1 107     -6.24      -6.24         -6.24      -6.24     0.30      0.30
+         a      i_1515  UP5|flagged 305     -3.97      -3.98         -3.97      -3.98     0.32      0.32
+         a      i_1515 M220|flagged  97     -3.32      -3.33         -3.32      -3.33     0.33      0.33
+         a    ii_tgt20    EVERY_DAY 503     -4.18      -4.19         -4.24      -4.24     0.42      0.41
+         a    ii_tgt20           D0 107     -8.08      -8.10         -8.48      -8.50     0.63      0.61
+         a    ii_tgt20          D-1 107     -4.03      -4.03         -4.01      -4.01     0.41      0.41
+         a    ii_tgt20  UP5|flagged 305     -3.40      -3.40         -3.36      -3.36     0.43      0.43
+         a    ii_tgt20 M220|flagged  97     -5.94      -5.94         -5.83      -5.84     0.40      0.40
+         a iii_d2_0916    EVERY_DAY 395     -4.27      -4.27         -4.27      -4.27     0.33      0.33
+         a iii_d2_0916           D0   0       NaN        NaN           NaN        NaN      NaN       NaN
+         a iii_d2_0916          D-1 107     -7.69      -7.69         -7.69      -7.69     0.32      0.32
+         a iii_d2_0916  UP5|flagged 256     -5.10      -5.10         -5.10      -5.10     0.33      0.33
+         a iii_d2_0916 M220|flagged  72      0.83       0.83          0.83       0.83     0.36      0.36
+         b      i_1515    EVERY_DAY 504     -3.80      -3.80         -3.80      -3.80     0.30      0.30
+         b      i_1515           D0 108     -3.47      -3.47         -3.47      -3.47     0.31      0.31
+         b      i_1515          D-1 107     -6.24      -6.24         -6.24      -6.24     0.30      0.30
+         b      i_1515  UP5|flagged 306     -4.37      -4.37         -4.37      -4.37     0.31      0.31
+         b      i_1515 M220|flagged  98     -0.91      -0.91         -0.91      -0.91     0.34      0.34
+         b    ii_tgt20    EVERY_DAY 504     -3.11      -3.11         -3.11      -3.11     0.35      0.35
+         b    ii_tgt20           D0 108     -3.03      -3.03         -3.18      -3.18     0.32      0.32
+         b    ii_tgt20          D-1 107     -4.03      -4.03         -4.01      -4.01     0.41      0.41
+         b    ii_tgt20  UP5|flagged 306     -3.53      -3.53         -3.59      -3.59     0.37      0.37
+         b    ii_tgt20 M220|flagged  98     -1.32      -1.32         -1.28      -1.28     0.36      0.36
+         b iii_d2_0916    EVERY_DAY 500     -3.78      -3.78         -3.78      -3.78     0.33      0.33
+         b iii_d2_0916           D0 105     -1.96      -1.96         -1.96      -1.96     0.30      0.30
+         b iii_d2_0916          D-1 107     -7.69      -7.69         -7.69      -7.69     0.32      0.32
+         b iii_d2_0916  UP5|flagged 304     -4.63      -4.63         -4.63      -4.63     0.32      0.32
+         b iii_d2_0916 M220|flagged  97      0.71       0.71          0.71       0.71     0.37      0.37
+
+=== cells where the plan rule (flagged > unflagged and flagged > 0) holds, any variant ===
+exp_choice        exit  slip        group  n  mean_net  mean_tick  mean_nextmin  mean_both  t_net
+         a iii_d2_0916   0.5 M220|flagged 72      0.83       0.83          0.83       0.83   0.18
+         b iii_d2_0916   0.5 M220|flagged 97      0.71       0.71          0.71       0.71   0.20

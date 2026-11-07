@@ -1,0 +1,16 @@
+                                                                                  check  value                                                                                                                     detail
+0                                                          frozen sha256 matches record   True                                                           9b9490102276daaedde3519c7e55cbdde55088cacc4085d111c05670fe75aa4d
+1                                                   frozen mtime < validation mtime (s)   True                                                                                                                       79.9
+2                                                          validation ids == frozen ids   True                                                                                                                        241
+3                                              validation rule_json == frozen rule_json   True                                                                                                                           
+4                                                 pass rule reapplied == their val_pass   True                                                                                                                          9
+5                                                            hypotheses.csv rows with p  29639  {'context': 316, 'pair': 7889, 'tree': 349, 'univariate': 19964, 'validation': 233, 'walkforward': 792, 'wf_vixbase': 96}
+6                  NIFTY kept rows whose previous panel row is not the previous session      1                                                                                                                           
+7       NIFTY D0 rows (t not expiry) where s was NOT the near expiry in bhavcopy of t-1      1                                                                                                     of 294; ['2023-06-28']
+8              BANKNIFTY kept rows whose previous panel row is not the previous session      1                                                                                                                           
+9   BANKNIFTY D0 rows (t not expiry) where s was NOT the near expiry in bhavcopy of t-1      1                                                                                                     of 339; ['2023-06-28']
+10    validation family (n>=20) size / BH10 sig / Bonferroni sig / null-expected passes    188                                                                                                                4 / 0 / 9.4
+match
+True    62
+leak_flags
+ok    62

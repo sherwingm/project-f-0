@@ -1,0 +1,35 @@
+ul,check,n,max_abs_diff,share_match_1e6
+NIFTY,recompute f_mom1 from px columns,1598,0.0,1.0
+NIFTY,recompute f_close_pos from px columns,1599,0.0,1.0
+NIFTY,recompute f_dist_high20 from px columns,1579,5.136499323156663,0.6922102596580114
+NIFTY,recompute f_hv10 from px columns,1589,0.0,1.0
+NIFTY,recompute y_gap_pct from px columns,1598,0.0,1.0
+NIFTY,recompute y_oc from px columns,1598,0.0,1.0
+NIFTY,recompute y_cc from px columns,1598,0.0,1.0
+NIFTY,f_mom1 vs recompute shifted -1 (must not match),1597,18.81337895077201,0.0
+NIFTY,f_mom1 vs recompute shifted +1 (must not match),1597,18.81337895077201,0.0
+NIFTY,y_gap_pct == o_gap_pct of next row,1598,0.0,1.0
+NIFTY,y_oc == o_oc of next row,1598,0.0,1.0
+NIFTY,y_cc == o_cc of next row,1598,0.0,1.0
+NIFTY,y_range_pct == o_range_pct of next row,1598,0.0,1.0
+NIFTY,y_max_exc == o_max_exc of next row,1598,0.0,1.0
+NIFTY,f_vix_close vs raw vix_daily of row +0,1582,0.0,1.0
+NIFTY,f_vix_close vs raw vix_daily of row -1,1581,11.620002746582031,0.006325110689437065
+NIFTY,f_vix_close vs raw vix_daily of row +1,1581,11.620002746582031,0.006325110689437065
+BANKNIFTY,recompute f_mom1 from px columns,1598,0.0,1.0
+BANKNIFTY,recompute f_close_pos from px columns,1599,0.0,1.0
+BANKNIFTY,recompute f_dist_high20 from px columns,1579,6.3578443125328565,0.714376187460418
+BANKNIFTY,recompute f_hv10 from px columns,1589,0.0,1.0
+BANKNIFTY,recompute y_gap_pct from px columns,1598,0.0,1.0
+BANKNIFTY,recompute y_oc from px columns,1598,0.0,1.0
+BANKNIFTY,recompute y_cc from px columns,1598,0.0,1.0
+BANKNIFTY,f_mom1 vs recompute shifted -1 (must not match),1597,17.89964734012477,0.0
+BANKNIFTY,f_mom1 vs recompute shifted +1 (must not match),1597,17.89964734012477,0.0
+BANKNIFTY,y_gap_pct == o_gap_pct of next row,1598,0.0,1.0
+BANKNIFTY,y_oc == o_oc of next row,1598,0.0,1.0
+BANKNIFTY,y_cc == o_cc of next row,1598,0.0,1.0
+BANKNIFTY,y_range_pct == o_range_pct of next row,1598,0.0,1.0
+BANKNIFTY,y_max_exc == o_max_exc of next row,1598,0.0,1.0
+BANKNIFTY,f_vix_close vs raw vix_daily of row +0,1582,0.0,1.0
+BANKNIFTY,f_vix_close vs raw vix_daily of row -1,1581,11.620002746582031,0.006325110689437065
+BANKNIFTY,f_vix_close vs raw vix_daily of row +1,1581,11.620002746582031,0.006325110689437065

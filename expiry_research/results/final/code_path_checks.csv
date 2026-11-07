@@ -1,0 +1,86 @@
+check,ok,detail
+model frozen sha256 equals recorded,True,9b9490102276daae
+PPC032 passed validation in its module,True,Passed-validation
+PPC062 passed validation in its module,True,Passed-validation
+PPC092 passed validation in its module,True,Passed-validation
+PPC098 passed validation in its module,True,Passed-validation
+PPC129 passed validation in its module,True,Passed-validation
+OC08 passed validation in its module,True,Passed-validation
+OC13 passed validation in its module,True,Passed-validation
+OC17 passed validation in its module,True,Passed-validation
+OC21 passed validation in its module,True,Passed-validation
+OC118 passed validation in its module,True,Passed-validation
+M143 passed validation in its module,True,Passed-validation
+M218 passed validation in its module,True,Passed-validation
+M220 passed validation in its module,True,Passed-validation
+pricepath NIFTY f_mom5,True,n 366 diff 0 max 0.0
+pricepath NIFTY f_streak_close,True,n 366 diff 0 max 0.0
+pricepath NIFTY o_cc,True,n 366 diff 0 max 0.0
+pricepath NIFTY f_fut_vol_r20,True,n 366 diff 0 max 0.0
+pricepath NIFTY f_vix_close,True,n 366 diff 0 max 0.0
+pricepath NIFTY usable,True,n 366 diff 0 max 0.0
+pricepath NIFTY ctx_ALL,True,n 366 diff 0 max 0.0
+pricepath NIFTY t_big (labelled validation rows),True,n 365 diff 0
+pricepath BANKNIFTY f_mom5,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY f_streak_close,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY o_cc,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY f_fut_vol_r20,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY f_vix_close,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY usable,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY ctx_ALL,True,n 366 diff 0 max 0.0
+pricepath BANKNIFTY t_big (labelled validation rows),True,n 365 diff 0
+optionchain NIFTY wall_width vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY wall_near vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY iv_chg vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY iv_proxy vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY n_sess vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY f_vix_close vs features_NIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain NIFTY y_range_pct,True,n 365 diff 0
+optionchain NIFTY y_big_move_exc,True,n 365 diff 0
+optionchain BANKNIFTY wall_width vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY wall_near vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY iv_chg vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY iv_proxy vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY n_sess vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY f_vix_close vs features_BANKNIFTY.parquet,True,n 366 diff 0 max 0.0
+optionchain BANKNIFTY y_range_pct,True,n 365 diff 0
+optionchain BANKNIFTY y_big_move_exc,True,n 365 diff 0
+model NIFTY date_t,True,n 366 diff 0 max nan
+model NIFTY d_opt_near_straddle_daily,True,n 366 diff 0 max 0.0
+model NIFTY f_opt_near_pcr_oi,True,n 366 diff 0 max 0.0
+model NIFTY f_atr14_pct,True,n 366 diff 0 max 0.0
+model NIFTY f_vix_close,True,n 366 diff 0 max 0.0
+model NIFTY t_big_exc,True,n 366 diff 0 max 0.0
+model NIFTY t_low_pc,True,n 366 diff 0 max 0.0
+model NIFTY split,True,n 366 diff 0 max nan
+model BANKNIFTY date_t,True,n 366 diff 0 max nan
+model BANKNIFTY d_opt_near_straddle_daily,True,n 366 diff 0 max 0.0
+model BANKNIFTY f_opt_near_pcr_oi,True,n 366 diff 0 max 0.0
+model BANKNIFTY f_atr14_pct,True,n 366 diff 0 max 0.0
+model BANKNIFTY f_vix_close,True,n 366 diff 0 max 0.0
+model BANKNIFTY t_big_exc,True,n 366 diff 0 max 0.0
+model BANKNIFTY t_low_pc,True,n 366 diff 0 max 0.0
+model BANKNIFTY split,True,n 366 diff 0 max nan
+PPC032 validation n/rate/base/p,True,"n 45 vs 45, rate 0.4000 vs 0.4000, base 0.2137 vs 0.2137"
+PPC062 validation n/rate/base/p,True,"n 67 vs 67, rate 0.1194 vs 0.1194, base 0.2137 vs 0.2137"
+PPC092 validation n/rate/base/p,True,"n 38 vs 38, rate 0.6053 vs 0.6053, base 0.3973 vs 0.3973"
+PPC098 validation n/rate/base/p,True,"n 44 vs 44, rate 0.6136 vs 0.6136, base 0.3973 vs 0.3973"
+PPC129 validation n/rate/base/p,True,"n 87 vs 87, rate 0.5057 vs 0.5057, base 0.3973 vs 0.3973"
+OC08 frozen threshold q67 matches rule text,True,5.2894 vs 5.2894
+OC08 validation n/k/base,True,"n 111 vs 111, k 42 vs 42, base 0.2253 vs 0.2253"
+OC08 discovery n/rate reproduced,True,n 410 vs 410
+OC13 frozen threshold q67 matches rule text,True,1.83441 vs 1.83441
+OC13 validation n/k/base,True,"n 63 vs 63, k 30 vs 30, base 0.2500 vs 0.2500"
+OC13 discovery n/rate reproduced,True,n 411 vs 411
+OC17 frozen threshold q67 matches rule text,True,6.03737 vs 6.03737
+OC17 validation n/k/base,True,"n 58 vs 58, k 25 vs 25, base 0.2500 vs 0.2500"
+OC17 discovery n/rate reproduced,True,n 411 vs 411
+OC21 frozen threshold q67 matches rule text,True,1.83441 vs 1.83441
+OC21 validation n/k/base,True,"n 63 vs 63, k 24 vs 24, base 0.2115 vs 0.2115"
+OC21 discovery n/rate reproduced,True,n 411 vs 411
+OC118 frozen threshold q67 matches rule text,True,0.651378 vs 0.651378
+OC118 validation n/k/base,True,"n 77 vs 77, k 27 vs 27, base 0.2077 vs 0.2077"
+OC118 discovery n/rate reproduced,True,n 323 vs 323
+M143 validation n/rate/base/p,True,"n 20 vs 20, rate 0.5500 vs 0.5500, base 0.2110 vs 0.2110"
+M218 validation n/rate/base/p,True,"n 120 vs 120, rate -0.2686 vs -0.2686, base -0.3896 vs -0.3896"
+M220 validation n/rate/base/p,True,"n 115 vs 115, rate -0.2671 vs -0.2671, base -0.3896 vs -0.3896"

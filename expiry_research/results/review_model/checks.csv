@@ -1,0 +1,12 @@
+check,value,detail
+frozen sha256 matches record,True,9b9490102276daaedde3519c7e55cbdde55088cacc4085d111c05670fe75aa4d
+frozen mtime < validation mtime (s),True,79.9
+validation ids == frozen ids,True,241
+validation rule_json == frozen rule_json,True,
+pass rule reapplied == their val_pass,True,9
+hypotheses.csv rows with p,29639,"{'context': 316, 'pair': 7889, 'tree': 349, 'univariate': 19964, 'validation': 233, 'walkforward': 792, 'wf_vixbase': 96}"
+NIFTY kept rows whose previous panel row is not the previous session,1,
+NIFTY D0 rows (t not expiry) where s was NOT the near expiry in bhavcopy of t-1,1,of 294; ['2023-06-28']
+BANKNIFTY kept rows whose previous panel row is not the previous session,1,
+BANKNIFTY D0 rows (t not expiry) where s was NOT the near expiry in bhavcopy of t-1,1,of 339; ['2023-06-28']
+validation family (n>=20) size / BH10 sig / Bonferroni sig / null-expected passes,188,4 / 0 / 9.4

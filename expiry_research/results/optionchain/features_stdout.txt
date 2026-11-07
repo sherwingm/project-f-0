@@ -1,0 +1,33 @@
+NIFTY (1599, 213) dates 2018-01-01 2024-06-28
+  near expiry == cal_next_date on eve rows: 0.9966
+  atmz_pcr: non-null 1597  median 0.8475
+  atmz_flow: non-null 1597  median -0.01157
+  iv_proxy: non-null 1597  median 12.53
+  vol_surge: non-null 1522  median 1.017
+  settle_index_near: non-null 1081  median 1.733e+04
+  eve rows with bhavcopy settlement index: 229 of 294
+  |settlement index / official close of t+1 - 1| %: median 0.0 max 0.0
+BANKNIFTY (1599, 213) dates 2018-01-01 2024-06-28
+  near expiry == cal_next_date on eve rows: 0.9971
+  atmz_pcr: non-null 1596  median 0.837
+  atmz_flow: non-null 1596  median -0.03059
+  iv_proxy: non-null 1597  median 16.83
+  vol_surge: non-null 1578  median 1.041
+  settle_index_near: non-null 1078  median 3.749e+04
+  eve rows with bhavcopy settlement index: 229 of 339
+  |settlement index / official close of t+1 - 1| %: median 0.0 max 0.0
+ year underlying   rows  settle_le0  untraded  undrlyg_empty  near_strikes_oi_pm5  grid_coverage_pm5
+ 2018      NIFTY 566450    0.070799  0.889056            1.0                 21.0           0.997895
+ 2019      NIFTY 770090    0.064752  0.895068            1.0                 23.0           0.992532
+ 2020      NIFTY 731639    0.006660  0.836086            1.0                 23.0           0.998047
+ 2021      NIFTY 510565    0.007870  0.692223            1.0                 32.0           0.999566
+ 2022      NIFTY 562041    0.011834  0.628075            1.0                 35.0           0.999428
+ 2023      NIFTY 339069    0.004657  0.476443            1.0                 38.0           1.001328
+ 2024      NIFTY 184857    0.002137  0.454335            1.0                 45.0           0.999406
+ 2018  BANKNIFTY 241382    0.041552  0.798009            1.0                 26.0           0.993487
+ 2019  BANKNIFTY 275904    0.038408  0.785998            1.0                 29.0           0.995692
+ 2020  BANKNIFTY 500308    0.002672  0.827023            1.0                 23.0           0.998878
+ 2021  BANKNIFTY 544484    0.004197  0.763003            1.0                 35.0           0.999209
+ 2022  BANKNIFTY 414535    0.005671  0.581005            1.0                 38.0           0.997985
+ 2023  BANKNIFTY 305234    0.001949  0.506703            1.0                 44.0           1.000062
+ 2024  BANKNIFTY 181764    0.003483  0.476370            1.0                 48.0           1.000251

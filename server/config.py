@@ -105,6 +105,7 @@ class Settings:
     index_record: bool = _bool("INDEX_RECORD", True)        # NIFTY 1-second candles from the stream (server/index_recorder.py)
     g1_paper: bool = _bool("G1_PAPER", True)               # S3 G1 / G1-F live paper trades (server/g1_live.py), own ledger
     nt_paper: bool = _bool("NT_PAPER", True)               # NT Near Tighty live paper trades (server/nt_live.py), own ledger
+    xp_paper: bool = _bool("XP_PAPER", True)               # XP NIFTY expiry-day straddle forward log (server/xp_live.py), own ledger
     live_fast_seconds: float = float(os.getenv("LIVE_FAST_SECONDS", "1"))   # the feed's interval while streaming
     anthropic_api_key: str = os.getenv("ANTHROPIC_API_KEY", "")
     commentary_model: str = os.getenv("COMMENTARY_MODEL", "claude-sonnet-4-6")
@@ -131,6 +132,7 @@ class Settings:
     fill_tick: float = float(os.getenv("FILL_TICK", "0.05"))
     paper_queue_fill_at: str = os.getenv("PAPER_QUEUE_FILL_AT", "09:20")
     nse_holidays: str = os.getenv("NSE_HOLIDAYS", "")
+    special_sessions: str = os.getenv("SPECIAL_SESSIONS", "")   # full Saturday / Sunday sessions NSE announces (index programs only; server/sessions.py)
     # ---- paper engine: ledger (server/paper.py)
     paper_capital: float = float(os.getenv("PAPER_CAPITAL", "500000"))
     margin_estimate_pct: float = float(os.getenv("MARGIN_ESTIMATE_PCT", "18"))
