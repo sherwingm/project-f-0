@@ -1038,3 +1038,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
 
 ### 2026-11-07: handoff for the index chat
 - `HANDOFF_INDEX_G1.md` written (state, house rules, live system, research results, open items); pointer added at the top of `HANDOFF.md`.
+
+## 7 Nov 2026 (index chat): breakout score 0-7, history check
+Pre-registered g1_research/SCORE_PREREG.md, then ran scripts/g1_score.py on the 259 history signals. Result (SCORE_RESULT.md): the score does not rank max up (rho +0.06 discovery, +0.09 validation, high vs low p 0.25) = Rejected as a predictor; it stays a record only (no filter, no size). Hidden: prev 5-day and EMA20 items overlap (0.59), two items point the wrong way, hump shape (3-4 points best). Nothing changed live.

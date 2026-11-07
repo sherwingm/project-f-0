@@ -451,3 +451,6 @@ website page `/near-tighty` and API `/api/near-tighty`, own results; it changes 
 - **Overlap:** on 1-3-session days G1 takes the same put in its own ledger; each counts it once in its own record.
 - Kotak Neo allows these buys through the API (checked 2026-11-04: NIFTY options are cash-settled; limit orders only,
   static IP, 10 orders a second).
+
+### 7 Nov 2026 - G1 breakout score (record only)
+Score 0-7 (7 entry-time items), score %, expanding percentile. Verdict on history: Rejected as a predictor of max up (validation rho +0.09, p 0.25); kept as a record only; re-judge at 30 live signals, max up first, by band. See g1_research/SCORE_RESULT.md.
