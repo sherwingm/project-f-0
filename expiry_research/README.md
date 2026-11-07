@@ -44,3 +44,5 @@ period is sealed in `data/sealed/` for the coordinator. Python: `../.venvs/fo/Sc
 | 10 | `reports/WALK_FORWARD_VALIDATION.md` | walk-forward and the single final out-of-sample test |
 | 11 | `reports/TRADEABILITY_ANALYSIS.md` | NIFTY ATM straddle on real option minutes |
 | – | `reports/BIAS_AND_VALIDITY.md`, `reports/PANEL.md` | bias checks, mining null (Agent 5a); the shared panel |
+
+**Reporting default (the user, 2026-11-07):** results lead with max up after entry (share reaching +50 / +100 / +200 %, mean, median), then the booked result.

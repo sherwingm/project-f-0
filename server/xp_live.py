@@ -232,6 +232,8 @@ class ExpiryStraddleLogger:
                             "max_up_100_share": sum(u >= 100 for u in ups) / len(ups) if ups else None,
                             "target_hit_share": sum(t["primary"]["exit"] != "15:15" for t in done) / len(done) if done else None},
                 "tracks": [{"pod": "XP (+20 % target)", "trades": len(done), "gate_at": GATE,
+                            "max_up_mean": sum(ups) / len(ups) if ups else None, "max_up_median": median(ups),
+                            "max_up_100": sum(u >= 100 for u in ups) / len(ups) if ups else None,
                             "won": sum(v > 0 for v in prim) / len(prim) if prim else None,
                             "mean_pct": sum(prim) / len(prim) if prim else None, "median_pct": median(prim),
                             "t": t_stat(prim), "total_rs": round(sum(t["primary"]["net_rs"] for t in done), 2),

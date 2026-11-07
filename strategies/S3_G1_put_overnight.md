@@ -97,6 +97,9 @@ skip filters, the paper ledger (every G1 trade is still recorded with its G1-F f
 trades each). Paper only; no real order, and no change to S1 or S2. A G1-F pass with a G1 fail (or the reverse) is still
 reported as it is.
 
+## Reporting default (2026-11-07)
+Every G1 / G1-F report shows max up first (share reaching +50 / +100 / +200 %, mean, median), then the booked result. The `/index` Pods table does the same.
+
 ## After the verdict
 - **Pass:** a proposal to the user to run G1 as a paper strategy. Nothing is enabled automatically, and S1 / S2 are
   untouched.

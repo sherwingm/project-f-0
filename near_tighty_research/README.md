@@ -21,3 +21,5 @@ from the overall index / NIFTY optimisation. Anything related to Near Tighty is 
 - `data/results/S3_G1_datasheet.csv`: the G1 trades NT is cut from.
 
 Later Near Tighty work (live-trade max up, optimisation, studies) goes in this folder.
+
+**Reporting default (the user, 2026-11-07):** results lead with max up after entry (share reaching +50 / +100 / +200 %, mean, median), then the booked result.

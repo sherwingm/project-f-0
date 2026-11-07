@@ -147,6 +147,9 @@ Closed before the S1 structure; not reopened except as a component of an S1 vers
 | Options under ₹2, 3–7 sessions to expiry | −26 % to −65 % of stake |
 | EOD model | Brier 0.674 vs 0.667 for the base rate |
 
+## 2026-11-07 · Reporting default: max up first (user decision)
+**Reporting default (the user, 2026-11-07):** every result leads with the max up after entry: the share of trades reaching +50 / +100 / +200 %, the mean max up and the median max up, then the booked result (win %, average, median, total ₹). Max up is the measure; no exit rule is judged by it. Split by days held (and by days to expiry where it matters). It is descriptive and changes no rule, no gate and no live behaviour. The live `/index` Pods table now shows max up average, median and the share ≥ +100 % before the booked columns.
+
 ## 2026-11-04 · Near-expiry strategy exempt from our own near-expiry guards, that strategy only (user decision)
 The user, 2026-11-04: "leave my own code rules only for this strategy" (after the Kotak Neo docs showed near-expiry buying
 is allowed through the API). `NEAR_EXPIRY_STRATEGIES` (default `near_expiry`) names the rule-trade strategies

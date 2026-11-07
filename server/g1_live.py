@@ -354,8 +354,11 @@ class G1Trader:
             o["unrealised_rs"] = round((o["mark"] - o["paid"]) * o["qty"] - o["entry_fees"] - exit_fee, 2) if o.get("mark") else None
         for name, sel in self.tracks(trades):
             x = [t["net_pct"] for t in sel]
+            mu = [t["max_up_pct"] for t in sel if t.get("max_up_pct") is not None]
             out["tracks"].append({
                 "pod": name, "trades": len(sel), "gate_at": 30,
+                "max_up_mean": sum(mu) / len(mu) if mu else None, "max_up_median": median(mu),     # the lead measure
+                "max_up_100": sum(v >= 100 for v in mu) / len(mu) if mu else None,
                 "won": sum(v > 0 for v in x) / len(x) if x else None,
                 "mean_pct": sum(x) / len(x) if x else None,
                 "median_pct": median(x),

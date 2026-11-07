@@ -9,3 +9,5 @@ All max up after entry, no exit, history Oct 2024 -> Oct 2026 (windows: entry da
 - `scripts/sensex_maxup_free.py` -> `data/sensex_maxup_free_trades.csv`, `results/sensex_maxup_free_summary.csv`: the G1 / G1-F put rule on SENSEX (step 100).
 - `scripts/calls_maxup_free.py` -> `data/calls_{nifty,sensex}_maxup_free_trades.csv`, `results/calls_{nifty,sensex}_maxup_free_summary.csv`: the mirror (first close ABOVE the range -> ATM call), NIFTY and SENSEX. "Mirror filters" = skip gap <= -0.3 %, width 0.5-0.8 %, VIX >= 17: a guess by symmetry, not tested knowledge.
 Entry price = minute close x 1.005 (x 1.01 before 09:30), not the engine's fill, so the NIFTY call figures are not exactly comparable with the NIFTY put file.
+
+**Reporting default (the user, 2026-11-07):** results lead with max up after entry (share reaching +50 / +100 / +200 %, mean, median), then the booked result.

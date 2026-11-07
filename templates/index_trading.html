@@ -141,9 +141,9 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
     const tk = [...(((D.g1 || {}).tracks) || []), ...(((D.xp || {}).tracks) || [])];
     h += `<h2>Pods <small>index strategies, paper results</small></h2>
-      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Won</th><th>Average</th><th>Median</th><th>t</th><th>Total ₹</th></tr></thead>
-      <tbody>${tk.length ? tk.map(p => `<tr><td><b>${esc(p.pod)}</b></td><td>${esc(p.status)}</td><td>${num(p.trades)} / ${num(p.gate_at)}</td><td>${pc(p.won == null ? null : p.won * 100, 0)}</td><td>${sg(p.mean_pct)}</td><td>${sg(p.median_pct)}</td><td>${p.t == null ? "—" : num(p.t, 2)}</td><td class="${p.total_rs < 0 ? "down" : "up"}">₹${num(p.total_rs)}</td></tr>`).join("")
-        : `<tr><td colspan="8" style="text-align:left"><span class="muted">${esc((D.g1 || {}).error || "G1 paper is not reporting yet.")}</span></td></tr>`}</tbody></table></div>`;
+      <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Max up avg</th><th>Max up median</th><th>Max up ≥ +100 %</th><th>Won</th><th>Booked avg</th><th>Booked median</th><th>t</th><th>Total ₹</th></tr></thead>
+      <tbody>${tk.length ? tk.map(p => `<tr><td><b>${esc(p.pod)}</b></td><td>${esc(p.status)}</td><td>${num(p.trades)} / ${num(p.gate_at)}</td><td>${sg(p.max_up_mean)}</td><td>${sg(p.max_up_median)}</td><td>${pc(p.max_up_100 == null ? null : p.max_up_100 * 100, 0)}</td><td>${pc(p.won == null ? null : p.won * 100, 0)}</td><td>${sg(p.mean_pct)}</td><td>${sg(p.median_pct)}</td><td>${p.t == null ? "—" : num(p.t, 2)}</td><td class="${p.total_rs < 0 ? "down" : "up"}">₹${num(p.total_rs)}</td></tr>`).join("")
+        : `<tr><td colspan="11" style="text-align:left"><span class="muted">${esc((D.g1 || {}).error || "G1 paper is not reporting yet.")}</span></td></tr>`}</tbody></table></div>`;
     h += `<h2>Recorder health <small>nightly at 19:30 IST, GitHub Actions</small></h2>`;
     if (!rec) h += `<p class="empty">No recorder run yet.</p>`;
     else {

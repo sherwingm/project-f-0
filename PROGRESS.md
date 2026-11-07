@@ -34,6 +34,7 @@ are recorded?
 | Screen B (run 2026-10-18) + order-book proxy + QIP | Parent indicators and market backdrop: not run (the pinned futures series failed the pre-registered hourly check); sector rotation, gap fill, weak results: 0 of 8 tests pass; order wins and QIP: no fall | No new way to catch a fall; weak results tend to **rise** after day 0 (the fade's call side again), not fall |
 
 ## How we work
+- **Reporting default (the user, 2026-11-07):** every result leads with the max up after entry: the share of trades reaching +50 / +100 / +200 %, the mean max up and the median max up, then the booked result (win %, average, median, total ₹). Max up is the measure; no exit rule is judged by it. Split by days held (and by days to expiry where it matters).
 - **The core idea tracker above is updated with every step**, alongside the detailed log.
 - **S1 and S2 are kept separate**: their own specs (`strategies/S1_*`, `strategies/S2_*`), modules, pages, paper
   records and sections below. One commit never mixes S1 and S2 changes.
