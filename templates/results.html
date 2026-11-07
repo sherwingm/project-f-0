@@ -204,6 +204,102 @@ td.mu-g { white-space:nowrap; font-weight:600; }
   .px .entry b { font-size:23px; }
   :root { --disc:64px; }
 }
+
+/* ===== design pass (7 Nov 2026): look only, no content or data change. From the dashboard-design skill: one clear
+   hierarchy, quiet colour (a hue only where the number is good or bad), tables that scan, width that grows with the
+   screen. Every colour is a token from /tokens.css, so light and dark both work; delete this block to undo it. */
+:root { --pad:clamp(14px,2.2vw,40px); --edge:color-mix(in srgb, var(--line) 55%, var(--line-strong) 45%); }
+body { letter-spacing:.003em; }
+main { padding:20px var(--pad) 28px; }
+::-webkit-scrollbar { height:10px; width:10px; } ::-webkit-scrollbar-thumb { background:var(--line-strong); border-radius:6px; border:2px solid transparent; background-clip:content-box; }
+::-webkit-scrollbar-track { background:transparent; }
+
+/* top bar: glass, clearer brand, tabs that read as the main navigation */
+.top { background:color-mix(in srgb, var(--panel) 86%, transparent); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); padding:10px var(--pad); gap:12px; }
+.brand { font-size:16px; letter-spacing:-.01em; }
+.tabs { padding:4px; border-radius:12px; background:var(--surface); }
+.tabs button { padding:7px 16px; border-radius:9px; font-size:13px; transition:background .15s, color .15s; }
+.tabs button:hover { color:var(--ink); }
+.tabs button[aria-selected="true"] { background:var(--raise); box-shadow:inset 0 -2px 0 var(--c), 0 1px 2px rgba(0,0,0,.25); }
+.tlink, .tbtn { transition:border-color .15s, background .15s; } .tlink:hover, .tbtn:hover { border-color:var(--accent); background:var(--raise); }
+
+/* header and panels: the title leads, the explanation steps back */
+.ws h1 { font-size:22px; letter-spacing:-.015em; }
+.ws p, .note { color:var(--muted); line-height:1.6; max-width:120ch; }
+.ws p { font-size:13px; }
+.panels { gap:18px; }
+.panel { padding:16px 20px 20px; border-color:var(--edge); box-shadow:0 1px 0 rgba(255,255,255,.025) inset, 0 10px 28px -14px rgba(0,0,0,.55); }
+.panel > header { margin:0 0 14px; padding-bottom:12px; border-bottom:1px solid var(--line); }
+h2 { font-size:15.5px; font-weight:650; letter-spacing:-.005em; }
+h2 small { font-size:12.5px; color:var(--muted); }
+.panel.flat > header { border-bottom:0; padding-bottom:0; }
+
+/* tables: calmer rules, a header that anchors, rows that light up under the pointer */
+.tw { border-color:var(--edge); border-radius:var(--r-md); background:color-mix(in srgb, var(--surface) 70%, var(--panel)); }
+th { background:color-mix(in srgb, var(--raise) 55%, transparent); color:var(--muted); font-size:10.5px; letter-spacing:.06em; padding:10px 12px; border-bottom:1px solid var(--edge); }
+td { padding:10px 12px; border-bottom:1px solid color-mix(in srgb, var(--line) 80%, transparent); }
+tbody tr { transition:background .12s; } tbody tr:hover td { background:color-mix(in srgb, var(--raise) 70%, transparent); }
+td.up, td.down, .up b, .down b, td .up, td .down { font-weight:600; }
+td small { color:var(--muted); }
+/* the grey detail under a number (time, price) stacks under it instead of beside it: the wide tables then fit a wide
+   screen without sideways scrolling. The first column keeps its own layout. */
+@media (min-width:1600px) {
+  .tw td:not(:first-child) small { display:block; white-space:normal; line-height:1.3; margin-top:2px; }
+  .tw td:last-child:not(.l) { white-space:normal; min-width:130px; }
+}
+.tw table { --cellx:9px; } .tw th, .tw td { padding-left:var(--cellx); padding-right:var(--cellx); }
+.tw th { white-space:normal; line-height:1.25; }
+.tw table:has(tbody td:nth-child(18)) { --cellx:6px; }              /* the 18-19 column fade tables */
+.sb .tw table { --cellx:7px; } .sb .tw th { padding:9px 7px; } .sb .tw td:first-child { white-space:normal; min-width:96px; }
+tr.dayrow td { background:var(--raise); border-top:1px solid var(--edge); border-bottom:1px solid var(--edge); padding:9px 12px; font-size:13px; letter-spacing:.005em; }
+tr.dayrow:hover td { background:var(--raise); }
+th.g { border-left:1px solid var(--edge); } td.gl { border-left:1px solid var(--edge); }
+td:first-child b { letter-spacing:.01em; }
+
+/* tags and chips: a tinted fill instead of a hard outline */
+.arm { border:0; font-size:10.5px; padding:3px 8px; border-radius:7px; background:var(--raise); }
+.arm.a { background:color-mix(in srgb, var(--arm-a) 16%, transparent); } .arm.b { background:color-mix(in srgb, var(--arm-b) 16%, transparent); }
+.arm.f { background:color-mix(in srgb, var(--arm-f) 16%, transparent); }
+.chip { border:0; padding:3px 10px; background:var(--raise); }
+.chip.in { background:var(--bull-soft); } .chip.out { background:var(--unc-soft); }
+.tag { padding:3px 10px; }
+
+/* the Max up panel: big numbers, thick bars */
+.mu-ladder, .mu-cmp > div { border-color:var(--edge); background:color-mix(in srgb, var(--surface) 75%, var(--panel)); }
+.mu-ladder { padding:16px 18px; }
+.mu-ladder h4, .mu-cmp small { font-size:10.5px; letter-spacing:.07em; }
+.mu-row { grid-template-columns:96px minmax(0,1fr) 48px 72px; padding:6px 0; }
+.mu-lbl { font-size:12.5px; color:var(--ink); }
+.mu-track { height:12px; border-radius:6px; background:color-mix(in srgb, var(--line) 80%, transparent); }
+.mu-track i { border-radius:6px; background:linear-gradient(90deg, color-mix(in srgb, var(--bull) 70%, transparent), var(--bull)); }
+.mu-row b { font-size:14px; }
+.mu-cmp { gap:10px; } .mu-cmp > div { padding:14px 16px; }
+.mu-cmp b { font-size:28px; letter-spacing:-.02em; margin:4px 0; }
+.mu-cmp em { font-size:11.5px; line-height:1.4; }
+.museg { border-color:var(--edge); border-radius:10px; } .museg button { padding:7px 14px; }
+.mubar { height:8px; border-radius:4px; }
+
+/* tiles, scoreboard cards, position cards */
+.tiles { gap:10px; grid-template-columns:repeat(auto-fill,minmax(170px,1fr)); }
+.tile { padding:14px 16px; border-color:var(--edge); border-radius:var(--r-md); }
+.tile b { font-size:23px; letter-spacing:-.02em; display:block; margin-top:4px; }
+.facts > div { border-color:var(--edge); padding:12px 14px; }
+.pc { border-color:var(--edge); border-radius:16px; box-shadow:0 10px 28px -16px rgba(0,0,0,.6); }
+.empty { padding:18px 20px; border-color:var(--line-strong); font-size:13px; }
+details summary { padding:4px 0; } details summary:hover { color:var(--ink); }
+.sb h3 { font-size:13.5px; margin:0 0 8px; }
+
+/* wide screens: the layout adds columns instead of stretching a few */
+@media (min-width:1700px) {
+  .sb { grid-template-columns:repeat(3,minmax(0,1fr)); }
+  .mu-hero { grid-template-columns:minmax(0,1.5fr) minmax(0,1fr); }
+}
+@media (max-width:760px) {
+  .top { position:static; }                                          /* four wrapped rows: let it scroll away, not stick */
+  .tabs button { padding:8px 2px; } .panel { padding:14px; } .ws h1 { font-size:19px; }
+  .mu-cmp b { font-size:22px; } .mu-row { grid-template-columns:78px minmax(0,1fr) 40px 56px; }
+}
+@media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
 </style>
 </head>
 <body>
