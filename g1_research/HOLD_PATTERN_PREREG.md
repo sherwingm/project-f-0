@@ -50,3 +50,9 @@ day h = min(days to expiry, 3) is **≥ +50 % above the put's price at the decis
 counts). Decisions: D1 entry (the target is unchanged, no overlap), D2 next 09:16, D3 next close (needs days to expiry
 ≥ 2, otherwise there is no time left). Same split, features, buckets, FDR 10 % (one family over all three targets),
 candidate and validation rules as above, nothing else changed. A result of "no pattern" is a valid result.
+
+## Amendment 2, written 2026-11-07 after the user's IV-crush remark and before this test is computed
+The feature list lacked the change in volatility AFTER entry, the IV-crush channel. Added as two features, high / low
+buckets as before (discovery P67 / P33): `dvix_d2` = India VIX at the next 09:16 minus VIX at entry (decision D2) and
+`dvix_d3` = VIX at the next close minus VIX at entry (decision D3). Target: the follow-up ≥ +50 % after that decision
+(Amendment 1). Four new rules join the corrected family (96 in all), BH 10 % over all 96, same validation rule.
