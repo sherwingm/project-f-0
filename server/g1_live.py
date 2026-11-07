@@ -24,13 +24,15 @@ import logging
 import math
 import os
 import threading
+import time as time_mod
 from datetime import date, datetime, time, timedelta
 from pathlib import Path
 
 from server import alerts, sessions
 from server import charges as ch
+from server import g1_score
 
-log = logging.getLogger("g1")
+log =logging.getLogger("g1")
 IST = sessions.IST
 SPOT_KEY, VIX_KEY = "NSE_INDEX|Nifty 50", "NSE_INDEX|India VIX"
 STEP, LOT, STOP = 50, 65, 0.50
@@ -40,6 +42,7 @@ GAP_MAX, WIDTH_SKIP, VIX_MAX = 0.3, (0.5, 0.8), 17.0
 QUOTE_AGE = 60.0
 EPOCH = "2026-11-05 G1 live paper"
 PAGE = "strategies/S3_G1_put_overnight.md"
+SCORE_KEYS = ("score", "score_pct", "score_band", "score_items", "score_missing", "score_pctile", "score_avg_pct", "score_inputs")
 
 
 def _best(s: dict | None) -> tuple[float | None, float | None]:
@@ -91,6 +94,7 @@ class G1Trader:
     """One rule-trading paper ledger. A subclass (server/nt_live.py, Near Tighty) changes the class attributes and
     the two hooks `entry_skip` / `entry_note` / `tracks`; the signal, entry, stop and exit stay exactly G1's."""
     NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
+    SCORE = True              # the 0-7 breakout score (record only); Near Tighty is not scored here
     HOLD_TO_CLOSE = True      # G1 / G1-F (2026-11-06, the user): hold to the next session's close; a subclass may say False
 
     def __init__(self, stream, upstox, data_dir, lot: int = LOT):
@@ -105,6 +109,7 @@ class G1Trader:
         self.asks: dict[float, tuple[datetime, float]] = {}     # strike -> (seen at, ask) during the entry minute
         self.last_bid: tuple[datetime, float] | None = None
         self.prev_close: float | None = None
+        self._closes: tuple | None = None                  # (day, daily closes or None, fetched at): for the score
 
     # ------------------------------------------------------------ ledger
     def _load(self) -> dict:
@@ -214,7 +219,7 @@ class G1Trader:
                     vix = next((v for t, v in reversed(self.vix) if t < end), None)
                     st.update(phase="entry", signal=f"{m:%H:%M}", signal_close=c, entry=f"{ent:%H:%M}",
                               gap_pct=None if gap is None else round(gap, 3), width_pct=round(width, 3), vix=vix,
-                              g1f_skip=g1f_check(gap, width, vix),
+                              g1f_skip=g1f_check(gap, width, vix), **self._score(lo, c, m, width, gap, vix),
                               status=f"downside breakout at {m:%H:%M} ({c:,.2f} < {lo:,.2f}): buying at {ent:%H:%M}")
                     self._save()
                     phase = "entry"
@@ -269,12 +274,13 @@ class G1Trader:
                               "bought_at": seen[0].isoformat(timespec="seconds"), "expiry": exp, "strike": k,
                               "key": self._key(exp, k), "paid": paid, "qty": self.lot, "entry_fees": round(fees, 2),
                               "spot": spot, "g1f_skip": st["g1f_skip"], "gap_pct": st["gap_pct"],
-                              "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid}
+                              "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid,
+                              **{k: st[k] for k in SCORE_KEYS if k in st}}
         st.update(phase="done", status=f"bought NIFTY {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
                   + self.entry_note(st))
         self._save()
         alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
-                    + self.entry_note(st),
+                    + self.entry_note(st) + self._score_text(st),
                     key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
     def _manage_open(self, now: datetime) -> None:
@@ -329,6 +335,25 @@ class G1Trader:
         self._save()
         alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold NIFTY {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
                     f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
+
+    # ------------------------------------------------------------ score (record only)
+    def _score(self, lo: float, close: float, m: time, width: float, gap: float | None, vix: float | None) -> dict:
+        """The 0-7 breakout score of this signal (g1_research/SCORE_PREREG.md). Record only: nothing here gates a trade."""
+        if not self.SCORE:
+            return {}
+        try:
+            now = time_mod.monotonic()
+            if self._closes is None or self._closes[0] != self.day or (self._closes[1] is None and now - self._closes[2] > 60):
+                self._closes = (self.day, g1_score.daily_closes(self.upstox, self.day), now)
+            f = g1_score.features(lo, close, m, width, gap, vix, self._closes[1])
+            before = [d["score"] for k, d in sorted(self.state["days"].items()) if k < self.day.isoformat() and "score" in d]
+            return g1_score.stamp(f, before)
+        except Exception as exc:  # noqa: BLE001 - a record must never stop the trade
+            log.warning("g1 score failed (%s)", exc)
+            return {}
+
+    def _score_text(self, st: dict) -> str:
+        return "; " + g1_score.line(st) if "score" in st else ""
 
     # ------------------------------------------------------------ hooks
     def entry_skip(self, day: date, expiry: str) -> str:
