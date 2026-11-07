@@ -927,6 +927,21 @@ def api_paper_trades(_: str = Depends(auth)):
     return {"trades": trades, "stats": trade_stats(trades)}
 
 
+@app.get("/api/paper/path/{pid}")
+def api_paper_path(pid: str, _: str = Depends(auth)):
+    """One paper trade's recorded best bid / ask from the buy to an hour after the sale (data/observations, written by
+    server/peak.py ObsLog on every change): the results page's trade chart. Read only."""
+    from server.peak import read_path
+    lg = _ledger()
+    with lg.lock:
+        p = next((x for x in lg.state.get("positions", []) + lg.state.get("closed", []) if x.get("id") == pid), None)
+        first, last = (p or {}).get("opened_at"), (p or {}).get("closed_at")
+    if p is None:
+        raise HTTPException(404, "no such paper trade")
+    last = (last or datetime.now(IST).isoformat())[:10]
+    return {"id": pid, "rows": read_path(lg.obs.dir, pid, str(first)[:10], last)}
+
+
 @app.post("/api/paper/close/{pid}")
 def api_paper_close(pid: str, _: str = Depends(auth)):
     """Close one paper position now at the best bid (the results page's Close)."""

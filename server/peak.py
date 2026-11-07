@@ -125,6 +125,53 @@ class ObsLog:
             fh.write(json.dumps(row, separators=(",", ":")) + "\n")
 
 
+_PATH_CACHE: dict[tuple, list] = {}                 # (file, size, mtime, trade id) -> its rows: past days never change
+
+
+def _file_path(f: Path, pid: str) -> list[dict]:
+    st = f.stat()
+    key = (str(f), st.st_size, st.st_mtime_ns, pid)
+    if key not in _PATH_CACHE:
+        if len(_PATH_CACHE) > 512:
+            _PATH_CACHE.clear()
+        rows = []
+        with open(f, encoding="utf-8") as fh:
+            for line in fh:
+                if pid not in line:
+                    continue
+                try:
+                    r = json.loads(line)
+                except ValueError:
+                    continue
+                if r.get("id") == pid:
+                    rows.append({k: r.get(k) for k in ("t", "bid", "ask", "ltp", "phase")})
+        _PATH_CACHE[key] = rows
+    return _PATH_CACHE[key]
+
+
+def read_path(obs_dir: Path, pid: str, first: str, last: str, max_rows: int = 3000) -> list[dict]:
+    """One trade's recorded bid / ask rows (ObsLog) from day `first` to day `last` (ISO dates), oldest first:
+    {t, bid, ask, ltp, phase}; the results page's trade chart. A longer record is thinned to about `max_rows` by keeping
+    the lowest and the highest bid of each slice, so the chart's peaks and dips survive. Read only."""
+    rows = []
+    for f in sorted(Path(obs_dir).glob("*.jsonl")):
+        if first <= f.stem <= last:
+            rows += _file_path(f, pid)
+    rows.sort(key=lambda r: r["t"] or "")
+    if len(rows) <= max_rows:
+        return rows
+    n = max(1, max_rows // 2)
+    size, out = len(rows) / n, []
+    for b in range(n):
+        chunk = rows[int(b * size):int((b + 1) * size)]
+        priced = [r for r in chunk if r["bid"] is not None]
+        if not priced:
+            continue
+        lo, hi = min(priced, key=lambda r: r["bid"]), max(priced, key=lambda r: r["bid"])
+        out += [lo] if lo is hi else sorted((lo, hi), key=lambda r: r["t"])
+    return out
+
+
 def ltt_age(ltt, now: datetime) -> dict:
     """{"ltt_age_s", "stale_ltt", "stale_ltt_reason"} for a last-trade time (str "YYYY-MM-DD HH:MM:SS" IST, ISO, or
     datetime). Missing or unreadable -> age None, stale_ltt None, with the reason."""
