@@ -942,6 +942,14 @@ def api_paper_path(pid: str, _: str = Depends(auth)):
     return {"id": pid, "rows": read_path(lg.obs.dir, pid, str(first)[:10], last)}
 
 
+@app.get("/api/paper/gaps")
+def api_paper_gaps(_: str = Depends(auth)):
+    """Every paper trade's recorded day edges {id: [[day, open bid at 09:16, last bid], ...]}: the results page's gap-open
+    column (a day's open against the previous day's last bid). Read only; server/peak.py day_edges."""
+    from server.peak import day_edges
+    return {"gaps": day_edges(_ledger().obs.dir)}
+
+
 @app.post("/api/paper/close/{pid}")
 def api_paper_close(pid: str, _: str = Depends(auth)):
     """Close one paper position now at the best bid (the results page's Close)."""

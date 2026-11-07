@@ -20,6 +20,7 @@ when peak_net > 0 (else None with a reason), never clamped; peak_to_exit_pct = (
 from __future__ import annotations
 
 import json
+import re
 import threading
 from datetime import datetime, time, timedelta, timezone
 from pathlib import Path
@@ -123,6 +124,52 @@ class ObsLog:
         self.dir.mkdir(parents=True, exist_ok=True)
         with open(self.dir / f"{now.date().isoformat()}.jsonl", "a", encoding="utf-8") as fh:
             fh.write(json.dumps(row, separators=(",", ":")) + "\n")
+
+
+_EDGE_RE = re.compile(r'"id":"([^"]+)","t":"(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})[^"]*","ts":"[^"]*","bid":([\d.]+)')
+_EDGES: dict[str, list] = {}                        # file -> [bytes read, {trade id: [bid standing at 09:16, first bid after it, last bid]}]
+_EDGE_LOCK = threading.Lock()
+
+
+def day_edges(obs_dir: Path) -> dict[str, list[list]]:
+    """Every trade's recorded day edges, oldest day first: {trade id: [[day, open bid, last bid], ...]} from the held rows of
+    data/observations. The open bid is the bid standing at 09:16:00 (the project's 09:16 convention: the first seconds can
+    still carry yesterday's book), else the first bid after it; the last bid is the day's last held row up to 15:30. The
+    results page's gap-open column compares a day's open bid with the previous day's last bid. One pass per file, then only
+    the bytes added since (today's file grows all session); a restart reads everything again (about 10 s for 11 days)."""
+    out: dict[str, list[list]] = {}
+    with _EDGE_LOCK:
+        for f in sorted(Path(obs_dir).glob("*.jsonl")):
+            st = f.stat().st_size
+            hold = _EDGES.get(str(f))
+            if hold is None or hold[0] > st:
+                hold = _EDGES[str(f)] = [0, {}]
+            if st > hold[0]:
+                with open(f, "rb") as fh:
+                    fh.seek(hold[0])
+                    chunk = fh.read(st - hold[0])
+                cut = chunk.rfind(b"\n") + 1                    # a half-written last line waits for the next call
+                hold[0] += cut
+                for line in chunk[:cut].decode("utf-8", "replace").splitlines():
+                    if not line.endswith('"phase":"held"}'):
+                        continue
+                    m = _EDGE_RE.match(line[1:])
+                    if not m:
+                        continue
+                    pid, d, hms, bid = m.group(1), m.group(2), m.group(3), float(m.group(4))
+                    if bid <= 0 or hms > "15:30:00":
+                        continue
+                    e = hold[1].setdefault(pid, [None, None, None])
+                    if hms <= "09:16:00":
+                        e[0] = bid
+                    elif e[1] is None:
+                        e[1] = bid
+                    e[2] = bid
+            for pid, (std, after, last) in hold[1].items():
+                op = std if std is not None else after
+                if op is not None and last is not None:
+                    out.setdefault(pid, []).append([f.stem, op, last])
+    return out
 
 
 _PATH_CACHE: dict[tuple, list] = {}                 # (file, size, mtime, trade id) -> its rows: past days never change
