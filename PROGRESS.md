@@ -1035,3 +1035,6 @@ same-day exit, lot Rs 600-8,000. Rule-7 (B < Rs 10, >= 7 sessions to expiry): -1
   to `data/special_sessions.json` once NSE announces a weekend session.
 - Also noted: Tue 10 Nov 2026 is a holiday, so the NIFTY weekly expiry moves to Mon 9 Nov; the XP log's first day is
   Mon 9 Nov (it reads the expiry from the option list), not Tue 10 Nov as first written.
+
+### 2026-11-07: handoff for the index chat
+- `HANDOFF_INDEX_G1.md` written (state, house rules, live system, research results, open items); pointer added at the top of `HANDOFF.md`.
