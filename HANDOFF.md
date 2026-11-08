@@ -28,7 +28,7 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
 ## 1-8 Nov 2026: what this chat did (newest state; this chat is a fork of "rem works in fade"; id `local_7712e1b3-d385-48bb-a87b-25789c0bada8`)
-**Live now:** the VM runs `9d9a937cc` (the index chat's merge of `main`, deployed Sun 8 Nov; it includes this chat's last commit `32891bb9`, which was deployed alone at 10:35 IST). Every deploy ships all of `main`, both chats' commits. Paper account: 45 open (Arm A / B calls from 15 Oct on), 96 closed
+**Live now:** the VM runs `292e045a` (deployed Mon 9 Nov 00:12 IST; it includes the index chat's Near Tighty SENSEX merge `9d9a937cc`). Every deploy ships all of `main`, both chats' commits. Paper account: 45 open (Arm A / B calls from 15 Oct on), 96 closed
 (69 fade). The PC clock is ~5.5 h behind IST: read market time from the VM before any restart. S1 v12 rules are unchanged.
 **Deploy pattern used all week (a scratch script, not in the repo):** `ssh -o BatchMode=yes fo-scanner 'bash -s' < script.sh` where the script
 refuses on weekdays 09:00-15:45 by the VM's `TZ=Asia/Kolkata` clock, does `git fetch` + `git merge --ff-only origin/main`, `systemctl restart fo-scanner`,
@@ -52,9 +52,16 @@ then prints `is-active` and `running commit`. `data/scan.json` shows as modified
   removed in `32891bb9`. Do not re-add. The user wants "the previous after-sale trading in all": it is drawn for the 80 of 96 closed trades that have recorded
   rows (the server records only **60 minutes** after a sale, from 26 Oct; Arm A / B sell at 15:20, so they have ~10 minutes).
 
-**Assumption the user has NOT confirmed:** "gap open" = a day's 09:16 bid against the previous session's last bid (from `data/observations`, held rows only),
-marked when the biggest gap reaches the chosen size (10 / 20 / 50 / 100 %, default 20). The user's words were "how many of them have hit at the gap open in
-any day, mark it": ask whether they meant stop hits or +100 % jumps. Trades held one day show "-".
+**Answers the user gave on 9 Nov (all built, deployed, DECISIONS 2026-11-09):**
+- **Gap open** = a day's 09:16 bid against the **previous close**; the column shows the biggest gap up and down (marked at the chosen size) and the latest gap %.
+  A special session counts as the previous close: `scanner/muhurat_pull.py` wrote `data/muhurat/2026-11-08.json` (Upstox 1-minute history, last prices) and
+  `/api/paper/gaps` adds it as a "Muhurat" row, so Monday's gap reads against the Muhurat close. Re-run the pull for any later special session
+  (`python -m scanner.muhurat_pull <date> <ledger.json>`); the index has no candles for a special session.
+- **After-sale price path recorded to T-2** (`server/paper.py _follow_path`, one `after_exit` row per 120 s per sold trade plus new extremes; ~5 MB a day;
+  watch the `paper-state` size). Only trades sold from 9 Nov on get it; the chart already draws `after_exit` rows across days.
+- **Muhurat check:** 30 of the 45 open options traded in it (15 did not); median -6 % vs Friday's last price, widest -19 % / +30 %; none near the 50 % stop.
+  Be careful reading Monday 9 Nov: its gaps include the weekend and that session, and the Muhurat prices are last prices, not bids.
+- **Funnel link: dropped** (left as it is on the server, not repaired). Use the sslip.io link.
 
 **Research closed this week (all numbers only, no live change):**
 - Fade profit-target carry (`strategies/S1_fade_target_carry.md`, results `75a0e8329`): sell limit +50 % held to T-1 = -8.2 % a trade vs v12 +2.2 %
@@ -81,8 +88,7 @@ its `/graphify` skill and `~/.claude/CLAUDE.md` were installed), the `dashboard-
 Test env: `$TEMP/fo-venv` (rebuilt 2 Nov), `pytest -q -p no:warnings tests` = 739 pass, 1 skipped. Preview: `.claude/launch.json` entry `results-preview`
 (port 8765, `DATA_DIR` = a scratch folder holding copies of `paper_ledger.json` and `data/observations/` from the `paper-state` branch; the scratch path changes per session).
 
-**Open for the user (ask, do not assume):** (1) what "hit at the gap open" means (above); (2) record the price path for days after a sale, not just 60 minutes (changes what the
-live server stores; unanswered); (3) the Muhurat price pull; (4) whether the Funnel link should be repaired or dropped; (5) the older list in "Open" below.
+**Open for the user:** nothing new from this chat. Check Monday 9 Nov after 09:15: `after_exit` rows appear for trades sold that day beyond the first hour, the gap column's Muhurat rows, and the older "Open" list below.
 
 ## Live system: AWS Lightsail Mumbai VM (this block is the 26-27 Oct state; the section above is newer)
 - **Pushed 27 Oct (since deployed):** `bd8ae35f`, the **scan watcher** (`_scan_watch_once`): while the next session's lists are
