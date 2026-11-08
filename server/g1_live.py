@@ -342,7 +342,8 @@ class G1Trader:
         self.last_bid = None
         self._save()
         alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold {self.INDEX} {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
-                    f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
+                    f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %), max up {t['max_up_pct']:+.0f} %"
+                    + (f"; {g1_score.line(t)}" if t.get("score") is not None else ""), key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
 
     # ------------------------------------------------------------ score (record only)
     def _score(self, lo: float, close: float, m: time, width: float, gap: float | None, vix: float | None) -> dict:
@@ -396,5 +397,8 @@ class G1Trader:
                 "mean_pct": sum(x) / len(x) if x else None,
                 "median_pct": median(x),
                 "t": t_stat(x), "total_rs": round(sum(t["net_rs"] for t in sel), 2),
-                "status": "forward paper · verdict at 30 trades"})
+                "status": "forward paper · verdict at 30 trades",
+                "bands": g1_score.bands(sel) if self.SCORE else []})
+        if self.SCORE:
+            out["score_meta"] = g1_score.meta()
         return out

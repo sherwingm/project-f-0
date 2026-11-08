@@ -69,3 +69,23 @@ def test_score_failure_never_stops_a_trade(tmp_path, monkeypatch):
 def test_near_tighty_is_not_scored(tmp_path, monkeypatch):
     from server.nt_live import NearTightyTrader
     assert NearTightyTrader.SCORE is False and G.G1Trader.SCORE is True
+
+
+def test_view_carries_score_meta_and_bands(tmp_path, monkeypatch):
+    monkeypatch.setattr(G.sessions, "is_session", lambda d: d.weekday() < 5)
+    monkeypatch.setattr(G.alerts, "send", lambda *a, **k: False)
+    tr = G.G1Trader(Stream(), Upstox(), tmp_path)
+    tr.state["trades"] = [
+        {"day": "2026-11-05", "paid": 100.0, "net_pct": 40.0, "net_rs": 2600.0, "max_up_pct": 150.0, "score": 6, "score_band": "high 5-7", "g1f_skip": ""},
+        {"day": "2026-11-06", "paid": 100.0, "net_pct": -50.0, "net_rs": -3250.0, "max_up_pct": 10.0, "score": 2, "score_band": "low 0-2", "g1f_skip": "VIX 18 >= 17"},
+        {"day": "2026-11-09", "paid": 100.0, "net_pct": 10.0, "net_rs": 650.0, "max_up_pct": 60.0, "g1f_skip": ""},     # no score (before the score existed)
+    ]
+    v = tr.view()
+    assert [m["key"] for m in v["score_meta"]] == ["depth", "time", "width", "gap", "vix", "prev5", "ema20"]
+    assert all(m["rule"] and m["short"] for m in v["score_meta"])
+    f = next(t for t in v["tracks"] if t["pod"].startswith("G1-F"))
+    hi = next(b for b in f["bands"] if b["band"] == "high 5-7")
+    assert hi["n"] == 1 and hi["up100"] == 1.0 and hi["mean"] == 150.0 and hi["booked"] == 40.0
+    assert next(b for b in f["bands"] if b["band"] == "low 0-2")["n"] == 0            # the low-score trade was skipped by G1-F
+    g = next(t for t in v["tracks"] if t["pod"].startswith("G1 "))
+    assert next(b for b in g["bands"] if b["band"] == "low 0-2")["n"] == 1

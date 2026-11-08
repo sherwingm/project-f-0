@@ -57,6 +57,21 @@ td small { font-size:10.5px; }
 .exp { display:flex; flex-wrap:wrap; gap:8px; }
 .exp span { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:6px 10px; font-size:12.5px; }
 code { font-family:"JetBrains Mono",monospace; font-size:12px; }
+.sb { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+.sb .big { font:700 30px "JetBrains Mono",monospace; }
+.sb .bar { display:flex; gap:3px; margin:8px 0 10px; }
+.sb .bar i { flex:1; height:8px; border-radius:2px; background:var(--line-strong); }
+.sb .bar i.on { background:var(--bull); }
+.sb .stat { display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:8px; margin-bottom:10px; }
+.sb .stat div small { display:block; font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; }
+.sb .stat div b { font:600 15px "JetBrains Mono",monospace; }
+.sb .pts { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:6px; }
+.sb .pt { border:1px solid var(--line); border-radius:8px; padding:6px 9px; font-size:12px; }
+.sb .pt.on { border-color:var(--bull); background:var(--bull-soft); }
+.sb .pt.off { color:var(--muted); }
+.sb .pt b { display:block; font-size:12.5px; }
+.chip { display:inline-block; background:var(--bull-soft); color:var(--bull); border-radius:6px; padding:1px 6px; margin:1px 2px 1px 0; font:600 10.5px Inter,sans-serif; }
+.pill.band { background:var(--surface); border:1px solid var(--line-strong); color:var(--ink); }
 </style>
 </head>
 <body>
@@ -94,6 +109,28 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
   const sg = v => v == null ? "—" : `<span class="${v < 0 ? "down" : "up"}">${v > 0 ? "+" : ""}${num(v, 1)} %</span>`;
   const hm = s => s ? `${day(s.slice(0, 10))} ${s.slice(11, 19)}` : "—";
 
+  const INPUT_FMT = { depth: v => num(v, 3) + " %", time: v => num(v, 0) + " min", width: v => num(v, 2) + " %", gap: v => (v > 0 ? "+" : "") + num(v, 2) + " %",
+    vix: v => num(v, 2), prev5: v => (v > 0 ? "+" : "") + num(v, 2) + " %", ema20: v => (v > 0 ? "+" : "") + num(v, 2) + " %" };
+  const chips = (r, meta) => r && r.score != null ? (r.score_items || []).map(k => `<span class="chip">${esc(((meta || []).find(m => m.key === k) || {}).short || k)}</span>`).join("") || `<small>none</small>` : "—";
+  function scoreBoard(r, meta, title) {
+    if (!r || r.score == null) return "";
+    const on = new Set(r.score_items || []), miss = new Set(r.score_missing || []), inp = r.score_inputs || {};
+    const strong = (meta || []).filter(m => on.has(m.key)).map(m => m.label);
+    return `<h2>Score board <small>${esc(title)} · record only, it changes no rule</small></h2><div class="sb">
+      <div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap"><span class="big">${num(r.score)}/7</span><span>${pc(r.score_pct, 0)}</span><span class="pill band">${esc(r.score_band)}</span></div>
+      <div class="bar">${[0, 1, 2, 3, 4, 5, 6].map(i => `<i class="${i < r.score ? "on" : ""}"></i>`).join("")}</div>
+      <div class="stat"><div><small>Percentile vs history</small><b>${r.score_pctile == null ? "—" : num(r.score_pctile, 0)}</b></div><div><small>Running average</small><b>${pc(r.score_avg_pct, 0)}</b></div><div><small>Strong points</small><b>${num(on.size)} of 7</b></div></div>
+      <p style="margin:0 0 8px;font-size:12.5px"><b>Strong:</b> ${strong.length ? esc(strong.join(" · ")) : "none"}</p>
+      <div class="pts">${(meta || []).map(m => { const v = inp[m.key]; const s = on.has(m.key);
+        return `<div class="pt ${s ? "on" : "off"}"><b>${s ? "✓" : "✗"} ${esc(m.label)}</b>${esc(m.rule)}<br><small>now: ${miss.has(m.key) || v == null ? "no data" : esc((INPUT_FMT[m.key] || String)(v))}</small></div>`; }).join("")}</div></div>`;
+  }
+  function bandTable(tracks) {
+    const rows = (tracks || []).filter(t => (t.bands || []).some(b => b.n));
+    if (!rows.length) return `<p class="note">Score by band: shown here once closed trades carry a score. Judged at 30 trades, max up first.</p>`;
+    return `<h2>Max up by score band <small>closed trades · max up first, then booked · judged at 30 trades · record only</small></h2><div class="tw"><table><thead><tr><th>Track · band</th><th>Trades</th><th>Max up ≥ +100 %</th><th>Max up avg</th><th>Max up median</th><th>Booked avg</th></tr></thead><tbody>${rows.map(t => t.bands.map(b =>
+      `<tr><td>${esc(t.pod.split(" ")[0])} · ${esc(b.band)}</td><td>${num(b.n)}</td><td>${b.up100 == null ? "—" : pc(b.up100 * 100, 0)}</td><td>${sg(b.mean)}</td><td>${sg(b.median)}</td><td>${sg(b.booked)}</td></tr>`).join("")).join("")}</tbody></table></div>`;
+  }
+
   function g1Section() {
     const g = D.g1;
     let h = `<h2>G1-F (main) · NIFTY downside ORB put, held overnight <small>G1 = same trade without the skip filters · paper · rules: ${esc((g || {}).page || "strategies/S3_G1_put_overnight.md")}</small></h2>`;
@@ -103,13 +140,16 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     const td = g.today;
     h += `<div class="kv"><div><small>Today</small><b>${esc(td ? td.status : "no session yet")}</b></div>${td && td.hi ? `<div><small>Opening range</small><b>${num(td.lo, 2)} – ${num(td.hi, 2)}</b></div>` : ""}${td && td.signal ? `<div><small>Signal</small><b>${esc(td.signal)} · gap ${td.gap_pct == null ? "—" : num(td.gap_pct, 2) + " %"} · width ${num(td.width_pct, 2)} % · VIX ${td.vix == null ? "—" : num(td.vix, 2)}</b></div>` : ""}</div>`;
     const o = g.open;
+    const sbSrc = td && td.score != null ? td : (o && o.score != null ? o : null);
+    h += scoreBoard(sbSrc, g.score_meta, sbSrc ? `signal ${sbSrc.signal || ""}${sbSrc.day ? " on " + day(sbSrc.day) : ""}` : "");
     h += `<h2>Open position</h2>` + (o ? `<div class="tw"><table><thead><tr><th>Bought</th><th>Contract</th><th>Paid (ask)</th><th>Bid now</th><th>Best bid</th><th>Unrealised</th><th>Stop at</th><th>G1-F</th></tr></thead><tbody>
       <tr><td>${hm(o.bought_at)}</td><td><b>NIFTY ${day(o.expiry)} ${num(o.strike)} PE</b> × ${num(o.qty)}</td><td>₹${num(o.paid, 2)}</td><td>₹${num(o.mark, 2)}</td><td>₹${num(o.max_bid, 2)}</td><td class="${o.unrealised_rs < 0 ? "down" : "up"}">₹${num(o.unrealised_rs)}</td><td>₹${num(o.paid * 0.5, 2)}</td><td>${o.g1f_skip ? `<small>skips: ${esc(o.g1f_skip)}</small>` : "counts"}</td></tr></tbody></table></div>`
       : `<p class="empty">None.</p>`);
     const tr = g.trades || [];
-    h += `<h2>Trades <small>${tr.length} closed</small></h2>` + (tr.length ? `<div class="tw"><table><thead><tr><th>Day</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Net ₹</th><th>Net %</th><th>Max up</th><th>G1-F</th></tr></thead><tbody>${tr.map(t =>
-      `<tr><td>${day(t.day)} ${esc(t.signal)}</td><td>${day(t.expiry)} ${num(t.strike)} PE</td><td>₹${num(t.paid, 2)}</td><td>₹${num(t.sold, 2)}</td><td>${hm(t.sold_at)} <small>${esc(t.reason)}</small></td><td class="${t.net_rs < 0 ? "down" : "up"}">₹${num(t.net_rs)}</td><td>${sg(t.net_pct)}</td><td>${sg(t.max_up_pct)}</td><td>${t.g1f_skip ? `<small>skips</small>` : "counts"}</td></tr>`).join("")}</tbody></table></div>`
+    h += `<h2>Trades <small>${tr.length} closed</small></h2>` + (tr.length ? `<div class="tw"><table><thead><tr><th>Day</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Net ₹</th><th>Net %</th><th>Max up</th><th>Score</th><th>Strong points</th><th>G1-F</th></tr></thead><tbody>${tr.map(t =>
+      `<tr><td>${day(t.day)} ${esc(t.signal)}</td><td>${day(t.expiry)} ${num(t.strike)} PE</td><td>₹${num(t.paid, 2)}</td><td>₹${num(t.sold, 2)}</td><td>${hm(t.sold_at)} <small>${esc(t.reason)}</small></td><td class="${t.net_rs < 0 ? "down" : "up"}">₹${num(t.net_rs)}</td><td>${sg(t.net_pct)}</td><td>${sg(t.max_up_pct)}</td><td>${t.score == null ? "—" : `<b>${num(t.score)}/7</b> <small>${esc(t.score_band)}</small>`}</td><td style="text-align:left;white-space:normal;min-width:150px">${chips(t, g.score_meta)}</td><td>${t.g1f_skip ? `<small>skips</small>` : "counts"}</td></tr>`).join("")}</tbody></table></div>`
       : `<p class="empty">No closed trade yet. The first possible entry is the first session the server runs this code.</p>`);
+    h += bandTable(g.tracks);
     return h;
   }
 

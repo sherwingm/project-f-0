@@ -45,6 +45,32 @@ def points(f: dict) -> tuple[int, list[str], list[str]]:
     return len(got), got, missing
 
 
+SHORT = {"depth": "Deep break", "time": "Early", "width": "Narrow range", "gap": "Gap down", "vix": "VIX<17", "prev5": "Falling 5d", "ema20": "Below EMA20"}
+LABEL = {"depth": "Breakout depth", "time": "Early break", "width": "Narrow range", "gap": "Day-1 gap down", "vix": "Calm VIX",
+         "prev5": "Falling 5 days", "ema20": "Below EMA20"}
+RULE = {"depth": "closes at least {th:.3f} % below the range low", "time": "breaks within {th:.0f} minutes of 09:30",
+        "width": "range width at most {th:.2f} %", "gap": "day-1 gap at most {th:+.2f} %", "vix": "India VIX under {th:.0f}",
+        "prev5": "previous 5-day return at most {th:+.2f} %", "ema20": "previous close at most {th:+.2f} % from its EMA20"}
+
+
+def meta() -> list[dict]:
+    """What each point means, for the website's score board."""
+    return [{"key": k, "label": LABEL[k], "short": SHORT[k], "rule": RULE[k].format(th=th)} for k, _, th in ITEMS]
+
+
+def bands(trades: list) -> list[dict]:
+    """Max up first, then the booked result, by score band (closed trades that carry a score)."""
+    out = []
+    for b in ("high 5-7", "mid 3-4", "low 0-2"):
+        sel = [t for t in trades if t.get("score_band") == b]
+        mu = sorted(t["max_up_pct"] for t in sel if t.get("max_up_pct") is not None)
+        net = [t["net_pct"] for t in sel if t.get("net_pct") is not None]
+        out.append({"band": b, "n": len(sel), "up100": (sum(v >= 100 for v in mu) / len(mu)) if mu else None,
+                    "mean": sum(mu) / len(mu) if mu else None, "median": (mu[len(mu) // 2] if len(mu) % 2 else (mu[len(mu) // 2 - 1] + mu[len(mu) // 2]) / 2) if mu else None,
+                    "booked": sum(net) / len(net) if net else None})
+    return out
+
+
 def history_scores() -> list[int]:
     try:
         with open(HISTORY_CSV, encoding="utf-8") as fh:
