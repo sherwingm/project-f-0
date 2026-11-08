@@ -1074,4 +1074,9 @@ server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, scor
   t 2.73, +100 % reached by the next close on 38 %; Near Tighty +12.6 %; G1 +8.4 %), all in-sample; buying by days to
   expiry, 09:20 features, expiry-day blasts, N1 (−24 %), the independent expiry study and the G1 add-ons give nothing.
   Live ledgers checked 2026-11-08: 0 trades booked (5 and 6 Nov were upward breakouts). No live change.
+- 2026-11-08 · Near Tighty on SENSEX (the user: "SENSEX ... put compute for this", then "this is near tighty why the g1-f is
+  here"): `near_tighty_research/reports/NT_SENSEX.md`. G1-F is the index chat's, so it is not used: Near Tighty rule only
+  (1-3 sessions to expiry). SENSEX NT, 162 trades, sold next 09:16 with no target: +15.2 % (t 2.29, +₹1.74 lakh at lot 20,
+  halves +19.0 / +11.9); NIFTY NT +12.6 %. Max up ≥ +100 %: 25 % by next 09:16, 44 % by next close. History only; nothing
+  trades SENSEX live.
 

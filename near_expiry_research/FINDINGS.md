@@ -49,7 +49,7 @@ unfiltered G1 the 09:16 exit books more. (G1 / G1-F sell at the next close since
 
 ## Still open (the search for the max)
 1. **Forward results:** 30 trades each for G1, G1-F and Near Tighty (0 booked so far). The only real test.
-2. **SENSEX put side:** max up as good as NIFTY's (43 % reach +100 % by the next close); booked result and a forward run not done.
+2. **SENSEX Near Tighty:** booked on history 2026-11-08 (`near_tighty_research/reports/NT_SENSEX.md`): +15.2 % (t 2.29, 162 trades), stronger than NIFTY's +12.6 %; not live, no forward run yet.
 3. **Upside blasts are not covered:** every live method is a put on a downside break; the call mirror is much weaker on max up.
 4. **Whether the three G1-F filters hold up** on data they were not picked from (only the forward run can say).
 5. **Exit choice per filter set** (table above): decide only on forward data, not on this history.

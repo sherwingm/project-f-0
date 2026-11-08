@@ -15,6 +15,8 @@ from the overall index / NIFTY optimisation. Anything related to Near Tighty is 
 | `reports/NT_TARGETS.md` | which sell-at level (1.5x-10x) books the best result, NT, history (2026-11-07) |
 | `data/nt_target_trades.csv`, `results/nt_target_summary.csv` | per trade and per level / window: sold price, reason, net, max up |
 | `scripts/nt_targets.py` | reproduces both |
+| `reports/NT_SENSEX.md` | Near Tighty on SENSEX: booked result, history (2026-11-08) |
+| `data/nt_sensex_booked_trades.csv`, `results/nt_sensex_booked_summary.csv`, `scripts/nt_sensex_booked.py` | per trade / per set, reproduces |
 
 ## Related Near Tighty files that live elsewhere (not moved)
 - `strategies/NT_near_tighty.md`: the pre-registered rules and gate.
