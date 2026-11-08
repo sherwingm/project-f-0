@@ -1106,7 +1106,6 @@ Pre-registered EXTERNAL_PREREG.md; fetched NSE participant OI (1,280 sessions) a
 
 ## 8 Nov 2026 (index chat): drift-free FII/DII positions
 EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures one-day change, q 0.08); failed validation (35 vs 28 %, p 0.28) and confirmation (37 vs 37 %). Nothing passes. EXTERNAL2_RESULT.md.
-<<<<<<< Updated upstream
 - 2026-11-08 · Near Tighty on SENSEX in live paper (the user: "Add sensex"): `NearTightySensexTrader` (own ledger
   `data/nt_sensex_ledger.json`, `/api/near-tighty/sensex`, second section on `/near-tighty`), rules pre-registered in
   `strategies/NT_near_tighty.md`. The server only knew NSE instruments, so `server/upstox.py` loads SENSEX contracts from one
@@ -1121,8 +1120,6 @@ EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures 
   trade). The earlier "Thursday at the earliest" was NIFTY's calendar. A one-time read-only check is scheduled for Mon 2026-11-09 09:20 IST
   (scheduled task `check-nt-sensex-feed-mon-9-nov`): SENSEX contracts loaded, subscriptions, ledger status.
 
-=======
 
 ## 8 Nov 2026 (S1 chat): results-page trade pages, Arm A / B live tables, gap column; today's-book fix live; fade carry closed
 Paper buys wait for today's book (4e2ce3e8, live; first real test Mon 9 Nov 09:15). Results page: design pass, motion, a row opens its own trade page with the best-bid chart and after-sale hour, Arm A / B tabs with live tables and filters, Won / Lost on open positions, Gap open column (definition is an assumption, unconfirmed), /api/paper/path and /api/paper/gaps; VM at 32891bb9. Fade profit-target carry FAILED (-8.2 % vs +2.2 %). New link https://3-109-99-56.sslip.io (Funnel link was down). Details in HANDOFF.md "1-8 Nov 2026".
->>>>>>> Stashed changes
