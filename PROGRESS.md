@@ -1123,3 +1123,6 @@ EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures 
 
 ## 8 Nov 2026 (S1 chat): results-page trade pages, Arm A / B live tables, gap column; today's-book fix live; fade carry closed
 Paper buys wait for today's book (4e2ce3e8, live; first real test Mon 9 Nov 09:15). Results page: design pass, motion, a row opens its own trade page with the best-bid chart and after-sale hour, Arm A / B tabs with live tables and filters, Won / Lost on open positions, Gap open column (definition is an assumption, unconfirmed), /api/paper/path and /api/paper/gaps; VM at 32891bb9. Fade profit-target carry FAILED (-8.2 % vs +2.2 %). New link https://3-109-99-56.sslip.io (Funnel link was down). Details in HANDOFF.md "1-8 Nov 2026".
+
+## 9 Nov 2026 (index chat): FII/DII positions vs NIFTY next day, all sessions
+EXTERNAL3_PREREG.md: 1,228 sessions, 64 rules. Direction: nothing. Size: retail (Client) index-futures net high vs its 60-session past gives more big-move days (42/29, 34/22, 33/26 %; confirmation p 0.051), no pass by the plan. EXTERNAL3_RESULT.md.
