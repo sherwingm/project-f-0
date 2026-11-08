@@ -1100,3 +1100,6 @@ Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, B
 
 ## 8 Nov 2026 (index chat): G1 follow-through on NIFTY spot, five years
 Pre-registered UNDERLYING_PREREG.md; 638 signals from 2021-10 (spot data starts Oct 2021, not 2018). Q0: follow-through vs same-minute baseline +0.06 ATR (p 0.11-0.14, not significant). 78 single rules over 40 features: 0 candidates (best q 0.43). UNDERLYING_RESULT.md. No live change.
+
+## 8 Nov 2026 (index chat): FII/DII positions, news tone, heavyweights vs G1 follow-through
+Pre-registered EXTERNAL_PREREG.md; fetched NSE participant OI (1,280 sessions) and GDELT news tone (public); heavyweights from data/eod2. 54 single rules on 638 signals: 0 candidates (best q 0.105). FII/DII cash flows are not available historically (gap). Raw data git-ignored (re-fetch with fetch_external.py). EXTERNAL_RESULT.md.
