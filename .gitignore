@@ -33,3 +33,6 @@ store/
 
 # live 1-second websocket candles copied from the VM (large; the VM keeps the originals)
 data/candles_1s/
+
+# raw public data for g1_research/EXTERNAL_PREREG.md (re-fetch: g1_research/scripts/fetch_external.py)
+g1_research/data/external/
