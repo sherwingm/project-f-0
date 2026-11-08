@@ -1,4 +1,4 @@
-# Handoff (2026-10-27, 09:00 IST)
+# Handoff (8 Nov 2026, evening; the 1-8 Nov section below is the newest, the rest is older)
 
 > **Index chat (G1 / G1-F, expiry research, index max up) has its own handoff: `HANDOFF_INDEX_G1.md` (2026-11-07).**
 
@@ -27,8 +27,65 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
   check the staged diff is yours (it has left colour edits in `templates/*.html` unstaged), pull with `--autostash`.
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
-## Live system: AWS Lightsail Mumbai VM, commit `25669145` (deployed Mon 26 Oct 22:49)
-- **Pushed 27 Oct, NOT deployed yet:** `bd8ae35f`, the **scan watcher** (`_scan_watch_once`): while the next session's lists are
+## 1-8 Nov 2026: what this chat did (newest state; this chat is a fork of "rem works in fade"; id `local_7712e1b3-d385-48bb-a87b-25789c0bada8`)
+**Live now:** the VM runs `32891bb9` (deployed Sun 8 Nov 10:35 IST). Paper account: 45 open (Arm A / B calls from 15 Oct on), 96 closed
+(69 fade). The PC clock is ~5.5 h behind IST: read market time from the VM before any restart. S1 v12 rules are unchanged.
+**Deploy pattern used all week (a scratch script, not in the repo):** `ssh -o BatchMode=yes fo-scanner 'bash -s' < script.sh` where the script
+refuses on weekdays 09:00-15:45 by the VM's `TZ=Asia/Kolkata` clock, does `git fetch` + `git merge --ff-only origin/main`, `systemctl restart fo-scanner`,
+then prints `is-active` and `running commit`. `data/scan.json` shows as modified on the VM (the server writes it); the ff-only merge was fine.
+
+**Code shipped (all on `main`, deployed):**
+- **Paper buys wait for today's order book** (`4e2ce3e8`, DECISIONS 2026-11-02, plan `strategies/S1_paper_entry_todays_book.md`): `server/peak.py`
+  `old_book` = the 27 Oct last-trade check OR an Upstox stream quote still showing yesterday's volume with no opening price (before 09:30 only).
+  Used by the fade walk, sub-Rs 2 rule, Arm A / B 09:15 entries and the real-order fill; `entry_quote` gains `todays_book` and `day_open`.
+  Why: 29 / 30 Oct JSWENERGY, GODREJCP, BLUESTARCO filled at 09:15 on yesterday's ask. **First real test: Mon 9 Nov 09:15** (check each buy's
+  `entry_quote.todays_book`, how long it waited; `tests/test_todays_book.py` has 12 tests).
+- **Results page** (`templates/results.html`, home page `/`): full-width layout (`f08e486d`), design pass (`612880f1`: tokens kept, one labelled CSS block),
+  data-update motion (`53955da0`: cells flash green / red when a poll moves a number, only visible in market hours, all off under reduced motion),
+  **a row opens that trade's own page in a new tab** (`#view/<pos|trade>:<id>`, `7e0b6658`): details card first, then the best-bid chart of the held
+  period with stop / trail / entry / peak / exit lines, a hover read-out, a sold line and the dashed recorded hour after the sale (`32891bb9`; price labels
+  stacked 16 px apart), then a Gap opens table. New read-only endpoints `/api/paper/path/{id}` (`peak.read_path`) and `/api/paper/gaps`
+  (`peak.day_edges`, incremental, cached); tests in `tests/test_trade_path.py`.
+- **Arm A / Arm B tabs** (`09043046`): the live paper tables of that arm (Max up, open, closed) with the Paper tab's filters and columns, above the older
+  "Forward test" panels. Won / Lost filter now also on open positions (won = if sold now above 0). **Gap open column** on every open and closed table.
+- **The user reverted one idea:** after-sale dots (highest bid / lowest bid / last price) on the chart stretched the scale and squashed the recorded path;
+  removed in `32891bb9`. Do not re-add. The user wants "the previous after-sale trading in all": it is drawn for the 80 of 96 closed trades that have recorded
+  rows (the server records only **60 minutes** after a sale, from 26 Oct; Arm A / B sell at 15:20, so they have ~10 minutes).
+
+**Assumption the user has NOT confirmed:** "gap open" = a day's 09:16 bid against the previous session's last bid (from `data/observations`, held rows only),
+marked when the biggest gap reaches the chosen size (10 / 20 / 50 / 100 %, default 20). The user's words were "how many of them have hit at the gap open in
+any day, mark it": ask whether they meant stop hits or +100 % jumps. Trades held one day show "-".
+
+**Research closed this week (all numbers only, no live change):**
+- Fade profit-target carry (`strategies/S1_fade_target_carry.md`, results `75a0e8329`): sell limit +50 % held to T-1 = -8.2 % a trade vs v12 +2.2 %
+  (paired t -2.98); +100 % -9.4 %; half-carry -3.0 %. FAIL; do not hold fade options past day 0.
+- Past entry-rule studies re-run on the live websocket data (`5f1bb378`, `scanner/fade_live_retest.py`): 0 of 15,061 rules pass, wider stops fail, the 3 near-miss
+  rules lose on 23 live trades. Old-book fills moved -3.5 % to -12.2 % (the reason for the fix above).
+- Arm B backtest (v8 holdout, 74 trades): win rate 17.6 %, max up while held mean +61.8 % / median +5.4 % (to expiry +98 % / +13 %); Arm A 16.6 %, fade 55 %.
+
+**Site and network:**
+- **Use `https://3-109-99-56.sslip.io`** (Caddy on the VM, `/etc/caddy/Caddyfile`, `bind 172.26.4.64` because tailscaled holds :443 on its own address;
+  Lightsail firewall opens 22, 80, 443; password page unchanged). Set up 2 Nov because the Tailscale Funnel link
+  (`ip-172-26-4-64.tail956abb.ts.net`) timed out from the internet (Funnel's public IPs 103.84.155.x refused connections; a `funnel reset` did not help;
+  Tailscale's status page showed no incident). The user's phone has no Tailscale. Funnel was not re-tested after 2 Nov.
+- The auto-mode safety check blocks commands that put a service on the internet; the user ran the Caddy install in the Lightsail browser terminal.
+
+**Muhurat:** Sun 8 Nov 2026 had a special NSE session (~14:20-15:30, per Kotak Neo and Arihant Plus; confirm against NSE's circular). The project lists it as a
+holiday (`data/nse_holidays.json`), so the server recorded and traded nothing and the paper account did not move. Monday 9 Nov is the next session: its gap
+includes the weekend and the Muhurat move. **Tue 10 Nov is also on the holiday list.** Offered, not done: pull the 1-minute Muhurat prices of the 45 open options
+from Upstox's public history.
+
+**PC tools added (not in the repo):** `graphify` (`uv tool`; `graphify update <dir>` builds a free code map in `<dir>/graphify-out/`, ignored by git through
+`.git/info/exclude`; maps exist for the repo root, `expiry_research/` and `near_tighty_research/`; the docs pass would use Claude tokens, the user chose code-only;
+its `/graphify` skill and `~/.claude/CLAUDE.md` were installed), the `dashboard-design` skill in `~/.claude/skills/` (its author-advert sign-off line is skipped).
+Test env: `$TEMP/fo-venv` (rebuilt 2 Nov), `pytest -q -p no:warnings tests` = 739 pass, 1 skipped. Preview: `.claude/launch.json` entry `results-preview`
+(port 8765, `DATA_DIR` = a scratch folder holding copies of `paper_ledger.json` and `data/observations/` from the `paper-state` branch; the scratch path changes per session).
+
+**Open for the user (ask, do not assume):** (1) what "hit at the gap open" means (above); (2) record the price path for days after a sale, not just 60 minutes (changes what the
+live server stores; unanswered); (3) the Muhurat price pull; (4) whether the Funnel link should be repaired or dropped; (5) the older list in "Open" below.
+
+## Live system: AWS Lightsail Mumbai VM (this block is the 26-27 Oct state; the section above is newer)
+- **Pushed 27 Oct (since deployed):** `bd8ae35f`, the **scan watcher** (`_scan_watch_once`): while the next session's lists are
   not on the server it pulls `SCAN_URL` every 10 min outside 09:15-15:45 and reloads only what changed. Deploy it **after
   15:45 on 27 Oct**, guarded.
 - **27 Oct plan (loaded by the 08:40 pull):** fade APLAPOLLO, MANKIND, MAHABANK, RECLTD, TATACONSUM, SONACOMS, PAYTM;
@@ -236,6 +293,9 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
   session.
 
 ## Open (ask the user before doing)
+- **Mon 9 Nov 09:15 (newest):** first live check of the today's-book fix (`entry_quote.todays_book`, wait time); the gap column's first Monday gap
+  (includes the Muhurat session); flashes on the results page need market hours. After 15:45: re-run the checks that apply from the older list.
+- *Older items from 27-30 Oct follow (some are done; verify before acting):*
 - **Tue 27 Oct, before 09:15:** the **09:08 Telegram plan** should arrive (not yet seen sent); trades start 09:15 (11 planned).
 - **After Tue 27 Oct's close (after 15:45):** deploy `bd8ae35f` (guarded); then `python -m scanner.fade_live_validate` on the
   first measured trades (no trade was measured on 26 Oct: no list that day; entry quote and stale flag, held peak/low,
@@ -264,7 +324,10 @@ was unhappy about the token cost of the 21–22 Oct workflows). Keep replies sho
 - Clean the `index-data` history when the repo passes ~3 GB.
 
 ## After a context compaction
-- Read this file first, then the tail of `PROGRESS.md`.
+- Read this file first (the "1-8 Nov 2026" section is the newest state), then the tail of `PROGRESS.md`. The index chat has its own `HANDOFF_INDEX_G1.md`
+  and also commits to `main`: `git pull --rebase --autostash` before pushing, stage only your files.
+- Standing rules the user repeated this week: short plain replies, no deploy 09:00-15:45 on weekdays, never `git add -A`, never commit `S1_web_project.pptx`
+  or `server/autoupdate.py`, no strategy or live-recording change without their word, ask before doing anything that puts a service on the internet.
 - This chat is a fork of "rem works in fade", renamed "S1 fade live fixes 26 Oct" (the desktop app nests forks under their parent;
   `claude://claude.ai/epitaxy/local_7712e1b3-d385-48bb-a87b-25789c0bada8` opens it). The user's mods `live-trades` (a paper-account
   pane) and `pet-crab` are in `C:/Users/sherw/.claude/dev-mods/7712e1b3-d385-48bb-a87b-25789c0bada8/`; they only draw in a terminal
