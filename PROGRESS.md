@@ -1096,3 +1096,7 @@ Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, B
   average loss −0.90R, payoff 2.05, break-even win rate 33 %, profit factor 1.54; 36 % of trades end worse than −1R (gap through
   the stop), worst −1.81R, best +9.75R; without the 5 best +0.17R. Oct 2025 → now (165): +0.31R, PF 1.57. History only.
 
+
+
+## 8 Nov 2026 (index chat): G1 follow-through on NIFTY spot, five years
+Pre-registered UNDERLYING_PREREG.md; 638 signals from 2021-10 (spot data starts Oct 2021, not 2018). Q0: follow-through vs same-minute baseline +0.06 ATR (p 0.11-0.14, not significant). 78 single rules over 40 features: 0 candidates (best q 0.43). UNDERLYING_RESULT.md. No live change.
