@@ -1080,3 +1080,10 @@ server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, scor
   halves +19.0 / +11.9); NIFTY NT +12.6 %. Max up ≥ +100 %: 25 % by next 09:16, 44 % by next close. History only; nothing
   trades SENSEX live.
 
+
+
+## 8 Nov 2026 (index chat): score methods search
+Pre-registered 10 ways to build the score (SCORE_METHODS_PREREG.md), fitted on discovery, read once on validation, plus walk-forward and a selection check. None passes (best M2 rho +0.16, p 0.034 alone but 0.126 after 10 tries; walk-forward about 0). Result: SCORE_METHODS_RESULT.md. Score stays a record only.
+
+## 8 Nov 2026 (index chat): formation patterns, one at a time
+Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, BH 10 %. 0 candidates (best q 0.67); the best two fell to chance on validation. FORMATION_RESULT.md. Nothing changed live.
