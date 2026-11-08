@@ -1103,3 +1103,6 @@ Pre-registered UNDERLYING_PREREG.md; 638 signals from 2021-10 (spot data starts 
 
 ## 8 Nov 2026 (index chat): FII/DII positions, news tone, heavyweights vs G1 follow-through
 Pre-registered EXTERNAL_PREREG.md; fetched NSE participant OI (1,280 sessions) and GDELT news tone (public); heavyweights from data/eod2. 54 single rules on 638 signals: 0 candidates (best q 0.105). FII/DII cash flows are not available historically (gap). Raw data git-ignored (re-fetch with fetch_external.py). EXTERNAL_RESULT.md.
+
+## 8 Nov 2026 (index chat): drift-free FII/DII positions
+EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures one-day change, q 0.08); failed validation (35 vs 28 %, p 0.28) and confirmation (37 vs 37 %). Nothing passes. EXTERNAL2_RESULT.md.
