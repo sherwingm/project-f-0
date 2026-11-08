@@ -1087,3 +1087,8 @@ Pre-registered 10 ways to build the score (SCORE_METHODS_PREREG.md), fitted on d
 
 ## 8 Nov 2026 (index chat): formation patterns, one at a time
 Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, BH 10 %. 0 candidates (best q 0.67); the best two fell to chance on validation. FORMATION_RESULT.md. Nothing changed live.
+- 2026-11-08 · Near Tighty, 2025-10 → present (the user: "get the result between the year of 2025 oct to present"):
+  `near_tighty_research/reports/NT_OCT2025_ON.md`. Sold next 09:16, no target, 50 % stop: NIFTY 78 trades +19.4 % (t 1.71,
+  +₹77.8k), SENSEX 87 trades +11.9 % (t 1.30, +₹82.1k); +100 % reached by the next close on 40 % / 45 %. Earlier period
+  NIFTY +6.0 %, SENSEX +19.0 %. Not independent of the 1-3 session cut; nothing live changed.
+
