@@ -1075,3 +1075,7 @@ server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, scor
   expiry, 09:20 features, expiry-day blasts, N1 (−24 %), the independent expiry study and the G1 add-ons give nothing.
   Live ledgers checked 2026-11-08: 0 trades booked (5 and 6 Nov were upward breakouts). No live change.
 
+
+
+## 8 Nov 2026 (index chat): score methods search
+Pre-registered 10 ways to build the score (SCORE_METHODS_PREREG.md), fitted on discovery, read once on validation, plus walk-forward and a selection check. None passes (best M2 rho +0.16, p 0.034 alone but 0.126 after 10 tries; walk-forward about 0). Result: SCORE_METHODS_RESULT.md. Score stays a record only.
