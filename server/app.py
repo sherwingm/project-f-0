@@ -949,15 +949,26 @@ def api_paper_path(pid: str, _: str = Depends(auth)):
     if p is None:
         raise HTTPException(404, "no such paper trade")
     last = (last or datetime.now(IST).isoformat())[:10]
+    last = max(last, str(((p or {}).get("after") or {}).get("until") or "")[:10])       # the after-sale path runs to the T-2 day
     return {"id": pid, "rows": read_path(lg.obs.dir, pid, str(first)[:10], last)}
 
 
 @app.get("/api/paper/gaps")
 def api_paper_gaps(_: str = Depends(auth)):
     """Every paper trade's recorded day edges {id: [[day, open bid at 09:16, last bid], ...]}: the results page's gap-open
-    column (a day's open against the previous day's last bid). Read only; server/peak.py day_edges."""
-    from server.peak import day_edges
-    return {"gaps": day_edges(_ledger().obs.dir)}
+    column (a day's open against the previous day's last bid). A special session (the Muhurat, data/muhurat/<day>.json)
+    that a trade was held through is added as [day, first price, last price, "Muhurat"]: the next session's gap then reads
+    against its last price. Read only; server/peak.py day_edges, special_sessions, add_special_rows."""
+    from server.peak import add_special_rows, day_edges, special_sessions
+    lg = _ledger()
+    edges = day_edges(lg.obs.dir)
+    special = special_sessions(settings.data_dir / "muhurat")
+    if special:
+        with lg.lock:
+            trades = [(x["id"], x.get("tradingsymbol"), str(x["opened_at"])[:10], str(x["closed_at"])[:10] if x.get("closed_at") else None)
+                      for x in lg.state.get("positions", []) + lg.state.get("closed", [])]
+        add_special_rows(edges, trades, special)
+    return {"gaps": edges}
 
 
 @app.post("/api/paper/close/{pid}")

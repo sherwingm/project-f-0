@@ -369,6 +369,7 @@ tr[data-why] { cursor:pointer; }
 .gp { display:block; font-weight:600; opacity:.55; width:fit-content; margin-left:auto; padding:1px 7px; border-radius:6px; }
 .gp small { display:inline !important; margin:0; }
 .gp.up { color:var(--bull); } .gp.down { color:var(--bear); }
+.gp.last { font-weight:500; }
 .gp.hit { opacity:1; } .gp.up.hit { background:var(--bull-soft); } .gp.down.hit { background:var(--bear-soft); }
 .pfbar select[data-pfgap] { border-color:var(--line-strong); }
 
@@ -582,22 +583,25 @@ tr[data-why] { cursor:pointer; }
   }
   function gapInfo(p) {
     const rows = (GAPS || {})[p.id]; if (!rows) return null;
-    const out = []; for (let i = 1; i < rows.length; i++) out.push({ d: rows[i][0], open: rows[i][1], prev: rows[i - 1][2], pct: (rows[i][1] / rows[i - 1][2] - 1) * 100 });
+    const out = []; for (let i = 1; i < rows.length; i++) out.push({ d: rows[i][0], open: rows[i][1], prev: rows[i - 1][2], pct: (rows[i][1] / rows[i - 1][2] - 1) * 100, note: rows[i][3] || "" });
     return out;
   }
   function gapCell(p) {
     if (!GAPS) return `<td class="gapc"><small>…</small></td>`;
     const g = gapInfo(p); if (!g || !g.length) return `<td class="gapc">—</td>`;
     const T = +PF.gap, up = g.reduce((m, x) => x.pct > m.pct ? x : m, g[0]), dn = g.reduce((m, x) => x.pct < m.pct ? x : m, g[0]);
+    const tag = x => `${day(x.d)}${x.note ? " " + x.note : ""}`;
     const chip = (x, s) => (s > 0 ? x.pct > 0 : x.pct < 0)
-      ? `<span class="gp ${s > 0 ? "up" : "down"}${(s > 0 ? x.pct >= T : x.pct <= -T) ? " hit" : ""}" title="${esc(wday(x.d))}: previous close bid ${rs(x.prev)} → opened ${rs(x.open)}">${s > 0 ? "▲" : "▼"} ${pct(x.pct)} <small>${day(x.d)}</small></span>` : "";
-    return `<td class="gapc">${chip(up, 1) + chip(dn, -1) || "<small>no gap</small>"}</td>`;
+      ? `<span class="gp ${s > 0 ? "up" : "down"}${(s > 0 ? x.pct >= T : x.pct <= -T) ? " hit" : ""}" title="${esc(wday(x.d))}${x.note ? " (" + x.note + " session)" : ""}: previous close ${rs(x.prev)} → opened ${rs(x.open)}">${s > 0 ? "▲" : "▼"} ${pct(x.pct)} <small>${tag(x)}</small></span>` : "";
+    const lg = g[g.length - 1];                                     // the latest day's gap too, when it is not already the biggest up or down
+    const latest = lg === up || lg === dn ? "" : `<span class="gp last ${lg.pct >= 0 ? "up" : "down"}${Math.abs(lg.pct) >= T ? " hit" : ""}" title="${esc(wday(lg.d))}${lg.note ? " (" + lg.note + " session)" : ""}: previous close ${rs(lg.prev)} → opened ${rs(lg.open)}">latest ${pct(lg.pct)} <small>${tag(lg)}</small></span>`;
+    return `<td class="gapc">${chip(up, 1) + chip(dn, -1) + latest || "<small>no gap</small>"}</td>`;
   }
   function gapNote(rows) {
     if (!GAPS) return `<p class="note" style="margin:0 0 8px">Reading each day's opening gap…</p>`;
     const T = +PF.gap; let up = 0, dn = 0, held = 0;
     rows.forEach(p => { const g = gapInfo(p); if (!g || !g.length) return; held++; if (g.some(x => x.pct >= T)) up++; if (g.some(x => x.pct <= -T)) dn++; });
-    return `<p class="note" style="margin:0 0 8px">Gap open of ${T} % or more on some day: <b class="up">▲ ${up} up</b> · <b class="down">▼ ${dn} down</b>, of ${held} trades held past their first day (a day's 09:16 bid against the previous session's last bid)</p>`;
+    return `<p class="note" style="margin:0 0 8px">Gap open of ${T} % or more on some day: <b class="up">▲ ${up} up</b> · <b class="down">▼ ${dn} down</b>, of ${held} trades held past their first day (a day's 09:16 bid against the previous session's last close, the Muhurat session included)</p>`;
   }
   const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const wday = d => `${WD[new Date(d + "T00:00:00").getDay()]} ${day(d)}`;
@@ -1228,8 +1232,8 @@ tr[data-why] { cursor:pointer; }
         p.after.last ? tile("After the sale · last", rs(p.after.last.price), dir(chg(p.after.last.price, L.e))) : ""] : [])].join("");
     const g = gapInfo(p);
     const gaps = g && g.length ? panel("Gap opens", `<div class="tw"><table><thead><tr><th>Day</th><th>Previous close bid</th><th>Opened at (09:16 bid)</th><th>Gap</th><th>From your entry</th></tr></thead><tbody>${g.map(x =>
-      `<tr><td>${wday(x.d)}</td><td>${rs(x.prev)}</td><td>${rs(x.open)}</td><td class="${dir(x.pct)}"><span class="gp ${x.pct > 0 ? "up" : "down"}${Math.abs(x.pct) >= +PF.gap ? " hit" : ""}">${pct(x.pct)}</span></td><td class="${dir(chg(x.open, L.e))}">${pct(chg(x.open, L.e))}</td></tr>`).join("")}</tbody></table></div>`,
-      { sub: `each later day's 09:16 bid against the previous session's last bid · marked at ${PF.gap} % or more` }) : "";
+      `<tr><td>${wday(x.d)}${x.note ? ` <small>${x.note} session</small>` : ""}</td><td>${rs(x.prev)}</td><td>${rs(x.open)}</td><td class="${dir(x.pct)}"><span class="gp ${x.pct > 0 ? "up" : "down"}${Math.abs(x.pct) >= +PF.gap ? " hit" : ""}">${pct(x.pct)}</span></td><td class="${dir(chg(x.open, L.e))}">${pct(chg(x.open, L.e))}</td></tr>`).join("")}</tbody></table></div>`,
+      { sub: `each later day's 09:16 bid against the previous session's last close · marked at ${PF.gap} % or more · a Muhurat row uses last traded prices (no bids were recorded in it)` }) : "";
     return `<div class="view" style="--c:${w.c}">${back}
       <section class="panel details">${details}</section>
       <section class="panel"><header><h2>Price<small>best bid at every change while held · the hour after the sale dashed · point at the line to read it</small></h2></header>

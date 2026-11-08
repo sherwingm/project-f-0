@@ -377,6 +377,19 @@ changes v12's entry, exit or sizing.
 - Not an S1 rule change: signal, walk, strike, spread and lot limits and exits are the same; some 09:15 buys come a
   few seconds later. Probe check 28 – 30 Oct: the 3 old-book buys held back, 0 of 14 normal buys delayed.
 
+## 2026-11-09 · After-sale price path to T-2, and the Muhurat session as a gap's previous close (user decisions)
+- **Record the price path of a sold option until its T-2 day** (the user: "2 a", asked after the results page showed only 10 minutes after a 15:20 sale).
+  `server/paper.py` `_follow_path`: after the first hour (the existing 60-minute recorder), one `after_exit` observation row every 120 s per sold
+  trade, plus one at once when the after-sale highest or lowest bid is beaten, until `after.until`. It reuses the quote `_follow_closed` already
+  fetches (no extra broker call), is measurement only, and touches no trade, P&L or rule. About 5 MB a day for 90 sold trades (observations are
+  mirrored to `paper-state`, so watch the repo size). Only trades sold from 9 Nov on get the longer path.
+- **Gap = the open against the last close** (the user: "from the last close price, calculate how much it has opened"). A special session counts as the
+  last close: Sunday 8 Nov 2026 (the Diwali Muhurat, listed as a holiday so the server recorded nothing in it) is read from `data/muhurat/2026-11-08.json`
+  (`scanner/muhurat_pull.py`, Upstox's public 1-minute history, last prices, traded candles only) and put into each held trade's day edges, so Monday's
+  gap reads against the Muhurat close and the Muhurat session's own gap against Friday's. The column also shows the latest day's gap.
+- **What the Muhurat session did to the 45 open options:** 30 traded in it (15 did not); median -6 % against Friday's last price, widest -19 % / +30 %; none came
+  near its 50 % stop level. The index has no candles for a special session in Upstox's free history, so Nifty's own move is not in the data.
+
 ### S3 B2 · accepted opening-range breakout: closed (2026-11-01)
 Page `strategies/S3_B2_accepted_breakout.md` (rules 58bb8114; run order changed by the user aa374ccd, before any number).
 Runner `scanner/s3_b2.py`; reports `data/results/S3_B2_report.md`, `S3_B2_stageA_report.md`.

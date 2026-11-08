@@ -162,6 +162,7 @@ class PaperLedger:
         self.queue = PaperQueue(self.dir / "paper_queue.jsonl")
         self.obs = pk.ObsLog(self.dir)                        # bid/ask changes of open trades (server/peak.py)
         self._post_last: dict[str, float] = {}               # last post-exit record per closed trade (throttle)
+        self._follow_obs: dict[str, float] = {}              # last after-sale path row per closed trade, after its first hour
         self.quotes = quotes or QuoteSource(None)
         self.tick = tick or settings.fill_tick
         self.rules = rules
@@ -764,6 +765,24 @@ class PaperLedger:
                 a["peak"] = {"price": px, "at": at}
             if a["trough"] is None or px < a["trough"]["price"]:
                 a["trough"] = {"price": px, "at": at}
+            self._follow_path(c, q, bid, a, now, at)
+
+    def _follow_path(self, c: dict, q: dict, bid, a: dict, now: datetime, at: str) -> None:
+        """The after-sale price path beyond the first hour (that hour is _post_exit_series'): one observation row every
+        FOLLOW_OBS_EVERY_S, and at once when the highest or lowest bid since the sale is beaten, until the trade's T-2 day.
+        The quote was already fetched for the peak / low above, so this adds no broker call. Hypothetical only: it never
+        touches the closed trade's held peak or P&L."""
+        until = c.get("post_exit_until")
+        if not bid or (until and now <= datetime.fromisoformat(until)):
+            return
+        extreme = (a.get("peak_bid") or {}).get("at") == at or (a.get("low_bid") or {}).get("at") == at
+        if not extreme and now.timestamp() - self._follow_obs.get(c["id"], 0.0) < pk.FOLLOW_OBS_EVERY_S:
+            return
+        self._follow_obs[c["id"]] = now.timestamp()
+        try:
+            self.obs.add({"id": c["id"], "tradingsymbol": c["tradingsymbol"]}, q, now, pk.SOURCE_POLL, phase="after_exit")
+        except OSError as exc:
+            log.warning("observation log: %s", exc)
 
     def process_queue(self, now: datetime) -> list[dict]:
         done, out = set(), []

@@ -40,6 +40,8 @@ LTT_STALE_S = 300
 SESSION_OPEN = time(9, 15)
 POST_EXIT_MINUTES = 60                   # after a sale the contract's bid/ask is still recorded this long (phase after_exit)
 POST_EXIT_SLOW_S = 30                    # ... at most this often while prices come from Kotak (rate limits), not the stream
+FOLLOW_OBS_EVERY_S = 120                 # after that hour, to the trade's T-2 day: one after_exit row this often, plus one whenever the
+                                         # after-sale highest or lowest bid is beaten (the results page's chart; ~5 MB a day for 90 trades)
 
 
 def observe(pos: dict, bid: float | None, now: datetime, source: str, qty: int | None = None) -> None:
@@ -170,6 +172,35 @@ def day_edges(obs_dir: Path) -> dict[str, list[list]]:
                 if op is not None and last is not None:
                     out.setdefault(pid, []).append([f.stem, op, last])
     return out
+
+
+def special_sessions(muhurat_dir: Path) -> dict[str, dict[str, list]]:
+    """data/muhurat/<day>.json (scanner/muhurat_pull.py) -> {day: {tradingsymbol: [first traded price, last traded price]}}.
+    A special session (the Diwali Muhurat, Sunday 8 Nov 2026) is listed as a holiday, so the server records nothing in it; its
+    last price is still the last close before the next session, which is what a gap is measured from."""
+    out: dict[str, dict[str, list]] = {}
+    for f in sorted(Path(muhurat_dir).glob("*.json")):
+        try:
+            d = json.loads(f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        out[f.stem] = {ts: [v["open"], v["close"]] for ts, v in (d.get("prices") or {}).items() if v.get("open") and v.get("close")}
+    return out
+
+
+def add_special_rows(edges: dict[str, list], trades: list[tuple], special: dict[str, dict[str, list]]) -> dict[str, list]:
+    """Put each special session into the day edges of every trade that was held through it: [day, open, last, "Muhurat"],
+    between the neighbouring recorded days. trades: [(id, tradingsymbol, opened_day, closed_day or None)]. The next session's
+    gap then reads against that session's last price, and the special session's own gap against the previous close."""
+    for pid, ts, opened, closed in trades:
+        for day, prices in special.items():
+            p = prices.get(ts)
+            if p and opened < day and (closed is None or closed >= day):
+                rows = edges.setdefault(pid, [])
+                if not any(r[0] == day for r in rows):
+                    rows.append([day, p[0], p[1], "Muhurat"])
+                    rows.sort(key=lambda r: r[0])
+    return edges
 
 
 _PATH_CACHE: dict[tuple, list] = {}                 # (file, size, mtime, trade id) -> its rows: past days never change
