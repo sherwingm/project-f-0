@@ -1068,4 +1068,10 @@ server/g1_score.py + g1_live.py: every G1 signal is stamped with score 0-7, scor
   target +12.6 % (t 1.73, +₹1.08 lakh); 5x +12.0 %, 3x +7.9 %, 2x +4.9 %, 1.5x −3.8 %: a lower target gives money back.
   Top 5 trades make more than the total (mean +3.1 % without them). Next 09:16 beats the next close for NT (+12.6 % vs
   +5.7 %; stop hit 42 % vs 61 %). Nothing changed live.
+- 2026-11-08 · Near-expiry research, its own part (the user: "from our finding for the other chat which method get good
+  result, and keep this as another part of search for the max"): `near_expiry_research/` (`FINDINGS.md`,
+  `results/method_scoreboard.csv`, README index). Only the downside opening-range put family is positive (G1-F best: +18.3 %
+  t 2.73, +100 % reached by the next close on 38 %; Near Tighty +12.6 %; G1 +8.4 %), all in-sample; buying by days to
+  expiry, 09:20 features, expiry-day blasts, N1 (−24 %), the independent expiry study and the G1 add-ons give nothing.
+  Live ledgers checked 2026-11-08: 0 trades booked (5 and 6 Nov were upward breakouts). No live change.
 
