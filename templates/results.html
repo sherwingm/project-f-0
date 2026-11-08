@@ -348,15 +348,12 @@ td.fx-up { animation:fx-up 1.4s var(--ease-std); } td.fx-down { animation:fx-dow
 .plot svg { position:absolute; inset:0; width:100%; height:100%; overflow:visible; }
 .pl { fill:none; stroke-width:2; stroke-linejoin:round; vector-effect:non-scaling-stroke; }
 .pl.held { stroke:var(--c, var(--accent)); } .pl.after { stroke:var(--muted); stroke-dasharray:5 4; }
-.pl.keptl { stroke:var(--muted); stroke-width:1.5; stroke-dasharray:1 6; stroke-linecap:round; opacity:.7; }
 .lv { position:absolute; left:0; right:0; border-top:1px dashed var(--line-strong); pointer-events:none; }
 .lb { position:absolute; z-index:2; font:600 10.5px/16px "JetBrains Mono",monospace; color:var(--muted); background:var(--surface); padding:0 6px; border-radius:5px; pointer-events:none; white-space:nowrap; }
 .lb.l { left:4px; } .lb.r { right:4px; }
 .lb.entry { color:var(--ink); } .lb.stop { color:var(--bear); } .lb.peak { color:var(--bull); } .lb.trail { color:var(--unc); } .lb.exit, .lb.now { color:var(--accent); }
 .lv.entry { border-top:1px solid color-mix(in srgb, var(--ink) 55%, transparent); }
 .lv.stop { border-color:var(--bear); } .lv.peak { border-color:var(--bull); } .lv.trail { border-color:var(--unc); } .lv.exit, .lv.now { border-color:var(--accent); }
-.kp { position:absolute; width:11px; height:11px; margin:-5.5px 0 0 -5.5px; border-radius:50%; background:var(--muted); box-shadow:0 0 0 3px var(--panel); pointer-events:none; }
-.kp.peak { background:var(--bull); } .kp.dip { background:var(--bear); } .kp.last { background:var(--accent); }
 .dm { position:absolute; top:0; bottom:0; border-left:1px dotted var(--line-strong); pointer-events:none; }
 .dm span { position:absolute; bottom:4px; left:5px; font-size:10.5px; color:var(--muted); white-space:nowrap; }
 .dm.sold { border-left:1px solid var(--accent); } .dm.sold span { bottom:auto; top:4px; color:var(--accent); font-weight:600; }
@@ -1235,7 +1232,7 @@ tr[data-why] { cursor:pointer; }
       { sub: `each later day's 09:16 bid against the previous session's last bid · marked at ${PF.gap} % or more` }) : "";
     return `<div class="view" style="--c:${w.c}">${back}
       <section class="panel details">${details}</section>
-      <section class="panel"><header><h2>Price<small>best bid at every change while held · after the sale dashed: the recorded first hour, then the highest bid (green dot), lowest bid (red) and last price (blue) it reached until its T-2 day, joined by a faint dotted line (the days between are not recorded) · point at the line to read it</small></h2></header>
+      <section class="panel"><header><h2>Price<small>best bid at every change while held · the hour after the sale dashed · point at the line to read it</small></h2></header>
         <div class="tiles">${tiles}</div>
         <div class="chart" id="vchart" data-id="${esc(p.id)}">${loading()}</div>
         ${rail(L.e, L.now, L.pk, L.low, L.stop)}</section>${gaps}</div>`;
@@ -1250,12 +1247,9 @@ tr[data-why] { cursor:pointer; }
   }
   function plot(box, rows, p) {
     const L = levels(p), rec = rows.filter(r => r.bid > 0 && r.t);
-    // the follow after the sale: the recorded hour (phase after_exit) and then the peak, dip and last price the server kept
-    // until the trade's T-2 day (p.after, last prices): drawn dashed from the exit, with a dot for each kept point
-    const ap = p.after || {}, kept = L.closed ? [["peak", ap.peak_bid || ap.peak], ["dip", ap.low_bid || ap.trough], ["last", ap.last]]
-      .filter(([, x]) => x && x.price > 0 && x.at).map(([k, x]) => ({ t: x.at, bid: x.price, ask: null, phase: "kept", kind: k })).sort((x, y) => x.t.localeCompare(y.t)) : [];
+    // after the sale: the recorded bids of the hour after it (phase after_exit) are drawn dashed from the exit
     const sold = L.closed && p.closed_at ? { t: p.closed_at, bid: L.now, ask: null, phase: "sold" } : null;
-    const pts = rec.concat(kept);
+    const pts = rec;
     if (rec.length < 2) { box.innerHTML = empty("No recorded bids for this trade (the record starts 23 Oct 2026)."); return; }
     // x: trading time with the nights squeezed out (each session 09:15 - 15:45 side by side)
     const days = [...new Set(pts.concat(sold ? [sold] : []).map(r => r.t.slice(0, 10)))].sort();
@@ -1267,17 +1261,15 @@ tr[data-why] { cursor:pointer; }
     const poly = list => list.map(r => `${sx(X(r)).toFixed(1)},${sy(r.bid).toFixed(1)}`).join(" ");
     const heldRows = rec.filter(r => r.phase !== "after_exit"), afterRows = rec.filter(r => r.phase === "after_exit");
     const afterLine = sold ? [sold].concat(afterRows) : afterRows;          // the recorded path
-    const keptLine = kept.length ? [afterLine[afterLine.length - 1] || rec[rec.length - 1]].concat(kept) : [];   // joins the kept points: not a path
     const labels = [], lv = (v, cls, lab, side) => { if (!(v > 0 && v >= lo && v <= hi)) return ""; labels.push({ v, cls, side, text: `${lab} ${rs(v)}` });
       return `<div class="lv ${cls}" style="top:${topPct(v)}"></div>`; };
     const marks = days.slice(1).map((d, k) => { const x = (k + 1) * 390; return x > x0 && x < x0 + xr ? `<div class="dm" style="left:${(sx(x) / W * 100).toFixed(2)}%"><span>${day(d)}</span></div>` : ""; }).join("");
     const soldMark = sold ? `<div class="dm sold" style="left:${(sx(X(sold)) / W * 100).toFixed(2)}%"><span>sold ${when(sold.t).slice(-8)}</span></div>` : "";
-    const dots = kept.map(r => `<i class="kp ${r.kind}" style="left:${(sx(X(r)) / W * 100).toFixed(2)}%;top:${topPct(r.bid)}" title="${r.kind === "peak" ? "highest bid" : r.kind === "dip" ? "lowest bid" : "last price"} after the sale: ${rs(r.bid)} (${pct(chg(r.bid, L.e))}) · ${when(r.t)}"></i>`).join("");
     box.innerHTML = `<div class="plot">${soldMark}<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="best bid from ${rs(rec[0].bid)} to ${rs(rec[rec.length - 1].bid)}">
-        <polyline class="pl held" points="${poly(heldRows)}"/>${afterLine.length > 1 ? `<polyline class="pl after" points="${poly(afterLine)}"/>` : ""}${keptLine.length > 1 ? `<polyline class="pl keptl" points="${poly(keptLine)}"/>` : ""}</svg>
+        <polyline class="pl held" points="${poly(heldRows)}"/>${afterLine.length > 1 ? `<polyline class="pl after" points="${poly(afterLine)}"/>` : ""}</svg>
         ${lv(L.stop, "stop", "stop", "l")}${lv(L.trail, "trail", "trail on", "r")}${lv(L.e, "entry", "entry", "l")}${lv(L.pk, "peak", "peak", "r")}${lv(L.now, L.closed ? "exit" : "now", L.closed ? "exit" : "now", "r")}
-        ${marks}${dots}<div class="xh" hidden><i></i><div class="tip"></div></div></div>
-      <div class="ax"><span>${when(rec[0].t)}</span><span>${rec.length} quotes${kept.length ? ` · after the sale to ${day(ap.until || kept[kept.length - 1].t.slice(0, 10))}` : ""}</span><span>${when(pts.reduce((m, r) => r.t > m ? r.t : m, rec[0].t))}</span></div>`;
+        ${marks}<div class="xh" hidden><i></i><div class="tip"></div></div></div>
+      <div class="ax"><span>${when(rec[0].t)}</span><span>${rec.length} quotes</span><span>${when(pts.reduce((m, r) => r.t > m ? r.t : m, rec[0].t))}</span></div>`;
     const plotEl = $(".plot", box), xh = $(".xh", box);
     // price labels: stacked so none sits on another (each side keeps 16 px between labels; the dashed line stays at its true price)
     const place = () => {
@@ -1300,9 +1292,7 @@ tr[data-why] { cursor:pointer; }
       const r = all[i].r, f = sx(all[i].x) / W;
       xh.hidden = false; xh.style.left = (f * 100).toFixed(2) + "%"; xh.classList.toggle("flip", f > 0.7);
       $("i", xh).style.top = topPct(r.bid);
-      $(".tip", xh).innerHTML = r.phase === "kept"
-        ? `<b>${when(r.t)}</b><br>${r.kind === "peak" ? "highest bid" : r.kind === "dip" ? "lowest bid" : "last price"} after the sale<br>${rs(r.bid)} <span class="${dir(chg(r.bid, L.e))}">${pct(chg(r.bid, L.e))}</span>`
-        : `<b>${when(r.t)}</b><br>bid ${rs(r.bid)} <span class="${dir(chg(r.bid, L.e))}">${pct(chg(r.bid, L.e))}</span><br><small>ask ${rs(r.ask)}${r.phase === "after_exit" ? " · after the sale" : ""}</small>`;
+      $(".tip", xh).innerHTML = `<b>${when(r.t)}</b><br>bid ${rs(r.bid)} <span class="${dir(chg(r.bid, L.e))}">${pct(chg(r.bid, L.e))}</span><br><small>ask ${rs(r.ask)}${r.phase === "after_exit" ? " · after the sale" : ""}</small>`;
     };
     plotEl.addEventListener("pointermove", read); plotEl.addEventListener("pointerdown", read);
     plotEl.addEventListener("pointerleave", () => { xh.hidden = true; });
