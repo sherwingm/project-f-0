@@ -1233,11 +1233,11 @@ tr[data-why] { cursor:pointer; }
       `<tr><td>${wday(x.d)}</td><td>${rs(x.prev)}</td><td>${rs(x.open)}</td><td class="${dir(x.pct)}"><span class="gp ${x.pct > 0 ? "up" : "down"}${Math.abs(x.pct) >= +PF.gap ? " hit" : ""}">${pct(x.pct)}</span></td><td class="${dir(chg(x.open, L.e))}">${pct(chg(x.open, L.e))}</td></tr>`).join("")}</tbody></table></div>`,
       { sub: `each later day's 09:16 bid against the previous session's last bid · marked at ${PF.gap} % or more` }) : "";
     return `<div class="view" style="--c:${w.c}">${back}
-      <section class="panel"><header><h2>Price <small>best bid at every change while held · the hour after the sale dashed · point at the line to read it</small></h2></header>
+      <section class="panel details">${details}</section>
+      <section class="panel"><header><h2>Price<small>best bid at every change while held · the hour after the sale dashed · point at the line to read it</small></h2></header>
         <div class="tiles">${tiles}</div>
         <div class="chart" id="vchart" data-id="${esc(p.id)}">${loading()}</div>
-        ${rail(L.e, L.now, L.pk, L.low, L.stop)}</section>${gaps}
-      <section class="panel details">${details}</section></div>`;
+        ${rail(L.e, L.now, L.pk, L.low, L.stop)}</section>${gaps}</div>`;
   }
   async function drawView() {
     const box = $("#vchart"), p = VIEW && tradeOf(VIEW); if (!box || !p) return;
