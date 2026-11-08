@@ -1115,4 +1115,8 @@ EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures 
 - 2026-11-08 12:53 IST (server clock, Sunday): Near Tighty SENSEX deployed to the VM (commit 9d9a937cc), service active, new route
   answers (401 = login), no errors in the log. Not yet verified live: the SENSEX contract load (`Upstox SENSEX option contracts: N` in
   the journal) happens on the first session day from 09:00 (Mon 2026-11-09); first possible SENSEX trade Thu 2026-11-12.
+- 2026-11-08 · Correction and check for Near Tighty SENSEX: SENSEX expires Thursdays and 10 Nov is a holiday, so Mon 9 Nov is 2 sessions
+  from the 12 Nov expiry: the SENSEX track can trade on Mon 9 Nov and Wed 11 Nov (Thu 12 Nov is 5 sessions from the next expiry: no
+  trade). The earlier "Thursday at the earliest" was NIFTY's calendar. A one-time read-only check is scheduled for Mon 2026-11-09 09:20 IST
+  (scheduled task `check-nt-sensex-feed-mon-9-nov`): SENSEX contracts loaded, subscriptions, ledger status.
 
