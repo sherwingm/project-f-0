@@ -1112,4 +1112,7 @@ EXTERNAL2_PREREG.md: 16 normalised features, 32 rules. 1 candidate (FII futures 
   read-only call (`GET /v2/option/contract`, once a day, background thread); the trader subscribes BSE_INDEX|SENSEX and ATM ± 6
   puts of 2 expiries from 09:00. G1 trader made index-agnostic (class attributes + `subscribe` hook), G1 / NIFTY NT unchanged.
   Tests added (`tests/test_nt_live.py`). Deployed after the close (see the next entry).
+- 2026-11-08 12:53 IST (server clock, Sunday): Near Tighty SENSEX deployed to the VM (commit 9d9a937cc), service active, new route
+  answers (401 = login), no errors in the log. Not yet verified live: the SENSEX contract load (`Upstox SENSEX option contracts: N` in
+  the journal) happens on the first session day from 09:00 (Mon 2026-11-09); first possible SENSEX trade Thu 2026-11-12.
 
