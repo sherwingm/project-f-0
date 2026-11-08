@@ -75,3 +75,114 @@ def test_page_and_api():
     from server import nt_pages
     assert "Near Tighty" in nt_pages.near_tighty_page()
     assert "error" in nt_pages.near_tighty_api() or "tracks" in nt_pages.near_tighty_api()
+
+
+# ---------------------------------------------------------------- Near Tighty on SENSEX
+SX_SPOT = "BSE_INDEX|SENSEX"
+
+
+class SxUpstox:
+    """The Upstox client as the SENSEX trader sees it: the contract map, the lot per expiry, ensure_sensex."""
+    def __init__(self, *expiries, lot=20):
+        self._sensex = {(e, "PE", float(k)): f"SX{e}{k}" for e in expiries for k in range(77000, 81100, 100)}
+        self._sensex_lot = {e: lot for e in expiries}
+        self.ensured = []
+
+    def ensure_sensex(self, today):
+        self.ensured.append(today)
+
+
+def sx_down_day(st, put_bid=300.0, vix=13.0, cp=79000.0, expiry=EXP):
+    def f(t):
+        m = t.time()
+        st.s[G.VIX_KEY] = {"ltpc": {"ltp": vix}}
+        px = (79000.0 if (t.second // 10) % 2 else 79050.0) if m < time(9, 30) else (79020.0 if m < time(9, 40) else 78950.0)
+        st.s[SX_SPOT] = {"ltpc": {"ltp": px, "cp": cp}}
+        for k in range(78800, 79300, 100):
+            st.s[f"SX{expiry}{k}"] = {"depth": [(put_bid, 75, put_bid + 1.0, 75)]}
+    return f
+
+
+def test_sensex_trades_near_expiry_in_its_own_ledger(env):
+    tmp, st, sent = env
+    up = SxUpstox("2026-11-03", EXP)
+    sx = N.NearTightySensexTrader(st, up, tmp)
+    run(sx, D1, time(9, 15), time(9, 45), before=sx_down_day(st))
+    o = sx.state["open"]
+    assert (o["entry"], o["strike"], o["expiry"], o["paid"], o["qty"]) == ("09:41", 79000.0, EXP, 301.0, 20)
+    assert "SENSEX" in sx.state["days"][str(D1)]["status"]
+    assert (tmp / "nt_sensex_ledger.json").exists() and not (tmp / "nt_ledger.json").exists()
+    assert sent and sent[0].startswith("🟢 Near Tighty SENSEX paper: bought SENSEX")
+    assert up.ensured and f"SX{EXP}79000" in st.wanted and SX_SPOT in st.wanted
+
+    def d2(t):
+        st.s[SX_SPOT] = {"ltpc": {"ltp": 78500.0, "cp": 78950.0}}
+        st.s[f"SX{EXP}79000"] = {"depth": [(450.0, 75, 451.0, 75)]}
+    run(sx, D2, time(9, 15), time(9, 18), before=d2)
+    t = sx.state["trades"][0]
+    assert t["reason"] == "next open" and t["sold"] == 450.0 and t["qty"] == 20
+    v = sx.view()
+    assert v["index"] == "SENSEX" and v["near"] == [1, 3]
+    assert [(x["pod"], x["trades"]) for x in v["tracks"]] == [("Near Tighty", 1)]
+
+
+def test_sensex_no_trade_when_the_nearest_expiry_is_4_or_more_sessions_away(env):
+    tmp, st, _ = env
+    sx = N.NearTightySensexTrader(st, SxUpstox(FAR), tmp)
+    run(sx, D1, time(9, 15), time(9, 45), before=sx_down_day(st, expiry=FAR))
+    assert sx.state["open"] is None
+    s = sx.state["days"][str(D1)]["status"]
+    assert "SENSEX downside breakout" in s and "8 sessions away" in s
+
+
+def test_sensex_subscribes_spot_vix_and_the_puts_around_the_money(env):
+    tmp, st, _ = env
+    up = SxUpstox(EXP, FAR)
+    sx = N.NearTightySensexTrader(st, up, tmp)
+    sx_down_day(st)(datetime_at(D1, time(9, 5)))
+    sx.tick(datetime_at(D1, time(9, 5)))                 # before 09:15: subscribes, no trading yet
+    assert {SX_SPOT, G.VIX_KEY} <= st.wanted
+    assert f"SX{EXP}78400" in st.wanted and f"SX{EXP}79600" in st.wanted        # ATM 79000 +/- 6 steps
+    assert f"SX{EXP}78300" not in st.wanted and f"SX{EXP}79700" not in st.wanted
+    assert any(k.startswith(f"SX{FAR}") for k in st.wanted)                      # the second expiry too
+    assert sx.state["open"] is None
+
+
+def test_nifty_and_sensex_each_hold_their_own_position(env):
+    tmp, st, _ = env
+    nifty = N.NearTightyTrader(st, upstox("2026-11-03", EXP), tmp)
+    sx = N.NearTightySensexTrader(st, SxUpstox(EXP), tmp)
+
+    def both(t):
+        down_day(st)(t)
+        sx_down_day(st)(t)
+    for tr in (nifty, sx):
+        run(tr, D1, time(9, 15), time(9, 45), before=both)
+    assert nifty.state["open"]["strike"] == 24000.0 and sx.state["open"]["strike"] == 79000.0
+    assert nifty.state["epoch"] != sx.state["epoch"]
+
+
+def test_ingest_sensex_keeps_only_sensex_calls_and_puts_with_the_lot():
+    from server.upstox import UpstoxProvider
+    u = UpstoxProvider("x")
+    rows = [
+        {"instrument_type": "PE", "instrument_key": "BSE_FO|1", "strike_price": 79000.0, "expiry": "2026-11-12",
+         "underlying_symbol": "SENSEX", "lot_size": 20},
+        {"instrument_type": "CE", "instrument_key": "BSE_FO|2", "strike_price": 79000.0, "expiry": 1794441600000,
+         "underlying_symbol": "SENSEX", "lot_size": 20},
+        {"instrument_type": "PE", "instrument_key": "BSE_FO|3", "strike_price": 60000.0, "expiry": "2026-11-12",
+         "underlying_symbol": "BANKEX", "lot_size": 30},
+        {"instrument_type": "PE", "instrument_key": "BSE_FO|4", "strike_price": 79000.0, "expiry": "2026-11-12",
+         "underlying_symbol": "SENSEX50", "lot_size": 60},
+        {"instrument_type": "FUT", "instrument_key": "BSE_FO|5", "expiry": "2026-11-26", "underlying_symbol": "SENSEX"},
+    ]
+    assert u.ingest_sensex(rows) == 2
+    assert u._sensex[("2026-11-12", "PE", 79000.0)] == "BSE_FO|1" and u._sensex[("2026-11-12", "CE", 79000.0)] == "BSE_FO|2"
+    assert not any(v in ("BSE_FO|3", "BSE_FO|4", "BSE_FO|5") for v in u._sensex.values())   # BANKEX, SENSEX50, futures
+    assert u._sensex_lot["2026-11-12"] == 20
+    assert u.ingest_sensex([]) == 0 and len(u._sensex) == 2            # an empty answer keeps what is loaded
+
+
+def datetime_at(day, t):
+    from datetime import datetime
+    return datetime.combine(day, t, G.IST)

@@ -43,3 +43,29 @@ is not rescued by changing the stop, the exit or the 1-3 window.
 - **Pass:** a proposal to the user to consider real orders (Kotak Neo, limit orders, static IP). Nothing is enabled
   automatically.
 - **Fail:** closed. The result goes to DECISIONS.md either way.
+
+## SENSEX track (added 2026-11-08, before any SENSEX forward session)
+The user, 2026-11-08: "Add sensex" (after `near_tighty_research/reports/NT_SENSEX.md`). Near Tighty on SENSEX is a second,
+separate forward test of the same rule. It does not change the NIFTY track, G1 or G1-F.
+
+**Seen before this addendum (disclosed):** the SENSEX history (Oct 2024 → Oct 2026, in-sample, the 1-3 session cut was found
+after looking at G1's results): 162 trades sold at the next 09:16 with no target +15.2 % of the premium a trade (t 2.29, median
+−16 %, won 44 %, halves +19.0 / +11.9, +₹1.74 lakh at lot 20); max up reaches +100 % on 25 % by the next 09:16, 44 % by the next close.
+Oct 2025 → now: 87 trades +11.9 % (t 1.30). Without the 5 best trades +7.8 % (whole history). Not independent of the rule's choice.
+
+**Rules:** identical to the NIFTY track with these substitutions only:
+- Spot: BSE SENSEX (`BSE_INDEX|SENSEX`); strike step 100; India VIX as before.
+- Option: the at-the-money SENSEX put of the nearest SENSEX weekly expiry after the signal day (contract list: Upstox
+  `GET /v2/option/contract`, loaded once a day); traded only when that expiry is 1-3 sessions after the signal day.
+- Lot: the contract's lot from that list (20 in the history run).
+- Entry, 50 % stop on the bid (any second, both days), exit at the next session's 09:16 bid, no target: unchanged.
+
+**Where it runs:** paper only, the live server, `server/nt_live.py` `NearTightySensexTrader`; own ledger `data/nt_sensex_ledger.json`,
+own alerts, own section on `/near-tighty`, API `/api/near-tighty/sensex`; `NT_SENSEX_PAPER=true` by default. Nothing is ordered.
+
+**Gate:** the same six checks, on the SENSEX track's own first 30 trades, judged apart from NIFTY (never pooled). A fail closes the
+SENSEX track only; it is not rescued by changing the stop, exit, window or lot.
+
+**Known limits (stated now):** the SENSEX range is built from the live stream; a server restart between 09:15 and 13:00 loses that day's
+opening range (no trade that day, listed as such); if the contract list cannot be loaded the day is listed as "no SENSEX expiry in the
+instrument list: no trade", never filled by guess; the history used a fixed lot of 20 and NSE charge rates.

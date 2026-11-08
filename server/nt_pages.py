@@ -20,6 +20,15 @@ def near_tighty_page():
     return html.replace("/*__SERVER__*/{}", json.dumps(settings.public()))
 
 
+@router.get("/api/near-tighty/sensex")
+def near_tighty_sensex_api():
+    """The same for Near Tighty on SENSEX (its own ledger)."""
+    from server.app import state
+    nt = getattr(state, "nt_sx", None)
+    return nt.view() if nt is not None else {"error": "Near Tighty SENSEX paper is not running on this server "
+                                                      "(it needs the Upstox stream)"}
+
+
 @router.get("/api/near-tighty")
 def near_tighty_api():
     """Open position, today's status, closed trades and the 30-trade gate track."""

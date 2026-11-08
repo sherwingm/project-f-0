@@ -96,6 +96,8 @@ class G1Trader:
     NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
     SCORE = True              # the 0-7 breakout score (record only); Near Tighty is not scored here
     HOLD_TO_CLOSE = True      # G1 / G1-F (2026-11-06, the user): hold to the next session's close; a subclass may say False
+    # the market of the run; Near Tighty on SENSEX (server/nt_live.py) changes these and `subscribe`
+    INDEX, SPOT, SPOT_LABEL, STEP, KEYS = "NIFTY", SPOT_KEY, "NIFTY 50", STEP, "_nifty"
 
     def __init__(self, stream, upstox, data_dir, lot: int = LOT):
         self.stream, self.upstox, self.lot = stream, upstox, lot
@@ -131,7 +133,10 @@ class G1Trader:
 
     # ------------------------------------------------------------ inputs
     def _nifty_keys(self) -> dict:
-        return getattr(self.upstox, "_nifty", None) or {}
+        return getattr(self.upstox, self.KEYS, None) or {}
+
+    def subscribe(self, now: datetime) -> None:
+        """Hook: ask the stream for this market's keys (NIFTY's come from the index recorder; SENSEX subscribes its own)."""
 
     def expiry_after(self, today: date) -> str | None:
         exps = sorted({e for e, typ, _ in self._nifty_keys() if typ == "PE" and e > today.isoformat()})
@@ -141,14 +146,15 @@ class G1Trader:
         return self._nifty_keys().get((expiry, "PE", float(strike)))
 
     def _seed(self, now: datetime) -> None:
-        """Today's NIFTY 50 minute bars from the recorder's file, after a restart in the session."""
+        """Today's NIFTY 50 minute bars from the recorder's file, after a restart in the session (a market the recorder
+        does not write, SENSEX, has no file: a restart inside the session loses that day's opening range)."""
         f = self.dir / "candles_1s_index" / f"{now.date()}.jsonl"
         if not f.exists():
             return
         try:
             for line in f.read_text(encoding="utf-8").splitlines():
                 r = json.loads(line)
-                if r.get("ts") == "NIFTY 50" and r.get("c"):
+                if r.get("ts") == self.SPOT_LABEL and r.get("c"):
                     hh, mm, _ = map(int, r["t"].split(":"))
                     self._bar(time(hh, mm), float(r["c"]))
                 elif r.get("ts") == "INDIA VIX" and r.get("c"):
@@ -172,9 +178,11 @@ class G1Trader:
                 self.prev_close = None
                 if sessions.is_index_session(now.date()) and now.time() > OR_FROM:
                     self._seed(now)
+            if sessions.is_index_session(now.date()) and time(9, 0) <= now.time() <= time(15, 31):
+                self.subscribe(now)                       # before 09:15, so the first minute's prices are there
             if not sessions.is_index_session(now.date()) or not time(9, 15) <= now.time() <= time(15, 30):
                 return
-            sp = self.stream.get(SPOT_KEY)
+            sp = self.stream.get(self.SPOT)
             px = _ltp(sp)
             if px:
                 self._bar(now.time().replace(second=0, microsecond=0), px)
@@ -193,7 +201,7 @@ class G1Trader:
         if phase == "range" and now.time() >= OR_TO:
             rng = [b for m, b in self.bars.items() if OR_FROM <= m < OR_TO]
             if not rng:
-                st.update(phase="done", status="no NIFTY prices for the opening range: no trade")
+                st.update(phase="done", status=f"no {self.INDEX} prices for the opening range: no trade")
                 self._save()
                 return
             st.update(phase="scan", hi=max(b["h"] for b in rng), lo=min(b["l"] for b in rng),
@@ -236,7 +244,7 @@ class G1Trader:
         ent = datetime.combine(self.day, time.fromisoformat(st["entry"]), IST)
         exp = self.expiry_after(self.day)
         if exp is None:
-            st.update(phase="done", status="no NIFTY expiry after today in the instrument list: no trade")
+            st.update(phase="done", status=f"no {self.INDEX} expiry after today in the instrument list: no trade")
             self._save()
             return
         why = self.entry_skip(self.day, exp)
@@ -247,8 +255,8 @@ class G1Trader:
         if ent <= now < ent + timedelta(minutes=1):            # the entry minute: keep every strike's last ask
             spot = (self.bars.get(ent.time()) or {}).get("c")
             if spot:
-                atm = round(spot / STEP) * STEP
-                for k in (atm - 2 * STEP, atm - STEP, atm, atm + STEP, atm + 2 * STEP):
+                atm = round(spot / self.STEP) * self.STEP
+                for k in (atm - 2 * self.STEP, atm - self.STEP, atm, atm + self.STEP, atm + 2 * self.STEP):
                     key = self._key(exp, k)
                     _, ask = _best(self.stream.get(key)) if key else (None, None)
                     if ask:
@@ -261,11 +269,11 @@ class G1Trader:
             self._save()
             return
         spot = (self.bars.get(ent.time()) or {}).get("c")
-        k = float(round(spot / STEP) * STEP) if spot else None
+        k = float(round(spot / self.STEP) * self.STEP) if spot else None
         seen = self.asks.get(k) if k is not None else None
         if seen is None or (ent + timedelta(minutes=1) - seen[0]).total_seconds() > QUOTE_AGE:
             st.update(phase="done", status=f"no ask for the {k:.0f} PE in the {st['entry']} minute: no trade" if k
-                      else f"no NIFTY price in the {st['entry']} minute: no trade")
+                      else f"no {self.INDEX} price in the {st['entry']} minute: no trade")
             self._save()
             return
         paid = seen[1]
@@ -276,10 +284,10 @@ class G1Trader:
                               "spot": spot, "g1f_skip": st["g1f_skip"], "gap_pct": st["gap_pct"],
                               "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid,
                               **{k: st[k] for k in SCORE_KEYS if k in st}}
-        st.update(phase="done", status=f"bought NIFTY {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
+        st.update(phase="done", status=f"bought {self.INDEX} {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
                   + self.entry_note(st))
         self._save()
-        alerts.send(f"🟢 {self.NAME} paper: bought NIFTY {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
+        alerts.send(f"🟢 {self.NAME} paper: bought {self.INDEX} {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
                     + self.entry_note(st) + self._score_text(st),
                     key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
@@ -333,7 +341,7 @@ class G1Trader:
         self.state["open"] = None
         self.last_bid = None
         self._save()
-        alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold NIFTY {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
+        alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold {self.INDEX} {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
                     f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %)", key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
 
     # ------------------------------------------------------------ score (record only)

@@ -48,6 +48,9 @@ td small { font-size:10.5px; }
 .hist { display:flex; flex-wrap:wrap; gap:6px; }
 .hist span { background:var(--surface); border:1px solid var(--line); border-radius:8px; padding:4px 8px; font-size:12px; }
 .note { font-size:12px; color:var(--muted); margin-top:16px; }
+h3 { font-size:13px; margin:16px 0 6px; display:flex; align-items:baseline; gap:8px; }
+h3 small { font-weight:400; font-size:12px; }
+h2.sec { border-top:1px solid var(--line); padding-top:16px; margin-top:28px; }
 .disclaimer { position:fixed; left:0; right:0; bottom:0; min-height:var(--disc); background:var(--panel); border-top:1px solid var(--bear); padding:6px 16px; font-size:11.5px; z-index:6; display:flex; align-items:center; }
 .disclaimer b { color:var(--bear); }
 @media (max-width:760px) { main { padding:12px 10px; } :root { --disc:64px; } .top { padding:8px 10px; } }
@@ -94,34 +97,38 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
   const sg = v => v == null ? "—" : `<span class="${v < 0 ? "down" : "up"}">${v > 0 ? "+" : ""}${num(v, 1)} %</span>`;
   const hm = s => s ? `${day(s.slice(0, 10))} ${s.slice(11, 19)}` : "—";
 
-  function render() {
-    const g = D.nt;
-    let h = `<h1>Near Tighty · NIFTY downside breakout put, 1-3 sessions to expiry</h1>
-      <p class="lead">Its own part, separate from the index pods: own rules (${esc((g || {}).page || "strategies/NT_near_tighty.md")}), own paper ledger, own results.</p>
-      <div class="banner"><b>Paper only.</b> Trades on the live bid / ask in its own ledger; no real order is sent. The S1 account and G1's ledger are separate.</div>`;
-    if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
-    if (!g || g.error) { $("#main").innerHTML = h + `<p class="empty">${esc((g || {}).error || "Not reporting.")}</p>`; return; }
-    const nr = g.near || [1, 3];
+  function section(g, name) {
+    let h = `<h2 class="sec">${name} <small>${g && !g.error ? "paper · own ledger" : ""}</small></h2>`;
+    if (!g || g.error) return h + `<p class="empty">${esc((g || {}).error || "Not reporting.")}</p>`;
+    const idx = esc(g.index || name), nr = g.near || [1, 3];
     h += `<p class="note">Opening range 09:15-09:29 · first close outside it from 09:30 to 13:00 · only a close below the low trades · <b>only when the nearest weekly expiry is ${nr[0]}-${nr[1]} sessions away</b> · ATM put, 1 lot (${num(g.lot)}), bought at the ask the minute after · sold at the bid at 50 % of the price paid, else at the next session's 09:16. No target, no other filter.</p>`;
     const td = g.today;
     h += `<div class="kv"><div><small>Today</small><b>${esc(td ? td.status : "no session yet")}</b></div>${td && td.hi ? `<div><small>Opening range</small><b>${num(td.lo, 2)} – ${num(td.hi, 2)}</b></div>` : ""}${td && td.signal ? `<div><small>Signal</small><b>${esc(td.signal)}</b></div>` : ""}</div>`;
     const tk = (g.tracks || [])[0];
-    if (tk) h += `<h2>Result <small>verdict at ${num(tk.gate_at)} trades</small></h2>
+    if (tk) h += `<h3>Result <small>verdict at ${num(tk.gate_at)} trades</small></h3>
       <div class="kv"><div><small>Trades</small><b>${num(tk.trades)} / ${num(tk.gate_at)}</b></div><div><small>Won</small><b>${pc(tk.won == null ? null : tk.won * 100, 0)}</b></div>
         <div><small>Average</small><b>${sg(tk.mean_pct)}</b></div><div><small>Median</small><b>${sg(tk.median_pct)}</b></div>
         <div><small>t</small><b>${tk.t == null ? "—" : num(tk.t, 2)}</b></div><div><small>Total</small><b class="${tk.total_rs < 0 ? "down" : "up"}">₹${num(tk.total_rs)}</b></div></div>`;
     const o = g.open;
-    h += `<h2>Open position</h2>` + (o ? `<div class="tw"><table><thead><tr><th>Bought</th><th>Contract</th><th>Paid (ask)</th><th>Bid now</th><th>Best bid</th><th>Unrealised</th><th>Stop at</th></tr></thead><tbody>
-      <tr><td>${hm(o.bought_at)}</td><td><b>NIFTY ${day(o.expiry)} ${num(o.strike)} PE</b> × ${num(o.qty)}</td><td>₹${num(o.paid, 2)}</td><td>₹${num(o.mark, 2)}</td><td>₹${num(o.max_bid, 2)}</td><td class="${o.unrealised_rs < 0 ? "down" : "up"}">₹${num(o.unrealised_rs)}</td><td>₹${num(o.paid * 0.5, 2)}</td></tr></tbody></table></div>`
+    h += `<h3>Open position</h3>` + (o ? `<div class="tw"><table><thead><tr><th>Bought</th><th>Contract</th><th>Paid (ask)</th><th>Bid now</th><th>Best bid</th><th>Unrealised</th><th>Stop at</th></tr></thead><tbody>
+      <tr><td>${hm(o.bought_at)}</td><td><b>${idx} ${day(o.expiry)} ${num(o.strike)} PE</b> × ${num(o.qty)}</td><td>₹${num(o.paid, 2)}</td><td>₹${num(o.mark, 2)}</td><td>₹${num(o.max_bid, 2)}</td><td class="${o.unrealised_rs < 0 ? "down" : "up"}">₹${num(o.unrealised_rs)}</td><td>₹${num(o.paid * 0.5, 2)}</td></tr></tbody></table></div>`
       : `<p class="empty">None.</p>`);
     const tr = g.trades || [];
-    h += `<h2>Trades <small>${tr.length} closed</small></h2>` + (tr.length ? `<div class="tw"><table><thead><tr><th>Day</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Net ₹</th><th>Net %</th><th>Max up</th></tr></thead><tbody>${tr.map(t =>
+    h += `<h3>Trades <small>${tr.length} closed</small></h3>` + (tr.length ? `<div class="tw"><table><thead><tr><th>Day</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Net ₹</th><th>Net %</th><th>Max up</th></tr></thead><tbody>${tr.map(t =>
       `<tr><td>${day(t.day)} ${esc(t.signal)}</td><td>${day(t.expiry)} ${num(t.strike)} PE</td><td>₹${num(t.paid, 2)}</td><td>₹${num(t.sold, 2)}</td><td>${hm(t.sold_at)} <small>${esc(t.reason)}</small></td><td class="${t.net_rs < 0 ? "down" : "up"}">₹${num(t.net_rs)}</td><td>${sg(t.net_pct)}</td><td>${sg(t.max_up_pct)}</td></tr>`).join("")}</tbody></table></div>`
       : `<p class="empty">No closed trade yet. It trades only on days whose nearest weekly expiry is 1-3 sessions away, about 6-7 a month.</p>`);
-    $("#main").innerHTML = h;
+    return h;
+  }
+
+  function render() {
+    let h = `<h1>Near Tighty · downside breakout put, 1-3 sessions to expiry</h1>
+      <p class="lead">Its own part, separate from the index pods: own rules (${esc(((D.nt || {}).page) || "strategies/NT_near_tighty.md")}), own paper ledgers (NIFTY and SENSEX), own results.</p>
+      <div class="banner"><b>Paper only.</b> Trades on the live bid / ask in its own ledgers; no real order is sent. The S1 account and G1's ledger are separate.</div>`;
+    if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
+    $("#main").innerHTML = h + section(D.nt, "NIFTY") + section(D.sx, "SENSEX");
   }
   render();
-  const load = () => get("/api/near-tighty").then(g => { D = { loaded: true, nt: g }; render(); });
+  const load = () => Promise.all([get("/api/near-tighty"), get("/api/near-tighty/sensex")]).then(([g, x]) => { D = { loaded: true, nt: g, sx: x }; render(); });
   load(); setInterval(() => { if (!document.hidden) load(); }, 15000);
 })();
 </script>

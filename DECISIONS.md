@@ -468,3 +468,11 @@ description, never the verdict. Nothing runs on the live server and nothing is o
 calls −27.9 %, puts −21.0 %; expiry day −39.3 % (won 5 %), day before −8.2 %; both halves negative. Max up while held
 median +39 %, ≥ +100 % on 25 %. By the page it neither passes nor fails N1; the forward test stays open unless the user
 closes it. Runner `scanner/s3_n1.py` (5 tests).
+
+## 2026-11-08 · NT · Near Tighty on SENSEX added as a second forward track (user decision: "Add sensex")
+Same rule as the NIFTY track, on BSE SENSEX weekly puts (step 100, lot from the contract list), 1-3 sessions to expiry, 50 % stop,
+sold at the next 09:16, no target. Pre-registered in `strategies/NT_near_tighty.md` ("SENSEX track") before any SENSEX forward session.
+Evidence disclosed there (history +15.2 %, t 2.29, in-sample). Paper only: `server/nt_live.py` `NearTightySensexTrader`, own ledger
+`data/nt_sensex_ledger.json`, `/near-tighty` and `/api/near-tighty/sensex`, `NT_SENSEX_PAPER`. Own 30-trade gate, never pooled with NIFTY.
+NIFTY Near Tighty, G1, G1-F and S1 / S2 unchanged. Code: the G1 trader became index-agnostic (class attributes + a `subscribe` hook;
+G1 and NIFTY Near Tighty behave as before, their tests pass); `server/upstox.py` gained a read-only SENSEX contract loader.

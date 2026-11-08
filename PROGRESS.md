@@ -1100,3 +1100,10 @@ Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, B
 
 ## 8 Nov 2026 (index chat): G1 follow-through on NIFTY spot, five years
 Pre-registered UNDERLYING_PREREG.md; 638 signals from 2021-10 (spot data starts Oct 2021, not 2018). Q0: follow-through vs same-minute baseline +0.06 ATR (p 0.11-0.14, not significant). 78 single rules over 40 features: 0 candidates (best q 0.43). UNDERLYING_RESULT.md. No live change.
+- 2026-11-08 · Near Tighty on SENSEX in live paper (the user: "Add sensex"): `NearTightySensexTrader` (own ledger
+  `data/nt_sensex_ledger.json`, `/api/near-tighty/sensex`, second section on `/near-tighty`), rules pre-registered in
+  `strategies/NT_near_tighty.md`. The server only knew NSE instruments, so `server/upstox.py` loads SENSEX contracts from one
+  read-only call (`GET /v2/option/contract`, once a day, background thread); the trader subscribes BSE_INDEX|SENSEX and ATM ± 6
+  puts of 2 expiries from 09:00. G1 trader made index-agnostic (class attributes + `subscribe` hook), G1 / NIFTY NT unchanged.
+  Tests added (`tests/test_nt_live.py`). Deployed after the close (see the next entry).
+

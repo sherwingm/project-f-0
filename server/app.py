@@ -138,6 +138,7 @@ class State:
         self.index_rec = None               # server.index_recorder.IndexRecorder (record only)
         self.g1 = None                      # server.g1_live.G1Trader (S3 G1 paper, own ledger)
         self.nt = None                      # server.nt_live.NearTightyTrader (NT Near Tighty paper, own ledger)
+        self.nt_sx = None                   # server.nt_live.NearTightySensexTrader (NT on SENSEX, own ledger)
         self.xp = None                      # server.xp_live.ExpiryStraddleLogger (XP expiry straddle forward log, own ledger)
         self.version: dict | None = None    # server.version.deployed(), read once at start-up
 
@@ -217,6 +218,9 @@ def startup() -> None:
                 if settings.nt_paper:
                     from server.nt_live import NearTightyTrader
                     state.nt = NearTightyTrader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
+                if settings.nt_sensex_paper:
+                    from server.nt_live import NearTightySensexTrader
+                    state.nt_sx = NearTightySensexTrader(state.stream, state.upstox, settings.data_dir)   # paper only
                 if settings.xp_paper:
                     from server.xp_live import ExpiryStraddleLogger
                     state.xp = ExpiryStraddleLogger(state.stream, state.upstox, settings.data_dir)   # log only, own ledger
@@ -313,6 +317,12 @@ def _fade_fast_loop() -> None:
                     except Exception as exc:  # noqa: BLE001 - never stops the trading loop
                         log.warning("near tighty paper: %s", exc)
                         alerts.send(f"⚠️ Near Tighty paper error: {exc}"[:300], key="nt-loop", every=900)
+                if state.nt_sx is not None:
+                    try:
+                        state.nt_sx.tick(now)            # NT on SENSEX paper (server/nt_live.py), after NIFTY's
+                    except Exception as exc:  # noqa: BLE001 - never stops the trading loop
+                        log.warning("near tighty sensex paper: %s", exc)
+                        alerts.send(f"⚠️ Near Tighty SENSEX paper error: {exc}"[:300], key="nt-sx-loop", every=900)
                 if state.xp is not None:
                     try:
                         state.xp.tick(now)               # XP expiry-day straddle forward log (server/xp_live.py)

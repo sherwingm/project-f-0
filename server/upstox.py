@@ -29,7 +29,7 @@ import tempfile
 import threading
 import time
 from collections import deque
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from urllib.parse import quote as urlquote
 
 import requests
@@ -94,6 +94,11 @@ class UpstoxProvider:
         self._eq: dict[str, dict] = {}        # symbol -> {"key": "NSE_EQ|ISIN", "isin": ...}
         self._fo: dict[tuple, dict] = {}      # (symbol, type, yy, MON, strike|None) -> {"key", "expiry", "lot_size"}
         self._nifty: dict[tuple, str] = {}    # NIFTY (expiry ISO, CE|PE|FUT, strike|None) -> instrument key
+        self._sensex: dict[tuple, str] = {}   # SENSEX (expiry ISO, CE|PE, strike) -> instrument key (Near Tighty SENSEX)
+        self._sensex_lot: dict[str, int] = {}  # SENSEX expiry ISO -> lot size
+        self._sensex_on: date | None = None   # the day the SENSEX contracts were last loaded
+        self._sensex_try = 0.0                # monotonic time of the last attempt
+        self._sensex_busy = False
         self._loaded = False
         self._chains: dict[str, dict] = {}    # symbol -> {"expiry", "ts", "strikes": {(strike, side): {...}}, "pcr"...}
         self._cursor = 0
@@ -136,6 +141,51 @@ class UpstoxProvider:
                     self._fo[k] = {"key": r["instrument_key"], "expiry": d.isoformat(), "lot_size": r.get("lot_size")}
         self._loaded = True
         log.info("Upstox instruments: %d equities, %d NSE F&O contracts", len(self._eq), len(self._fo))
+
+    # ---- SENSEX option contracts (BSE_FO) ----------------------------------------------------
+    def ingest_sensex(self, rows: list[dict]) -> int:
+        """Keep the SENSEX index CE / PE rows of GET /v2/option/contract. Returns the contracts kept."""
+        keys, lots = {}, {}
+        for r in rows or []:
+            typ = r.get("instrument_type")
+            if typ not in ("CE", "PE") or not r.get("instrument_key") or r.get("strike_price") is None:
+                continue
+            if str(r.get("underlying_symbol") or r.get("name") or "").upper() != "SENSEX":
+                continue
+            exp = r.get("expiry")
+            if exp is None:
+                continue
+            d = (datetime.fromtimestamp(int(exp) / 1000, tz=IST).date() if isinstance(exp, (int, float))
+                 else datetime.strptime(str(exp)[:10], "%Y-%m-%d").date())
+            keys[(d.isoformat(), typ, float(r["strike_price"]))] = r["instrument_key"]
+            if r.get("lot_size"):
+                lots[d.isoformat()] = int(r["lot_size"])
+        if keys:
+            self._sensex, self._sensex_lot = keys, lots
+        return len(keys)
+
+    def load_sensex(self) -> int:
+        """One read-only call: every live SENSEX option contract (all expiries). Raises on a request error."""
+        data = self._get("/option/contract", {"instrument_key": "BSE_INDEX|SENSEX"})
+        n = self.ingest_sensex(data if isinstance(data, list) else [])
+        log.info("Upstox SENSEX option contracts: %d", n)
+        return n
+
+    def ensure_sensex(self, today: date, retry_s: float = 300.0) -> None:
+        """Load the SENSEX contracts once a day, in a background thread; retried every `retry_s` after a failure."""
+        if self._sensex_on == today or self._sensex_busy or time.monotonic() - self._sensex_try < retry_s:
+            return
+        self._sensex_busy, self._sensex_try = True, time.monotonic()
+
+        def run():
+            try:
+                if self.load_sensex():
+                    self._sensex_on = today
+            except Exception as exc:  # noqa: BLE001 - the NIFTY side never depends on this
+                log.warning("Upstox SENSEX contracts: %s", exc)
+            finally:
+                self._sensex_busy = False
+        threading.Thread(target=run, name="upstox-sensex", daemon=True).start()
 
     def _fo_key(self, parsed: dict) -> dict | None:
         strike = float(parsed["strike"]) if parsed.get("strike") else None
