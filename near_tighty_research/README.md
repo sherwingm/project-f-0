@@ -18,6 +18,7 @@ from the overall index / NIFTY optimisation. Anything related to Near Tighty is 
 | `reports/NT_SENSEX.md` | Near Tighty on SENSEX: booked result, history (2026-11-08) |
 | `data/nt_sensex_booked_trades.csv`, `results/nt_sensex_booked_summary.csv`, `scripts/nt_sensex_booked.py` | per trade / per set, reproduces |
 | `reports/NT_OCT2025_ON.md`, `results/nt_oct2025_on.csv`, `scripts/nt_oct2025_on.py` | NIFTY and SENSEX Near Tighty, 2025-10 → present (2026-11-08) |
+| `results/nt_r_multiples.csv`, `scripts/nt_r_multiples.py` | R-multiples (1R = the 50 % stop): expectancy, payoff, profit factor (2026-11-08) |
 
 ## Related Near Tighty files that live elsewhere (not moved)
 - `strategies/NT_near_tighty.md`: the pre-registered rules and gate.

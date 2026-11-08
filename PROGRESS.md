@@ -1091,4 +1091,8 @@ Pre-registered 28 price-shape features (FORMATION_PREREG.md), 53 single rules, B
   `near_tighty_research/reports/NT_OCT2025_ON.md`. Sold next 09:16, no target, 50 % stop: NIFTY 78 trades +19.4 % (t 1.71,
   +₹77.8k), SENSEX 87 trades +11.9 % (t 1.30, +₹82.1k); +100 % reached by the next close on 40 % / 45 %. Earlier period
   NIFTY +6.0 %, SENSEX +19.0 %. Not independent of the 1-3 session cut; nothing live changed.
+- 2026-11-08 · Near Tighty R-multiples (the user: "check the R value"): `near_tighty_research/results/nt_r_multiples.csv`. 1R = the
+  50 % stop. NIFTY + SENSEX (322 trades, sold next 09:16, no target): expectancy +0.28R (t 2.31), won 43 %, average win +1.85R,
+  average loss −0.90R, payoff 2.05, break-even win rate 33 %, profit factor 1.54; 36 % of trades end worse than −1R (gap through
+  the stop), worst −1.81R, best +9.75R; without the 5 best +0.17R. Oct 2025 → now (165): +0.31R, PF 1.57. History only.
 
