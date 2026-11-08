@@ -28,7 +28,7 @@ result changes), `INDEX_DATA_REPORT.md`, `DATA_ACCESS_AUDIT.md`, `STRATEGY_AUDIT
 - **No multi-agent workflows** unless the user asks by name. **No ML** until the user decides (descriptive first).
 
 ## 1-8 Nov 2026: what this chat did (newest state; this chat is a fork of "rem works in fade"; id `local_7712e1b3-d385-48bb-a87b-25789c0bada8`)
-**Live now:** the VM runs `32891bb9` (deployed Sun 8 Nov 10:35 IST). Paper account: 45 open (Arm A / B calls from 15 Oct on), 96 closed
+**Live now:** the VM runs `9d9a937cc` (the index chat's merge of `main`, deployed Sun 8 Nov; it includes this chat's last commit `32891bb9`, which was deployed alone at 10:35 IST). Every deploy ships all of `main`, both chats' commits. Paper account: 45 open (Arm A / B calls from 15 Oct on), 96 closed
 (69 fade). The PC clock is ~5.5 h behind IST: read market time from the VM before any restart. S1 v12 rules are unchanged.
 **Deploy pattern used all week (a scratch script, not in the repo):** `ssh -o BatchMode=yes fo-scanner 'bash -s' < script.sh` where the script
 refuses on weekdays 09:00-15:45 by the VM's `TZ=Asia/Kolkata` clock, does `git fetch` + `git merge --ff-only origin/main`, `systemctl restart fo-scanner`,
