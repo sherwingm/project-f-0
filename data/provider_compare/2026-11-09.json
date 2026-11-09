@@ -308,6 +308,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.5,
    "upstox_minus_kotak_quote_time_s_median": -59.0
+  },
+  {
+   "at": "11:10:07",
+   "contracts": 70,
+   "on_both": 70,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.86,
+   "same_best_bid_pct": 48.6,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.3,
+   "upstox_minus_kotak_quote_time_s_median": -46.5
   }
  ],
  "top_gaps": [
@@ -359,6 +373,13 @@
    "kotak": 4.9,
    "upstox": 5.0,
    "at": "10:15"
+  },
+  {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.86,
+   "kotak": 21.5,
+   "upstox": 21.1,
+   "at": "11:10"
   },
   {
    "contract": "MUTHOOTFIN26NOV2700CE",
@@ -443,23 +464,16 @@
    "kotak": 44.75,
    "upstox": 44.25,
    "at": "09:25"
-  },
-  {
-   "contract": "DLF26NOV750PE",
-   "gap_pct": 1.034,
-   "kotak": 14.5,
-   "upstox": 14.35,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 22,
-  "contract_quotes": 1560,
+  "rounds": 23,
+  "contract_quotes": 1630,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.5,
-  "same_best_ask_pct": 31.7,
+  "same_best_bid_pct": 35.2,
+  "same_best_ask_pct": 32.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.7,
-  "upstox_minus_kotak_quote_time_s_median": -29.0
+  "oi_same_pct": 94.3,
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
