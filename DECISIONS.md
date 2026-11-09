@@ -489,3 +489,6 @@ Evidence disclosed there (history +15.2 %, t 2.29, in-sample). Paper only: `serv
 `data/nt_sensex_ledger.json`, `/near-tighty` and `/api/near-tighty/sensex`, `NT_SENSEX_PAPER`. Own 30-trade gate, never pooled with NIFTY.
 NIFTY Near Tighty, G1, G1-F and S1 / S2 unchanged. Code: the G1 trader became index-agnostic (class attributes + a `subscribe` hook;
 G1 and NIFTY Near Tighty behave as before, their tests pass); `server/upstox.py` gained a read-only SENSEX contract loader.
+
+### 9 Nov 2026 - G1-C (call mirror) not supported
+Verification Test 1: the G1 call mirror held to the next close with the 50 % stop lost at every strike (ATM -10.8 % a trade, -Rs 1.6 lakh over 235 trades, 2024-10 to 2026-10). G1-C is not built unless the user decides otherwise; strike stays ATM for G1 (no strike beat ATM). See g1_research/VERIFY_RESULT.md.

@@ -1129,3 +1129,6 @@ EXTERNAL3_PREREG.md: 1,228 sessions, 64 rules. Direction: nothing. Size: retail 
 
 ## 9 Nov 2026 (index chat): score board on /index
 The 0-7 score is now a board on /index: score, %, band, percentile, running average, the strong points (what scored, with its value), the same on every trade row and in the sell alert, and a max-up-by-band table (G1-F and G1). API /api/index/g1 carries score_meta and tracks[].bands. Record only. Deployed Mon 9 Nov 00:23 IST (23e55edb2, before the session); all endpoints 200, PAPER=true, no errors. First scored signal: today at the earliest.
+
+## 9 Nov 2026 (index chat): verification of public option-buying claims
+VERIFY_PREREG.md (fab94a8b5, before numbers) -> VERIFY_RESULT.md. ATM vs ITM on G1: no strike beats ATM per rupee at risk (ITM = more wins, smaller losses, fewer +100 % runs). Call mirror held overnight LOSES at every strike (ATM -10.8 % a trade). Zerodha ORB on premium: -1.1 %, win 39 % (not their 48 %), negative every year. Forum 2 %/2 %: negative every year. 30-min ORB bot: loses gross and net. 11.5-year trail rule: least bad, still negative intraday. Nothing live changed.
