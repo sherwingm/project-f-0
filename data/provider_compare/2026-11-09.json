@@ -700,6 +700,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.2,
    "upstox_minus_kotak_quote_time_s_median": -79.0
+  },
+  {
+   "at": "13:30:14",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.86,
+   "same_best_bid_pct": 35.2,
+   "same_best_ask_pct": 35.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.8,
+   "upstox_minus_kotak_quote_time_s_median": -99.0
   }
  ],
  "top_gaps": [
@@ -774,6 +788,13 @@
    "at": "11:10"
   },
   {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 1.86,
+   "kotak": 45.7,
+   "upstox": 44.85,
+   "at": "13:30"
+  },
+  {
    "contract": "MUTHOOTFIN26NOV2700CE",
    "gap_pct": 1.843,
    "kotak": 252.35,
@@ -835,21 +856,14 @@
    "kotak": 37.35,
    "upstox": 36.8,
    "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6900CE",
-   "gap_pct": 1.397,
-   "kotak": 268.4,
-   "upstox": 264.65,
-   "at": "11:05"
   }
  ],
  "day": {
-  "rounds": 50,
-  "contract_quotes": 3545,
+  "rounds": 51,
+  "contract_quotes": 3616,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.7,
-  "same_best_ask_pct": 38.0,
+  "same_best_bid_pct": 38.0,
+  "same_best_ask_pct": 36.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.8,
   "upstox_minus_kotak_quote_time_s_median": -41.0
