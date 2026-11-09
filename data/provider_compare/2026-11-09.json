@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.8,
    "upstox_minus_kotak_quote_time_s_median": -58.0
+  },
+  {
+   "at": "10:35:05",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.843,
+   "same_best_bid_pct": 40.8,
+   "same_best_ask_pct": 36.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.0,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -261,6 +275,13 @@
    "kotak": 4.9,
    "upstox": 5.0,
    "at": "10:15"
+  },
+  {
+   "contract": "MUTHOOTFIN26NOV2700CE",
+   "gap_pct": 1.843,
+   "kotak": 252.35,
+   "upstox": 257.0,
+   "at": "10:35"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -345,23 +366,16 @@
    "kotak": 35.15,
    "upstox": 35.5,
    "at": "10:05"
-  },
-  {
-   "contract": "ATHERENERG26NOV1800CE",
-   "gap_pct": 0.986,
-   "kotak": 71.0,
-   "upstox": 70.3,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 1063,
+  "rounds": 16,
+  "contract_quotes": 1134,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.6,
+  "same_best_bid_pct": 31.0,
   "same_best_ask_pct": 31.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.5,
-  "upstox_minus_kotak_quote_time_s_median": -26.0
+  "oi_same_pct": 92.2,
+  "upstox_minus_kotak_quote_time_s_median": -26.5
  }
 }
