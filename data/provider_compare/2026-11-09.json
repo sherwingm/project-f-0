@@ -602,6 +602,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.8,
    "upstox_minus_kotak_quote_time_s_median": -80.0
+  },
+  {
+   "at": "12:55:12",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.675,
+   "same_best_bid_pct": 31.0,
+   "same_best_ask_pct": 36.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.2,
+   "upstox_minus_kotak_quote_time_s_median": -130.0
   }
  ],
  "top_gaps": [
@@ -718,6 +732,13 @@
    "at": "10:45"
   },
   {
+   "contract": "ABB26NOV6800PE",
+   "gap_pct": 1.675,
+   "kotak": 200.0,
+   "upstox": 203.35,
+   "at": "12:55"
+  },
+  {
    "contract": "TITAN26NOV5150CE",
    "gap_pct": 1.515,
    "kotak": 33.0,
@@ -737,23 +758,16 @@
    "kotak": 268.4,
    "upstox": 264.65,
    "at": "11:05"
-  },
-  {
-   "contract": "DRREDDY26NOV1400CE",
-   "gap_pct": 1.333,
-   "kotak": 18.75,
-   "upstox": 19.0,
-   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 43,
-  "contract_quotes": 3049,
+  "rounds": 44,
+  "contract_quotes": 3120,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.0,
+  "same_best_bid_pct": 37.3,
   "same_best_ask_pct": 36.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.8,
-  "upstox_minus_kotak_quote_time_s_median": -36.0
+  "upstox_minus_kotak_quote_time_s_median": -37.0
  }
 }
