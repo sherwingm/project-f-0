@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.8,
    "upstox_minus_kotak_quote_time_s_median": -30.0
+  },
+  {
+   "at": "10:15:04",
+   "contracts": 70,
+   "on_both": 70,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.041,
+   "same_best_bid_pct": 42.9,
+   "same_best_ask_pct": 41.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.9,
+   "upstox_minus_kotak_quote_time_s_median": -24.5
   }
  ],
  "top_gaps": [
@@ -191,6 +205,13 @@
    "kotak": 66.25,
    "upstox": 67.65,
    "at": "09:55"
+  },
+  {
+   "contract": "DELHIVERY26NOV440CE",
+   "gap_pct": 2.041,
+   "kotak": 4.9,
+   "upstox": 5.0,
+   "at": "10:15"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -289,23 +310,16 @@
    "kotak": 22.8,
    "upstox": 23.0,
    "at": "10:00"
-  },
-  {
-   "contract": "DIXON26NOV12500PE",
-   "gap_pct": 0.825,
-   "kotak": 303.1,
-   "upstox": 300.6,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 780,
+  "rounds": 12,
+  "contract_quotes": 850,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.6,
-  "same_best_ask_pct": 28.2,
+  "same_best_bid_pct": 31.0,
+  "same_best_ask_pct": 29.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 88.7,
-  "upstox_minus_kotak_quote_time_s_median": -24.0
+  "oi_same_pct": 90.1,
+  "upstox_minus_kotak_quote_time_s_median": -24.25
  }
 }
