@@ -126,6 +126,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.7,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "10:05:04",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.996,
+   "same_best_bid_pct": 45.1,
+   "same_best_ask_pct": 49.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.8,
+   "upstox_minus_kotak_quote_time_s_median": -28.0
   }
  ],
  "top_gaps": [
@@ -242,6 +256,13 @@
    "at": "09:45"
   },
   {
+   "contract": "GLENMARK26NOV2800CE",
+   "gap_pct": 0.996,
+   "kotak": 35.15,
+   "upstox": 35.5,
+   "at": "10:05"
+  },
+  {
    "contract": "ATHERENERG26NOV1800CE",
    "gap_pct": 0.986,
    "kotak": 71.0,
@@ -261,23 +282,16 @@
    "kotak": 303.1,
    "upstox": 300.6,
    "at": "09:45"
-  },
-  {
-   "contract": "TITAN26NOV5150CE",
-   "gap_pct": 0.767,
-   "kotak": 32.6,
-   "upstox": 32.85,
-   "at": "09:55"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 638,
+  "rounds": 10,
+  "contract_quotes": 709,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.2,
+  "same_best_bid_pct": 28.9,
   "same_best_ask_pct": 28.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 88.7,
-  "upstox_minus_kotak_quote_time_s_median": -16.0
+  "upstox_minus_kotak_quote_time_s_median": -20.0
  }
 }
