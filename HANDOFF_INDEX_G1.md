@@ -49,6 +49,8 @@ VM shell, never printed), `PAPER=true`, no errors in `journalctl -u fo-scanner -
 
 - **Breakout score (7 Nov, record only):** `server/g1_score.py`; score 0-7 + % + percentile + running avg on every G1 signal (ledger day + trade + buy alert); never gates a trade; NT not scored. History check: no link to max up (SCORE_RESULT.md); judge again at 30 live signals, max up first by band. VM at `ed98cb1ef`.
 
+- **9 Nov update:** score board on /index (deployed 23e55edb2). FIRST LIVE G1 TRADE 9 Nov: signal 09:40, bought NIFTY 17 Nov 24900 PE at Rs 289.85, G1-F skips (gap, width, VIX), score 1/7 (low band, percentile 2), all 7 inputs live. Searches since 7 Nov (score methods, formation, 5-year spot, FII/DII x3, news, heavyweights) found nothing; verification of public claims (VERIFY_RESULT.md): no strike beats ATM, the call mirror (G1-C) LOSES held overnight, Zerodha ORB / forum ideas all negative. Do not build G1-C without the user.
+
 ## Research done this chat (all history, in-sample unless stated; folders are separate, do not mix)
 - `expiry_research/` (independent project, all years 2018-2026, sealed final period Jul 2024 →): **no direction edge** at
   any decision time (gap transitions, 5 sessions before expiry, option chain / OI, ML all ~chance, AUC 0.44-0.56). Size of
