@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.4,
    "upstox_minus_kotak_quote_time_s_median": -31.0
+  },
+  {
+   "at": "10:45:05",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.712,
+   "same_best_bid_pct": 33.8,
+   "same_best_ask_pct": 26.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.8,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -326,6 +340,13 @@
    "at": "09:30"
   },
   {
+   "contract": "AUROPHARMA26NOV1860CE",
+   "gap_pct": 1.712,
+   "kotak": 29.2,
+   "upstox": 29.7,
+   "at": "10:45"
+  },
+  {
    "contract": "TITAN26NOV5150CE",
    "gap_pct": 1.515,
    "kotak": 33.0,
@@ -338,6 +359,13 @@
    "kotak": 37.35,
    "upstox": 36.8,
    "at": "09:20"
+  },
+  {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.333,
+   "kotak": 18.75,
+   "upstox": 19.0,
+   "at": "10:45"
   },
   {
    "contract": "LAURUSLABS26NOV2540CE",
@@ -366,30 +394,16 @@
    "kotak": 24.2,
    "upstox": 24.45,
    "at": "09:45"
-  },
-  {
-   "contract": "DRREDDY26NOV1400CE",
-   "gap_pct": 1.008,
-   "kotak": 19.85,
-   "upstox": 20.05,
-   "at": "09:45"
-  },
-  {
-   "contract": "GLENMARK26NOV2800CE",
-   "gap_pct": 0.996,
-   "kotak": 35.15,
-   "upstox": 35.5,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 1205,
+  "rounds": 18,
+  "contract_quotes": 1276,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.6,
-  "same_best_ask_pct": 31.0,
+  "same_best_bid_pct": 31.0,
+  "same_best_ask_pct": 30.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.9,
+  "oi_same_pct": 92.95,
   "upstox_minus_kotak_quote_time_s_median": -27.0
  }
 }
