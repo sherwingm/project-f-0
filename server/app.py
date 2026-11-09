@@ -1023,8 +1023,7 @@ async def http_error(_: Request, exc: HTTPException):
 
 # ---------------------------------------------------------------- index options (INDEX_DATA_PLAN.md §8)
 # Read-only page and data in their own modules; registered here without changing any existing route.
-from server import index_api, index_pages, nt_pages  # noqa: E402
+from server import index_api, index_pages  # noqa: E402
 
 app.include_router(index_api.router, dependencies=[Depends(auth)])
 app.include_router(index_pages.router, dependencies=[Depends(auth)])
-app.include_router(nt_pages.router, dependencies=[Depends(auth)])

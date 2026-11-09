@@ -71,10 +71,19 @@ def test_ledger_epoch_is_its_own(env):
     assert nt.state["open"] is None and nt.state["epoch"] == N.NearTightyTrader.EPOCH
 
 
-def test_page_and_api():
-    from server import nt_pages
-    assert "Near Tighty" in nt_pages.near_tighty_page()
-    assert "error" in nt_pages.near_tighty_api() or "tracks" in nt_pages.near_tighty_api()
+def test_index_page_shows_near_tighty_and_there_is_no_separate_page():
+    from pathlib import Path
+
+    from server import index_api
+    html = (Path(__file__).resolve().parents[1] / "templates" / "index_trading.html").read_text(encoding="utf-8")
+    assert "/api/index/nt" in html and "/api/index/nt_sensex" in html and 'ntSection(D.nt, "NIFTY")' in html
+    assert 'ntSection(D.nts, "SENSEX")' in html
+    root = Path(__file__).resolve().parents[1]
+    assert not (root / "templates" / "near_tighty.html").exists() and not (root / "server" / "nt_pages.py").exists()
+    for fn in (index_api.nt, index_api.nt_sensex):          # not running in a test: a plain message, never a crash
+        assert "error" in fn() or "tracks" in fn()
+    for page in ("results.html", "s2.html"):
+        assert "/near-tighty" not in (root / "templates" / page).read_text(encoding="utf-8")
 
 
 # ---------------------------------------------------------------- Near Tighty on SENSEX
@@ -123,7 +132,7 @@ def test_sensex_trades_near_expiry_in_its_own_ledger(env):
     assert t["reason"] == "next open" and t["sold"] == 450.0 and t["qty"] == 20
     v = sx.view()
     assert v["index"] == "SENSEX" and v["near"] == [1, 3]
-    assert [(x["pod"], x["trades"]) for x in v["tracks"]] == [("Near Tighty", 1)]
+    assert [(x["pod"], x["trades"]) for x in v["tracks"]] == [("Near Tighty SENSEX", 1)]
 
 
 def test_sensex_no_trade_when_the_nearest_expiry_is_4_or_more_sessions_away(env):

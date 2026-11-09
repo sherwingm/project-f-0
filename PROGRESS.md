@@ -1132,3 +1132,8 @@ The 0-7 score is now a board on /index: score, %, band, percentile, running aver
 
 ## 9 Nov 2026 (index chat): verification of public option-buying claims
 VERIFY_PREREG.md (fab94a8b5, before numbers) -> VERIFY_RESULT.md. ATM vs ITM on G1: no strike beats ATM per rupee at risk (ITM = more wins, smaller losses, fewer +100 % runs). Call mirror held overnight LOSES at every strike (ATM -10.8 % a trade). Zerodha ORB on premium: -1.1 %, win 39 % (not their 48 %), negative every year. Forum 2 %/2 %: negative every year. 30-min ORB bot: loses gross and net. 11.5-year trail rule: least bad, still negative intraday. Nothing live changed.
+- 2026-11-10 · Near Tighty moved onto the /index page (the user: "I don't want a seperate page ... keep it in the index page itself"):
+  two sections ("Near Tighty · NIFTY", "· SENSEX") + rows in the Pods table; API `/api/index/nt`, `/api/index/nt_sensex`; `/near-tighty`,
+  `server/nt_pages.py`, `templates/near_tighty.html` and the nav links removed. Ledgers and rules unchanged. Also: first live SENSEX
+  trade 2026-11-09 (SENSEX 12 Nov 80700 PE, ₹714, lot 20, open over the 10 Nov holiday; sells Wed 11 Nov 09:16 or at the 50 % stop).
+

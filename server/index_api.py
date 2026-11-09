@@ -96,6 +96,24 @@ def xp():
     return _xp() or {"error": "XP log is not running on this server (it needs the Upstox stream)"}
 
 
+def _nt(attr: str):
+    from server.app import state
+    t = getattr(state, attr, None)
+    return t.view() if t is not None else None
+
+
+@router.get("/nt")
+def nt():
+    """Near Tighty on NIFTY (server/nt_live.py; strategies/NT_near_tighty.md): open position, today's status, trades, gate track."""
+    return _nt("nt") or {"error": "Near Tighty paper is not running on this server (it needs the Upstox stream)"}
+
+
+@router.get("/nt_sensex")
+def nt_sensex():
+    """Near Tighty on SENSEX (its own ledger)."""
+    return _nt("nt_sx") or {"error": "Near Tighty SENSEX paper is not running on this server (it needs the Upstox stream)"}
+
+
 @router.get("/positions")
 def positions():
     v = _g1()

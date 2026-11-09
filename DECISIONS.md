@@ -492,3 +492,10 @@ G1 and NIFTY Near Tighty behave as before, their tests pass); `server/upstox.py`
 
 ### 9 Nov 2026 - G1-C (call mirror) not supported
 Verification Test 1: the G1 call mirror held to the next close with the 50 % stop lost at every strike (ATM -10.8 % a trade, -Rs 1.6 lakh over 235 trades, 2024-10 to 2026-10). G1-C is not built unless the user decides otherwise; strike stays ATM for G1 (no strike beat ATM). See g1_research/VERIFY_RESULT.md.
+
+## 2026-11-10 · NT · Near Tighty moves onto the /index page; no separate page (user decision)
+The user: "I don't want a seperate page in the website for near tighty, keep it in the index page itself". The `/near-tighty` page and
+`/api/near-tighty*` are removed; the NIFTY and SENSEX tracks are two sections of `/index` ("Near Tighty · NIFTY", "Near Tighty · SENSEX"),
+their results join the Pods table, the API is `/api/index/nt` and `/api/index/nt_sensex`. Rules, ledgers (`data/nt_ledger.json`,
+`data/nt_sensex_ledger.json`), gates and everything else unchanged; the Results and S2 pages lose their "Near Tighty →" link (the
+generated `docs/` copies lose it on the next nightly build).

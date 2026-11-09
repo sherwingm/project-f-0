@@ -28,8 +28,8 @@ website page and DECISIONS entry. It does not change S1, S2, S3, G1 or `/index`.
 - No VIX, gap or trend filter (the "avoid" cells of the screen were picked after seeing the data).
 
 ## Where it runs
-- Paper only on the live server (`server/nt_live.py`), its own ledger `data/nt_ledger.json`, its own website page
-  `/near-tighty` and `/api/near-tighty`. Nothing is ordered. Prices from the Upstox stream (real bid / ask), charges
+- Paper only on the live server (`server/nt_live.py`), its own ledger `data/nt_ledger.json`, shown on
+  the `/index` page (a "Near Tighty · NIFTY" section) and `/api/index/nt`. Nothing is ordered. (Moved onto `/index` on 2026-11-10 at the user's request; it had its own page `/near-tighty` from 2026-11-04 to 2026-11-09.) Prices from the Upstox stream (real bid / ask), charges
   from `server/charges.py`, the lot at entry (65 now). From the first session after it is deployed.
 - Overlap with G1: on a 1-3-session day G1 takes the same put; each keeps its own ledger and counts it once.
 
@@ -61,7 +61,7 @@ Oct 2025 → now: 87 trades +11.9 % (t 1.30). Without the 5 best trades +7.8 % (
 - Entry, 50 % stop on the bid (any second, both days), exit at the next session's 09:16 bid, no target: unchanged.
 
 **Where it runs:** paper only, the live server, `server/nt_live.py` `NearTightySensexTrader`; own ledger `data/nt_sensex_ledger.json`,
-own alerts, own section on `/near-tighty`, API `/api/near-tighty/sensex`; `NT_SENSEX_PAPER=true` by default. Nothing is ordered.
+own alerts, own "Near Tighty · SENSEX" section on the `/index` page, API `/api/index/nt_sensex`; `NT_SENSEX_PAPER=true` by default. Nothing is ordered.
 
 **Gate:** the same six checks, on the SENSEX track's own first 30 trades, judged apart from NIFTY (never pooled). A fail closes the
 SENSEX track only; it is not rescued by changing the stop, exit, window or lot.

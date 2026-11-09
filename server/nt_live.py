@@ -1,7 +1,7 @@
 """NT · Near Tighty live paper trading (strategies/NT_near_tighty.md; the user, 2026-11-04: "keep this as a seperate
 rule , i will name it as a near tighty dont mix with the nifty index , i will be a seperate part form it").
 
-Its own part of the project: own ledger data/nt_ledger.json, own page /near-tighty, own API /api/near-tighty, own
+Its own part of the project: own ledger data/nt_ledger.json, own sections on the /index page (2026-11-10: the user wanted no separate page), API /api/index/nt, own
 alerts. Paper only: nothing is ordered, and neither the S1 paper account nor G1's ledger is touched.
 
 Rules: G1's (server/g1_live.py: downside first breakout of the 09:15-09:29 range, ATM put of the nearest weekly
@@ -77,6 +77,9 @@ class NearTightySensexTrader(NearTightyTrader):
             if lot:
                 self.lot = int(lot)                                 # the lot of the nearest expiry, read at entry
         self.stream.want(keys)
+
+    def tracks(self, trades: list) -> list:
+        return [("Near Tighty SENSEX", trades)]
 
     def entry_skip(self, day: date, expiry: str) -> str:
         why = super().entry_skip(day, expiry)
