@@ -42,9 +42,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.7,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "09:35:02",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.358,
+   "same_best_bid_pct": 25.4,
+   "same_best_ask_pct": 28.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 85.9,
+   "upstox_minus_kotak_quote_time_s_median": -11.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "MAXHEALTH26NOV920CE",
+   "gap_pct": 3.358,
+   "kotak": 26.8,
+   "upstox": 27.7,
+   "at": "09:35"
+  },
   {
    "contract": "BAJAJFINSV26NOV1840PE",
    "gap_pct": 2.183,
@@ -93,6 +114,13 @@
    "kotak": 71.0,
    "upstox": 70.3,
    "at": "09:20"
+  },
+  {
+   "contract": "BOSCHLTD26NOV50000CE",
+   "gap_pct": 0.491,
+   "kotak": 1100.0,
+   "upstox": 1094.6,
+   "at": "09:35"
   },
   {
    "contract": "BSE26NOV4000CE",
@@ -158,42 +186,28 @@
    "at": "09:30"
   },
   {
+   "contract": "BIOCON26NOVFUT",
+   "gap_pct": 0.013,
+   "kotak": 374.85,
+   "upstox": 374.8,
+   "at": "09:35"
+  },
+  {
    "contract": "360ONE26NOV1140CE",
    "gap_pct": 0.0,
    "kotak": 27.7,
    "upstox": 27.7,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOV1140PE",
-   "gap_pct": 0.0,
-   "kotak": 32.95,
-   "upstox": 32.95,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1135.35,
-   "upstox": 1135.35,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV6900CE",
-   "gap_pct": 0.0,
-   "kotak": 243.0,
-   "upstox": 243.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 212,
+  "rounds": 4,
+  "contract_quotes": 283,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 19.7,
-  "same_best_ask_pct": 19.7,
+  "same_best_bid_pct": 22.55,
+  "same_best_ask_pct": 21.8,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 85.9,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -13.25
  }
 }
