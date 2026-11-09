@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.4,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "09:55:03",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.113,
+   "same_best_bid_pct": 28.2,
+   "same_best_ask_pct": 31.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.7,
+   "upstox_minus_kotak_quote_time_s_median": -27.0
   }
  ],
  "top_gaps": [
@@ -114,6 +128,13 @@
    "kotak": 34.35,
    "upstox": 35.1,
    "at": "09:30"
+  },
+  {
+   "contract": "GRASIM26NOV3200PE",
+   "gap_pct": 2.113,
+   "kotak": 66.25,
+   "upstox": 67.65,
+   "at": "09:55"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -207,6 +228,13 @@
    "at": "09:45"
   },
   {
+   "contract": "TITAN26NOV5150CE",
+   "gap_pct": 0.767,
+   "kotak": 32.6,
+   "upstox": 32.85,
+   "at": "09:55"
+  },
+  {
    "contract": "BHARTIARTL26NOV2120CE",
    "gap_pct": 0.575,
    "kotak": 8.7,
@@ -226,30 +254,16 @@
    "kotak": 1100.0,
    "upstox": 1094.6,
    "at": "09:35"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.474,
-   "kotak": 42.2,
-   "upstox": 42.4,
-   "at": "09:30"
-  },
-  {
-   "contract": "BAJFINANCE26NOV1070CE",
-   "gap_pct": 0.369,
-   "kotak": 27.1,
-   "upstox": 27.0,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 496,
+  "rounds": 8,
+  "contract_quotes": 567,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 25.4,
-  "same_best_ask_pct": 23.9,
+  "same_best_bid_pct": 26.8,
+  "same_best_ask_pct": 26.05,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 88.7,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
