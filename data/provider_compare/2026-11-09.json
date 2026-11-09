@@ -112,9 +112,37 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.7,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "10:00:03",
+   "contracts": 71,
+   "on_both": 71,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.653,
+   "same_best_bid_pct": 38.0,
+   "same_best_ask_pct": 46.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.7,
+   "upstox_minus_kotak_quote_time_s_median": -27.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "HDFCLIFE26NOV565PE",
+   "gap_pct": 3.653,
+   "kotak": 10.95,
+   "upstox": 10.55,
+   "at": "10:00"
+  },
+  {
+   "contract": "HDFCLIFE26NOV565CE",
+   "gap_pct": 3.415,
+   "kotak": 10.25,
+   "upstox": 10.6,
+   "at": "10:00"
+  },
   {
    "contract": "MAXHEALTH26NOV920CE",
    "gap_pct": 3.358,
@@ -221,6 +249,13 @@
    "at": "09:20"
   },
   {
+   "contract": "HINDALCO26NOV940CE",
+   "gap_pct": 0.877,
+   "kotak": 22.8,
+   "upstox": 23.0,
+   "at": "10:00"
+  },
+  {
    "contract": "DIXON26NOV12500PE",
    "gap_pct": 0.825,
    "kotak": 303.1,
@@ -233,37 +268,16 @@
    "kotak": 32.6,
    "upstox": 32.85,
    "at": "09:55"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.575,
-   "kotak": 8.7,
-   "upstox": 8.65,
-   "at": "09:40"
-  },
-  {
-   "contract": "DIXON26NOV12500CE",
-   "gap_pct": 0.549,
-   "kotak": 346.3,
-   "upstox": 348.2,
-   "at": "09:45"
-  },
-  {
-   "contract": "BOSCHLTD26NOV50000CE",
-   "gap_pct": 0.491,
-   "kotak": 1100.0,
-   "upstox": 1094.6,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 567,
+  "rounds": 9,
+  "contract_quotes": 638,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.8,
-  "same_best_ask_pct": 26.05,
+  "same_best_bid_pct": 28.2,
+  "same_best_ask_pct": 28.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 88.7,
-  "upstox_minus_kotak_quote_time_s_median": -15.0
+  "upstox_minus_kotak_quote_time_s_median": -16.0
  }
 }
