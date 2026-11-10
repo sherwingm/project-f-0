@@ -111,6 +111,7 @@ class G1Trader:
         self.asks: dict[float, tuple[datetime, float]] = {}     # strike -> (seen at, ask) during the entry minute
         self.last_bid: tuple[datetime, float] | None = None
         self.prev_close: float | None = None
+        self._pos_saved: datetime | None = None            # when the open position's marks were last saved
         self._closes: tuple | None = None                  # (day, daily closes or None, fetched at): for the score
 
     # ------------------------------------------------------------ ledger
@@ -302,6 +303,9 @@ class G1Trader:
             pos["mark"] = bid
             pos["max_bid"] = max(pos.get("max_bid") or 0, bid)
             pos["marked_at"] = now.isoformat(timespec="seconds")
+            if self._pos_saved is None or (now - self._pos_saved).total_seconds() > 30:   # keep mark / best bid on disk
+                self._pos_saved = now                                                   # (a restart must not lose the max up)
+                self._save()
             if bid <= pos["paid"] * (1 - STOP):
                 self._close(pos, bid, now, "stop")
                 return

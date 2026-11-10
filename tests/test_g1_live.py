@@ -144,3 +144,17 @@ def test_g1_runs_on_an_announced_saturday_session(g1, monkeypatch):
     monkeypatch.setattr(G.sessions, "special_sessions", lambda: {sat})
     run(tr, sat, time(9, 15), time(9, 45), before=down_day(st))
     assert tr.state["open"] is not None and tr.state["open"]["entry"] == "09:41"
+
+
+def test_open_position_marks_are_saved_so_a_restart_keeps_the_max_up(g1, tmp_path):
+    import json
+    tr, st = g1
+    run(tr, D1, time(9, 15), time(9, 45), before=down_day(st))
+    assert tr.state["open"] is not None
+
+    def d2(t):
+        st.spot(24000.0, 24000.0)
+        st.put(24000, 160.0 if t.time() < time(11, 0) else 120.0, 162.0)
+    run(tr, D2, time(9, 15), time(11, 5), every=20, before=d2)
+    saved = json.loads((tmp_path / "g1_ledger.json").read_text(encoding="utf-8"))["open"]
+    assert saved["max_bid"] == 160.0 and saved["mark"] == 120.0       # on disk, not only in memory
