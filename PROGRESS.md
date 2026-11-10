@@ -1159,3 +1159,7 @@ Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 l
 - 2026-11-10 · S1 fade live rule re-tested on every contract with 1-minute candles (user's request, `scanner/fade_minutes_retest.py`,
   `data/results/S1_fade_minutes_retest.md`): 339 trades (of 870; the rest have no minutes), entry 09:16 open + 1 tick. v12 (live) +2.86 % a trade,
   t 1.79, win 55 %, +1.75 % without the top 3; v10 hold-to-15:19 +3.88 %, t 0.78, median -18.9 %. Positive in both halves under v12 but not significant. Matches the earlier realistic-entry studies.
+- 2026-11-10 · What the fade's 50-lot rule changed (user's question), pre-registered `strategies/S1_fade_novolume.md`, `scanner/fade_novolume_test.py`,
+  `data/results/S1_fade_novolume.md`: removing the rule changes the strike for 19 of 486 signals and adds 3 more (22 of ~489, 4.5 %). Minute fetch 20/22
+  (NAUKRI, SONACOMS: no candles). None of the 20 new picks has a 09:16 candle (no trade at the open), so none can be entered at the pre-registered 09:16 price;
+  old picks for the same signals: 6 testable, 5 of 6 also thin. No evidence the skipped options would have been buyable at the open. Nothing live changed.
