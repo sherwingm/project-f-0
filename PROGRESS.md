@@ -1145,3 +1145,6 @@ VERIFY_PREREG.md (fab94a8b5, before numbers) -> VERIFY_RESULT.md. ATM vs ITM on 
 - 2026-11-10 · S1 NIFTY-above-50-day-average filter, pre-registered (`strategies/S1_nifty_regime_filter.md`), run once (`scanner/nifty_regime_filter.py`,
   `data/results/S1_nifty_regime_filter.md`): fails. Kept trades: arm A -12.4 % (2023-24) and -14.6 % (2025-26); arm B +2.4 % (t 0.07) and -8.2 %.
   In 2023-24 the dropped trades did better than the kept ones (arm B +97 % on 12). The trend filter does not select winners. Nothing live changed.
+
+## 10 Nov 2026 (index chat): ATM vs ITM added to the research docs
+Written into g1_research/README.md and strategies/S3_G1_put_overnight.md (strike stays ATM; ITM = more wins, smaller typical loss, fewer big doubles, about twice the capital, no better return per rupee). Result file: VERIFY_RESULT.md.

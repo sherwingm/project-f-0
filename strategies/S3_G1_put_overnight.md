@@ -100,6 +100,11 @@ reported as it is.
 ## Reporting default (2026-11-07)
 Every G1 / G1-F report shows max up first (share reaching +50 / +100 / +200 %, mean, median), then the booked result. The `/index` Pods table does the same.
 
+## Strike choice checked: ATM stays (2026-11-09, verification of public claims)
+Pre-registered ATM vs 1 / 2 / 4 strikes ITM (and 1 OTM) on the 259 history signals, live exit, 1x and 2x costs (`g1_research/VERIFY_RESULT.md`): no strike beats ATM per rupee at risk.
+ITM wins more often and loses less on a bad trade but reaches +100 % less often (34 % ATM, 28 % two ITM, 20 % deep ITM) and costs about twice the premium per lot; its bigger rupee totals come from more money at risk.
+So the live strike stays ATM. The call mirror held overnight lost at every strike, so G1-C is not built.
+
 ## After the verdict
 - **Pass:** a proposal to the user to run G1 as a paper strategy. Nothing is enabled automatically, and S1 / S2 are
   untouched.
