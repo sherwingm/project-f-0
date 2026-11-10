@@ -1148,3 +1148,6 @@ VERIFY_PREREG.md (fab94a8b5, before numbers) -> VERIFY_RESULT.md. ATM vs ITM on 
 
 ## 10 Nov 2026 (index chat): ATM vs ITM added to the research docs
 Written into g1_research/README.md and strategies/S3_G1_put_overnight.md (strike stays ATM; ITM = more wins, smaller typical loss, fewer big doubles, about twice the capital, no better return per rupee). Result file: VERIFY_RESULT.md.
+
+## 10 Nov 2026 (index chat): live-style replay from Oct 2024
+Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 lot, engine fills and charges): G1-F 154 trades +Rs 2.47 lakh (+Rs 2.13 lakh at 2x costs), win 41%, avg +19.7%, t 2.41, max drawdown -Rs 41.6k, 7 of 23 months negative; passes its 30-trade gate checked at 60, 90, 120, 150 trades (not at 30). G1 259 trades +Rs 40k (-Rs 13k at 2x), t 0.94, drawdown -Rs 115k, never passes. In-sample. Trade list: g1_research/results/g1_live_replay_trades.csv.
