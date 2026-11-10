@@ -1156,3 +1156,6 @@ Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 l
   Contracts expiring Oct 2024 onward only (Upstox has no earlier expired stock-option minutes). Entry 09:16 open + 1 tick, a mean 7.2 % dearer than the
   daily VWAP entry; 75 contracts had no 09:16 trade and are dropped. Live rule on closes: arm A -24.4 % (t -2.2, n 140), arm B -19.1 % (n 55);
   with an intraday 50 % stop worse (A -28.8 %, B -31.8 %). H8, H11, S8 all <= 0 or t < 1. No variant passes. Also committed the Arm B hold test's max up/dip columns.
+- 2026-11-10 · S1 fade live rule re-tested on every contract with 1-minute candles (user's request, `scanner/fade_minutes_retest.py`,
+  `data/results/S1_fade_minutes_retest.md`): 339 trades (of 870; the rest have no minutes), entry 09:16 open + 1 tick. v12 (live) +2.86 % a trade,
+  t 1.79, win 55 %, +1.75 % without the top 3; v10 hold-to-15:19 +3.88 %, t 0.78, median -18.9 %. Positive in both halves under v12 but not significant. Matches the earlier realistic-entry studies.
