@@ -1137,3 +1137,8 @@ VERIFY_PREREG.md (fab94a8b5, before numbers) -> VERIFY_RESULT.md. ATM vs ITM on 
   `server/nt_pages.py`, `templates/near_tighty.html` and the nav links removed. Ledgers and rules unchanged. Also: first live SENSEX
   trade 2026-11-09 (SENSEX 12 Nov 80700 PE, ₹714, lot 20, open over the 10 Nov holiday; sells Wed 11 Nov 09:16 or at the 50 % stop).
 
+- 2026-11-10 · Arm B longer-hold exits (H8, H11, S8) and NIFTY test, pre-registered in `strategies/S1_armb_hold_and_nifty.md`, run once
+  (`scanner/armb_hold_and_nifty.py`, `data/results/S1_armb_hold_and_nifty.md`). Part 1: no variant passes (2025-26 means -19 %, -19 %, -7 % against
+  the live exit's -15 %; 2023-24 H8 +9.7 %, H11 +1.3 %, S8 +16.1 %, all t < 1). Part 2: net % tracks the NIFTY window return in every group
+  (corr 0.2-0.4); the flat-NIFTY intercept is <= 0 or its 95 % interval includes 0 for arms A and B; the live S1 gain since 28 Oct (NIFTY +10.3 %) is that pattern.
+  2023-24 here = events from 2023 only (2021-22 events not on this PC). Nothing live changed.
