@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230B0F14'/%3E%3Crect x='6' y='6' width='500' height='500' rx='106' fill='none' stroke='%23222B36' stroke-width='4'/%3E%3Cg fill='none' stroke='%234C8DFF' stroke-width='40' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M104 336 L196 244 L260 296 L408 148'/%3E%3Cpath d='M104 404 H408'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0B0F14">
 <title>F&amp;O Live Results</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +30,8 @@ a { color:var(--accent); }
 /* top bar */
 .top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
 .brand { font-weight:700; font-size:15px; white-space:nowrap; }
+.brand { display:inline-flex; align-items:center; gap:8px; }
+.brand .logo { width:22px; height:22px; color:var(--accent); flex:0 0 auto; }
 .brand i { font-style:normal; color:var(--accent); }
 .mkt { display:flex; align-items:center; gap:6px; font-size:12px; color:var(--muted); white-space:nowrap; }
 .dot { width:8px; height:8px; border-radius:50%; background:var(--muted); }
@@ -378,11 +384,21 @@ tr[data-why] { cursor:pointer; }
   .dot.on, td.fx-up, td.fx-down, #main.fx-in, .fx-hero .mu-track i { animation:none !important; }
   details::details-content { transition:none !important; }
 }
+
+/* market-holiday notice: shown from the day before a closure until the market reopens */
+.hol { display:flex; align-items:center; gap:16px; background:var(--panel); border:1px solid var(--line); border-radius:var(--r-lg); padding:14px 16px 14px 18px; margin:0 0 14px; }
+.hol .hi { flex:0 0 auto; width:44px; height:44px; border-radius:50%; background:var(--unc-soft); color:var(--unc); display:grid; place-items:center; }
+.hol .hi svg { width:22px; height:22px; }
+.hol .ht { flex:1; min-width:0; }
+.hol h2 { font-size:15px; margin:0 0 2px; display:block; }
+.hol p { margin:0; font-size:13px; color:var(--muted); }
+.hol .hx { flex:0 0 auto; width:32px; height:32px; border:0; background:none; border-radius:var(--r-sm); color:var(--muted); font-size:20px; line-height:1; }
+.hol .hx:hover { color:var(--ink); background:var(--raise); }
 </style>
 </head>
 <body>
 <header class="top">
-  <div class="brand">F&amp;O <i>Live Results</i></div>
+  <div class="brand"><svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 8-9"/><path d="M3 21h18"/></svg>F&amp;O <i>Live Results</i></div>
   <div class="mkt"><span class="dot" id="dot"></span><span class="lbl" id="mkt">—</span><span class="clock" id="clock"></span></div>
   <nav class="tabs" role="tablist" aria-label="Workspaces" id="tabs"></nav>
   <button class="tbtn" type="button" id="find" title="Find a stock (Ctrl+K)" aria-label="Find a stock">🔍<kbd>Ctrl K</kbd></button>
@@ -429,6 +445,28 @@ tr[data-why] { cursor:pointer; }
   const optName = (sym, strike, typ) => `${esc(sym)} <span>${num(strike, Number.isInteger(+strike) ? 0 : 2)} ${typ === "PE" ? "PUT" : "CALL"}</span>`;
   const tile = (k, v, c = "") => `<div class="tile"><small>${k}</small><b class="${c}">${v}</b></div>`;
   const todayIso = () => new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Kolkata" });
+
+  // ---- market holidays (NSE F&O list, data/nse_holidays.json): the server and the nightly build fill the list in
+  const HOLIDAYS = new Set(/*__HOLIDAYS__*/[]);
+  const addDays = (iso, n) => new Date(Date.parse(iso + "T00:00:00Z") + n * 864e5).toISOString().slice(0, 10);
+  const weekend = iso => [0, 6].includes(new Date(iso + "T00:00:00Z").getUTCDay());
+  const isSession = iso => !weekend(iso) && !HOLIDAYS.has(iso);
+  const nextOpen = iso => { let d = addDays(iso, 1); while (!isSession(d)) d = addDays(d, 1); return d; };
+  const ord = n => n + (n % 100 >= 11 && n % 100 <= 13 ? "th" : ["th", "st", "nd", "rd"][n % 10] || "th");
+  const longDay = iso => `${ord(+iso.slice(8, 10))} ${MON[+iso.slice(5, 7) - 1]}`;
+  // the closure to announce today: a weekday holiday h is announced from the day before it until the market reopens
+  const holidayNow = (today = todayIso()) => [...HOLIDAYS].sort().filter(h => !weekend(h))
+    .map(h => ({ h, open: nextOpen(h) })).find(c => today >= addDays(c.h, -1) && today < c.open) || null;
+  const holidayBanner = () => {
+    const c = holidayNow(); if (!c || ls.get("fo_hol_x", "") === c.h) return "";
+    const today = todayIso(), gap = (Date.parse(c.open) - Date.parse(c.h)) / 864e5;
+    const openTxt = `${gap > 1 ? WD[new Date(c.open + "T00:00:00Z").getUTCDay()] + " " : ""}${day(c.open)}`;
+    const head = today < c.h ? (addDays(today, 1) === c.h ? `Market holiday tomorrow, ${longDay(c.h)}` : `Market holiday on ${longDay(c.h)}`) : `Market holiday on ${longDay(c.h)}`;
+    const body = today < c.h ? `Markets will be closed on ${WD[new Date(c.h + "T00:00:00Z").getUTCDay()]} ${day(c.h)} and will open at 9:15 AM on ${openTxt}.`
+      : `Markets are closed on account of the holiday and will open at 9:15 AM on ${openTxt}.`;
+    return `<aside class="hol" role="status"><span class="hi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/><path d="M9.5 14.5l5 4M14.5 14.5l-5 4"/></svg></span>
+      <div class="ht"><h2>${head}</h2><p>${body}</p></div><button class="hx" type="button" data-hol="${c.h}" aria-label="Dismiss">&times;</button></aside>`;
+  };
 
   async function getJson(url, opts) {
     const r = await fetch(url, { ...auth, ...(opts || {}) }), txt = await r.text();
@@ -764,10 +802,11 @@ tr[data-why] { cursor:pointer; }
           <td class="l"><small>50 % stop at a close · 5 sessions without a new closing high · T-1</small></td>
           <td class="l">open ${state(ru.open, ru.open_wait, p.symbol, "open")}<br>close ${state(ru.close, null, p.symbol, "close")}</td></tr>`);
       }));
-      const stale = (FD && FD.session && FD.session !== today ? `<p class="note">The fade list on the server is for ${day(FD.session)}, not today: tonight's build has not run yet.</p>` : "")
+      const closed = HOLIDAYS.has(today) && !weekend(today);
+      const stale = closed ? "" : (FD && FD.session && FD.session !== today ? `<p class="note">The fade list on the server is for ${day(FD.session)}, not today: tonight's build has not run yet.</p>` : "")
         + (FW && FW.for_today === false ? `<p class="note">The Arm A / B list is not for today (it was made after the ${day(FW.last_session)} session): no Arm A / B trades are planned until a fresh list arrives.</p>` : "");
       return panel(`Today's trades · ${day(today)}`, (rows.length ? `<div class="tw"><table><thead><tr><th>Stock</th><th>Buys</th><th class="l">Why</th><th class="l">Strike and price</th><th class="l">Exit</th><th class="l">Now</th></tr></thead><tbody>${rows.join("")}</tbody></table></div>`
-        : empty("No rule trades for today: no strong or weak results and no results beats yesterday.")) + stale
+        : empty(closed ? `Market holiday: nothing is bought today. The next session is ${day(nextOpen(today))}.` : "No rule trades for today: no strong or weak results and no results beats yesterday.")) + stale
         + `<p class="note">Paper only, 1 lot each. Fade strikes are chosen at the live ask when the market opens, so the strike shown here appears once bought. Arm A / B strikes come from last night's closing prices; the 09:15 order uses the live price.${FD && (FD.ban || []).length ? ` In the F&amp;O ban today (not traded): ${FD.ban.map(esc).join(", ")}.` : ""}</p>`,
         { sub: "what the paper account will try to buy this session", rt: FD && FD.made_at ? "list made " + when(FD.made_at) : "" });
     },
@@ -1418,7 +1457,7 @@ tr[data-why] { cursor:pointer; }
     const prev = drawn === tab ? snapshot() : null, switched = !!drawn && drawn !== tab;
     const keep = drawn === tab ? $$("#main details").filter(d => d.open).map(sum) : [];
     const sx = drawn === tab ? $$("#main .tw").map(t => t.scrollLeft) : [];   // and each table's sideways scroll
-    $("#main").innerHTML = `<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
+    $("#main").innerHTML = `${holidayBanner()}<div class="ws" style="--c:${w.color}"><div class="bar"></div><div><h1>${w.title}</h1><p>${w.desc}</p></div></div>
       <div class="panels">${w.panels().filter(Boolean).join("")}</div>`;
     drawn = tab;
     if (keep.length) $$("#main details").forEach(d => { if (keep.includes(sum(d))) d.open = true; });
@@ -1427,6 +1466,8 @@ tr[data-why] { cursor:pointer; }
     motion(prev, switched);
   }
   $("#main").addEventListener("click", e => {
+    const hx = e.target.closest("[data-hol]");
+    if (hx) { ls.set("fo_hol_x", hx.dataset.hol); render(); return; }
     const mu = e.target.closest("[data-mu]");
     if (mu) { muMode = mu.dataset.mu; try { localStorage.setItem("fo_mu", muMode); } catch (err) { /* private mode */ } render(); return; }
     const pf = e.target.closest("[data-pf]");

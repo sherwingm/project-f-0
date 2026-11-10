@@ -241,7 +241,9 @@ def render_results(scan: dict, template: Path, out: Path) -> None:
     fwd = json.dumps(scan.get("meta", {}).get("forward"), separators=(",", ":")).replace("</", "<\\/")
     fade = json.dumps(scan.get("meta", {}).get("fade"), separators=(",", ":")).replace("</", "<\\/")
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade), encoding="utf-8")
+    hol = json.loads((ROOT / "data" / "nse_holidays.json").read_text(encoding="utf-8")).get("holidays") or []
+    out.write_text(html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade)
+                   .replace("/*__HOLIDAYS__*/[]", json.dumps(sorted(hol))), encoding="utf-8")
 
 
 def render(scan: dict, template: Path, out: Path) -> None:

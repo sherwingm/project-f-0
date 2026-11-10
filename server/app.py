@@ -51,6 +51,7 @@ from server.news import News
 from server.paper import PaperLedger, PaperRejected, QuoteSource, trade_stats
 from server.risk import RiskGate, kotak_margin_fn
 from server.commentary import Commentary
+from server import sessions
 from server.verdict import Verdict
 from server.version import deployed
 from server import alerts
@@ -547,6 +548,32 @@ def _forward_for_page(fw: dict | None) -> dict | None:
 
 
 # ---------------------------------------------------------------- page & data
+ICON_FILES = {"icon.svg": "image/svg+xml", "icon-192.png": "image/png", "icon-512.png": "image/png",
+              "icon-maskable-512.png": "image/png", "apple-touch-icon.png": "image/png"}
+
+
+def _icon_route(name: str, media_type: str) -> None:
+    def serve():
+        return Response((ROOT / "templates" / "icons" / name).read_bytes(), media_type=media_type,
+                        headers={"Cache-Control": "public, max-age=86400"})
+    app.add_api_route("/" + name, serve, methods=["GET"], include_in_schema=False)   # public: the logo is not a secret
+
+
+for _name, _type in ICON_FILES.items():
+    _icon_route(_name, _type)
+
+
+@app.get("/manifest.webmanifest", include_in_schema=False)
+def web_manifest():
+    """Lets the phone or PC install the page as an app with the logo and a dark splash."""
+    icons = [{"src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+             {"src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+             {"src": "/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}]
+    return JSONResponse({"name": "F&O Live Results", "short_name": "F&O Live", "start_url": "/", "scope": "/", "display": "standalone",
+                         "background_color": "#0B0F14", "theme_color": "#0B0F14", "icons": icons},
+                        media_type="application/manifest+json", headers={"Cache-Control": "no-cache"})
+
+
 @app.get("/tokens.css")
 def tokens_css():
     """Shared design tokens for every page (templates/tokens.css). Public: it holds colours only."""
@@ -562,7 +589,8 @@ def results_page(_: str = Depends(auth)):
     fwd = json.dumps(_forward_for_page(meta.get("forward")), separators=(",", ":")).replace("</", "<\\/")
     fade = json.dumps(meta.get("fade"), separators=(",", ":")).replace("</", "<\\/")
     return (html.replace("/*__FORWARD__*/null", fwd).replace("/*__FADE__*/null", fade)
-            .replace("/*__SERVER__*/{}", json.dumps(settings.public())))
+            .replace("/*__SERVER__*/{}", json.dumps(settings.public()))
+            .replace("/*__HOLIDAYS__*/[]", json.dumps(sorted(d.isoformat() for d in sessions.holidays()))))
 
 
 @app.get("/s2", response_class=HTMLResponse)

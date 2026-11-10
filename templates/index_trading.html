@@ -3,6 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='112' fill='%230B0F14'/%3E%3Crect x='6' y='6' width='500' height='500' rx='106' fill='none' stroke='%23222B36' stroke-width='4'/%3E%3Cg fill='none' stroke='%234C8DFF' stroke-width='40' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M104 336 L196 244 L260 296 L408 148'/%3E%3Cpath d='M104 404 H408'/%3E%3C/g%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0B0F14">
 <title>F&amp;O Index options</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,6 +23,8 @@ a { color:var(--accent); }
 small, .muted { color:var(--muted); }
 .top { position:sticky; top:0; z-index:5; display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:8px 16px; background:var(--panel); border-bottom:1px solid var(--line); }
 .brand { font-weight:700; font-size:15px; white-space:nowrap; }
+.brand { display:inline-flex; align-items:center; gap:8px; }
+.brand .logo { width:22px; height:22px; color:var(--accent); flex:0 0 auto; }
 .brand i { font-style:normal; color:var(--bear); }
 .clock { font-family:"JetBrains Mono",monospace; font-size:12px; }
 .sp { margin-left:auto; }
@@ -76,7 +82,7 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
 </head>
 <body>
 <header class="top">
-  <div class="brand">F&amp;O <i style="color:var(--arm-f)">Index options</i></div>
+  <div class="brand"><svg class="logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l5-5 4 3 8-9"/><path d="M3 21h18"/></svg>F&amp;O <i style="color:var(--arm-f)">Index options</i></div>
   <span class="clock" id="clock"></span>
   <span class="sp"></span>
   <a class="tlink" href="/" id="homeLink">← Results</a>
