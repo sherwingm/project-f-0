@@ -37,14 +37,14 @@ SHIFT = "2026-10-28"
 # --------------------------------------------------------------- exits (the only thing that changes)
 VARIANTS = {"LIVE": (None, None), "H8": ("hold", 8), "H11": ("hold", 11), "S8": ("grace", 8)}
 _orig_path = v7._path
-CUR = {"mode": None, "n": None}
+CUR = {"mode": None, "n": None, "name": "LIVE"}
+EXTREMES: dict = {}          # (variant, symbol, day 0) -> (highest close, lowest close) as % of the entry fill
 
 
 def path(m, s, exp, k, entry, stop, days):
     mode, n = CUR["mode"], CUR["n"]
-    if mode is None:
-        return _orig_path(m, s, exp, k, entry, stop, days)
     e = s.i0 + 1
+    hi = lo = None
     best, stall = entry, 0
     fut0 = stock0 = None
     j = e
@@ -66,7 +66,11 @@ def path(m, s, exp, k, entry, stop, days):
         to_exp = sessions_to(m.cal_dates, m.cal_dates[j], date.fromisoformat(exp))
         age = j - e
         reason = None
-        if mode == "hold":
+        hi, lo = (c, c) if hi is None else (max(hi, c), min(lo, c))
+        EXTREMES[(CUR["name"], s.symbol, m.cal[s.i0])] = ((hi / entry - 1) * 100, (lo / entry - 1) * 100)
+        if mode is None:
+            best, stall, reason = v7.exit_step(c, entry, best, stall, to_exp, v7.STOP)
+        elif mode == "hold":
             if to_exp <= v7.T_MINUS:
                 reason = "2_t_minus_1"
             elif age >= n:
@@ -100,7 +104,9 @@ def stats(g: pd.DataFrame) -> dict:
             "median_pct": round(x.median(), 1), "total_rs": round(tot), "t": None if t is None else round(t, 2),
             "at_or_below_-50_pct": round((x <= -50).mean() * 100, 1), "worst_pct": round(x.min(), 1),
             "top3_share_of_profit_pct": round(top["net"].head(3).sum() / tot * 100) if tot > 0 else None,
-            "mean_ex_top3_pct": None if ex3.empty else round(ex3.mean(), 1)}
+            "mean_ex_top3_pct": None if ex3.empty else round(ex3.mean(), 1),
+            "max_up_mean": round(g["max_up_pct"].astype(float).mean(), 1), "max_up_median": round(g["max_up_pct"].astype(float).median(), 1),
+            "max_dip_mean": round(g["max_dip_pct"].astype(float).mean(), 1), "max_dip_median": round(g["max_dip_pct"].astype(float).median(), 1)}
 
 
 # --------------------------------------------------------------- NIFTY
@@ -171,7 +177,7 @@ def main() -> None:
 
     frames = []
     for name, (mode, n) in VARIANTS.items():
-        CUR.update(mode=mode, n=n)
+        CUR.update(mode=mode, n=n, name=name)
         for period, sigs, end in (("2023-24", sigs_t, t_end), ("2025-26", None, m.cal[-1])):
             if period == "2023-24":
                 t = v7.simulate(m, sigs, "B", rules, days, inp.ban, universe, inp.category, Counter(base), end)
@@ -186,7 +192,9 @@ def main() -> None:
                 arms["A"] = v7.simulate(m, sigs, "A", rules, days, inp.ban, universe, inp.category, Counter(base), end)
             for arm, t in arms.items():
                 if not t.empty:
-                    frames.append(t.assign(variant=name, period=period, arm=arm))
+                    ex_ = [EXTREMES.get((name, sy, d0), (None, None)) for sy, d0 in zip(t["symbol"], t["signal_date"])]
+                    frames.append(t.assign(variant=name, period=period, arm=arm,
+                                           max_up_pct=[x[0] for x in ex_], max_dip_pct=[x[1] for x in ex_]))
     CUR.update(mode=None, n=None)
     tr = pd.concat(frames, ignore_index=True)
     a.out_dir.mkdir(parents=True, exist_ok=True)

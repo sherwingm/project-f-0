@@ -1151,3 +1151,8 @@ Written into g1_research/README.md and strategies/S3_G1_put_overnight.md (strike
 
 ## 10 Nov 2026 (index chat): live-style replay from Oct 2024
 Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 lot, engine fills and charges): G1-F 154 trades +Rs 2.47 lakh (+Rs 2.13 lakh at 2x costs), win 41%, avg +19.7%, t 2.41, max drawdown -Rs 41.6k, 7 of 23 months negative; passes its 30-trade gate checked at 60, 90, 120, 150 trades (not at 30). G1 259 trades +Rs 40k (-Rs 13k at 2x), t 0.94, drawdown -Rs 115k, never passes. In-sample. Trade list: g1_research/results/g1_live_replay_trades.csv.
+- 2026-11-10 · S1 arms A/B redone on 1-minute candles (user: daily-candle tests not accepted), pre-registered in `strategies/S1_armab_minutes.md`, run once
+  (`scanner/armab_minutes.py`, `data/results/S1_armab_minutes.md`; candles from the `stock-options-probe` workflow, `S1_v10_bandarmab2_minutes.csv`, local only).
+  Contracts expiring Oct 2024 onward only (Upstox has no earlier expired stock-option minutes). Entry 09:16 open + 1 tick, a mean 7.2 % dearer than the
+  daily VWAP entry; 75 contracts had no 09:16 trade and are dropped. Live rule on closes: arm A -24.4 % (t -2.2, n 140), arm B -19.1 % (n 55);
+  with an intraday 50 % stop worse (A -28.8 %, B -31.8 %). H8, H11, S8 all <= 0 or t < 1. No variant passes. Also committed the Arm B hold test's max up/dip columns.
