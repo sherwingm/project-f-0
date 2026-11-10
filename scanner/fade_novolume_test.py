@@ -2,6 +2,8 @@
 Pre-registered: strategies/S1_fade_novolume.md."""
 from __future__ import annotations
 
+import sys
+
 import pandas as pd
 
 from .backtest_s1_v2 import md
@@ -12,6 +14,10 @@ from .fade_stop_trail import one
 from .fastio import read_table
 
 RES = ROOT / "data" / "results"
+TAG = sys.argv[1] if len(sys.argv) > 1 else "novolume"        # novolume: S1_fade_novolume_picks.csv ... ; vol100: S1_fade_vol100_picks.csv ...
+PICKS = RES / ("S1_fade_novolume_picks.csv" if TAG == "novolume" else f"S1_fade_{TAG}_picks.csv")
+MINS = RES / ("S1_v10_bandnovol_minutes.csv" if TAG == "novolume" else f"S1_v10_band{TAG}_minutes.csv")
+OUT = "S1_fade_novolume" if TAG == "novolume" else f"S1_fade_{TAG}"
 V10 = {"S": 10 ** 6, "mode": "touch", "start": "09:17", "A": 10 ** 6, "D": 2, "re": False}
 
 
@@ -32,8 +38,8 @@ def trade(m: pd.DataFrame, r: dict):
 
 
 def main() -> None:
-    picks = pd.read_csv(RES / "S1_fade_novolume_picks.csv")
-    new = read_table(RES / "S1_v10_bandnovol_minutes.csv")
+    picks = pd.read_csv(PICKS)
+    new = read_table(MINS)
     old = pd.concat([read_table(RES / f"S1_v10_{s}_minutes.csv") for s in SETS]).drop_duplicates(["symbol", "day0", "side", "strike", "ts"])
     lots = {}
     for s in SETS:
@@ -69,17 +75,17 @@ def main() -> None:
                 f[f"{w}_status"] = v["why"] if isinstance(v, dict) else v
         flat.append(f)
     df = pd.DataFrame(flat)
-    df.to_csv(RES / "S1_fade_novolume_trades.csv", index=False)
+    df.to_csv(RES / f"{OUT}_trades.csv", index=False)
     both = df.dropna(subset=["new_v12", "old_v12"]) if "old_v12" in df and "new_v12" in df else df.iloc[0:0]
     n_new = df["new_v12"].notna().sum() if "new_v12" in df else 0
-    rep = (f"# S1 fade · what the 50-lot rule changed\n\nNumbers only. Pre-registered: strategies/S1_fade_novolume.md. 22 new picks: {n_new} testable on minutes; "
+    rep = (f"# S1 fade · what the volume rule changed ({TAG})\n\nNumbers only. Pre-registered: strategies/S1_fade_{'novolume' if TAG == 'novolume' else TAG}.md. {len(df)} new picks: {n_new} testable on minutes; "
            f"{len(both)} with the old pick also testable on the same day. Net % of premium after charges and slippage.\n\n{md(df)}\n\n")
     if len(both):
         rep += ("## New strike against old strike, same signal and day\n\n"
                 + md(pd.DataFrame([{"exit": e, "n": len(both), "new mean %": round(both[f'new_{e}'].mean(), 1), "new median %": round(both[f'new_{e}'].median(), 1),
                                     "new win %": round((both[f'new_{e}'] > 0).mean() * 100), "old mean %": round(both[f'old_{e}'].mean(), 1),
                                     "old median %": round(both[f'old_{e}'].median(), 1), "old win %": round((both[f'old_{e}'] > 0).mean() * 100)} for e in ("v12", "v10")])) + "\n")
-    (RES / "S1_fade_novolume.md").write_text(rep, encoding="utf-8")
+    (RES / f"{OUT}.md").write_text(rep, encoding="utf-8")
     print(rep)
 
 

@@ -1,4 +1,4 @@
-# S1 fade · what the 50-lot rule changed
+# S1 fade · what the volume rule changed (novolume)
 
 Numbers only. Pre-registered: strategies/S1_fade_novolume.md. 22 new picks: 0 testable on minutes; 0 with the old pick also testable on the same day. Net % of premium after charges and slippage.
 

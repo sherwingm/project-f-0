@@ -1163,3 +1163,7 @@ Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 l
   `data/results/S1_fade_novolume.md`: removing the rule changes the strike for 19 of 486 signals and adds 3 more (22 of ~489, 4.5 %). Minute fetch 20/22
   (NAUKRI, SONACOMS: no candles). None of the 20 new picks has a 09:16 candle (no trade at the open), so none can be entered at the pre-registered 09:16 price;
   old picks for the same signals: 6 testable, 5 of 6 also thin. No evidence the skipped options would have been buyable at the open. Nothing live changed.
+- 2026-11-10 · Fade volume rule at 100 lots instead of 50 (user's request), pre-registered `strategies/S1_fade_vol100.md`, `data/results/S1_fade_vol100.md`:
+  14 of the 486 picks at 50 had < 100 lots; 9 change strike (all 9 minute-fetched, all had a 09:16 candle), 5 signals drop out (4 had no 09:16 trade
+  anyway; DELHIVERY -24 % v12). New strike vs old on the 4 comparable days: v12 +22 % vs +44 %, v10 -8 % vs +26 %: 4 trades, no conclusion. The 339-trade live-rule
+  result (+2.86 % v12) is unchanged by dropping the 5 signals (only 1 of them is in it). Nothing live changed.
