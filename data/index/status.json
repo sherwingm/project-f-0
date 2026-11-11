@@ -1,7 +1,7 @@
 {
  "recorder": {
-  "run_at": "2026-11-11T02:15:29+05:30",
-  "session": "2026-11-10",
+  "run_at": "2026-11-12T02:39:08+05:30",
+  "session": "2026-11-11",
   "expiry_check": {
    "bse_fo": {
     "checked": 4373,
@@ -14,26 +14,38 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 25255.05,
+    "contracts": 204,
+    "rows": 307363,
+    "expiries": [
+     "2026-11-17",
+     "2026-11-23"
+    ]
    },
    "SENSEX": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 81879.4,
+    "contracts": 328,
+    "rows": 105342,
+    "expiries": [
+     "2026-11-12",
+     "2026-11-19"
+    ]
    },
    "BANKNIFTY": {
-    "spot": null,
-    "contracts": 0,
-    "rows": 0
+    "spot": 60792.4,
+    "contracts": 244,
+    "rows": 62124,
+    "expiries": [
+     "2026-11-23",
+     "2026-12-29"
+    ]
    }
   },
   "failures": [],
-  "chain_eod_rows": 0,
-  "calls": 3,
-  "runtime_s": 13.9,
-  "contracts": 0
+  "chain_eod_rows": 776,
+  "calls": 1113,
+  "runtime_s": 2030.9,
+  "contracts": 776
  },
  "recent_runs": [
   {
@@ -195,6 +207,14 @@
    "calls": 3,
    "runtime_s": 13.9,
    "failures": 0
+  },
+  {
+   "run_at": "2026-11-12T02:39:08+05:30",
+   "session": "2026-11-11",
+   "contracts": 776,
+   "calls": 1113,
+   "runtime_s": 2030.9,
+   "failures": 0
   }
  ],
  "spot_backfill": {
@@ -313,19 +333,19 @@
  "daily_extras": {
   "spot_vix_1m": {
    "NIFTY50": {
-    "rows_added": 0,
+    "rows_added": 376,
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 0,
+    "rows_added": 376,
     "runtime_s": 2
    },
    "SENSEX": {
-    "rows_added": 0,
+    "rows_added": 361,
     "runtime_s": 2
    },
    "INDIAVIX": {
-    "rows_added": 0,
+    "rows_added": 376,
     "runtime_s": 2,
     "vix_fix": {
      "rows_corrected": 0
@@ -334,32 +354,32 @@
   },
   "spot_upstox_repair": {
    "NIFTY50": {
-    "bar_0915_replaced": 26,
+    "bar_0915_replaced": 6,
     "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 0
+    "days_kept_no_upstox": 1
    },
    "NIFTYBANK": {
-    "bar_0915_replaced": 26,
+    "bar_0915_replaced": 6,
     "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 0
+    "days_kept_no_upstox": 1
    },
    "SENSEX": {
-    "bar_0915_replaced": 26,
+    "bar_0915_replaced": 6,
     "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 0
+    "days_kept_no_upstox": 1
    },
    "INDIAVIX": {
-    "bar_0915_replaced": 26,
-    "bar_0915_changed": 0,
+    "bar_0915_replaced": 7,
+    "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
@@ -367,51 +387,51 @@
    }
   },
   "options_daily": {
-   "sessions": 0,
+   "sessions": 1,
    "skipped_existing": 0,
-   "unavailable": 1,
-   "rows": 0,
+   "unavailable": 0,
+   "rows": 6885,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-10",
-  "runtime_s": 29
+  "day": "2026-11-11",
+  "runtime_s": 24
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-11",
+  "run_on": "2026-11-12",
   "days": {
-   "2026-11-03": {
-    "positions": 43,
-    "stock_rows": 9739,
-    "option_rows": 7288
-   },
    "2026-11-04": {
     "positions": 44,
     "stock_rows": 10108,
-    "option_rows": 7820
+    "option_rows": 7846
    },
    "2026-11-05": {
     "positions": 47,
     "stock_rows": 11552,
-    "option_rows": 8469
+    "option_rows": 8501
    },
    "2026-11-06": {
     "positions": 55,
     "stock_rows": 13714,
-    "option_rows": 8932
+    "option_rows": 8947
    },
    "2026-11-09": {
     "positions": 54,
     "stock_rows": 11912,
-    "option_rows": 8567
+    "option_rows": 8648
    },
    "2026-11-10": {
     "positions": 52,
     "stock_rows": 0,
     "option_rows": 0
+   },
+   "2026-11-11": {
+    "positions": 54,
+    "stock_rows": 11912,
+    "option_rows": 8835
    }
   },
   "missing_tokens": [],
-  "calls": 439
+  "calls": 456
  }
 }
