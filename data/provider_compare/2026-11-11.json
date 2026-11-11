@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.3,
    "upstox_minus_kotak_quote_time_s_median": -10.0
+  },
+  {
+   "at": "09:40:06",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.073,
+   "same_best_bid_pct": 35.1,
+   "same_best_ask_pct": 25.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.9,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -93,6 +107,13 @@
    "kotak": 40.55,
    "upstox": 41.0,
    "at": "09:20"
+  },
+  {
+   "contract": "COCHINSHIP26NOV1200PE",
+   "gap_pct": 1.073,
+   "kotak": 41.95,
+   "upstox": 42.4,
+   "at": "09:40"
   },
   {
    "contract": "ADANIPORTS26NOV1960PE",
@@ -177,23 +198,16 @@
    "kotak": 57.35,
    "upstox": 57.45,
    "at": "09:35"
-  },
-  {
-   "contract": "ADANIENT26NOV2800CE",
-   "gap_pct": 0.11,
-   "kotak": 45.25,
-   "upstox": 45.2,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 219,
+  "rounds": 4,
+  "contract_quotes": 293,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.0,
-  "same_best_ask_pct": 17.8,
+  "same_best_bid_pct": 26.7,
+  "same_best_ask_pct": 21.75,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.2,
-  "upstox_minus_kotak_quote_time_s_median": -8.0
+  "oi_same_pct": 94.55,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
