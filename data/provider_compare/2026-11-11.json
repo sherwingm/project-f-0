@@ -196,6 +196,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.3,
    "upstox_minus_kotak_quote_time_s_median": -28.5
+  },
+  {
+   "at": "10:35:09",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.292,
+   "same_best_bid_pct": 41.9,
+   "same_best_ask_pct": 36.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.3,
+   "upstox_minus_kotak_quote_time_s_median": -38.0
   }
  ],
  "top_gaps": [
@@ -270,6 +284,13 @@
    "at": "09:20"
   },
   {
+   "contract": "PHOENIXLTD26NOV2200CE",
+   "gap_pct": 1.292,
+   "kotak": 38.7,
+   "upstox": 38.2,
+   "at": "10:35"
+  },
+  {
    "contract": "DABUR26NOV380CE",
    "gap_pct": 1.212,
    "kotak": 8.25,
@@ -319,35 +340,28 @@
    "at": "10:10"
   },
   {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 0.833,
+   "kotak": 18.0,
+   "upstox": 18.15,
+   "at": "10:35"
+  },
+  {
    "contract": "DIVISLAB26NOV11300PE",
    "gap_pct": 0.822,
    "kotak": 237.35,
    "upstox": 239.3,
    "at": "09:45"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.816,
-   "kotak": 49.0,
-   "upstox": 48.6,
-   "at": "09:25"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 0.777,
-   "kotak": 70.8,
-   "upstox": 70.25,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 1029,
+  "rounds": 15,
+  "contract_quotes": 1103,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.75,
-  "same_best_ask_pct": 32.0,
+  "same_best_bid_pct": 31.1,
+  "same_best_ask_pct": 32.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.25,
-  "upstox_minus_kotak_quote_time_s_median": -18.25
+  "oi_same_pct": 97.3,
+  "upstox_minus_kotak_quote_time_s_median": -18.5
  }
 }
