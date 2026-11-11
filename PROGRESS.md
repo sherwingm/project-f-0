@@ -1167,3 +1167,8 @@ Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 l
   14 of the 486 picks at 50 had < 100 lots; 9 change strike (all 9 minute-fetched, all had a 09:16 candle), 5 signals drop out (4 had no 09:16 trade
   anyway; DELHIVERY -24 % v12). New strike vs old on the 4 comparable days: v12 +22 % vs +44 %, v10 -8 % vs +26 %: 4 trades, no conclusion. The 339-trade live-rule
   result (+2.86 % v12) is unchanged by dropping the 5 signals (only 1 of them is in it). Nothing live changed.
+- 2026-11-11 · Nearer/farther strike than the walk's pick (user's request), pre-registered `strategies/S1_strike_neighbours.md`, `scanner/strike_neighbours.py`,
+  `data/results/S1_strike_neighbours.md` (minute candles; fetch 1,265/1,303 fade, 540/545 Arm A/B). Fade (326 trades): the pick (+3.4 %, t 2.16) beats the
+  neighbours; nearer strikes -2.5 % / -2.0 % paired, farther +0.5 % / +2.0 % (t 0.5 / 1.7): no offset passes. Arm A/B: the -2 strike passes the pre-registered rule on 9 pairs
+  (+15.6 % paired, t 3.0, own mean +43 %), the -1 strike improves by +8.4 % (t 2.9) but its own mean stays -24 %; farther strikes are worse. Only 9 / 22 pairs: the dearer
+  strikes are mostly outside the Rs 8,000 lot band, so this is a selection of cheap-lot stocks. No shadow tag made. Nothing live changed.
