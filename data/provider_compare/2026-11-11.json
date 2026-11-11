@@ -994,6 +994,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.6,
    "upstox_minus_kotak_quote_time_s_median": -20.5
+  },
+  {
+   "at": "15:20:23",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.113,
+   "same_best_bid_pct": 45.9,
+   "same_best_ask_pct": 51.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.6,
+   "upstox_minus_kotak_quote_time_s_median": -53.0
   }
  ],
  "top_gaps": [
@@ -1031,6 +1045,13 @@
    "kotak": 22.5,
    "upstox": 21.95,
    "at": "09:45"
+  },
+  {
+   "contract": "TITAN26NOV5150CE",
+   "gap_pct": 2.113,
+   "kotak": 28.4,
+   "upstox": 27.8,
+   "at": "15:20"
   },
   {
    "contract": "AMBER26NOV6500CE",
@@ -1110,6 +1131,13 @@
    "at": "09:20"
   },
   {
+   "contract": "TITAN26NOV5100CE",
+   "gap_pct": 1.299,
+   "kotak": 38.5,
+   "upstox": 38.0,
+   "at": "15:20"
+  },
+  {
    "contract": "PHOENIXLTD26NOV2200CE",
    "gap_pct": 1.292,
    "kotak": 38.7,
@@ -1122,25 +1150,11 @@
    "kotak": 8.0,
    "upstox": 7.9,
    "at": "11:30"
-  },
-  {
-   "contract": "DABUR26NOV380CE",
-   "gap_pct": 1.212,
-   "kotak": 8.25,
-   "upstox": 8.35,
-   "at": "09:45"
-  },
-  {
-   "contract": "MFSL26NOV1300PE",
-   "gap_pct": 1.207,
-   "kotak": 29.0,
-   "upstox": 29.35,
-   "at": "12:15"
   }
  ],
  "day": {
-  "rounds": 71,
-  "contract_quotes": 5235,
+  "rounds": 72,
+  "contract_quotes": 5309,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 39.2,
   "same_best_ask_pct": 39.2,
