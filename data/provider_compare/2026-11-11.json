@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.3,
    "upstox_minus_kotak_quote_time_s_median": -42.5
+  },
+  {
+   "at": "12:00:13",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.459,
+   "same_best_bid_pct": 37.8,
+   "same_best_ask_pct": 31.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.6,
+   "upstox_minus_kotak_quote_time_s_median": -44.0
   }
  ],
  "top_gaps": [
@@ -450,6 +464,13 @@
    "kotak": 7.85,
    "upstox": 8.05,
    "at": "09:20"
+  },
+  {
+   "contract": "IREDA26NOV123PE",
+   "gap_pct": 2.459,
+   "kotak": 3.66,
+   "upstox": 3.57,
+   "at": "12:00"
   },
   {
    "contract": "GLENMARK26NOV2800CE",
@@ -569,20 +590,13 @@
    "kotak": 27.45,
    "upstox": 27.7,
    "at": "10:15"
-  },
-  {
-   "contract": "AUROPHARMA26NOV1860CE",
-   "gap_pct": 0.834,
-   "kotak": 35.95,
-   "upstox": 35.65,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 2285,
+  "rounds": 32,
+  "contract_quotes": 2359,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 35.1,
+  "same_best_bid_pct": 35.8,
   "same_best_ask_pct": 36.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.3,
