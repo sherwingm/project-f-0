@@ -182,6 +182,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.5,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "10:30:08",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.585,
+   "same_best_bid_pct": 32.4,
+   "same_best_ask_pct": 39.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.3,
+   "upstox_minus_kotak_quote_time_s_median": -28.5
   }
  ],
  "top_gaps": [
@@ -240,6 +254,13 @@
    "kotak": 18.8,
    "upstox": 19.1,
    "at": "10:15"
+  },
+  {
+   "contract": "PHOENIXLTD26NOV2200CE",
+   "gap_pct": 1.585,
+   "kotak": 41.0,
+   "upstox": 41.65,
+   "at": "10:30"
   },
   {
    "contract": "ADANIENT26NOV2800CE",
@@ -317,23 +338,16 @@
    "kotak": 70.8,
    "upstox": 70.25,
    "at": "09:45"
-  },
-  {
-   "contract": "MARUTI26NOV13100CE",
-   "gap_pct": 0.755,
-   "kotak": 211.95,
-   "upstox": 213.55,
-   "at": "10:25"
   }
  ],
  "day": {
-  "rounds": 13,
-  "contract_quotes": 955,
+  "rounds": 14,
+  "contract_quotes": 1029,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.4,
-  "same_best_ask_pct": 31.1,
+  "same_best_bid_pct": 29.75,
+  "same_best_ask_pct": 32.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 97.2,
-  "upstox_minus_kotak_quote_time_s_median": -18.0
+  "oi_same_pct": 97.25,
+  "upstox_minus_kotak_quote_time_s_median": -18.25
  }
 }
