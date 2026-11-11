@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.6,
    "upstox_minus_kotak_quote_time_s_median": -42.0
+  },
+  {
+   "at": "11:30:11",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.25,
+   "same_best_bid_pct": 51.4,
+   "same_best_ask_pct": 52.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.3,
+   "upstox_minus_kotak_quote_time_s_median": -69.5
   }
  ],
  "top_gaps": [
@@ -431,6 +445,13 @@
    "at": "10:35"
   },
   {
+   "contract": "JSWENERGY26NOV530CE",
+   "gap_pct": 1.25,
+   "kotak": 8.0,
+   "upstox": 7.9,
+   "at": "11:30"
+  },
+  {
    "contract": "DABUR26NOV380CE",
    "gap_pct": 1.212,
    "kotak": 8.25,
@@ -485,23 +506,16 @@
    "kotak": 35.95,
    "upstox": 35.65,
    "at": "10:10"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.833,
-   "kotak": 18.0,
-   "upstox": 18.15,
-   "at": "10:35"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 1841,
+  "rounds": 26,
+  "contract_quotes": 1915,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 33.8,
-  "same_best_ask_pct": 33.8,
+  "same_best_bid_pct": 34.45,
+  "same_best_ask_pct": 34.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.3,
-  "upstox_minus_kotak_quote_time_s_median": -23.0
+  "upstox_minus_kotak_quote_time_s_median": -23.25
  }
 }
