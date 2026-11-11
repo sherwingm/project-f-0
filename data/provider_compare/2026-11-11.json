@@ -896,6 +896,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.6,
    "upstox_minus_kotak_quote_time_s_median": -63.0
+  },
+  {
+   "at": "14:45:21",
+   "contracts": 73,
+   "on_both": 73,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.418,
+   "same_best_bid_pct": 46.6,
+   "same_best_ask_pct": 37.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.6,
+   "upstox_minus_kotak_quote_time_s_median": -43.0
   }
  ],
  "top_gaps": [
@@ -984,6 +998,13 @@
    "at": "13:40"
   },
   {
+   "contract": "WIPRO26NOV197.5PE",
+   "gap_pct": 1.418,
+   "kotak": 4.23,
+   "upstox": 4.29,
+   "at": "14:45"
+  },
+  {
    "contract": "M&M26NOV3400CE",
    "gap_pct": 1.414,
    "kotak": 84.85,
@@ -1031,20 +1052,13 @@
    "kotak": 40.0,
    "upstox": 39.55,
    "at": "14:00"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1960CE",
-   "gap_pct": 1.11,
-   "kotak": 40.55,
-   "upstox": 41.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 64,
-  "contract_quotes": 4719,
+  "rounds": 65,
+  "contract_quotes": 4792,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.1,
+  "same_best_bid_pct": 38.4,
   "same_best_ask_pct": 39.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.6,
