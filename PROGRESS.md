@@ -1182,3 +1182,7 @@ Pre-registered `strategies/S1_strike_choice_minutes.md`; `python -m scanner.stri
 
 ## 11 Nov 2026 (index chat): 1-minute data audit
 g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in Nov 2021), no duplicates / OHLC errors / zero prices; VIX clean; options present and consistent on all 259 G1 days (entry bar 259/259, gaps <= 1 min). Found: index feed is flat 15:15-15:28 since 3 Aug 2026 (same in the live recorder: NSE feed, not an error); does not affect G1. No result changes.
+- 2026-11-11 · Fade entry 09:15 vs 09:16 (user's request), pre-registered `strategies/S1_fade_entry_0915_0916.md`, `scanner/fade_entry_time.py`,
+  `data/results/S1_fade_entry_time.md`. Minutes (285 fade trades buyable at both): live exit E15 +4.1 % vs E16 +3.8 %, paired +0.3 % (t 0.08), halves -5.8 / +5.7;
+  hold-to-close E15 -4.0 % worse (t -1.5); the 09:15 open is on average +16 % (median +4 %) dearer; 09:15 candle range median 47 %. Seconds (26-30 Oct, 23 trades, ask/bid):
+  every entry second loses, 09:15:01 -11 % vs 09:16:00 -11.5 %, 09:16:30 -6.7 % (noise); spread paid ~10 %. Neither shown better; no change to the live entry.
