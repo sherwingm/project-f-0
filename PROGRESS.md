@@ -1172,3 +1172,10 @@ Results of the live rule replayed on history (ATM put, next close, 50% stop, 1 l
   neighbours; nearer strikes -2.5 % / -2.0 % paired, farther +0.5 % / +2.0 % (t 0.5 / 1.7): no offset passes. Arm A/B: the -2 strike passes the pre-registered rule on 9 pairs
   (+15.6 % paired, t 3.0, own mean +43 %), the -1 strike improves by +8.4 % (t 2.9) but its own mean stays -24 %; farther strikes are worse. Only 9 / 22 pairs: the dearer
   strikes are mostly outside the Rs 8,000 lot band, so this is a selection of cheap-lot stocks. No shadow tag made. Nothing live changed.
+
+## 2026-11-11 · S1 strike choice, 09:15 volume rule, next strike (fade v12 and arms A / B on 1-minute candles)
+Pre-registered `strategies/S1_strike_choice_minutes.md`; `python -m scanner.strike_choice_minutes run` -> `data/results/S1_strike_choice_minutes.md`.
+- **Which strike (fade, v12, 401 signals):** no strike beats the walk's pick (+3.6 %, +Rs 1.08 lakh). Paired difference: ATM -0.6 points (t -0.6), 1 closer -0.2, 1 further -1.7, 2 further -0.8, ITM1 -0.7, ITM2 -2.5 (t -2.2); 3 further +1.7 (t 0.7). ATM and ITM lots are over Rs 8,000 in 84-93 % of trades.
+- **09:15 volume rule instead of the whole-day 50 contracts:** train picks >= 1 lot; test +3.17 % vs today's +3.82 %. Changes about half the picks; no gain.
+- **Next strike when the pick has no 09:16 trade:** fade 43 of 59 found, mean -1.7 % (t -0.4), lowers the total. Arms A / B: 17 / 9 trades found, all variants lose; the arms stay failed.
+- One signal was in the F&O ban on its day (RBLBANK 2025-10-20), dropped. Minute files stay out of git (artifacts of the GitHub fetch).
