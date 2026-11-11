@@ -1186,3 +1186,6 @@ g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in N
   `data/results/S1_fade_entry_time.md`. Minutes (285 fade trades buyable at both): live exit E15 +4.1 % vs E16 +3.8 %, paired +0.3 % (t 0.08), halves -5.8 / +5.7;
   hold-to-close E15 -4.0 % worse (t -1.5); the 09:15 open is on average +16 % (median +4 %) dearer; 09:15 candle range median 47 %. Seconds (26-30 Oct, 23 trades, ask/bid):
   every entry second loses, 09:15:01 -11 % vs 09:16:00 -11.5 %, 09:16:30 -6.7 % (noise); spread paid ~10 %. Neither shown better; no change to the live entry.
+- 2026-11-11 · Fade exits v10 / v11 / v12 side by side on minute and second data (`scanner/fade_exit_versions.py`, `data/results/S1_fade_exit_versions.md`, descriptive):
+  minutes, 314 trades: v10 +3.4 % (t 0.7, win 40 %, median -18 %), v11 +4.2 % (t 1.2, win 26 %, median -21 %), v12 +3.4 % (t 2.2, win 56 %, median +5.8 %, both halves positive); paired
+  differences all t < 0.3. Seconds (23 live trades, ask/bid): all three lose; v11 worst at 09:15:10 (win 6 %), v12 least bad at 09:16:00 (-11.5 %). Same average, v12 steadier. No change.
