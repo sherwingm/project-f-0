@@ -952,9 +952,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "15:05:22",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.73,
+   "same_best_bid_pct": 41.9,
+   "same_best_ask_pct": 40.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.6,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "CHOLAFIN26NOV1720CE",
+   "gap_pct": 4.73,
+   "kotak": 97.25,
+   "upstox": 92.65,
+   "at": "15:05"
+  },
   {
    "contract": "ALKEM26NOV5400CE",
    "gap_pct": 2.667,
@@ -1087,18 +1108,11 @@
    "kotak": 29.0,
    "upstox": 29.35,
    "at": "12:15"
-  },
-  {
-   "contract": "ADANIENT26NOV2800CE",
-   "gap_pct": 1.125,
-   "kotak": 40.0,
-   "upstox": 39.55,
-   "at": "14:00"
   }
  ],
  "day": {
-  "rounds": 68,
-  "contract_quotes": 5013,
+  "rounds": 69,
+  "contract_quotes": 5087,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 39.2,
   "same_best_ask_pct": 39.2,
