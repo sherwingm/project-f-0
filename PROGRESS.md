@@ -1179,3 +1179,6 @@ Pre-registered `strategies/S1_strike_choice_minutes.md`; `python -m scanner.stri
 - **09:15 volume rule instead of the whole-day 50 contracts:** train picks >= 1 lot; test +3.17 % vs today's +3.82 %. Changes about half the picks; no gain.
 - **Next strike when the pick has no 09:16 trade:** fade 43 of 59 found, mean -1.7 % (t -0.4), lowers the total. Arms A / B: 17 / 9 trades found, all variants lose; the arms stay failed.
 - One signal was in the F&O ban on its day (RBLBANK 2025-10-20), dropped. Minute files stay out of git (artifacts of the GitHub fetch).
+
+## 11 Nov 2026 (index chat): 1-minute data audit
+g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in Nov 2021), no duplicates / OHLC errors / zero prices; VIX clean; options present and consistent on all 259 G1 days (entry bar 259/259, gaps <= 1 min). Found: index feed is flat 15:15-15:28 since 3 Aug 2026 (same in the live recorder: NSE feed, not an error); does not affect G1. No result changes.
