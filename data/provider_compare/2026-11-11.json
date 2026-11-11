@@ -700,6 +700,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.6,
    "upstox_minus_kotak_quote_time_s_median": -60.5
+  },
+  {
+   "at": "13:35:18",
+   "contracts": 74,
+   "on_both": 74,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.087,
+   "same_best_bid_pct": 41.9,
+   "same_best_ask_pct": 39.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -16.5
   }
  ],
  "top_gaps": [
@@ -830,28 +844,28 @@
    "at": "09:20"
   },
   {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.087,
+   "kotak": 13.8,
+   "upstox": 13.95,
+   "at": "13:35"
+  },
+  {
    "contract": "COCHINSHIP26NOV1200PE",
    "gap_pct": 1.073,
    "kotak": 41.95,
    "upstox": 42.4,
    "at": "09:40"
-  },
-  {
-   "contract": "ADANIPORTS26NOV1960PE",
-   "gap_pct": 1.046,
-   "kotak": 38.25,
-   "upstox": 37.85,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 50,
-  "contract_quotes": 3686,
+  "rounds": 51,
+  "contract_quotes": 3760,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 37.8,
-  "same_best_ask_pct": 38.5,
+  "same_best_ask_pct": 39.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.3,
-  "upstox_minus_kotak_quote_time_s_median": -34.5
+  "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
