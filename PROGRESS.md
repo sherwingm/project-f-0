@@ -1189,3 +1189,7 @@ g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in N
 - 2026-11-11 · Fade exits v10 / v11 / v12 side by side on minute and second data (`scanner/fade_exit_versions.py`, `data/results/S1_fade_exit_versions.md`, descriptive):
   minutes, 314 trades: v10 +3.4 % (t 0.7, win 40 %, median -18 %), v11 +4.2 % (t 1.2, win 26 %, median -21 %), v12 +3.4 % (t 2.2, win 56 %, median +5.8 %, both halves positive); paired
   differences all t < 0.3. Seconds (23 live trades, ask/bid): all three lose; v11 worst at 09:15:10 (win 6 %), v12 least bad at 09:16:00 (-11.5 %). Same average, v12 steadier. No change.
+- 2026-11-11 · Fade v12 max up / dip while held and after the sale on minute candles (user's request; `scanner/fade_v12_maxup.py`, `data/results/S1_fade_v12_maxup.md`, descriptive):
+  314 trades: held max up mean +24 % / median +17 %, held max dip -15 / -14; after the sale the option peaks at mean +66 % / median +37 % the same day (day high +71 / +44), ends the day at +5 / -17 %;
+  stop exits (124) held +5 % up, dip -28 %; trail exits (190) held +36 % up and sold at +22 %, after-sale peak +88 %. 7 trades reached +100 % while held, 62 after the sale / on the day.
+  Later sessions (carry candles, 312 trades): peak mean +141 %, median +54 %, >= 100 % in 128 trades. Candle highs, upper bounds on a bid.
