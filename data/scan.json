@@ -3,7 +3,7 @@
   "as_of": "2026-11-09",
   "price_fallback_days": [],
   "as_of_label": "Mon 09 Nov 2026",
-  "generated_at_ist": "2026-11-10 05:17 IST",
+  "generated_at_ist": "2026-11-11 02:41 IST",
   "universe_size": 218,
   "stocks_with_data": 218,
   "missing_symbols": [],
@@ -13677,8 +13677,160 @@
   "fade": {
    "rules": "S1 v12 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below 0.80 x entry from 09:16 (-20 % stop); once the bid reaches 1.10 x entry a trailing stop sells at the first bid 2 % below the highest bid since; else at 15:20 the same day.",
    "session": "2026-11-11",
-   "made_at": "2026-11-10T05:16:53+05:30",
-   "signals": [],
+   "made_at": "2026-11-11T02:41:17+05:30",
+   "signals": [
+    {
+     "symbol": "COCHINSHIP",
+     "filed": "2026-11-10",
+     "filed_time": "14:27",
+     "quarter": "2026-09-30",
+     "np_yoy": -50.0,
+     "np_qoq": -64.5,
+     "rev_yoy": 11.7,
+     "why": "net profit YoY -50.0 %, QoQ -64.5 %; revenue YoY +11.7 %",
+     "side": "CE",
+     "expiry": "2026-11-23",
+     "spot": 1289.86,
+     "strikes": [
+      920.0,
+      960.0,
+      980.0,
+      1000.0,
+      1020.0,
+      1040.0,
+      1060.0,
+      1080.0,
+      1100.0,
+      1120.0,
+      1140.0,
+      1160.0,
+      1180.0,
+      1200.0,
+      1220.0,
+      1240.0,
+      1260.0,
+      1280.0,
+      1300.0,
+      1320.0,
+      1340.0,
+      1360.0,
+      1380.0,
+      1400.0,
+      1440.0,
+      1460.0,
+      1480.0,
+      1520.0
+     ],
+     "chain_from": "2026-11-09",
+     "listing": {
+      "920": 284.4,
+      "960": 244.2,
+      "980": 226.35,
+      "1000": 152.0,
+      "1020": 186.1,
+      "1060": 83.4,
+      "1100": 165.3,
+      "1120": 57.05,
+      "1140": 73.15,
+      "1160": 54.7,
+      "1180": 46.9,
+      "1200": 59.4,
+      "1220": 14.15,
+      "1240": 19.0,
+      "1260": 63.25,
+      "1280": 6.45,
+      "1300": 24.75,
+      "1320": 90.0,
+      "1340": 6.6,
+      "1360": 4.9,
+      "1380": 8.7,
+      "1400": 7.2,
+      "1440": 2.45,
+      "1460": 5.6,
+      "1480": 6.0,
+      "1520": 3.4
+     }
+    },
+    {
+     "symbol": "KALYANKJIL",
+     "filed": "2026-11-10",
+     "filed_time": "17:08",
+     "quarter": "2026-09-30",
+     "np_yoy": 63.9,
+     "np_qoq": 22.5,
+     "rev_yoy": 31.4,
+     "why": "net profit YoY +63.9 %, QoQ +22.5 %; revenue YoY +31.4 %",
+     "side": "PE",
+     "expiry": "2026-11-23",
+     "spot": 611.0,
+     "strikes": [
+      400.0,
+      420.0,
+      430.0,
+      440.0,
+      450.0,
+      460.0,
+      470.0,
+      480.0,
+      490.0,
+      500.0,
+      510.0,
+      520.0,
+      530.0,
+      540.0,
+      550.0,
+      560.0,
+      570.0,
+      580.0,
+      590.0,
+      600.0,
+      610.0,
+      620.0,
+      630.0,
+      640.0,
+      650.0,
+      660.0,
+      670.0,
+      680.0,
+      700.0
+     ],
+     "chain_from": "2026-11-09",
+     "listing": {
+      "400": 2.25,
+      "420": 3.65,
+      "430": 5.0,
+      "440": 3.75,
+      "450": 4.4,
+      "460": 10.5,
+      "470": 6.55,
+      "480": 8.05,
+      "490": 7.3,
+      "500": 20.75,
+      "510": 9.65,
+      "520": 24.2,
+      "530": 26.7,
+      "540": 19.3,
+      "550": 27.05,
+      "560": 26.0,
+      "570": 32.35,
+      "580": 46.35,
+      "590": 94.75,
+      "600": 57.5,
+      "610": 101.0,
+      "620": 68.4,
+      "630": 75.0,
+      "640": 84.0,
+      "650": 52.75,
+      "660": 101.25,
+      "680": 118.4,
+      "700": 103.6
+     },
+     "filing_day": {
+      "market_hours": false,
+      "tagged": false
+     }
+    }
+   ],
    "skipped": [],
    "history": [
     {
@@ -19452,7 +19604,7 @@
    "signals": {
     "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
     "session": "2026-11-09",
-    "generated": "2026-11-10T05:15+05:30",
+    "generated": "2026-11-11T02:39+05:30",
     "signals": [
      {
       "symbol": "JUBLFOOD",
@@ -19884,53 +20036,53 @@
     "insider": 14265,
     "results_date": 3098,
     "block_deal": 3070,
-    "results": 3052,
+    "results": 3054,
     "capacity": 2561,
     "ban": 1790,
     "bulk_deal": 1590,
-    "rating": 1168,
+    "rating": 1169,
     "order_win": 1163,
     "analyst_view": 64
    },
    "sources": {
     "nse_ann": {
-     "last_success": "2026-11-10T05:10:46+05:30",
+     "last_success": "2026-11-11T02:37:33+05:30",
      "error": null
     },
     "bse_ann": {
-     "last_success": "2026-11-10T05:11:49+05:30",
+     "last_success": "2026-11-11T02:38:36+05:30",
      "error": null
     },
     "nse_block": {
-     "last_success": "2026-11-10T05:11:50+05:30",
+     "last_success": "2026-11-11T02:38:36+05:30",
      "error": null
     },
     "nse_bulk": {
-     "last_success": "2026-11-10T05:11:51+05:30",
+     "last_success": "2026-11-11T02:38:37+05:30",
      "error": null
     },
     "nse_ban": {
-     "last_success": "2026-11-10T05:12:59+05:30",
-     "error": null
+     "last_success": "2026-11-11T02:38:39+05:30",
+     "error": "FetchError: https://nsearchives.nseindia.com/archives/fo/sec_ban/fo_secban_12112026.csv: HTTP 404"
     },
     "nse_pit": {
-     "last_success": "2026-11-10T05:11:52+05:30",
+     "last_success": "2026-11-11T02:38:38+05:30",
      "error": null
     },
     "rss:et_markets": {
-     "last_success": "2026-11-10T05:11:54+05:30",
+     "last_success": "2026-11-11T02:38:41+05:30",
      "error": null
     },
     "nse_bm": {
-     "last_success": "2026-11-10T05:11:54+05:30",
+     "last_success": "2026-11-11T02:38:40+05:30",
      "error": null
     },
     "rss:moneycontrol": {
-     "last_success": "2026-11-10T05:12:58+05:30",
+     "last_success": "2026-11-11T02:39:44+05:30",
      "error": null
     },
     "rss:business_standard": {
-     "last_success": "2026-11-10T05:12:58+05:30",
+     "last_success": "2026-11-11T02:39:44+05:30",
      "error": null
     }
    }
@@ -29202,7 +29354,14 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "rating",
+      "date": "2026-11-10",
+      "sessions": 1,
+      "subject": "Adani Power Limited has informed the Exchange about Credit Rating"
+     }
+    ],
     "analyst_view": [
      {
       "type": "analyst_view",
@@ -40503,7 +40662,7 @@
       "eps_yoy": 18.9
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 5814000,
    "fut_oi_prev": 6010350,
@@ -55391,7 +55550,7 @@
       "eps_yoy": -17.9
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 10984000,
    "fut_oi_prev": 10707000,
@@ -56581,7 +56740,7 @@
       "eps_yoy": -34.1
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 51345125,
    "fut_oi_prev": 51394525,
@@ -61192,7 +61351,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 224480,
    "fut_oi_prev": 200460,
@@ -63484,7 +63643,7 @@
       "eps_yoy": 21.1
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 2714750,
    "fut_oi_prev": 2688750,
@@ -73799,6 +73958,19 @@
     "basis": "consolidated",
     "quarters": [
      {
+      "period": "2026-09-30",
+      "filed": null,
+      "revenue": 1249.19,
+      "revenue_qoq": 14.2,
+      "revenue_yoy": 11.7,
+      "net_profit": 53.77,
+      "net_profit_qoq": -64.5,
+      "net_profit_yoy": -50.0,
+      "eps": 2.04,
+      "eps_qoq": -64.6,
+      "eps_yoy": -50.1
+     },
+     {
       "period": "2026-06-30",
       "filed": null,
       "revenue": 1094.21,
@@ -73823,22 +73995,9 @@
       "eps": 10.51,
       "eps_qoq": 91.1,
       "eps_yoy": -3.8
-     },
-     {
-      "period": "2025-12-31",
-      "filed": null,
-      "revenue": 1350.41,
-      "revenue_qoq": 20.7,
-      "revenue_yoy": 17.7,
-      "net_profit": 144.67,
-      "net_profit_qoq": 34.5,
-      "net_profit_yoy": -18.3,
-      "eps": 5.5,
-      "eps_qoq": 34.5,
-      "eps_yoy": -18.3
      }
     ],
-    "updated": "2026-10-14"
+    "updated": "2026-11-10"
    },
    "fut_oi": 5419200,
    "fut_oi_prev": 5349200,
@@ -74078,6 +74237,12 @@
       "date": "2026-11-10",
       "sessions": 1,
       "subject": "To consider and approve the financial results for the period ended September 30, 2026 and dividend"
+     },
+     {
+      "type": "results",
+      "date": "2026-11-10",
+      "sessions": 1,
+      "subject": "Cochin Shipyard Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026."
      }
     ],
     "analyst_view": [],
@@ -78432,7 +78597,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 414600,
    "fut_oi_prev": 366000,
@@ -84168,7 +84333,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 501000,
    "fut_oi_prev": 514125,
@@ -86567,7 +86732,7 @@
       "eps_yoy": 13.6
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 6334600,
    "fut_oi_prev": 6558500,
@@ -97973,7 +98138,7 @@
       "eps_yoy": 44.3
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 11218125,
    "fut_oi_prev": 11115050,
@@ -100293,7 +100458,7 @@
       "eps_yoy": 6575.0
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 10627500,
    "fut_oi_prev": 10003500,
@@ -102613,7 +102778,7 @@
       "eps_yoy": -38.0
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 1710225,
    "fut_oi_prev": 1656600,
@@ -116340,7 +116505,7 @@
       "eps_yoy": -50.8
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 70205100,
    "fut_oi_prev": 67067700,
@@ -145991,7 +146156,7 @@
       "eps_yoy": 65.8
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 18296250,
    "fut_oi_prev": 15851250,
@@ -147113,6 +147278,19 @@
     "basis": "consolidated",
     "quarters": [
      {
+      "period": "2026-09-30",
+      "filed": null,
+      "revenue": 10322.62,
+      "revenue_qoq": -2.5,
+      "revenue_yoy": 31.4,
+      "net_profit": 427.1,
+      "net_profit_qoq": 22.5,
+      "net_profit_yoy": 63.9,
+      "eps": 4.14,
+      "eps_qoq": 22.5,
+      "eps_yoy": 64.3
+     },
+     {
       "period": "2026-06-30",
       "filed": null,
       "revenue": 10588.93,
@@ -147137,22 +147315,9 @@
       "eps": 3.97,
       "eps_qoq": -1.5,
       "eps_yoy": 118.1
-     },
-     {
-      "period": "2025-12-31",
-      "filed": null,
-      "revenue": 10343.42,
-      "revenue_qoq": 31.7,
-      "revenue_yoy": 41.9,
-      "net_profit": 416.3,
-      "net_profit_qoq": 59.8,
-      "net_profit_yoy": 90.4,
-      "eps": 4.03,
-      "eps_qoq": 59.9,
-      "eps_yoy": 90.1
      }
     ],
-    "updated": "2026-10-14"
+    "updated": "2026-11-10"
    },
    "fut_oi": 17744400,
    "fut_oi_prev": 19260450,
@@ -147377,6 +147542,12 @@
       "date": "2026-11-10",
       "sessions": 1,
       "subject": "To consider and approve the financial results for the period ended September 30, 2026"
+     },
+     {
+      "type": "results",
+      "date": "2026-11-10",
+      "sessions": 1,
+      "subject": "Kalyan Jewellers India Limited has submitted to the Exchange, the financial results for the period ended September 30, 2026."
      }
     ],
     "analyst_view": [],
@@ -157656,7 +157827,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 45808000,
    "fut_oi_prev": 45490200,
@@ -164496,7 +164667,7 @@
       "eps_yoy": 41.5
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 13510000,
    "fut_oi_prev": 13233200,
@@ -175932,7 +176103,7 @@
       "eps_yoy": -4.7
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 155213700,
    "fut_oi_prev": 157003350,
@@ -178284,7 +178455,7 @@
       "eps_yoy": 13.7
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 3924800,
    "fut_oi_prev": 3971550,
@@ -185220,7 +185391,7 @@
       "eps_yoy": 36.9
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 100191000,
    "fut_oi_prev": 102167000,
@@ -195565,7 +195736,7 @@
       "eps_yoy": 47.8
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 68586750,
    "fut_oi_prev": 68629500,
@@ -216280,7 +216451,7 @@
       "eps_yoy": 901.7
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 5308200,
    "fut_oi_prev": 5281650,
@@ -231353,7 +231524,7 @@
       "eps_yoy": -36.4
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 3673775,
    "fut_oi_prev": 3704400,
@@ -245170,7 +245341,7 @@
       "eps_yoy": 125.0
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 340744250,
    "fut_oi_prev": 337576250,
@@ -248626,7 +248797,7 @@
       "eps_yoy": 83.4
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 3839000,
    "fut_oi_prev": 3868600,
@@ -249786,7 +249957,7 @@
       "eps_yoy": 32.4
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 5232675,
    "fut_oi_prev": 5241250,
@@ -260100,7 +260271,7 @@
       "eps_yoy": null
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 5661150,
    "fut_oi_prev": 5559950,
@@ -265849,7 +266020,7 @@
       "eps_yoy": -51.8
      }
     ],
-    "updated": "2026-11-09"
+    "updated": "2026-11-10"
    },
    "fut_oi": 10328725,
    "fut_oi_prev": 9957425,
