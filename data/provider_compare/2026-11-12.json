@@ -528,6 +528,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "12:05:10",
+   "contracts": 66,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.25,
+   "same_best_bid_pct": 56.9,
+   "same_best_ask_pct": 44.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.9,
+   "upstox_minus_kotak_quote_time_s_median": -42.0
   }
  ],
  "top_gaps": [
@@ -558,6 +574,20 @@
    "kotak": 66.55,
    "upstox": 65.0,
    "at": "11:35"
+  },
+  {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 2.25,
+   "kotak": 40.0,
+   "upstox": 39.1,
+   "at": "12:05"
+  },
+  {
+   "contract": "SUPREMEIND26NOV3350CE",
+   "gap_pct": 2.148,
+   "kotak": 83.8,
+   "upstox": 82.0,
+   "at": "12:05"
   },
   {
    "contract": "AUROPHARMA26NOV1860CE",
@@ -656,28 +686,14 @@
    "kotak": 47.95,
    "upstox": 47.5,
    "at": "10:40"
-  },
-  {
-   "contract": "MARICO26NOV910CE",
-   "gap_pct": 0.901,
-   "kotak": 11.1,
-   "upstox": 11.0,
-   "at": "11:20"
-  },
-  {
-   "contract": "COALINDIA26NOV404.75CE",
-   "gap_pct": 0.877,
-   "kotak": 5.7,
-   "upstox": 5.65,
-   "at": "10:50"
   }
  ],
  "day": {
-  "rounds": 33,
-  "contract_quotes": 2152,
+  "rounds": 34,
+  "contract_quotes": 2217,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 37.5,
-  "same_best_ask_pct": 35.9,
+  "same_best_bid_pct": 38.3,
+  "same_best_ask_pct": 36.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.5,
   "upstox_minus_kotak_quote_time_s_median": -24.0
