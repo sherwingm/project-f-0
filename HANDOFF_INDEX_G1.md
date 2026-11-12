@@ -51,6 +51,8 @@ VM shell, never printed), `PAPER=true`, no errors in `journalctl -u fo-scanner -
 
 - **9 Nov update:** score board on /index (deployed 23e55edb2). FIRST LIVE G1 TRADE 9 Nov: signal 09:40, bought NIFTY 17 Nov 24900 PE at Rs 289.85, G1-F skips (gap, width, VIX), score 1/7 (low band, percentile 2), all 7 inputs live. Searches since 7 Nov (score methods, formation, 5-year spot, FII/DII x3, news, heavyweights) found nothing; verification of public claims (VERIFY_RESULT.md): no strike beats ATM, the call mirror (G1-C) LOSES held overnight, Zerodha ORB / forum ideas all negative. Do not build G1-C without the user.
 
+- **12 Nov update:** first live G1 trade (9 Nov put, score 1/7) was stopped at Wed's open: -73 %, -Rs 13.8k (gap through the stop). **G1-C (call mirror) set up as PAPER** at the user's request (server/g1c_live.py, strategies/S3_G1C_call_overnight.md, /api/index/g1c, own ledger g1c_ledger.json, deployed 1d46d134e): the history says it loses (VERIFY_RESULT.md), so it is a forward record judged at 30 trades. Marks / best bid are now saved every 30 s (a restart reset a trade's max up once).
+
 ## Research done this chat (all history, in-sample unless stated; folders are separate, do not mix)
 - `expiry_research/` (independent project, all years 2018-2026, sealed final period Jul 2024 →): **no direction edge** at
   any decision time (gap transitions, 5 sessions before expiry, option chain / OI, ML all ~chance, AUC 0.44-0.56). Size of

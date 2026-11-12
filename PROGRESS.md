@@ -1196,3 +1196,6 @@ g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in N
 - 2026-11-12 · `scanner/real_vs_paper_fills.py` (+ `tests/test_real_vs_paper_fills.py`, 4 tests): compares the user's REAL broker fills (a CSV of date, time, tradingsymbol, side,
   qty, price, typed in or exported from the tradebook) with the paper account's fills; reports the cost (% worse than paper), the seconds between the fills and partial fills. Places no orders;
   live trading was not switched on. Run: `python -m scanner.real_vs_paper_fills <paper_ledger.json> <real_fills.csv>`.
+
+## 12 Nov 2026 (index chat): G1-C (call option buying, paper) set up
+strategies/S3_G1C_call_overnight.md (rules written first, 01c75b7ea; history NEGATIVE disclosed) -> server/g1c_live.py (G1CTrader: OPT = CE, no filters, no score), G1Trader now takes the option side as a class attribute (G1 / G1-F / Near Tighty unchanged). Own ledger data/g1c_ledger.json, API /api/index/g1c, /index section + Pods row, G1C_PAPER env (default on). Tests tests/test_g1c_live.py. Deployed Thu 12 Nov 17:49 IST (1d46d134e), all endpoints 200, PAPER=true. First possible trade: Fri 13 Nov.

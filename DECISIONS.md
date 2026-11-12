@@ -499,3 +499,6 @@ The user: "I don't want a seperate page in the website for near tighty, keep it 
 their results join the Pods table, the API is `/api/index/nt` and `/api/index/nt_sensex`. Rules, ledgers (`data/nt_ledger.json`,
 `data/nt_sensex_ledger.json`), gates and everything else unchanged; the Results and S2 pages lose their "Near Tighty →" link (the
 generated `docs/` copies lose it on the next nightly build).
+
+### 12 Nov 2026 - G1-C paper set up at the user's request
+The call mirror of G1 runs as paper only with its own 30-trade gate (strategies/S3_G1C_call_overnight.md). History says the rule loses (VERIFY_RESULT.md Test 1); this is a forward record, judged at 30 trades, no auto-promotion, no real orders.
