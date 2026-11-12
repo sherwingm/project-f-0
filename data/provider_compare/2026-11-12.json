@@ -784,6 +784,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -37.5
+  },
+  {
+   "at": "13:25:15",
+   "contracts": 66,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.374,
+   "same_best_bid_pct": 49.2,
+   "same_best_ask_pct": 36.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -41.0
   }
  ],
  "top_gaps": [
@@ -849,6 +865,13 @@
    "kotak": 65.05,
    "upstox": 66.0,
    "at": "10:15"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2100CE",
+   "gap_pct": 1.374,
+   "kotak": 18.2,
+   "upstox": 18.45,
+   "at": "13:25"
   },
   {
    "contract": "NYKAA26NOV355PE",
@@ -919,23 +942,16 @@
    "kotak": 75.7,
    "upstox": 74.9,
    "at": "13:10"
-  },
-  {
-   "contract": "ITC26NOV290CE",
-   "gap_pct": 1.02,
-   "kotak": 4.9,
-   "upstox": 4.95,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 49,
-  "contract_quotes": 3188,
+  "rounds": 50,
+  "contract_quotes": 3253,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 39.4,
-  "same_best_ask_pct": 41.3,
+  "same_best_bid_pct": 39.7,
+  "same_best_ask_pct": 40.65,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 98.5,
-  "upstox_minus_kotak_quote_time_s_median": -29.0
+  "upstox_minus_kotak_quote_time_s_median": -29.25
  }
 }
