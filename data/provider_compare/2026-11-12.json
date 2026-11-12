@@ -80,6 +80,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.4,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "09:45:04",
+   "contracts": 67,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.308,
+   "same_best_bid_pct": 24.2,
+   "same_best_ask_pct": 27.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -14.0
   }
  ],
  "top_gaps": [
@@ -203,6 +219,13 @@
    "at": "09:20"
   },
   {
+   "contract": "MFSL26NOV1340CE",
+   "gap_pct": 0.308,
+   "kotak": 32.5,
+   "upstox": 32.4,
+   "at": "09:45"
+  },
+  {
    "contract": "ICICILIFE26NOVFUT",
    "gap_pct": 0.225,
    "kotak": 467.5,
@@ -215,23 +238,16 @@
    "kotak": 73.35,
    "upstox": 73.5,
    "at": "09:25"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 0.198,
-   "kotak": 75.75,
-   "upstox": 75.6,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 334,
+  "rounds": 6,
+  "contract_quotes": 400,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.8,
-  "same_best_ask_pct": 29.9,
+  "same_best_bid_pct": 30.6,
+  "same_best_ask_pct": 29.15,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 89.6,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "oi_same_pct": 90.3,
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
