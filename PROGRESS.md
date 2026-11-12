@@ -1199,3 +1199,6 @@ g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in N
 
 ## 12 Nov 2026 (index chat): G1-C (call option buying, paper) set up
 strategies/S3_G1C_call_overnight.md (rules written first, 01c75b7ea; history NEGATIVE disclosed) -> server/g1c_live.py (G1CTrader: OPT = CE, no filters, no score), G1Trader now takes the option side as a class attribute (G1 / G1-F / Near Tighty unchanged). Own ledger data/g1c_ledger.json, API /api/index/g1c, /index section + Pods row, G1C_PAPER env (default on). Tests tests/test_g1c_live.py. Deployed Thu 12 Nov 17:49 IST (1d46d134e), all endpoints 200, PAPER=true. First possible trade: Fri 13 Nov.
+
+## 12 Nov 2026 (index chat): XP on 1-minute history
+g1_research/scripts/xp_history_minute.py (107 NIFTY expiry days, Oct 2024 - Oct 2026, engine fills and charges): max up reaches +100 % on 21 %, mean +54 % / median +30 %; the XP rule (+20 % target else 15:15) wins 57 % but averages -11.0 % (t -2.70), -Rs 1.13 lakh for 1 lot, 13 of 107 days at or below -72 % (the live day was -72 %); hold to 15:15 -5.3 %. XP loses in history on both halves. No live change.
