@@ -1202,3 +1202,6 @@ strategies/S3_G1C_call_overnight.md (rules written first, 01c75b7ea; history NEG
 
 ## 12 Nov 2026 (index chat): XP on 1-minute history
 g1_research/scripts/xp_history_minute.py (107 NIFTY expiry days, Oct 2024 - Oct 2026, engine fills and charges): max up reaches +100 % on 21 %, mean +54 % / median +30 %; the XP rule (+20 % target else 15:15) wins 57 % but averages -11.0 % (t -2.70), -Rs 1.13 lakh for 1 lot, 13 of 107 days at or below -72 % (the live day was -72 %); hold to 15:15 -5.3 %. XP loses in history on both halves. No live change.
+
+## 12 Nov 2026 (index chat): minimum breakout size
+DEPTH_PREREG.md (+ Amendment 1) -> DEPTH_RESULT.md: requiring the break to be X % beyond the range does not help (0 of 12 tests; median depth is only 0.017 %). For puts the tiniest breaks did best (kept worse than dropped, t -2.71, suggestive only after 12 tries); calls no effect. Live rule unchanged.

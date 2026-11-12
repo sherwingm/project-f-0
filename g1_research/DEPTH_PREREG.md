@@ -22,7 +22,7 @@ what if the breakout candle must close at least some percentage beyond the range
   a minimum size helps". With four thresholds and three sets, one pass would be reported with the number of tries.
 - Read in-sample (G1-F's filters were chosen on this same period). A pass would still need its own forward paper run; no live rule changes.
 
-## Amendment 1 (12 Nov, written after seeing only the depth distribution, before any booked or max-up result by threshold)
+## Amendment 1 (12 Nov, written after the FIRST run, which printed only the pre-registered thresholds: the 0.05 % row (kept puts worse than dropped) and near-empty rows beyond it had been seen; the new thresholds were chosen from the depth distribution, not from any result at them)
 The depth quantiles of the 494 signals are: 10th 0.003 %, 25th 0.008 %, median 0.017 %, 75th 0.031 %, 90th 0.050 %. The thresholds above
 (0.05-0.20 %) therefore keep 27 / 4 / 0 puts (and 24 / 3 / 1 calls): too few to test beyond 0.05 %. Thresholds that fit the scale are added:
 **0.01 %, 0.02 %, 0.03 %** (about the 35th, 55th and 75th percentile). Same variant, measures and decision rule. The number of tries
