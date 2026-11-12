@@ -1,27 +1,44 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-11-11",
- "generated": "2026-11-12T03:16+05:30",
+ "session": "2026-11-12",
+ "generated": "2026-11-13T03:15+05:30",
  "signals": [
   {
-   "symbol": "COCHINSHIP",
-   "close": 1202.0,
-   "price_pct": -6.82,
-   "oi_pct": 39.63,
-   "vol_ratio": 10.83,
+   "symbol": "PAGEIND",
+   "close": 31850.0,
+   "price_pct": -12.91,
+   "oi_pct": 46.12,
+   "vol_ratio": 16.8,
+   "put": null,
+   "put_note": "no put with >= 50 contracts and a lot of Rs 600-8,000"
+  },
+  {
+   "symbol": "BDL",
+   "close": 1055.1,
+   "price_pct": -4.08,
+   "oi_pct": 22.82,
+   "vol_ratio": 5.6,
    "put": {
     "expiry": "2026-12-29",
-    "strike": 1000.0,
-    "premium": 8.83,
-    "lot": 400,
-    "lot_cost": 3532,
-    "below_spot_pct": 16.81,
-    "contracts": 330.0
+    "strike": 900.0,
+    "premium": 11.58,
+    "lot": 425,
+    "lot_cost": 4922,
+    "below_spot_pct": 14.7,
+    "contracts": 286.0
    }
   }
  ],
  "note": null,
  "history": [
+  {
+   "session": "2026-11-12",
+   "symbols": [
+    "PAGEIND",
+    "BDL"
+   ],
+   "note": null
+  },
   {
    "session": "2026-11-11",
    "symbols": [
