@@ -288,6 +288,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -28.5
+  },
+  {
+   "at": "10:50:07",
+   "contracts": 66,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.877,
+   "same_best_bid_pct": 32.3,
+   "same_best_ask_pct": 33.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.5,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -397,6 +413,13 @@
    "at": "10:40"
   },
   {
+   "contract": "COALINDIA26NOV404.75CE",
+   "gap_pct": 0.877,
+   "kotak": 5.7,
+   "upstox": 5.65,
+   "at": "10:50"
+  },
+  {
    "contract": "GLENMARK26NOV2800CE",
    "gap_pct": 0.839,
    "kotak": 23.85,
@@ -423,23 +446,16 @@
    "kotak": 15.7,
    "upstox": 15.8,
    "at": "10:20"
-  },
-  {
-   "contract": "ICICIBANK26NOV1580PE",
-   "gap_pct": 0.633,
-   "kotak": 23.7,
-   "upstox": 23.85,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 1180,
+  "rounds": 19,
+  "contract_quotes": 1245,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.8,
   "same_best_ask_pct": 35.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.95,
-  "upstox_minus_kotak_quote_time_s_median": -16.5
+  "oi_same_pct": 94.0,
+  "upstox_minus_kotak_quote_time_s_median": -17.0
  }
 }
