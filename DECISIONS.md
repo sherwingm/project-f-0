@@ -502,3 +502,6 @@ generated `docs/` copies lose it on the next nightly build).
 
 ### 12 Nov 2026 - G1-C paper set up at the user's request
 The call mirror of G1 runs as paper only with its own 30-trade gate (strategies/S3_G1C_call_overnight.md). History says the rule loses (VERIFY_RESULT.md Test 1); this is a forward record, judged at 30 trades, no auto-promotion, no real orders.
+
+### 13 Nov 2026 - Project CLAUDE.md, research registry and validation tests adopted
+The user approved the Claude Code audit plan: project CLAUDE.md, docs/research/SOURCES.md and experiments.csv (one row per run, append only), validation tests (new files only) and the deploy-vm / research-loop skills plus the research-verifier agent. Production calculations were not changed; the known differences (minute-close vs per-second stops, one charges table for all dates, flat slippage, partial opening range accepted) are documented in docs/research/VALIDATION_INVENTORY.md for a separate decision. Auto-compaction stays off.
