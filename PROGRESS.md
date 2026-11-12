@@ -1193,3 +1193,6 @@ g1_research/DATA_AUDIT.md: spot 1,238 of 1,240 sessions complete (2 partial in N
   314 trades: held max up mean +24 % / median +17 %, held max dip -15 / -14; after the sale the option peaks at mean +66 % / median +37 % the same day (day high +71 / +44), ends the day at +5 / -17 %;
   stop exits (124) held +5 % up, dip -28 %; trail exits (190) held +36 % up and sold at +22 %, after-sale peak +88 %. 7 trades reached +100 % while held, 62 after the sale / on the day.
   Later sessions (carry candles, 312 trades): peak mean +141 %, median +54 %, >= 100 % in 128 trades. Candle highs, upper bounds on a bid.
+- 2026-11-12 · `scanner/real_vs_paper_fills.py` (+ `tests/test_real_vs_paper_fills.py`, 4 tests): compares the user's REAL broker fills (a CSV of date, time, tradingsymbol, side,
+  qty, price, typed in or exported from the tradebook) with the paper account's fills; reports the cost (% worse than paper), the seconds between the fills and partial fills. Places no orders;
+  live trading was not switched on. Run: `python -m scanner.real_vs_paper_fills <paper_ledger.json> <real_fills.csv>`.
