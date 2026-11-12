@@ -224,6 +224,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.5,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "10:30:06",
+   "contracts": 65,
+   "on_both": 64,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 37.5,
+   "same_best_ask_pct": 43.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.4,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -369,13 +385,13 @@
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 922,
+  "rounds": 15,
+  "contract_quotes": 986,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.8,
-  "same_best_ask_pct": 34.3,
+  "same_best_ask_pct": 34.8,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.8,
-  "upstox_minus_kotak_quote_time_s_median": -15.5
+  "upstox_minus_kotak_quote_time_s_median": -16.0
  }
 }
