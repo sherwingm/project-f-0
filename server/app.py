@@ -138,6 +138,7 @@ class State:
         self.stream = None                  # server.upstox_stream.UpstoxStream
         self.index_rec = None               # server.index_recorder.IndexRecorder (record only)
         self.g1 = None                      # server.g1_live.G1Trader (S3 G1 paper, own ledger)
+        self.g1c = None                     # server.g1c_live.G1CTrader (G1-C call mirror paper, own ledger)
         self.nt = None                      # server.nt_live.NearTightyTrader (NT Near Tighty paper, own ledger)
         self.nt_sx = None                   # server.nt_live.NearTightySensexTrader (NT on SENSEX, own ledger)
         self.xp = None                      # server.xp_live.ExpiryStraddleLogger (XP expiry straddle forward log, own ledger)
@@ -216,6 +217,9 @@ def startup() -> None:
                 if settings.g1_paper:
                     from server.g1_live import G1Trader
                     state.g1 = G1Trader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
+                if settings.g1c_paper:
+                    from server.g1c_live import G1CTrader
+                    state.g1c = G1CTrader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
                 if settings.nt_paper:
                     from server.nt_live import NearTightyTrader
                     state.nt = NearTightyTrader(state.stream, state.upstox, settings.data_dir)   # paper only, own ledger
@@ -312,6 +316,12 @@ def _fade_fast_loop() -> None:
                     except Exception as exc:  # noqa: BLE001 - never stops the trading loop
                         log.warning("g1 paper: %s", exc)
                         alerts.send(f"⚠️ G1 paper error: {exc}"[:300], key="g1-loop", every=900)
+                if state.g1c is not None:
+                    try:
+                        state.g1c.tick(now)              # G1-C call mirror paper (server/g1c_live.py), after G1
+                    except Exception as exc:  # noqa: BLE001 - never stops the trading loop
+                        log.warning("g1c paper: %s", exc)
+                        alerts.send(f"⚠️ G1-C paper error: {exc}"[:300], key="g1c-loop", every=900)
                 if state.nt is not None:
                     try:
                         state.nt.tick(now)               # NT Near Tighty paper (server/nt_live.py), its own part

@@ -197,17 +197,38 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     return h;
   }
 
+  // G1-C (strategies/S3_G1C_call_overnight.md): the call mirror of G1, paper
+  function g1cSection() {
+    const g = D.g1c;
+    let h = `<h2>G1-C · NIFTY upside ORB call, held overnight <small>the call mirror of G1 · paper · rules: ${esc((g || {}).page || "strategies/S3_G1C_call_overnight.md")}</small></h2>`;
+    if (!D.loaded) return h;
+    if (!g || g.error) return h + `<p class="empty">${esc((g || {}).error || "Not reporting.")}</p>`;
+    h += `<p class="note">Opening range 09:15-09:29 · first close outside it from 09:30 to 13:00 · only a close <b>above the high</b> trades · ATM call of the nearest weekly, 1 lot (${num(g.lot)}), bought at the ask the minute after · sold at the bid at 50 % of the price paid, else at the next session's close (15:29) · no filters, no score. <b>History says this rule loses</b> (about -11 % a trade over two years), so this is a forward paper record, judged at 30 trades, max up first.</p>`;
+    const td = g.today;
+    h += `<div class="kv"><div><small>Today</small><b>${esc(td ? td.status : "no session yet")}</b></div>${td && td.hi ? `<div><small>Opening range</small><b>${num(td.lo, 2)} – ${num(td.hi, 2)}</b></div>` : ""}${td && td.signal ? `<div><small>Signal</small><b>${esc(td.signal)}</b></div>` : ""}</div>`;
+    const o = g.open;
+    h += `<div class="tw" style="margin-top:8px">` + (o ? `<table><thead><tr><th>Open position</th><th>Bought</th><th>Paid (ask)</th><th>Bid now</th><th>Best bid</th><th>Max up</th><th>Unrealised</th><th>Stop at</th></tr></thead><tbody>
+      <tr><td><b>NIFTY ${day(o.expiry)} ${num(o.strike)} CE</b> × ${num(o.qty)}</td><td>${hm(o.bought_at)}</td><td>₹${num(o.paid, 2)}</td><td>₹${num(o.mark, 2)}</td><td>₹${num(o.max_bid, 2)}</td><td>${sg(o.max_bid && o.paid ? (o.max_bid / o.paid - 1) * 100 : null)}</td><td class="${o.unrealised_rs < 0 ? "down" : "up"}">₹${num(o.unrealised_rs)}</td><td>₹${num(o.paid * 0.5, 2)}</td></tr></tbody></table>`
+      : `<p class="empty" style="margin:0;border:0">No open position.</p>`) + `</div>`;
+    const tr = g.trades || [];
+    h += tr.length ? `<div class="tw" style="margin-top:8px"><table><thead><tr><th>Closed trades (${tr.length})</th><th>Contract</th><th>Paid</th><th>Sold</th><th>Exit</th><th>Max up</th><th>Net ₹</th><th>Net %</th></tr></thead><tbody>${tr.map(t =>
+      `<tr><td>${day(t.day)} ${esc(t.signal)}</td><td>${day(t.expiry)} ${num(t.strike)} CE</td><td>₹${num(t.paid, 2)}</td><td>₹${num(t.sold, 2)}</td><td>${hm(t.sold_at)} <small>${esc(t.reason)}</small></td><td>${sg(t.max_up_pct)}</td><td class="${t.net_rs < 0 ? "down" : "up"}">₹${num(t.net_rs)}</td><td>${sg(t.net_pct)}</td></tr>`).join("")}</tbody></table></div>`
+      : `<p class="empty" style="margin-top:8px">No closed trade yet. It trades only when the first break of the day is upward, about 10 a month in history.</p>`;
+    return h;
+  }
+
   function render() {
     const st = (D.status || {}).status || {}, rec = st.recorder;
     let h = `<h1>Index options · data</h1>
       <p class="lead">Minute and daily data for NIFTY, SENSEX and BANKNIFTY options, index spot and India VIX, and the index pods' paper trades. Main: <b>G1-F</b>, the NIFTY downside opening-range put held overnight with three skip filters (G1 is the same trade without them, kept as the baseline). Also: <b>XP</b>, a forward log of the NIFTY expiry-day straddle, and <b>Near Tighty</b> (NIFTY and SENSEX), the same downside put traded only 1-3 sessions before expiry.</p>
       <div class="banner"><b>Paper only.</b> G1 and Near Tighty trade on the live bid / ask, each in its own paper ledger; no real order is sent, and the S1 account is separate. Large data files live on the repository's <code>index-data</code> branch.</div>`;
     h += g1Section();
+    h += g1cSection();
     h += xpSection();
     h += ntSection(D.nt, "NIFTY");
     h += ntSection(D.nts, "SENSEX");
     if (!D.loaded) { $("#main").innerHTML = h + `<p class="empty">Loading…</p>`; return; }
-    const tk = [...(((D.g1 || {}).tracks) || []), ...(((D.xp || {}).tracks) || []), ...(((D.nt || {}).tracks) || []), ...(((D.nts || {}).tracks) || [])];
+    const tk = [...(((D.g1 || {}).tracks) || []), ...(((D.xp || {}).tracks) || []), ...(((D.g1c || {}).tracks) || []), ...(((D.nt || {}).tracks) || []), ...(((D.nts || {}).tracks) || [])];
     h += `<h2>Pods <small>index strategies, paper results</small></h2>
       <div class="tw"><table><thead><tr><th>Pod</th><th>Status</th><th>Trades</th><th>Max up avg</th><th>Max up median</th><th>Max up ≥ +100 %</th><th>Won</th><th>Booked avg</th><th>Booked median</th><th>t</th><th>Total ₹</th></tr></thead>
       <tbody>${tk.length ? tk.map(p => `<tr><td><b>${esc(p.pod)}</b></td><td>${esc(p.status)}</td><td>${num(p.trades)} / ${num(p.gate_at)}</td><td>${sg(p.max_up_mean)}</td><td>${sg(p.max_up_median)}</td><td>${pc(p.max_up_100 == null ? null : p.max_up_100 * 100, 0)}</td><td>${pc(p.won == null ? null : p.won * 100, 0)}</td><td>${sg(p.mean_pct)}</td><td>${sg(p.median_pct)}</td><td>${p.t == null ? "—" : num(p.t, 2)}</td><td class="${p.total_rs < 0 ? "down" : "up"}">₹${num(p.total_rs)}</td></tr>`).join("")
@@ -226,9 +247,9 @@ code { font-family:"JetBrains Mono",monospace; font-size:12px; }
     $("#main").innerHTML = h;
   }
   render();
-  const load = () => Promise.all([get("/api/index/status"), get("/api/index/g1"), get("/api/index/xp"), get("/api/index/nt"), get("/api/index/nt_sensex")])
-    .then(([s, g, x, n, ns]) => { D = { loaded: true, status: s, g1: g, xp: x, nt: n, nts: ns }; render(); });
-  load(); setInterval(() => { if (!document.hidden) Promise.all([get("/api/index/g1"), get("/api/index/xp"), get("/api/index/nt"), get("/api/index/nt_sensex")]).then(([g, x, n, ns]) => { if (g) D.g1 = g; if (x) D.xp = x; if (n) D.nt = n; if (ns) D.nts = ns; render(); }); }, 15000);
+  const load = () => Promise.all([get("/api/index/status"), get("/api/index/g1"), get("/api/index/xp"), get("/api/index/nt"), get("/api/index/nt_sensex"), get("/api/index/g1c")])
+    .then(([s, g, x, n, ns, gc]) => { D = { loaded: true, status: s, g1: g, xp: x, nt: n, nts: ns, g1c: gc }; render(); });
+  load(); setInterval(() => { if (!document.hidden) Promise.all([get("/api/index/g1"), get("/api/index/xp"), get("/api/index/nt"), get("/api/index/nt_sensex"), get("/api/index/g1c")]).then(([g, x, n, ns, gc]) => { if (g) D.g1 = g; if (x) D.xp = x; if (n) D.nt = n; if (ns) D.nts = ns; if (gc) D.g1c = gc; render(); }); }, 15000);
 })();
 </script>
 </body>

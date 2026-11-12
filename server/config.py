@@ -104,6 +104,7 @@ class Settings:
     upstox_stream: bool = _bool("UPSTOX_STREAM", True)      # Upstox WebSocket prices when the token is set
     index_record: bool = _bool("INDEX_RECORD", True)        # NIFTY 1-second candles from the stream (server/index_recorder.py)
     g1_paper: bool = _bool("G1_PAPER", True)               # S3 G1 / G1-F live paper trades (server/g1_live.py), own ledger
+    g1c_paper: bool = _bool("G1C_PAPER", True)             # G1-C NIFTY upside breakout call paper (server/g1c_live.py), own ledger data/g1c_ledger.json
     nt_paper: bool = _bool("NT_PAPER", True)               # NT Near Tighty live paper trades (server/nt_live.py), own ledger
     nt_sensex_paper: bool = _bool("NT_SENSEX_PAPER", True)  # NT on SENSEX (2026-11-08), own ledger data/nt_sensex_ledger.json
     xp_paper: bool = _bool("XP_PAPER", True)               # XP NIFTY expiry-day straddle forward log (server/xp_live.py), own ledger

@@ -95,6 +95,8 @@ class G1Trader:
     the two hooks `entry_skip` / `entry_note` / `tracks`; the signal, entry, stop and exit stay exactly G1's."""
     NAME, LEDGER, EPOCH, PAGE = "G1", "g1_ledger.json", EPOCH, PAGE
     SCORE = True              # the 0-7 breakout score (record only); Near Tighty is not scored here
+    OPT = "PE"                # the option bought: a downside breakout buys the put; G1-C (server/g1c_live.py) buys the call
+    FILTERS = True            # G1-F's three skip filters are evaluated (G1-C has none)
     HOLD_TO_CLOSE = True      # G1 / G1-F (2026-11-06, the user): hold to the next session's close; a subclass may say False
     # the market of the run; Near Tighty on SENSEX (server/nt_live.py) changes these and `subscribe`
     INDEX, SPOT, SPOT_LABEL, STEP, KEYS = "NIFTY", SPOT_KEY, "NIFTY 50", STEP, "_nifty"
@@ -140,11 +142,11 @@ class G1Trader:
         """Hook: ask the stream for this market's keys (NIFTY's come from the index recorder; SENSEX subscribes its own)."""
 
     def expiry_after(self, today: date) -> str | None:
-        exps = sorted({e for e, typ, _ in self._nifty_keys() if typ == "PE" and e > today.isoformat()})
+        exps = sorted({e for e, typ, _ in self._nifty_keys() if typ == self.OPT and e > today.isoformat()})
         return exps[0] if exps else None
 
     def _key(self, expiry: str, strike: float) -> str | None:
-        return self._nifty_keys().get((expiry, "PE", float(strike)))
+        return self._nifty_keys().get((expiry, self.OPT, float(strike)))
 
     def _seed(self, now: datetime) -> None:
         """Today's NIFTY 50 minute bars from the recorder's file, after a restart in the session (a market the recorder
@@ -216,11 +218,13 @@ class G1Trader:
                           and datetime.combine(self.day, m, IST) + timedelta(minutes=1) <= now)
             for m in done:
                 c = self.bars[m]["c"]
-                if c > hi:
-                    st.update(phase="done", status=f"first breakout up at {m:%H:%M} ({c:,.2f} > {hi:,.2f}): no trade today")
+                skip_side = c > hi if self.OPT == "PE" else c < lo          # the other side's first break: no trade today
+                take = c < lo if self.OPT == "PE" else c > hi
+                if skip_side:
+                    st.update(phase="done", status=f"first breakout {'up' if self.OPT == 'PE' else 'down'} at {m:%H:%M} ({c:,.2f} {'>' if self.OPT == 'PE' else '<'} {hi if self.OPT == 'PE' else lo:,.2f}): no trade today")
                     self._save()
                     return
-                if c < lo:
+                if take:
                     ent = (datetime.combine(self.day, m, IST) + timedelta(minutes=1)).time()
                     width = (hi - lo) / lo * 100
                     gap = (st["open"] / self.prev_close - 1) * 100 if self.prev_close else None
@@ -228,8 +232,9 @@ class G1Trader:
                     vix = next((v for t, v in reversed(self.vix) if t < end), None)
                     st.update(phase="entry", signal=f"{m:%H:%M}", signal_close=c, entry=f"{ent:%H:%M}",
                               gap_pct=None if gap is None else round(gap, 3), width_pct=round(width, 3), vix=vix,
-                              g1f_skip=g1f_check(gap, width, vix), **self._score(lo, c, m, width, gap, vix),
-                              status=f"downside breakout at {m:%H:%M} ({c:,.2f} < {lo:,.2f}): buying at {ent:%H:%M}")
+                              g1f_skip=g1f_check(gap, width, vix) if self.FILTERS else "", **self._score(lo, c, m, width, gap, vix),
+                              status=(f"downside breakout at {m:%H:%M} ({c:,.2f} < {lo:,.2f})" if self.OPT == "PE"
+                                      else f"upside breakout at {m:%H:%M} ({c:,.2f} > {hi:,.2f})") + f": buying at {ent:%H:%M}")
                     self._save()
                     phase = "entry"
                     break
@@ -273,22 +278,22 @@ class G1Trader:
         k = float(round(spot / self.STEP) * self.STEP) if spot else None
         seen = self.asks.get(k) if k is not None else None
         if seen is None or (ent + timedelta(minutes=1) - seen[0]).total_seconds() > QUOTE_AGE:
-            st.update(phase="done", status=f"no ask for the {k:.0f} PE in the {st['entry']} minute: no trade" if k
+            st.update(phase="done", status=f"no ask for the {k:.0f} {self.OPT} in the {st['entry']} minute: no trade" if k
                       else f"no {self.INDEX} price in the {st['entry']} minute: no trade")
             self._save()
             return
         paid = seen[1]
-        fees = ch.leg("PE", "BUY", self.lot, paid)["total"]
+        fees = ch.leg(self.OPT, "BUY", self.lot, paid)["total"]
         self.state["open"] = {"day": self.day.isoformat(), "signal": st["signal"], "entry": st["entry"],
                               "bought_at": seen[0].isoformat(timespec="seconds"), "expiry": exp, "strike": k,
                               "key": self._key(exp, k), "paid": paid, "qty": self.lot, "entry_fees": round(fees, 2),
                               "spot": spot, "g1f_skip": st["g1f_skip"], "gap_pct": st["gap_pct"],
                               "width_pct": st["width_pct"], "vix": st["vix"], "mark": paid, "max_bid": paid,
                               **{k: st[k] for k in SCORE_KEYS if k in st}}
-        st.update(phase="done", status=f"bought {self.INDEX} {exp} {k:.0f} PE at ₹{paid:.2f} (ask)"
+        st.update(phase="done", status=f"bought {self.INDEX} {exp} {k:.0f} {self.OPT} at ₹{paid:.2f} (ask)"
                   + self.entry_note(st))
         self._save()
-        alerts.send(f"🟢 {self.NAME} paper: bought {self.INDEX} {exp} {k:.0f} PE × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
+        alerts.send(f"🟢 {self.NAME} paper: bought {self.INDEX} {exp} {k:.0f} {self.OPT} × {self.lot} at ₹{paid:.2f} (signal {st['signal']})"
                     + self.entry_note(st) + self._score_text(st),
                     key=f"{self.NAME.lower()}-open-{self.day}", every=3600)
 
@@ -333,7 +338,7 @@ class G1Trader:
             self._close(pos, bid, now, "next open (late: no bid in the 09:16 minute)")
 
     def _close(self, pos: dict, sold: float, at: datetime, why: str) -> None:
-        fees = pos["entry_fees"] + ch.leg("PE", "SELL", pos["qty"], sold)["total"]
+        fees = pos["entry_fees"] + ch.leg(self.OPT, "SELL", pos["qty"], sold)["total"]
         gross = (sold - pos["paid"]) * pos["qty"]
         net = gross - fees
         t = {**{k: v for k, v in pos.items() if k not in ("mark", "marked_at")}, "sold": sold,
@@ -345,7 +350,7 @@ class G1Trader:
         self.state["open"] = None
         self.last_bid = None
         self._save()
-        alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold {self.INDEX} {pos['expiry']} {pos['strike']:.0f} PE at ₹{sold:.2f} "
+        alerts.send(f"{'🔴' if net < 0 else '✅'} {self.NAME} paper: sold {self.INDEX} {pos['expiry']} {pos['strike']:.0f} {self.OPT} at ₹{sold:.2f} "
                     f"({why}), net ₹{net:,.0f} ({t['net_pct']:+.1f} %), max up {t['max_up_pct']:+.0f} %"
                     + (f"; {g1_score.line(t)}" if t.get("score") is not None else ""), key=f"{self.NAME.lower()}-close-{pos['day']}", every=3600)
 
@@ -384,11 +389,11 @@ class G1Trader:
         with self.lock:
             st = json.loads(json.dumps(self.state, default=str))
         trades = st["trades"]
-        out = {"page": self.PAGE, "epoch": self.EPOCH, "lot": self.lot, "open": st["open"], "trades": trades[::-1],
+        out = {"page": self.PAGE, "epoch": self.EPOCH, "lot": self.lot, "opt": self.OPT, "open": st["open"], "trades": trades[::-1],
                "today": st["days"].get(datetime.now(IST).date().isoformat()), "tracks": []}
         if st["open"]:
             o = st["open"]
-            exit_fee = ch.leg("PE", "SELL", o["qty"], o["mark"])["total"] if o.get("mark") else 0
+            exit_fee = ch.leg(self.OPT, "SELL", o["qty"], o["mark"])["total"] if o.get("mark") else 0
             o["unrealised_rs"] = round((o["mark"] - o["paid"]) * o["qty"] - o["entry_fees"] - exit_fee, 2) if o.get("mark") else None
         for name, sel in self.tracks(trades):
             x = [t["net_pct"] for t in sel]

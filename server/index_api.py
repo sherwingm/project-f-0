@@ -85,6 +85,17 @@ def g1():
     return _g1() or {"error": "G1 paper is not running on this server (it needs the Upstox stream)"}
 
 
+def _g1c():
+    from server.app import state
+    return state.g1c.view() if getattr(state, "g1c", None) is not None else None
+
+
+@router.get("/g1c")
+def g1c():
+    """G1-C call mirror live paper ledger (server/g1c_live.py; strategies/S3_G1C_call_overnight.md)."""
+    return _g1c() or {"error": "G1-C paper is not running on this server (it needs the Upstox stream)"}
+
+
 def _xp():
     from server.app import state                     # late import: the app module imports this router
     return state.xp.view() if getattr(state, "xp", None) is not None else None
@@ -122,5 +133,5 @@ def positions():
 
 @router.get("/results")
 def results():
-    v, x = _g1(), _xp()
-    return {"pods": (v["tracks"] if v else []) + (x["tracks"] if x else [])}
+    v, x, c = _g1(), _xp(), _g1c()
+    return {"pods": (v["tracks"] if v else []) + (x["tracks"] if x else []) + (c["tracks"] if c else [])}
