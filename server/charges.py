@@ -22,6 +22,7 @@ contract-note style breakdown always adds up.
 from __future__ import annotations
 
 import json
+from datetime import date
 
 from server.config import settings
 
@@ -40,6 +41,24 @@ FUT_STAMP_BUY_PCT = 0.002       # % of contract value, buy side only
 OPT_STAMP_BUY_PCT = 0.003       # % of premium, buy side only
 GST_PCT = 18.0                  # % of (brokerage + NSE transaction charge + SEBI fee)
 
+# STT history (added 2026-11-13, so a HISTORY test charges the STT that applied on its day). Only STT is versioned: the other components
+# (brokerage, exchange, SEBI, stamp, GST) are one table for all dates. Each row is (effective from, FUT_STT_SELL_PCT, OPT_STT_SELL_PCT,
+# OPT_STT_EXERCISE_PCT); the module constants above are the rows effective from CHARGES_EFFECTIVE (2026-04-01) and apply when `on` is not given.
+#   before 2024-10-01: futures 0.0125 %, options sale 0.0625 %, exercise 0.125 %
+#   2024-10-01 (Finance (No. 2) Act 2024):  futures 0.02 %,  options sale 0.10 %, exercise 0.125 %
+#   2026-04-01 (Union Budget 2026-27):      futures 0.05 %,  options sale 0.15 %, exercise 0.15 %
+# Sources read 2026-11-13: HDFC Bank, HDFC Securities, Angel One and Upstox write-ups of the Budget 2026 hike (old options rate 0.10 %, exercise 0.125 %,
+# futures 0.02 %) and Business Standard coverage of Budget 2024 (futures 0.0125 %). The Finance Act texts were NOT read: treat the pre-2026 rows as
+# reported by secondary sources. The exchange charge of Rs 35.03 per lakh (NSE circular NSE/FA/64232, 2024-09-27, from 2024-10-01) versus the
+# Rs 35.53 used here for all dates is NOT versioned (35.53 could not be confirmed); the difference is Rs 0.5 per lakh of premium.
+STT_HISTORY = (
+    (date(1900, 1, 1), 0.0125, 0.0625, 0.125),
+    (date(2024, 10, 1), 0.02, 0.10, 0.125),
+    (date(2026, 4, 1), 0.05, 0.15, 0.15),
+)
+_STT_FIELDS = ("FUT_STT_SELL_PCT", "OPT_STT_SELL_PCT", "OPT_STT_EXERCISE_PCT")
+_OVERRIDDEN: set[str] = set()                 # rates set through configure() / CHARGES_JSON: an override wins on every date
+
 RATE_NAMES = ("FUT_BROKERAGE_PCT", "BROKERAGE_CAP", "OPT_BROKERAGE", "FUT_STT_SELL_PCT", "OPT_STT_SELL_PCT",
               "OPT_STT_EXERCISE_PCT", "FUT_NSE_PER_LAKH", "OPT_NSE_PER_LAKH", "SEBI_PER_CRORE",
               "FUT_STAMP_BUY_PCT", "OPT_STAMP_BUY_PCT", "GST_PCT")
@@ -56,6 +75,7 @@ def configure(overrides: str | dict | None) -> dict:
         raise ValueError(f"CHARGES_JSON: unknown rate name(s) {unknown}; valid: {list(RATE_NAMES)}")
     for name, value in data.items():
         globals()[name] = float(value)
+        _OVERRIDDEN.add(name)
     return rates()
 
 
@@ -63,12 +83,27 @@ def rates() -> dict:
     return {"effective": CHARGES_EFFECTIVE, **{n: globals()[n] for n in RATE_NAMES}}
 
 
+def stt_rates(on: date | None = None) -> tuple[float, float, float]:
+    """(futures sell %, options sell %, options exercise %) that applied on `on`; the current constants when `on` is None
+    or a rate was overridden with configure()."""
+    row = None
+    if on is not None:
+        for r in STT_HISTORY:
+            if on >= r[0]:
+                row = r
+    cur = (FUT_STT_SELL_PCT, OPT_STT_SELL_PCT, OPT_STT_EXERCISE_PCT)
+    if row is None:
+        return cur
+    return tuple(cur[i] if _STT_FIELDS[i] in _OVERRIDDEN else row[i + 1] for i in range(3))
+
+
 def is_future(instrument: str) -> bool:
     return str(instrument).upper() in ("FUT", "FUTSTK", "STF")
 
 
-def leg(instrument: str, side: str, qty: int, px: float) -> dict:
-    """Charges on one order: `instrument` FUT or CE/PE, `side` BUY or SELL, `qty` units, `px` per unit."""
+def leg(instrument: str, side: str, qty: int, px: float, on: date | None = None) -> dict:
+    """Charges on one order: `instrument` FUT or CE/PE, `side` BUY or SELL, `qty` units, `px` per unit. `on` (the trade date) picks the STT
+    that applied then (STT_HISTORY); without it the current table is used, exactly as before."""
     side = str(side).upper()
     if side not in ("BUY", "SELL"):
         raise ValueError("side must be BUY or SELL")
@@ -77,7 +112,8 @@ def leg(instrument: str, side: str, qty: int, px: float) -> dict:
     fut = is_future(instrument)
     value = qty * px
     brokerage = min(FUT_BROKERAGE_PCT / 100 * value, BROKERAGE_CAP) if fut else OPT_BROKERAGE
-    stt = ((FUT_STT_SELL_PCT if fut else OPT_STT_SELL_PCT) / 100 * value) if side == "SELL" else 0.0
+    fut_stt, opt_stt, _ = stt_rates(on)
+    stt = ((fut_stt if fut else opt_stt) / 100 * value) if side == "SELL" else 0.0
     exchange = (FUT_NSE_PER_LAKH if fut else OPT_NSE_PER_LAKH) * value / 1e5
     sebi = SEBI_PER_CRORE * value / 1e7
     stamp = ((FUT_STAMP_BUY_PCT if fut else OPT_STAMP_BUY_PCT) / 100 * value) if side == "BUY" else 0.0
@@ -96,16 +132,16 @@ def round_trip(instrument: str, side_entry: str, qty: int, entry_px: float, exit
     return {"entry": entry, "exit": exit_, **summed, "total": round(entry["total"] + exit_["total"], 2)}
 
 
-def exercise(qty: int, intrinsic: float) -> dict:
-    """STT when a long ITM option is held to expiry and exercised: 0.15% of the intrinsic value."""
-    stt = round(OPT_STT_EXERCISE_PCT / 100 * qty * max(0.0, intrinsic), 2)
+def exercise(qty: int, intrinsic: float, on: date | None = None) -> dict:
+    """STT when a long ITM option is held to expiry and exercised: 0.15% of the intrinsic value (the rate of `on` when given)."""
+    stt = round(stt_rates(on)[2] / 100 * qty * max(0.0, intrinsic), 2)
     return {"value": round(qty * max(0.0, intrinsic), 2), "stt": stt, "total": stt}
 
 
-def held_to_expiry(instrument: str, qty: int, entry_px: float, intrinsic: float) -> dict:
+def held_to_expiry(instrument: str, qty: int, entry_px: float, intrinsic: float, on: date | None = None) -> dict:
     """Long option bought at `entry_px` and left to expire: buy-leg charges plus exercise STT if ITM."""
-    entry = leg(instrument, "BUY", qty, entry_px)
-    ex = exercise(qty, intrinsic)
+    entry = leg(instrument, "BUY", qty, entry_px, on)
+    ex = exercise(qty, intrinsic, on)
     return {"entry": entry, "exercise": ex, "total": round(entry["total"] + ex["total"], 2)}
 
 

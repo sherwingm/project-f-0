@@ -123,7 +123,8 @@ def simulate(chain: pd.DataFrame, spot_entry: float, day: date, spec: Spec, lot:
     fills_out = [_fill(p, _rev(lg.side), lg.offset, pd.Timestamp(exit_t).time(), spec.cost_mult)
                  for (lg, _, _), p in zip(legs, last)]
     gross_pt = sum(sign[lg.side] * (fi - fo) for (lg, _, _), fi, fo in zip(legs, fills_in, fills_out))
-    fees = sum(charges.leg(lg.opt, lg.side, qty, fi)["total"] + charges.leg(lg.opt, _rev(lg.side), qty, fo)["total"]
+    exit_date = pd.Timestamp(exit_t).date()          # the STT of the day each leg trades (server/charges.py STT_HISTORY)
+    fees = sum(charges.leg(lg.opt, lg.side, qty, fi, on=day)["total"] + charges.leg(lg.opt, _rev(lg.side), qty, fo, on=exit_date)["total"]
                for (lg, _, _), fi, fo in zip(legs, fills_in, fills_out)) * spec.cost_mult
     pnl = gross_pt * qty - fees
     # defined risk: the widest gap between a sold and a bought strike of the same type, less the credit

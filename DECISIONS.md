@@ -505,3 +505,6 @@ The call mirror of G1 runs as paper only with its own 30-trade gate (strategies/
 
 ### 13 Nov 2026 - Project CLAUDE.md, research registry and validation tests adopted
 The user approved the Claude Code audit plan: project CLAUDE.md, docs/research/SOURCES.md and experiments.csv (one row per run, append only), validation tests (new files only) and the deploy-vm / research-loop skills plus the research-verifier agent. Production calculations were not changed; the known differences (minute-close vs per-second stops, one charges table for all dates, flat slippage, partial opening range accepted) are documented in docs/research/VALIDATION_INVENTORY.md for a separate decision. Auto-compaction stays off.
+
+### 13 Nov 2026 - STT versioned by date for the S3 engine (user approved)
+History trades in the S3 engine are charged the STT of their own day (options sale 0.0625 % / 0.10 % / 0.15 % before 2024-10-01 / to 2026-03-31 / from 2026-04-01). Other charge components stay one table; S1 / S2 backtests still use the current table. Result files recorded before this date are not recomputed. Effect on G1 history: +Rs 861 over two years, no verdict changes.

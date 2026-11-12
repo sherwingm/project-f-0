@@ -72,6 +72,17 @@ Add new entries at the bottom. Dates: YYYY-MM-DD; "unknown" when the page does n
 - Issuer: journal record for a 2003-2013 DJIA / S&P / NASDAQ / HSI / TAIEX study. Accessed: 2026-11-09. URL: https://sindex.sdl.edu.sa/esploro/outputs/journalArticle/Assessing-the-Profitability-of-Timely-Opening/9942209608331
 - Evaluation: abstract level only; no Indian index. Context only.
 
+### STT rates and the 2026 hike (HDFC Bank, HDFC Securities, Angel One, Upstox write-ups)
+- Issuer: banks and brokers summarising Union Budget 2026-27 (announced 2026-02-01, effective 2026-04-01). Accessed: 2026-11-13.
+- URLs: https://www.hdfc.bank.in/blogs/union-budget/stt-hike-on-f-o-trading ; https://partnerassist.angelone.in/knowledge-hub/blogs/stt-charges-hike-futures-options-budget-2026 ; https://upstox.com/news/personal-finance/tax/explained-how-the-stt-hike-on-equity-futures-and-options-affects-traders-and-investors/article-189260/
+- Findings (as reported): options-premium STT 0.10 % -> 0.15 %, futures 0.02 % -> 0.05 %, exercise 0.125 % -> 0.15 %, from 2026-04-01. Business Standard's Budget 2024 coverage (https://www.business-standard.com/amp/budget/news/budget-2024-steep-stt-increase-to-tame-retail-frenzy-in-derivatives-market-124072301145_1.html) gives the earlier futures rate 0.0125 % and the 2024-10-01 start of the previous increase.
+- Evaluation: secondary; the Finance Act texts were not read. Used to version the STT in `server/charges.py` (effect on G1: +Rs 861 over two years, see `g1_research/CHARGES_DATED_RESULT.md`).
+
+### NSE circular NSE/FA/64232: revision in transaction charges (2024-09-27)
+- Issuer: NSE (official). URL: https://nsearchives.nseindia.com/content/circulars/FA64232.pdf. Reported accessed via search summary 2026-11-13 (the PDF itself was not opened).
+- Findings (as summarised): equity options Rs 35.03 per lakh of premium each side from 2024-10-01. The Rs 35.53 in `server/charges.py` could not be confirmed.
+- Allowed use: context for a possible later versioning of the exchange charge (difference about Rs 0.5 per lakh).
+
 ## Supplied but not read (blocked)
 ### Reddit threads from the user's notes
 - Eight threads (r/IndiaAlgoTrading, r/IndianStreetBets, r/NSEbets, r/IndianStocks, r/IndianStockMarket) were supplied as the user's notes on 2026-11-09. Every Reddit domain is blocked for the search, browser and reader tools, so none was opened.
