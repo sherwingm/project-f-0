@@ -96,6 +96,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "09:50:04",
+   "contracts": 68,
+   "on_both": 67,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.397,
+   "same_best_bid_pct": 40.3,
+   "same_best_ask_pct": 29.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.0,
+   "upstox_minus_kotak_quote_time_s_median": -19.0
   }
  ],
  "top_gaps": [
@@ -191,6 +207,13 @@
    "at": "09:25"
   },
   {
+   "contract": "MUTHOOTFIN26NOV2900PE",
+   "gap_pct": 0.397,
+   "kotak": 63.0,
+   "upstox": 62.75,
+   "at": "09:50"
+  },
+  {
    "contract": "HAL26NOV5000PE",
    "gap_pct": 0.386,
    "kotak": 155.45,
@@ -226,28 +249,21 @@
    "at": "09:45"
   },
   {
-   "contract": "ICICILIFE26NOVFUT",
-   "gap_pct": 0.225,
-   "kotak": 467.5,
-   "upstox": 468.55,
-   "at": "09:25"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.204,
-   "kotak": 73.35,
-   "upstox": 73.5,
-   "at": "09:25"
+   "contract": "MUTHOOTFIN26NOV2900CE",
+   "gap_pct": 0.264,
+   "kotak": 75.65,
+   "upstox": 75.45,
+   "at": "09:50"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 400,
+  "rounds": 7,
+  "contract_quotes": 467,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.6,
-  "same_best_ask_pct": 29.15,
+  "same_best_bid_pct": 32.8,
+  "same_best_ask_pct": 29.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.3,
-  "upstox_minus_kotak_quote_time_s_median": -12.0
+  "oi_same_pct": 91.0,
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
