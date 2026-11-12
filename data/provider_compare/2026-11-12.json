@@ -112,6 +112,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.0,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "09:55:04",
+   "contracts": 66,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "KALYANKJIL26NOV760CE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.333,
+   "same_best_bid_pct": 33.8,
+   "same_best_ask_pct": 41.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.8,
+   "upstox_minus_kotak_quote_time_s_median": -11.0
   }
  ],
  "top_gaps": [
@@ -128,6 +144,13 @@
    "kotak": 53.45,
    "upstox": 54.7,
    "at": "09:30"
+  },
+  {
+   "contract": "NYKAA26NOV355PE",
+   "gap_pct": 1.333,
+   "kotak": 7.5,
+   "upstox": 7.4,
+   "at": "09:55"
   },
   {
    "contract": "BHARTIARTL26NOV2100CE",
@@ -186,6 +209,13 @@
    "at": "09:40"
   },
   {
+   "contract": "ADANIENT26NOV2750CE",
+   "gap_pct": 0.593,
+   "kotak": 67.5,
+   "upstox": 67.1,
+   "at": "09:55"
+  },
+  {
    "contract": "ADANIPORTS26NOV1920CE",
    "gap_pct": 0.49,
    "kotak": 40.8,
@@ -240,30 +270,16 @@
    "kotak": 62.8,
    "upstox": 62.6,
    "at": "09:20"
-  },
-  {
-   "contract": "MFSL26NOV1340CE",
-   "gap_pct": 0.308,
-   "kotak": 32.5,
-   "upstox": 32.4,
-   "at": "09:45"
-  },
-  {
-   "contract": "MUTHOOTFIN26NOV2900CE",
-   "gap_pct": 0.264,
-   "kotak": 75.65,
-   "upstox": 75.45,
-   "at": "09:50"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 467,
+  "rounds": 8,
+  "contract_quotes": 532,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.8,
+  "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 29.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.0
+  "oi_same_pct": 91.7,
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
