@@ -1211,3 +1211,6 @@ Added (new files only, no production code changed): CLAUDE.md (about 500 tokens:
 
 ## 13 Nov 2026: follow-ups approved by the user ("do all")
 (1) .gitignore now tracks .claude/skills and .claude/agents (deploy-vm, research-loop, research-verifier committed); data/g1c_ledger.json ignored like the other ledgers. (2) Stale preview entries removed from the local .claude/launch.json. (3) Unused connectors switched off for this and new sessions: Figma, Google Calendar, Google Drive, BigQuery (plugin servers cannot be toggled from a session; the user can disable them in the app). (4) STT is now versioned by trade date: server/charges.py STT_HISTORY and leg(..., on=date); scanner/s3_engine.py passes each leg's own date. Live and every other caller pass no date and are unchanged; S1 / S2 backtests not switched. Effect on the G1 replay: +Rs 861 (G1), +Rs 556 (G1-F), no verdict changes (g1_research/CHARGES_DATED_RESULT.md). Tests: tests/test_charges_dated.py (9); whole suite 803 passed. The server on the VM was not redeployed (no live change).
+
+## 13 Nov 2026 (index chat): handoff rewritten before a manual /compact
+HANDOFF_INDEX_G1.md now holds the live results (G1 -73 %, G1-C -50.75 % first trade, XP -72.5 %), the rules, research results, infrastructure added on 13 Nov, known history-vs-live differences and next steps. Auto-compact stays off.

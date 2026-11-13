@@ -1,88 +1,77 @@
-# Handoff: index chat "nifty index" (G1 / G1-F, expiry research, index max up) , 2026-11-07
+# Handoff: index chat "nifty index" (G1 / G1-F / G1-C, expiry research, index max up), updated 2026-11-13
 
-This chat is for the **normal index build** (NIFTY / SENSEX index puts, G1 / G1-F, the independent expiry research).
-The user said (6 Nov): **keep Near Tighty (NT) and the near-expiry (1-3 sessions) rule OUT of this chat.** NT is its own
-part (`strategies/NT_near_tighty.md`, `server/nt_live.py`, `near_tighty_research/`). One NT folder was added here by mistake
-(commit `4ffae4e83`); the user did not ask to remove it. Repo `sherwingm/project-f-0` (public; never commit secrets), local
-clone `C:\Users\sherw\project-f-0`. The older `HANDOFF.md` is the S1 / shared one.
+This chat is for the **normal index build** (NIFTY index options: G1 / G1-F puts, the G1-C call mirror, XP, the independent expiry research).
+The user said (6 Nov): **keep Near Tighty (NT) and the near-expiry (1-3 sessions) rule OUT of this chat.** NT is its own part
+(`strategies/NT_near_tighty.md`, `server/nt_live.py`, `near_tighty_research/`). Repo `sherwingm/project-f-0` (public; never commit secrets),
+local clone `C:\Users\sherw\project-f-0`. The older `HANDOFF.md` is the S1 / shared one. `CLAUDE.md` (repo root) loads by itself and holds the
+short version of the rules below.
 
-## House rules for this chat (the user's, in force)
-- **Reporting default (7 Nov):** every result leads with **max up after entry**: the share reaching +50 / +100 / +200 %,
-  the mean and the median max up, THEN the booked result (win %, average, median, total ₹). Max up is the measure; the
-  exit is not (there is no perfect exit). Split by days held / days to expiry. Written into PROGRESS.md, DECISIONS.md, the
-  G1 page, the folder READMEs and memory (`max-up-is-the-real-measure`).
+## House rules (the user's, in force)
+- **Reporting default:** every result leads with **max up after entry** (share reaching +50 / +100 / +200 %, mean, median), THEN the booked result
+  (win %, average, median, total Rs). Max up is the measure; the exit is not. Split by days held / days to expiry.
 - Buy only (options). Paper only: **no real order, no deploy of a rule change without the user, no auto-promotion.**
-- Phone reader: plain words, narrow tables, end every reply with **"Still running:"**. Teach, then do (interview lines).
-- Commit and push every step, log in PROGRESS.md, decisions in DECISIONS.md; pre-register before any number
-  (`strategies/*.md` or a PREREG file). Commit trailer: `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
-- **The PC clock is ~5.5 h behind IST.** Read market time from the VM: `ssh -o BatchMode=yes fo-scanner 'TZ=Asia/Kolkata date +%H:%M'`.
-  Never restart the live server 09:00-15:40 IST on a session day (weekends are safe). The user once asked to use Opus: that
-  can only be set from the app's model menu (the session cannot switch itself); it has been Sonnet 5.5.
-- **Another session edits the same folder** (`templates/results.html` etc.): stage only your own files, check the staged
-  diff, `git pull --rebase --autostash`. Stray untracked files (`calib_cash.csv`, `fills_mech.csv`, ...) are not ours.
+- Phone reader: plain words, lists not wide tables (a table once did not display), end every reply with **"Still running:"** and the error-count
+  line (memory `error-count-footer`). Teach, then do.
+- Commit and push every step, log in `PROGRESS.md`, verdicts in `DECISIONS.md`; **pre-register before any number** (`strategies/*.md` or a `*_PREREG.md`);
+  one row per run in `docs/research/experiments.csv`. Commit trailer: `Co-Authored-By: Claude Sonnet 5.5 <noreply@anthropic.com>`.
+- **The PC clock is ~5.5 h behind IST.** Read market time from the VM: `ssh -o BatchMode=yes fo-scanner 'TZ=Asia/Kolkata date'`. Never restart the live
+  server 09:00-15:40 IST on a session day. The model can only be changed in the app's model menu (this session is Sonnet 5.5).
+- **Auto-compact is OFF by the user's choice:** use `/context`, then `/compact` (or this handoff + `/clear`).
+- **Another session edits the same folder:** stage only your own files, `git pull --rebase --autostash`. Untracked `calib_cash.csv`, `fills_mech.csv`,
+  `S1_web_project.pptx`, `server/autoupdate.py` etc. are not ours.
 
-## Live system (AWS VM, `ssh -o BatchMode=yes fo-scanner`, dir `/home/ubuntu/fo_scanner`)
-Deploy recipe that works: back up modified files to `~/deploy_backup_<stamp>`, `git checkout -- .` (the server rewrites
-`data/scan.json`), `git pull --rebase`; untracked `data/live_snapshots/<day>.json` can block the pull (move it away after
-`cmp` with origin), `sudo systemctl restart fo-scanner`, wait ~45 s, then check `systemctl is-active`, HTTP 200 on
-`/index`, `/api/index/g1`, `/api/index/xp`, `/api/near-tighty` with `curl -u user:$APP_PASSWORD` (read from `.env` inside the
-VM shell, never printed), `PAPER=true`, no errors in `journalctl -u fo-scanner --since -3min`.
-- VM was at `7e0b66582` (another session's results-page change) on 7 Nov 13:04 IST; my last deploy was `9ee8f67d7`.
-- **G1-F is the MAIN track** (user, 6 Nov), G1 the baseline: `server/g1_live.py` (G1Trader; own ledger `data/g1_ledger.json`,
-  git-ignored), shown on `/index` (G1 section, Pods table with max up avg / median / ≥ +100 % first), API `/api/index/g1`.
-  Rules `strategies/S3_G1_put_overnight.md`: opening range 09:15-09:29; first close outside it 09:30-13:00; only a close
-  below the low trades; ATM put (50-pt step) of the nearest weekly after today; buy at the last ask of the minute after the
-  signal; **stop at bid ≤ 50 % of price paid (any second, both days); else exit = best bid at the first quote of the NEXT
-  session's 15:29 minute (changed 7 Nov from 09:16, before any live trade; a missed close sells at the first bid next
-  session)**. G1-F takes the same trade only if day-1 gap < +0.3 %, range width not in 0.5-0.8 %, VIX < 17. Two separate
-  30-trade gates (mean > 0, still > 0 at 2× charges, t ≥ 2, both halves > 0, worst loss < average month).
-  `HOLD_TO_CLOSE` is a class attribute: G1 True, Near Tighty False (NT keeps its 09:16 exit).
-- **Live results so far: 0 trades** (5 and 6 Nov both broke upward first = no trade). Next session **Mon 9 Nov**; **Tue 10 Nov
-  is a holiday** (Diwali Balipratipada), so the NIFTY weekly expiry moved to Mon 9 Nov; Sun 8 Nov is the one-hour evening
-  Muhurat session (not a full session, not traded, listed as a holiday).
-- **XP forward log** (`server/xp_live.py`, `expiry_research/FORWARD_TEST.md`, ledger `data/xp_ledger.json`, `/api/index/xp`,
-  section on `/index`): NIFTY expiry days only, buys the same-day ATM CE + PE at the 09:16 asks, +20 % target on the pair else 15:15,
-  hold-to-15:15 logged alongside, max up recorded; verdict at 40 expiry days. **First day is Mon 9 Nov** (not Tue 10 Nov).
-- **Calendar fix (7 Nov):** `server/sessions.py` `is_index_session` counts announced full Saturday / Sunday sessions
-  (`SPECIAL_SESSIONS` env or `data/special_sessions.json`, empty now) for G1 / NT / XP / the NIFTY recorder; `is_session` is
-  unchanged so S1 / S2 are untouched; a holiday always wins. Add a date when NSE announces a weekend session.
+## Live system (AWS VM `ssh -o BatchMode=yes fo-scanner`, dir `/home/ubuntu/fo_scanner`; use `/deploy-vm`)
+- VM runs `1d46d134e` (my last deploy, 12 Nov 17:49 IST: G1-C). Later pushes (docs, tests, `server/charges.py` dated STT, skills, handoff) are NOT deployed and
+  change no live behaviour (the live code passes no date to `charges.leg`). Deploy them at a quiet restart, outside 09:00-15:40 IST.
+- **G1 / G1-F** (`server/g1_live.py`, rules `strategies/S3_G1_put_overnight.md`): opening range 09:15-09:29; first 1-minute close outside it 09:30-13:00; only a
+  close BELOW the low trades (a first close above = no G1 trade); ATM put of the nearest weekly after today at the last ask of the next minute; **stop at bid <= 50 %
+  of the price paid (any second, both days), else sold at the best bid at the first quote of the next session's 15:29** (a missed close sells at the first bid next
+  session). **G1-F (main track)** takes the same trade only if the day-1 gap < +0.3 %, the range width is not 0.5-0.8 % and VIX < 17; G1 is the baseline. No minimum
+  break size (median break only 0.017 % beyond the range). Own ledger `data/g1_ledger.json`; API `/api/index/g1`; shown on `/index` with the **score board**.
+- **Breakout score 0-7** (`server/g1_score.py`, record only, never gates a trade; puts only, NT not scored): history shows no link to max up; judge again at 30 live signals.
+  Marks / best bid of an open position are saved every 30 s (a restart on 10 Nov once reset a trade's best bid).
+- **G1-C** (`server/g1c_live.py`, `strategies/S3_G1C_call_overnight.md`, ledger `data/g1c_ledger.json`, `/api/index/g1c`): the call mirror, paper only, the first close ABOVE the range
+  buys the ATM call, same stop and exit, no filters, no score. Built at the user's request on 12 Nov although history says it loses (about -11 % a trade); judged at 30 trades.
+  `G1Trader` takes the option side from the class attribute `OPT` (G1, G1-F, NT unchanged).
+- **XP** (`server/xp_live.py`, `expiry_research/FORWARD_TEST.md`, `data/xp_ledger.json`, `/api/index/xp`): NIFTY expiry days only, ATM CE + PE at the 09:16 asks, +20 % target on the
+  pair else 15:15, log only, verdict at 40 expiry days.
+- **Calendar:** `server/sessions.py` `is_index_session` counts announced full weekend sessions (`data/special_sessions.json`, empty now); holidays win. Tue 10 Nov was a holiday.
+- The index feed is frozen 15:15-15:28 since 3 Aug 2026 (NSE feed; G1 is unaffected).
 
-- **Breakout score (7 Nov, record only):** `server/g1_score.py`; score 0-7 + % + percentile + running avg on every G1 signal (ledger day + trade + buy alert); never gates a trade; NT not scored. History check: no link to max up (SCORE_RESULT.md); judge again at 30 live signals, max up first by band. VM at `ed98cb1ef`.
+## Live paper results (13 Nov 2026 16:00 IST, from the VM API; one trade each, nothing is judged yet)
+- **G1 1 of 30:** Mon 9 Nov 09:40 bought NIFTY 17 Nov 24900 PE at Rs 289.85 (G1-F skipped: gap +0.31 %, width 0.72 %, VIX 18.03), score 1/7. Wed 11 Nov 09:15 the first quote (Rs 78.70)
+  was far below the stop (Rs 144.93) and it sold there: **-73.2 %, -Rs 13,790**, max up only +3.9 %. **G1-F 0 of 30**, no loss.
+- **G1-C 1 of 30:** Fri 13 Nov bought NIFTY 17 Nov 25200 CE at Rs 164.45, stopped the same day at Rs 81.95: **-50.75 %, -Rs 5,425**, max up +19.6 %.
+- **XP 1 of 40:** Mon 9 Nov straddle 25050 at Rs 245.25, target not reached, sold 15:15 at Rs 69.20: **-72.5 %, -Rs 11,553**, max up +3.6 %. History replay (107 expiry days): the XP rule loses on average
+  (-11.0 %, t -2.70); 13 of 107 days at or below -72 %.
+- Context: NIFTY rose about 9 % from 29 Oct (22,937) to 6 Nov (25,030); puts idled on up-break days; today (13 Nov) the first break was up at 09:45 (no put).
 
-- **9 Nov update:** score board on /index (deployed 23e55edb2). FIRST LIVE G1 TRADE 9 Nov: signal 09:40, bought NIFTY 17 Nov 24900 PE at Rs 289.85, G1-F skips (gap, width, VIX), score 1/7 (low band, percentile 2), all 7 inputs live. Searches since 7 Nov (score methods, formation, 5-year spot, FII/DII x3, news, heavyweights) found nothing; verification of public claims (VERIFY_RESULT.md): no strike beats ATM, the call mirror (G1-C) LOSES held overnight, Zerodha ORB / forum ideas all negative. Do not build G1-C without the user.
+## Research results (history, in-sample; folders `g1_research/`, `expiry_research/`; one row each in `docs/research/experiments.csv`)
+- **G1-F history (live rule, ATM put, 154 trades Oct 2024-Oct 2026, 1 lot):** max up through next close reaches +100 % on 41 %, mean +104 % / median +72 %; booked win 41 %, average +19.7 %, median -18 %,
+  total +Rs 2.47 lakh (+Rs 2.13 lakh at 2x costs), max drawdown -Rs 41.6k, 7 of 23 months negative; passes its gate at 60-150 trades, not at 30. **G1 (259 trades):** +Rs 40k, t 0.94, fails at 2x costs.
+  Without the top 10 trades every variant is about zero. Only the overnight hold works (same entries intraday lose).
+- **Nothing found that predicts follow-through or ranks max up:** score (10 methods), formation shapes, 5 years of NIFTY moves (638 signals, follow-through +0.06 ATR, p 0.11-0.14), FII/DII positions (x3), news tone,
+  heavyweight stocks, holding patterns, IV crush, minimum break size. Near-miss lead only: retail net-long positioning -> bigger next-day move (confirmation p 0.051).
+- **Verification of public claims (`VERIFY_RESULT.md`):** no strike beats ATM (ITM = more wins, smaller loss, fewer big doubles, about 2x capital); the call mirror loses at every strike; Zerodha ORB on premium, forum 2 %/2 %,
+  the 30-minute ORB bot and the 11.5-year trail rule are all negative on our data.
+- **Expiry research** (`expiry_research/`, sealed final period from Jul 2024): no direction edge (AUC 0.44-0.56); size partly predictable (volatility clustering) but a long ATM straddle loses.
+- **1-minute data audit** (`g1_research/DATA_AUDIT.md`): complete and consistent on all 259 G1 days.
+- Capital view given to the user: 1 lot of G1-F history drawdown -Rs 41.6k, longest losing streak 11, so about Rs 1.5-3 lakh for 1 lot (not advice; paper only).
 
-- **12 Nov update:** first live G1 trade (9 Nov put, score 1/7) was stopped at Wed's open: -73 %, -Rs 13.8k (gap through the stop). **G1-C (call mirror) set up as PAPER** at the user's request (server/g1c_live.py, strategies/S3_G1C_call_overnight.md, /api/index/g1c, own ledger g1c_ledger.json, deployed 1d46d134e): the history says it loses (VERIFY_RESULT.md), so it is a forward record judged at 30 trades. Marks / best bid are now saved every 30 s (a restart reset a trade's max up once).
+## Infrastructure added 13 Nov (user approved)
+- `CLAUDE.md`; `docs/research/{README,SOURCES,VALIDATION_INVENTORY}.md` + `experiments.csv`; `docs/CLAUDE_CODE_CHEATSHEET.md`; skills `/deploy-vm`, `/research-loop` and agent `research-verifier`
+  (`.claude/skills`, `.claude/agents`, tracked in git); 32 validation tests (`tests/test_validation_*.py`); STT dated by trade day in the S3 engine (`server/charges.py` `STT_HISTORY`, effect on G1 +Rs 861, no verdict change).
+- **Known history-vs-live differences (documented, not changed):** stops on minute closes vs live per-second bid (a gap through the stop fills below it, as on 11 Nov); flat slippage; non-STT charges one table;
+  partial opening range accepted; no sealed holdout for G1.
+- Connectors Figma, Google Calendar, Google Drive, BigQuery switched off (also default for new sessions). Whole suite: **803 passed, 0 failed**.
 
-## Research done this chat (all history, in-sample unless stated; folders are separate, do not mix)
-- `expiry_research/` (independent project, all years 2018-2026, sealed final period Jul 2024 →): **no direction edge** at
-  any decision time (gap transitions, 5 sessions before expiry, option chain / OI, ML all ~chance, AUC 0.44-0.56). Size of
-  the next move is partly predictable (11 of 13 rules passed the one-time final test) but it is volatility clustering and a
-  long ATM straddle on it loses (−4.6 % every day). Report `expiry_research/reports/FINAL_RESEARCH_REPORT.md`.
-  Max up from a 09:16 ATM buy: expiry day 68 % of days a leg ≥ +100 %, 1 day out 38 %, 2: 29 %, 3: 15 %, 4+: 12 %.
-- `g1_research/` (normal index): max up after entry with NO exit (`g1_maxup_free`), SENSEX put side, call mirror (NIFTY, SENSEX),
-  exit comparison (`g1_next_close_exit`), holding-days sweep (`g1_hold_days`), holding-pattern search (pre-registered,
-  `HOLD_PATTERN_PREREG.md`, result `HOLD_PATTERN_RESULT.md`), IV-crush check. Key numbers (G1-F since 2025, 133 trades):
-  - Max up through next 09:16: mean +59 % / median +30 %, ≥ +100 % on 23 %; through next close +102 % / +70 %, 38 %;
-    2 days +129 % / +103 %, 50 %; 3 days +155 % / +122 %, 56 % (peak, not profit). SENSEX puts about the same; calls about half.
-  - Booked (50 % stop): old exit (next 09:16) win 49 %, mean +17.6 %, median −3.9 %, ₹1.91 L; new exit (next close) win 40 %,
-    mean +17.6 %, median −29 %, ₹2.31 L, 44 % stopped. Longer holds: 3 days +31.8 %, to expiry +30.2 % / ₹3.25 L but 62 % stopped.
-  - G1 (no filters) is much weaker with longer holds (next close +2.0 %, t 0.3). Without the top 10 trades every variant is ~0.
-  - Pace: G1 ≈ 10.4 trades a month, G1-F ≈ 6.2 (30 trades ≈ 5 months for G1-F).
-  - **Holding-pattern search: none found** (96 rules, 0 candidates after BH; the first run's 3 "passes" were circular and
-    rejected; VIX change after entry (IV crush) explains the put's level at the decision but does not predict the follow-up).
-- `near_tighty_research/` (NT only, made on 6 Nov): `nt_maxup.py`, `NT_MAXUP.md`; keep NT work there.
-
-## Open / waiting on the user
-- Live paper needs trades: G1-F gate at 30 trades; do not change entry rules, filters or the stop before it is judged
-  (my advice: stop tuning). Optional, not started: record "what each hold length would have given" on every live trade
-  (shadow, no rule change); SENSEX live paper (needs a SENSEX option feed on the server and its own gate); special-session dates.
-- On the first live trades, check the ledger (`data/g1_ledger.json` on the VM), the phone alert (says whether G1-F counts it),
-  and that max up is recorded per trade (`max_bid`, `max_up_pct`).
-- The user's PC has `S1_web_project.pptx` etc. untracked: not ours.
+## Next steps / waiting
+- Let the live paper trades accumulate (G1-F 0 of 30, G1 1 of 30, G1-C 1 of 30, XP 1 of 40). Do not change entry rules, filters or stops before a gate is judged; judge max up first, then booked.
+- Optional, not started: shadow log of what each hold length would have given on live trades; SENSEX live paper; date-version the non-STT charges (exchange Rs 35.53 vs 35.03 unconfirmed);
+  a shared Benjamini-Hochberg helper; an environment lock; walk-forward for the S3 pods; a sealed holdout policy for G1; deploy the later pushes at a quiet restart.
+- After each committed study add one row to `docs/research/experiments.csv` (append only).
 
 ## After the compaction
-Read this file, then the tail of `PROGRESS.md` and the last entries of `DECISIONS.md`. Python:
-`C:\Users\sherw\.venvs\fo\Scripts\python.exe` (tests: `pytest -q -p no:warnings tests`, all pass except
-`test_spec12_step7_model.py`); data env `INDEX_STORE=../fo-index-data/data/index`. Latest commits of this chat:
-`767b4ca4e` (IV-crush check), `581f771b9` (hold pattern), `9ee8f67d7` (reporting default), `45ab842fc` (calendar fix),
-`60a058f0b` (next-close exit), `76dc84328` (G1-F main), `01d0602c1` (XP log), `7d47ae69e` (expiry research).
+Read this file, then the tail of `PROGRESS.md` (never the whole file) and the last entries of `DECISIONS.md`. Use `/research-loop` for a study and `/deploy-vm` for a VM update.
+Python: `C:\Users\sherw\.venvs\fo\Scripts\python.exe` (tests: `pytest -q -p no:warnings tests`); data env `INDEX_STORE=../fo-index-data/data/index`.
+Latest commits: `8eb9067a7` (registry row), `e31fd79ec` (skills tracked, dated STT), `851a54cc7` (CLAUDE.md, research docs, validation tests), `365eec3d0` (depth test), `5a0347afd` (XP history), `1d46d134e` (G1-C deployed).
