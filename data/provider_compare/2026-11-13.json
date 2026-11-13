@@ -364,6 +364,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -33.5
+  },
+  {
+   "at": "11:30:09",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.623,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 48.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.9,
+   "upstox_minus_kotak_quote_time_s_median": -60.0
   }
  ],
  "top_gaps": [
@@ -509,8 +523,8 @@
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 1711,
+  "rounds": 27,
+  "contract_quotes": 1777,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 36.4,
   "same_best_ask_pct": 36.4,
