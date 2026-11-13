@@ -1,0 +1,128 @@
+                                                                                      item audit_value                                          independent_value                  status
+0                                              G1 baseline trades from the original engine         259                                                        259                Verified
+1       G1 baseline: max abs per-trade difference, audit simulator vs ORIGINAL engine (Rs)         0.0                                                        0.0                Verified
+2                                                 G1 baseline total Rs (engine, dated STT)       41309                                                   41309.39                Verified
+3                                               G1-F baseline total Rs (engine, dated STT)      247602                                                  247601.63                Verified
+4                                                            stored replay file: G1 trades         259                                                        259                Verified
+5                                            stored replay file: G1 total Rs (undated STT)       40448                                                   40448.08                Verified
+6                                                          stored replay file: G1-F trades         154                                                        154                Verified
+7                                          stored replay file: G1-F total Rs (undated STT)      247046                                                  247046.08                Verified
+8                                           stored replay days equal the engine's 259 days           1                                                          1                Verified
+9                          G1 total Rs, engine with the undated STT table vs stored replay    40448.08                                                   40448.08                Verified
+10                           per-trade max diff, engine(undated STT) vs stored replay (Rs)         0.0                                                        0.0                Verified
+11        per-trade max diff, engine cost_mult=2 (undated) vs stored replay net_rs_2x (Rs)         0.0                                                        0.0                Verified
+12                                   G1 C1: net Rs (ORIGINAL engine with patches) vs audit     -3102.0                                                   -3101.51                Verified
+13                                                                      G1 C1: trade count       259.0                                                        259                Verified
+14                                 G1-F C1: net Rs (ORIGINAL engine with patches) vs audit    220001.0                                                   220000.7                Verified
+15                                                                    G1-F C1: trade count       154.0                                                        154                Verified
+16                                   G1 C2: net Rs (ORIGINAL engine with patches) vs audit      5545.0                                                    5545.11                Verified
+17                                                                      G1 C2: trade count       259.0                                                        259                Verified
+18                                 G1-F C2: net Rs (ORIGINAL engine with patches) vs audit    223880.0                                                  223880.37                Verified
+19                                                                    G1-F C2: trade count       154.0                                                        154                Verified
+20                                   G1 C3: net Rs (ORIGINAL engine with patches) vs audit     24538.0                                                   24537.93                Verified
+21                                                                      G1 C3: trade count       259.0                                                        259                Verified
+22                                 G1-F C3: net Rs (ORIGINAL engine with patches) vs audit    237617.0                                                  237616.96                Verified
+23                                                                    G1-F C3: trade count       154.0                                                        154                Verified
+24                                   G1 C4: net Rs (ORIGINAL engine with patches) vs audit     41336.0                                                   41336.35                Verified
+25                                                                      G1 C4: trade count       259.0                                                        259                Verified
+26                                 G1-F C4: net Rs (ORIGINAL engine with patches) vs audit    247617.0                                                  247617.05                Verified
+27                                                                    G1-F C4: trade count       154.0                                                        154                Verified
+28                                   G1 C5: net Rs (ORIGINAL engine with patches) vs audit     40448.0                                                   40448.08                Verified
+29                                                                      G1 C5: trade count       259.0                                                        259                Verified
+30                                 G1-F C5: net Rs (ORIGINAL engine with patches) vs audit    247046.0                                                  247046.08                Verified
+31                                                                    G1-F C5: trade count       154.0                                                        154                Verified
+32                                   G1 C6: net Rs (ORIGINAL engine with patches) vs audit    -11194.0                                                  -11193.63                Verified
+33                                                                      G1 C6: trade count       259.0                                                        259                Verified
+34                                 G1-F C6: net Rs (ORIGINAL engine with patches) vs audit    213920.0                                                  213919.96                Verified
+35                                                                    G1-F C6: trade count       154.0                                                        154                Verified
+36                                   G1 E1: net Rs (ORIGINAL engine with patches) vs audit     48071.0                                                   48071.44                Verified
+37                                                                      G1 E1: trade count       259.0                                                        259                Verified
+38                                 G1-F E1: net Rs (ORIGINAL engine with patches) vs audit    254821.0                                                  254821.41                Verified
+39                                                                    G1-F E1: trade count       154.0                                                        154                Verified
+40                                   G1 E2: net Rs (ORIGINAL engine with patches) vs audit     66060.0                                                   66060.06                Verified
+41                                                                      G1 E2: trade count       259.0                                                        259                Verified
+42                                 G1-F E2: net Rs (ORIGINAL engine with patches) vs audit    258584.0                                                  258584.44                Verified
+43                                                                    G1-F E2: trade count       154.0                                                        154                Verified
+44                                                                       G1 B0: mean net %       5.535                                                   5.535022                Verified
+45                                                                 G1 B0: date-clustered t       0.942                                                   0.941919                Verified
+46                                                         G1 B0: cluster-bootstrap CI low       -5.82                                                  -5.817398                Verified
+47                                                        G1 B0: cluster-bootstrap CI high       17.18                                                  17.177299                Verified
+48                                                           G1 B0: block-bootstrap CI low       -7.18                                                  -7.181023                Verified
+49                                                                  G1 B0: max drawdown Rs  -114441.41                                                 -114441.41                Verified
+50                                                                    G1 B0: profit factor        1.06                                                   1.059541                Verified
+51                                                                       G1 C1: mean net %        3.55                                                   3.549775                Verified
+52                                                                 G1 C1: date-clustered t       0.617                                                    0.61714                Verified
+53                                                         G1 C1: cluster-bootstrap CI low       -7.54                                                  -7.536153                Verified
+54                                                        G1 C1: cluster-bootstrap CI high       14.92                                                  14.920938                Verified
+55                                                           G1 C1: block-bootstrap CI low       -8.67                                                  -8.672408                Verified
+56                                                                  G1 C1: max drawdown Rs  -143176.77                                                 -143176.77                Verified
+57                                                                    G1 C1: profit factor         1.0                                                   0.995665                Verified
+58                                                                       G1 C6: mean net %        3.06                                                     3.0595                Verified
+59                                                                 G1 C6: date-clustered t        0.53                                                   0.529855                Verified
+60                                                         G1 C6: cluster-bootstrap CI low       -8.03                                                  -8.033267                Verified
+61                                                        G1 C6: cluster-bootstrap CI high       14.53                                                  14.526112                Verified
+62                                                           G1 C6: block-bootstrap CI low       -9.34                                                  -9.335042                Verified
+63                                                                  G1 C6: max drawdown Rs  -148375.27                                                 -148375.27                Verified
+64                                                                    G1 C6: profit factor        0.98                                                   0.984466                Verified
+65                                                                       G1 E1: mean net %       6.322                                                   6.322152                Verified
+66                                                                 G1 E1: date-clustered t       1.073                                                   1.073282                Verified
+67                                                         G1 E1: cluster-bootstrap CI low       -5.18                                                  -5.175221                Verified
+68                                                        G1 E1: cluster-bootstrap CI high       17.88                                                  17.878361                Verified
+69                                                           G1 E1: block-bootstrap CI low       -6.13                                                  -6.126803                Verified
+70                                                                  G1 E1: max drawdown Rs  -105208.87                                                 -105208.87                Verified
+71                                                                    G1 E1: profit factor        1.07                                                   1.069787                Verified
+72                                                                     G1-F B0: mean net %      19.703                                                   19.70346                Verified
+73                                                               G1-F B0: date-clustered t       2.411                                                   2.411193                Verified
+74                                                       G1-F B0: cluster-bootstrap CI low        4.28                                                   4.277602                Verified
+75                                                      G1-F B0: cluster-bootstrap CI high       35.92                                                  35.915164                Verified
+76                                                         G1-F B0: block-bootstrap CI low         0.3                                                   0.300605                Verified
+77                                                                G1-F B0: max drawdown Rs   -41610.94                                                  -41610.94                Verified
+78                                                                  G1-F B0: profit factor        1.87                                                   1.874051                Verified
+79                                                                     G1-F C1: mean net %      17.347                                                  17.346625                Verified
+80                                                               G1-F C1: date-clustered t       2.168                                                    2.16797                Verified
+81                                                       G1-F C1: cluster-bootstrap CI low        2.27                                                   2.270701                Verified
+82                                                      G1-F C1: cluster-bootstrap CI high       33.19                                                  33.185846                Verified
+83                                                         G1-F C1: block-bootstrap CI low       -1.34                                                  -1.344853                Verified
+84                                                                G1-F C1: max drawdown Rs   -44077.81                                                  -44077.81                Verified
+85                                                                  G1-F C1: profit factor        1.75                                                   1.745236                Verified
+86                                                                     G1-F C6: mean net %      16.785                                                  16.785195                Verified
+87                                                               G1-F C6: date-clustered t       2.088                                                   2.087697                Verified
+88                                                       G1-F C6: cluster-bootstrap CI low        1.62                                                   1.623678                Verified
+89                                                      G1-F C6: cluster-bootstrap CI high       32.65                                                   32.64568                Verified
+90                                                         G1-F C6: block-bootstrap CI low       -2.04                                                  -2.039991                Verified
+91                                                                G1-F C6: max drawdown Rs   -44740.31                                                  -44740.31                Verified
+92                                                                  G1-F C6: profit factor        1.72                                                   1.715225                Verified
+93                                                                     G1-F E1: mean net %      20.796                                                  20.795792                Verified
+94                                                               G1-F E1: date-clustered t       2.555                                                   2.554564                Verified
+95                                                       G1-F E1: cluster-bootstrap CI low         5.4                                                   5.400854                Verified
+96                                                      G1-F E1: cluster-bootstrap CI high       36.74                                                  36.740504                Verified
+97                                                         G1-F E1: block-bootstrap CI low        1.25                                                   1.254552                Verified
+98                                                                G1-F E1: max drawdown Rs   -41899.31                                                  -41899.31                Verified
+99                                                                  G1-F E1: profit factor        1.91                                                    1.91179                Verified
+100         sensitivity cells (G1 and G1-F, 54 rows) not reproduced by the original engine           0                                                          0                Verified
+101                  G1 regimes: trades whose VIX input is dated on or after the trade day           0                                                          0                Verified
+102                                                         G1 vix_regime=high: n / mean %     -12.115                                                 -12.115158                Verified
+103                                                          G1 vix_regime=low: n / mean %      10.707                                                  10.706809                Verified
+104                                                          G1 vix_regime=mid: n / mean %       17.77                                                  17.770036                Verified
+105                                                         G1 vol_regime=high: n / mean %      -9.434                                                  -9.434279                Verified
+106                                                          G1 vol_regime=low: n / mean %       6.865                                                   6.865449                Verified
+107                                                          G1 vol_regime=mid: n / mean %      19.158                                                  19.158426                Verified
+108                                                         G1 trend_prev=down: n / mean %       0.205                                                   0.204607                Verified
+109                                                           G1 trend_prev=up: n / mean %      11.338                                                  11.338297                Verified
+110                                                       G1-F vix_regime=high: n / mean %      29.627                                                  29.627145                Verified
+111                                                        G1-F vix_regime=low: n / mean %      10.569                                                  10.568903                Verified
+112                                                        G1-F vix_regime=mid: n / mean %      27.662                                                  27.661518                Verified
+113                                                       G1-F vol_regime=high: n / mean %      12.527                                                  12.527007                Verified
+114                                                        G1-F vol_regime=low: n / mean %        9.16                                                   9.160399                Verified
+115                                                        G1-F vol_regime=mid: n / mean %      36.967                                                   36.96706                Verified
+116                                                       G1-F trend_prev=down: n / mean %      18.536                                                  18.536219                Verified
+117                                                         G1-F trend_prev=up: n / mean %       20.49                                                  20.490078                Verified
+118                        G1 regimes: tercile cut points come from the whole trade window   as stated                                                  confirmed                Verified
+119  G1-F raw recomputation: days not checkable by this script (no earlier session loaded)        None                                                 2024-10-01  Verified (calculation)
+120  G1-F flag recomputed from raw spot/VIX minutes vs stored g1f flag: days that disagree           0                                                          0                Verified
+121                G1-F flag from the datasheet columns vs stored flag: days that disagree           0                                                          0                Verified
+122               G1-F filter map: published-rule cell n / mean % (from raw recomputation)        19.7                                                       19.7                Verified
+123     G1-F filter-threshold map: share of 27 threshold cells with mean above G1's +5.5 %        None  27 of 27; cell means range 9.5 to 25.4 %; n range 106-191  Verified (calculation)
+124             G1 overnight minus same-day (Rs per trade, paired on the same 259 signals)        None         all 427 (t 1.04); Oct24-Sep25 898; Oct25-Oct26 -34  Verified (calculation)
+
+NOT REPRODUCED: 0 of 125

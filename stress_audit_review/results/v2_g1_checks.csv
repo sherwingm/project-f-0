@@ -1,0 +1,126 @@
+item,audit_value,independent_value,tolerance,status,note
+G1 baseline trades from the original engine,259,259,0.0,Verified,263 signals collected; 4 have no usable entry price in the engine itself
+"G1 baseline: max abs per-trade difference, audit simulator vs ORIGINAL engine (Rs)",0.0,0.0,0.01,Verified,
+"G1 baseline total Rs (engine, dated STT)",41309,41309.390000000036,1.0,Verified,
+"G1-F baseline total Rs (engine, dated STT)",247602,247601.63,1.0,Verified,
+stored replay file: G1 trades,259,259,0.0,Verified,
+stored replay file: G1 total Rs (undated STT),40448,40448.08,1.0,Verified,
+stored replay file: G1-F trades,154,154,0.0,Verified,
+stored replay file: G1-F total Rs (undated STT),247046,247046.08,1.0,Verified,
+stored replay days equal the engine's 259 days,1,1,0.0,Verified,
+"G1 total Rs, engine with the undated STT table vs stored replay",40448.08,40448.08,1.0,Verified,reproduces how the stored file was written
+"per-trade max diff, engine(undated STT) vs stored replay (Rs)",0.0,0.0,0.01,Verified,
+"per-trade max diff, engine cost_mult=2 (undated) vs stored replay net_rs_2x (Rs)",0.0,0.0,0.01,Verified,
+G1 C1: net Rs (ORIGINAL engine with patches) vs audit,-3102.0,-3101.5099999999948,1.5,Verified,engine oracle
+G1 C1: trade count,259.0,259,0.0,Verified,
+G1-F C1: net Rs (ORIGINAL engine with patches) vs audit,220001.0,220000.7,1.5,Verified,engine oracle
+G1-F C1: trade count,154.0,154,0.0,Verified,
+G1 C2: net Rs (ORIGINAL engine with patches) vs audit,5545.0,5545.110000000008,1.5,Verified,engine oracle
+G1 C2: trade count,259.0,259,0.0,Verified,
+G1-F C2: net Rs (ORIGINAL engine with patches) vs audit,223880.0,223880.37000000002,1.5,Verified,engine oracle
+G1-F C2: trade count,154.0,154,0.0,Verified,
+G1 C3: net Rs (ORIGINAL engine with patches) vs audit,24538.0,24537.930000000026,1.5,Verified,engine oracle
+G1 C3: trade count,259.0,259,0.0,Verified,
+G1-F C3: net Rs (ORIGINAL engine with patches) vs audit,237617.0,237616.95999999996,1.5,Verified,engine oracle
+G1-F C3: trade count,154.0,154,0.0,Verified,
+G1 C4: net Rs (ORIGINAL engine with patches) vs audit,41336.0,41336.35,1.5,Verified,engine oracle
+G1 C4: trade count,259.0,259,0.0,Verified,
+G1-F C4: net Rs (ORIGINAL engine with patches) vs audit,247617.0,247617.05,1.5,Verified,engine oracle
+G1-F C4: trade count,154.0,154,0.0,Verified,
+G1 C5: net Rs (ORIGINAL engine with patches) vs audit,40448.0,40448.08,1.5,Verified,engine oracle
+G1 C5: trade count,259.0,259,0.0,Verified,
+G1-F C5: net Rs (ORIGINAL engine with patches) vs audit,247046.0,247046.08,1.5,Verified,engine oracle
+G1-F C5: trade count,154.0,154,0.0,Verified,
+G1 C6: net Rs (ORIGINAL engine with patches) vs audit,-11194.0,-11193.630000000034,1.5,Verified,engine oracle
+G1 C6: trade count,259.0,259,0.0,Verified,
+G1-F C6: net Rs (ORIGINAL engine with patches) vs audit,213920.0,213919.96000000002,1.5,Verified,engine oracle
+G1-F C6: trade count,154.0,154,0.0,Verified,
+G1 E1: net Rs (ORIGINAL engine with patches) vs audit,48071.0,48071.43999999997,1.5,Verified,engine oracle
+G1 E1: trade count,259.0,259,0.0,Verified,
+G1-F E1: net Rs (ORIGINAL engine with patches) vs audit,254821.0,254821.40999999997,1.5,Verified,engine oracle
+G1-F E1: trade count,154.0,154,0.0,Verified,
+G1 E2: net Rs (ORIGINAL engine with patches) vs audit,66060.0,66060.06000000004,1.5,Verified,engine oracle
+G1 E2: trade count,259.0,259,0.0,Verified,
+G1-F E2: net Rs (ORIGINAL engine with patches) vs audit,258584.0,258584.44,1.5,Verified,engine oracle
+G1-F E2: trade count,154.0,154,0.0,Verified,
+G1 B0: mean net %,5.535,5.535022007722008,0.002,Verified,
+G1 B0: date-clustered t,0.942,0.9419192607390787,0.002,Verified,
+G1 B0: cluster-bootstrap CI low,-5.82,-5.817397808880309,0.15,Verified,different RNG stream; within bootstrap noise
+G1 B0: cluster-bootstrap CI high,17.18,17.177298725868706,0.15,Verified,
+G1 B0: block-bootstrap CI low,-7.18,-7.181022683397684,0.3,Verified,5-trade-date blocks; different RNG stream
+G1 B0: max drawdown Rs,-114441.41,-114441.40999999997,1.0,Verified,
+G1 B0: profit factor,1.06,1.0595414002037957,0.006,Verified,
+G1 C1: mean net %,3.55,3.5497749034749018,0.002,Verified,
+G1 C1: date-clustered t,0.617,0.6171398779174592,0.002,Verified,
+G1 C1: cluster-bootstrap CI low,-7.54,-7.536152953667954,0.15,Verified,different RNG stream; within bootstrap noise
+G1 C1: cluster-bootstrap CI high,14.92,14.920937596525087,0.15,Verified,
+G1 C1: block-bootstrap CI low,-8.67,-8.672407828185328,0.3,Verified,5-trade-date blocks; different RNG stream
+G1 C1: max drawdown Rs,-143176.77,-143176.77000000005,1.0,Verified,
+G1 C1: profit factor,1.0,0.995664972607999,0.006,Verified,
+G1 C6: mean net %,3.06,3.059500386100386,0.002,Verified,
+G1 C6: date-clustered t,0.53,0.5298550451845514,0.002,Verified,
+G1 C6: cluster-bootstrap CI low,-8.03,-8.033266959459459,0.15,Verified,different RNG stream; within bootstrap noise
+G1 C6: cluster-bootstrap CI high,14.53,14.52611217181466,0.15,Verified,
+G1 C6: block-bootstrap CI low,-9.34,-9.33504222007722,0.3,Verified,5-trade-date blocks; different RNG stream
+G1 C6: max drawdown Rs,-148375.27,-148375.26999999996,1.0,Verified,
+G1 C6: profit factor,0.98,0.9844663246360427,0.006,Verified,
+G1 E1: mean net %,6.322,6.322151737451739,0.002,Verified,
+G1 E1: date-clustered t,1.073,1.0732824462400137,0.002,Verified,
+G1 E1: cluster-bootstrap CI low,-5.18,-5.175220685328185,0.15,Verified,different RNG stream; within bootstrap noise
+G1 E1: cluster-bootstrap CI high,17.88,17.87836117760617,0.15,Verified,
+G1 E1: block-bootstrap CI low,-6.13,-6.126803175675674,0.3,Verified,5-trade-date blocks; different RNG stream
+G1 E1: max drawdown Rs,-105208.87,-105208.87000000007,1.0,Verified,
+G1 E1: profit factor,1.07,1.0697868410494722,0.006,Verified,
+G1-F B0: mean net %,19.703,19.703459740259742,0.002,Verified,
+G1-F B0: date-clustered t,2.411,2.4111933517639366,0.002,Verified,
+G1-F B0: cluster-bootstrap CI low,4.28,4.2776019318181815,0.15,Verified,different RNG stream; within bootstrap noise
+G1-F B0: cluster-bootstrap CI high,35.92,35.91516389610389,0.15,Verified,
+G1-F B0: block-bootstrap CI low,0.3,0.30060506493506733,0.3,Verified,5-trade-date blocks; different RNG stream
+G1-F B0: max drawdown Rs,-41610.94,-41610.94000000003,1.0,Verified,
+G1-F B0: profit factor,1.87,1.874051337540378,0.006,Verified,
+G1-F C1: mean net %,17.347,17.346624675324676,0.002,Verified,
+G1-F C1: date-clustered t,2.168,2.16796983258936,0.002,Verified,
+G1-F C1: cluster-bootstrap CI low,2.27,2.270701217532468,0.15,Verified,different RNG stream; within bootstrap noise
+G1-F C1: cluster-bootstrap CI high,33.19,33.18584646103894,0.15,Verified,
+G1-F C1: block-bootstrap CI low,-1.34,-1.3448525974025973,0.3,Verified,5-trade-date blocks; different RNG stream
+G1-F C1: max drawdown Rs,-44077.81,-44077.80999999997,1.0,Verified,
+G1-F C1: profit factor,1.75,1.7452364468512946,0.006,Verified,
+G1-F C6: mean net %,16.785,16.78519480519481,0.002,Verified,
+G1-F C6: date-clustered t,2.088,2.087697234168692,0.002,Verified,
+G1-F C6: cluster-bootstrap CI low,1.62,1.6236784902597419,0.15,Verified,different RNG stream; within bootstrap noise
+G1-F C6: cluster-bootstrap CI high,32.65,32.645679610389614,0.15,Verified,
+G1-F C6: block-bootstrap CI low,-2.04,-2.0399911363636356,0.3,Verified,5-trade-date blocks; different RNG stream
+G1-F C6: max drawdown Rs,-44740.31,-44740.30999999997,1.0,Verified,
+G1-F C6: profit factor,1.72,1.7152251543717423,0.006,Verified,
+G1-F E1: mean net %,20.796,20.795792207792207,0.002,Verified,
+G1-F E1: date-clustered t,2.555,2.55456412257931,0.002,Verified,
+G1-F E1: cluster-bootstrap CI low,5.4,5.40085435064935,0.15,Verified,different RNG stream; within bootstrap noise
+G1-F E1: cluster-bootstrap CI high,36.74,36.74050352272724,0.15,Verified,
+G1-F E1: block-bootstrap CI low,1.25,1.2545518831168831,0.3,Verified,5-trade-date blocks; different RNG stream
+G1-F E1: max drawdown Rs,-41899.31,-41899.31,1.0,Verified,
+G1-F E1: profit factor,1.91,1.9117902717933655,0.006,Verified,
+"sensitivity cells (G1 and G1-F, 54 rows) not reproduced by the original engine",0,0,0.0,Verified,54 rows compared
+G1 regimes: trades whose VIX input is dated on or after the trade day,0,0,0.0,Verified,
+G1 vix_regime=high: n / mean %,-12.115,-12.115157647058822,0.003,Verified,n audit 85 vs 85
+G1 vix_regime=low: n / mean %,10.707,10.706808988764045,0.003,Verified,n audit 89 vs 89
+G1 vix_regime=mid: n / mean %,17.77,17.770036470588234,0.003,Verified,n audit 85 vs 85
+G1 vol_regime=high: n / mean %,-9.434,-9.434279069767442,0.003,Verified,n audit 86 vs 86
+G1 vol_regime=low: n / mean %,6.865,6.8654494252873555,0.003,Verified,n audit 87 vs 87
+G1 vol_regime=mid: n / mean %,19.158,19.158425581395345,0.003,Verified,n audit 86 vs 86
+G1 trend_prev=down: n / mean %,0.205,0.20460666666666627,0.003,Verified,n audit 135 vs 135
+G1 trend_prev=up: n / mean %,11.338,11.33829677419355,0.003,Verified,n audit 124 vs 124
+G1-F vix_regime=high: n / mean %,29.627,29.627145000000006,0.003,Verified,n audit 20 vs 20
+G1-F vix_regime=low: n / mean %,10.569,10.568902702702703,0.003,Verified,n audit 74 vs 74
+G1-F vix_regime=mid: n / mean %,27.662,27.661518333333333,0.003,Verified,n audit 60 vs 60
+G1-F vol_regime=high: n / mean %,12.527,12.527007142857142,0.003,Verified,n audit 28 vs 28
+G1-F vol_regime=low: n / mean %,9.16,9.160398591549294,0.003,Verified,n audit 71 vs 71
+G1-F vol_regime=mid: n / mean %,36.967,36.96706,0.003,Verified,n audit 55 vs 55
+G1-F trend_prev=down: n / mean %,18.536,18.53621935483871,0.003,Verified,n audit 62 vs 62
+G1-F trend_prev=up: n / mean %,20.49,20.49007826086957,0.003,Verified,n audit 92 vs 92
+G1 regimes: tercile cut points come from the whole trade window,as stated,confirmed,,Verified,"labels are descriptive; the cut points themselves use later data than any single trade, so they are not an implementable rule"
+G1-F raw recomputation: days not checkable by this script (no earlier session loaded),,2024-10-01,,Verified (calculation),limit of the review script; the datasheet-based check below covers that day
+G1-F flag recomputed from raw spot/VIX minutes vs stored g1f flag: days that disagree,0,0,0.0,Verified,"inputs: signal-day 09:15 open vs previous close, 09:15-09:29 range, VIX up to the signal minute (all known at the signal)"
+G1-F flag from the datasheet columns vs stored flag: days that disagree,0,0,0.0,Verified,258 days compared
+G1-F filter map: published-rule cell n / mean % (from raw recomputation),19.7,19.7,0.1,Verified,ties to the audit's 154 / +19.7 % (flag identical)
+G1-F filter-threshold map: share of 27 threshold cells with mean above G1's +5.5 %,,27 of 27; cell means range 9.5 to 25.4 %; n range 106-191,,Verified (calculation),"tests whether G1-F's lift depends on the exact thresholds; every cell is the same 259 signals re-filtered, so cells are not independent"
+"G1 overnight minus same-day (Rs per trade, paired on the same 259 signals)",,all 427 (t 1.04); Oct24-Sep25 898; Oct25-Oct26 -34,,Verified (calculation),"stop 50 %, ATM; overnight = next 15:29, same-day = 15:15. NOT independent evidence: G1 was picked as the best of seven variants on these same trades (strategies/S3_G1_put_overnight.md)"

@@ -1,0 +1,49 @@
+{
+  "review_git_head": "136d3de6f04615ece9f86bf63f78f79e8b4febba",
+  "index_store_git_head": "62a232575682254864037c670a4e6e9493b9797a",
+  "random_seed": 20261113,
+  "python": "3.13.2",
+  "pandas": "2.3.3",
+  "numpy": "2.5.2",
+  "reviewed_files_sha256": {
+    "stress_audit\\PREREG.md": "646f3651772a785bed25d3d5e1d1f2ee4e14e2ab1e9c7af89ade347a6f7ce3ff",
+    "stress_audit\\AMENDMENTS.md": "0d63a75a8392efedff502a48922ef609d60f1d7c97933e138e17e6abe146fe1e",
+    "stress_audit\\FREEZE.json": "6f48b8b3cb160f0a914cd87cbffd757c08a41ea89fef2aef45685b342c290e2f",
+    "stress_audit\\common.py": "d2f8fbf74d1a6641a1017b23e8dee8efa12fc83c42a898cf790d5e7b42401282",
+    "stress_audit\\s1_stress.py": "4d66b40b518b47426c7c9251b9ef9cae75c437a6a32ca810b0dd1a272c0ca2cc",
+    "stress_audit\\g1_stress.py": "30954f6477977cb2161502cc91134bc8370bf38bb751fd6ef738ab91d91fc6bf",
+    "stress_audit\\trade_audit.py": "f42dab75dd63673f7d43f7a038031fbcb42f15fcb3f7aa5636aa2b4ec7f46433",
+    "stress_audit\\build_report.py": "8e0db5060a3e2c11cf2e900d884f151898478ee00b52220f9d39844506be4e11",
+    "stress_audit\\holdout_track.py": "a89e71762a2b17152976bf0deb545ed7b7d54cb4f60b7b8e0ccaed491a289857",
+    "stress_audit\\results\\g1_ambiguous_trades.csv": "17ea0ec6698dddd08324c42d03b3982fe6b74cabb48340065cfe706138e56b68",
+    "stress_audit\\results\\g1_run_log.txt": "7c6b7f6a101e3ccbe51351c188a698e8af3a93274556383265f248cc066979de",
+    "stress_audit\\results\\g1_validation.json": "37a6ede9e3e59b8d32fe3fc970453623ad5c5128c33ebb5c36c9743b2c67089d",
+    "stress_audit\\results\\regimes_g1.csv": "95cb5d7c89840448e9c99bf0cd751eed2e1070458ba445032021201b5a9f0fa6",
+    "stress_audit\\results\\regimes_s1.csv": "e690e3fb5a2246eb633d6ce5d4a582862a8cc88d9fc857c7bc06c7a4100e6519",
+    "stress_audit\\results\\RUN_MANIFEST.json": "bf22e7f3b7f25bc340556244b8a1f175dc9f8e4960ec3cfe9ed041026f1517c3",
+    "stress_audit\\results\\s1_ambiguous_trades.csv": "8b45b9309f76737a891f8ec23685250f7f65451013ea8454b455726368ef074e",
+    "stress_audit\\results\\scenario_results_g1.csv": "3a7968332ce9847cdb56714f319f75c479c11d5cda3918945d2b80f9f3f4204a",
+    "stress_audit\\results\\scenario_results_s1.csv": "ccf157423248b5ae574ea5abe628061f5b993b11fe00a787385146ac2519f158",
+    "stress_audit\\results\\sensitivity_g1.csv": "3ae439d2e2a1f00558a63ee5baffbbaeddf64145064b7db26f2568feb13313b6",
+    "stress_audit\\results\\sensitivity_s1.csv": "9bba50ade86ebab2c2dccb742a745c3c1155def757c5393c38c3492d5cabe880",
+    "stress_audit\\results\\STRESS_REPORT.md": "5bf81660830014eb0ac60143fd7273f30646f4d8d80c53da57f5d6568730e209",
+    "stress_audit\\results\\TRADE_AUDIT.xlsx": "3591813fee5e72ed38d88bfada7c0e4e3d78b35e3002eb851bcc304fc745e1d5",
+    "stress_audit\\results\\trade_audit_log.txt": "880e0bc770356622c3ab80f5a8a9e8fb609f816c2f250af7add9b7f6e066867f",
+    "stress_audit\\results\\trades_g1_all_scenarios.csv": "1f00a8ab678fce4856554371dc5ed12b3ba9f555972d84844d0084387418909f",
+    "stress_audit\\results\\trades_s1_all_scenarios.csv": "a78663a022504b7c4f927ae7981cd0a8ddf7cec4d1cbb478a1a6089c0a323384",
+    "g1_research\\results\\g1_live_replay_trades.csv": "bca437133dd80567f2c73ee63788aefb62a6e54107045d178a4affc628dbb974",
+    "data\\results\\S3_G1_datasheet.csv": "9f42069fa2f7880647b3493e86604167a09763001c33357bd64f6710df5b058f",
+    "stress_audit\\data\\paper_ledger_snapshot_2026-11-09.json": "c76cbe7bf77c2b72bf58bf7e3ffb6a1dc89c32c2c96e95fd14b34370d1ca76a9"
+  },
+  "minute_store": {
+    "options_1m": {
+      "files": 5699,
+      "bytes": 2006889429
+    },
+    "spot_1m": {
+      "files": 244,
+      "bytes": 52109845
+    }
+  },
+  "note": "the 2.4 GB minute store is identified by its git checkout and file counts/sizes, not hashed file by file"
+}

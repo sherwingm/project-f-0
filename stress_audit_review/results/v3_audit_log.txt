@@ -1,0 +1,15 @@
+C:\Users\sherw\project-f-0\stress_audit\trade_audit.py:116: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  trades["g1f"] = trades["day0"].map(dict(zip(rp["day"].astype(str), rp["g1f"] == 1))).fillna(False)
+saved C:\Users\sherw\project-f-0\stress_audit_review\results\repro\TRADE_AUDIT.xlsx 30 S1 trades, 23 G1 trades
+{'seeded random fill': 7, 'trail exit': 4, 'stop exit': 4, 'losses (largest)': 3, 'ambiguous candle': 3, 'gap-through stop (deepest gap)': 3, 'friction (largest charges + tick vs premium)': 3, 'wins (largest)': 3}
+{'stop exit': 4, 'next-close exit': 4, 'gap-through stop (deepest gap)': 3, 'wins (largest)': 3, 'friction (largest charges + slippage vs premium)': 3, 'ambiguous minute': 3, 'losses (largest)': 3}
+29730 chars written; Holm-significant lines: [('S1 fade v12 C8', 0.0, 0.0), ('S1 fade v12 E3', 0.0, 0.0), ('S1 fade v12 E2', 0.0081, 0.3806), ('G1-F E2', 0.0089, 0.4116), ('G1-F E4', 0.009, 0.4116), ('G1-F E1', 0.0106, 0.4672), ('G1-F S5', 0.0121, 0.5221), ('G1-F S6', 0.0157, 0.6591), ('G1-F B0', 0.0159, 0.6591), ('G1-F C4', 0.0159, 0.6591), ('G1-F C5', 0.0161, 0.6591), ('G1-F C7', 0.0168, 0.6591), ('G1-F C3', 0.0217, 0.802), ('G1-F C8', 0.0274, 0.9858), ('G1-F C2', 0.0275, 0.9858), ('G1-F C1', 0.0302, 1.0), ('G1-F C6', 0.0368, 1.0), ('G1-F E3', 0.0399, 1.0)]
+
+COMPARISON with the committed files in stress_audit/results/
+TRADE_AUDIT.xlsx / Summary        IDENTICAL
+TRADE_AUDIT.xlsx / S1 trades      IDENTICAL
+TRADE_AUDIT.xlsx / S1 candles     IDENTICAL
+TRADE_AUDIT.xlsx / G1 trades      IDENTICAL
+TRADE_AUDIT.xlsx / G1 minutes     IDENTICAL
+TRADE_AUDIT.xlsx / Scenarios      IDENTICAL
+STRESS_REPORT.md (without its 'Run:' header line) DIFFERENT (1 lines)

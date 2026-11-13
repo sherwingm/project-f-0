@@ -1,0 +1,36 @@
+baseline set: 339 trades
+B0: {'n': 339, 'exp_pct': np.float64(2.861), 'net_rs': np.float64(68160.0), 't_clustered': 1.79}
+ambiguous trades (order L vs H differ): 200
+   scenario    n  exp_pct    net_rs  win_pct  profit_factor  max_dd_rs  t_clustered  delta_vs_B0_rs                                                                           verdict
+0        B0  339    2.861   68160.0     55.2           1.39  -11234.87        1.790             0.0                                       insufficient evidence (interval contains 0)
+1       S0H  339    0.228   16549.0     54.3           1.10  -15635.41        0.162        -51611.0                                       insufficient evidence (interval contains 0)
+2       S0W  339   -2.331  -31984.0     50.1           0.82  -36838.55       -1.749       -100144.0                                               bound only - not used for a verdict
+3       S0B  339    5.420  116694.0     59.3           1.71   -8497.95        3.283         48534.0                                               bound only - not used for a verdict
+4        C1  339    0.893   28930.0     53.4           1.15  -13842.08        0.575        -39230.0                                       insufficient evidence (interval contains 0)
+5       C2a  339   -1.130   -8476.0     51.3           0.96  -20001.83       -0.729        -76636.0                                       insufficient evidence (interval contains 0)
+6       C2b  339   -0.686    -829.0     50.7           1.00  -24810.55       -0.437        -68989.0                                       insufficient evidence (interval contains 0)
+7        C3  339    1.600   47502.0     55.2           1.26  -11861.49        1.003        -20658.0                                       insufficient evidence (interval contains 0)
+8        C4  339    2.862   68183.0     55.2           1.39  -11234.32        1.791            23.0                                       insufficient evidence (interval contains 0)
+9       C5s  339    2.898   68830.0     55.2           1.40  -11213.20        1.812           670.0                                       insufficient evidence (interval contains 0)
+10       C6  339   -2.363  -29077.0     50.1           0.87  -35360.20       -1.528        -97237.0                                       insufficient evidence (interval contains 0)
+11       C7  339    2.305   57478.0     54.6           1.32  -12097.09        1.458        -10682.0                                       insufficient evidence (interval contains 0)
+12       E1  339   -1.529  -31369.0     49.6           0.85  -42287.42       -1.155        -99529.0                                       insufficient evidence (interval contains 0)
+13       E2  339   -2.916  -56026.0     49.0           0.73  -66763.08       -2.648       -124186.0                                                                 negative evidence
+14       E3  339   -7.097 -138563.0     38.6           0.49 -139745.51       -4.893       -206723.0                                                                 negative evidence
+15       E4   95    1.194    3908.0     53.7           1.07  -12178.89        0.309        -64252.0                                       insufficient evidence (interval contains 0)
+16       S2  339    0.735   31958.0     55.2           1.15  -14610.17        0.420        -36202.0                                       insufficient evidence (interval contains 0)
+17       S3  339    2.497   61624.0     55.5           1.34  -11584.96        1.521         -6536.0                                       insufficient evidence (interval contains 0)
+18      S3t  339    2.284   52612.0     51.0           1.29  -18163.52        1.308        -15548.0                                       insufficient evidence (interval contains 0)
+19       S4  339   -0.837   -6569.0     48.4           0.96  -18181.09       -0.552        -74729.0                                       insufficient evidence (interval contains 0)
+20       C8  339   -7.643 -152098.0     38.1           0.47 -160895.81       -5.387       -220258.0                                                                 negative evidence
+21    E5_10  305    2.865   61568.0      NaN            NaN        NaN          NaN             NaN  5th-95th percentile of the draws in the ci95 columns (not a confidence interval)
+22    E5_20  271    2.903   55172.0      NaN            NaN        NaN          NaN             NaN  5th-95th percentile of the draws in the ci95 columns (not a confidence interval)
+23    E5_30  237    2.882   48008.0      NaN            NaN        NaN          NaN             NaN  5th-95th percentile of the draws in the ci95 columns (not a confidence interval)
+sensitivity cells with exp_pct > 0: 36 of 36
+
+COMPARISON with the committed files in stress_audit/results/
+scenario_results_s1.csv              IDENTICAL
+sensitivity_s1.csv                   IDENTICAL
+regimes_s1.csv                       IDENTICAL
+trades_s1_all_scenarios.csv          IDENTICAL
+s1_ambiguous_trades.csv              IDENTICAL
