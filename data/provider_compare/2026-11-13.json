@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -48.0
+  },
+  {
+   "at": "11:55:10",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.55,
+   "same_best_bid_pct": 45.5,
+   "same_best_ask_pct": 42.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 87.9,
+   "upstox_minus_kotak_quote_time_s_median": -14.5
   }
  ],
  "top_gaps": [
@@ -499,6 +513,13 @@
    "kotak": 21.45,
    "upstox": 21.1,
    "at": "09:20"
+  },
+  {
+   "contract": "TITAN26NOV5100CE",
+   "gap_pct": 1.55,
+   "kotak": 12.9,
+   "upstox": 13.1,
+   "at": "11:55"
   },
   {
    "contract": "HDFCLIFE26NOV595CE",
@@ -569,23 +590,16 @@
    "kotak": 55.7,
    "upstox": 55.05,
    "at": "09:25"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 1.136,
-   "kotak": 35.2,
-   "upstox": 34.8,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 2041,
+  "rounds": 32,
+  "contract_quotes": 2107,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 36.9,
-  "same_best_ask_pct": 38.5,
+  "same_best_bid_pct": 37.4,
+  "same_best_ask_pct": 38.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 92.4,
-  "upstox_minus_kotak_quote_time_s_median": -28.0
+  "upstox_minus_kotak_quote_time_s_median": -26.5
  }
 }
