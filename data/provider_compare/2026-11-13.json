@@ -280,6 +280,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -34.0
+  },
+  {
+   "at": "11:00:08",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.369,
+   "same_best_bid_pct": 47.0,
+   "same_best_ask_pct": 39.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 89.4,
+   "upstox_minus_kotak_quote_time_s_median": -38.5
   }
  ],
  "top_gaps": [
@@ -382,6 +396,13 @@
    "at": "09:45"
   },
   {
+   "contract": "TVSMOTOR26NOV4500PE",
+   "gap_pct": 1.369,
+   "kotak": 84.0,
+   "upstox": 82.85,
+   "at": "11:00"
+  },
+  {
    "contract": "AMBER26NOV6300PE",
    "gap_pct": 1.341,
    "kotak": 234.9,
@@ -415,23 +436,16 @@
    "kotak": 22.65,
    "upstox": 22.9,
    "at": "09:25"
-  },
-  {
-   "contract": "AUROPHARMA26NOV1820CE",
-   "gap_pct": 1.087,
-   "kotak": 41.4,
-   "upstox": 41.85,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 1317,
+  "rounds": 21,
+  "contract_quotes": 1383,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 35.6,
-  "same_best_ask_pct": 35.9,
+  "same_best_bid_pct": 36.4,
+  "same_best_ask_pct": 36.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.45,
-  "upstox_minus_kotak_quote_time_s_median": -22.25
+  "oi_same_pct": 92.4,
+  "upstox_minus_kotak_quote_time_s_median": -23.5
  }
 }
