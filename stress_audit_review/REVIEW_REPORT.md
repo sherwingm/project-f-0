@@ -1,6 +1,6 @@
 # Independent review of the stress audit (commit 136d3de6f)
 
-Reviewer run: repo HEAD 136d3de6f (review files are uncommitted until you approve), fo-index-data checkout 62a232575 (clean), seed 20261113.
+Reviewer run: repo HEAD 9c926e0f3 (the review is committed locally and NOT pushed; pushing is network use, so it waits for your approval), fo-index-data checkout 62a232575 (clean), seed 20261113.
 Scope: `stress_audit/` (PREREG, AMENDMENTS, FREEZE, scripts, results, trade-audit workbook, run manifest), `docs/research/experiments.csv`, `PROGRESS.md`, Git
 commits dafc8f685, 7cc23d7ff, f81de746e, 3fa031ee3, 136d3de6f, and the reviewer's own session transcript for process facts.
 Rules followed: offline, local files and Git history only; no VM, broker or API; no `git pull` / `git push` in this review; the sealed expiry dataset was not opened
