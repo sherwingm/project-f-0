@@ -196,6 +196,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "10:30:06",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.948,
+   "same_best_bid_pct": 39.4,
+   "same_best_ask_pct": 36.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.4,
+   "upstox_minus_kotak_quote_time_s_median": -36.0
   }
  ],
  "top_gaps": [
@@ -219,6 +233,13 @@
    "kotak": 18.8,
    "upstox": 18.35,
    "at": "09:30"
+  },
+  {
+   "contract": "NYKAA26NOV360CE",
+   "gap_pct": 1.948,
+   "kotak": 7.7,
+   "upstox": 7.85,
+   "at": "10:30"
   },
   {
    "contract": "DRREDDY26NOV1400CE",
@@ -331,23 +352,16 @@
    "kotak": 9.45,
    "upstox": 9.55,
    "at": "10:05"
-  },
-  {
-   "contract": "TITAN26NOV5100CE",
-   "gap_pct": 1.042,
-   "kotak": 19.2,
-   "upstox": 19.0,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 921,
+  "rounds": 15,
+  "contract_quotes": 987,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.3,
+  "same_best_bid_pct": 34.8,
   "same_best_ask_pct": 31.8,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 92.4,
-  "upstox_minus_kotak_quote_time_s_median": -15.75
+  "upstox_minus_kotak_quote_time_s_median": -18.0
  }
 }
