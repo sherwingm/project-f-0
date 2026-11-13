@@ -756,6 +756,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -40.5
+  },
+  {
+   "at": "13:50:15",
+   "contracts": 65,
+   "on_both": 65,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.564,
+   "same_best_bid_pct": 44.6,
+   "same_best_ask_pct": 60.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.8,
+   "upstox_minus_kotak_quote_time_s_median": -47.0
   }
  ],
  "top_gaps": [
@@ -786,6 +800,13 @@
    "kotak": 6.85,
    "upstox": 6.65,
    "at": "10:35"
+  },
+  {
+   "contract": "KALYANKJIL26NOV760CE",
+   "gap_pct": 2.564,
+   "kotak": 5.85,
+   "upstox": 5.7,
+   "at": "13:50"
   },
   {
    "contract": "AXISBANK26NOV1330CE",
@@ -891,23 +912,16 @@
    "kotak": 218.0,
    "upstox": 215.0,
    "at": "12:10"
-  },
-  {
-   "contract": "TVSMOTOR26NOV4500PE",
-   "gap_pct": 1.369,
-   "kotak": 84.0,
-   "upstox": 82.85,
-   "at": "11:00"
   }
  ],
  "day": {
-  "rounds": 54,
-  "contract_quotes": 3556,
+  "rounds": 55,
+  "contract_quotes": 3621,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.05,
+  "same_best_bid_pct": 44.6,
   "same_best_ask_pct": 45.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.85,
-  "upstox_minus_kotak_quote_time_s_median": -33.75
+  "oi_same_pct": 93.8,
+  "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
