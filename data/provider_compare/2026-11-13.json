@@ -294,6 +294,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 89.4,
    "upstox_minus_kotak_quote_time_s_median": -38.5
+  },
+  {
+   "at": "11:05:08",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.408,
+   "same_best_bid_pct": 39.4,
+   "same_best_ask_pct": 43.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.4,
+   "upstox_minus_kotak_quote_time_s_median": -32.5
   }
  ],
  "top_gaps": [
@@ -382,6 +396,13 @@
    "at": "09:25"
   },
   {
+   "contract": "GLENMARK26NOV2800CE",
+   "gap_pct": 1.408,
+   "kotak": 14.2,
+   "upstox": 14.4,
+   "at": "11:05"
+  },
+  {
    "contract": "M&M26NOV3400CE",
    "gap_pct": 1.395,
    "kotak": 46.6,
@@ -410,6 +431,13 @@
    "at": "09:20"
   },
   {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 1.22,
+   "kotak": 16.4,
+   "upstox": 16.6,
+   "at": "11:05"
+  },
+  {
    "contract": "BSE26NOV4000CE",
    "gap_pct": 1.167,
    "kotak": 55.7,
@@ -422,30 +450,16 @@
    "kotak": 35.2,
    "upstox": 34.8,
    "at": "09:25"
-  },
-  {
-   "contract": "BAJFINANCE26NOV1100CE",
-   "gap_pct": 1.109,
-   "kotak": 22.55,
-   "upstox": 22.3,
-   "at": "09:30"
-  },
-  {
-   "contract": "AUROPHARMA26NOV1860CE",
-   "gap_pct": 1.104,
-   "kotak": 22.65,
-   "upstox": 22.9,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 1383,
+  "rounds": 22,
+  "contract_quotes": 1449,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 36.4,
   "same_best_ask_pct": 36.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 92.4,
-  "upstox_minus_kotak_quote_time_s_median": -23.5
+  "upstox_minus_kotak_quote_time_s_median": -23.75
  }
 }
