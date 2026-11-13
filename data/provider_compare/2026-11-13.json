@@ -126,6 +126,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -9.5
+  },
+  {
+   "at": "10:05:05",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.167,
+   "same_best_bid_pct": 36.4,
+   "same_best_ask_pct": 31.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.4,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -135,6 +149,13 @@
    "kotak": 24.0,
    "upstox": 23.0,
    "at": "09:55"
+  },
+  {
+   "contract": "IDEA26NOV13CE",
+   "gap_pct": 4.167,
+   "kotak": 0.24,
+   "upstox": 0.25,
+   "at": "10:05"
   },
   {
    "contract": "AXISBANK26NOV1330CE",
@@ -249,35 +270,28 @@
    "at": "09:30"
   },
   {
+   "contract": "GLENMARK26NOV2880CE",
+   "gap_pct": 1.058,
+   "kotak": 9.45,
+   "upstox": 9.55,
+   "at": "10:05"
+  },
+  {
    "contract": "TITAN26NOV5100CE",
    "gap_pct": 1.042,
    "kotak": 19.2,
    "upstox": 19.0,
    "at": "09:30"
-  },
-  {
-   "contract": "ABB26NOV7000CE",
-   "gap_pct": 0.931,
-   "kotak": 236.35,
-   "upstox": 238.55,
-   "at": "09:20"
-  },
-  {
-   "contract": "GVT&D26NOV4300PE",
-   "gap_pct": 0.908,
-   "kotak": 121.2,
-   "upstox": 120.1,
-   "at": "09:55"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 592,
+  "rounds": 10,
+  "contract_quotes": 658,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.3,
-  "same_best_ask_pct": 29.2,
+  "same_best_bid_pct": 33.05,
+  "same_best_ask_pct": 29.55,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.3,
-  "upstox_minus_kotak_quote_time_s_median": -11.0
+  "oi_same_pct": 92.35,
+  "upstox_minus_kotak_quote_time_s_median": -10.5
  }
 }
