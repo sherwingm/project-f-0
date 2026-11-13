@@ -194,6 +194,10 @@ def holm(pvals: dict[str, float]) -> dict[str, float]:
 
 def write_manifest(extra: dict) -> None:
     OUT.mkdir(parents=True, exist_ok=True)
-    m = {"run_time_ist": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+05:30"), "git_head": git_head(), "seed": SEED,
+    prev = {}
+    if (OUT / "RUN_MANIFEST.json").exists():
+        prev = json.loads((OUT / "RUN_MANIFEST.json").read_text(encoding="utf-8"))
+    dirty = subprocess.check_output(["git", "status", "--porcelain", "--", "stress_audit/*.py", "scanner", "server", "index_data"], cwd=ROOT, text=True).strip()
+    m = {**prev, "scripts_clean_at_run": not dirty, "uncommitted_script_files": dirty.splitlines(), "run_time_ist": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+05:30"), "git_head": git_head(), "seed": SEED,
          "prereg": "stress_audit/PREREG.md", **extra}
     (OUT / "RUN_MANIFEST.json").write_text(json.dumps(m, indent=2, default=str), encoding="utf-8")

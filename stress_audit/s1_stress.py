@@ -144,7 +144,7 @@ def run_scenario(trades: pd.DataFrame, sid: str, **over) -> pd.DataFrame:
         r = sim(t, cfg)
         if r is None or "skipped" in (r or {}):
             continue
-        out.append({"scenario": sid, "symbol": t.symbol, "day0": t.day0, "side": t.side, "half": t.half, "lot": t.lot, **r})
+        out.append({"scenario": sid, "tid": t.Index, "symbol": t.symbol, "day0": t.day0, "side": t.side, "strike": t.strike, "half": t.half, "lot": t.lot, **r})
     return pd.DataFrame(out)
 
 
@@ -152,12 +152,11 @@ def bracket(trades: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFr
     """Order L (baseline), order H, and the per-trade worst / best of the two; plus the set of ambiguous trades (different result)."""
     L = run_scenario(trades, "B0")
     H = run_scenario(trades, "S0H", order="H")
-    m = L.merge(H, on=["symbol", "day0", "side"], suffixes=("_L", "_H"))
-    amb = set(map(tuple, m.loc[(m["net_rs_L"] - m["net_rs_H"]).abs() > 0.005, ["symbol", "day0", "side"]].to_numpy()))
-    worst = m.apply(lambda r: r if r.net_rs_L <= r.net_rs_H else r, axis=1)
+    m = L.merge(H, on="tid", suffixes=("_L", "_H"))
+    amb = set(int(x) for x in m.loc[(m["net_rs_L"] - m["net_rs_H"]).abs() > 0.005, "tid"])
     pick = lambda better: pd.DataFrame([  # noqa: E731
         {**{k: r[k + ("_L" if (r.net_rs_L <= r.net_rs_H) == (not better) else "_H")] for k in ("entry", "exit", "reason", "exit_idx", "net_rs", "net_pct", "minutes_held", "entry_candle", "exit_candle", "charges_rs")},
-         "symbol": r.symbol, "day0": r.day0, "side": r.side, "half_L": r.half_L, "lot": r.lot_L} for _, r in m.iterrows()])
+         "tid": r.tid, "symbol": r.symbol_L, "day0": r.day0_L, "side": r.side_L, "strike": r.strike_L, "half_L": r.half_L, "lot": r.lot_L} for _, r in m.iterrows()])
     W, B = pick(False), pick(True)
     for d, sid in ((W, "S0W"), (B, "S0B")):
         d["scenario"] = sid
@@ -189,6 +188,7 @@ SCENARIOS = [  # id, description, price type, overrides
 def main() -> None:
     C.OUT.mkdir(parents=True, exist_ok=True)
     trades = load_trades()
+    trades["tid"] = trades.index
     vol = C.add_regimes(trades.drop(columns=["candles"]), "day0")
     trades["volatile_day"] = vol["volatile_day"].to_numpy()
     for col in ("vix_regime", "vol_regime", "trend_prev", "half_year", "vix_prev"):
@@ -205,10 +205,9 @@ def main() -> None:
     for sid, desc, ptype, over in SCENARIOS:
         allt[sid] = run_scenario(trades, sid, **over)
         meta[sid] = (desc, ptype)
-    vmap = trades.set_index(["symbol", "day0", "side"])
     rows = []
     for sid, d in allt.items():
-        d = d.merge(trades[["symbol", "day0", "side", "vix_regime", "vol_regime", "trend_prev", "half_year"]], on=["symbol", "day0", "side"], how="left")
+        d = d.merge(trades[["tid", "vix_regime", "vol_regime", "trend_prev", "half_year"]], on="tid", how="left")
         allt[sid] = d
         s = C.summarize(d, scenario=sid, description=meta[sid][0], price_type=meta[sid][1])
         s["mean_minutes_held"] = round(d["minutes_held"].mean(), 1)
@@ -218,7 +217,7 @@ def main() -> None:
         s["mean_pct_Nov25_Sep26"] = round(halves.get("Nov25-Sep26", np.nan), 3)
         s["delta_vs_B0_rs"] = s["net_rs"] - base_row["net_rs"]
         s["delta_vs_B0_pct_points"] = round(s["exp_pct"] - base_row["exp_pct"], 3)
-        s["verdict"] = C.verdict(s, halves)
+        s["verdict"] = "bound only - not used for a verdict" if sid in ("S0W", "S0B") else C.verdict(s, halves)
         rows.append(s)
     res = pd.DataFrame(rows)
     # E5 missed entries
@@ -237,7 +236,7 @@ def main() -> None:
     res.insert(0, "strategy", "S1 fade v12")
     res.to_csv(C.OUT / "scenario_results_s1.csv", index=False)
     pd.concat(allt.values(), ignore_index=True).to_csv(C.OUT / "trades_s1_all_scenarios.csv", index=False)
-    pd.Series(sorted(amb)).to_csv(C.OUT / "s1_ambiguous_trades.csv", index=False, header=["symbol_day0_side"])
+    pd.Series(sorted(amb)).to_csv(C.OUT / "s1_ambiguous_trades.csv", index=False, header=["tid"])
     # sensitivity map (no ranking)
     sens = []
     for stp, st, gp in itertools.product((0.15, 0.20, 0.25), (0.05, 0.10, 0.15), (0.01, 0.02, 0.03, 0.04)):
