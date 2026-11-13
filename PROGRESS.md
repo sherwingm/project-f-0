@@ -1214,3 +1214,10 @@ Added (new files only, no production code changed): CLAUDE.md (about 500 tokens:
 
 ## 13 Nov 2026 (index chat): handoff rewritten before a manual /compact
 HANDOFF_INDEX_G1.md now holds the live results (G1 -73 %, G1-C -50.75 % first trade, XP -72.5 %), the rules, research results, infrastructure added on 13 Nov, known history-vs-live differences and next steps. Auto-compact stays off.
+
+## 13 Nov 2026: stress test and reality audit of S1 fade v12, G1, G1-F (approved by the user with 14 conditions)
+Pre-registered `stress_audit/PREREG.md` (+ `AMENDMENTS.md`) at dafc8f685, freeze 13 Nov 17:48:58 IST (`FREEZE.json`); offline, nothing in production changed, sealed expiry data untouched. Report: `stress_audit/results/STRESS_REPORT.md`, trade audit `TRADE_AUDIT.xlsx`, registry E-20261113-02.
+- Engine: S1 baseline reproduces exactly (339 trades, +2.86 %, Rs 68,160, t 1.79); the G1 simulator equals `s3_engine` to the rupee on 259 trades and reproduces the stored replay.
+- S1 v12 has no slippage term; +2.9 % becomes +0.9 % at 1 % a side, -1.1 % at 2 %, -1.5 % with entry one candle later, -2.4 % combined. Median trade lasts 3 minutes (136 stops, 203 trails, 0 exits at 15:19); the opposite intrabar order changes 200 of 339 trades (+0.2 %); bounds -2.3 % to +5.4 %.
+- G1 +5.5 % (t 0.94) falls to about Rs -3k to +6k with +1 % / 2x slippage; loses in high-VIX and high-volatility periods and 2026 H2; every same-day-exit setting is negative. G1-F +19.7 % stays positive in all stresses and 27 of 27 neighbours, but its filters are in-sample.
+- Charges are small (x2: -Rs 20.7k on S1; Rs 35.03 vs 35.53: +Rs 23). Verdicts: insufficient evidence for all three; prospective holdout n = 0. No improvements applied; list in section 13 of the report awaits approval.

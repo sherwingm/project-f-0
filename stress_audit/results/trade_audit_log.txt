@@ -1,0 +1,7 @@
+C:\Users\sherw\project-f-0\stress_audit\trade_audit.py:116: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  trades["g1f"] = trades["day0"].map(dict(zip(rp["day"].astype(str), rp["g1f"] == 1))).fillna(False)
+C:\Users\sherw\project-f-0\stress_audit\trade_audit.py:143: DeprecationWarning: The 'generic' unit for NumPy timedelta is deprecated, and will raise an error in the future. This includes implicit conversion of bare integers (e.g. `+ 1`).Please use a specific unit instead.
+  w = df[(df["timestamp"] >= tt - pd.Timedelta(minutes=3)) & (df["timestamp"] <= tt + pd.Timedelta(minutes=2))]
+saved C:\Users\sherw\project-f-0\stress_audit\results\TRADE_AUDIT.xlsx 30 S1 trades, 23 G1 trades
+{'seeded random fill': 7, 'trail exit': 4, 'stop exit': 4, 'losses (largest)': 3, 'ambiguous candle': 3, 'gap-through stop (deepest gap)': 3, 'friction (largest charges + tick vs premium)': 3, 'wins (largest)': 3}
+{'stop exit': 4, 'next-close exit': 4, 'gap-through stop (deepest gap)': 3, 'wins (largest)': 3, 'friction (largest charges + slippage vs premium)': 3, 'ambiguous minute': 3, 'losses (largest)': 3}

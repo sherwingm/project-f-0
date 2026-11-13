@@ -1,0 +1,126 @@
+{
+  "scripts_clean_at_run": false,
+  "uncommitted_script_files": [
+    "?? server/autoupdate.py"
+  ],
+  "run_time_ist": "2026-11-13T18:10:16+05:30",
+  "git_head": "3fa031ee3ceedf8579786027b0fa34e1da9e552c",
+  "seed": 20261113,
+  "prereg": "stress_audit/PREREG.md",
+  "s1_inputs": [
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_bandv10_contracts.csv",
+      "bytes": 37233,
+      "sha256": "5310b19e4ba4ff39cbda86b35124d3f945c0117d2f0280ed43d74026fbdd5d40"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_bandv10_minutes.csv",
+      "bytes": 15230217,
+      "sha256": "e0319f1dda7e2bf4225b9f83a7517765d2e823739dfe855721ab3682f1974569"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band12_contracts.csv",
+      "bytes": 18446,
+      "sha256": "a659e835ad1c617184a58d08064f92ad1ebd12db95a0d640cb8623ce8947cb5a"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band12_minutes.csv",
+      "bytes": 6371365,
+      "sha256": "53227fc41526586a92a9b5d0a175376cd40b56ca45c36a11034d8fc03848ec36"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band12q4_contracts.csv",
+      "bytes": 2536,
+      "sha256": "cd377231cf40e662d0e58d60784fad1feba7d1d2626446b868675c018d8d6f01"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band12q4_minutes.csv",
+      "bytes": 718050,
+      "sha256": "fdbd34b4e7106c50d5970bfd2bb4fb0285404e32c332e43c73300f8f371e81fa"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band050_contracts.csv",
+      "bytes": 12714,
+      "sha256": "d132ad2925a7be1338b9b9717a3bca9c4ee634511765258ab7154829c96772f5"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band050_minutes.csv",
+      "bytes": 4348728,
+      "sha256": "b829091a1e170ad412a5a83375762d97ad1a33bbbd1e2fd78ef7e44eff9eeebc"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band050q4_contracts.csv",
+      "bytes": 1672,
+      "sha256": "cb480c3e7476e073742b13075c8faa1a691c6b81cd23956fde21f86803ce097f"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_band050q4_minutes.csv",
+      "bytes": 468723,
+      "sha256": "bd0122a10676f28710606062eb7cf1c2cdd1fc8b74f774d28dbfb250f7b7c680"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\results\\S1_v10_trades.csv",
+      "bytes": 186510,
+      "sha256": "6d6885be6030d2907658ad4c0cbbf792f9a04484db5fc1f9c06a559e21ba49ae"
+    },
+    {
+      "file": "C:\\Users\\sherw\\project-f-0\\data\\eod2\\nifty 50.csv",
+      "bytes": 72548,
+      "sha256": "a1884b4a5af958d39d35da00aff92b44a21f147748159b3e1adec4665ee07749"
+    },
+    {
+      "file": "C:\\Users\\sherw\\fo-index-data\\data\\index\\vix_daily.parquet",
+      "bytes": 99845,
+      "sha256": "1d0010d7b73c2a716ec4a8f856691c8e8b5f3fbf04ecb91ee906af5692d88c69"
+    }
+  ],
+  "s1_baseline_trades": 339,
+  "s1_scenarios": [
+    "C1",
+    "C2a",
+    "C2b",
+    "C3",
+    "C4",
+    "C5s",
+    "C6",
+    "C7",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "S2",
+    "S3",
+    "S3t",
+    "S4",
+    "C8"
+  ],
+  "g1_validation": {
+    "trades_collected": 263,
+    "sim_trades": 259,
+    "engine_trades": 259,
+    "max_abs_diff_vs_engine_rs": 0.0,
+    "n_diff_over_1rs": 0,
+    "engine_total_rs": 41309.0,
+    "sim_total_rs": 41309.0,
+    "replay_file_trades": 259,
+    "replay_file_total_rs_undated_stt": 40448.0,
+    "replay_file_g1f_trades": 154,
+    "replay_file_g1f_total_rs": 247046.0
+  },
+  "g1_scenarios": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "S5",
+    "S6",
+    "C8"
+  ]
+}
