@@ -896,6 +896,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -22.5
+  },
+  {
+   "at": "14:40:18",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.883,
+   "same_best_bid_pct": 39.4,
+   "same_best_ask_pct": 36.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.5,
+   "upstox_minus_kotak_quote_time_s_median": -49.5
   }
  ],
  "top_gaps": [
@@ -912,6 +926,13 @@
    "kotak": 0.24,
    "upstox": 0.25,
    "at": "10:05"
+  },
+  {
+   "contract": "AUROPHARMA26NOV1880CE",
+   "gap_pct": 3.883,
+   "kotak": 10.3,
+   "upstox": 10.7,
+   "at": "14:40"
   },
   {
    "contract": "INOXWIND26NOV65PE",
@@ -1031,23 +1052,16 @@
    "kotak": 17.1,
    "upstox": 16.85,
    "at": "09:25"
-  },
-  {
-   "contract": "GLENMARK26NOV2800CE",
-   "gap_pct": 1.408,
-   "kotak": 14.2,
-   "upstox": 14.4,
-   "at": "11:05"
   }
  ],
  "day": {
-  "rounds": 64,
-  "contract_quotes": 4214,
+  "rounds": 65,
+  "contract_quotes": 4280,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.5,
   "same_best_ask_pct": 45.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.9,
-  "upstox_minus_kotak_quote_time_s_median": -33.75
+  "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
