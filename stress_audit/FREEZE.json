@@ -1,0 +1,41 @@
+{
+  "freeze_time_ist": "2026-11-13T17:48:58+05:30",
+  "clock_note": "PC local clock (UTC+05:30), checked against the last repo commit (13 Nov 16:01 +0530) on the same day; the VM clock was not read (offline).",
+  "counting_rule": "a paper trade counts as prospective holdout only if its entry time is after freeze_time_ist, it was made under the rules below, and it was not reported before",
+  "repo_head_at_freeze": "71d5c19db830a9d585d80475ec0805afa11565e7",
+  "preregistration_commit": "to be filled by the follow-up commit (before any experiment)",
+  "strategies": {
+    "S1_fade_v12": {
+      "version_tag_in_ledger": "rule.version = v12",
+      "page": "strategies/S1_v12_fade_trail2.md (+ S1_v12_sub2_listing.md for refused signals, S1_paper_entry_todays_book.md)",
+      "live_since": "2026-10-22 (v12 exit); entry-timing rule last changed 2026-11-02 17:41 IST",
+      "last_rule_commits": {"exit": "9e9f85307 (2026-10-21 17:31)", "entry_waits_for_todays_book": "4e2ce3e86 (2026-11-02 17:41)", "server/fade.py last change": "4e2ce3e86815fa735bb29cafd64c6bbe8bfb48ca"},
+      "parameters": {
+        "signal": "results filing; strong = NP YoY > +10 %, NP QoQ > 0, revenue YoY > 0 -> buy put; weak = NP YoY < -10 %, NP QoQ < 0 -> buy call",
+        "expiry": "current monthly if >= 2 sessions remain after day 0, else next monthly",
+        "strike_walk": "nearest strike to the live price, away from the money, up to 15 strikes; first with two-sided quote, spread <= 10 % of ask, ask >= Rs 2, one lot Rs 600-8,000",
+        "entry": "live ask, from 09:15:00, retried every second; waits for the option's first trade today",
+        "exit": "from 09:16: bid <= 0.80 x entry sells (stop); bid >= 1.10 x entry turns the trail on, then bid <= 0.98 x highest bid since sells; else first poll from 15:20 at the best bid",
+        "size": "1 lot", "stop": 0.20, "trail_start": 0.10, "trail_gap": 0.02, "price_floor_rs": 2, "lot_band_rs": [600, 8000]
+      }
+    },
+    "G1": {
+      "page": "strategies/S3_G1_put_overnight.md",
+      "live_since": "2026-11-05 (first live trade 2026-11-09 per HANDOFF); exit rule last changed 2026-11-06 13:32 IST (60a058f0b)",
+      "last_rule_commit": "60a058f0b18d132700205cf1105a75352cdbc22b; server/g1_live.py last touched by 1d46d134ed4ab5722d9edfe7b0425fafb7ee838a (G1-C refactor, rules unchanged)",
+      "parameters": {
+        "opening_range": "NIFTY 1-minute bars 09:15-09:29",
+        "signal": "first 1-minute close outside the range from 09:30 to 13:00; trade only when below the low",
+        "option": "ATM put (strike nearest the entry minute close, step 50), nearest weekly expiry after today",
+        "entry": "last ask of the minute after the signal minute", "lot": 65, "size": "1 lot",
+        "stop": "bid <= 0.50 x price paid, any second, both days",
+        "exit": "best bid at the first quote of the next session's 15:29 minute (from 2026-11-06)"
+      }
+    },
+    "G1-F": {
+      "parameters": {"same_as": "G1", "filters": "take the trade only when day-1 opening gap < +0.3 %, range width not in 0.5-0.8 %, India VIX < 17"},
+      "main_track_since": "2026-11-06 (76dc84328)"
+    }
+  },
+  "not_holdout": "S1 live trades from 22 Oct to the freeze, and G1 trades from 9 Nov to the freeze, were seen and discussed before this audit: descriptive only"
+}
