@@ -56,6 +56,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.3,
    "upstox_minus_kotak_quote_time_s_median": -18.0
+  },
+  {
+   "at": "09:40:04",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.855,
+   "same_best_bid_pct": 36.4,
+   "same_best_ask_pct": 42.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.4,
+   "upstox_minus_kotak_quote_time_s_median": -13.5
   }
  ],
  "top_gaps": [
@@ -165,6 +179,13 @@
    "at": "09:20"
   },
   {
+   "contract": "BHARTIARTL26NOV2100CE",
+   "gap_pct": 0.855,
+   "kotak": 23.4,
+   "upstox": 23.6,
+   "at": "09:40"
+  },
+  {
    "contract": "KALYANKJIL26NOV760CE",
    "gap_pct": 0.833,
    "kotak": 6.0,
@@ -186,28 +207,21 @@
    "at": "09:25"
   },
   {
-   "contract": "BAJFINANCE26NOV1100PE",
-   "gap_pct": 0.493,
-   "kotak": 20.3,
-   "upstox": 20.4,
-   "at": "09:30"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 0.458,
-   "kotak": 21.85,
-   "upstox": 21.95,
-   "at": "09:30"
+   "contract": "COFORGE26NOV2060CE",
+   "gap_pct": 0.726,
+   "kotak": 55.1,
+   "upstox": 55.5,
+   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 264,
+  "rounds": 5,
+  "contract_quotes": 330,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.55,
-  "same_best_ask_pct": 22.3,
+  "same_best_bid_pct": 29.2,
+  "same_best_ask_pct": 23.1,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.65,
-  "upstox_minus_kotak_quote_time_s_median": -7.0
+  "oi_same_pct": 92.3,
+  "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
