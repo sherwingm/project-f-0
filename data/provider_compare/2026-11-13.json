@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.4,
    "upstox_minus_kotak_quote_time_s_median": -36.0
+  },
+  {
+   "at": "10:35:06",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.92,
+   "same_best_bid_pct": 31.8,
+   "same_best_ask_pct": 36.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -23.5
   }
  ],
  "top_gaps": [
@@ -226,6 +240,13 @@
    "kotak": 0.24,
    "upstox": 0.25,
    "at": "10:05"
+  },
+  {
+   "contract": "OIL26NOV445CE",
+   "gap_pct": 2.92,
+   "kotak": 6.85,
+   "upstox": 6.65,
+   "at": "10:35"
   },
   {
    "contract": "AXISBANK26NOV1330CE",
@@ -345,23 +366,16 @@
    "kotak": 41.4,
    "upstox": 41.85,
    "at": "09:30"
-  },
-  {
-   "contract": "GLENMARK26NOV2880CE",
-   "gap_pct": 1.058,
-   "kotak": 9.45,
-   "upstox": 9.55,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 987,
+  "rounds": 16,
+  "contract_quotes": 1053,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.8,
-  "same_best_ask_pct": 31.8,
+  "same_best_bid_pct": 34.3,
+  "same_best_ask_pct": 33.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 92.4,
-  "upstox_minus_kotak_quote_time_s_median": -18.0
+  "upstox_minus_kotak_quote_time_s_median": -18.5
  }
 }
