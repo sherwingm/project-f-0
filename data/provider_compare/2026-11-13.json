@@ -742,6 +742,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -88.5
+  },
+  {
+   "at": "13:45:15",
+   "contracts": 66,
+   "on_both": 66,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.595,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 53.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -40.5
   }
  ],
  "top_gaps": [
@@ -758,6 +772,13 @@
    "kotak": 0.24,
    "upstox": 0.25,
    "at": "10:05"
+  },
+  {
+   "contract": "INOXWIND26NOV65PE",
+   "gap_pct": 3.595,
+   "kotak": 3.06,
+   "upstox": 2.95,
+   "at": "13:45"
   },
   {
    "contract": "OIL26NOV445CE",
@@ -877,23 +898,16 @@
    "kotak": 84.0,
    "upstox": 82.85,
    "at": "11:00"
-  },
-  {
-   "contract": "AMBER26NOV6300PE",
-   "gap_pct": 1.341,
-   "kotak": 234.9,
-   "upstox": 238.05,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 53,
-  "contract_quotes": 3490,
+  "rounds": 54,
+  "contract_quotes": 3556,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 44.6,
+  "same_best_bid_pct": 45.05,
   "same_best_ask_pct": 45.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.8,
-  "upstox_minus_kotak_quote_time_s_median": -33.5
+  "oi_same_pct": 93.85,
+  "upstox_minus_kotak_quote_time_s_median": -33.75
  }
 }
