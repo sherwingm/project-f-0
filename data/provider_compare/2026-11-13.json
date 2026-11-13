@@ -28,9 +28,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.0,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "09:30:03",
+   "contracts": 67,
+   "on_both": 67,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.394,
+   "same_best_bid_pct": 22.4,
+   "same_best_ask_pct": 29.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.5,
+   "upstox_minus_kotak_quote_time_s_median": -4.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "AXISBANK26NOV1330CE",
+   "gap_pct": 2.394,
+   "kotak": 18.8,
+   "upstox": 18.35,
+   "at": "09:30"
+  },
   {
    "contract": "DRREDDY26NOV1400CE",
    "gap_pct": 1.913,
@@ -39,11 +60,32 @@
    "at": "09:20"
   },
   {
+   "contract": "BDL26NOV1040CE",
+   "gap_pct": 1.715,
+   "kotak": 29.15,
+   "upstox": 29.65,
+   "at": "09:30"
+  },
+  {
+   "contract": "BEL26NOV405CE",
+   "gap_pct": 1.695,
+   "kotak": 5.9,
+   "upstox": 5.8,
+   "at": "09:30"
+  },
+  {
    "contract": "AUROPHARMA26NOV1860CE",
    "gap_pct": 1.632,
    "kotak": 21.45,
    "upstox": 21.1,
    "at": "09:20"
+  },
+  {
+   "contract": "TITAN26NOV5150CE",
+   "gap_pct": 1.465,
+   "kotak": 13.65,
+   "upstox": 13.45,
+   "at": "09:30"
   },
   {
    "contract": "AUROPHARMA26NOV1880CE",
@@ -74,11 +116,32 @@
    "at": "09:25"
   },
   {
+   "contract": "BAJFINANCE26NOV1100CE",
+   "gap_pct": 1.109,
+   "kotak": 22.55,
+   "upstox": 22.3,
+   "at": "09:30"
+  },
+  {
    "contract": "AUROPHARMA26NOV1860CE",
    "gap_pct": 1.104,
    "kotak": 22.65,
    "upstox": 22.9,
    "at": "09:25"
+  },
+  {
+   "contract": "AUROPHARMA26NOV1820CE",
+   "gap_pct": 1.087,
+   "kotak": 41.4,
+   "upstox": 41.85,
+   "at": "09:30"
+  },
+  {
+   "contract": "TITAN26NOV5100CE",
+   "gap_pct": 1.042,
+   "kotak": 19.2,
+   "upstox": 19.0,
+   "at": "09:30"
   },
   {
    "contract": "ABB26NOV7000CE",
@@ -95,6 +158,13 @@
    "at": "09:20"
   },
   {
+   "contract": "DRREDDY26NOV1400CE",
+   "gap_pct": 0.769,
+   "kotak": 19.5,
+   "upstox": 19.35,
+   "at": "09:30"
+  },
+  {
    "contract": "APOLLOHOSP26NOV8600CE",
    "gap_pct": 0.763,
    "kotak": 131.0,
@@ -102,84 +172,28 @@
    "at": "09:25"
   },
   {
+   "contract": "BAJFINANCE26NOV1100PE",
+   "gap_pct": 0.493,
+   "kotak": 20.3,
+   "upstox": 20.4,
+   "at": "09:30"
+  },
+  {
    "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 0.242,
-   "kotak": 20.7,
-   "upstox": 20.75,
-   "at": "09:25"
-  },
-  {
-   "contract": "AMBER26NOV6300CE",
-   "gap_pct": 0.238,
-   "kotak": 209.95,
-   "upstox": 209.45,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOVFUT",
-   "gap_pct": 0.014,
-   "kotak": 6977.0,
-   "upstox": 6978.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOV1180CE",
-   "gap_pct": 0.0,
-   "kotak": 35.45,
-   "upstox": 35.45,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOV1180PE",
-   "gap_pct": 0.0,
-   "kotak": 30.3,
-   "upstox": 30.3,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1175.4,
-   "upstox": 1175.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV7000PE",
-   "gap_pct": 0.0,
-   "kotak": 263.6,
-   "upstox": 263.6,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV410CE",
-   "gap_pct": 0.0,
-   "kotak": 10.4,
-   "upstox": 10.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV410PE",
-   "gap_pct": 0.0,
-   "kotak": 7.8,
-   "upstox": 7.8,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 412.55,
-   "upstox": 412.55,
-   "at": "09:20"
+   "gap_pct": 0.458,
+   "kotak": 21.85,
+   "upstox": 21.95,
+   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 2,
-  "contract_quotes": 132,
+  "rounds": 3,
+  "contract_quotes": 199,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.1,
-  "same_best_ask_pct": 21.2,
+  "same_best_bid_pct": 23.9,
+  "same_best_ask_pct": 21.5,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.9,
-  "upstox_minus_kotak_quote_time_s_median": -7.0
+  "oi_same_pct": 91.0,
+  "upstox_minus_kotak_quote_time_s_median": -6.0
  }
 }
