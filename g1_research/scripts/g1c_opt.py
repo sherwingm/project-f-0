@@ -108,6 +108,15 @@ def pnorm_upper(t):
 def load():
     T = pd.read_csv(TRADES, parse_dates=["day"])
     T["day"] = T["day"].dt.date
+    # Amendment 1: previous close vs its 20-day SIMPLE average of daily closes (data up to the previous session only)
+    sp = L.spot_1m(WINDOW[0] - timedelta(days=60), WINDOW[1] + timedelta(days=10), "NIFTY50")
+    sp["d"] = sp["timestamp"].dt.date
+    g = {d: x for d, x in sp.groupby("d") if len(x) >= G.MIN_BARS}
+    ses = sorted(g)
+    dc = pd.Series({d: float(g[d]["close"].iloc[-1]) for d in ses})
+    sma = dc.rolling(20).mean()
+    prev = {ses[i]: ses[i - 1] for i in range(1, len(ses))}
+    T["prev_vs_sma20_pct"] = [(dc[prev[d]] / sma[prev[d]] - 1) * 100 if d in prev and not np.isnan(sma[prev[d]]) else np.nan for d in T["day"]]
     return T
 
 
@@ -121,6 +130,9 @@ def cells(T, med):
     for f in FEATURES:
         out[f"{f}_keepLE"] = (T[f].to_numpy() <= med[f], "B", "B_peak")      # skip when the feature is above the discovery median
         out[f"{f}_keepGT"] = (T[f].to_numpy() > med[f], "B", "B_peak")       # skip when it is at or below it
+    gap, ext = T["gap_pct"].to_numpy(), T["prev_vs_sma20_pct"].to_numpy()
+    out["GAP075"] = (gap >= 0.75, "B", "B_peak")                                                  # Amendment 1
+    out["SKIPEXT"] = (~((gap >= 0.2) & (gap <= 0.5) & (ext >= 2.5)), "B", "B_peak")              # Amendment 1
     return out
 
 

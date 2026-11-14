@@ -34,3 +34,11 @@ For every cell and half: **max up first** (share reaching +50 / +100 / +200 %, m
 ## Sensitivity and amendments
 - Amendments are allowed only if written and committed before the by-cell results are printed, and must say what had been seen. Any threshold chosen after seeing a number is disclosed.
 - Output: `g1_research/scripts/g1c_opt.py` -> `results/g1c_opt_*.csv`, `G1C_OPT_RESULT.md`. Commit of this page recorded in the result.
+
+## Amendment 1 (14 Nov 2026, written while the `build` stage runs; no by-cell number had been printed or read)
+**Source:** the user's pasted notes on 14 Nov (r/IndiaAlgoTrading "11.5-year NIFTY gap" case study, Zerodha Varsity, forums). Reddit cannot be opened by our tools, so the claims are taken as written in the notes, as leads only.
+The earlier verification (`VERIFY_RESULT.md`, Test 5) checked only that post's exit rules (30 % stop, trail after +20 %), not its two gap claims. They are added here as two extra cells in the same family, tested on the same G1-C call trades (live exit, ATM):
+- **GAP075 (gap and go):** keep a call only when the day opened at least +0.75 % above the previous session's close (follow the gap). Expected to give few trades; reported "too few" if under 30 in discovery, never loosened.
+- **SKIPEXT (the "87 % losing" setup):** skip a call when the day's gap is between +0.2 % and +0.5 % AND the previous close was at least 2.5 % above its 20-day **simple** moving average of daily closes. The notes give the gap size without a sign; we use the gap in the trade's direction (up, for calls). The 20-day SMA is computed from daily closes up to the previous session only.
+The family becomes 23 candidate cells; the Benjamini-Hochberg pass at 10 % runs over all tested cells including these two.
+**Not added (outside the project's rules or already tested):** short straddles / strangles before events (option selling; the user's buy-only decision of 30 Oct; a long event straddle, E1, lost -6.2 %); bull call / bear put spreads (need a sold leg; buy-only rule; would need the user's decision first); 50 / 200 SMA crosses (the notes themselves say they fail); "gap >= 0.5 % confirmed, follow the gap" was already tested as S3 G1-gap (closed, -4.3 %, t -0.54; the calls-only hint failed on 2022-24 spot).
