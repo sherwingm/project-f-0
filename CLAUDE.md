@@ -8,6 +8,8 @@ Live: AWS VM (`ssh -o BatchMode=yes fo-scanner`, dir /home/ubuntu/fo_scanner), p
 
 **Research:** pre-register in `strategies/` or a `*_PREREG.md` and commit BEFORE any number. Discovery / validation split. Report max up first (share >= +50/+100/+200 %, mean, median), then the booked result. Verdicts in `DECISIONS.md`, log in `PROGRESS.md`, one row per run in `experiments.csv`. History is in-sample. Never turn an article or AI summary into a rule.
 
+**Already-solved research (read FIRST, then move on):** before any new study, strategy idea or "optimize / try / combine X" request, check what is already settled in `docs/research/experiments.csv`, `index_research/REPORT.md` (19 studies + combinations: no candidate), `g1_research/*_RESULT.md`, `DECISIONS.md` (S1 versions, S3 pods) and `strategies/*.md`. **If the user asks for something already tested, WARN and STOP**: name the earlier result (file and numbers), say what would be genuinely new, and wait. Re-run only with new data, a new rule, or the user's explicit "run it again anyway". Never re-open a sealed holdout.
+
 **Clock:** the PC clock is ~5.5 h behind IST. Read time from the VM: `ssh -o BatchMode=yes fo-scanner 'TZ=Asia/Kolkata date'`. Never restart the server 09:00-15:40 IST on a session day.
 
 **Deploy / git:** see `/deploy-vm`. Other sessions edit this folder: stage only your own files, `git pull --rebase --autostash`, commit and push each step.
