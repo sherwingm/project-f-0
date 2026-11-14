@@ -152,3 +152,14 @@ def save(df, name):
     p = os.path.join(ROOT, "results", name)
     df.to_csv(p, index=False)
     return p
+
+
+def index_close_vix():
+    """India VIX daily close from 2008 (vix_daily.parquet), extended with minute closes where the file has gaps."""
+    v = pd.read_parquet(os.path.join(os.environ["INDEX_STORE"], "vix_daily.parquet"))
+    v["d"] = pd.to_datetime(v["date"]).dt.date
+    s = v.set_index("d")["close"].dropna()
+    m = L.spot_1m(date(2025, 1, 1), END, "INDIAVIX")
+    m["d"] = m["timestamp"].dt.date
+    last = m.groupby("d")["close"].last()
+    return pd.concat([s, last[last.index > s.index.max()]]).sort_index()
