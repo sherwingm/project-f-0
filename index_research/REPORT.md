@@ -32,7 +32,7 @@ Why, in one line each:
 - **R17 Calendar anomalies** (3 cells): turn of the month passed discovery (+0.61 % a trade, t 2.54, 71 months) and **failed validation** (+0.47 %, t 1.21, 48 months). Monday short and the weekend effect: nothing.
 - **R18 NIFTY / BANKNIFTY ratio** (1 cell): 23 trades, t 0.41.
 - **R19 Calendar straddle** (sell the near weekly, buy the next weekly, NIFTY 2018-2021; 2 cells): loses -4.7 % of the far premium a trade (t -2.55); in low VIX -6.7 % (t -2.34). The "calendars when VIX is low" claim fails.
-- **R12 Combinations:** not run, by rule: no study produced a validation passer to combine.
+- **Combinations (Amendment A4, run at the user's request although no component had passed):** 10 filter mixes and 3 portfolios on NIFTY. 5 passed discovery (overnight after an up day, alone or with the 200-day trend filter, and three portfolios that lean on it); **all 5 failed validation** (2024-01 to 2025-09: +0.005 to +0.039 % a trade, t 0.2-1.6, none positive without the best 5 % or at 2x costs). Adding turn-of-month, the ML forecast or a trend filter gave no lift. Mixing weak signals did not create an edge.
 
 ## Failed approaches: most likely reasons (from their own numbers)
 1. **Cost floor.** NIFTY futures cost about 0.035 % a round trip in 2021-2025 and about 0.06 % after April 2026 (futures STT 0.05 % on sales). Intraday drifts, breakouts and momentum on the index are below that.
