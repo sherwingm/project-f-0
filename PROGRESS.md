@@ -1224,3 +1224,5 @@ Pre-registered `stress_audit/PREREG.md` (+ `AMENDMENTS.md`) at dafc8f685, freeze
 
 ## 14 Nov 2026 (index chat): G1-C optimization study
 Pre-registered (`g1_research/G1C_OPT_PREREG.md`, Amendment 1 adds the two gap claims from the user's notes). 240 call signals, discovery 113 / validation 127. 22 cells tested, none survives BH 10 % (best t +0.14); GAP075 too few (4). Baseline live rule in discovery: max up +100 % on 21 %, mean +74 %, median +40 %; booked -4.35 % a trade (t -0.56). Validation not opened. G1-C unchanged. Result: `g1_research/G1C_OPT_RESULT.md`.
+- 2026-11-14 · S1 minute backtests re-run (identical) and extended: fetched NSE F&O files 28 Sep-13 Nov, results events 10 Aug-13 Nov, eod2 closes to 13 Nov (471/473). Arm A/B: no finished trade after 26 Sep.
+  Fade extension, day 0 9-21 Oct: 15 picks, 8 buyable at 09:16, v12 -22.6 %, v10 +20 %; combined v12 +2.27 % (t 1.43). `S1_extension_oct2026.md`, `scanner/s1_extension_picks.py`, `scanner/fade_extension_test.py`, experiments E-20261114-02.

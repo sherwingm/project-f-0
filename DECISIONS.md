@@ -511,3 +511,6 @@ History trades in the S3 engine are charged the STT of their own day (options sa
 
 ### 14 Nov 2026 - G1-C optimization: no candidate
 23 pre-registered cells (exits, ITM strikes, entry-time skip filters, the gap-and-go and "small gap when extended" claims from the user's notes): none survives discovery (BH 10 %), validation not opened. G1-C keeps its live paper rules and 30-trade gate (`g1_research/G1C_OPT_RESULT.md`).
+
+### 14 Nov 2026 - S1 minute backtests re-run and extended to Oct 2026: no change
+The Arm A/B (140 and 55 trades) and fade (339 trades) minute-candle results reproduce exactly. After fetching the missing NSE files and results events, Arm A/B has no finished trade after 26 Sep (4 signals, no completed contract), and the fade adds 15 picks (day 0 9-21 Oct), 8 testable at 09:16: v12 -22.6 % on 8 trades, v10 +20 % (one winner). Earlier + extension: v12 +2.27 % a trade (t 1.43, 347 trades) against +2.86 % (t 1.79). Read against the rule fixed in `strategies/S1_extension_oct2026.md`: "fails" (extension mean <= 0), on a sample too small to confirm or reject. No rule or live change (`data/results/S1_extension_oct2026.md`).
