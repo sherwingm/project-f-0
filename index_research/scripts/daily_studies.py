@@ -140,6 +140,63 @@ def r09():
     return out
 
 
+def r19():
+    """Calendar straddle (Amendment A2): sell the near weekly ATM straddle and buy the next weekly's ATM straddle at the close 4 sessions before
+    the near expiry; at the near expiry's close the near legs settle at intrinsic (index close) and the far legs are sold at their close.
+    % = net / (far straddle premium x lot). Cells: all, VIX 1-year percentile < 30."""
+    ic = index_close()
+    vix = ic["INDIAVIX"]
+    vpct = vix.rolling(250, min_periods=200).apply(lambda x: (x[:-1] < x[-1]).mean() * 100, raw=True)
+    b = bhav("NIFTY")
+    o = b[b["FinInstrmTp"] == "IDO"]
+    spot = ic["NIFTY50"]
+    ses = sorted(set(o["TradDt"]))
+    pos = {d: i for i, d in enumerate(ses)}
+    exps = sorted(set(o["XpryDt"]))
+    lot = LOTS["NIFTY"]
+    out = []
+    for k, E in enumerate(exps[:-1]):
+        E2 = exps[k + 1]
+        if E not in pos or E not in spot.index or pos[E] < 4 or (E2 - E).days > 8:
+            continue
+        d0 = ses[pos[E] - 4]
+        if d0 not in spot.index:
+            continue
+        S0, SE = float(spot[d0]), float(spot[E])
+        c0 = o[(o["TradDt"] == d0) & (o["TtlTradgVol"] > 0)]
+        n_ = c0[c0["XpryDt"] == E]
+        f_ = c0[c0["XpryDt"] == E2]
+        if n_.empty or f_.empty:
+            continue
+        ks = np.array(sorted(set(n_["StrkPric"]) & set(f_["StrkPric"])))
+        if not len(ks):
+            continue
+        K = ks[np.argmin(abs(ks - S0))]
+        def px(fr, t):
+            r = fr[(fr["StrkPric"] == K) & (fr["OptnTp"] == t)]
+            return float(r["ClsPric"].iloc[0]) if len(r) else None
+        nc, np_, fc, fp = px(n_, "CE"), px(n_, "PE"), px(f_, "CE"), px(f_, "PE")
+        fE = o[(o["TradDt"] == E) & (o["XpryDt"] == E2) & (o["StrkPric"] == K) & (o["TtlTradgVol"] > 0)]
+        if None in (nc, np_, fc, fp) or len(fE) < 2:
+            continue
+        fce, fpe = float(fE[fE["OptnTp"] == "CE"]["ClsPric"].iloc[0]), float(fE[fE["OptnTp"] == "PE"]["ClsPric"].iloc[0])
+        intrinsic = max(0.0, SE - K) + max(0.0, K - SE)
+        rec = {"day": d0, "expiry": E}
+        for cm, sfx in ((1.0, ""), (2.0, "_2x")):
+            s = 0.01 * cm
+            near = ((nc + np_) * (1 - s) - intrinsic) * lot
+            far = ((fce + fpe) * (1 - s) - (fc + fp) * (1 + s)) * lot
+            fees = sum(CH.leg(t, sd, lot, p, on=d) ["total"] for t, sd, p, d in
+                       (("CE", "SELL", nc, d0), ("PE", "SELL", np_, d0), ("CE", "BUY", fc, d0), ("PE", "BUY", fp, d0),
+                        ("CE", "SELL", fce, E), ("PE", "SELL", fpe, E))) * cm
+            net = near + far - fees
+            rec[f"net_rs{sfx}"], rec[f"net_pct{sfx}"] = net, net / ((fc + fp) * lot) * 100
+        out.append({**rec, "cell": "NIFTY|calendar_all"})
+        if vpct.get(d0, np.nan) < 30:
+            out.append({**rec, "cell": "NIFTY|calendar_lowvix"})
+    return out
+
+
 def evaluate(study, trades):
     T = pd.DataFrame(trades)
     T["period"] = T["day"].map(per)
@@ -171,4 +228,4 @@ def evaluate(study, trades):
 
 if __name__ == "__main__":
     for st in sys.argv[1:]:
-        evaluate(st, {"R02b": r02b, "R09": r09}[st]())
+        evaluate(st, {"R02b": r02b, "R09": r09, "R19": r19}[st]())
