@@ -2,7 +2,7 @@
 
 Written 13 Nov 2026 (draft, not yet committed). Evidence-based reconstruction from git history, `DECISIONS.md`, `PROGRESS.md`,
 `HANDOFF.md`, `HANDOFF_INDEX_G1.md`, `STRATEGY_AUDIT.md`, `strategies/*.md`, `docs/research/*` and `stress_audit/results/STRESS_REPORT.md`.
-Companion files: `CHANGELOG_ANALYSIS.md` (good / bad / incomplete / regressions / unresolved), `CURRENT_PROJECT_STATE.md`, `STRATEGY_HISTORY.md`.
+Day-by-day log of the last week: `RECENT_CHANGES_2026-11-09_to_2026-11-14.md`. Companion files: `CHANGELOG_ANALYSIS.md` (good / bad / incomplete / regressions / unresolved), `CURRENT_PROJECT_STATE.md`, `STRATEGY_HISTORY.md`.
 Existing documents were not edited. Where an older document is wrong or out of date it is noted here, not corrected there.
 
 ## Executive summary
@@ -72,20 +72,13 @@ Existing documents were not edited. Where an older document is wrong or out of d
 - **6 to 7 Nov.** G1-F made the main track; G1 exit changed to the next session's close (user); "max up first" reporting default; breakout score (0 to 7, record only).
 - **7 to 9 Nov.** Searches for anything that predicts follow-through: holding patterns (first run had **circular** passes and was rejected), score methods (10), formation shapes, 5 years of spot, FII/DII positions (three variants), news tone,
   heavyweights. **None passed.** 9 Nov: public claims verified on our data (ATM vs ITM, Zerodha ORB, forum rules); all negative.
-- **10 Nov.** A VM restart reset an open G1 trade's best bid; fixed by saving marks every 30 s (`162dd2953`). The user rejected daily-candle tests; S1 arms A / B and the S1 fade were **re-run on 1-minute candles**: arm A -24.4 % (t -2.2), arm B -19.1 %; fade v12 +2.86 % (t 1.79).
-- **11 to 12 Nov.** 1-minute data audit of the G1 days (complete and consistent). G1's first live trade stopped at **-73 %** against a 50 % stop (gap through the stop). G1-C (call mirror) put on paper at the user's request although history said it loses. XP replayed on minutes: loses (-11.0 %, t -2.70).
-- **13 Nov.** Project `CLAUDE.md`, research registry, 32 validation tests, skills and an agent; STT versioned by date (effect on G1 +Rs 861, no verdict change); then the **stress test and reality audit** (see below). Manual `/compact` after a handoff rewrite.
+- **9 to 14 Nov.** Moved to `RECENT_CHANGES_2026-11-09_to_2026-11-14.md` (day-by-day log). Headlines: 1-minute re-tests of S1 arms A / B and the fade; G1's first live trade stopped at -73 %; G1-C and XP added; infrastructure (CLAUDE.md, registry, validation tests, dated STT); the stress audit, its independent review and a corrections addendum.
 
-## The stress audit of 13 Nov (latest)
-Pre-registered (`stress_audit/PREREG.md`, freeze file committed before results). Offline, no parameter tuned. Headlines:
-- S1 baseline reproduces exactly (339 trades, +2.86 %, t 1.79). The G1 simulator matches the engine to the rupee on 259 trades.
-- S1 v12 loses its edge at 2 % slippage a side (-1.13 %), one candle later entry (-1.53 %), and flips with the unknowable order inside a candle (+0.23 % vs bracket -2.33 % to +5.42 %).
-  200 of 339 trades change result between the two orderings.
-- G1 (all): +5.54 %, t 0.94; interval contains 0; slightly negative in rupees with +1 % slippage. G1-F: positive in all 27 neighbours and under every stress, but in-sample.
-- Charges are not the problem (all charges x2 costs S1 Rs 20,658; exchange charge 35.03 vs 35.53 changes under Rs 30).
-- A **look-ahead was found in S1**: the strike pick uses whole-day volume (V2).
-- Prospective holdout frozen 13 Nov 17:48:58 IST with 0 trades so far. Verdict for all three: **insufficient evidence**.
-- Unexplained: later entry and a stop on the minute low *improve* G1. Not a recommendation.
+## The stress audit of 13 Nov (summary; detail and corrections in `RECENT_CHANGES_2026-11-09_to_2026-11-14.md`)
+Pre-registered, offline, no parameter tuned (`stress_audit/`). Reproduced by an independent review (`stress_audit_review/`; arithmetic verified, process errors noted) and qualified by a corrections addendum (`stress_audit_corrections/`, 14 Nov, awaiting the user's approval).
+- S1 fade v12: +2.86 % a trade (t 1.79) shrinks to -1.13 % at 2 % slippage a side; first-candle uncertainty range +1.786 % to +3.876 %; intrabar bracket -2.33 % to +5.42 %; strike pick has a look-ahead. **Insufficient evidence; execution assumptions unrealistic.**
+- G1: +5.54 %, t 0.94, interval contains 0; robustness to stress: split. **G1-F:** +19.7 %, t 2.41, held up in every stress line, but the stress lines do not vary its three filters, which were fitted on the same data: **in-sample, not validated.**
+- Charges are not the problem; slippage and entry timing are. Prospective holdout frozen 13 Nov 17:48:58 IST, 0 trades so far.
 
 ## Backtest and execution: how the approach evolved
 Detailed comparison is in `CURRENT_PROJECT_STATE.md`. In short:
