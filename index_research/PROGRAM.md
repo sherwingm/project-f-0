@@ -77,3 +77,8 @@ NIFTYBANK daily from `index_close_daily.parquet` (2018 ->). Daily periods: D = 2
 - **R18 NIFTY / BANKNIFTY ratio reversion (index pair):** log ratio, 60-day hedge, z over 20 sessions, enter |z| > 2, exit at 0, stop 3.5 (one cell); on daily closes 2018 -> (D 2018-2021, V 2022-01 to 2024-09, L 2024-10 ->), futures costs on both legs.
 - **R19 Calendar straddle (daily bhavcopy, NIFTY):** at the close 4 sessions before a weekly expiry, sell the ATM straddle of that expiry and buy the ATM straddle of the next weekly expiry; close everything at the expiry-day close (near at intrinsic, far at its close). Cells: all, VIX 1-year percentile < 30 (the report's "low VIX -> calendars"). Option periods of R09.
 Same pass rules. Each study's BH runs over its own cells.
+
+## Amendment A3 (14 Nov, after R09's discovery numbers; exploratory, cannot pass)
+R09's two VoV cells point the same way on both indices (short when VoV is low, long when VoV is high), each t < 1. Exploration X1: the "VoV switch"
+(short the straddle when VoV < its 1-year median, long it otherwise), NIFTY and BANKNIFTY, read on V (2022-01 to 2024-09) only, from the trades R09
+already wrote. It is labelled post-hoc; it cannot become a candidate; the late period stays closed.
