@@ -9,10 +9,11 @@ Status of each study: TODO / RUNNING / DONE (verdict). Keep this file current so
 - R07 pre-event short straddle / strangle: DONE, 16 events in D (too few to test); means -3 to -13 % of credit.
 - R10 pairs (4 bank pairs): DONE, 0 passes (best SBIN-ICICIBANK raw +1.1 %, t 1.7).
 - R11 daily ML walk-forward: DONE, 0 passes (rf_all +0.056 %, t 1.71).
-- R13 intraday momentum: DONE, 0 passes; significantly NEGATIVE after costs on all 3 indices (t -2.5 to -3.7), but gross is about 0: costs (about 0.034 % a trade, mostly the 2026 futures STT) are the whole loss; the reverse would lose too.
+- R13 intraday momentum: DONE, 0 passes; significantly NEGATIVE after costs on all 3 indices (t -2.5 to -3.7), but gross is about 0: costs (about 0.034 % a trade in D: 2 points of slippage, the 0.0125 % futures STT, exchange, stamp, brokerage) are the whole loss; the reverse would lose too.
 - R14 trend filters: DONE, 0 passes (few spells: 4-55).
 - R15 reversal: DONE, 0 passes.
 - R16 VIX spikes: DONE, 7 episodes a cell in D (too few).
 - R17 calendar: DONE. turn-of-month passed discovery (+0.61 %, t 2.54, n 71) but FAILED validation (+0.47 %, t 1.21, n 48). L not opened.
 - R18 NIFTY/BANKNIFTY ratio: DONE, n 23, 0 passes.
 - RUNNING: R04, R05, R06, R08, R09. TODO: R19 (after R09 builds the bhavcopy cache), combinations (none to combine yet), robustness for any passer, final report.
+- R06 overnight short straddle / iron fly / long straddle 15:15 -> 09:16 (NIFTY minutes): DONE, 0 passes. Short straddle -1.1 % of credit (t -0.79; gross about +2 %, costs about 3 %); iron fly -3.1 % (t -3.2); long straddle -4.8 % (t -3.6). VIX 12-18 and VoV filters made it worse, not better.
