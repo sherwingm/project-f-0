@@ -60,3 +60,8 @@ sealed data, holdouts or frozen strategies, deploy nothing, place no orders.
 - **R12 Combinations:** only of strategies that pass validation, or of the standing live tracks (G1-F) with any passer; equal weights; correlation of daily P&L.
 - **Failure analysis:** for every failed family, the report states the most likely reason (costs, decay, no signal, regime) from its own numbers.
 Cells added after a number is seen are labelled "post-hoc exploration", never used for a pass.
+
+## Amendment A1 (14 Nov, before R06-R08 were run; R01-R03 results had been seen, none of R04-R11)
+- R07: the FOMC decision is announced after the Indian close, so "exit before the announcement" = 15:25 on the FOMC date (the text above said the next 09:16, which would hold through it).
+- R02 overnight trades on the index ignore the futures carry (about 0.02 % a night at 6-7 % a year); the R02b check on real daily futures (2018+) settles it.
+- R02b (added now, after R02's numbers): overnight close -> next open on the real near-month NIFTY / BANKNIFTY future from the daily bhavcopy, cells all / previous day up; D = 2018-2021, V = 2022-01 to 2024-09, L = 2024-10 ->. It is a follow-up of a seen result (labelled as such), testing whether the futures carry kills it.
