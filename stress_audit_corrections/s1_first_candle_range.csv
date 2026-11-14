@@ -1,0 +1,5 @@
+line,trades_changed,mean_net_pct,net_rs,t_clustered,source
+Original baseline (entry candle not stop-tested),0,2.861,68160,1.79,"stress_audit/results/scenario_results_s1.csv, B0"
+"41 unambiguous first-candle stops re-booked (low at or below the stop level, no +10 % print in that candle)",41,2.585,63474,1.6,stress_audit_review/results/v1_s1_checks.csv
+"All 47 re-tested, the 6 candles that also reach +10 % booked STOP-first (lower end of the range)",47,1.786,48624,1.1,same file
+"All 47 re-tested, the 6 candles that also reach +10 % booked HIGH-first (upper end of the range)",47,3.876,83039,2.63,same file
