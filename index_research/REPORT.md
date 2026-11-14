@@ -6,7 +6,7 @@ Results: `results/<study>_discovery.csv`, `_validation.csv` (only where a cell p
 Research only: nothing live changed, no order, no sealed data, the 13 Nov prospective holdout not used.
 
 ## The answer
-**No strategy family produced a candidate.** 19 studies (about 190 pre-named cells) on NIFTY, BANKNIFTY and SENSEX: 4 cells passed the first (discovery) test and **all 4 failed validation**; none reached the robustness battery or the late period. Nothing here is profitable on the evidence, and nothing is proposed for paper trading.
+**No strategy family produced a candidate.** 19 studies (about 190 pre-named cells) plus one labelled exploration on NIFTY, BANKNIFTY and SENSEX: 4 cells passed the first (discovery) test and **all 4 failed validation**; none reached the robustness battery or the late period. Nothing here is profitable on the evidence, and nothing is proposed for paper trading.
 Why, in one line each:
 - **Costs are larger than the edges.** Index-futures intraday ideas earn +0.00 to +0.04 % a trade before costs; costs are about 0.035 % a round trip (about 0.06 % since the April 2026 futures STT). Option-selling ideas earn about +2 % of the credit before costs and pay about 3 %.
 - **What looks like an edge does not repeat** in the next period (turn of the month, overnight drift after an up day).
@@ -31,7 +31,8 @@ Why, in one line each:
 - **R16 VIX spike buying** (3 cells): 7 episodes each in discovery: too few.
 - **R17 Calendar anomalies** (3 cells): turn of the month passed discovery (+0.61 % a trade, t 2.54, 71 months) and **failed validation** (+0.47 %, t 1.21, 48 months). Monday short and the weekend effect: nothing.
 - **R18 NIFTY / BANKNIFTY ratio** (1 cell): 23 trades, t 0.41.
-- **R19 Calendar straddle** (2 cells): see below.
+- **R19 Calendar straddle** (sell the near weekly, buy the next weekly, NIFTY 2018-2021; 2 cells): loses -4.7 % of the far premium a trade (t -2.55); in low VIX -6.7 % (t -2.34). The "calendars when VIX is low" claim fails.
+- **R12 Combinations:** not run, by rule: no study produced a validation passer to combine.
 
 ## Failed approaches: most likely reasons (from their own numbers)
 1. **Cost floor.** NIFTY futures cost about 0.035 % a round trip in 2021-2025 and about 0.06 % after April 2026 (futures STT 0.05 % on sales). Intraday drifts, breakouts and momentum on the index are below that.
