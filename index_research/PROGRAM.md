@@ -82,3 +82,15 @@ Same pass rules. Each study's BH runs over its own cells.
 R09's two VoV cells point the same way on both indices (short when VoV is low, long when VoV is high), each t < 1. Exploration X1: the "VoV switch"
 (short the straddle when VoV < its 1-year median, long it otherwise), NIFTY and BANKNIFTY, read on V (2022-01 to 2024-09) only, from the trades R09
 already wrote. It is labelled post-hoc; it cannot become a candidate; the late period stays closed.
+
+## Amendment A4: combinations (14 Nov, the user: "try by mixing which are the combinations that will work"; written before any combination number)
+Every component below was already seen, so a pass here is at most an **exploratory candidate** that would still need a prospective paper record.
+Common window: NIFTY50, 2021-10-20 to 2026-10-28, periods of the index-minute studies (D to 2023-12-31, V to 2025-09-30, L after; L only for V passers).
+Components (from the saved trade files; filters known at the decision time):
+A = overnight long after an up day (R02), O = overnight long every day (R02), G = gap >= 1 % follow, no stop (R01), I = intraday long when VIX is in its low tercile (R02),
+TOM = the turn-of-month window (the last 4 sessions of a month and the first session of the next), TR = previous close above its 200-day SMA (eod2 NIFTY),
+RF = the R11 random-forest probability for the next session > 0.5.
+**Filter combinations (one trade a day, NIFTY50):** C1 A; C2 A and TOM; C3 A and TR; C4 A and RF; C5 O and TR; C6 O and TOM; C7 O and RF; C8 G and trend agreement
+(gap up with TR, gap down without TR); C9 I and TR; C10 O and TOM and TR.
+**Portfolios (daily rupee sum at 1 lot each, each component traded independently):** P1 A + I; P2 A + G + I; P3 A + G + I + C8-style trend gap.
+Replications: any cell that passes V is re-run on BANKNIFTY and SENSEX (descriptive). Gates as in this program (BH 10 % over the 13 cells).
