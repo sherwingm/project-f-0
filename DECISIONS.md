@@ -508,3 +508,6 @@ The user approved the Claude Code audit plan: project CLAUDE.md, docs/research/S
 
 ### 13 Nov 2026 - STT versioned by date for the S3 engine (user approved)
 History trades in the S3 engine are charged the STT of their own day (options sale 0.0625 % / 0.10 % / 0.15 % before 2024-10-01 / to 2026-03-31 / from 2026-04-01). Other charge components stay one table; S1 / S2 backtests still use the current table. Result files recorded before this date are not recomputed. Effect on G1 history: +Rs 861 over two years, no verdict changes.
+
+### 14 Nov 2026 - G1-C optimization: no candidate
+23 pre-registered cells (exits, ITM strikes, entry-time skip filters, the gap-and-go and "small gap when extended" claims from the user's notes): none survives discovery (BH 10 %), validation not opened. G1-C keeps its live paper rules and 30-trade gate (`g1_research/G1C_OPT_RESULT.md`).

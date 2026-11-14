@@ -1221,3 +1221,6 @@ Pre-registered `stress_audit/PREREG.md` (+ `AMENDMENTS.md`) at dafc8f685, freeze
 - S1 v12 has no slippage term; +2.9 % becomes +0.9 % at 1 % a side, -1.1 % at 2 %, -1.5 % with entry one candle later, -2.4 % combined. Median trade lasts 3 minutes (136 stops, 203 trails, 0 exits at 15:19); the opposite intrabar order changes 200 of 339 trades (+0.2 %); bounds -2.3 % to +5.4 %.
 - G1 +5.5 % (t 0.94) falls to about Rs -3k to +6k with +1 % / 2x slippage; loses in high-VIX and high-volatility periods and 2026 H2; every same-day-exit setting is negative. G1-F +19.7 % stays positive in all stresses and 27 of 27 neighbours, but its filters are in-sample.
 - Charges are small (x2: -Rs 20.7k on S1; Rs 35.03 vs 35.53: +Rs 23). Verdicts: insufficient evidence for all three; prospective holdout n = 0. No improvements applied; list in section 13 of the report awaits approval.
+
+## 14 Nov 2026 (index chat): G1-C optimization study
+Pre-registered (`g1_research/G1C_OPT_PREREG.md`, Amendment 1 adds the two gap claims from the user's notes). 240 call signals, discovery 113 / validation 127. 22 cells tested, none survives BH 10 % (best t +0.14); GAP075 too few (4). Baseline live rule in discovery: max up +100 % on 21 %, mean +74 %, median +40 %; booked -4.35 % a trade (t -0.56). Validation not opened. G1-C unchanged. Result: `g1_research/G1C_OPT_RESULT.md`.
