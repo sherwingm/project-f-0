@@ -1238,3 +1238,6 @@ Already-tested parts named and not re-run (breakouts, acceptance, failed breakou
 
 ## 15 Nov 2026 (index chat): S1 daily-candle old data vs Oct 2024 to present vs minutes vs live
 At the user's request (pre-registered `strategies/S1_daily_vs_minute_vs_live.md`, script `scanner/s1_daily_vs_minute_vs_live.py`, result `data/results/S1_daily_vs_minute_vs_live.md`). Fade same-day sale on daily candles: old data +1.4 % (t 0.37), Oct 2024 on +5.7 % (t 1.42), same sign, not significantly different, but the years swing from -7 % to +11 %. Minutes v12 +2.9 %; live v12 -5.7 % (58 trades). Matched trades correlate 0.83. Arm B flips sign (old +31.8 % quoted, recent -14.5 %). 2017-18 not available.
+
+## 15 Nov 2026 (index chat): daily-candle studies by year, 2018-2026, Covid excluded
+At the user's request: slices of saved trade files (A6, window fixed before numbers). Results in `index_research/results/Y1_by_year.md`. Most cells change sign between years; weekend / Monday / turn-of-month effects fade after 2022; the calendar straddle is negative every year. Live S1 / index strategies have no daily history before 2021 / Oct 2024, so they are not in this view.
