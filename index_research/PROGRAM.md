@@ -94,3 +94,17 @@ RF = the R11 random-forest probability for the next session > 0.5.
 (gap up with TR, gap down without TR); C9 I and TR; C10 O and TOM and TR.
 **Portfolios (daily rupee sum at 1 lot each, each component traded independently):** P1 A + I; P2 A + G + I; P3 A + G + I + C8-style trend gap.
 Replications: any cell that passes V is re-run on BANKNIFTY and SENSEX (descriptive). Gates as in this program (BH 10 % over the 13 cells).
+
+## Amendment A5 (15 Nov, the user's pasted r/IndianStockMarket post "How Trading Really Works", "do it"; written before any number of R20 / R21)
+The parts of the post already tested are listed in the reply of 15 Nov (breakouts, acceptance, failed breakouts, pullbacks, reversions, trend and VIX filters, squeeze). Only the two untested parts run here.
+- **R20 Daily swing setup (his rules, index futures proxy):** setup day s (known at its close): close > SMA50, EMA10 and EMA20 both above their values 5 sessions earlier, and day s is an inside day
+  (high <= previous high and low >= previous low) or an NR7 (smallest high-low range of the last 7). Next session: buy when the high of s is broken (at the open if it opens above, else at the high of s),
+  stop = low of s. Half off at +1R; the rest exits at the first close below EMA20 (sold at that close) or the stop; at most 30 sessions. Daily bars cannot order a stop and a target touched on the same day:
+  the stop is assumed first (conservative). No new trade while one is open. Costs: 1 point (NIFTY) / 3 points (BANKNIFTY) a side + dated FUT charges, 2x for stress.
+  Cells: NIFTY {all rules; + VIX < 15 at the setup close; without the contraction condition}, the same 3 on BANKNIFTY = 6 cells.
+  Data / periods: NIFTY `data/eod2/nifty 50.csv` 2012-02 -> 2026-10-28 (D 2012-2017, V 2018-2021, L 2022 ->); BANKNIFTY `index_close_daily` 2018 -> extended with minute bars (D 2018-2021, V 2022-01 to 2024-09, L 2024-10 ->).
+  Not testable: index volume (none), breadth, his custom indicator; an option-buy version would have too few trades in the option-minute window (Oct 2024 on) and is not run.
+- **R21 "Don't buy extensions" (50 % of ADR) on G1 / G1-C:** ADR = mean of (high - low) / close over the 20 sessions before the signal day. Stretch = the move from the previous close to the
+  signal-minute close in the trade's direction, as a share of ADR (in index points). Cells: G1 puts keep stretch <= 50 % ADR; G1 puts keep > 50 % (the mirror); G1-F subset keep <= 50 %; G1-C calls keep <= 50 %;
+  G1-C calls keep > 50 % = 5 cells, on the saved live-rule replays (`g1_research/results/g1_live_replay_trades.csv`, `g1_research/data/g1c_opt_trades.csv` column B). Periods D to 2025-09-30, V after.
+Same gates as the program (BH 10 % within each study). Both studies use data already seen in other studies; a pass would be a lead for paper only.
