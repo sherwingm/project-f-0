@@ -34,6 +34,9 @@ Why, in one line each:
 - **R19 Calendar straddle** (sell the near weekly, buy the next weekly, NIFTY 2018-2021; 2 cells): loses -4.7 % of the far premium a trade (t -2.55); in low VIX -6.7 % (t -2.34). The "calendars when VIX is low" claim fails.
 - **Combinations (Amendment A4, run at the user's request although no component had passed):** 10 filter mixes and 3 portfolios on NIFTY. 5 passed discovery (overnight after an up day, alone or with the 200-day trend filter, and three portfolios that lean on it); **all 5 failed validation** (2024-01 to 2025-09: +0.005 to +0.039 % a trade, t 0.2-1.6, none positive without the best 5 % or at 2x costs). Adding turn-of-month, the ML forecast or a trend filter gave no lift. Mixing weak signals did not create an edge.
 
+- **R20 Daily swing setup from the pasted "How Trading Really Works" post** (trend above SMA50 with rising 10/20 EMA, inside day or NR7, previous-high break, stop at the previous low, half at 1R, 20 EMA trail; 6 cells, Amendment A5): 0 pass. NIFTY +0.05 % a trade (t 0.29), with VIX < 15 +0.10 %; BANKNIFTY +0.42 % (t 0.75). 14-65 setups a cell.
+- **R21 "Don't buy extensions" (50 % of ADR) on G1 / G1-C** (5 cells): 0 pass, and the rule points the wrong way: calls after a big stretch +30 % a trade (t 1.4, 26 trades) vs -15 % (t -2.0) for the unstretched ones; on G1-F it lowers the mean (+25 % -> +21 %).
+
 ## Failed approaches: most likely reasons (from their own numbers)
 1. **Cost floor.** NIFTY futures cost about 0.035 % a round trip in 2021-2025 and about 0.06 % after April 2026 (futures STT 0.05 % on sales). Intraday drifts, breakouts and momentum on the index are below that.
 2. **Decay and spread on bought options:** a long option needs a move larger than its premium; the median bought option in every buy study loses 15-50 %.
