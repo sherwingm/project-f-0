@@ -158,3 +158,12 @@ def test_open_position_marks_are_saved_so_a_restart_keeps_the_max_up(g1, tmp_pat
     run(tr, D2, time(9, 15), time(11, 5), every=20, before=d2)
     saved = json.loads((tmp_path / "g1_ledger.json").read_text(encoding="utf-8"))["open"]
     assert saved["max_bid"] == 160.0 and saved["mark"] == 120.0       # on disk, not only in memory
+
+
+def test_status_says_the_range_is_forming_during_0915_0929_not_waiting_for_0915(g1):
+    tr, st = g1
+    run(tr, D1, time(9, 15), time(9, 17), before=down_day(st))
+    s = tr.state["days"][str(D1)]["status"]
+    assert s.startswith("opening range forming until 09:30: high 24,010.00, low 24,000.00"), s
+    run(tr, D1, time(9, 18), time(9, 30), before=down_day(st))
+    assert "opening range" not in tr.state["days"][str(D1)]["status"]

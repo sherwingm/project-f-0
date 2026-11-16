@@ -201,6 +201,11 @@ class G1Trader:
     def _signal(self, now: datetime) -> None:
         st = self._today()
         phase = st.get("phase", "range")
+        if phase == "range" and now.time() < OR_TO:                # the range is forming: say so, not "waiting for 09:15"
+            rng = [b for m, b in self.bars.items() if OR_FROM <= m < OR_TO]
+            st["status"] = (f"opening range forming until {OR_TO:%H:%M}: high {max(b['h'] for b in rng):,.2f}, low {min(b['l'] for b in rng):,.2f}"
+                            if rng else f"waiting for the first {self.INDEX} price")
+            return
         if phase == "range" and now.time() >= OR_TO:
             rng = [b for m, b in self.bars.items() if OR_FROM <= m < OR_TO]
             if not rng:
