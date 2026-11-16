@@ -28,6 +28,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.5,
    "upstox_minus_kotak_quote_time_s_median": -4.0
+  },
+  {
+   "at": "09:30:03",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.151,
+   "same_best_bid_pct": 15.9,
+   "same_best_ask_pct": 4.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.1,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
@@ -39,6 +53,20 @@
    "at": "09:20"
   },
   {
+   "contract": "MARICO26NOV910CE",
+   "gap_pct": 2.151,
+   "kotak": 9.3,
+   "upstox": 9.5,
+   "at": "09:30"
+  },
+  {
+   "contract": "M&M26NOV3400CE",
+   "gap_pct": 1.929,
+   "kotak": 31.1,
+   "upstox": 31.7,
+   "at": "09:30"
+  },
+  {
    "contract": "APLAPOLLO26NOV2280CE",
    "gap_pct": 1.706,
    "kotak": 43.95,
@@ -46,11 +74,25 @@
    "at": "09:25"
   },
   {
+   "contract": "AXISBANK26NOV1340PE",
+   "gap_pct": 1.7,
+   "kotak": 17.65,
+   "upstox": 17.35,
+   "at": "09:30"
+  },
+  {
    "contract": "ANGELONE26NOV350PE",
    "gap_pct": 1.695,
    "kotak": 8.85,
    "upstox": 9.0,
    "at": "09:25"
+  },
+  {
+   "contract": "MARICO26NOV930CE",
+   "gap_pct": 1.429,
+   "kotak": 3.5,
+   "upstox": 3.55,
+   "at": "09:30"
   },
   {
    "contract": "ATHERENERG26NOV2000PE",
@@ -95,6 +137,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BSE26NOV4000CE",
+   "gap_pct": 0.58,
+   "kotak": 51.7,
+   "upstox": 52.0,
+   "at": "09:30"
+  },
+  {
    "contract": "AMBER26NOV7000CE",
    "gap_pct": 0.478,
    "kotak": 31.35,
@@ -135,51 +184,16 @@
    "kotak": 348.5,
    "upstox": 348.0,
    "at": "09:25"
-  },
-  {
-   "contract": "360ONE26NOV1180CE",
-   "gap_pct": 0.0,
-   "kotak": 24.65,
-   "upstox": 24.65,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOV1180PE",
-   "gap_pct": 0.0,
-   "kotak": 25.5,
-   "upstox": 25.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "360ONE26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1179.0,
-   "upstox": 1179.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV7000CE",
-   "gap_pct": 0.0,
-   "kotak": 184.5,
-   "upstox": 184.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26NOV7000PE",
-   "gap_pct": 0.0,
-   "kotak": 189.9,
-   "upstox": 189.9,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 2,
-  "contract_quotes": 125,
+  "rounds": 3,
+  "contract_quotes": 188,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.35,
-  "same_best_ask_pct": 26.4,
+  "same_best_bid_pct": 21.0,
+  "same_best_ask_pct": 24.2,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.4,
-  "upstox_minus_kotak_quote_time_s_median": -4.75
+  "oi_same_pct": 90.5,
+  "upstox_minus_kotak_quote_time_s_median": -5.5
  }
 }
