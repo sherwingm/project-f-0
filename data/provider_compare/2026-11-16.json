@@ -588,6 +588,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.4,
    "upstox_minus_kotak_quote_time_s_median": -15.0
+  },
+  {
+   "at": "12:50:13",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.786,
+   "same_best_bid_pct": 42.9,
+   "same_best_ask_pct": 46.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -38.0
   }
  ],
  "top_gaps": [
@@ -676,6 +690,13 @@
    "at": "12:10"
   },
   {
+   "contract": "UPL26NOV565CE",
+   "gap_pct": 1.786,
+   "kotak": 11.2,
+   "upstox": 11.4,
+   "at": "12:50"
+  },
+  {
    "contract": "SBILIFE26NOV1800CE",
    "gap_pct": 1.783,
    "kotak": 28.05,
@@ -723,23 +744,16 @@
    "kotak": 19.3,
    "upstox": 19.6,
    "at": "11:00"
-  },
-  {
-   "contract": "MARICO26NOV930CE",
-   "gap_pct": 1.471,
-   "kotak": 3.4,
-   "upstox": 3.45,
-   "at": "11:25"
   }
  ],
  "day": {
-  "rounds": 42,
-  "contract_quotes": 2639,
+  "rounds": 43,
+  "contract_quotes": 2702,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 34.9,
   "same_best_ask_pct": 34.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
-  "upstox_minus_kotak_quote_time_s_median": -19.5
+  "upstox_minus_kotak_quote_time_s_median": -20.0
  }
 }
