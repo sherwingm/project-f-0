@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -11.5
+  },
+  {
+   "at": "11:25:09",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.471,
+   "same_best_bid_pct": 39.7,
+   "same_best_ask_pct": 39.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -29.0
   }
  ],
  "top_gaps": [
@@ -467,6 +481,13 @@
   },
   {
    "contract": "MARICO26NOV930CE",
+   "gap_pct": 1.471,
+   "kotak": 3.4,
+   "upstox": 3.45,
+   "at": "11:25"
+  },
+  {
+   "contract": "MARICO26NOV930CE",
    "gap_pct": 1.429,
    "kotak": 3.5,
    "upstox": 3.55,
@@ -485,21 +506,14 @@
    "kotak": 7.35,
    "upstox": 7.25,
    "at": "10:20"
-  },
-  {
-   "contract": "AUROPHARMA26NOV1880CE",
-   "gap_pct": 1.224,
-   "kotak": 12.25,
-   "upstox": 12.4,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 1570,
+  "rounds": 26,
+  "contract_quotes": 1633,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 33.9,
-  "same_best_ask_pct": 29.0,
+  "same_best_bid_pct": 34.4,
+  "same_best_ask_pct": 29.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
   "upstox_minus_kotak_quote_time_s_median": -16.0
