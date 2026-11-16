@@ -378,9 +378,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -24.0
+  },
+  {
+   "at": "11:35:09",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.254,
+   "same_best_bid_pct": 33.3,
+   "same_best_ask_pct": 46.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -26.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "DIVISLAB26NOV11200PE",
+   "gap_pct": 4.254,
+   "kotak": 190.4,
+   "upstox": 182.3,
+   "at": "11:35"
+  },
   {
    "contract": "DELHIVERY26NOV440CE",
    "gap_pct": 3.597,
@@ -401,6 +422,13 @@
    "kotak": 17.5,
    "upstox": 17.0,
    "at": "11:20"
+  },
+  {
+   "contract": "DIVISLAB26NOV11200CE",
+   "gap_pct": 2.613,
+   "kotak": 218.15,
+   "upstox": 223.85,
+   "at": "11:35"
   },
   {
    "contract": "KALYANKJIL26NOV760CE",
@@ -506,30 +534,16 @@
    "kotak": 3.5,
    "upstox": 3.55,
    "at": "09:30"
-  },
-  {
-   "contract": "ATHERENERG26NOV2000PE",
-   "gap_pct": 1.413,
-   "kotak": 46.0,
-   "upstox": 45.35,
-   "at": "09:25"
-  },
-  {
-   "contract": "KALYANKJIL26NOV760CE",
-   "gap_pct": 1.361,
-   "kotak": 7.35,
-   "upstox": 7.25,
-   "at": "10:20"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 1696,
+  "rounds": 28,
+  "contract_quotes": 1759,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.9,
-  "same_best_ask_pct": 30.2,
+  "same_best_bid_pct": 34.4,
+  "same_best_ask_pct": 30.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
-  "upstox_minus_kotak_quote_time_s_median": -16.0
+  "upstox_minus_kotak_quote_time_s_median": -16.5
  }
 }
