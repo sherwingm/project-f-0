@@ -252,9 +252,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -40.0
+  },
+  {
+   "at": "10:50:07",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.597,
+   "same_best_bid_pct": 42.9,
+   "same_best_ask_pct": 28.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.7,
+   "upstox_minus_kotak_quote_time_s_median": -29.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "DELHIVERY26NOV440CE",
+   "gap_pct": 3.597,
+   "kotak": 6.95,
+   "upstox": 6.7,
+   "at": "10:50"
+  },
   {
    "contract": "PGEL26NOV580CE",
    "gap_pct": 3.571,
@@ -387,23 +408,16 @@
    "kotak": 13.75,
    "upstox": 13.9,
    "at": "10:25"
-  },
-  {
-   "contract": "MAXHEALTH26NOV920CE",
-   "gap_pct": 1.076,
-   "kotak": 69.7,
-   "upstox": 68.95,
-   "at": "09:55"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 1130,
+  "rounds": 19,
+  "contract_quotes": 1193,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 32.5,
+  "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
-  "upstox_minus_kotak_quote_time_s_median": -14.25
+  "upstox_minus_kotak_quote_time_s_median": -16.0
  }
 }
