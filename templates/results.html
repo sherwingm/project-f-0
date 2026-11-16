@@ -556,9 +556,9 @@ tr[data-why] { cursor:pointer; }
   const shadowNet = (sh, net) => !sh ? null : sh.status === "done" ? sh.net : sh.status === "same" ? net : null;
 
   function positionCard(p) {
-    const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
-    const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
-    const spread = now && bid != null ? (1 - bid / now) * 100 : null;
+    const e = p.entry.price, m = p.mark || {}, last = m.ltp ?? m.price, bid = m.bid ?? m.price, now = bid;   // Now = the bid: what a sale gets
+    const ltpPnl = last != null ? (last - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
+    const spread = last && bid != null ? (1 - bid / last) * 100 : null;
     const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price;
     const up = chg(pk, e), dn = chg(tr, e);
     const lots = `${p.lots} lot${p.lots === 1 ? "" : "s"} × ${p.lot_size}`;
@@ -578,16 +578,16 @@ tr[data-why] { cursor:pointer; }
       <div class="sub">Expiry ${day(p.expiry)} · ${lots} · bought ${when(p.opened_at)}${r ? ` · <span class="mode">${MODE[r.entry_mode] || ""}</span>` : ""}</div>
       ${fade ? `<div class="chips">${numbersChip(r)}${shadowChip(p.instrument, npOf(r))}</div>` : ""}
       <div class="px"><div class="entry"><small>Entry price</small><b>${rs(e)}</b></div><div class="arr">→</div>
-        <div class="now"><small>Now${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}</em></div></div>
+        <div class="now"><small>Now (bid)${m.at ? " · " + when(m.at) : ""}</small><b>${rs(now)}</b><em class="${dir(chg(now, e))}">${pct(chg(now, e))}${last != null && last !== now ? ` · last ${rs(last)}` : ""}</em></div></div>
       <div class="val"><div><small>Buy value</small><b>${rs(e * p.qty)}</b><em>${rs(e)} × ${num(p.qty, 0)} qty</em></div>
-        <div class="r"><small>Value at last price</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
+        <div class="r"><small>Value at the bid</small><b class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty) : "—"}</b><em>${now != null ? rs(now) + " × " + num(p.qty, 0) + " qty" : ""}</em></div></div>
       <div class="ex"><div><small>Max up</small><b class="${dir(up)}">${pk != null ? pct(up) : "—"}</b><em>${pk != null ? rs(pk) + " · " + when(p.peak.at) : "from the next market poll"}</em></div>
         <div><small>Max dip</small><b class="${dir(dn)}">${tr != null ? pct(dn) : "—"}</b><em>${tr != null ? rs(tr) + " · " + when(p.trough.at) : "from the next market poll"}</em></div></div>
       ${rail(e, now, pk, tr, fade ? null : r ? e / 2 : p.stop)}
       <div class="pl2">
-        <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(now)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
+        <div><small>P&amp;L at last price</small><b class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</b><em>(${rs(last)} − ${rs(e)}) × ${num(p.qty, 0)}, before charges</em></div>
         <div class="r"><small>If sold now (MTM)</small><b class="${dir(p.unrealised)}">${srs(p.unrealised, 2)}</b><em>at the best bid ${rs(bid)} · MTM, net of charges</em></div></div>
-      ${spread != null && spread > 3 ? `<p class="gap">Thin option: the best bid ${rs(bid)} is ${spread.toFixed(1)}% below the last traded price ${rs(now)}, so selling now would get less than the last price shows.</p>` : ""}
+      ${spread != null && spread > 3 ? `<p class="gap">Thin option: the best bid ${rs(bid)} is ${spread.toFixed(1)}% below the last traded price ${rs(last)}, so selling now would get less than the last price shows.</p>` : ""}
       <div class="ft">${exitLine}${p.stop_triggered_at ? `<span class="down">stop hit · exits next poll</span>` : ""}
         <button class="btn sell" type="button" data-close="${esc(p.id)}">Close</button></div>
       <p class="err" data-cerr="${esc(p.id)}" hidden></p>
@@ -677,14 +677,14 @@ tr[data-why] { cursor:pointer; }
       ${on ? `<button type="button" class="btn" data-pf="reset:1">Clear filters</button>` : ""}</div>`;
   }
   function openTable(rows, group) {
-    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Lots", "Entry", "Now", "Buy value", "Value now", "Max up", "Max dip", "Gap open",
+    return `<div class="tw"><table><thead><tr>${["Option", "Bought", "Lots", "Entry", "Now (bid)", "Buy value", "Value now (bid)", "Max up", "Max dip", "Gap open",
       "P&amp;L at last", "If sold now (MTM)", "Exit rule", ""].map(h => `<th>${h}</th>`).join("")}</tr></thead><tbody>${byDay(rows, group, 14, openDaySum, p => {
-        const e = p.entry.price, m = p.mark || {}, now = m.ltp ?? m.price, bid = m.bid ?? m.price;
-        const ltpPnl = now != null ? (now - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
+        const e = p.entry.price, m = p.mark || {}, last = m.ltp ?? m.price, bid = m.bid ?? m.price, now = bid;   // Now = the bid
+        const ltpPnl = last != null ? (last - e) * p.qty * (p.side === "BUY" ? 1 : -1) : null;
         const pk = p.peak && p.peak.price, tr = p.trough && p.trough.price, r = p.rule;
         return `<tr data-why="pos:${esc(p.id)}" tabindex="0"><td><b>${esc(p.symbol)}</b> <small>${num(p.strike, 0)} ${p.instrument} · ${day(p.expiry)}</small> ${r ? armTags(r.arms) + ` <small>${r.entry_mode === "fade" ? "fade " + (r.version || "") : r.entry_mode === "open" ? "open" : "close"}</small>` : ""}</td>
           <td>${when(p.opened_at)}</td><td>${p.lots} × ${p.lot_size}</td><td class="entry">${rs(e)}</td>
-          <td class="${dir(chg(now, e))}">${rs(now)} <small>${pct(chg(now, e))}</small></td><td>${rs(e * p.qty, 0)}</td><td class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty, 0) : "—"}</td>
+          <td class="${dir(chg(now, e))}">${rs(now)} <small>${pct(chg(now, e))}</small>${last != null && last !== now ? `<br><small class="muted">last ${rs(last)}</small>` : ""}</td><td>${rs(e * p.qty, 0)}</td><td class="${dir(chg(now, e))}">${now != null ? rs(now * p.qty, 0) : "—"}</td>
           <td class="${dir(chg(pk, e))}">${pk != null ? pct(chg(pk, e)) + ` <small>${rs(pk)} · ${when(p.peak.at)}</small>` : "—"}</td>
           <td class="${dir(chg(tr, e))}">${tr != null ? pct(chg(tr, e)) + ` <small>${rs(tr)}</small>` : "—"}</td>${gapCell(p)}
           <td class="${dir(ltpPnl)}">${srs(ltpPnl, 2)}</td><td class="${dir(p.unrealised)}">${srs(p.unrealised, 2)} <small>bid ${rs(bid)}</small></td>
@@ -1209,7 +1209,7 @@ tr[data-why] { cursor:pointer; }
     const p = kind === "pos" ? P.positions.find(x => x.id === id) : P.trades.find(x => x.id === id);
     if (!p) return null;
     const r = p.rule || {}, fade = r.strategy === "fade", e = p.entry.price, n = parseNums(r.why), np = npOf(r) ?? n.np;
-    const exitPx = p.exit && p.exit.price, now = (p.mark || {}).ltp ?? (p.mark || {}).price;
+    const exitPx = p.exit && p.exit.price, now = (p.mark || {}).bid ?? (p.mark || {}).price;
     const hp = p.held_peak || p.peak, ht = p.held_trough || p.trough;
     const se = r.spot_at_entry, sx = r.spot_at_exit, otm = otmPct(se, p.strike, p.instrument);
     const stockMove = se && sx ? (sx / se - 1) * 100 : null, fadeMove = stockMove == null ? null : (p.instrument === "PE" ? -stockMove : stockMove);
@@ -1217,7 +1217,7 @@ tr[data-why] { cursor:pointer; }
       <p class="muted" style="margin:0">${MODE[r.entry_mode] || "manual paper trade"} · bought ${when(p.opened_at)}${p.closed_at ? " · sold " + when(p.closed_at) : ""}</p>
       ${fade ? `<div class="why">${classify(np, r.np_qoq ?? n.qoq, r.rev_yoy ?? n.rev, p.instrument)}</div>` : r.why ? `<div class="why">${esc(r.why)}</div>` : ""}
       ${kv([fade ? ["Shadow track", inShadow(p.instrument, np) == null ? "—" : inShadow(p.instrument, np) ? "in (call, or put above 25 %)" : "left out (put at 10-25 %)"] : null,
-            ["Entry price", rs(e)], [p.closed_at ? "Exit price" : "Now", rs(p.closed_at ? exitPx : now)],
+            ["Entry price", rs(e)], [p.closed_at ? "Exit price" : "Now (bid)", rs(p.closed_at ? exitPx : now)],
             [p.closed_at ? "Net" : "If sold now (MTM)", p.closed_at ? `${srs(p.net_pnl, 2)} (${pct(p.return_pct)})` : srs(p.unrealised, 2), dir(p.closed_at ? p.net_pnl : p.unrealised)],
             ["Max up while held", hp ? `${pct(chg(hp.price, e))} · ${when(hp.at)}` : null, dir(hp && chg(hp.price, e))],
             ["Max dip while held", ht ? `${pct(chg(ht.price, e))} · ${when(ht.at)}` : null, dir(ht && chg(ht.price, e))],
