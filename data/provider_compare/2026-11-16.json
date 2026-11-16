@@ -196,6 +196,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "10:30:06",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.095,
+   "same_best_bid_pct": 41.3,
+   "same_best_ask_pct": 34.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 92.1,
+   "upstox_minus_kotak_quote_time_s_median": -26.0
   }
  ],
  "top_gaps": [
@@ -212,6 +226,13 @@
    "kotak": 9.3,
    "upstox": 9.5,
    "at": "09:30"
+  },
+  {
+   "contract": "OBEROIRLTY26NOV1760PE",
+   "gap_pct": 2.095,
+   "kotak": 26.25,
+   "upstox": 26.8,
+   "at": "10:30"
   },
   {
    "contract": "M&M26NOV3400CE",
@@ -331,23 +352,16 @@
    "kotak": 27.0,
    "upstox": 26.75,
    "at": "09:40"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 0.769,
-   "kotak": 52.0,
-   "upstox": 52.4,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 878,
+  "rounds": 15,
+  "contract_quotes": 941,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 28.55,
-  "same_best_ask_pct": 27.8,
+  "same_best_bid_pct": 31.7,
+  "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 94.45,
-  "upstox_minus_kotak_quote_time_s_median": -10.5
+  "oi_same_pct": 93.7,
+  "upstox_minus_kotak_quote_time_s_median": -12.0
  }
 }
