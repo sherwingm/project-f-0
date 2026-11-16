@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.2,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "10:00:05",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.163,
+   "same_best_bid_pct": 25.4,
+   "same_best_ask_pct": 28.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.2,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -193,6 +207,13 @@
    "at": "09:20"
   },
   {
+   "contract": "HINDUNILVR26NOV2000CE",
+   "gap_pct": 1.163,
+   "kotak": 21.5,
+   "upstox": 21.75,
+   "at": "10:00"
+  },
+  {
    "contract": "BHARTIARTL26NOV2100CE",
    "gap_pct": 1.104,
    "kotak": 63.4,
@@ -247,23 +268,16 @@
    "kotak": 49.65,
    "upstox": 49.3,
    "at": "09:45"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.666,
-   "kotak": 37.55,
-   "upstox": 37.8,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 502,
+  "rounds": 9,
+  "contract_quotes": 565,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 22.4,
+  "same_best_bid_pct": 23.8,
   "same_best_ask_pct": 27.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.3,
-  "upstox_minus_kotak_quote_time_s_median": -7.5
+  "oi_same_pct": 92.1,
+  "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
