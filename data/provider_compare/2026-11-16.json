@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 87.1,
    "upstox_minus_kotak_quote_time_s_median": -12.5
+  },
+  {
+   "at": "09:50:04",
+   "contracts": 63,
+   "on_both": 63,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.739,
+   "same_best_bid_pct": 23.8,
+   "same_best_ask_pct": 27.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.7,
+   "upstox_minus_kotak_quote_time_s_median": -12.0
   }
  ],
  "top_gaps": [
@@ -114,6 +128,13 @@
    "kotak": 19.95,
    "upstox": 19.6,
    "at": "09:35"
+  },
+  {
+   "contract": "FEDERALBNK26NOV365CE",
+   "gap_pct": 1.739,
+   "kotak": 5.75,
+   "upstox": 5.85,
+   "at": "09:50"
   },
   {
    "contract": "APLAPOLLO26NOV2280CE",
@@ -219,23 +240,16 @@
    "kotak": 51.7,
    "upstox": 52.0,
    "at": "09:30"
-  },
-  {
-   "contract": "AMBER26NOV7000CE",
-   "gap_pct": 0.478,
-   "kotak": 31.35,
-   "upstox": 31.5,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 376,
+  "rounds": 7,
+  "contract_quotes": 439,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 20.8,
-  "same_best_ask_pct": 25.6,
+  "same_best_bid_pct": 21.0,
+  "same_best_ask_pct": 27.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.5,
-  "upstox_minus_kotak_quote_time_s_median": -6.5
+  "upstox_minus_kotak_quote_time_s_median": -7.0
  }
 }
