@@ -336,6 +336,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -15.0
+  },
+  {
+   "at": "11:20:09",
+   "contracts": 62,
+   "on_both": 62,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.857,
+   "same_best_bid_pct": 32.3,
+   "same_best_ask_pct": 32.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -11.5
   }
  ],
  "top_gaps": [
@@ -354,11 +368,25 @@
    "at": "09:20"
   },
   {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 2.857,
+   "kotak": 17.5,
+   "upstox": 17.0,
+   "at": "11:20"
+  },
+  {
    "contract": "KALYANKJIL26NOV760CE",
    "gap_pct": 2.5,
    "kotak": 6.0,
    "upstox": 6.15,
    "at": "10:35"
+  },
+  {
+   "contract": "JSWENERGY26NOV530CE",
+   "gap_pct": 2.439,
+   "kotak": 2.05,
+   "upstox": 2.1,
+   "at": "11:20"
   },
   {
    "contract": "MARICO26NOV910CE",
@@ -464,28 +492,14 @@
    "kotak": 12.25,
    "upstox": 12.4,
    "at": "09:20"
-  },
-  {
-   "contract": "HINDUNILVR26NOV2000CE",
-   "gap_pct": 1.163,
-   "kotak": 21.5,
-   "upstox": 21.75,
-   "at": "10:00"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 1.104,
-   "kotak": 63.4,
-   "upstox": 62.7,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 1508,
+  "rounds": 25,
+  "contract_quotes": 1570,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 34.4,
-  "same_best_ask_pct": 28.8,
+  "same_best_bid_pct": 33.9,
+  "same_best_ask_pct": 29.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.2,
   "upstox_minus_kotak_quote_time_s_median": -16.0
