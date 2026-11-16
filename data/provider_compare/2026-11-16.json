@@ -70,6 +70,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 92.1,
    "upstox_minus_kotak_quote_time_s_median": -7.0
+  },
+  {
+   "at": "09:45:04",
+   "contracts": 62,
+   "on_both": 62,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.755,
+   "same_best_bid_pct": 19.4,
+   "same_best_ask_pct": 21.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 87.1,
+   "upstox_minus_kotak_quote_time_s_median": -12.5
   }
  ],
  "top_gaps": [
@@ -173,10 +187,24 @@
   },
   {
    "contract": "BHARTIARTL26NOV2100CE",
+   "gap_pct": 0.755,
+   "kotak": 66.2,
+   "upstox": 65.7,
+   "at": "09:45"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2100CE",
    "gap_pct": 0.741,
    "kotak": 47.25,
    "upstox": 46.9,
    "at": "09:20"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 0.705,
+   "kotak": 49.65,
+   "upstox": 49.3,
+   "at": "09:45"
   },
   {
    "contract": "BHARTIARTL26NOV2120CE",
@@ -198,30 +226,16 @@
    "kotak": 31.35,
    "upstox": 31.5,
    "at": "09:25"
-  },
-  {
-   "contract": "APOLLOHOSP26NOV8600CE",
-   "gap_pct": 0.434,
-   "kotak": 138.3,
-   "upstox": 138.9,
-   "at": "09:25"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.267,
-   "kotak": 56.1,
-   "upstox": 55.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 314,
+  "rounds": 6,
+  "contract_quotes": 376,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 21.0,
-  "same_best_ask_pct": 27.0,
+  "same_best_bid_pct": 20.8,
+  "same_best_ask_pct": 25.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.5,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "upstox_minus_kotak_quote_time_s_median": -6.5
  }
 }
