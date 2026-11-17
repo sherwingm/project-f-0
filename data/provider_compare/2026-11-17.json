@@ -392,6 +392,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "11:40:09",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.504,
+   "same_best_bid_pct": 37.3,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -23.0
   }
  ],
  "top_gaps": [
@@ -480,6 +494,13 @@
    "at": "10:35"
   },
   {
+   "contract": "GMRAIRPORT26NOV105CE",
+   "gap_pct": 1.504,
+   "kotak": 1.33,
+   "upstox": 1.35,
+   "at": "11:40"
+  },
+  {
    "contract": "DIXON26NOV13250PE",
    "gap_pct": 1.37,
    "kotak": 270.0,
@@ -527,23 +548,16 @@
    "kotak": 17.15,
    "upstox": 16.95,
    "at": "10:15"
-  },
-  {
-   "contract": "BSE26NOV3950PE",
-   "gap_pct": 1.154,
-   "kotak": 60.65,
-   "upstox": 61.35,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 28,
-  "contract_quotes": 1426,
+  "rounds": 29,
+  "contract_quotes": 1477,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.05,
+  "same_best_bid_pct": 37.3,
   "same_best_ask_pct": 39.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -24.5
+  "upstox_minus_kotak_quote_time_s_median": -24.0
  }
 }
