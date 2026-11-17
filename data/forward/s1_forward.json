@@ -1,7 +1,7 @@
 {
  "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
- "last_session": "2026-11-16",
+ "last_session": "2026-11-17",
  "sessions": [
   {
    "session": "2026-10-13",
@@ -478,115 +478,28 @@
     ],
     "signals": []
    }
+  },
+  {
+   "session": "2026-11-17",
+   "A": {
+    "filled": [],
+    "exited": [
+     "DRREDDY",
+     "AMBER"
+    ],
+    "signals": []
+   },
+   "B": {
+    "filled": [],
+    "exited": [],
+    "signals": []
+   }
   }
  ],
  "arms": {
   "A": {
    "pending": [],
    "open": [
-    {
-     "arm": "A",
-     "symbol": "DRREDDY",
-     "sector": "nifty pharma",
-     "signal_date": "2026-10-26",
-     "beat": 4.89,
-     "move": 6.62,
-     "expiry": "2026-11-23",
-     "spot": 1310.81,
-     "id": "A:DRREDDY:2026-10-27",
-     "entry_date": "2026-10-27",
-     "strike": 1400.0,
-     "strikes_walked": 9,
-     "lot": 625,
-     "contracts_day1": 1567.0,
-     "entry_price": 10.42,
-     "entry_source": "vwap",
-     "cost": 6512.5,
-     "category": "large",
-     "best": 17.55,
-     "stall": 4,
-     "fut0": 1312.5,
-     "stock0": 1310.0,
-     "path": [
-      [
-       "2026-10-27",
-       9.1
-      ],
-      [
-       "2026-10-28",
-       11.25
-      ],
-      [
-       "2026-10-29",
-       12.1
-      ],
-      [
-       "2026-10-30",
-       12.4
-      ],
-      [
-       "2026-11-02",
-       7.0
-      ],
-      [
-       "2026-11-03",
-       10.15
-      ],
-      [
-       "2026-11-04",
-       12.0
-      ],
-      [
-       "2026-11-05",
-       12.8
-      ],
-      [
-       "2026-11-06",
-       13.45
-      ],
-      [
-       "2026-11-09",
-       17.55
-      ],
-      [
-       "2026-11-11",
-       14.6
-      ],
-      [
-       "2026-11-12",
-       14.5
-      ],
-      [
-       "2026-11-13",
-       12.3
-      ],
-      [
-       "2026-11-16",
-       7.9
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 68.43,
-      "h_peak_date": "2026-11-09",
-      "h_dip": -32.82,
-      "h_dip_date": "2026-11-02",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 7.9,
-      "mark_pct": -24.18
-     }
-    },
     {
      "arm": "A",
      "symbol": "ATHERENERG",
@@ -607,7 +520,7 @@
      "cost": 7556.25,
      "category": "small",
      "best": 153.3,
-     "stall": 1,
+     "stall": 2,
      "fut0": 1654.6,
      "stock0": 1650.0,
      "path": [
@@ -662,6 +575,10 @@
       [
        "2026-11-16",
        140.95
+      ],
+      [
+       "2026-11-17",
+       124.2
       ]
      ],
      "exit_date": null,
@@ -681,9 +598,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 140.95,
-      "mark_pct": 599.5
+      "last_date": "2026-11-17",
+      "last_close": 124.2,
+      "mark_pct": 516.38
      }
     },
     {
@@ -706,7 +623,7 @@
      "cost": 5353.25,
      "category": "small",
      "best": 51.2,
-     "stall": 2,
+     "stall": 3,
      "fut0": 863.15,
      "stock0": 855.0,
      "path": [
@@ -761,6 +678,10 @@
       [
        "2026-11-16",
        26.85
+      ],
+      [
+       "2026-11-17",
+       45.7
       ]
      ],
      "exit_date": null,
@@ -780,9 +701,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 26.85,
-      "mark_pct": 188.4
+      "last_date": "2026-11-17",
+      "last_close": 45.7,
+      "mark_pct": 390.87
      }
     },
     {
@@ -805,7 +726,7 @@
      "cost": 7293.0,
      "category": "large",
      "best": 93.3,
-     "stall": 0,
+     "stall": 1,
      "fut0": 1003.8,
      "stock0": 1000.2,
      "path": [
@@ -860,6 +781,10 @@
       [
        "2026-11-16",
        93.3
+      ],
+      [
+       "2026-11-17",
+       91.15
       ]
      ],
      "exit_date": null,
@@ -879,9 +804,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 93.3,
-      "mark_pct": 603.62
+      "last_date": "2026-11-17",
+      "last_close": 91.15,
+      "mark_pct": 587.41
      }
     },
     {
@@ -904,7 +829,7 @@
      "cost": 7801.5,
      "category": "large",
      "best": 309.75,
-     "stall": 3,
+     "stall": 4,
      "fut0": 3855.1,
      "stock0": 3837.1,
      "path": [
@@ -955,6 +880,10 @@
       [
        "2026-11-16",
        240.5
+      ],
+      [
+       "2026-11-17",
+       265.75
       ]
      ],
      "exit_date": null,
@@ -974,9 +903,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 240.5,
-      "mark_pct": 439.48
+      "last_date": "2026-11-17",
+      "last_close": 265.75,
+      "mark_pct": 496.12
      }
     },
     {
@@ -999,7 +928,7 @@
      "cost": 7344.0,
      "category": "small",
      "best": 8.05,
-     "stall": 2,
+     "stall": 3,
      "fut0": 154.82,
      "stock0": 154.33,
      "path": [
@@ -1046,6 +975,10 @@
       [
        "2026-11-16",
        5.06
+      ],
+      [
+       "2026-11-17",
+       5.42
       ]
      ],
      "exit_date": null,
@@ -1065,9 +998,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 5.06,
-      "mark_pct": 148.04
+      "last_date": "2026-11-17",
+      "last_close": 5.42,
+      "mark_pct": 165.69
      }
     },
     {
@@ -1089,8 +1022,8 @@
      "entry_source": "vwap",
      "cost": 6812.5,
      "category": "large",
-     "best": 137.4,
-     "stall": 2,
+     "best": 156.0,
+     "stall": 0,
      "fut0": 1595.4,
      "stock0": 1586.0,
      "path": [
@@ -1137,6 +1070,10 @@
       [
        "2026-11-16",
        120.6
+      ],
+      [
+       "2026-11-17",
+       156.0
       ]
      ],
      "exit_date": null,
@@ -1147,8 +1084,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 1160.55,
-      "h_peak_date": "2026-11-12",
+      "h_peak": 1331.19,
+      "h_peak_date": "2026-11-17",
       "h_dip": -28.44,
       "h_dip_date": "2026-10-30",
       "a_peak": null,
@@ -1156,9 +1093,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 120.6,
-      "mark_pct": 1006.42
+      "last_date": "2026-11-17",
+      "last_close": 156.0,
+      "mark_pct": 1331.19
      }
     },
     {
@@ -1181,7 +1118,7 @@
      "cost": 7744.0,
      "category": "large",
      "best": 188.6,
-     "stall": 3,
+     "stall": 4,
      "fut0": 1912.7,
      "stock0": 1911.0,
      "path": [
@@ -1228,6 +1165,10 @@
       [
        "2026-11-16",
        114.75
+      ],
+      [
+       "2026-11-17",
+       159.9
       ]
      ],
      "exit_date": null,
@@ -1247,9 +1188,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 114.75,
-      "mark_pct": 307.49
+      "last_date": "2026-11-17",
+      "last_close": 159.9,
+      "mark_pct": 467.83
      }
     },
     {
@@ -1271,8 +1212,8 @@
      "entry_source": "vwap",
      "cost": 6388.0,
      "category": "mid",
-     "best": 58.0,
-     "stall": 4,
+     "best": 66.5,
+     "stall": 0,
      "fut0": 1343.7,
      "stock0": 1333.7,
      "path": [
@@ -1319,6 +1260,10 @@
       [
        "2026-11-16",
        55.0
+      ],
+      [
+       "2026-11-17",
+       66.5
       ]
      ],
      "exit_date": null,
@@ -1329,8 +1274,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 263.18,
-      "h_peak_date": "2026-11-09",
+      "h_peak": 316.41,
+      "h_peak_date": "2026-11-17",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -1338,9 +1283,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 55.0,
-      "mark_pct": 244.4
+      "last_date": "2026-11-17",
+      "last_close": 66.5,
+      "mark_pct": 316.41
      }
     },
     {
@@ -1362,7 +1307,7 @@
      "entry_source": "vwap",
      "cost": 7107.5,
      "category": "large",
-     "best": 181.6,
+     "best": 220.0,
      "stall": 0,
      "fut0": 2334.1,
      "stock0": 2344.3,
@@ -1406,6 +1351,10 @@
       [
        "2026-11-16",
        181.6
+      ],
+      [
+       "2026-11-17",
+       220.0
       ]
      ],
      "exit_date": null,
@@ -1416,8 +1365,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 538.76,
-      "h_peak_date": "2026-11-16",
+      "h_peak": 673.83,
+      "h_peak_date": "2026-11-17",
       "h_dip": -15.23,
       "h_dip_date": "2026-11-02",
       "a_peak": null,
@@ -1425,9 +1374,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 181.6,
-      "mark_pct": 538.76
+      "last_date": "2026-11-17",
+      "last_close": 220.0,
+      "mark_pct": 673.83
      }
     },
     {
@@ -1450,7 +1399,7 @@
      "cost": 6670.5,
      "category": "large",
      "best": 565.0,
-     "stall": 2,
+     "stall": 3,
      "fut0": 4919.8,
      "stock0": 4919.9,
      "path": [
@@ -1493,6 +1442,10 @@
       [
        "2026-11-16",
        475.0
+      ],
+      [
+       "2026-11-17",
+       475.0
       ]
      ],
      "exit_date": null,
@@ -1512,7 +1465,7 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
+      "last_date": "2026-11-17",
       "last_close": 475.0,
       "mark_pct": 968.14
      }
@@ -1536,8 +1489,8 @@
      "entry_source": "vwap",
      "cost": 7324.75,
      "category": "small",
-     "best": 8.9,
-     "stall": 2,
+     "best": 18.55,
+     "stall": 0,
      "fut0": 414.25,
      "stock0": 412.0,
      "path": [
@@ -1576,6 +1529,10 @@
       [
        "2026-11-16",
        6.7
+      ],
+      [
+       "2026-11-17",
+       18.55
       ]
      ],
      "exit_date": null,
@@ -1586,8 +1543,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 152.12,
-      "h_peak_date": "2026-11-12",
+      "h_peak": 425.5,
+      "h_peak_date": "2026-11-17",
       "h_dip": -19.26,
       "h_dip_date": "2026-11-03",
       "a_peak": null,
@@ -1595,9 +1552,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 6.7,
-      "mark_pct": 89.8
+      "last_date": "2026-11-17",
+      "last_close": 18.55,
+      "mark_pct": 425.5
      }
     },
     {
@@ -1619,7 +1576,7 @@
      "entry_source": "vwap",
      "cost": 7649.25,
      "category": "large",
-     "best": 88.95,
+     "best": 102.45,
      "stall": 0,
      "fut0": 896.7,
      "stock0": 895.5,
@@ -1659,6 +1616,10 @@
       [
        "2026-11-16",
        88.95
+      ],
+      [
+       "2026-11-17",
+       102.45
       ]
      ],
      "exit_date": null,
@@ -1669,8 +1630,8 @@
      "excluded": "",
      "tracking": true,
      "stats": {
-      "h_peak": 510.5,
-      "h_peak_date": "2026-11-16",
+      "h_peak": 603.16,
+      "h_peak_date": "2026-11-17",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -1678,9 +1639,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 88.95,
-      "mark_pct": 510.5
+      "last_date": "2026-11-17",
+      "last_close": 102.45,
+      "mark_pct": 603.16
      }
     },
     {
@@ -1703,7 +1664,7 @@
      "cost": 6063.75,
      "category": "large",
      "best": 234.7,
-     "stall": 2,
+     "stall": 3,
      "fut0": 2528.4,
      "stock0": 2528.2,
      "path": [
@@ -1742,6 +1703,10 @@
       [
        "2026-11-16",
        95.25
+      ],
+      [
+       "2026-11-17",
+       73.55
       ]
      ],
      "exit_date": null,
@@ -1761,9 +1726,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 95.25,
-      "mark_pct": 331.97
+      "last_date": "2026-11-17",
+      "last_close": 73.55,
+      "mark_pct": 233.56
      }
     },
     {
@@ -1786,7 +1751,7 @@
      "cost": 5225.5,
      "category": "mid",
      "best": 116.0,
-     "stall": 2,
+     "stall": 3,
      "fut0": 2044.9,
      "stock0": 2048.7,
      "path": [
@@ -1825,6 +1790,10 @@
       [
        "2026-11-16",
        90.7
+      ],
+      [
+       "2026-11-17",
+       90.7
       ]
      ],
      "exit_date": null,
@@ -1844,7 +1813,7 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
+      "last_date": "2026-11-17",
       "last_close": 90.7,
       "mark_pct": 507.5
      }
@@ -1869,7 +1838,7 @@
      "cost": 6528.0,
      "category": "mid",
      "best": 7.6,
-     "stall": 3,
+     "stall": 4,
      "fut0": 889.3,
      "stock0": 890.0,
      "path": [
@@ -1904,6 +1873,10 @@
       [
        "2026-11-16",
        3.6
+      ],
+      [
+       "2026-11-17",
+       4.1
       ]
      ],
      "exit_date": null,
@@ -1923,9 +1896,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 3.6,
-      "mark_pct": -33.82
+      "last_date": "2026-11-17",
+      "last_close": 4.1,
+      "mark_pct": -24.63
      }
     },
     {
@@ -1948,7 +1921,7 @@
      "cost": 7858.0,
      "category": "mid",
      "best": 56.5,
-     "stall": 3,
+     "stall": 4,
      "fut0": 3810.1,
      "stock0": 3800.0,
      "path": [
@@ -1975,6 +1948,10 @@
       [
        "2026-11-16",
        26.75
+      ],
+      [
+       "2026-11-17",
+       26.0
       ]
      ],
      "exit_date": null,
@@ -1987,16 +1964,16 @@
      "stats": {
       "h_peak": 43.8,
       "h_peak_date": "2026-11-11",
-      "h_dip": -31.92,
-      "h_dip_date": "2026-11-16",
+      "h_dip": -33.83,
+      "h_dip_date": "2026-11-17",
       "a_peak": null,
       "a_peak_date": null,
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 26.75,
-      "mark_pct": -31.92
+      "last_date": "2026-11-17",
+      "last_close": 26.0,
+      "mark_pct": -33.83
      }
     },
     {
@@ -2019,7 +1996,7 @@
      "cost": 6417.25,
      "category": "large",
      "best": 49.75,
-     "stall": 0,
+     "stall": 1,
      "fut0": 2067.1,
      "stock0": 2072.1,
      "path": [
@@ -2042,6 +2019,10 @@
       [
        "2026-11-16",
        49.75
+      ],
+      [
+       "2026-11-17",
+       44.05
       ]
      ],
      "exit_date": null,
@@ -2061,9 +2042,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 49.75,
-      "mark_pct": 268.25
+      "last_date": "2026-11-17",
+      "last_close": 44.05,
+      "mark_pct": 226.05
      }
     },
     {
@@ -2086,7 +2067,7 @@
      "cost": 7090.0,
      "category": "large",
      "best": 108.7,
-     "stall": 3,
+     "stall": 4,
      "fut0": 3284.8,
      "stock0": 3290.6,
      "path": [
@@ -2109,6 +2090,10 @@
       [
        "2026-11-16",
        35.9
+      ],
+      [
+       "2026-11-17",
+       67.9
       ]
      ],
      "exit_date": null,
@@ -2128,60 +2113,9 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 35.9,
-      "mark_pct": 1.27
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "AMBER",
-     "sector": "nifty consumer durables",
-     "signal_date": "2026-11-13",
-     "beat": 9.75,
-     "move": 9.07,
-     "expiry": "2026-11-23",
-     "spot": 6771.53,
-     "id": "A:AMBER:2026-11-16",
-     "entry_date": "2026-11-16",
-     "strike": 6800.0,
-     "strikes_walked": 0,
-     "lot": 100,
-     "contracts_day1": 12318.0,
-     "entry_price": 31.56,
-     "entry_source": "vwap",
-     "cost": 3156.0,
-     "category": "small",
-     "best": 31.56,
-     "stall": 1,
-     "fut0": 6250.5,
-     "stock0": 6252.0,
-     "path": [
-      [
-       "2026-11-16",
-       19.05
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 0.0,
-      "h_peak_date": null,
-      "h_dip": -39.64,
-      "h_dip_date": "2026-11-16",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 19.05,
-      "mark_pct": -39.64
+      "last_date": "2026-11-17",
+      "last_close": 67.9,
+      "mark_pct": 91.54
      }
     }
    ],
@@ -2439,6 +2373,10 @@
       [
        "2026-11-16",
        9.8
+      ],
+      [
+       "2026-11-17",
+       4.4
       ]
      ],
      "exit_date": "2026-10-26",
@@ -2455,12 +2393,12 @@
       "h_dip_date": "2026-10-23",
       "a_peak": 53.06,
       "a_peak_date": "2026-11-05",
-      "a_dip": -83.43,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -92.56,
+      "a_dip_date": "2026-11-17",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 9.8,
-      "mark_pct": -83.43
+      "last_date": "2026-11-17",
+      "last_close": 4.4,
+      "mark_pct": -92.56
      },
      "charges": 63.4,
      "slippage": 422.85
@@ -2739,6 +2677,10 @@
       [
        "2026-11-16",
        17.65
+      ],
+      [
+       "2026-11-17",
+       16.2
       ]
      ],
      "exit_date": "2026-10-30",
@@ -2758,9 +2700,9 @@
       "a_dip": 0.0,
       "a_dip_date": null,
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 17.65,
-      "mark_pct": 59.73
+      "last_date": "2026-11-17",
+      "last_close": 16.2,
+      "mark_pct": 46.61
      },
      "charges": 57.16,
      "slippage": 109.01
@@ -2844,6 +2786,10 @@
       [
        "2026-11-16",
        518.65
+      ],
+      [
+       "2026-11-17",
+       517.1
       ]
      ],
      "exit_date": "2026-10-30",
@@ -2863,9 +2809,9 @@
       "a_dip": -12.23,
       "a_dip_date": "2026-11-02",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 518.65,
-      "mark_pct": 97.23
+      "last_date": "2026-11-17",
+      "last_close": 517.1,
+      "mark_pct": 96.64
      },
      "charges": 56.03,
      "slippage": 192.51
@@ -2945,6 +2891,10 @@
       [
        "2026-11-16",
        11.75
+      ],
+      [
+       "2026-11-17",
+       3.55
       ]
      ],
      "exit_date": "2026-11-02",
@@ -2961,12 +2911,12 @@
       "h_dip_date": "2026-11-02",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -76.67,
-      "a_dip_date": "2026-11-03",
+      "a_dip": -83.27,
+      "a_dip_date": "2026-11-17",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 11.75,
-      "mark_pct": -44.63
+      "last_date": "2026-11-17",
+      "last_close": 3.55,
+      "mark_pct": -83.27
      },
      "charges": 56.05,
      "slippage": 205.94
@@ -3038,6 +2988,10 @@
       [
        "2026-11-16",
        3.96
+      ],
+      [
+       "2026-11-17",
+       3.67
       ]
      ],
      "exit_date": "2026-11-02",
@@ -3057,9 +3011,9 @@
       "a_dip": -72.08,
       "a_dip_date": "2026-11-03",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 3.96,
-      "mark_pct": 49.43
+      "last_date": "2026-11-17",
+      "last_close": 3.67,
+      "mark_pct": 38.49
      },
      "charges": 54.89,
      "slippage": 261.56
@@ -3139,6 +3093,10 @@
       [
        "2026-11-16",
        24.0
+      ],
+      [
+       "2026-11-17",
+       13.95
       ]
      ],
      "exit_date": "2026-11-03",
@@ -3158,9 +3116,9 @@
       "a_dip": -49.69,
       "a_dip_date": "2026-11-05",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 24.0,
-      "mark_pct": -5.66
+      "last_date": "2026-11-17",
+      "last_close": 13.95,
+      "mark_pct": -45.17
      },
      "charges": 57.47,
      "slippage": 204.2
@@ -3236,6 +3194,10 @@
       [
        "2026-11-16",
        1.15
+      ],
+      [
+       "2026-11-17",
+       0.65
       ]
      ],
      "exit_date": "2026-11-04",
@@ -3252,12 +3214,12 @@
       "h_dip_date": "2026-11-04",
       "a_peak": 73.1,
       "a_peak_date": "2026-11-12",
-      "a_dip": -85.2,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -91.63,
+      "a_dip_date": "2026-11-17",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 1.15,
-      "mark_pct": -85.2
+      "last_date": "2026-11-17",
+      "last_close": 0.65,
+      "mark_pct": -91.63
      },
      "charges": 58.82,
      "slippage": 351.12
@@ -3325,6 +3287,10 @@
       [
        "2026-11-16",
        3.15
+      ],
+      [
+       "2026-11-17",
+       5.35
       ]
      ],
      "exit_date": "2026-11-06",
@@ -3344,9 +3310,9 @@
       "a_dip": -80.67,
       "a_dip_date": "2026-11-16",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 3.15,
-      "mark_pct": -80.67
+      "last_date": "2026-11-17",
+      "last_close": 5.35,
+      "mark_pct": -67.18
      },
      "charges": 57.94,
      "slippage": 218.02
@@ -3430,6 +3396,10 @@
       [
        "2026-11-16",
        4.25
+      ],
+      [
+       "2026-11-17",
+       4.0
       ]
      ],
      "exit_date": "2026-11-09",
@@ -3446,12 +3416,12 @@
       "h_dip_date": "2026-10-29",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -74.07,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -75.59,
+      "a_dip_date": "2026-11-17",
       "above_exit": false,
-      "last_date": "2026-11-16",
-      "last_close": 4.25,
-      "mark_pct": -74.07
+      "last_date": "2026-11-17",
+      "last_close": 4.0,
+      "mark_pct": -75.59
      },
      "charges": 65.99,
      "slippage": 314.83
@@ -3499,6 +3469,10 @@
       [
        "2026-11-16",
        3.85
+      ],
+      [
+       "2026-11-17",
+       1.5
       ]
      ],
      "exit_date": "2026-11-12",
@@ -3515,12 +3489,12 @@
       "h_dip_date": "2026-11-12",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -81.68,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -92.86,
+      "a_dip_date": "2026-11-17",
       "above_exit": false,
-      "last_date": "2026-11-16",
-      "last_close": 3.85,
-      "mark_pct": -81.68
+      "last_date": "2026-11-17",
+      "last_close": 1.5,
+      "mark_pct": -92.86
      },
      "charges": 57.35,
      "slippage": 226.28
@@ -3600,6 +3574,10 @@
       [
        "2026-11-16",
        2.0
+      ],
+      [
+       "2026-11-17",
+       1.4
       ]
      ],
      "exit_date": "2026-11-13",
@@ -3616,12 +3594,12 @@
       "h_dip_date": "2026-11-04",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -63.83,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -74.68,
+      "a_dip_date": "2026-11-17",
       "above_exit": false,
-      "last_date": "2026-11-16",
-      "last_close": 2.0,
-      "mark_pct": -63.83
+      "last_date": "2026-11-17",
+      "last_close": 1.4,
+      "mark_pct": -74.68
      },
      "charges": 62.25,
      "slippage": 390.65
@@ -3669,6 +3647,10 @@
       [
        "2026-11-16",
        11.65
+      ],
+      [
+       "2026-11-17",
+       6.85
       ]
      ],
      "exit_date": "2026-11-13",
@@ -3685,12 +3667,12 @@
       "h_dip_date": "2026-11-13",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -74.33,
-      "a_dip_date": "2026-11-16",
+      "a_dip": -84.91,
+      "a_dip_date": "2026-11-17",
       "above_exit": false,
-      "last_date": "2026-11-16",
-      "last_close": 11.65,
-      "mark_pct": -74.33
+      "last_date": "2026-11-17",
+      "last_close": 6.85,
+      "mark_pct": -84.91
      },
      "charges": 54.79,
      "slippage": 100.34
@@ -3762,6 +3744,10 @@
       [
        "2026-11-16",
        19.95
+      ],
+      [
+       "2026-11-17",
+       38.55
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3776,14 +3762,14 @@
       "h_peak_date": "2026-11-06",
       "h_dip": -13.97,
       "h_dip_date": "2026-11-16",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 66.24,
+      "a_peak_date": "2026-11-17",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 19.95,
-      "mark_pct": -13.97
+      "above_exit": true,
+      "last_date": "2026-11-17",
+      "last_close": 38.55,
+      "mark_pct": 66.24
      },
      "charges": 62.23,
      "slippage": 133.15
@@ -3855,6 +3841,10 @@
       [
        "2026-11-16",
        19.15
+      ],
+      [
+       "2026-11-17",
+       21.15
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3869,14 +3859,14 @@
       "h_peak_date": "2026-11-06",
       "h_dip": -8.45,
       "h_dip_date": "2026-11-02",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 30.39,
+      "a_peak_date": "2026-11-17",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 19.15,
-      "mark_pct": 18.06
+      "above_exit": true,
+      "last_date": "2026-11-17",
+      "last_close": 21.15,
+      "mark_pct": 30.39
      },
      "charges": 68.09,
      "slippage": 167.77
@@ -3948,6 +3938,10 @@
       [
        "2026-11-16",
        2.45
+      ],
+      [
+       "2026-11-17",
+       1.9
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3962,14 +3956,14 @@
       "h_peak_date": "2026-11-06",
       "h_dip": -56.64,
       "h_dip_date": "2026-11-16",
-      "a_peak": null,
+      "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 2.45,
-      "mark_pct": -56.64
+      "a_dip": -66.37,
+      "a_dip_date": "2026-11-17",
+      "above_exit": false,
+      "last_date": "2026-11-17",
+      "last_close": 1.9,
+      "mark_pct": -66.37
      },
      "charges": 54.9,
      "slippage": 173.08
@@ -4021,6 +4015,10 @@
       [
        "2026-11-16",
        6.55
+      ],
+      [
+       "2026-11-17",
+       4.3
       ]
      ],
      "exit_date": "2026-11-16",
@@ -4035,14 +4033,14 @@
       "h_peak_date": "2026-11-09",
       "h_dip": -53.08,
       "h_dip_date": "2026-11-16",
-      "a_peak": null,
+      "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 6.55,
-      "mark_pct": -53.08
+      "a_dip": -69.2,
+      "a_dip_date": "2026-11-17",
+      "above_exit": false,
+      "last_date": "2026-11-17",
+      "last_close": 4.3,
+      "mark_pct": -69.2
      },
      "charges": 57.52,
      "slippage": 225.06
@@ -4094,6 +4092,10 @@
       [
        "2026-11-16",
        1.15
+      ],
+      [
+       "2026-11-17",
+       0.55
       ]
      ],
      "exit_date": "2026-11-16",
@@ -4108,17 +4110,183 @@
       "h_peak_date": "2026-11-09",
       "h_dip": -60.34,
       "h_dip_date": "2026-11-16",
+      "a_peak": 0.0,
+      "a_peak_date": null,
+      "a_dip": -81.03,
+      "a_dip_date": "2026-11-17",
+      "above_exit": false,
+      "last_date": "2026-11-17",
+      "last_close": 0.55,
+      "mark_pct": -81.03
+     },
+     "charges": 55.75,
+     "slippage": 200.0
+    },
+    {
+     "arm": "A",
+     "symbol": "DRREDDY",
+     "sector": "nifty pharma",
+     "signal_date": "2026-10-26",
+     "beat": 4.89,
+     "move": 6.62,
+     "expiry": "2026-11-23",
+     "spot": 1310.81,
+     "id": "A:DRREDDY:2026-10-27",
+     "entry_date": "2026-10-27",
+     "strike": 1400.0,
+     "strikes_walked": 9,
+     "lot": 625,
+     "contracts_day1": 1567.0,
+     "entry_price": 10.42,
+     "entry_source": "vwap",
+     "cost": 6512.5,
+     "category": "large",
+     "best": 17.55,
+     "stall": 5,
+     "fut0": 1312.5,
+     "stock0": 1310.0,
+     "path": [
+      [
+       "2026-10-27",
+       9.1
+      ],
+      [
+       "2026-10-28",
+       11.25
+      ],
+      [
+       "2026-10-29",
+       12.1
+      ],
+      [
+       "2026-10-30",
+       12.4
+      ],
+      [
+       "2026-11-02",
+       7.0
+      ],
+      [
+       "2026-11-03",
+       10.15
+      ],
+      [
+       "2026-11-04",
+       12.0
+      ],
+      [
+       "2026-11-05",
+       12.8
+      ],
+      [
+       "2026-11-06",
+       13.45
+      ],
+      [
+       "2026-11-09",
+       17.55
+      ],
+      [
+       "2026-11-11",
+       14.6
+      ],
+      [
+       "2026-11-12",
+       14.5
+      ],
+      [
+       "2026-11-13",
+       12.3
+      ],
+      [
+       "2026-11-16",
+       7.9
+      ],
+      [
+       "2026-11-17",
+       8.45
+      ]
+     ],
+     "exit_date": "2026-11-17",
+     "exit_reason": "1_decay",
+     "exit_price": 8.4,
+     "net": -1440.36,
+     "net_pct": -22.12,
+     "excluded": "",
+     "tracking": true,
+     "stats": {
+      "h_peak": 68.43,
+      "h_peak_date": "2026-11-09",
+      "h_dip": -32.82,
+      "h_dip_date": "2026-11-02",
       "a_peak": null,
       "a_peak_date": null,
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 1.15,
-      "mark_pct": -60.34
+      "last_date": "2026-11-17",
+      "last_close": 8.45,
+      "mark_pct": -18.91
      },
-     "charges": 55.75,
-     "slippage": 200.0
+     "charges": 60.24,
+     "slippage": 117.62
+    },
+    {
+     "arm": "A",
+     "symbol": "AMBER",
+     "sector": "nifty consumer durables",
+     "signal_date": "2026-11-13",
+     "beat": 9.75,
+     "move": 9.07,
+     "expiry": "2026-11-23",
+     "spot": 6771.53,
+     "id": "A:AMBER:2026-11-16",
+     "entry_date": "2026-11-16",
+     "strike": 6800.0,
+     "strikes_walked": 0,
+     "lot": 100,
+     "contracts_day1": 12318.0,
+     "entry_price": 31.56,
+     "entry_source": "vwap",
+     "cost": 3156.0,
+     "category": "small",
+     "best": 31.56,
+     "stall": 1,
+     "fut0": 6250.5,
+     "stock0": 6252.0,
+     "path": [
+      [
+       "2026-11-16",
+       19.05
+      ],
+      [
+       "2026-11-17",
+       11.0
+      ]
+     ],
+     "exit_date": "2026-11-17",
+     "exit_reason": "0_stop",
+     "exit_price": 10.95,
+     "net": -2239.24,
+     "net_pct": -70.95,
+     "excluded": "",
+     "tracking": true,
+     "stats": {
+      "h_peak": 0.0,
+      "h_peak_date": null,
+      "h_dip": -65.15,
+      "h_dip_date": "2026-11-17",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-17",
+      "last_close": 11.0,
+      "mark_pct": -65.15
+     },
+     "charges": 50.71,
+     "slippage": 127.53
     }
    ],
    "refused": [
@@ -4414,6 +4582,10 @@
       [
        "2026-11-16",
        3.15
+      ],
+      [
+       "2026-11-17",
+       5.35
       ]
      ],
      "exit_date": "2026-11-06",
@@ -4433,9 +4605,9 @@
       "a_dip": -80.67,
       "a_dip_date": "2026-11-16",
       "above_exit": true,
-      "last_date": "2026-11-16",
-      "last_close": 3.15,
-      "mark_pct": -80.67
+      "last_date": "2026-11-17",
+      "last_close": 5.35,
+      "mark_pct": -67.18
      },
      "charges": 57.94,
      "slippage": 218.02
@@ -4487,6 +4659,10 @@
       [
        "2026-11-16",
        6.55
+      ],
+      [
+       "2026-11-17",
+       4.3
       ]
      ],
      "exit_date": "2026-11-16",
@@ -4501,14 +4677,14 @@
       "h_peak_date": "2026-11-09",
       "h_dip": -53.08,
       "h_dip_date": "2026-11-16",
-      "a_peak": null,
+      "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 6.55,
-      "mark_pct": -53.08
+      "a_dip": -69.2,
+      "a_dip_date": "2026-11-17",
+      "above_exit": false,
+      "last_date": "2026-11-17",
+      "last_close": 4.3,
+      "mark_pct": -69.2
      },
      "charges": 57.52,
      "slippage": 225.06
@@ -4560,6 +4736,10 @@
       [
        "2026-11-16",
        1.15
+      ],
+      [
+       "2026-11-17",
+       0.55
       ]
      ],
      "exit_date": "2026-11-16",
@@ -4574,14 +4754,14 @@
       "h_peak_date": "2026-11-09",
       "h_dip": -60.34,
       "h_dip_date": "2026-11-16",
-      "a_peak": null,
+      "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-16",
-      "last_close": 1.15,
-      "mark_pct": -60.34
+      "a_dip": -81.03,
+      "a_dip_date": "2026-11-17",
+      "above_exit": false,
+      "last_date": "2026-11-17",
+      "last_close": 0.55,
+      "mark_pct": -81.03
      },
      "charges": 55.75,
      "slippage": 200.0

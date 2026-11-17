@@ -1,43 +1,27 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-11-16",
- "generated": "2026-11-17T05:11+05:30",
+ "session": "2026-11-17",
+ "generated": "2026-11-18T04:20+05:30",
  "signals": [
   {
-   "symbol": "KAYNES",
-   "close": 2980.0,
-   "price_pct": -13.12,
-   "oi_pct": 17.34,
-   "vol_ratio": 15.68,
-   "put": {
-    "expiry": "2026-12-29",
-    "strike": 2300.0,
-    "premium": 40.22,
-    "lot": 150,
-    "lot_cost": 6033,
-    "below_spot_pct": 22.82,
-    "contracts": 490.0
-   }
-  },
-  {
-   "symbol": "AMBER",
-   "close": 6252.0,
-   "price_pct": -7.68,
-   "oi_pct": 23.74,
-   "vol_ratio": 3.14,
-   "put": {
-    "expiry": "2026-12-29",
-    "strike": 5000.0,
-    "premium": 35.97,
-    "lot": 100,
-    "lot_cost": 3597,
-    "below_spot_pct": 20.03,
-    "contracts": 117.0
-   }
+   "symbol": "ASHOKLEY",
+   "close": 160.5,
+   "price_pct": -4.17,
+   "oi_pct": 16.36,
+   "vol_ratio": 2.65,
+   "put": null,
+   "put_note": "premium below Rs 2"
   }
  ],
  "note": null,
  "history": [
+  {
+   "session": "2026-11-17",
+   "symbols": [
+    "ASHOKLEY"
+   ],
+   "note": null
+  },
   {
    "session": "2026-11-16",
    "symbols": [
@@ -167,13 +151,6 @@
     "NESTLEIND",
     "ENRIN",
     "CGPOWER"
-   ],
-   "note": null
-  },
-  {
-   "session": "2026-10-14",
-   "symbols": [
-    "LICHSGFIN"
    ],
    "note": null
   }
