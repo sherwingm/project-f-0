@@ -1,0 +1,139 @@
+{
+ "downloaded": "2026-11-17",
+ "note": "raw data git-ignored; scripts/fetch_external.py re-fetches it",
+ "files": {
+  "fii_dii_cash_stockezee.csv": {
+   "sha256_16": "de78e496a8d20cdb",
+   "rows": 218,
+   "bytes": 17120
+  },
+  "gift_bhavcopy_futures.csv": {
+   "sha256_16": "e599013b0f248469",
+   "rows": 29777,
+   "bytes": 2125994
+  },
+  "nse_breadth_daily.csv": {
+   "sha256_16": "ee8b89acd9ca2ea9",
+   "rows": 1324,
+   "bytes": 78103
+  },
+  "nse_index_closes.csv": {
+   "sha256_16": "d789b97bf598c020",
+   "rows": 228108,
+   "bytes": 25356292
+  },
+  "yahoo/ASX200_1d.csv": {
+   "sha256_16": "f9ed3163b18902eb",
+   "rows": 2250,
+   "bytes": 205584
+  },
+  "yahoo/BRENT_1d.csv": {
+   "sha256_16": "44af4e6399b3e115",
+   "rows": 2237,
+   "bytes": 231490
+  },
+  "yahoo/DXY_1d.csv": {
+   "sha256_16": "4fd0888b48702fe5",
+   "rows": 2700,
+   "bytes": 241026
+  },
+  "yahoo/ES_F_1d.csv": {
+   "sha256_16": "30ef7e15d513bb8a",
+   "rows": 2237,
+   "bytes": 147333
+  },
+  "yahoo/ES_F_60m.csv": {
+   "sha256_16": "7a506ee15c7e8c35",
+   "rows": 14516,
+   "bytes": 830820
+  },
+  "yahoo/GOLD_1d.csv": {
+   "sha256_16": "2b47801d62a20c4a",
+   "rows": 2237,
+   "bytes": 214746
+  },
+  "yahoo/GSPC_1d.csv": {
+   "sha256_16": "0b06452b53d932ae",
+   "rows": 2232,
+   "bytes": 232110
+  },
+  "yahoo/HSI_1d.csv": {
+   "sha256_16": "e1564e9d571e13d3",
+   "rows": 2184,
+   "bytes": 213444
+  },
+  "yahoo/IXIC_1d.csv": {
+   "sha256_16": "28d467316cd6b6b4",
+   "rows": 2232,
+   "bytes": 225711
+  },
+  "yahoo/KOSPI_1d.csv": {
+   "sha256_16": "b3aa2abc54dcaa50",
+   "rows": 2175,
+   "bytes": 219485
+  },
+  "yahoo/N225_1d.csv": {
+   "sha256_16": "67940de47447b182",
+   "rows": 2176,
+   "bytes": 204923
+  },
+  "yahoo/NQ_F_1d.csv": {
+   "sha256_16": "940be9d341c444a1",
+   "rows": 2237,
+   "bytes": 151662
+  },
+  "yahoo/NQ_F_60m.csv": {
+   "sha256_16": "fbc883686f06247d",
+   "rows": 14516,
+   "bytes": 870739
+  },
+  "yahoo/NSEI_1d.csv": {
+   "sha256_16": "673c755c7b4f4b2c",
+   "rows": 2191,
+   "bytes": 201173
+  },
+  "yahoo/SSEC_1d.csv": {
+   "sha256_16": "bd40851b3096f40e",
+   "rows": 2150,
+   "bytes": 218454
+  },
+  "yahoo/TWII_1d.csv": {
+   "sha256_16": "620dd97f8b1a68e9",
+   "rows": 2155,
+   "bytes": 206623
+  },
+  "yahoo/US10Y_1d.csv": {
+   "sha256_16": "d0746b9b2ac9c9e2",
+   "rows": 2232,
+   "bytes": 230738
+  },
+  "yahoo/USDINR_1d.csv": {
+   "sha256_16": "8f7c9c1b20cd4f46",
+   "rows": 2317,
+   "bytes": 221248
+  },
+  "yahoo/USDINR_60m.csv": {
+   "sha256_16": "bfe68a6b4aa90d27",
+   "rows": 12519,
+   "bytes": 1016519
+  },
+  "yahoo/VIX_US_1d.csv": {
+   "sha256_16": "825e2b5672e22812",
+   "rows": 2316,
+   "bytes": 232177
+  },
+  "yahoo/WTI_1d.csv": {
+   "sha256_16": "b200bdc0a1d9cdbf",
+   "rows": 2237,
+   "bytes": 234284
+  }
+ },
+ "sources": {
+  "gift_bhavcopy_futures.csv": "https://www.nseix.com/api/content/daily_report/G_T_Bhavcopy_FO_DDMMYY.CSV (NSE International Exchange, public)",
+  "nse_index_closes.csv": "https://nsearchives.nseindia.com/content/indices/ind_close_all_DDMMYYYY.csv (NSE, public)",
+  "nse_breadth_daily.csv": "https://nsearchives.nseindia.com/products/content/sec_bhavdata_full_DDMMYYYY.csv aggregated per day (NSE, public)",
+  "yahoo/*": "https://query1.finance.yahoo.com/v8/finance/chart/<symbol> (Yahoo Finance public chart API; quality caveats in DOWNLOAD_QUALITY_CHECKS.md)",
+  "fii_dii_cash_stockezee.csv": "https://www.stockezee.com/fii-dii-historical-data (third-party archive, extracted through the page's month selector on 2026-11-17; verified against NSE's own combined table on 2026-11-17 only; September 2026 absent at source)",
+  "not_obtained": "FII / DII cash flows before 2025-12 and for 2026-09 (NSE serves only the latest day; NSDL archive needs form scraping; no verified bulk source found); GIFT 09:00 level and intraday history; timestamped news archive; NIFTY 50 historical constituents"
+ }
+}
