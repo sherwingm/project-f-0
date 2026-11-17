@@ -28,6 +28,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.2,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "09:30:01",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.322,
+   "same_best_bid_pct": 29.4,
+   "same_best_ask_pct": 25.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.2,
+   "upstox_minus_kotak_quote_time_s_median": -11.0
   }
  ],
  "top_gaps": [
@@ -88,6 +102,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BANKBARODA26NOV270PE",
+   "gap_pct": 0.322,
+   "kotak": 3.11,
+   "upstox": 3.1,
+   "at": "09:30"
+  },
+  {
    "contract": "APOLLOHOSP26NOV8800CE",
    "gap_pct": 0.273,
    "kotak": 109.85,
@@ -100,6 +121,13 @@
    "kotak": 129.7,
    "upstox": 129.45,
    "at": "09:20"
+  },
+  {
+   "contract": "BDL26NOVFUT",
+   "gap_pct": 0.148,
+   "kotak": 1045.65,
+   "upstox": 1047.2,
+   "at": "09:30"
   },
   {
    "contract": "BSE26NOV4000CE",
@@ -156,30 +184,16 @@
    "kotak": 7.05,
    "upstox": 7.05,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOV410PE",
-   "gap_pct": 0.0,
-   "kotak": 6.2,
-   "upstox": 6.2,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 411.0,
-   "upstox": 411.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 2,
-  "contract_quotes": 102,
+  "rounds": 3,
+  "contract_quotes": 153,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 12.75,
-  "same_best_ask_pct": 14.7,
+  "same_best_bid_pct": 15.7,
+  "same_best_ask_pct": 19.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 87.25,
-  "upstox_minus_kotak_quote_time_s_median": -9.5
+  "oi_same_pct": 90.2,
+  "upstox_minus_kotak_quote_time_s_median": -11.0
  }
 }
