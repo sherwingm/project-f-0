@@ -126,9 +126,30 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.2,
    "upstox_minus_kotak_quote_time_s_median": -21.0
+  },
+  {
+   "at": "10:05:04",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 6.061,
+   "same_best_bid_pct": 41.2,
+   "same_best_ask_pct": 39.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.2,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "IEX26NOV116CE",
+   "gap_pct": 6.061,
+   "kotak": 1.98,
+   "upstox": 2.1,
+   "at": "10:05"
+  },
   {
    "contract": "DATAPATTNS26NOV4300CE",
    "gap_pct": 3.882,
@@ -242,6 +263,13 @@
    "at": "09:20"
   },
   {
+   "contract": "INDHOTEL26NOV900CE",
+   "gap_pct": 0.73,
+   "kotak": 13.7,
+   "upstox": 13.6,
+   "at": "10:05"
+  },
+  {
    "contract": "ICICIBANK26NOV1600PE",
    "gap_pct": 0.671,
    "kotak": 14.9,
@@ -254,30 +282,16 @@
    "kotak": 31.75,
    "upstox": 31.95,
    "at": "09:20"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 0.607,
-   "kotak": 41.2,
-   "upstox": 41.45,
-   "at": "09:45"
-  },
-  {
-   "contract": "ANGELONE26NOV350CE",
-   "gap_pct": 0.578,
-   "kotak": 8.65,
-   "upstox": 8.6,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 459,
+  "rounds": 10,
+  "contract_quotes": 510,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.4,
-  "same_best_ask_pct": 25.5,
+  "same_best_bid_pct": 30.4,
+  "same_best_ask_pct": 30.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -12.5
  }
 }
