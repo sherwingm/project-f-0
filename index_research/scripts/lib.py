@@ -53,7 +53,11 @@ def daily(days):
 
 
 def vix_daily():
-    return daily(minutes("INDIAVIX"))
+    # 17 Nov 2026 fix: the raw cached VIX minutes hold unrepaired rows (e.g. 0.24, 3079) for 2021-10 to 2023-08; use the loader's repaired series.
+    v = L.vix_1m(START, END)
+    v["d"] = v["timestamp"].dt.date
+    v["hm"] = v["timestamp"].dt.hour * 100 + v["timestamp"].dt.minute
+    return daily({d: g.reset_index(drop=True) for d, g in v.groupby("d") if len(g) >= 100})
 
 
 def fut_trade(index, day, direction, entry, exit_, slip_pts=None, cost_mult=1.0):

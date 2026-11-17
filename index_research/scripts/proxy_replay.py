@@ -87,7 +87,12 @@ def sim_long(frames, d, nxt, ts_entry, cp, K, E, k, cm):
 
 def main():
     k, n_cal, n_test, err = calibrate()
-    spot, vixm = minutes("NIFTY50"), minutes("INDIAVIX")
+    spot = minutes("NIFTY50")
+    # VIX from the loader that repairs the x100 / /100 rows of 2021-10 to 2023-08 (the raw cached minutes contain values such as 0.24 and 3079)
+    from lib import L
+    vx = L.vix_1m(date(2021, 10, 1), date(2026, 10, 31))
+    vx["d"] = vx["timestamp"].dt.date
+    vixm = {d: g[["timestamp", "close"]] for d, g in vx.groupby("d")}
     frames = {"spot": spot, "vix": {d: g[["timestamp", "close"]] for d, g in vixm.items()}}
     ses = sorted(spot)
     exps = expiries()
