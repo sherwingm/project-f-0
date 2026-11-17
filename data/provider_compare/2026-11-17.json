@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 94.1,
    "upstox_minus_kotak_quote_time_s_median": -49.0
+  },
+  {
+   "at": "11:35:09",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.632,
+   "same_best_bid_pct": 39.2,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 94.1,
+   "upstox_minus_kotak_quote_time_s_median": -25.0
   }
  ],
  "top_gaps": [
@@ -452,6 +466,13 @@
    "at": "09:45"
   },
   {
+   "contract": "DIVISLAB26NOV11100CE",
+   "gap_pct": 1.632,
+   "kotak": 190.0,
+   "upstox": 193.1,
+   "at": "11:35"
+  },
+  {
    "contract": "MARICO26NOV910CE",
    "gap_pct": 1.613,
    "kotak": 9.3,
@@ -464,6 +485,13 @@
    "kotak": 270.0,
    "upstox": 266.3,
    "at": "09:45"
+  },
+  {
+   "contract": "DIVISLAB26NOV11100PE",
+   "gap_pct": 1.352,
+   "kotak": 147.95,
+   "upstox": 145.95,
+   "at": "11:35"
   },
   {
    "contract": "ADANIPORTS26NOV1920PE",
@@ -506,30 +534,16 @@
    "kotak": 60.65,
    "upstox": 61.35,
    "at": "09:35"
-  },
-  {
-   "contract": "M&M26NOV3350CE",
-   "gap_pct": 1.037,
-   "kotak": 67.5,
-   "upstox": 68.2,
-   "at": "09:35"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 1.036,
-   "kotak": 38.6,
-   "upstox": 39.0,
-   "at": "11:15"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 1375,
+  "rounds": 28,
+  "contract_quotes": 1426,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 37.3,
+  "same_best_bid_pct": 38.05,
   "same_best_ask_pct": 39.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -24.0
+  "upstox_minus_kotak_quote_time_s_median": -24.5
  }
 }
