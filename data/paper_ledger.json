@@ -45,17 +45,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 9.5,
-    "bid": 9.5,
-    "ask": 9.65,
+    "price": 9.3,
+    "bid": 9.3,
+    "ask": 9.5,
     "ltp": 9.45,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 31.25,
-   "exit_charges_est": 35.01,
-   "unrealised": -30.03,
-   "liquidation_value": 5902.49,
+   "unrealised_gross": -93.75,
+   "exit_charges_est": 34.77,
+   "unrealised": -154.79,
+   "liquidation_value": 5777.73,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -127,11 +127,11 @@
      "qty": 1875
     },
     "last": {
-     "price": 9.5,
-     "at": "2026-11-17T14:21:19+05:30",
-     "qty": 1250
+     "price": 9.3,
+     "at": "2026-11-17T14:21:32+05:30",
+     "qty": 1875
     },
-    "n": 127024,
+    "n": 127033,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -181,17 +181,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 78.45,
-    "bid": 78.45,
-    "ask": 81.8,
-    "ltp": 80.95,
-    "at": "2026-11-17T14:21:19+05:30",
+    "price": 78.95,
+    "bid": 78.95,
+    "ask": 82.55,
+    "ltp": 78.45,
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 22050.0,
-   "exit_charges_est": 80.1,
-   "unrealised": 21942.98,
-   "liquidation_value": 29338.65,
+   "unrealised_gross": 22237.5,
+   "exit_charges_est": 80.46,
+   "unrealised": 22130.12,
+   "liquidation_value": 29525.79,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -263,11 +263,11 @@
      "qty": 375
     },
     "last": {
-     "price": 78.45,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 78.95,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 375
     },
-    "n": 126604,
+    "n": 126613,
     "missing": 1,
     "sources": [
      "live best bid (feed poll)"
@@ -319,9 +319,9 @@
    "mark": {
     "price": 77.65,
     "bid": 77.65,
-    "ask": 80.4,
+    "ask": 80.2,
     "ltp": 88.75,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 35007.5,
@@ -400,10 +400,10 @@
     },
     "last": {
      "price": 77.65,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 3300
     },
-    "n": 126614,
+    "n": 126623,
     "missing": 4,
     "sources": [
      "live best bid (feed poll)"
@@ -457,7 +457,7 @@
     "bid": 87.6,
     "ask": 89.9,
     "ltp": 92.0,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 38252.5,
@@ -536,10 +536,10 @@
     },
     "last": {
      "price": 87.6,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 4950
     },
-    "n": 113455,
+    "n": 113464,
     "missing": 68,
     "sources": [
      "live best bid (feed poll)"
@@ -589,17 +589,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 289.55,
-    "bid": 289.55,
-    "ask": 294.0,
+    "price": 289.4,
+    "bid": 289.4,
+    "ask": 292.5,
     "ltp": 297.0,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 42805.0,
-   "exit_charges_est": 120.91,
-   "unrealised": 42656.95,
-   "liquidation_value": 50550.34,
+   "unrealised_gross": 42778.75,
+   "exit_charges_est": 120.86,
+   "unrealised": 42630.75,
+   "liquidation_value": 50524.14,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -671,11 +671,11 @@
      "qty": 175
     },
     "last": {
-     "price": 289.55,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 289.4,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 175
     },
-    "n": 113486,
+    "n": 113495,
     "missing": 1,
     "sources": [
      "live best bid (feed poll)"
@@ -729,7 +729,7 @@
     "bid": 66.6,
     "ask": 68.9,
     "ltp": 64.95,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 20460.0,
@@ -808,10 +808,10 @@
     },
     "last": {
      "price": 66.6,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 400
     },
-    "n": 112101,
+    "n": 112110,
     "missing": 2,
     "sources": [
      "live best bid (feed poll)"
@@ -863,9 +863,9 @@
    "mark": {
     "price": 5.67,
     "bid": 5.67,
-    "ask": 5.78,
+    "ask": 5.82,
     "ltp": 5.8,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 14976.0,
@@ -944,10 +944,10 @@
     },
     "last": {
      "price": 5.67,
-     "at": "2026-11-17T14:21:19+05:30",
-     "qty": 7200
+     "at": "2026-11-17T14:21:32+05:30",
+     "qty": 3600
     },
-    "n": 110753,
+    "n": 110762,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -1001,7 +1001,7 @@
     "bid": 66.6,
     "ask": 68.9,
     "ltp": 64.95,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 19700.0,
@@ -1080,10 +1080,10 @@
     },
     "last": {
      "price": 66.6,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 400
     },
-    "n": 110759,
+    "n": 110768,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -1133,17 +1133,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 19.6,
-    "bid": 19.6,
-    "ask": 19.95,
+    "price": 19.55,
+    "bid": 19.55,
+    "ask": 19.9,
     "ltp": 20.6,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 34652.5,
-   "exit_charges_est": 101.71,
-   "unrealised": 34524.47,
-   "liquidation_value": 40568.29,
+   "unrealised_gross": 34548.75,
+   "exit_charges_est": 101.5,
+   "unrealised": 34420.93,
+   "liquidation_value": 40464.75,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -1217,11 +1217,11 @@
      "qty": 6225
     },
     "last": {
-     "price": 19.6,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 19.55,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 2075
     },
-    "n": 109009,
+    "n": 109018,
     "missing": 4,
     "sources": [
      "live best bid (feed poll)"
@@ -1275,7 +1275,7 @@
     "bid": 53.8,
     "ask": 56.3,
     "ltp": 49.45,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 15347.5,
@@ -1356,10 +1356,10 @@
     },
     "last": {
      "price": 53.8,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 350
     },
-    "n": 109011,
+    "n": 109020,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -1413,7 +1413,7 @@
     "bid": 107.4,
     "ask": 112.05,
     "ltp": 98.65,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 48615.0,
@@ -1494,10 +1494,10 @@
     },
     "last": {
      "price": 107.4,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 1575
     },
-    "n": 109006,
+    "n": 109015,
     "missing": 1,
     "sources": [
      "live best bid (feed poll)"
@@ -1547,17 +1547,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 5.07,
-    "bid": 5.07,
-    "ask": 5.4,
+    "price": 5.09,
+    "bid": 5.09,
+    "ask": 5.38,
     "ltp": 5.42,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 10330.5,
-   "exit_charges_est": 58.16,
-   "unrealised": 10245.29,
-   "liquidation_value": 17940.34,
+   "unrealised_gross": 10401.5,
+   "exit_charges_est": 58.3,
+   "unrealised": 10316.15,
+   "liquidation_value": 18011.2,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -1631,11 +1631,11 @@
      "qty": 3550
     },
     "last": {
-     "price": 5.07,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 5.09,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 3550
     },
-    "n": 108990,
+    "n": 108999,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -1685,17 +1685,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 19.6,
-    "bid": 19.6,
-    "ask": 19.95,
+    "price": 19.55,
+    "bid": 19.55,
+    "ask": 19.9,
     "ltp": 20.6,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 34756.25,
-   "exit_charges_est": 101.71,
-   "unrealised": 34628.27,
-   "liquidation_value": 40568.29,
+   "unrealised_gross": 34652.5,
+   "exit_charges_est": 101.5,
+   "unrealised": 34524.73,
+   "liquidation_value": 40464.75,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -1769,11 +1769,11 @@
      "qty": 6225
     },
     "last": {
-     "price": 19.6,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 19.55,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 2075
     },
-    "n": 105974,
+    "n": 105983,
     "missing": 5,
     "sources": [
      "live best bid (feed poll)"
@@ -1827,7 +1827,7 @@
     "bid": 97.65,
     "ask": 102.05,
     "ltp": 102.45,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 43260.0,
@@ -1908,10 +1908,10 @@
     },
     "last": {
      "price": 97.65,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 525
     },
-    "n": 105974,
+    "n": 105983,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -1965,7 +1965,7 @@
     "bid": 11.95,
     "ask": 12.15,
     "ltp": 12.0,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 7440.0,
@@ -2046,10 +2046,10 @@
     },
     "last": {
      "price": 11.95,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 2400
     },
-    "n": 105845,
+    "n": 105854,
     "missing": 28,
     "sources": [
      "live best bid (feed poll)"
@@ -2103,7 +2103,7 @@
     "bid": 3.85,
     "ask": 3.95,
     "ltp": 3.95,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": -1200.0,
@@ -2184,10 +2184,10 @@
     },
     "last": {
      "price": 3.85,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 3600
     },
-    "n": 102343,
+    "n": 102352,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2237,17 +2237,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 30.3,
-    "bid": 30.3,
-    "ask": 30.6,
+    "price": 30.1,
+    "bid": 30.1,
+    "ask": 30.55,
     "ltp": 30.15,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 0.0,
-   "exit_charges_est": 35.24,
-   "unrealised": -61.57,
-   "liquidation_value": 6024.76,
+   "unrealised_gross": -40.0,
+   "exit_charges_est": 35.17,
+   "unrealised": -101.5,
+   "liquidation_value": 5984.83,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -2321,11 +2321,11 @@
      "qty": 600
     },
     "last": {
-     "price": 30.3,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 30.1,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 200
     },
-    "n": 97900,
+    "n": 97909,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2375,17 +2375,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 30.3,
-    "bid": 30.3,
-    "ask": 30.6,
+    "price": 30.1,
+    "bid": 30.1,
+    "ask": 30.55,
     "ltp": 30.15,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": -2710.0,
-   "exit_charges_est": 35.24,
-   "unrealised": -2772.79,
-   "liquidation_value": 6024.76,
+   "unrealised_gross": -2750.0,
+   "exit_charges_est": 35.17,
+   "unrealised": -2812.72,
+   "liquidation_value": 5984.83,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -2459,11 +2459,11 @@
      "qty": 600
     },
     "last": {
-     "price": 30.3,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 30.1,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 200
     },
-    "n": 85893,
+    "n": 85902,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2513,17 +2513,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 55.35,
-    "bid": 55.35,
-    "ask": 55.85,
-    "ltp": 55.7,
-    "at": "2026-11-17T14:21:19+05:30",
+    "price": 55.15,
+    "bid": 55.15,
+    "ask": 55.4,
+    "ltp": 55.45,
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 5270.0,
-   "exit_charges_est": 44.86,
-   "unrealised": 5198.93,
-   "liquidation_value": 11025.14,
+   "unrealised_gross": 5230.0,
+   "exit_charges_est": 44.79,
+   "unrealised": 5159.0,
+   "liquidation_value": 10985.21,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -2597,11 +2597,11 @@
      "qty": 4000
     },
     "last": {
-     "price": 55.35,
-     "at": "2026-11-17T14:21:19+05:30",
-     "qty": 400
+     "price": 55.15,
+     "at": "2026-11-17T14:21:32+05:30",
+     "qty": 600
     },
-    "n": 85495,
+    "n": 85504,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2651,17 +2651,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 34.7,
-    "bid": 34.7,
-    "ask": 35.2,
+    "price": 33.7,
+    "bid": 33.7,
+    "ask": 34.35,
     "ltp": 34.2,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 9048.75,
-   "exit_charges_est": 55.26,
-   "unrealised": 8966.54,
-   "liquidation_value": 16427.24,
+   "unrealised_gross": 8573.75,
+   "exit_charges_est": 54.35,
+   "unrealised": 8492.45,
+   "liquidation_value": 15953.15,
    "rule": {
     "entry_mode": "open",
     "arms": [
@@ -2735,11 +2735,11 @@
      "qty": 4275
     },
     "last": {
-     "price": 34.7,
-     "at": "2026-11-17T14:21:19+05:30",
-     "qty": 950
+     "price": 33.7,
+     "at": "2026-11-17T14:21:32+05:30",
+     "qty": 475
     },
-    "n": 85495,
+    "n": 85504,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2793,7 +2793,7 @@
     "bid": 50.55,
     "ask": 51.05,
     "ltp": 51.65,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": 17147.5,
@@ -2874,10 +2874,10 @@
     },
     "last": {
      "price": 50.55,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 475
     },
-    "n": 71097,
+    "n": 71106,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -2927,17 +2927,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 88.9,
-    "bid": 88.9,
-    "ask": 89.8,
-    "ltp": 89.2,
-    "at": "2026-11-17T14:21:19+05:30",
+    "price": 88.35,
+    "bid": 88.35,
+    "ask": 89.6,
+    "ltp": 89.45,
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": 10050.0,
-   "exit_charges_est": 57.75,
-   "unrealised": 9965.16,
-   "liquidation_value": 17722.25,
+   "unrealised_gross": 9940.0,
+   "exit_charges_est": 57.53,
+   "unrealised": 9855.38,
+   "liquidation_value": 17612.47,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -3011,11 +3011,11 @@
      "qty": 4000
     },
     "last": {
-     "price": 88.9,
-     "at": "2026-11-17T14:21:19+05:30",
-     "qty": 200
+     "price": 88.35,
+     "at": "2026-11-17T14:21:32+05:30",
+     "qty": 400
     },
-    "n": 71097,
+    "n": 71106,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -3069,7 +3069,7 @@
     "bid": 1.9,
     "ask": 2.0,
     "ltp": 1.95,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
    "unrealised_gross": -5062.5,
@@ -3150,10 +3150,10 @@
     },
     "last": {
      "price": 1.9,
-     "at": "2026-11-17T14:21:19+05:30",
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 18900
     },
-    "n": 55885,
+    "n": 55894,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -3203,17 +3203,17 @@
    "t2_date": "2026-11-19",
    "stop_triggered_at": null,
    "mark": {
-    "price": 33.85,
-    "bid": 33.85,
-    "ask": 34.35,
+    "price": 33.65,
+    "bid": 33.65,
+    "ask": 34.2,
     "ltp": 34.0,
-    "at": "2026-11-17T14:21:19+05:30",
+    "at": "2026-11-17T14:21:32+05:30",
     "stale": false
    },
-   "unrealised_gross": -1985.0,
-   "exit_charges_est": 30.1,
-   "unrealised": -2041.12,
-   "liquidation_value": 3354.9,
+   "unrealised_gross": -2005.0,
+   "exit_charges_est": 30.07,
+   "unrealised": -2061.09,
+   "liquidation_value": 3334.93,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -3286,11 +3286,11 @@
      "qty": 200
     },
     "last": {
-     "price": 33.85,
-     "at": "2026-11-17T14:21:19+05:30",
+     "price": 33.65,
+     "at": "2026-11-17T14:21:32+05:30",
      "qty": 100
     },
-    "n": 12410,
+    "n": 12419,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -25208,7 +25208,7 @@
     },
     "last": {
      "price": 0.2,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 1.45,
@@ -25485,7 +25485,7 @@
     },
     "last": {
      "price": 0.4,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 3.05,
@@ -25745,7 +25745,7 @@
     },
     "last": {
      "price": 2.6,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 4.15,
@@ -28037,7 +28037,7 @@
     },
     "last": {
      "price": 0.4,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 3.95,
@@ -28294,7 +28294,7 @@
     },
     "last": {
      "price": 56.0,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 233.7,
@@ -28554,7 +28554,7 @@
     },
     "last": {
      "price": 2.8,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 3.8,
@@ -28828,7 +28828,7 @@
     },
     "last": {
      "price": 20.6,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 47.2,
@@ -30165,8 +30165,8 @@
      "at": "2026-11-17T14:19:35+05:30"
     },
     "last": {
-     "price": 14.35,
-     "at": "2026-11-17T14:21:19+05:30"
+     "price": 14.5,
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 100.75,
@@ -30426,7 +30426,7 @@
     },
     "last": {
      "price": 0.6,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 3.3,
@@ -30683,7 +30683,7 @@
     },
     "last": {
      "price": 30.8,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 53.85,
@@ -31724,8 +31724,8 @@
      "at": "2026-11-17T12:43:49+05:30"
     },
     "last": {
-     "price": 27.15,
-     "at": "2026-11-17T14:21:19+05:30"
+     "price": 27.0,
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 33.2,
@@ -31939,7 +31939,7 @@
     },
     "last": {
      "price": 22.35,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 30.6,
@@ -32153,7 +32153,7 @@
     },
     "last": {
      "price": 1.25,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 2.8,
@@ -32367,7 +32367,7 @@
     },
     "last": {
      "price": 4.9,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 5.95,
@@ -32584,7 +32584,7 @@
     },
     "last": {
      "price": 2.95,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 5.25,
@@ -32801,7 +32801,7 @@
     },
     "last": {
      "price": 0.65,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 1.15,
@@ -33018,7 +33018,7 @@
     },
     "last": {
      "price": 4.3,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 7.6,
@@ -33235,7 +33235,7 @@
     },
     "last": {
      "price": 0.65,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 1.15,
@@ -33452,7 +33452,7 @@
     },
     "last": {
      "price": 3.45,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 7.5,
@@ -33668,7 +33668,7 @@
     },
     "last": {
      "price": 6.3,
-     "at": "2026-11-17T14:21:19+05:30"
+     "at": "2026-11-17T14:21:32+05:30"
     },
     "peak_bid": {
      "price": 11.7,
@@ -33869,7 +33869,7 @@
   },
   "2026-11-17": {
    "start_equity": 1213993.06,
-   "end_equity": 1291896.62,
+   "end_equity": 1291072.95,
    "realised": 0.0
   }
  },
@@ -34064,7 +34064,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-17T14:21:19+05:30",
+ "saved_at": "2026-11-17T14:21:32+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
