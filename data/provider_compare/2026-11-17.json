@@ -938,6 +938,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "14:55:20",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.439,
+   "same_best_bid_pct": 33.3,
+   "same_best_ask_pct": 49.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.0,
+   "upstox_minus_kotak_quote_time_s_median": -18.0
   }
  ],
  "top_gaps": [
@@ -996,6 +1010,13 @@
    "kotak": 52.55,
    "upstox": 51.2,
    "at": "13:10"
+  },
+  {
+   "contract": "KALYANKJIL26NOV760CE",
+   "gap_pct": 2.439,
+   "kotak": 2.05,
+   "upstox": 2.1,
+   "at": "14:55"
   },
   {
    "contract": "KALYANKJIL26NOV760CE",
@@ -1073,23 +1094,16 @@
    "kotak": 75.3,
    "upstox": 76.45,
    "at": "13:15"
-  },
-  {
-   "contract": "GMRAIRPORT26NOV105CE",
-   "gap_pct": 1.504,
-   "kotak": 1.33,
-   "upstox": 1.35,
-   "at": "11:40"
   }
  ],
  "day": {
-  "rounds": 67,
-  "contract_quotes": 3414,
+  "rounds": 68,
+  "contract_quotes": 3465,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.2,
+  "same_best_bid_pct": 40.2,
   "same_best_ask_pct": 41.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.1,
-  "upstox_minus_kotak_quote_time_s_median": -34.0
+  "upstox_minus_kotak_quote_time_s_median": -33.5
  }
 }
