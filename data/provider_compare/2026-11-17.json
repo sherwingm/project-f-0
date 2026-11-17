@@ -504,6 +504,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.1,
    "upstox_minus_kotak_quote_time_s_median": -26.0
+  },
+  {
+   "at": "12:20:11",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.262,
+   "same_best_bid_pct": 49.0,
+   "same_best_ask_pct": 41.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.1,
+   "upstox_minus_kotak_quote_time_s_median": -49.0
   }
  ],
  "top_gaps": [
@@ -628,6 +642,13 @@
   },
   {
    "contract": "BSE26NOV4000CE",
+   "gap_pct": 1.262,
+   "kotak": 67.35,
+   "upstox": 66.5,
+   "at": "12:20"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
    "gap_pct": 1.256,
    "kotak": 67.65,
    "upstox": 68.5,
@@ -639,20 +660,13 @@
    "kotak": 64.7,
    "upstox": 65.5,
    "at": "11:15"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 1.173,
-   "kotak": 51.15,
-   "upstox": 50.55,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 36,
-  "contract_quotes": 1833,
+  "rounds": 37,
+  "contract_quotes": 1884,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 39.0,
+  "same_best_bid_pct": 39.2,
   "same_best_ask_pct": 39.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.2,
