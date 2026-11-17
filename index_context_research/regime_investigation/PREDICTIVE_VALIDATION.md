@@ -1,0 +1,35 @@
+# Predictive validation (coordinator; audited by Agent 5; 17 Nov 2026)
+
+Explanatory results ask which conditions went with profitable trades. This file asks whether those conditions **could have been identified before entry and persisted**. Method fixed in `PREREG_REGIME.md`: chronological ordering only, no random train / test splits (Agent 5 found none; the only random numbers are bootstrap seeds), thresholds fixed before any return was looked at, discovery = entries to 2025-09-30, then consistency in 2025-10-01 to 2026-10-28 and by half-year, no machine learning, trading days clustered. **The second half had already been seen descriptively in earlier reports, so it is a consistency check, not a clean holdout. The prospective holdout (trades after 13 Nov 17:48 IST) was not used and has 0 trades.**
+
+## 1. Multiple comparisons (Agent 5, consolidated over everything every agent tested)
+- Family per strategy: 37 planned tests (36 testable for G1-F; H4 has only 2 trades): Agent 3's 9, Agent 3b's 5 plus 4 same-contract repeats, Agent 4's 19. Both GIFT definitions are counted (conservative); robustness items are listed but excluded. Benjamini-Hochberg 10 % per strategy on the Kruskal-Wallis p-values.
+- **G1-F: 4 nominal p < 0.05 observed against 1.8 expected by chance** (if independent, P of at least 4 is 0.10). The smallest raw p-values: 0.020 (VIX x GIFT, column version), 0.020 (VIX level), 0.039 (VIX x gap), 0.042 (USD/INR). **Smallest corrected q 0.37: no survivor.** In discovery alone: **0 of 31 tests below 0.05** (smallest 0.070).
+- G1: 1 nominal hit (expected 1.8), no survivor (min q 0.93). G1-C: 3 nominal hits, smallest p 0.0028, q 0.101: **just misses** (the FII futures level cell, which is a calendar split). XP: 1 nominal hit, q 0.34; in discovery alone XP's VIX direction passes but reverses.
+- Dependence (so the correction is only approximate): G1-F is a subset of G1; combinations contain the single-condition classes they are built from; indicated-vs-actual is mechanically (gap minus GIFT); several global variables overlap; VIX, FII and DII level classes are confounded with calendar period.
+
+## 2. Consistency across the two periods and half-years (G1-F)
+- Agent 3: 8 testable class contrasts, 4 same sign (bearish, VIX falling, S&P flat, S&P up) with second-year sizes near zero. Agent 3b: 4 same-sign against 4 reversed. Agent 4: the discovery best-versus-worst class order is kept in the second year in 5 hypotheses, reversed in 8, and untestable in 6. That is coin-flip consistency.
+- **Same sign in both periods, none significant:** breadth mid above low; S&P up above flat; flat USD/INR weakest; **indicated-vs-actual "in line" worse than the rest (-41 then -34 points; 4 of 5 half-years; p 0.077, q 0.49)**; the 5-day return middle quintile positive in all four testable half-years (non-monotonic, outside the family).
+- **Reversed:** Asia down / flat, high breadth, sector leadership, the VIX-level gap (+5 points in discovery), US VIX spike (strongly negative only in the second year), XP VIX direction.
+- Half-year results swing widely (2026 H1 +64 % vs 2026 H2 -5.6 %) whatever the regime.
+
+## 3. Verdict per hypothesis (G1-F primary), using the pre-defined verdict words
+- **Direction (H1), VIX direction (H3), actual opening gap (H5), GIFT overnight class (H10), Asia (H12), global risk-on / off, Brent, dollar index, US 10-year, news tone, scheduled events, participant positioning:** NO PREDICTIVE VALUE (no discovery signal; events and expansion are also untestable by size).
+- **VIX level, normal vs low (H2, H9, C2):** PROMISING BUT INSUFFICIENT EVIDENCE at most, leaning to FAILED OUT-OF-SAMPLE: the discovery difference is +5 points, the whole-sample gap comes from 8 later trades, one 2024 half-year reverses, there are no high-VIX trades, and the class is period-confounded. Without its top 3 trades the normal-VIX mean is +20.2 %, so the effect is not a three-trade artefact, but it cannot be separated from time.
+- **Indicated vs actual opening ("in line" worse), same-contract:** PROMISING BUT INSUFFICIENT EVIDENCE (same sign in both years, small cells, the second half already seen, q 0.49).
+- **USD/INR large-move days (X02):** no discovery test below 0.05 (discovery p 0.070; second half 0.085, same shape); one nominal p of 19 tests, which chance explains: PROMISING BUT INSUFFICIENT EVIDENCE at best.
+- **Breadth (mid best):** discovery-consistent in order but high breadth reverses: NO PREDICTIVE VALUE established.
+- **FII / DII cash (diverging vs both buying):** PROMISING BUT INSUFFICIENT EVIDENCE and window-limited (59 trades, third party, September 2026 missing); REQUIRES LIVE PAPER VALIDATION if it is ever pursued.
+- **Combinations:** NO PREDICTIVE VALUE beyond the single variable they contain; the triple is insufficient (cells under 10 trades).
+- **Other strategies:** G1-C after bullish run-ups: same sign in both years (-33 / -28 points), Welch p 0.005, KW p 0.255: PROMISING BUT INSUFFICIENT EVIDENCE (a lead in the opposite direction to the usual expectation); G1-C US VIX spike (+25.9 % vs -15.3 %, same direction in both years, n 23): PROMISING BUT INSUFFICIENT EVIDENCE; XP VIX direction: PASSED DISCOVERY ONLY, then FAILED out-of-sample.
+- **Nothing reaches PASSED OUT-OF-SAMPLE VALIDATION.** None of these leads is recommended for any rule change; they may be tracked on the live paper record (with the conditions fixed as defined here) so that future trades can show whether they persist.
+
+## 4. Checks Agent 5 performed (summary)
+- Re-derived 12 features for 30 random G1-F trades from the raw files: all matched exactly (the only differences were the auditor's own calendar errors about the NSE index file lacking the Saturday / Sunday Budget sessions, which Agent 3's labels handle correctly).
+- Reproduced direction (ret20) tables identically and the VIX table to one trade; GIFT tables identical to Agent 3b in every row.
+- No look-ahead found in any predictor actually used. Yahoo local-offset fragility: the code applied the offset only to Nikkei and Hang Seng, whose stamps make local date equal UTC date; mis-dated rows 0.
+- Corrections applied in this report: same-contract GIFT as primary; consolidated correction instead of per-agent families; one set of statistics definitions (`results_tables/`); Agent 4's complete S&P variable instead of Agent 3's stale cache; "mean without top 3 trades" next to every class; the power limit stated; Agent 2's descriptive cuts not mixed with the pre-registered classes.
+
+## 5. What this validation can and cannot say
+It can say that, in these 154 trades, no market condition identifiable before entry shows an effect large enough to stand out from chance after correction, and that the apparent effects either reverse or cannot be checked in the second period. It **cannot** say the conditions do not matter: effects below about 45 points are invisible at these cell sizes (`RESEARCH_LIMITATIONS.md`), G1-F has no high-VIX or gap-up trades, and the sample is two years of one market phase.

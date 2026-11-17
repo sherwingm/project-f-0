@@ -1,0 +1,169 @@
+strategy,section,hypothesis,test,contrast,diff_pp,p_raw,n_cells_ge10
+G1-F,explanatory_all,H10,Kruskal-Wallis,all classes with n>=10,,0.6094755643013265,2.0
+G1-F,explanatory_all,H10,Welch,"gap-down minus gap-up (nA=8, nB=10)",,,
+G1-F,explanatory_all,H10,Welch,"flat minus the rest (nA=134, nB=18)",-4.088067993366497,0.8933285183167636,
+G1-F,explanatory_all,H11,Kruskal-Wallis,all classes with n>=10,,0.6278581125644994,3.0
+G1-F,explanatory_all,H11,Welch,"in line minus the rest (nA=88, nB=64)",-10.85602272727273,0.5226015752031711,
+G1-F,explanatory_all,H11,Welch,"weaker minus stronger (nA=41, nB=23)",-9.197539766702022,0.7528826749866289,
+G1-F,explanatory_all,H12,Kruskal-Wallis,all classes with n>=10,,0.5828975205924332,3.0
+G1-F,explanatory_all,H12,Welch,"down minus up (nA=41, nB=47)",-5.352989102231454,0.8163364379915833,
+G1-F,explanatory_all,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.7867314775169831,3.0
+G1-F,explanatory_all,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.020258373598016573,2.0
+G1-F,explanatory_all,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.6853451239131731,3.0
+G1-F,explanatory_all,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=28, nB=15)",-1.5405952380952321,0.9641049761381094,
+G1-F,explanatory_all,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.03146371057602007,3.0
+G1-F,explanatory_all,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=100, nB=52)",-41.91614615384614,0.027112056560122187,
+G1-F,discovery_to_2025-09-30,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+G1-F,discovery_to_2025-09-30,H10,Welch,"gap-down minus gap-up (nA=8, nB=8)",,,
+G1-F,discovery_to_2025-09-30,H10,Welch,"flat minus the rest (nA=58, nB=16)",-5.008038793103452,0.8863137981094709,
+G1-F,discovery_to_2025-09-30,H11,Kruskal-Wallis,all classes with n>=10,,0.8800797152444745,3.0
+G1-F,discovery_to_2025-09-30,H11,Welch,"in line minus the rest (nA=43, nB=31)",-27.718214553638415,0.2957073115355556,
+G1-F,discovery_to_2025-09-30,H11,Welch,"weaker minus stronger (nA=18, nB=13)",-5.7263675213675285,0.9061163555719305,
+G1-F,discovery_to_2025-09-30,H12,Kruskal-Wallis,all classes with n>=10,,0.20811745669169832,3.0
+G1-F,discovery_to_2025-09-30,H12,Welch,"down minus up (nA=14, nB=22)",16.03441558441559,0.7226165757958593,
+G1-F,discovery_to_2025-09-30,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.1794126310408335,2.0
+G1-F,discovery_to_2025-09-30,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.5288074291180012,2.0
+G1-F,discovery_to_2025-09-30,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.6328131310482592,2.0
+G1-F,discovery_to_2025-09-30,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=14, nB=6)",,,
+G1-F,discovery_to_2025-09-30,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.26359769016243473,3.0
+G1-F,discovery_to_2025-09-30,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=44, nB=30)",-47.658681818181826,0.07538647172927218,
+G1-F,second_half,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+G1-F,second_half,H10,Welch,"gap-down minus gap-up (nA=0, nB=2)",,,
+G1-F,second_half,H10,Welch,"flat minus the rest (nA=76, nB=2)",,,
+G1-F,second_half,H11,Kruskal-Wallis,all classes with n>=10,,0.5287465310870447,3.0
+G1-F,second_half,H11,Welch,"in line minus the rest (nA=45, nB=33)",5.0060404040404105,0.8192369749005876,
+G1-F,second_half,H11,Welch,"weaker minus stronger (nA=23, nB=10)",-5.216608695652182,0.8759667074653771,
+G1-F,second_half,H12,Kruskal-Wallis,all classes with n>=10,,0.316083375970246,3.0
+G1-F,second_half,H12,Welch,"down minus up (nA=27, nB=25)",-9.91325925925926,0.6919261721082249,
+G1-F,second_half,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.15668879363029398,2.0
+G1-F,second_half,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,,1.0
+G1-F,second_half,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.40339100966829944,2.0
+G1-F,second_half,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=14, nB=9)",,,
+G1-F,second_half,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.03345637749861393,2.0
+G1-F,second_half,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=56, nB=22)",-33.67560064935065,0.20485961444286643,
+G1,explanatory_all,H10,Kruskal-Wallis,all classes with n>=10,,0.16030698373828003,3.0
+G1,explanatory_all,H10,Welch,"gap-down minus gap-up (nA=14, nB=28)",32.86928571428571,0.3721155258226563,
+G1,explanatory_all,H10,Welch,"flat minus the rest (nA=215, nB=42)",23.969990033222587,0.11751275099282807,
+G1,explanatory_all,H11,Kruskal-Wallis,all classes with n>=10,,0.9270816410899495,3.0
+G1,explanatory_all,H11,Welch,"in line minus the rest (nA=120, nB=137)",-4.570930656934308,0.6988634473383082,
+G1,explanatory_all,H11,Welch,"weaker minus stronger (nA=67, nB=70)",1.6001876332622578,0.9245612866544388,
+G1,explanatory_all,H12,Kruskal-Wallis,all classes with n>=10,,0.6652965743193036,3.0
+G1,explanatory_all,H12,Welch,"down minus up (nA=61, nB=99)",12.129148865706238,0.43576311555692554,
+G1,explanatory_all,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.2706133923757984,5.0
+G1,explanatory_all,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.576760817935104,4.0
+G1,explanatory_all,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.986828745508809,3.0
+G1,explanatory_all,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=41, nB=51)",18.09112386417982,0.3729378539389725,
+G1,explanatory_all,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.5382626193207851,3.0
+G1,explanatory_all,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=151, nB=106)",-19.985029363988506,0.11330566911737094,
+G1,discovery_to_2025-09-30,H10,Kruskal-Wallis,all classes with n>=10,,0.3421128887409111,3.0
+G1,discovery_to_2025-09-30,H10,Welch,"gap-down minus gap-up (nA=10, nB=19)",52.42284210526316,0.2995409679268809,
+G1,discovery_to_2025-09-30,H10,Welch,"flat minus the rest (nA=98, nB=29)",13.798673469387756,0.5203212144159082,
+G1,discovery_to_2025-09-30,H11,Kruskal-Wallis,all classes with n>=10,,0.9497716490548859,3.0
+G1,discovery_to_2025-09-30,H11,Welch,"in line minus the rest (nA=62, nB=65)",-13.706965260545907,0.4255822104850228,
+G1,discovery_to_2025-09-30,H11,Welch,"weaker minus stronger (nA=26, nB=39)",0.851025641025636,0.9767681136939629,
+G1,discovery_to_2025-09-30,H12,Kruskal-Wallis,all classes with n>=10,,0.5034831132999389,3.0
+G1,discovery_to_2025-09-30,H12,Welch,"down minus up (nA=21, nB=49)",23.8734693877551,0.43040111946709014,
+G1,discovery_to_2025-09-30,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.15660832398683155,4.0
+G1,discovery_to_2025-09-30,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.3643879668778527,3.0
+G1,discovery_to_2025-09-30,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7974396357155914,3.0
+G1,discovery_to_2025-09-30,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=19, nB=22)",28.888349282296645,0.35261046252503764,
+G1,discovery_to_2025-09-30,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7521572214104247,3.0
+G1,discovery_to_2025-09-30,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=68, nB=59)",-33.312178464606184,0.06352333177590251,
+G1,second_half,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+G1,second_half,H10,Welch,"gap-down minus gap-up (nA=4, nB=9)",,,
+G1,second_half,H10,Welch,"flat minus the rest (nA=117, nB=13)",49.616495726495735,0.00041055381697698094,
+G1,second_half,H11,Kruskal-Wallis,all classes with n>=10,,0.8388218484448571,3.0
+G1,second_half,H11,Welch,"in line minus the rest (nA=58, nB=72)",3.957749042145596,0.8145352938870379,
+G1,second_half,H11,Welch,"weaker minus stronger (nA=41, nB=31)",6.996805664830839,0.7212531898175586,
+G1,second_half,H12,Kruskal-Wallis,all classes with n>=10,,0.2687943509385264,3.0
+G1,second_half,H12,Welch,"down minus up (nA=40, nB=50)",9.294700000000002,0.5989607166299938,
+G1,second_half,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.6414299726410837,3.0
+G1,second_half,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.997405580932336,2.0
+G1,second_half,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.8747702453005758,3.0
+G1,second_half,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=22, nB=29)",9.248275862068965,0.7335269822977325,
+G1,second_half,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.5282966913254135,3.0
+G1,second_half,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=83, nB=47)",-5.14947193027429,0.7644637254249919,
+G1-C,explanatory_all,H10,Kruskal-Wallis,all classes with n>=10,,0.9303774526654471,3.0
+G1-C,explanatory_all,H10,Welch,"gap-down minus gap-up (nA=17, nB=30)",-24.05950980392156,0.15504496329655043,
+G1-C,explanatory_all,H10,Welch,"flat minus the rest (nA=186, nB=47)",8.711515671471057,0.4306223928485223,
+G1-C,explanatory_all,H11,Kruskal-Wallis,all classes with n>=10,,0.188064386994194,3.0
+G1-C,explanatory_all,H11,Welch,"in line minus the rest (nA=107, nB=126)",3.224480789200415,0.7406910007154474,
+G1-C,explanatory_all,H11,Welch,"weaker minus stronger (nA=66, nB=60)",16.176575757575755,0.24572836622800495,
+G1-C,explanatory_all,H12,Kruskal-Wallis,all classes with n>=10,,0.3692339878638304,3.0
+G1-C,explanatory_all,H12,Welch,"down minus up (nA=57, nB=79)",4.0916389073950725,0.7544206036395821,
+G1-C,explanatory_all,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.20899519221307766,4.0
+G1-C,explanatory_all,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.3149354508778774,4.0
+G1-C,explanatory_all,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.4150976115769046,3.0
+G1-C,explanatory_all,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=32, nB=60)",-1.9693541666666654,0.9077780281962096,
+G1-C,explanatory_all,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.04594923752499465,3.0
+G1-C,explanatory_all,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=138, nB=95)",-6.176359267734553,0.5429358112610003,
+G1-C,discovery_to_2025-09-30,H10,Kruskal-Wallis,all classes with n>=10,,0.3254947643427811,2.0
+G1-C,discovery_to_2025-09-30,H10,Welch,"gap-down minus gap-up (nA=9, nB=17)",,,
+G1-C,discovery_to_2025-09-30,H10,Welch,"flat minus the rest (nA=85, nB=26)",16.67042081447964,0.31222699782907876,
+G1-C,discovery_to_2025-09-30,H11,Kruskal-Wallis,all classes with n>=10,,0.7199538165951873,3.0
+G1-C,discovery_to_2025-09-30,H11,Welch,"in line minus the rest (nA=52, nB=59)",-20.575635593220337,0.1850163611100076,
+G1-C,discovery_to_2025-09-30,H11,Welch,"weaker minus stronger (nA=35, nB=24)",-0.6268571428571432,0.979462981216743,
+G1-C,discovery_to_2025-09-30,H12,Kruskal-Wallis,all classes with n>=10,,0.6484485094818289,3.0
+G1-C,discovery_to_2025-09-30,H12,Welch,"down minus up (nA=27, nB=33)",-1.8472053872053884,0.9306271752444784,
+G1-C,discovery_to_2025-09-30,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.08617838988129407,4.0
+G1-C,discovery_to_2025-09-30,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.8574545340458728,2.0
+G1-C,discovery_to_2025-09-30,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7119863987965444,3.0
+G1-C,discovery_to_2025-09-30,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=16, nB=25)",-10.095725000000002,0.7372735614814668,
+G1-C,discovery_to_2025-09-30,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.879113418003284,3.0
+G1-C,discovery_to_2025-09-30,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=70, nB=41)",-10.900700348432057,0.5081055664134679,
+G1-C,second_half,H10,Kruskal-Wallis,all classes with n>=10,,0.7213970375145762,2.0
+G1-C,second_half,H10,Welch,"gap-down minus gap-up (nA=8, nB=13)",,,
+G1-C,second_half,H10,Welch,"flat minus the rest (nA=101, nB=21)",2.2939603960396067,0.8798840776405205,
+G1-C,second_half,H11,Kruskal-Wallis,all classes with n>=10,,0.03313191001219434,3.0
+G1-C,second_half,H11,Welch,"in line minus the rest (nA=55, nB=67)",24.582407055630934,0.04248314809396421,
+G1-C,second_half,H11,Welch,"weaker minus stronger (nA=31, nB=36)",22.90290322580645,0.15837887663358363,
+G1-C,second_half,H12,Kruskal-Wallis,all classes with n>=10,,0.5927161103186684,3.0
+G1-C,second_half,H12,Welch,"down minus up (nA=30, nB=46)",7.718971014492748,0.6489739335467238,
+G1-C,second_half,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.7747386662442516,4.0
+G1-C,second_half,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.0816912893663414,2.0
+G1-C,second_half,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.5336768281690272,3.0
+G1-C,second_half,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=16, nB=35)",1.06475,0.9550011956120907,
+G1-C,second_half,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.010290787304127082,3.0
+G1-C,second_half,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=68, nB=54)",-3.9430283224400835,0.7523132737715137,
+XP,explanatory_all,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+XP,explanatory_all,H10,Welch,"gap-down minus gap-up (nA=9, nB=8)",,,
+XP,explanatory_all,H10,Welch,"flat minus the rest (nA=90, nB=17)",29.178450980392153,0.07096945873824255,
+XP,explanatory_all,H11,Kruskal-Wallis,all classes with n>=10,,0.33423830835318635,3.0
+XP,explanatory_all,H11,Welch,"in line minus the rest (nA=59, nB=48)",13.418004943502824,0.3792242794792897,
+XP,explanatory_all,H11,Welch,"weaker minus stronger (nA=27, nB=21)",24.074973544973545,0.29888285363100436,
+XP,explanatory_all,H12,Kruskal-Wallis,all classes with n>=10,,0.7394968440557675,3.0
+XP,explanatory_all,H12,Welch,"down minus up (nA=25, nB=35)",19.5972,0.3011612193165903,
+XP,explanatory_all,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.9559768070626078,3.0
+XP,explanatory_all,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.6371892345623482,2.0
+XP,explanatory_all,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.9835654908143253,3.0
+XP,explanatory_all,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=18, nB=17)",9.512679738562092,0.7750536495504422,
+XP,explanatory_all,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.9703835769772119,3.0
+XP,explanatory_all,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=67, nB=40)",-7.948335820895522,0.6314326285851777,
+XP,discovery_to_2025-09-30,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+XP,discovery_to_2025-09-30,H10,Welch,"gap-down minus gap-up (nA=4, nB=4)",,,
+XP,discovery_to_2025-09-30,H10,Welch,"flat minus the rest (nA=44, nB=8)",,,
+XP,discovery_to_2025-09-30,H11,Kruskal-Wallis,all classes with n>=10,,0.07468815150071408,2.0
+XP,discovery_to_2025-09-30,H11,Welch,"in line minus the rest (nA=33, nB=19)",25.606905901116424,0.3376152789390066,
+XP,discovery_to_2025-09-30,H11,Welch,"weaker minus stronger (nA=10, nB=9)",,,
+XP,discovery_to_2025-09-30,H12,Kruskal-Wallis,all classes with n>=10,,0.9308591380271217,3.0
+XP,discovery_to_2025-09-30,H12,Welch,"down minus up (nA=12, nB=15)",16.10383333333333,0.6224777293722179,
+XP,discovery_to_2025-09-30,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.051612403993473534,2.0
+XP,discovery_to_2025-09-30,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.3055070868612483,2.0
+XP,discovery_to_2025-09-30,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,,1.0
+XP,discovery_to_2025-09-30,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=9, nB=4)",,,
+XP,discovery_to_2025-09-30,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7432374054308082,2.0
+XP,discovery_to_2025-09-30,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=30, nB=22)",-3.0509393939393927,0.902180307689431,
+XP,second_half,H10,Kruskal-Wallis,all classes with n>=10,,,1.0
+XP,second_half,H10,Welch,"gap-down minus gap-up (nA=5, nB=4)",,,
+XP,second_half,H10,Welch,"flat minus the rest (nA=46, nB=9)",,,
+XP,second_half,H11,Kruskal-Wallis,all classes with n>=10,,0.48182219934895354,3.0
+XP,second_half,H11,Welch,"in line minus the rest (nA=26, nB=29)",-0.2605702917771815,0.9890746405625851,
+XP,second_half,H11,Welch,"weaker minus stronger (nA=17, nB=12)",29.588627450980393,0.2906856643218099,
+XP,second_half,H12,Kruskal-Wallis,all classes with n>=10,,0.7490165589509714,3.0
+XP,second_half,H12,Welch,"down minus up (nA=13, nB=20)",21.347346153846154,0.33255968268885305,
+XP,second_half,C1_dir3xGIFT,Kruskal-Wallis,all classes with n>=10,,0.1857887216213579,2.0
+XP,second_half,C2_VIXxGIFT,Kruskal-Wallis,all classes with n>=10,,0.9112855190470496,2.0
+XP,second_half,R1_gift_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7418973748753828,2.0
+XP,second_half,R1_gift_prevrow,Welch,"gap-down minus gap-up (nA=9, nB=13)",,,
+XP,second_half,R2_ivsa_prevrow,Kruskal-Wallis,all classes with n>=10,,0.7652573525006234,2.0
+XP,second_half,R2_ivsa_prevrow,Welch,"in line minus the rest (nA=37, nB=18)",-10.801486486486485,0.6332576877679682,

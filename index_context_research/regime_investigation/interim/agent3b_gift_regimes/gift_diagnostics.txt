@@ -1,0 +1,6 @@
+2023-07..2026-11 all: n=823; corr(primary, actual gap)=0.50; corr(prev-row variant, actual gap)=0.73; roll days 38
+   excluding roll days n=785: primary 0.50; prev-row 0.75; mean(prev-row minus primary) roll days 0.56 pt, other days -0.00 pt, sd 0.39
+   primary class counts: gap-down 60, gap-up 100, flat 663
+2024-10-01..2026-10-23 (trade window): n=505; corr(primary, actual gap)=0.50; corr(prev-row variant, actual gap)=0.73; roll days 23
+   excluding roll days n=482: primary 0.50; prev-row 0.75; mean(prev-row minus primary) roll days 0.58 pt, other days -0.02 pt, sd 0.43
+   primary class counts: gap-down 32, gap-up 60, flat 413

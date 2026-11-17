@@ -1,0 +1,10 @@
+same-contract return missing on 1 of 867 GIFT days; on trade rows missing: 6 ({'G1': 2, 'G1-C': 2, 'G1-F': 2, 'XP': 0})
+all days n=823: corr with actual NIFTY gap: same-contract 0.751; prev_settle column 0.497; previous-row 0.728
+trade window 2024-10-01..2026-10-23 n=505: corr with actual NIFTY gap: same-contract 0.752; prev_settle column 0.499; previous-row 0.730
+same-contract percentiles 1/5/50/95/99: [-1.406, -0.615, 0.042, 0.642, 1.274]; days differing from previous-row by >0.05 pt: 40
+G1: n=257 corr(same-contract, actual gap) 0.704; classes {'flat': 165, 'gap-up': 49, 'gap-down': 43}; ivsa {'in line': 154, 'stronger': 58, 'weaker': 45}
+G1-C: n=233 corr(same-contract, actual gap) 0.770; classes {'flat': 149, 'gap-up': 51, 'gap-down': 33}; ivsa {'in line': 145, 'weaker': 50, 'stronger': 38}
+G1-F: n=152 corr(same-contract, actual gap) 0.642; classes {'flat': 111, 'gap-down': 28, 'gap-up': 13}; ivsa {'in line': 102, 'weaker': 26, 'stronger': 24}
+  G1-F GIFT gap-down (same-contract) n=28: actual gap classes {'flat': 16, 'gap-down': 12}
+  G1-F GIFT gap-up (same-contract) n=13: actual gap classes {'flat': 13}
+XP: n=107 corr(same-contract, actual gap) 0.823; classes {'flat': 72, 'gap-down': 18, 'gap-up': 17}; ivsa {'in line': 67, 'weaker': 21, 'stronger': 19}

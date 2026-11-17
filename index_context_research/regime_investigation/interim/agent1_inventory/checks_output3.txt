@@ -1,0 +1,46 @@
+
+======== K. manifest hash verification (files unchanged since manifest)
+  files checked: 25  mismatches: 0
+
+======== L. trade sets vs calendars
+full sessions in minute store but absent from NSE index file: ['2024-01-20', '2025-02-01', '2026-02-01']
+G1F: n=154; trade ON a session absent from NSE index file: []; trades whose previous full session (minute calendar) != previous NSE-file session: 1 ['2025-02-03']; no GIFT row on trade date: ['2025-01-01', '2026-01-01']
+     previous full session has no breadth row: ['2025-02-01']  ; trade dates = Mon after special/holiday etc not examined
+     previous session in FII window with no FII row (excl. Sept 2026): 0  in Sept 2026: 8  before 2025-12: 87
+     previous session without participant OI file: 1
+G1: n=259; trade ON a session absent from NSE index file: []; trades whose previous full session (minute calendar) != previous NSE-file session: 2 ['2024-11-04', '2025-02-03']; no GIFT row on trade date: ['2025-01-01', '2026-01-01']
+     previous full session has no breadth row: ['2025-02-01']  ; trade dates = Mon after special/holiday etc not examined
+     previous session in FII window with no FII row (excl. Sept 2026): 0  in Sept 2026: 13  before 2025-12: 144
+     previous session without participant OI file: 1
+G1C: n=240; trade ON a session absent from NSE index file: ['2025-02-01', '2026-02-01']; trades whose previous full session (minute calendar) != previous NSE-file session: 2 ['2025-10-23', '2026-02-02']; no GIFT row on trade date: ['2025-02-01', '2026-02-01']
+     previous full session has no breadth row: ['2026-02-01']  ; trade dates = Mon after special/holiday etc not examined
+     previous session in FII window with no FII row (excl. Sept 2026): 0  in Sept 2026: 8  before 2025-12: 136
+     previous session without participant OI file: 1
+XP: n=108; trade ON a session absent from NSE index file: []; trades whose previous full session (minute calendar) != previous NSE-file session: 0 []; no GIFT row on trade date: []
+     previous full session has no breadth row: []  ; trade dates = Mon after special/holiday etc not examined
+     previous session in FII window with no FII row (excl. Sept 2026): 0  in Sept 2026: 4  before 2025-12: 61
+     previous session without participant OI file: 0
+
+======== M. breadth rows on non-session dates that are NOT copies of the previous row
+  non-duplicate holiday-dated rows: ['2021-11-05', '2024-01-22', '2024-05-20']
+            n_eq  advances  declines  unchanged  turnover_lacs
+date                                                          
+2021-11-04  1676       698       944         34      6198944.5
+2021-11-05  1665      1456       180         29      1141071.3
+2021-11-08  1667       890       750         27      7026933.5
+            n_eq  advances  declines  unchanged  turnover_lacs
+date                                                          
+2024-01-19  1785      1247       515         23     12278416.5
+2024-01-22  1792       878       892         22      7993269.4
+2024-01-23  1795       209      1573         13     15053704.7
+            n_eq  advances  declines  unchanged  turnover_lacs
+date                                                          
+2024-05-17  1886      1278       582         26     11015475.1
+2024-05-20  1892      1344       522         26      1520731.2
+2024-05-21  1896       714      1157         25     13087869.6
+  breadth rows on special sessions absent from NSE file: []
+  duplicate-of-previous rows on NSE *session* dates (genuine duplicates?): 2
+
+======== N. GIFT near-month, rows on NSE sessions only: rows missing
+  NSE sessions 2023-07-03..2026-11-17 with no GIFT row: ['2024-01-01', '2024-11-01', '2025-01-01', '2025-10-21', '2026-01-01']
+  special sessions (minute store only) with no GIFT row: ['2024-01-20', '2025-02-01', '2026-02-01']

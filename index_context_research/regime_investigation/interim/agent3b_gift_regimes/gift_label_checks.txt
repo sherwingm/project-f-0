@@ -1,0 +1,11 @@
+NIFTY futures rows 5242; after dropping already-expired 5242
+near-month days 867, 2023-07-03 to 2026-11-17; open==0 days 0; prev_settle missing 1
+primary vs robustness differ by >0.05 pt on 740 days (roll days); corr 0.5357
+gift_ret percentiles 1/5/50/95/99: [-0.805, -0.378, 0.007, 0.473, 0.843]; abs>3% days: 0
+Nikkei gap days 2152 (abs>5%: 0); HSI 2183 (abs>5%: 5)
+context gap_pct vs eod Open/prevClose: max abs diff 0.385 pt, days>0.05pt 215 (eod2 gap not used; context gap_pct is the actual 09:15 open)
+label rows 755; GIFT missing 6; Asia missing 7; Asia single-market 87
+G1: n=259 gift {'flat': 215, 'gap-up': 28, 'gap-down': 14} ivsa {'in line': 120, 'stronger': 70, 'weaker': 67} asia {'up': 99, 'flat': 97, 'down': 61}
+G1-C: n=235 gift {'flat': 186, 'gap-up': 30, 'gap-down': 17} ivsa {'in line': 107, 'weaker': 66, 'stronger': 60} asia {'flat': 96, 'up': 79, 'down': 57}
+G1-F: n=154 gift {'flat': 134, 'gap-up': 10, 'gap-down': 8} ivsa {'in line': 88, 'weaker': 41, 'stronger': 23} asia {'flat': 64, 'up': 47, 'down': 41}
+XP: n=107 gift {'flat': 90, 'gap-down': 9, 'gap-up': 8} ivsa {'in line': 59, 'weaker': 27, 'stronger': 21} asia {'flat': 47, 'up': 35, 'down': 25}

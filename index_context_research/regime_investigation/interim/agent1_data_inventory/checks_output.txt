@@ -1,0 +1,131 @@
+=== SPOT 1m ===
+NIFTY50 files 61 rows 466220 first 2021-10-20 last 2026-10-29 days 1241
+  minutes/day: min 43 median 376.0 max 376  days with <370 min: 2 ['2021-11-04', '2021-11-10']
+  dup timestamps: 0  NaN close: 0  source counts: {'kotak': 462675, 'upstox': 3545}
+  1-min |ret| >  0.02 count: 0
+  first-minute of day: most common {datetime.time(9, 15): 1240, datetime.time(14, 48): 1}
+NIFTYBANK files 61 rows 466170 first 2021-10-20 last 2026-10-29 days 1241
+  minutes/day: min 43 median 376.0 max 376  days with <370 min: 3 ['2021-11-04', '2021-11-10', '2022-03-07']
+  dup timestamps: 0  NaN close: 0  source counts: {'kotak': 462259, 'upstox': 3911}
+  1-min |ret| >  0.02 count: 0
+  first-minute of day: most common {datetime.time(9, 15): 1240, datetime.time(14, 48): 1}
+SENSEX files 61 rows 466194 first 2021-10-20 last 2026-10-29 days 1241
+  minutes/day: min 16 median 376.0 max 376  days with <370 min: 2 ['2021-11-10', '2023-12-23']
+  dup timestamps: 0  NaN close: 0  source counts: {'kotak': 461128, 'upstox': 5066}
+  1-min |ret| >  0.02 count: 1
+  first-minute of day: most common {datetime.time(9, 15): 1240, datetime.time(14, 46): 1}
+INDIAVIX files 61 rows 466351 first 2021-10-20 last 2026-10-29 days 1242
+  minutes/day: min 48 median 376.0 max 376  days with <370 min: 3 ['2021-11-04', '2021-11-10', '2022-10-24']
+  dup timestamps: 0  NaN close: 0  source counts: {'kotak': 463217, 'upstox': 3134}
+  1-min |ret| >  0.25 count: 123714
+  RAW VIX: close<5: 41621  close>100: 42004  high>100: 76905  months affected(high>100): ['2021-10', '2021-11', '2021-12', '2022-01', '2022-02', '2022-03', '2022-04', '2022-05', '2022-06', '2022-07', '2022-08', '2022-09', '2022-10', '2022-11', '2022-12', '2023-01', '2023-02', '2023-03', '2023-04', '2023-05', '2023-06', '2023-07', '2023-08']
+  first-minute of day: most common {datetime.time(9, 15): 1240, datetime.time(14, 43): 1, datetime.time(14, 6): 1}
+  NIFTYBANK: dates not in NIFTY50 0, NIFTY50 dates not in NIFTYBANK 0
+  SENSEX: dates not in NIFTY50 1, NIFTY50 dates not in SENSEX 1
+  INDIAVIX: dates not in NIFTY50 1, NIFTY50 dates not in INDIAVIX 0
+REPAIRED VIX via vix_1m: (466351, 8) ['timestamp', 'open', 'high', 'low', 'close', 'volume', 'oi', 'source']
+  min 9.08 max 33.85 NaN 0
+  days 1242 first 2021-10-20 09:15:00+05:30 last 2026-10-29 15:30:00+05:30
+  1-min |ret| > 0.25: 1
+vix_daily (4567, 5) 2008-03-03 2026-10-23 NaN close: 1 ['2026-10-23'] min 9.149999618530273 max 85.12999725341797
+  [vix_daily] missing vs NIFTY session calendar inside range: 8 ['2022-12-26', '2024-01-01', '2024-01-20', '2024-02-19', '2025-01-01', '2025-02-01', '2026-01-01', '2026-02-01']
+index_close_daily (5739, 6) {'INDIAVIX': 1913, 'NIFTY50': 1913, 'NIFTYBANK': 1913} 2018-01-01 2025-09-30
+   INDIAVIX 2018-01-01 2025-09-30 1913 NaN close 0
+   NIFTY50 2018-01-01 2025-09-30 1913 NaN close 0
+   NIFTYBANK 2018-01-01 2025-09-30 1913 NaN close 0
+  NIFTY daily |ret|>6%: [[Timestamp('2020-03-12 00:00:00'), 9590.15, -0.08301939111145107], [Timestamp('2020-03-16 00:00:00'), 9197.4, -0.07612102217936367], [Timestamp('2020-03-23 00:00:00'), 7610.25, -0.12980464127060365], [Timestamp('2020-03-25 00:00:00'), 8317.85, 0.06624749232475113], [Timestamp('2020-04-07 00:00:00'), 8792.2, 0.08763205423192066]]
+  NIFTY daily-file vs minute-derived close, overlap days 974 max abs diff pct 0.005292284468398132
+  NIFTY daily from 2018-01 to 2021-10 (pre-minute) days: 937
+=== EXPIRIES ===
+(49, 9) ['underlying', 'expiry_date', 'source', 'is_monthly', 'is_weekly', 'weekday', 'on_holiday_or_weekend', 'usual_weekday', 'shifted']
+                   min         max  count
+underlying                               
+BANKNIFTY   2026-10-27  2027-09-28      6
+FINNIFTY    2026-10-27  2026-12-29      3
+MIDCPNIFTY  2026-10-27  2026-12-29      3
+NIFTY       2026-10-19  2031-06-24     18
+SENSEX      2026-10-22  2031-06-26     19
+options_daily/NIFTY: files 106 rows 4635778 first 2018-01-01 last 2026-10-29 days 2177 types {'IDO': 4629247, 'IDF': 6531}
+   futures rows 6531 days 2177 first 2018-01-01 OI NaN 0 OI==0 share 0.0
+  [options_daily NIFTY] missing vs NIFTY session calendar inside range: 1 ['2021-03-30']
+options_daily/BANKNIFTY: files 106 rows 3073898 first 2018-01-01 last 2026-10-29 days 2177 types {'IDO': 3067367, 'IDF': 6531}
+   futures rows 6531 days 2177 first 2018-01-01 OI NaN 0 OI==0 share 0.0
+  [options_daily BANKNIFTY] missing vs NIFTY session calendar inside range: 1 ['2021-03-30']
+=== options_1m ===
+NIFTY expiry dirs 111 2024-10-03 2026-11-09 trade-day files 3227 distinct trade days 555 2024-08-02 2026-10-28
+  [options_1m NIFTY] missing vs NIFTY session calendar inside range: 0 []
+SENSEX expiry dirs 109 2024-10-04 2026-11-05 trade-day files 2472 distinct trade days 528 2024-09-06 2026-10-28
+  [options_1m SENSEX] missing vs NIFTY session calendar inside range: 4 ['2024-09-09', '2024-09-10', '2024-09-11', '2024-09-12']
+  sample every 40th file: 81 rows 2916046 oi==0 share 0.12450866687288198 sources {'upstox': 2871892, 'kotak': 44154}
+  per-contract-day first minute (time) median examples: {datetime.time(9, 15): 77, datetime.time(9, 17): 1}
+chain_eod 9 20261016.parquet 20261029.parquet
+nifty_1s 12 2026-11-02.parquet 2026-11-17.parquet
+instruments 10 20261016.parquet 20261029.parquet
+=== GIFT ===
+progress.txt: 2023-07-03 | 2023-07-04 | 2023-07-05 | 2023-07-06 | 2023-07-07 | 2023-07-10 | 2023-07-11 | 2023-07-12 | 2023-07-13 | 2023-07-14 | 2023-07-17 | 2023-07-18 | 2023-07-19 | 2023-07-20 | 2023-07-21 | 2023-07-24 | 2023-07-25 | 2023-07-26 | 2023-07-27 | 2023-07-28 | 2023-07-31 | 2023-08-01 | 2023-08-02 | 2023-08-03 | 2023-08-04 | 2023-08-07 | 2023-08-08 | 2023-08-09 | 2023-08-10 | 2023-08-11 | 2023-08-14 | 2023-08-15 | 2023-08-16 | 2023-08-17 | 2023-08-18 | 2023-08-21 | 2023
+dsp cols (29615, 7) [['10-JUL-2023', 'FUTIDX', 'BANKNIFTY', '27-JUL-2023', 0, 'FF', 44967.0], ['10-JUL-2023', 'FUTIDX', 'BANKNIFTY', '31-AUG-2023', 0, 'FF', 45186.0]] symbols ['BANKNIFTY', 'FINNIFTY', 'MIDCPNIFTY', 'NIFTY', 'NIFTYFPI', 'NIFTYIT', 'NIFTYNXT50']
+NIFTY rows 5206 days 861 2023-07-10 2026-11-13 weekdays in range 875
+  [GIFT NIFTY vs Indian sessions] missing vs NIFTY session calendar inside range: 6 ['2024-01-01', '2024-01-20', '2024-11-01', '2025-01-01', '2025-02-01', '2026-02-01']
+  GIFT NIFTY days on which NIFTY has a session: 811 ; GIFT days that are not Indian sessions: 50
+  NIFTY rows per day:  {6: 821, 7: 40}
+oi file: lines 30331 '#DAY' header lines 865 #DAY,2023-07-03,03-JUL-2023,4848,453400,5D FUTIDX,NIFTY,27-JUL-2023,0,FF,1,193904,193904
+=== participant_oi ===
+files 1280 first 2021-09-01 last 2026-11-06 parsed days 1280 bad: [('2024-02-22', 'nonnumeric')] 1
+columns: ['Client Type', 'Future Index Long', 'Future Index Short', 'Future Stock Long', 'Future Stock Short', 'Option Index Call Long', 'Option Index Put Long', 'Option Index Call Short', 'Option Index Put Short', 'Option Stock Call Long', 'Option Stock Put Long', 'Option Stock Call Short', 'Option Stock Put Short', 'Total Long Contracts', 'Total Short Contracts', 'd', 'Unnamed: 15']
+  participant days missing vs NIFTY minute calendar (from 2021-10-20): 3 ['2024-01-20', '2025-02-01', '2026-02-01']
+  participant dates that are not NIFTY minute-calendar days (<=2026-10-28): 36 ['2021-09-01', '2021-09-02', '2021-09-03', '2021-09-06', '2021-09-07', '2021-09-08', '2021-09-09', '2021-09-13', '2021-09-14', '2021-09-15']
+  FII index fut long share: min/max 0.05983222181116455 0.8384556585695767
+  FII option Index Call Long dtype ok; first/last rows: {'Option Index Call Long': 492769, 'Option Index Put Long': 503761} {'Option Index Call Long': 861276}
+  day-over-day jumps (FII Future Index Long |chg|>60%): 9
+  no volume / turnover / net-buy-sell cash columns; contracts = open interest, end of day
+=== data/parents ===
+yf_ALI_F.csv rows 1631 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 1 zero-volume days 922  gaps>5 calendar days: 0
+   days since 2021-10-20: 1239 Indian sessions without a row: 66
+yf_ALI_F_1h.csv rows 10206 2024-05-26 21:00:00 2026-10-16 16:00:00 dup 0 NaN close 0 bad dates 0
+yf_BZ_F.csv rows 1633 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 21 zero-volume days 8  gaps>5 calendar days: 0
+   days since 2021-10-20: 1241 Indian sessions without a row: 64
+yf_BZ_F_1h.csv rows 13588 2024-05-26 18:00:00 2026-10-16 16:00:00 dup 0 NaN close 0 bad dates 0
+yf_GSPC.csv rows 1630 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 1 zero-volume days 1  gaps>5 calendar days: 0
+   days since 2021-10-20: 1238 Indian sessions without a row: 67
+yf_HG_F.csv rows 1633 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 3 zero-volume days 7  gaps>5 calendar days: 0
+   days since 2021-10-20: 1241 Indian sessions without a row: 64
+yf_HG_F_1h.csv rows 13707 2024-05-26 18:00:00 2026-10-16 16:00:00 dup 0 NaN close 0 bad dates 0
+yf_INFY.csv rows 1630 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 8 zero-volume days 0  gaps>5 calendar days: 0
+   days since 2021-10-20: 1238 Indian sessions without a row: 67
+yf_INFY_1h.csv rows 5072 2023-11-17 09:30:00 2026-10-16 15:30:00 dup 0 NaN close 0 bad dates 0
+yf_TIO_F.csv rows 1631 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 12 zero-volume days 1562  gaps>5 calendar days: 0
+   days since 2021-10-20: 1239 Indian sessions without a row: 66
+yf_USDINR_X.csv rows 1688 2020-04-01 00:00:00 2026-09-25 00:00:00 dup 0 NaN close 0 bad dates 0
+   |daily ret|>8%: 0 zero-volume days 1688  gaps>5 calendar days: 0
+   days since 2021-10-20: 1283 Indian sessions without a row: 28
+Brent daily vs last hourly of the same ET date: overlap 586 2024-05-28 2026-09-25  |diff|>2%: 49  >4%: 24  median |diff| % 0.4713708899122371
+Hourly Brent range: 2024-05-26 18:00:00 2026-10-16 16:00:00 (timestamps are US Eastern, not UTC/IST)
+=== GDELT ===
+queries: ['(Nifty OR Sensex OR "Indian stocks")'] series: ['Average Tone', 'Article Count']
+  timelinevolraw_2021.json Article Count: rows 122 2021-09-01..2021-12-31 NaN 0 zero 0
+  timelinevolraw_2022.json Article Count: rows 365 2022-01-01..2022-12-31 NaN 0 zero 0
+  timelinevolraw_2023.json Article Count: rows 364 2023-01-01..2023-12-31 NaN 0 zero 0
+  timelinevolraw_2024.json Article Count: rows 366 2024-01-01..2024-12-31 NaN 0 zero 0
+  timelinevolraw_2025.json Article Count: rows 348 2025-01-01..2025-12-31 NaN 0 zero 1
+  timelinevolraw_2026.json Article Count: rows 285 2026-01-01..2026-11-07 NaN 0 zero 0
+  timelinetone_2021.json Average Tone: rows 122 2021-09-01..2021-12-31 NaN 0 zero 0
+  timelinetone_2022.json Average Tone: rows 365 2022-01-01..2022-12-31 NaN 0 zero 0
+  timelinetone_2023.json Average Tone: rows 364 2023-01-01..2023-12-31 NaN 0 zero 0
+  timelinetone_2024.json Average Tone: rows 366 2024-01-01..2024-12-31 NaN 0 zero 0
+  timelinetone_2025.json Average Tone: rows 348 2025-01-01..2025-12-31 NaN 0 zero 1
+  timelinetone_2026.json Average Tone: rows 285 2026-01-01..2026-11-07 NaN 0 zero 0
+tone: days 1850 calendar days in range 1894 missing 44 min/max -3.4672 3.3674
+tone coverage on Indian sessions (>=2021-10-20): 1213 of 1241
+=== eod2 / sectors ===
+eod2 files 474 columns ['Date', 'Open', 'High', 'Low', 'Close', 'Volume', 'Series', 'TOTAL_TRADES', 'QTY_PER_TRADE', 'DLV_QTY'] example 360one.csv 2019-09-19 2026-11-13 1772
+  first dates min/median/max 1995-01-02 2011-06-15 2025-12-19  last dates min/max 2026-05-11 2026-11-13  rows min/median/max 223 3829 7880
+sector_map rows 439 {'nifty infrastructure': 97, 'nifty financial services': 79, 'nifty auto': 38, 'nifty healthcare index': 28, 'nifty fmcg': 28, 'nifty it': 27, 'nifty pharma': 20, 'nifty metal': 19, 'nifty energy': 17, 'nifty oil & gas': 17, 'nifty consumer durables': 16, 'nifty services sector': 14, 'nifty psu bank': 12, 'nifty realty': 11, 'nifty private bank': 10, 'nifty media': 5, 'nifty bank': 1}
+fo_universe symbols 210 (single list, no dates)
+data/ files named nifty*/const*: []
+repo files with constituent/weight in name: []

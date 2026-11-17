@@ -1,0 +1,19 @@
+sample 30 random G1-F trades (seed 5)
+ret20_indep vs ret20_A3: compared 30/30, within 1e-06: 27, max diff 0.01501; mismatch dates [datetime.date(2025, 2, 3), datetime.date(2025, 2, 27), datetime.date(2026, 2, 13)]
+ret20_indep vs ret20_A2: compared 30/30, within 0.0001: 6, max diff 0.01506; mismatch dates [datetime.date(2024, 10, 1), datetime.date(2024, 10, 10), datetime.date(2024, 10, 25), datetime.date(2024, 10, 28), datetime.date(2024, 12, 26), datetime.date(2025, 1, 1), datetime.date(2025, 2, 3), datetime.date(2025, 2, 27), datetime.date(2025, 4, 4), datetime.date(2025, 4, 25), datetime.date(2025, 6, 4), datetime.date(2025, 7, 16), datetime.date(2025, 7, 24), datetime.date(2025, 8, 5), datetime.date(2025, 8, 20), datetime.date(2025, 8, 22), datetime.date(2025, 10, 24), datetime.date(2025, 11, 6), datetime.date(2025, 11, 7), datetime.date(2026, 1, 19), datetime.date(2026, 2, 13), datetime.date(2026, 8, 17), datetime.date(2026, 8, 24), datetime.date(2026, 8, 31)]
+vixprev_indep vs vixprev_A3: compared 30/30, within 0.01: 30, max diff 5.341e-07
+vixprev_indep vs vixprev_A2: compared 30/30, within 0.01: 6, max diff 2.07; mismatch dates [datetime.date(2024, 10, 1), datetime.date(2024, 10, 10), datetime.date(2024, 10, 25), datetime.date(2024, 10, 28), datetime.date(2024, 12, 26), datetime.date(2025, 1, 1), datetime.date(2025, 2, 3), datetime.date(2025, 2, 27), datetime.date(2025, 4, 4), datetime.date(2025, 4, 25), datetime.date(2025, 6, 4), datetime.date(2025, 7, 16), datetime.date(2025, 7, 24), datetime.date(2025, 8, 5), datetime.date(2025, 8, 22), datetime.date(2025, 11, 6), datetime.date(2025, 11, 7), datetime.date(2026, 1, 19), datetime.date(2026, 8, 11), datetime.date(2026, 8, 17), datetime.date(2026, 8, 24), datetime.date(2026, 8, 31), datetime.date(2026, 9, 4), datetime.date(2026, 10, 19)]
+gap_indep vs gap_ctx: compared 30/30, within 0.01: 29, max diff 0.155; mismatch dates [datetime.date(2025, 2, 3)]
+gap_indep vs gap_A2: compared 30/30, within 0.01: 29, max diff 0.155; mismatch dates [datetime.date(2025, 2, 3)]
+gift_ps_indep vs gift_ps_A3b: compared 29/30, within 1e-06: 29, max diff 9.714e-17
+gift_same_indep vs gift_same_A3b: compared 29/30, within 1e-06: 29, max diff 8.327e-17
+nk_indep vs nk_A3b: compared 28/30, within 1e-06: 28, max diff 8.327e-17
+nk_indep vs nk_A4: compared 28/30, within 1e-06: 28, max diff 8.327e-17
+hsi_indep vs hsi_A3b: compared 25/30, within 1e-06: 25, max diff 2.22e-16
+hsi_indep vs hsi_A4: compared 25/30, within 1e-06: 25, max diff 2.22e-16
+sp_indep vs sp_A4: compared 30/30, within 1e-06: 30, max diff 2.22e-16
+adv_indep vs adv_A4: compared 29/30, within 1e-06: 29, max diff 3.553e-15
+bankdiff_indep vs bankdiff_A4: compared 29/30, within 1e-06: 29, max diff 9.714e-17
+fii_indep vs fii_A4: compared 9/30, within 1e-06: 9, max diff 0
+fiishare_indep vs fiishare_A4: compared 29/30, within 1e-06: 29, max diff 7.105e-15
+rows where nikkei/hsi gap missing in A4 but present independently: 0 / 0

@@ -1,0 +1,59 @@
+--- H2 VIX level: class 'normal' vs rest
+   discovery   class n= 38 mean    27.9 med     4.2 | rest n= 37 mean    22.5 med   -39.0 | diff of means     5.4 | MW p 0.478
+   second half class n=  8 mean    86.2 med    81.2 | rest n= 71 mean     6.3 med   -36.2 | diff of means    79.9 | MW p 0.008
+   half-year (n class/rest -> diff of means): 2024H2: 14/7 -> -80; 2025H1: 24/3 -> n/a; 2025H2: 1/49 -> n/a; 2026H1: 4/16 -> n/a; 2026H2: 3/33 -> n/a
+--- H9 base: VIX normal (H9 = VIX x gap): class 'normal' vs rest
+   discovery   class n= 38 mean    27.9 med     4.2 | rest n= 37 mean    22.5 med   -39.0 | diff of means     5.4 | MW p 0.478
+   second half class n=  8 mean    86.2 med    81.2 | rest n= 71 mean     6.3 med   -36.2 | diff of means    79.9 | MW p 0.008
+   half-year (n class/rest -> diff of means): 2024H2: 14/7 -> -80; 2025H1: 24/3 -> n/a; 2025H2: 1/49 -> n/a; 2026H1: 4/16 -> n/a; 2026H2: 3/33 -> n/a
+--- H9 normal VIX & flat gap: class 'normal_flat' vs rest
+   discovery   class n= 33 mean    34.3 med     7.9 | rest n= 42 mean    18.1 med   -45.0 | diff of means    16.2 | MW p 0.214
+   second half class n=  7 mean    81.1 med    40.4 | rest n= 72 mean     7.9 med   -34.1 | diff of means    73.2 | MW p 0.020
+   half-year (n class/rest -> diff of means): 2024H2: 12/9 -> -77; 2025H1: 21/6 -> +62; 2025H2: 1/49 -> n/a; 2026H1: 4/16 -> n/a; 2026H2: 2/34 -> n/a
+--- C2-type: GIFT flat (prev_settle col) vs other: class 'flat' vs rest
+   discovery   class n= 58 mean    25.2 med    -1.7 | rest n= 16 mean    30.2 med   -41.8 | diff of means    -5.0 | MW p 0.864
+   second half class n= 76 mean    16.2 med   -27.5 | rest n=  2 mean   -23.9 med   -23.9 | diff of means    40.1 | MW p nan
+   half-year (n class/rest -> diff of means): 2024H2: 19/2 -> n/a; 2025H1: 18/8 -> -48; 2025H2: 43/7 -> +30; 2026H1: 19/0 -> n/a; 2026H2: 35/1 -> n/a
+--- A4 X02 USD/INR up: class 'up' vs rest
+   discovery   class n= 11 mean    64.3 med    20.9 | rest n= 52 mean    10.6 med   -45.0 | diff of means    53.7 | MW p 0.066
+   second half class n= 13 mean    30.8 med    11.9 | rest n= 65 mean    11.6 med   -36.2 | diff of means    19.2 | MW p 0.114
+   half-year (n class/rest -> diff of means): 2024H2: 1/9 -> n/a; 2025H1: 4/22 -> n/a; 2025H2: 11/39 -> +82; 2026H1: 4/16 -> n/a; 2026H2: 4/31 -> n/a
+--- H11 same-contract: stronger: class 'stronger' vs rest
+   discovery   class n= 18 mean    49.8 med    19.7 | rest n= 56 mean    18.7 med   -19.4 | diff of means    31.0 | MW p 0.619
+   second half class n=  6 mean    64.6 med    23.1 | rest n= 72 mean    11.1 med   -29.2 | diff of means    53.6 | MW p 0.673
+   half-year (n class/rest -> diff of means): 2024H2: 4/17 -> n/a; 2025H1: 8/18 -> +106; 2025H2: 6/44 -> -30; 2026H1: 2/17 -> n/a; 2026H2: 4/32 -> n/a
+--- H11 same-contract: in line: class 'in line' vs rest
+   discovery   class n= 46 mean    10.9 med   -23.7 | rest n= 28 mean    51.5 med    12.9 | diff of means   -40.6 | MW p 0.308
+   second half class n= 56 mean     5.7 med   -50.9 | rest n= 22 mean    39.4 med     6.7 | diff of means   -33.7 | MW p 0.045
+   half-year (n class/rest -> diff of means): 2024H2: 13/8 -> -82; 2025H1: 14/12 -> -56; 2025H2: 37/13 -> +4; 2026H1: 14/5 -> -93; 2026H2: 24/12 -> -15
+--- H11 prev_settle col: in line: class 'in line' vs rest
+   discovery   class n= 43 mean    14.7 med   -13.8 | rest n= 31 mean    42.4 med     1.6 | diff of means   -27.7 | MW p 0.657
+   second half class n= 45 mean    17.3 med   -36.2 | rest n= 33 mean    12.3 med    -8.5 | diff of means     5.0 | MW p 0.442
+   half-year (n class/rest -> diff of means): 2024H2: 13/8 -> -65; 2025H1: 12/14 -> -29; 2025H2: 31/19 -> +18; 2026H1: 14/5 -> -30; 2026H2: 18/18 -> -13
+--- R2 prev-row IvsA: in line (agent-marked robustness): class 'in line' vs rest
+   discovery   class n= 44 mean     7.0 med   -29.2 | rest n= 30 mean    54.6 med    19.7 | diff of means   -47.7 | MW p 0.142
+   second half class n= 56 mean     5.7 med   -50.9 | rest n= 22 mean    39.4 med     6.7 | diff of means   -33.7 | MW p 0.045
+   half-year (n class/rest -> diff of means): 2024H2: 13/8 -> -82; 2025H1: 12/14 -> -73; 2025H2: 37/13 -> +4; 2026H1: 14/5 -> -93; 2026H2: 24/12 -> -15
+--- H15 FII/DII: diverge: class 'diverge' vs rest
+   discovery   class n=  0 mean     nan med     nan | rest n=  0 mean     nan med     nan | diff of means     nan | MW p nan
+   second half class n= 44 mean    34.3 med    -5.1 | rest n= 15 mean   -29.4 med   -51.6 | diff of means    63.7 | MW p 0.083
+   half-year (n class/rest -> diff of means): 2025H2: 10/1 -> n/a; 2026H1: 13/7 -> +131; 2026H2: 21/7 -> +25
+--- R1 ret5 mid quintile (robustness): class '3' vs rest
+   discovery   class n= 15 mean    73.8 med    45.2 | rest n= 60 mean    13.1 med   -29.2 | diff of means    60.8 | MW p 0.011
+   second half class n= 26 mean    44.1 med     1.7 | rest n= 53 mean    -0.2 med   -50.9 | diff of means    44.3 | MW p 0.038
+   half-year (n class/rest -> diff of means): 2024H2: 4/17 -> n/a; 2025H1: 5/22 -> +41; 2025H2: 16/34 -> +54; 2026H1: 7/13 -> +119; 2026H2: 9/27 -> +21
+--- H1x bullish dir3: class 'bullish' vs rest
+   discovery   class n= 12 mean    51.1 med   -25.8 | rest n= 63 mean    20.3 med    -2.0 | diff of means    30.8 | MW p 0.745
+   second half class n=  7 mean    73.8 med    56.4 | rest n= 72 mean     8.6 med   -29.8 | diff of means    65.3 | MW p 0.136
+   half-year (n class/rest -> diff of means): 2024H2: 3/18 -> n/a; 2025H1: 7/20 -> +41; 2025H2: 7/43 -> +31; 2026H1: 1/19 -> n/a; 2026H2: 1/35 -> n/a
+--- C2 VIX x GIFT cells (prev_settle col), n and mean by period
+   low|flat             disc n= 29 mean    27.5 | 2nd n= 69 mean     8.0
+   low|gap-down         disc n=  4 mean    -0.1 | 2nd n=  0 mean     nan
+   low|gap-up           disc n=  4 mean     9.1 | 2nd n=  1 mean   -53.7
+   normal|flat          disc n= 29 mean    22.9 | 2nd n=  7 mean    97.7
+   normal|gap-down      disc n=  4 mean   104.2 | 2nd n=  0 mean     nan
+   normal|gap-up        disc n=  4 mean     7.6 | 2nd n=  1 mean     5.9
+--- VIX level by period counts: {('discovery', 'low'): 37, ('discovery', 'normal'): 38, ('second_half', 'low'): 71, ('second_half', 'normal'): 8}
+VIX normal vs low Mann-Whitney p 0.020; Welch p 0.140
+agents' same_sign flags in agent3_regimes/regime_consistency.csv: {True: 4, False: 4}
+agents' same_sign flags in agent3b_gift_regimes/gift_consistency_samecontract.csv: {'False': 4, 'True': 3, 'not testable': 2}

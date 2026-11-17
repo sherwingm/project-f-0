@@ -1,0 +1,40 @@
+# G1-F trade anatomy (coordinator consolidation of Agent 2, reviewed by Agent 5; 17 Nov 2026)
+
+Descriptive and explanatory only. Nothing here tests prediction. Full tables: `interim/agent2_anatomy/` (`G1F_ANATOMY_DRAFT.md`, `analysis_G1F.md`, `cut_tables_G1F.csv`, `anatomy_dataset.csv` with about 80 fields each labelled PRE-ENTRY or POST-ENTRY in `data_dictionary.md`, scripts, hashes). Original recorded results only; no rule changed; no alternative entry generated. Percentage = net rupees after slippage and all charges / premium paid in rupees; rupees are reported separately. Bootstrap intervals resample trading days (4,000 draws). Cells under 10 trades carry no conclusion.
+
+## 0. The recorded trades reproduce
+All 154 G1-F trades reproduce with the engine: same contract and same exit reason in 154 of 154; net % within 0.26 points (40 exact to 0.01, 132 within 0.1). The residual comes from the replay having used the undated 2026 STT table (disclosed, not changed). G1 reproduces 259 of 259, G1-C 235 of 235. This is a consistency check of the recorded trades, not a new backtest.
+
+## 1. Shape of the result
+- 154 trades, 2024-10-01 to 2026-10-28: total net Rs 247,046, mean +19.7 %, **median -18.2 %**, win rate 40.9 % (63 wins, 91 losses).
+- **Max up first (highest option value after entry, % above price paid, through the next close):** at least +50 % on 59 % of trades, at least +100 % on 41 %, at least +200 % on 16 %; mean 104 %, median 72 %.
+- **Stops:** 64 of 154 (42 %), mean -54.9 %. **Held to the next close: 90 trades, 70 % wins, mean +72.7 %, Rs +486,789.** Stops cost Rs -239,743. Average win +Rs 8.4k (+112 %), average loss -Rs 3.1k (about -44 %).
+- **Concentration:** the top 8 trades (5 %) earned Rs 190,146 = **77 %** of total net Rs (top 3: 37 %, top 5: 54 %, top 10: 91 %). Without them: 146 trades, Rs 56,900, mean +5.8 %, median -27.5 %. The largest trade (2025-04-04, +400 %, Rs 44,422) is 18 % of the total. All 8 were held to the next close, and all had the next close 0.4 % to 2.9 % below the entry-day close. G1-F is a convex payoff: a few large next-session falls pay for many small-to-medium losses.
+
+## 2. Winners versus losers
+**Pre-entry fields (means, winners / losers):** previous-session return -0.08 / +0.03 %; 5-session -0.03 / +0.10; 20-session -0.02 / +0.13; VIX at the signal 12.87 / 12.52; 5-day VIX change -1.6 / -1.4 %; opening gap -0.05 / -0.05 %; move from 09:15 to the signal -0.23 / -0.21 %; breakout minute after 09:30 14.5 / 17.2; breadth 48.4 / 49.5; ATM IV 12.5 / 12.5; put-call OI 0.92 / 0.90. All the same within noise (Mann-Whitney p 0.19 to 1.0).
+Two pre-entry fields differ: **sessions to expiry** (winners 3.25 vs losers 2.79, p 0.048) and **price paid** (127 vs 112, p 0.018). These are uncorrected p-values from about 25 fields (one or two would pass 0.05 by chance): descriptive only. Expiry-day trades are 33 % of winners and 20 % of losers.
+**What clearly separates them is post-entry** (as expected for a bought option held overnight): winners had the next session's open gap -0.28 % and next close -0.63 % below the entry-day close; losers +0.08 % and +0.17 %. 90 % of winners had the next close below the entry-day close vs 40 % of losers; Spearman of net % with the signal-to-next-close spot move is -0.74. **This explains outcomes; it is not a predictor.**
+
+## 3. Pre-named cuts (n, mean net % [95 % interval]; medians, rupees, MFE and MAE in `analysis_G1F.md` and `../results_tables/regime_mfe_mae.csv`)
+Agent 2's cuts use the store history from 2021-10 for class edges and the signal-minute VIX; they differ from the pre-registered classes of the regime analysis in 20 of 154 trades (20-session class) and 25 (VIX class). **Use these tables as descriptive, and do not mix them with the regime tables.**
+- 5-session return quintiles: means +13, +7, +55, +17, -16. The middle quintile (n 41, win 61 %, +55 % [+23, +88], Rs 169k) is the only quintile whose interval excludes zero; neighbours are weak (non-monotonic, likely noise). It is positive in all four testable half-years (Agent 5) but non-monotonic and outside the pre-registered family.
+- VIX level (G1-F has no VIX above 17 by its own filter): low n 83 +12 % [-8, +36], win 35 %, stop rate 49 %; normal n 71 +28 % [+7, +52], win 48 %, stop rate 32 %.
+- Gap: flat n 133 +22 % [+5, +40]; gap-down n 21 +6 % [-26, +45] (gap-up excluded by the rule).
+- **Sessions to expiry:** 1 session n 34, win 24 %, **stops 71 %**, mean +15 %, MFE mean 145 %; 2: n 26, win 50 %, +17 %; 3: n 32, +33 %; 4 or more: n 62, win 48 %, **stops 26 %**, +16 %. All intervals span zero. The same stop-rate gradient appears in G1 (75 % at 1 session) and G1-C (86 %); G1-F is a subset of G1, so these are not independent confirmations.
+- Breakout time: before 10:00 n 127 +23 %; 10:00 to 10:59 n 24 +9 %; later n 3 (too few).
+- Weekday: Wednesday the only negative (n 24, win 25 %, -16 % [-41, +12]); Thursday +39 % [+6, +77]. No stable weekday effect across the three sets (G1-C Monday -31 % vs G1-F Monday +4 %).
+- Quarters: 2024 Q4 +33 %; 2025 Q1 +54 % [+12, +99]; Q2 +20 % (n 11); Q3 +4.5 %; Q4 +2.4 % (but total Rs -6.7k: mean % and rupees disagree); 2026 Q1 +55 %; Q2 and Q4 n 3 (too few); **2026 Q3 -11.2 % (n 33, 24 % wins, [-30, +10], Rs -19,069)**.
+No cut shows a clean gradient. The cells whose interval excludes zero (5-day middle quintile, 10-day Q4, VIX normal, flat gap, Thursday, breakouts before 10:00, 2025 Q1) are non-monotonic or are most of the sample.
+
+## 4. Stop-outs (all post-entry description)
+Median time to stop 309 trading minutes (quartiles 149 / 372); none within 30 minutes, 7 within 60: stops are slow bleeds. 35 stopped on the entry day and 29 on the next. Mean option move at the stop -54 % (MAE). After the stop minute 15 of 64 options returned to at least the price paid at some minute and 8 ended the next close above it (5 above +100 %): about 1 stop in 8 would have recovered (an observation, not a rule suggestion; no alternative exit was tested). 72 % of stopped trades had the entry-day close back above the signal close (failed breakouts in hindsight) vs 20 % of held trades. Stop rate by quarter: 24, 31, 45, 52, 61, 35, 33, 42 % (2024 Q4 to 2026 Q3): 2025 Q3 and Q4 had higher stop rates than 2026 Q3.
+
+## 5. How long winners take
+Of 63 winners, 56 peaked on the next session. Median entry-to-peak 575 trading minutes (a session is 375). Of the 27 trades reaching +100 % or more, 26 peaked the next day after a median worst dip of about -20 % (worst -43 %). Winners' MAE averaged -22 % against losers' -48 %. Holding overnight is where the profit arises.
+
+## 6. Why 2026 Q3 lost
+33 trades, 8 wins, mean -11.2 %, median -29 %. The stop rate was not higher (42 % vs 41 %); the held trades did not win because **the next-session spot did not fall**: the mean next close vs entry-day close was +0.03 % in Q3 vs -0.21 % in other quarters; mean max up 67 % vs 115 % (post-entry). Pre-entry differences (Q3 vs the rest): VIX at the signal 11.97 vs 12.85; ATM IV 11.3 vs 12.8; previous close above SMA20 on 42 % of trades vs 56 %; breakout minute 25 vs 14 after 09:30 (30 % of Q3 breakouts came 10:00 to 10:59 vs 12 %); low-VIX trades 76 % vs 48 %; paid price 107 vs 121. By month: July n 9, -17 %; **August n 15, one win, -35 %, Rs -27,379**; September n 9, +35 %. No single condition separates the 2026 Q3 trades; August carries most of the loss. Calling it "a quarter of low volatility and late-morning breakouts that reversed" is a description, not a tested explanation.
+
+## 7. Limits
+154 trades over two years; the G1-F filters were chosen on the same data; effects below about 30 to 40 points cannot be seen in cells of 30 to 80 trades (Agent 5's power table in `RESEARCH_LIMITATIONS.md`). About 36 fields were compared without correction because nothing here is a test. MAE uses option minute closes (last traded price carried forward up to 30 minutes), not intraminute lows. All post-entry fields explain outcomes only. Agent 2 used 2021-10-20 as the store start for class boundaries (the plan said 2018).

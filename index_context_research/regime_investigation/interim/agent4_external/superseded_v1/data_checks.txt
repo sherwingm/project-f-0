@@ -1,0 +1,30 @@
+trades {'G1': 259, 'G1C': 235, 'G1F': 154, 'XP': 107}
+participant files 1280 2021-09-01 2026-11-06 header-date mismatches [] 0
+weekdays without a participant file and not in nse_holidays.json: 60 ['2021-09-10', '2021-10-15', '2021-11-05', '2021-11-19', '2022-01-26', '2022-03-01', '2022-03-18', '2022-04-14', '2022-04-15', '2022-05-03', '2022-08-09', '2022-08-15', '2022-08-31', '2022-10-05', '2022-10-26']
+note: nse_holidays.json (fetched 2026-10-14) may not list earlier-year holidays; the count above is an upper bound on real gaps
+BRENT daily: bars 1633 2020-04-01 2026-09-25 min 19.32999992370605 max 127.9800033569336 |ret|>8%: 21 |ret|>5%: 92 zero-change days: 5
+BRENT daily vs 14:00-ET hourly close (2024-09 on): days compared 512 |diff|>1%: 79 >2%: 24 >4%: 16 max 13.02
+BRENT days with |diff|>2%: [('2025-04-30', 3.4), ('2026-03-10', 2.3), ('2026-03-11', 2.9), ('2026-03-12', 2.8), ('2026-03-18', 3.9), ('2026-03-19', 5.6), ('2026-03-20', 4.8), ('2026-03-25', 4.2), ('2026-03-26', 6.5), ('2026-03-27', 7.3), ('2026-03-30', 4.7), ('2026-03-31', 13.0), ('2026-04-21', 6.5), ('2026-04-24', 6.4), ('2026-04-27', 6.5), ('2026-04-28', 6.6), ('2026-04-29', 6.8), ('2026-04-30', 2.7), ('2026-05-26', 3.2), ('2026-08-31', 2.7), ('2026-09-18', 5.3), ('2026-09-21', 4.0), ('2026-09-23', 5.0), ('2026-09-25', 7.2)]
+USD bars 1688 2020-04-01 2026-09-25 |ret|>8%: 0 zero-change days: 0 last-30-bars zero-change share: 0.0
+COPPER bars 1633 2020-04-01 2026-09-25 |ret|>8%: 3 zero-change days: 7 last-30-bars zero-change share: 0.0
+ALU bars 1631 2020-04-01 2026-09-25 |ret|>8%: 1 zero-change days: 19 last-30-bars zero-change share: 0.0
+IRON bars 1631 2020-04-01 2026-09-25 |ret|>8%: 12 zero-change days: 36 last-30-bars zero-change share: 0.03
+SP bars 1630 2020-04-01 2026-09-25 |ret|>8%: 1 zero-change days: 0 last-30-bars zero-change share: 0.0
+event sessions 32 Budget kept on its own (weekend special-session) date: ['2025-02-01', '2026-02-01']
+event list gaps: no FOMC after 2026-09-16 in the repo list; no CPI / GDP / geopolitical dates exist anywhere locally
+GDELT tone: observations 1850 2021-09-01 2026-11-07 missing calendar days in range: 44
+check: sp_ret vs dataset us_prev_ret: n 733 max abs diff 2.220446049250313e-16 n differing >0.01: 0
+check: fii_fut_share vs dataset fii_fut_longshare: n 749 max abs diff 0.2846485561191514
+check: fii chg vs dataset: n 749 max abs diff 13.671306013937647
+missing counts by strategy:
+   oi_asof_session {'G1': 0, 'G1C': 0, 'G1F': 0, 'XP': 0}
+   fii_fut_share {'G1': 0, 'G1C': 0, 'G1F': 0, 'XP': 0}
+   sp_ret {'G1': 7, 'G1C': 8, 'G1F': 3, 'XP': 4}
+   usd_chg {'G1': 7, 'G1C': 8, 'G1F': 3, 'XP': 4}
+   brent_chg {'G1': 7, 'G1C': 8, 'G1F': 3, 'XP': 4}
+   copper_chg {'G1': 7, 'G1C': 8, 'G1F': 3, 'XP': 4}
+   risk_class {'G1': 7, 'G1C': 8, 'G1F': 3, 'XP': 4}
+   event_class {'G1': 0, 'G1C': 0, 'G1F': 0, 'XP': 0}
+   tone_class {'G1': 11, 'G1C': 14, 'G1F': 6, 'XP': 5}
+brent_suspect trades: {'G1': 10.0, 'G1C': 9.0, 'G1F': 3.0, 'XP': 4.0}
+event class counts G1F: {'none': 128, 'event_day': 11, 'day_after': 9, 'day_before': 6} kinds {'': 128, 'RBI': 18, 'FOMC': 7, 'Budget': 1}

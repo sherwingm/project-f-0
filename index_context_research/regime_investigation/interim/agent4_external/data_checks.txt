@@ -1,0 +1,46 @@
+trades {'G1': 259, 'G1C': 235, 'G1F': 154, 'XP': 107} last day 2026-10-23
+session calendar (Nifty 50 rows in nse_index_closes): 2190 2018-01-01 2026-11-17 weekend special sessions since 2024-10: []
+Nifty 50 change_pct vs close-to-close (max abs diff, pts): 2.515
+trade dates not in the session calendar: [('2025-02-01', ['G1C']), ('2026-02-01', ['G1C'])]
+yahoo N225: rows 2176 2018-01-04..2026-11-17 weekend-dated rows 0 missing closes 13 missing opens 12
+yahoo HSI: rows 2184 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 1 missing opens 0
+yahoo GSPC: rows 2232 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 0 missing opens 0
+yahoo USDINR: rows 2317 2018-01-01..2026-11-17 weekend-dated rows 0 missing closes 6 missing opens 6
+yahoo BRENT: rows 2237 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 2 missing opens 2
+yahoo VIXUS: rows 2316 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 82 missing opens 82
+yahoo DXY: rows 2237 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 3 missing opens 3
+yahoo US10Y: rows 2232 2018-01-02..2026-11-17 weekend-dated rows 0 missing closes 0 missing opens 0
+BRENT daily(downloaded) vs 14:00-ET hourly (data/parents), 2024-09 on: days 527 |diff|>1%: 82 >2%: 27 >4%: 19 max 13.02 (hourly file ends 2026-10-16 ; trades after that cannot be flagged)
+BRENT downloaded daily vs data/parents daily: overlap 1633 days differing >0.5%: 0
+USDINR hourly Indian-session change available days 510 2024-11-18 2026-11-17
+breadth advance share percentiles over 2021-10-01..2024-09-30 (n=780): p25=36.55 p75=61.47
+breadth dates not in session calendar: ['2021-10-15', '2021-11-05', '2021-11-19', '2022-01-26', '2022-03-01', '2022-03-18', '2022-04-14', '2022-04-15', '2022-05-03', '2022-08-15']
+FII/DII cash rows 218 2025-12-01 2026-11-17 rows not in session calendar: ['2026-02-01', '2026-11-08']
+participant files 1280 2021-09-01 2026-11-06 header-date mismatches []
+participant level terciles: [{'variable': 'fii_share', 'n': 248, 'p33': 16.798, 'p67': 29.979}, {'variable': 'dii_share', 'n': 248, 'p33': 54.002, 'p67': 66.498}, {'variable': 'fii_opt', 'n': 248, 'p33': 0.026, 'p67': 0.076}]
+event sessions 32 (RBI policy, Budget, FOMC statement, US election; the lists come from scanner/s3_buy4.py; the US election entered is 2024-11-05, mapped to the first Indian session after it; no other election exists locally)
+Budget special sessions (Sat 2025-02-01, Sun 2026-02-01) are absent from nse_index_closes; added to the calendar (event flags and previous-session look-up; their market data are absent = missing): ['2025-02-01', '2026-02-01']
+GDELT tone obs 1850 2021-09-01 2026-11-07 missing calendar days in range 44
+check: sp_ret (new download) vs context_dataset us_prev_ret: n 735 max abs diff 1.2810991625840873 | trades with the context value but no new value: 0
+check: USDINR daily-bar change (INVALID: Yahoo daily close==open on 100% of 2023-24 days, 92% of 2025, 73% of 2026) vs hourly Indian-session change: n 684 corr 0.04 -> daily bar not used
+DXY weekend-dated rows (all-NaN junk) dropped before use: 463
+missing counts by strategy (feature: G1 / G1C / G1F / XP):
+   asia_class {'G1': 31, 'G1C': 31, 'G1F': 21, 'XP': 11}
+   us_class {'G1': 0, 'G1C': 0, 'G1F': 0, 'XP': 0}
+   risk_class {'G1': 31, 'G1C': 31, 'G1F': 21, 'XP': 11}
+   usd_class {'G1': 23, 'G1C': 15, 'G1F': 13, 'XP': 9}
+   brent_class {'G1': 3, 'G1C': 1, 'G1F': 1, 'XP': 0}
+   usvix_class {'G1': 17, 'G1C': 21, 'G1F': 9, 'XP': 7}
+   dxy_class {'G1': 5, 'G1C': 6, 'G1F': 3, 'XP': 2}
+   us10y_class {'G1': 5, 'G1C': 4, 'G1F': 3, 'XP': 3}
+   breadth_class {'G1': 1, 'G1C': 1, 'G1F': 1, 'XP': 0}
+   sector_class {'G1': 1, 'G1C': 1, 'G1F': 1, 'XP': 0}
+   fiidii_class {'G1': 157, 'G1C': 143, 'G1F': 95, 'XP': 64}
+   fii_fut_level_class {'G1': 2, 'G1C': 2, 'G1F': 1, 'XP': 1}
+   fii_fut_chg_class {'G1': 2, 'G1C': 2, 'G1F': 1, 'XP': 1}
+   dii_fut_level_class {'G1': 2, 'G1C': 2, 'G1F': 1, 'XP': 1}
+   fii_opt_level_class {'G1': 2, 'G1C': 2, 'G1F': 1, 'XP': 1}
+   event_class {'G1': 0, 'G1C': 0, 'G1F': 0, 'XP': 0}
+   tone_class {'G1': 11, 'G1C': 14, 'G1F': 6, 'XP': 5}
+brent_suspect trades: {'G1': 11.0, 'G1C': 11.0, 'G1F': 3.0, 'XP': 5.0}
+class counts G1F: {'asia_class': {'flat': 58, 'up': 38, 'down': 37}, 'us_class': {'up': 53, 'down': 53, 'flat': 48}, 'risk_class': {'mixed': 54, 'risk_off': 40, 'risk_on': 39}, 'breadth_class': {'mid': 79, 'low': 43, 'high': 31}, 'sector_class': {'in_line': 98, 'bank_leads': 31, 'bank_lags': 24}, 'fiidii_class': {'diverge': 44, 'both_buy': 15}, 'event_class': {'none': 128, 'event_day': 12, 'day_after': 8, 'day_before': 6}}

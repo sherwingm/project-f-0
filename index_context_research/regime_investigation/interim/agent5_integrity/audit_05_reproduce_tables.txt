@@ -1,0 +1,39 @@
+my ret20 edges [-0.01884, 0.00515, 0.02567, 0.04713]; VIX p25/p75 13.540/19.940
+H1 direction (ret20 quintile)
+  H1 1.0: agent3 n=36 win=47.2 mean=18.80 med=-3.24 Rs=56384 | mine n=36 win=47.2 mean=18.80 med=-3.24 Rs=56384 -> MATCH
+  H1 2.0: agent3 n=39 win=41.0 mean=5.24 med=-31.95 Rs=34290 | mine n=39 win=41.0 mean=5.24 med=-31.95 Rs=34290 -> MATCH
+  H1 3.0: agent3 n=60 win=33.3 mean=16.92 med=-32.63 Rs=63606 | mine n=60 win=33.3 mean=16.92 med=-32.63 Rs=63606 -> MATCH
+  H1 4.0: agent3 n=13 win=30.8 mean=18.11 med=-51.22 Rs=13639 | mine n=13 win=30.8 mean=18.11 med=-51.22 Rs=13639 -> MATCH
+  H1 5.0: agent3 n=6 win=100.0 mean=149.22 med=112.60 Rs=79127 | mine n=6 win=100.0 mean=149.22 med=112.60 Rs=79127 -> MATCH
+   cls   n  win_pct  wins_rs    mean  median  total_rs
+0    1  36    47.22       17   18.80   -3.24  56383.92
+1    2  39    41.03       16    5.24  -31.95  34290.43
+2    3  60    33.33       20   16.92  -32.64  63605.92
+3    4  13    30.77        4   18.11  -51.22  13638.93
+4    5   6   100.00        6  149.22  112.60  79126.88
+H2 VIX level
+  H2 low: agent3 n=108 win=34.3 mean=11.82 med=-37.60 Rs=64172 | mine n=109 win=33.9 mean=11.44 med=-36.25 Rs=60239 -> DIFF n 108 vs 109
+  H2 normal: agent3 n=46 win=56.5 mean=38.05 med=7.39 Rs=182874 | mine n=45 win=57.8 mean=39.57 med=7.94 Rs=186807 -> DIFF n 46 vs 45
+      cls    n  win_pct  wins_rs   mean  median   total_rs
+0     low  109    33.94     37.0  11.44  -36.25   60239.27
+1  normal   45    57.78     26.0  39.57    7.94  186806.81
+2    high    0      NaN      NaN    NaN     NaN        NaN
+my KW p: H1 dir5 0.5106; H2 VIX level 0.0183
+H10 GIFT class, prev_settle column (3b primary)
+        cls    n  win_pct  wins_rs   mean  median   total_rs
+0  gap-down    8    50.00        4  52.04  -15.40   50109.02
+1      flat  134    41.04       55  20.11  -15.56  192288.64
+2    gap-up   10    40.00        4   1.92  -41.85   11949.95
+  agent3b gap-down: n=8 mean=52.05 Rs=50109 -> MATCH
+  agent3b flat: n=134 mean=20.11 Rs=192289 -> MATCH
+  agent3b gap-up: n=10 mean=1.92 Rs=11950 -> MATCH
+  my KW p 0.6095
+H10 GIFT class, same contract (3b addendum)
+        cls    n  win_pct  wins_rs   mean  median   total_rs
+0  gap-down   28    39.29       11  26.69  -34.75   87768.90
+1      flat  111    41.44       46  19.42  -17.32  155621.21
+2    gap-up   13    46.15        6  17.54  -11.69   10957.50
+  agent3b gap-down: n=28 mean=26.69 Rs=87769 -> MATCH
+  agent3b flat: n=111 mean=19.42 Rs=155621 -> MATCH
+  agent3b gap-up: n=13 mean=17.54 Rs=10957 -> MATCH
+  my KW p 0.9472

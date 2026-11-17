@@ -1,0 +1,27 @@
+# sha256 first 16 hex chars; produced by agent 4 (inputs read-only)
+2a4e101509f3f3d8  index_context_research/results/context_dataset.csv
+adf01b700b617662  data/parents/yf_GSPC.csv
+0b9628211375761b  data/parents/yf_USDINR_X.csv
+aca5b10e2c53900a  data/parents/yf_BZ_F.csv
+ee77da141e1bfc87  data/parents/yf_BZ_F_1h.csv
+694b47f68949ee3a  data/parents/yf_HG_F.csv
+d5a1587326421ed4  data/parents/yf_ALI_F.csv
+c2a0b43e3430ec0c  data/parents/yf_TIO_F.csv
+00c4cf158ab82b64  data/nse_holidays.json
+55c8723800afb071  scanner/s3_buy4.py
+ee7082b093eedd22  g1_research/data/external/gdelt/timelinetone_2021.json
+ea58107699da8aca  g1_research/data/external/gdelt/timelinetone_2022.json
+f48efc05ddbc0727  g1_research/data/external/gdelt/timelinetone_2023.json
+14ab77036e4fb345  g1_research/data/external/gdelt/timelinetone_2024.json
+5e6abebca2b96c35  g1_research/data/external/gdelt/timelinetone_2025.json
+9f2181401da7cb92  g1_research/data/external/gdelt/timelinetone_2026.json
+f6bbcf962ee9321c  g1_research/data/external/participant_oi/2021-09-01.csv
+4ed5a27ad847dc93  g1_research/data/external/participant_oi/2026-11-06.csv
+280b2c53d2daf20a  g1_research/data/external/participant_oi/*.csv (1280 files; hash of per-file hashes in name order)
+# outputs and scripts
+537fe662070e58b7  index_context_research/regime_investigation/interim/agent4_external/build_features.py
+538ea604ec63294a  index_context_research/regime_investigation/interim/agent4_external/analyse_external.py
+29bffbc9895e1a7d  index_context_research/regime_investigation/interim/agent4_external/external_features.csv
+1c81f2ba7fd2ed4a  index_context_research/regime_investigation/interim/agent4_external/external_tables.csv
+691529eff4d4fb53  index_context_research/regime_investigation/interim/agent4_external/external_tests.csv
+29eb82cbe400f2d9  index_context_research/regime_investigation/interim/agent4_external/external_consistency.csv

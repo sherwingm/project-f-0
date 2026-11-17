@@ -1,0 +1,20 @@
+ret20 quintile A2 vs A3: both defined 154/154, same class 134, different 20
+VIX level A2(vix_signal) vs A3(prev close): both defined 154/154, same class 129, different 25
+gap class A2 vs A3: both defined 154/154, same class 154, different 0
+VIX dir A2 vs A3: both defined 154/154, same class 143, different 11
+US class A3(ctx) vs A4: both defined 151/154, same class 151, different 0
+Asia class 3b vs A4: both defined 133/154, same class 133, different 0
+GIFT class prev_settle-col vs same-contract (3b): both defined 152/154, same class 114, different 38
+IvsA class prev_settle-col vs same-contract (3b): both defined 152/154, same class 89, different 63
+A3 boundaries ret20 edges [-0.01884174782525916, 0.005152337349081965, 0.025672813639351012, 0.04713442395390777]; vix p25/p75 13.51/19.94
+,0
+ret1_quintile_edges,"[np.float64(-0.558), np.float64(-0.094), np.float64(0.264), np.float64(0.708)]"
+ret5_quintile_edges,"[np.float64(-1.196), np.float64(-0.07), np.float64(0.964), np.float64(1.858)]"
+ret10_quintile_edges,"[np.float64(-1.673), np.float64(0.131), np.float64(1.388), np.float64(2.799)]"
+ret20_quintile_edges,"[np.float64(-2.236), np.float64(0.078), np.float64(2.156), np.float64(4.147)]"
+vix_p25,12.565000000000001
+vix_p75,18.24375
+hist_days,727
+
+A2 vix_prev_close minus NSE VIX close of the previous session (G1-F): n 153, |diff|>0.05: 58, >0.5: 0, max 0.33
+A2 win (net_pct>0): 63

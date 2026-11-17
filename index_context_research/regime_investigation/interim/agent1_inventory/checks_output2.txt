@@ -1,0 +1,168 @@
+
+======== A. GIFT prev_settle semantics
+contracts parsed: ['FUTIDXNIFTY']
+near-month rows: 867  oi non-null: 3  oi non-null by year: {2023: 0, 2024: 0, 2025: 3, 2026: 0}
+  net_change non-null: 866  traded_value non-null 867
+prev_settle(t) / settlement(t-1 row, same contract) - 1: n 825  mean 0.00010 std 0.00410 abs-median 0.00176 max 0.0401
+  share with exactly equal: 0.006053268765133172
+  corr(prev_settle/settle(t-1)-1, S&P ret) [US date = t-1 cal day (closes ~01:30-02:30 IST of t)]: 0.500 (n=825)
+  corr(prev_settle/settle(t-1)-1, S&P ret) [US date = t (closes 01:30-02:30 IST of t+1)]: -0.113 (n=825)
+  n for gap comparison: 825 (NIFTY sessions, GIFT trade date == session date, previous GIFT row exists)
+  open_vs_prev_settle: std 0.00304  corr with actual NIFTY 09:15 gap 0.494
+  open_vs_prev_row_settle: std 0.00486  corr with actual NIFTY 09:15 gap 0.744
+  prev_settle_vs_prev_row_settle: std 0.00401  corr with actual NIFTY 09:15 gap 0.528
+  actual NIFTY gap std 0.00552
+  GIFT open vs 09:15 cash open (T): median diff (futures premium) 0.0021
+  where open == 0 or settle 0: 0
+
+======== B. breadth file on NSE non-session dates
+rows on dates not in NSE index file: 60  weekday dist: {0: 11, 1: 14, 2: 12, 3: 9, 4: 14}
+first 10:
+           date  n_eq  advances  declines  unchanged  adv_turnover_share  dec_turnover_share  turnover_lacs  avg_delivery_pct
+10  2021-10-15  1683       802       850         31              0.7001              0.2988      9770507.1             56.93
+25  2021-11-05  1665      1456       180         29              0.8989              0.1000      1141071.3             65.98
+35  2021-11-19  1654       292      1340         22              0.2183              0.7791      7150715.9             55.59
+83  2022-01-26  1650      1151       486         13              0.6564              0.3426      7278959.1             50.00
+107 2022-03-01  1648      1071       558         19              0.6815              0.3157      6898647.6             49.38
+120 2022-03-18  1654      1099       531         24              0.7719              0.2269      8529084.7             55.97
+139 2022-04-14  1801       996       773         32              0.5268              0.4655      5626212.6             52.27
+140 2022-04-15  1801       996       773         32              0.5268              0.4655      5626212.6             52.27
+152 2022-05-03  1763       518      1225         20              0.4349              0.5541      5256836.7             51.76
+224 2022-08-15  1810       908       861         41              0.6544              0.3410      5555282.8             54.81
+  of these, rows identical (adv/dec/unch) to the previous file row: 57
+  full duplicates of consecutive rows in whole file: 59
+  NSE sessions without breadth row (2021-10..): ['2022-08-08']
+  extra dates list: ['2021-10-15', '2021-11-05', '2021-11-19', '2022-01-26', '2022-03-01', '2022-03-18', '2022-04-14', '2022-04-15', '2022-05-03', '2022-08-15', '2022-08-31', '2022-10-05', '2022-10-26', '2022-11-08', '2023-01-26', '2023-03-07', '2023-03-30', '2023-04-04', '2023-04-07', '2023-04-14', '2023-05-01', '2023-06-29', '2023-08-15', '2023-09-19', '2023-10-02', '2023-10-24', '2023-11-14', '2023-11-27', '2023-12-25', '2024-01-22', '2024-01-26', '2024-03-08', '2024-03-25', '2024-03-29', '2024-04-11', '2024-04-17', '2024-05-01', '2024-05-20', '2024-06-17', '2024-07-17', '2024-08-15', '2024-10-02', '2024-11-20', '2024-12-25', '2025-10-22', '2025-11-05', '2026-01-15', '2026-01-26', '2026-03-03', '2026-03-26', '2026-03-31', '2026-04-03', '2026-04-14', '2026-05-01', '2026-05-28', '2026-06-26', '2026-09-14', '2026-10-02', '2026-10-20', '2026-11-10']
+  turnover on extra dates (median) vs normal: 8349300.0 9049385.25
+  Yahoo NSEI has rows on these extra dates: 1 of 60
+
+======== C. participant OI header-date vs filename
+files whose header date != filename (after stripping quotes): 0 []
+parsed 1280 files; any NaN: 0  FII idx fut long==0 days: 0  DII idx fut long==0: 0  DII idx fut zero both sides days: 0
+  day-on-day |change| of FII idx fut long > 50%: 24
+
+======== D. Yahoo day keys (UTC date), weekday check, partial last rows, opens
+ASX200_1d.csv: UTC-date weekdays {0: 440, 1: 457, 2: 457, 3: 451, 4: 229, 6: 216} | chosen key weekdays {0: 433, 1: 458, 2: 456, 3: 455, 4: 448} | dup keys 1 | rows with close 2248 | rows w/o close 2 | open NaN 1
+      share of days open==previous close exactly: 0.647;  open==close same day share 0.002
+BRENT_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | dup keys 0 | rows with close 2235 | rows w/o close 2 | open NaN 2
+      share of days open==previous close exactly: 0.017;  open==close same day share 0.006
+DXY_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448, 6: 463} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448, 6: 463} | dup keys 0 | rows with close 2234 | rows w/o close 466 | open NaN 466
+      share of days open==previous close exactly: 0.048;  open==close same day share 0.009
+ES_F_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | dup keys 0 | rows with close 2235 | rows w/o close 2 | open NaN 2
+      share of days open==previous close exactly: 0.030;  open==close same day share 0.004
+GOLD_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | dup keys 0 | rows with close 2234 | rows w/o close 3 | open NaN 3
+      share of days open==previous close exactly: 0.015;  open==close same day share 0.035
+GSPC_1d.csv: UTC-date weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | chosen key weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | dup keys 0 | rows with close 2232 | rows w/o close 0 | open NaN 0
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+HSI_1d.csv: UTC-date weekdays {0: 424, 1: 442, 2: 440, 3: 445, 4: 433} | chosen key weekdays {0: 424, 1: 442, 2: 440, 3: 445, 4: 433} | dup keys 0 | rows with close 2183 | rows w/o close 1 | open NaN 0
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+IXIC_1d.csv: UTC-date weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | chosen key weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | dup keys 0 | rows with close 2232 | rows w/o close 0 | open NaN 0
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+KOSPI_1d.csv: UTC-date weekdays {0: 424, 1: 439, 2: 432, 3: 442, 4: 438} | chosen key weekdays {0: 424, 1: 439, 2: 432, 3: 442, 4: 438} | dup keys 0 | rows with close 2174 | rows w/o close 1 | open NaN 0
+      share of days open==previous close exactly: 0.001;  open==close same day share 0.001
+N225_1d.csv: UTC-date weekdays {0: 406, 1: 439, 2: 443, 3: 443, 4: 445} | chosen key weekdays {0: 406, 1: 439, 2: 443, 3: 443, 4: 445} | dup keys 0 | rows with close 2163 | rows w/o close 13 | open NaN 12
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+NQ_F_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | dup keys 0 | rows with close 2235 | rows w/o close 2 | open NaN 2
+      share of days open==previous close exactly: 0.014;  open==close same day share 0.000
+NSEI_1d.csv: UTC-date weekdays {0: 439, 1: 439, 2: 438, 3: 440, 4: 432, 5: 2, 6: 1} | chosen key weekdays {0: 439, 1: 439, 2: 438, 3: 440, 4: 432, 5: 2, 6: 1} | dup keys 0 | rows with close 2187 | rows w/o close 4 | open NaN 4
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+SSEC_1d.csv: UTC-date weekdays {0: 420, 1: 434, 2: 436, 3: 436, 4: 424} | chosen key weekdays {0: 420, 1: 434, 2: 436, 3: 436, 4: 424} | dup keys 0 | rows with close 2149 | rows w/o close 1 | open NaN 0
+      share of days open==previous close exactly: 0.000;  open==close same day share 0.000
+TWII_1d.csv: UTC-date weekdays {0: 427, 1: 442, 2: 440, 3: 431, 4: 415} | chosen key weekdays {0: 427, 1: 442, 2: 440, 3: 431, 4: 415} | dup keys 0 | rows with close 2153 | rows w/o close 2 | open NaN 1
+      share of days open==previous close exactly: 0.003;  open==close same day share 0.000
+US10Y_1d.csv: UTC-date weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | chosen key weekdays {0: 419, 1: 461, 2: 456, 3: 449, 4: 447} | dup keys 0 | rows with close 2232 | rows w/o close 0 | open NaN 0
+      share of days open==previous close exactly: 0.015;  open==close same day share 0.027
+USDINR_1d.csv: UTC-date weekdays {0: 464, 1: 464, 2: 463, 3: 463, 4: 189, 6: 274} | chosen key weekdays {0: 464, 1: 464, 2: 463, 3: 463, 4: 463} | dup keys 0 | rows with close 2311 | rows w/o close 6 | open NaN 6
+      share of days open==previous close exactly: 0.001;  open==close same day share 0.662
+VIX_US_1d.csv: UTC-date weekdays {0: 463, 1: 464, 2: 463, 3: 463, 4: 463} | chosen key weekdays {0: 463, 1: 464, 2: 463, 3: 463, 4: 463} | dup keys 0 | rows with close 2234 | rows w/o close 82 | open NaN 82
+      share of days open==previous close exactly: 0.017;  open==close same day share 0.003
+WTI_1d.csv: UTC-date weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | chosen key weekdays {0: 420, 1: 461, 2: 456, 3: 452, 4: 448} | dup keys 0 | rows with close 2234 | rows w/o close 3 | open NaN 3
+      share of days open==previous close exactly: 0.025;  open==close same day share 0.005
+  N225_1d.csv open-gap: n 2162, std 0.0075, zero-gap share 0.000, |gap|>5%: 0, open==high==low==close days 0
+  HSI_1d.csv open-gap: n 2182, std 0.0094, zero-gap share 0.000, |gap|>5%: 5, open==high==low==close days 0
+  KOSPI_1d.csv open-gap: n 2173, std 0.0100, zero-gap share 0.001, |gap|>5%: 9, open==high==low==close days 2
+  SSEC_1d.csv open-gap: n 2148, std 0.0057, zero-gap share 0.000, |gap|>5%: 3, open==high==low==close days 0
+  TWII_1d.csv open-gap: n 2152, std 0.0059, zero-gap share 0.003, |gap|>5%: 2, open==high==low==close days 0
+  ASX200_1d.csv open-gap: n 2247, std 0.0016, zero-gap share 0.647, |gap|>5%: 0, open==high==low==close days 2
+
+======== E. Oil / gold roll jumps (2026) and WTI-Brent
+                 brent         wti    br_ret    wt_ret
+d                                                     
+2026-03-06   92.690002   90.900002  0.085236  0.122084
+2026-03-10   87.800003   83.449997 -0.112773 -0.119447
+2026-03-12  100.459999   95.730003  0.092194  0.097192
+2026-03-23   99.940002   88.129997 -0.109190 -0.103641
+2026-04-01  101.160004  100.120003 -0.145247 -0.012428
+2026-04-08   94.750000   94.410004 -0.132882 -0.164143
+2026-04-17   90.379997   83.849998 -0.090653 -0.114479
+2026-07-13   83.300003   78.139999  0.095908  0.094244
+2026-07-27   88.360001   82.610001 -0.087001 -0.075020
+2026-11-02  104.769997   96.459999 -0.109402 -0.073569
+2026-11-04   94.620003   88.120003 -0.086679 -0.082943
+Brent-WTI spread (>$15 or <$0) days since 2022: 1  days since 2022 where Brent and WTI returns differ by >5pts: 5
+older cache BZ_F vs new Brent (daily close) overlap diff:
+   overlap 1633 max rel diff 0.0000; days >1%: 0
+
+======== F. VIX odd rows and NIFTY big 1-min moves
+repaired VIX 2025-04-07: open/high/low/close range: 13.76 23.19 13.76 22.85  rows 376
+            date   open       high    low      close
+4186  2025-04-07  13.76  23.190001  13.76  22.790001
+NIFTY 1-min within-day |ret|>2%: 0 Empty DataFrame
+Columns: [timestamp, close]
+Index: []
+09:15 NIFTY bar degenerate (high==low) share: 0.028225806451612902  by year: {2021: 0.7, 2022: 0.0, 2023: 0.0, 2024: 0.0, 2025: 0.0, 2026: 0.0}  volume non-zero share 0.0
+09:15 open vs previous session last close gap sample (first 5 days of 2024):
+            open0915  prev_1529
+d                              
+2024-01-01  21727.75        NaN
+2024-01-02  21751.35   21685.35
+2024-01-03  21661.10   21660.25
+2024-01-04  21605.80   21526.15
+
+======== G. events.sqlite, other event lists
+           type      n       first        last
+0  analyst_view      1  2026-10-30  2026-10-30
+1           ban   1919  2023-01-18  2026-11-13
+2    block_deal   3089  2023-01-12  2026-10-30
+3     bulk_deal   1613  2023-01-03  2026-11-13
+4      capacity   2602  2023-01-02  2026-11-13
+5       insider  14265  2023-01-02  2026-04-30
+6     order_win   1178  2023-01-03  2026-11-12
+7        rating   1155  2023-01-03  2026-10-30
+8       results   3063  2023-01-09  2026-11-13
+9  results_date   3164  2023-01-09  2026-11-13
+     symbol     n
+0  JSWSTEEL  1329
+1       M&M  1228
+2      INFY  1182
+3    360ONE  1047
+4     DMART   929
+   n
+0  0
+
+======== H. sensex/calls trade-record files in g1_research/data
+sensex_maxup_free_trades.csv 263 ['day', 'expiry', 'entry', 'strike', 'paid', 'spot', 'day1', 'next_0916', 'next_close', 'gap_pct'] 2024-10-01 2026-10-23
+calls_sensex_maxup_free_trades.csv 226 ['day', 'expiry', 'entry', 'strike', 'paid', 'spot', 'day1', 'next_0916', 'next_close', 'gap_pct'] 2024-10-03 2026-10-21
+calls_nifty_maxup_free_trades.csv 235 ['day', 'expiry', 'entry', 'strike', 'paid', 'spot', 'day1', 'next_0916', 'next_close', 'gap_pct'] 2024-10-03 2026-10-15
+g1_maxup_free_trades.csv 227 ['day', 'entry', 'strike', 'paid', 'g1f', 'g1_exit', 'g1_net_pct', 'g1_max_up_held_pct', 'day1', 'next_0916'] 2025-01-01 2026-10-23
+
+======== I. hourly ES/NQ/USDINR coverage of the 06:30-09:15 IST window per Indian session
+ES_F_60m.csv: non-NaN bars 11435; IST sessions 2024-11-18..2026-10-28: 480; sessions with >=1 non-NaN bar stamped 06:00-09:15 IST: 456; bar stamps (minutes past hour): {0: 11414, 30: 20, 3: 1}
+   hours (IST) with most bars: {20: 500, 21: 500, 16: 499, 17: 499, 14: 499, 15: 499, 23: 499, 18: 499}  (CME Globex closes 03:30 IST daily break 22:30-23:30 IST)
+NQ_F_60m.csv: non-NaN bars 11434; IST sessions 2024-11-18..2026-10-28: 480; sessions with >=1 non-NaN bar stamped 06:00-09:15 IST: 456; bar stamps (minutes past hour): {0: 11413, 30: 20, 3: 1}
+USDINR_60m.csv: non-NaN bars 9869; IST sessions 2024-11-18..2026-10-28: 480; sessions with >=1 non-NaN bar stamped 06:00-09:15 IST: 477; bar stamps (minutes past hour): {0: 9868, 47: 1}
+
+======== J. FII/DII stockezee: sign convention and Sunday rows
+          date weekday  fii_cash_net  dii_cash_net  fii_index_fut  fii_index_opt  fii_stock_fut  fii_stock_opt  india_vix  nifty_close
+42  2026-02-01     Sun       -588.34       -682.73       -1564.98      -10292.45       -1804.69         659.71        NaN          NaN
+211 2026-11-08     Sun         -0.25       -700.31           0.00           0.00           0.00           0.00        NaN          NaN
+217 2026-11-17     Tue       4195.38        196.93       -1392.37       35139.21         860.11         549.49       15.5      25387.4
+rows with NaN nifty_close: ['2026-02-01', '2026-07-24', '2026-11-08']
+largest 5 close differences vs NSE (%):
+ date
+2026-03-19    0.384
+2026-03-16    0.224
+2026-06-30    0.220
+2026-05-12    0.214
+2026-03-24    0.198
+corr(fii_cash_net, NIFTY same-day return): 0.389  corr(dii, ret): -0.296  corr(fii,dii): -0.845

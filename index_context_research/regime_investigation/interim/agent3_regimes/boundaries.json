@@ -1,0 +1,33 @@
+{
+ "history": [
+  "2018-01-01",
+  "2024-09-30"
+ ],
+ "n_sessions_nifty": 1669,
+ "ret5_quintile_edges": [
+  -0.012004858383150973,
+  -0.0002694924007799797,
+  0.009619828911805593,
+  0.019535390446891922
+ ],
+ "ret10_quintile_edges": [
+  -0.016080134890272355,
+  0.0018280729134939858,
+  0.014820917501912811,
+  0.029730773691625422
+ ],
+ "ret20_quintile_edges": [
+  -0.01884174782525916,
+  0.005152337349081965,
+  0.025672813639351012,
+  0.04713442395390777
+ ],
+ "vix_p25": 13.510000228881836,
+ "vix_p75": 19.940000534057617,
+ "n_sessions_vix": 1649,
+ "vix_direction_threshold_pct": 5.0,
+ "vix_expansion_ratio": 1.1,
+ "gap_threshold_pct": 0.3,
+ "us_threshold_pct": 0.3,
+ "notes": "edges are NIFTY/VIX history only; ret = close(prev)/close(prev-k sessions)-1 as fractions"
+}

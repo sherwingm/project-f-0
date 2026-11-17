@@ -1,0 +1,57 @@
+G1-F n=154: mean 19.66 %, median -18.24 %, sd 101.36 %, SE of mean 8.17 %, 95% CI of mean 3.6..35.7; skew 1.74
+discovery n=75: mean 25.24, sd 103.58; second half n=79: mean 14.35, sd 99.59
+net Rs: sd per trade 7715, mean 1604
+Minimum detectable difference in mean net % between two classes of equal size n (two-sided, 80 % power, normal approximation, sd pooled = whole-sample sd):
+n per cell | alpha 0.05 | alpha 0.003 | alpha 0.05, discovery sd
+  10 |  127.0 pts |  172.7 pts |  129.8 pts
+  20 |   89.8 pts |  122.1 pts |   91.8 pts
+  40 |   63.5 pts |   86.3 pts |   64.9 pts
+  80 |   44.9 pts |   61.1 pts |   45.9 pts
+Unequal split e.g. 20 vs 134 (small class vs rest): 68.1 pts at 0.05; 92.6 at 0.003
+Class vs rest, class n=10/20/40/80 of 154: 10: 93 pts (0.05) / 126 (0.003), 20: 68 pts (0.05) / 93 (0.003), 40: 52 pts (0.05) / 71 (0.003), 80: 46 pts (0.05) / 62 (0.003)
+Whole-sample difference needed to move the G1-F mean from +19.7 % to a class mean significantly different from zero (one class, alpha 0.05): n=40 -> mean must exceed 31 %; n=10 -> 63 %
+G1-F overall: top1 44422 (18%), top3 91666 (37%), top8 190146 (77%); mean net % ex top 3 14.1, ex top 8 5.8; Rs ex top 8 56900
+top 3 by net %: [426.0, 400.0, 339.0], mean ex top3 by % 12.3
+
+Classes with n>=10 whose mean is notably above/below G1-F mean (|excess|>=10 pts), with mean ex top-3-by-Rs:
+                      test       cls   n  mean  median  mean_ex_top3_rs  top3_share_of_class_rs  total_rs  rs_ex_top3
+      A4 X12 FII opt level       low  15  61.2    -1.4              0.0                   129.9   50832.0    -15191.0
+                  H1x dir3   bullish  19  59.5    35.8             14.6                    84.9   92765.8     13965.6
+          R ret10 quintile         4  30  58.2    -6.1             30.1                    75.0  115613.1     28900.5
+           R ret5 quintile         3  41  55.0    22.7             38.0                    36.8  169470.3    107181.6
+  H11 IvsA (same contract)  stronger  24  53.5    19.7             18.0                    64.6  141995.3     50329.4
+             A4 X02 USDINR        up  24  46.1    20.8             23.3                    61.6   77005.3     29537.6
+      A4 X08 FII fut level      high  24  45.2   -13.2              4.1                   102.7   70315.7     -1887.1
+  H11 IvsA (same contract)    weaker  26  39.5     6.4              9.1                    89.8   52230.4      5301.7
+      A4 X08 FII fut level       mid  29  38.8     8.9             15.7                    65.8  101991.1     34909.3
+              H2 VIX level    normal  46  38.1     7.4             21.3                    49.5  182874.3     92433.6
+      A4 X10 DII fut level       mid  36  37.6    -3.9             16.6                    59.0  101974.3     41790.5
+             A4 X07 sector bank_lags  24  36.5    12.9              8.2                    74.2   83767.7     21595.4
+             A4 X02 USDINR      down  15  36.3   -51.2            -23.5                   151.3   46113.1    -23654.9
+            A4 H15 FII/DII   diverge  44  34.3    -5.1             15.6                    56.6  117057.5     50774.0
+            A4 H14 breadth       mid  79  33.7    -9.8             23.6                    39.4  168050.6    101767.2
+      A4 X10 DII fut level       low  29  33.6     6.8             10.2                    80.1   62041.6     12364.3
+H11 IvsA (prev_settle col)  stronger  23  32.8    -2.0              1.1                    84.6   94190.2     14485.9
+              A4 X03 Brent      flat  74  30.6   -15.6             20.4                    38.1  174820.4    108222.5
+          R ret10 quintile         2  43  30.5    -2.0             14.9                    57.4  115033.2     49016.4
+            A4 H14 breadth       low  43   9.1   -21.4             -2.4                   112.0   46868.5     -5642.0
+      A4 X08 FII fut level       low 100   8.7   -39.4              0.7                    74.2   79625.0     20506.3
+      A4 X10 DII fut level      high  88   8.5   -49.2             -3.0                   100.0   87916.0       -21.8
+              A4 X03 Brent        up  41   8.4    -8.3             -5.2                   130.0   37694.6    -11314.0
+  H11 IvsA (same contract)   in line 102   8.0   -34.4              0.2                    92.9   60121.9      4247.4
+               A4 H12 Asia        up  38   8.0   -15.0             -7.6                   230.6   22622.9    -29537.4
+               H6 US (ctx)      flat  48   8.0   -46.8             -5.8                   110.5   56683.2     -5929.2
+             A4 X02 USDINR      flat 102   7.4   -39.4             -0.1                    63.0  111145.9     41134.3
+           R ret5 quintile         2  55   7.4   -51.2             -8.8                   274.2   26793.3    -46683.7
+                    H5 gap  gap-down  21   6.4   -51.0            -18.7                  1022.8    3732.1    -34439.6
+  H1 dir5 (ret20 quintile)         2  39   5.2   -32.0            -12.2                   188.9   34290.4    -30501.2
+H10 GIFT (prev_settle col)    gap-up  10   1.9   -41.8            -45.3                   290.6   11950.0    -22777.6
+            A4 H14 breadth      high  31   0.7   -51.2            -23.8                   218.4   37012.8    -43840.4
+             A4 X04 US VIX     spike  13   0.3   -51.0            -44.3                   370.8   13173.6    -35675.4
+             A4 X15 events event_day  12  -1.4   -29.6            -36.2                   709.6    4317.4    -26319.7
+          R ret10 quintile         1  39  -2.8   -30.3            -16.1                     NaN   -6713.5    -51207.7
+          R ret10 quintile         3  29  -4.6   -51.4            -24.8                     NaN   -6864.2    -45361.8
+           R ret5 quintile         5  16 -21.5   -40.1            -40.0                     NaN  -19233.3    -39391.3
+            A4 H15 FII/DII  both_buy  15 -29.4   -51.6            -45.1                     NaN  -29620.9    -37358.5
+
+win definitions: net_pct>0 : 63; net_rs>0 : 63; disagreements 0; zero Rs trades 0
