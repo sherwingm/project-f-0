@@ -14,7 +14,7 @@ Why, in one line each:
 
 ## Study by study (discovery period first; % = net per trade after costs, of notional for futures, of credit / premium for options)
 - **R01 Gap-and-go** (report's 11.5-year claim; NIFTY, BANKNIFTY, SENSEX; 45 cells): 0 pass. Best NIFTY gap >= 1 % follow +0.19 % (t 1.46, n 42); gap 0.75 % +0.07 %; the "skip when 2.5 % above SMA20" filter changes little; fading gaps loses.
-- **R02 Overnight / intraday drift** (24 cells): overnight long after an up day passed discovery on all three indices (+0.08 %, t 2.3-2.9) and **failed validation** (+0.04 to +0.05 %, t 1.4-1.7, negative without the best 5 % of trades). Intraday long loses, most when VIX is high (-0.17 %, t -2.6).
+- **R02 Overnight / intraday drift** (24 cells): overnight long after an up day passed discovery on all three indices (+0.08 %, t 2.3-2.9) and **failed validation** (+0.04 to +0.05 %, t 1.4-1.7, negative without the best 5 % of trades). Intraday long loses, most when VIX is high (-0.10 %, t -1.5 after the 17 Nov VIX repair; the first run showed -0.17 %, t -2.6 from an unrepaired VIX series).
 - **R02b Overnight on the real future 2018-2021** (follow-up): -0.02 to -0.04 % (gross about +0.03 %): the index-based overnight effect does not survive real futures prices and costs.
 - **R03 Initial-balance breakout / liquidity sweep** (15 cells): 0 pass. IB breakout about 0; the sweep fade loses (its stop sits within 0.1 % and is hit most of the time).
 - **R04 Supertrend pullback** (6 cells): 0 pass (best +0.035 %, t 1.15).

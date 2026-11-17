@@ -1247,3 +1247,6 @@ Fetched GIFT Nifty daily settlements and combined OI from NSE IX (861 days, 10 J
 
 ## 17 Nov 2026 (index chat): daily-candle analogs of the index strategies, 2018-2026
 At the user's request (A7, rules fixed before numbers): puts and calls on daily breakouts, the G1-F gap / VIX filters and the expiry-day straddle, real daily option prices, Covid excluded. Overlap years agree with the real minute results. Puts: -5 % in 2018-21, +3.5 % in 2022-26; calls the mirror (+4.9 % then -3.0 %); the expiry-day straddle loses in both eras (about -11 %, t -2.1 / -2.6). `index_research/results/DP_summary.md`.
+
+## 17 Nov 2026 (index chat): proxy (model-priced) replay Oct 2021 to Oct 2026, and a VIX data fault found
+Proxy replay of G1 / G1-F / G1-C / XP on NIFTY minutes with Black-Scholes prices scaled to VIX (A8). It matches the real G1 replay (correlation 0.93) but fails for XP (+8 % vs real -11 %). Proxy years Oct 2021-Sep 2024: G1 -5.3 %, G1-F -3.9 %, G1-C -2.8 % (none significant): the put edge is not there before Oct 2024. Found: the cached 1-minute VIX for 2021-10 to 2023-08 holds unrepaired rows (0.24, 3079); `index_data.load.vix_1m` repairs them. First proxy run discarded; R02 and the combination study re-run (conclusions unchanged; one R02 sentence corrected). `index_research/results/PX_summary.md`.
