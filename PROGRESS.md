@@ -1241,3 +1241,6 @@ At the user's request (pre-registered `strategies/S1_daily_vs_minute_vs_live.md`
 
 ## 15 Nov 2026 (index chat): daily-candle studies by year, 2018-2026, Covid excluded
 At the user's request: slices of saved trade files (A6, window fixed before numbers). Results in `index_research/results/Y1_by_year.md`. Most cells change sign between years; weekend / Monday / turn-of-month effects fade after 2022; the calendar straddle is negative every year. Live S1 / index strategies have no daily history before 2021 / Oct 2024, so they are not in this view.
+
+## 16-17 Nov 2026 (index chat): index context research and GIFT Nifty data
+Fetched GIFT Nifty daily settlements and combined OI from NSE IX (861 days, 10 Jul 2023 to 13 Nov 2026; `index_context_research/data/gift/`, git-ignored; urllib timed out, curl works). Unified pre-entry dataset for G1 / G1-F / G1-C / XP and 17 factors; 67 cells; 1 survivor in discovery (XP, 5-day VIX change) failed validation; no validated factor; combinations not run. Near-misses (not significant after correction): ATM IV (G1 puts better in low IV, G1-C calls in high IV) and put-call OI for G1-C. Report `index_context_research/MASTER_INDEX_REPORT.md`, commit e9cb5128e. Pre-registration was written but not committed before the run (the mission said not to commit); its hash is in the manifest.
