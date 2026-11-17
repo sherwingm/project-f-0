@@ -868,6 +868,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -91.0
+  },
+  {
+   "at": "14:30:19",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.862,
+   "same_best_bid_pct": 47.1,
+   "same_best_ask_pct": 51.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 98.0,
+   "upstox_minus_kotak_quote_time_s_median": -60.0
   }
  ],
  "top_gaps": [
@@ -963,6 +977,13 @@
    "at": "09:45"
   },
   {
+   "contract": "SUNPHARMA26NOV1880PE",
+   "gap_pct": 1.862,
+   "kotak": 18.8,
+   "upstox": 19.15,
+   "at": "14:30"
+  },
+  {
    "contract": "ETERNAL26NOV375PE",
    "gap_pct": 1.639,
    "kotak": 6.1,
@@ -1003,20 +1024,13 @@
    "kotak": 1.33,
    "upstox": 1.35,
    "at": "11:40"
-  },
-  {
-   "contract": "DIXON26NOV13250PE",
-   "gap_pct": 1.37,
-   "kotak": 270.0,
-   "upstox": 266.3,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 62,
-  "contract_quotes": 3159,
+  "rounds": 63,
+  "contract_quotes": 3210,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 40.2,
+  "same_best_bid_pct": 41.2,
   "same_best_ask_pct": 41.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.1,
