@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.2,
    "upstox_minus_kotak_quote_time_s_median": -49.0
+  },
+  {
+   "at": "10:15:05",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.478,
+   "same_best_bid_pct": 23.5,
+   "same_best_ask_pct": 29.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 86.3,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -163,6 +177,13 @@
    "kotak": 1.98,
    "upstox": 2.1,
    "at": "10:05"
+  },
+  {
+   "contract": "KPITTECH26NOV540PE",
+   "gap_pct": 4.478,
+   "kotak": 10.05,
+   "upstox": 9.6,
+   "at": "10:15"
   },
   {
    "contract": "DATAPATTNS26NOV4300CE",
@@ -242,6 +263,13 @@
    "at": "09:45"
   },
   {
+   "contract": "KFINTECH26NOV980CE",
+   "gap_pct": 1.166,
+   "kotak": 17.15,
+   "upstox": 16.95,
+   "at": "10:15"
+  },
+  {
    "contract": "BSE26NOV3950PE",
    "gap_pct": 1.154,
    "kotak": 60.65,
@@ -282,30 +310,16 @@
    "kotak": 13.7,
    "upstox": 13.6,
    "at": "10:05"
-  },
-  {
-   "contract": "ICICIBANK26NOV1600PE",
-   "gap_pct": 0.671,
-   "kotak": 14.9,
-   "upstox": 14.8,
-   "at": "10:00"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.63,
-   "kotak": 31.75,
-   "upstox": 31.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 561,
+  "rounds": 12,
+  "contract_quotes": 612,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 31.4,
-  "same_best_ask_pct": 35.3,
+  "same_best_bid_pct": 30.4,
+  "same_best_ask_pct": 32.35,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "upstox_minus_kotak_quote_time_s_median": -12.5
  }
 }
