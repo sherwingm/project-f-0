@@ -182,6 +182,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 89.8,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "10:25:05",
+   "contracts": 51,
+   "on_both": 51,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.174,
+   "same_best_bid_pct": 41.2,
+   "same_best_ask_pct": 31.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 88.2,
+   "upstox_minus_kotak_quote_time_s_median": -30.0
   }
  ],
  "top_gaps": [
@@ -226,6 +240,13 @@
    "kotak": 109.25,
    "upstox": 106.35,
    "at": "09:20"
+  },
+  {
+   "contract": "KALYANKJIL26NOV760CE",
+   "gap_pct": 2.174,
+   "kotak": 2.3,
+   "upstox": 2.25,
+   "at": "10:25"
   },
   {
    "contract": "CGPOWER26NOV820CE",
@@ -317,23 +338,16 @@
    "kotak": 61.45,
    "upstox": 61.0,
    "at": "09:20"
-  },
-  {
-   "contract": "INDHOTEL26NOV900CE",
-   "gap_pct": 0.73,
-   "kotak": 13.7,
-   "upstox": 13.6,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 13,
-  "contract_quotes": 661,
+  "rounds": 14,
+  "contract_quotes": 712,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 31.4,
-  "same_best_ask_pct": 29.4,
+  "same_best_bid_pct": 32.35,
+  "same_best_ask_pct": 30.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -14.0
+  "oi_same_pct": 90.0,
+  "upstox_minus_kotak_quote_time_s_median": -17.5
  }
 }
