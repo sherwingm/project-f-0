@@ -1,0 +1,143 @@
+# Individual factor results (Stage 1)
+
+Index context research, 16 Nov 2026. Plan: `PREREG_CONTEXT.md`. Research only; nothing existing was changed; nothing committed. Net % = net per trade after costs (live-rule replays, 1 lot). Max up first.
+
+67 cells (4 trade sets x 17 features, minus those with a side under 5 trades) tested on the DISCOVERY half; Benjamini-Hochberg 10 % over all 67. **1 survivor** (XP, VIX change over 5 sessions), **which failed validation**. Everything else: no predictive value, or promising-but-insufficient where the nominal p was under 0.05.
+
+- XP expiry-day straddle (107) | vix_chg5: t -3.73, p 0.000 -> FAILED out-of-sample (passed discovery, did not hold)
+- G1-C calls (235) | pcr_oi: t +2.69, p 0.007 -> PROMISING BUT INSUFFICIENT EVIDENCE (nominal p < 0.05, failed multiple-testing correction)
+- G1 puts (259) | atm_iv: t -2.52, p 0.012 -> PROMISING BUT INSUFFICIENT EVIDENCE (nominal p < 0.05, failed multiple-testing correction)
+- XP expiry-day straddle (107) | gift_ret_prev: t +2.11, p 0.035 -> PROMISING BUT INSUFFICIENT EVIDENCE (nominal p < 0.05, failed multiple-testing correction)
+- G1-C calls (235) | atm_iv: t +2.07, p 0.038 -> PROMISING BUT INSUFFICIENT EVIDENCE (nominal p < 0.05, failed multiple-testing correction)
+- XP expiry-day straddle (107) | fut_px_chg: t +2.05, p 0.040 -> PROMISING BUT INSUFFICIENT EVIDENCE (nominal p < 0.05, failed multiple-testing correction)
+- G1-C calls (235) | vix_chg5: t -1.92, p 0.055 -> NO PREDICTIVE VALUE
+- G1 puts (259) | vix_pct1y: t -1.90, p 0.057 -> NO PREDICTIVE VALUE
+- G1 puts (259) | vix_chg5: t -1.86, p 0.063 -> NO PREDICTIVE VALUE
+- G1 puts (259) | breadth_prev: t -1.81, p 0.071 -> NO PREDICTIVE VALUE
+- G1-F (154) | gap_pct: t -1.79, p 0.073 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | breadth_prev: t +1.73, p 0.084 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | breadth_prev: t +1.69, p 0.091 -> NO PREDICTIVE VALUE
+- G1 puts (259) | vix_signal: t -1.56, p 0.118 -> NO PREDICTIVE VALUE
+- G1-F (154) | event_window: t -1.43, p 0.151 -> NO PREDICTIVE VALUE
+- G1-F (154) | iv_skew: t +1.41, p 0.158 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | fii_fut_longshare: t +1.29, p 0.197 -> NO PREDICTIVE VALUE
+- G1 puts (259) | event_window: t -1.24, p 0.215 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | fut_oi_chg: t -1.19, p 0.236 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | iv_skew: t -1.17, p 0.243 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | fut_oi_chg: t -1.12, p 0.262 -> NO PREDICTIVE VALUE
+- G1-F (154) | gift_ret_prev: t -1.05, p 0.295 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | fii_fut_chg: t +1.02, p 0.308 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | event_window: t +1.01, p 0.314 -> NO PREDICTIVE VALUE
+- G1 puts (259) | iv_skew: t +1.00, p 0.317 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | vix_pct1y: t -0.95, p 0.344 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | gift_ret_prev: t +0.93, p 0.352 -> NO PREDICTIVE VALUE
+- G1 puts (259) | expiry_day: t +0.92, p 0.358 -> NO PREDICTIVE VALUE
+- G1-F (154) | fut_px_chg: t -0.92, p 0.358 -> NO PREDICTIVE VALUE
+- G1-F (154) | breadth_prev: t +0.92, p 0.360 -> NO PREDICTIVE VALUE
+- G1 puts (259) | gap_pct: t -0.90, p 0.366 -> NO PREDICTIVE VALUE
+- G1 puts (259) | fii_fut_longshare: t +0.84, p 0.403 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | vix_signal: t -0.83, p 0.405 -> NO PREDICTIVE VALUE
+- G1-F (154) | fut_oi_chg: t -0.81, p 0.418 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | expiry_day: t +0.77, p 0.439 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | us_prev_ret: t -0.76, p 0.445 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | gap_pct: t +0.75, p 0.450 -> NO PREDICTIVE VALUE
+- G1-F (154) | expiry_day: t +0.73, p 0.465 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | fut_px_chg: t +0.71, p 0.477 -> NO PREDICTIVE VALUE
+- G1-F (154) | fii_fut_longshare: t +0.69, p 0.489 -> NO PREDICTIVE VALUE
+- G1-F (154) | pcr_oi: t +0.64, p 0.523 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | atm_iv: t -0.62, p 0.538 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | vix_pct1y: t -0.60, p 0.552 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | fii_fut_chg: t -0.58, p 0.560 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | gift_basis: t -0.58, p 0.560 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | pcr_oi: t +0.57, p 0.568 -> NO PREDICTIVE VALUE
+- G1 puts (259) | fut_oi_chg: t -0.53, p 0.594 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | fii_fut_longshare: t -0.52, p 0.603 -> NO PREDICTIVE VALUE
+- G1 puts (259) | gift_ret_prev: t -0.50, p 0.618 -> NO PREDICTIVE VALUE
+- G1 puts (259) | fut_px_chg: t -0.45, p 0.652 -> NO PREDICTIVE VALUE
+- G1-F (154) | atm_iv: t -0.45, p 0.654 -> NO PREDICTIVE VALUE
+- G1-F (154) | us_prev_ret: t +0.33, p 0.738 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | iv_skew: t -0.33, p 0.738 -> NO PREDICTIVE VALUE
+- G1 puts (259) | gift_basis: t -0.32, p 0.745 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | us_prev_ret: t -0.32, p 0.748 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | vix_signal: t -0.32, p 0.749 -> NO PREDICTIVE VALUE
+- G1 puts (259) | pcr_oi: t -0.31, p 0.759 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | gift_basis: t -0.25, p 0.806 -> NO PREDICTIVE VALUE
+- G1-F (154) | vix_pct1y: t +0.24, p 0.807 -> NO PREDICTIVE VALUE
+- G1-F (154) | vix_signal: t +0.23, p 0.816 -> NO PREDICTIVE VALUE
+- G1-F (154) | vix_chg5: t -0.20, p 0.838 -> NO PREDICTIVE VALUE
+- G1 puts (259) | fii_fut_chg: t +0.18, p 0.858 -> NO PREDICTIVE VALUE
+- G1-F (154) | fii_fut_chg: t -0.16, p 0.869 -> NO PREDICTIVE VALUE
+- XP expiry-day straddle (107) | event_window: t +0.15, p 0.884 -> NO PREDICTIVE VALUE
+- G1-F (154) | gift_basis: t -0.09, p 0.926 -> NO PREDICTIVE VALUE
+- G1 puts (259) | us_prev_ret: t +0.03, p 0.977 -> NO PREDICTIVE VALUE
+- G1-C calls (235) | gap_pct: t -0.01, p 0.993 -> NO PREDICTIVE VALUE
+
+## Full numbers per cell (max up first)
+
+- XP expiry-day straddle (107) | vix_chg5: high side -38.0 % (n 26, share reaching +100 % 8 %) vs low side +39.2 % (n 26, 42 %); difference -77.2 points, t -3.73, p 0.000, 95 % interval -121 to -38; multiple-testing pass: YES
+- G1-C calls (235) | pcr_oi: high side +15.9 % (n 56, share reaching +100 % 21 %) vs low side -24.6 % (n 56, 21 %); difference +40.5 points, t +2.69, p 0.007, 95 % interval +11 to +70; multiple-testing pass: no
+- G1 puts (259) | atm_iv: high side -12.8 % (n 64, share reaching +100 % 30 %) vs low side +29.5 % (n 64, 42 %); difference -42.3 points, t -2.52, p 0.012, 95 % interval -76 to -9; multiple-testing pass: no
+- XP expiry-day straddle (107) | gift_ret_prev: high side +24.0 % (n 25, share reaching +100 % 52 %) vs low side -24.6 % (n 26, 0 %); difference +48.6 points, t +2.11, p 0.035, 95 % interval +5 to +96; multiple-testing pass: no
+- G1-C calls (235) | atm_iv: high side +11.5 % (n 56, share reaching +100 % 27 %) vs low side -20.2 % (n 56, 16 %); difference +31.7 points, t +2.07, p 0.038, 95 % interval +2 to +62; multiple-testing pass: no
+- XP expiry-day straddle (107) | fut_px_chg: high side +23.7 % (n 26, share reaching +100 % 46 %) vs low side -22.4 % (n 26, 4 %); difference +46.1 points, t +2.05, p 0.040, 95 % interval +6 to +91; multiple-testing pass: no
+- G1-C calls (235) | vix_chg5: high side -19.0 % (n 56, share reaching +100 % 18 %) vs low side +10.3 % (n 56, 25 %); difference -29.4 points, t -1.92, p 0.055, 95 % interval -59 to -0; multiple-testing pass: no
+- G1 puts (259) | vix_pct1y: high side -8.0 % (n 63, share reaching +100 % 27 %) vs low side +24.2 % (n 65, 45 %); difference -32.1 points, t -1.90, p 0.057, 95 % interval -63 to +0; multiple-testing pass: no
+- G1 puts (259) | vix_chg5: high side -7.4 % (n 64, share reaching +100 % 33 %) vs low side +24.1 % (n 64, 39 %); difference -31.6 points, t -1.86, p 0.063, 95 % interval -65 to +2; multiple-testing pass: no
+- G1 puts (259) | breadth_prev: high side -7.0 % (n 64, share reaching +100 % 25 %) vs low side +23.7 % (n 64, 47 %); difference -30.7 points, t -1.81, p 0.071, 95 % interval -65 to +2; multiple-testing pass: no
+- G1-F (154) | gap_pct: high side +4.0 % (n 37, share reaching +100 % 46 %) vs low side +46.0 % (n 38, 47 %); difference -42.0 points, t -1.79, p 0.073, 95 % interval -87 to +4; multiple-testing pass: no
+- G1-C calls (235) | breadth_prev: high side +8.9 % (n 56, share reaching +100 % 23 %) vs low side -17.6 % (n 56, 20 %); difference +26.5 points, t +1.73, p 0.084, 95 % interval -3 to +56; multiple-testing pass: no
+- XP expiry-day straddle (107) | breadth_prev: high side +19.8 % (n 26, share reaching +100 % 38 %) vs low side -18.6 % (n 26, 12 %); difference +38.5 points, t +1.69, p 0.091, 95 % interval -3 to +86; multiple-testing pass: no
+- G1 puts (259) | vix_signal: high side -5.0 % (n 64, share reaching +100 % 27 %) vs low side +21.7 % (n 64, 45 %); difference -26.7 points, t -1.56, p 0.118, 95 % interval -59 to +7; multiple-testing pass: no
+- G1-F (154) | event_window: high side -4.5 % (n 10, share reaching +100 % 30 %) vs low side +29.8 % (n 65, 49 %); difference -34.3 points, t -1.43, p 0.151, 95 % interval -78 to +11; multiple-testing pass: no
+- G1-F (154) | iv_skew: high side +42.3 % (n 37, share reaching +100 % 57 %) vs low side +8.6 % (n 38, 37 %); difference +33.7 points, t +1.41, p 0.158, 95 % interval -10 to +79; multiple-testing pass: no
+- XP expiry-day straddle (107) | fii_fut_longshare: high side +15.5 % (n 26, share reaching +100 % 27 %) vs low side -14.3 % (n 26, 23 %); difference +29.7 points, t +1.29, p 0.197, 95 % interval -12 to +77; multiple-testing pass: no
+- G1 puts (259) | event_window: high side -10.9 % (n 15, share reaching +100 % 20 %) vs low side +10.9 % (n 113, 38 %); difference -21.8 points, t -1.24, p 0.215, 95 % interval -54 to +14; multiple-testing pass: no
+- G1-C calls (235) | fut_oi_chg: high side -13.7 % (n 55, share reaching +100 % 18 %) vs low side +4.8 % (n 56, 25 %); difference -18.5 points, t -1.19, p 0.236, 95 % interval -50 to +12; multiple-testing pass: no
+- XP expiry-day straddle (107) | iv_skew: high side -12.9 % (n 26, share reaching +100 % 27 %) vs low side +14.1 % (n 26, 23 %); difference -27.0 points, t -1.17, p 0.243, 95 % interval -73 to +15; multiple-testing pass: no
+- XP expiry-day straddle (107) | fut_oi_chg: high side -12.4 % (n 26, share reaching +100 % 12 %) vs low side +13.6 % (n 26, 38 %); difference -25.9 points, t -1.12, p 0.262, 95 % interval -72 to +17; multiple-testing pass: no
+- G1-F (154) | gift_ret_prev: high side +11.6 % (n 36, share reaching +100 % 39 %) vs low side +36.8 % (n 37, 54 %); difference -25.2 points, t -1.05, p 0.295, 95 % interval -72 to +18; multiple-testing pass: no
+- G1-C calls (235) | fii_fut_chg: high side +3.7 % (n 55, share reaching +100 % 24 %) vs low side -12.3 % (n 56, 20 %); difference +16.0 points, t +1.02, p 0.308, 95 % interval -14 to +46; multiple-testing pass: no
+- G1-C calls (235) | event_window: high side +13.6 % (n 16, share reaching +100 % 19 %) vs low side -7.4 % (n 96, 22 %); difference +21.0 points, t +1.01, p 0.314, 95 % interval -17 to +62; multiple-testing pass: no
+- G1 puts (259) | iv_skew: high side +16.9 % (n 64, share reaching +100 % 42 %) vs low side -0.2 % (n 64, 30 %); difference +17.2 points, t +1.00, p 0.317, 95 % interval -15 to +50; multiple-testing pass: no
+- G1-C calls (235) | vix_pct1y: high side -11.7 % (n 56, share reaching +100 % 20 %) vs low side +3.0 % (n 56, 23 %); difference -14.7 points, t -0.95, p 0.344, 95 % interval -46 to +15; multiple-testing pass: no
+- G1-C calls (235) | gift_ret_prev: high side +2.9 % (n 55, share reaching +100 % 20 %) vs low side -11.8 % (n 55, 24 %); difference +14.7 points, t +0.93, p 0.352, 95 % interval -16 to +45; multiple-testing pass: no
+- G1 puts (259) | expiry_day: high side +20.9 % (n 29, share reaching +100 % 31 %) vs low side +4.7 % (n 99, 37 %); difference +16.2 points, t +0.92, p 0.358, 95 % interval -17 to +50; multiple-testing pass: no
+- G1-F (154) | fut_px_chg: high side +15.2 % (n 37, share reaching +100 % 35 %) vs low side +37.4 % (n 37, 59 %); difference -22.2 points, t -0.92, p 0.358, 95 % interval -70 to +24; multiple-testing pass: no
+- G1-F (154) | breadth_prev: high side +36.7 % (n 36, share reaching +100 % 42 %) vs low side +14.6 % (n 39, 51 %); difference +22.1 points, t +0.92, p 0.360, 95 % interval -25 to +70; multiple-testing pass: no
+- G1 puts (259) | gap_pct: high side +0.6 % (n 64, share reaching +100 % 33 %) vs low side +16.1 % (n 64, 39 %); difference -15.5 points, t -0.90, p 0.366, 95 % interval -50 to +17; multiple-testing pass: no
+- G1 puts (259) | fii_fut_longshare: high side +16.1 % (n 63, share reaching +100 % 38 %) vs low side +1.6 % (n 64, 34 %); difference +14.5 points, t +0.84, p 0.403, 95 % interval -20 to +49; multiple-testing pass: no
+- G1-C calls (235) | vix_signal: high side -10.8 % (n 56, share reaching +100 % 20 %) vs low side +2.1 % (n 56, 23 %); difference -12.9 points, t -0.83, p 0.405, 95 % interval -44 to +17; multiple-testing pass: no
+- G1-F (154) | fut_oi_chg: high side +16.5 % (n 37, share reaching +100 % 46 %) vs low side +36.1 % (n 37, 49 %); difference -19.6 points, t -0.81, p 0.418, 95 % interval -66 to +28; multiple-testing pass: no
+- G1-C calls (235) | expiry_day: high side +7.0 % (n 23, share reaching +100 % 17 %) vs low side -7.3 % (n 89, 22 %); difference +14.3 points, t +0.77, p 0.439, 95 % interval -20 to +52; multiple-testing pass: no
+- G1-C calls (235) | us_prev_ret: high side -10.3 % (n 56, share reaching +100 % 23 %) vs low side +1.6 % (n 56, 20 %); difference -11.9 points, t -0.76, p 0.445, 95 % interval -42 to +18; multiple-testing pass: no
+- XP expiry-day straddle (107) | gap_pct: high side +9.4 % (n 26, share reaching +100 % 31 %) vs low side -8.2 % (n 26, 19 %); difference +17.6 points, t +0.75, p 0.450, 95 % interval -29 to +59; multiple-testing pass: no
+- G1-F (154) | expiry_day: high side +38.5 % (n 18, share reaching +100 % 44 %) vs low side +21.0 % (n 57, 47 %); difference +17.5 points, t +0.73, p 0.465, 95 % interval -27 to +65; multiple-testing pass: no
+- G1-C calls (235) | fut_px_chg: high side +1.2 % (n 55, share reaching +100 % 18 %) vs low side -9.9 % (n 56, 25 %); difference +11.1 points, t +0.71, p 0.477, 95 % interval -20 to +43; multiple-testing pass: no
+- G1-F (154) | fii_fut_longshare: high side +34.7 % (n 37, share reaching +100 % 51 %) vs low side +17.9 % (n 37, 43 %); difference +16.8 points, t +0.69, p 0.489, 95 % interval -30 to +65; multiple-testing pass: no
+- G1-F (154) | pcr_oi: high side +33.0 % (n 37, share reaching +100 % 46 %) vs low side +17.7 % (n 38, 47 %); difference +15.3 points, t +0.64, p 0.523, 95 % interval -30 to +61; multiple-testing pass: no
+- XP expiry-day straddle (107) | atm_iv: high side -6.6 % (n 26, share reaching +100 % 27 %) vs low side +7.8 % (n 26, 23 %); difference -14.4 points, t -0.62, p 0.538, 95 % interval -60 to +29; multiple-testing pass: no
+- XP expiry-day straddle (107) | vix_pct1y: high side -6.3 % (n 26, share reaching +100 % 19 %) vs low side +7.6 % (n 26, 31 %); difference -13.9 points, t -0.60, p 0.552, 95 % interval -55 to +32; multiple-testing pass: no
+- XP expiry-day straddle (107) | fii_fut_chg: high side -6.2 % (n 26, share reaching +100 % 31 %) vs low side +7.4 % (n 26, 19 %); difference -13.6 points, t -0.58, p 0.560, 95 % interval -61 to +29; multiple-testing pass: no
+- XP expiry-day straddle (107) | gift_basis: high side -7.8 % (n 25, share reaching +100 % 28 %) vs low side +5.9 % (n 26, 23 %); difference -13.7 points, t -0.58, p 0.560, 95 % interval -62 to +29; multiple-testing pass: no
+- XP expiry-day straddle (107) | pcr_oi: high side +7.3 % (n 26, share reaching +100 % 31 %) vs low side -6.0 % (n 26, 19 %); difference +13.3 points, t +0.57, p 0.568, 95 % interval -30 to +59; multiple-testing pass: no
+- G1 puts (259) | fut_oi_chg: high side +4.2 % (n 63, share reaching +100 % 37 %) vs low side +13.4 % (n 64, 36 %); difference -9.2 points, t -0.53, p 0.594, 95 % interval -43 to +25; multiple-testing pass: no
+- G1-C calls (235) | fii_fut_longshare: high side -8.5 % (n 55, share reaching +100 % 22 %) vs low side -0.3 % (n 56, 21 %); difference -8.2 points, t -0.52, p 0.603, 95 % interval -40 to +23; multiple-testing pass: no
+- G1 puts (259) | gift_ret_prev: high side +3.3 % (n 63, share reaching +100 % 29 %) vs low side +11.9 % (n 63, 43 %); difference -8.6 points, t -0.50, p 0.618, 95 % interval -44 to +26; multiple-testing pass: no
+- G1 puts (259) | fut_px_chg: high side +4.9 % (n 63, share reaching +100 % 32 %) vs low side +12.7 % (n 64, 41 %); difference -7.8 points, t -0.45, p 0.652, 95 % interval -41 to +27; multiple-testing pass: no
+- G1-F (154) | atm_iv: high side +19.8 % (n 37, share reaching +100 % 46 %) vs low side +30.6 % (n 38, 47 %); difference -10.8 points, t -0.45, p 0.654, 95 % interval -59 to +34; multiple-testing pass: no
+- G1-F (154) | us_prev_ret: high side +29.3 % (n 37, share reaching +100 % 49 %) vs low side +21.3 % (n 38, 45 %); difference +8.0 points, t +0.33, p 0.738, 95 % interval -40 to +55; multiple-testing pass: no
+- G1-C calls (235) | iv_skew: high side -7.0 % (n 56, share reaching +100 % 20 %) vs low side -1.7 % (n 56, 23 %); difference -5.2 points, t -0.33, p 0.738, 95 % interval -36 to +26; multiple-testing pass: no
+- G1 puts (259) | gift_basis: high side +4.8 % (n 63, share reaching +100 % 29 %) vs low side +10.4 % (n 63, 43 %); difference -5.6 points, t -0.32, p 0.745, 95 % interval -40 to +29; multiple-testing pass: no
+- XP expiry-day straddle (107) | us_prev_ret: high side -3.1 % (n 26, share reaching +100 % 15 %) vs low side +4.4 % (n 26, 35 %); difference -7.5 points, t -0.32, p 0.748, 95 % interval -56 to +36; multiple-testing pass: no
+- XP expiry-day straddle (107) | vix_signal: high side -3.1 % (n 26, share reaching +100 % 19 %) vs low side +4.4 % (n 26, 31 %); difference -7.5 points, t -0.32, p 0.749, 95 % interval -50 to +40; multiple-testing pass: no
+- G1 puts (259) | pcr_oi: high side +5.7 % (n 64, share reaching +100 % 36 %) vs low side +11.0 % (n 64, 36 %); difference -5.3 points, t -0.31, p 0.759, 95 % interval -38 to +27; multiple-testing pass: no
+- G1-C calls (235) | gift_basis: high side -6.4 % (n 55, share reaching +100 % 22 %) vs low side -2.5 % (n 55, 22 %); difference -3.9 points, t -0.25, p 0.806, 95 % interval -35 to +25; multiple-testing pass: no
+- G1-F (154) | vix_pct1y: high side +28.2 % (n 37, share reaching +100 % 49 %) vs low side +22.3 % (n 38, 45 %); difference +5.9 points, t +0.24, p 0.807, 95 % interval -38 to +52; multiple-testing pass: no
+- G1-F (154) | vix_signal: high side +28.1 % (n 37, share reaching +100 % 49 %) vs low side +22.5 % (n 38, 45 %); difference +5.6 points, t +0.23, p 0.816, 95 % interval -41 to +50; multiple-testing pass: no
+- G1-F (154) | vix_chg5: high side +22.8 % (n 37, share reaching +100 % 51 %) vs low side +27.7 % (n 38, 42 %); difference -4.9 points, t -0.20, p 0.838, 95 % interval -53 to +38; multiple-testing pass: no
+- G1 puts (259) | fii_fut_chg: high side +10.4 % (n 63, share reaching +100 % 32 %) vs low side +7.3 % (n 64, 41 %); difference +3.1 points, t +0.18, p 0.858, 95 % interval -30 to +38; multiple-testing pass: no
+- G1-F (154) | fii_fut_chg: high side +24.3 % (n 37, share reaching +100 % 43 %) vs low side +28.3 % (n 37, 51 %); difference -4.0 points, t -0.16, p 0.869, 95 % interval -51 to +43; multiple-testing pass: no
+- XP expiry-day straddle (107) | event_window: high side +4.0 % (n 7, share reaching +100 % 29 %) vs low side +0.1 % (n 45, 24 %); difference +3.9 points, t +0.15, p 0.884, 95 % interval -48 to +55; multiple-testing pass: no
+- G1-F (154) | gift_basis: high side +23.2 % (n 36, share reaching +100 % 39 %) vs low side +25.5 % (n 37, 54 %); difference -2.3 points, t -0.09, p 0.926, 95 % interval -49 to +47; multiple-testing pass: no
+- G1 puts (259) | us_prev_ret: high side +8.6 % (n 64, share reaching +100 % 38 %) vs low side +8.1 % (n 64, 34 %); difference +0.5 points, t +0.03, p 0.977, 95 % interval -32 to +34; multiple-testing pass: no
+- G1-C calls (235) | gap_pct: high side -4.4 % (n 56, share reaching +100 % 21 %) vs low side -4.3 % (n 56, 21 %); difference -0.1 points, t -0.01, p 0.993, 95 % interval -31 to +30; multiple-testing pass: no

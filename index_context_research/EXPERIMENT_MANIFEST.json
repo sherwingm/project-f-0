@@ -1,0 +1,28 @@
+{
+ "written": "2026-11-16",
+ "git_head_at_run": "820a8a421",
+ "committed": false,
+ "prereg_sha256_16": "9308bd6caa0249b9",
+ "dataset_sha256_16": "2a4e101509f3f3d8",
+ "inputs": [
+  "g1_research/results/g1_live_replay_trades.csv",
+  "g1_research/data/g1c_opt_trades.csv",
+  "g1_research/data/xp_history_minute.csv",
+  "index_context_research/data/gift/*.csv (fetched 2026-11-16)",
+  "index_research/data/bhav_NIFTY.parquet",
+  "g1_research/data/external/participant_oi/*",
+  "data/parents/yf_GSPC.csv",
+  "data/eod2/* (F&O list)",
+  "INDEX_STORE spot/option minutes"
+ ],
+ "scripts": [
+  "scripts/fetch_gift.py",
+  "scripts/build_dataset.py",
+  "scripts/analyse_context.py",
+  "scripts/make_reports.py"
+ ],
+ "notes": [
+  "analyse_context.py first run skipped XP through an n<60 rule not in the plan; corrected before validation was opened; the corrected script was then run twice in one command with identical output",
+  "validation half opened once logically (deterministic)"
+ ]
+}
