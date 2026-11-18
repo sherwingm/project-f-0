@@ -252,6 +252,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -52.0
+  },
+  {
+   "at": "10:50:09",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.113,
+   "same_best_bid_pct": 49.0,
+   "same_best_ask_pct": 46.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -50.0
   }
  ],
  "top_gaps": [
@@ -296,6 +310,13 @@
    "kotak": 35.2,
    "upstox": 36.0,
    "at": "09:30"
+  },
+  {
+   "contract": "AMBER26NOV6500CE",
+   "gap_pct": 2.113,
+   "kotak": 35.5,
+   "upstox": 34.75,
+   "at": "10:50"
   },
   {
    "contract": "M&M26NOV3350CE",
@@ -387,23 +408,16 @@
    "kotak": 24.0,
    "upstox": 23.8,
    "at": "09:25"
-  },
-  {
-   "contract": "HDFCBANK26NOV820CE",
-   "gap_pct": 0.813,
-   "kotak": 6.15,
-   "upstox": 6.2,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 18,
-  "contract_quotes": 880,
+  "rounds": 19,
+  "contract_quotes": 929,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 27.55,
-  "same_best_ask_pct": 23.45,
+  "same_best_bid_pct": 28.6,
+  "same_best_ask_pct": 24.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 91.8,
-  "upstox_minus_kotak_quote_time_s_median": -21.0
+  "upstox_minus_kotak_quote_time_s_median": -22.0
  }
 }
