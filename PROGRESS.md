@@ -1257,3 +1257,7 @@ At the user's request, with five independent agents (data inventory, G1-F trade 
 
 ## 2026-11-18: G1-F conditions re-tested with deduplication and skew-resistant tests (E-20261118-V2)
 36 tests reduced to 23 clusters; winsorised t, permutation, Mann-Whitney, Spearman and G1 sibling pooling on Year 1: no survivor at q < 0.10 (best q 0.285 vs original 0.367; other methods >= 0.9). Plan PREREG_V2_POWER.md (12ca29fa1); results index_context_research/regime_investigation_v2/V2_RESULTS.md. No rule or data changed.
+
+
+## 2026-11-18: G1-F time-stop and inverse-vol sizing (E-20261118-V3)
+Year-1 audit and grid; gate chosen S_iv14 (IV-14 sizing) failed Year 2 (Sharpe 1.37 -> 1.27). Time-stop T30_0 also passed Year 1 but Year 2 left unopened (needs user decision). Plan PREREG_V3_EXIT_SIZING.md (46120f9e8); results index_context_research/regime_investigation_v2/V3_RESULTS.md. No live rule changed.
