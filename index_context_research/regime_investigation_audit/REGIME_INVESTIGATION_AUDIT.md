@@ -2,7 +2,7 @@
 
 Auditor: separate session, 18 Nov 2026. Method: nothing taken from the summaries; each claim re-computed from the raw files (`data/eod2/nifty 50.csv`, `vix_daily.parquet`, `external_data/*`, `results/context_dataset.csv`, agents' CSVs). Scripts and raw outputs are in this folder: `scripts/a01_integrity.py`, `a02_recompute.py`, `a03_features_mc.py`, `a04_claims.py` and the matching `a0*_*.txt`. The agents' scripts were **not** re-run end to end (see U1).
 
-## Verdict: PASS WITH WARNINGS (PARTIAL PASS), score 84 / 100
+## Verdict: PASS WITH WARNINGS (PARTIAL PASS), score 86 / 100
 No error that changes a conclusion was found. The headline ("no pre-entry condition explains G1-F's periods; nothing survives correction; top 8 trades = 77 % of rupees") reproduces. Marks are lost for definition inconsistencies the report does not disclose, a few over-precise or loosely derived statements, and a missing end-to-end reproduction.
 
 ## Findings by area
@@ -56,8 +56,9 @@ No error that changes a conclusion was found. The headline ("no pre-entry condit
 
 **10. Reproducibility**
 - PASS: inputs hashed, seeds fixed, scripts present, my independent recomputation matches the headline numbers.
-- UNVERIFIED (U1): the agents' scripts were not re-run end to end here to avoid overwriting committed outputs. Raw git-ignored external data is re-fetchable only by running `fetch_external.py`; FII/DII third-party data was verified on one day only.
-- UNVERIFIED (U2): USD/INR hourly alignment and Brent roll artefacts were not re-derived; Agent 5's check is relied on.
+- PASS (U1, resolved 18 Nov): re-ran Agent 3 `regimes.py`, Agent 4 `build_features.py` and `analyse_external.py`, `merge_mfe_mae.py` and `consolidate_regime_stats.py` in a scratch copy (committed files untouched). Seven outputs (`regime_labels.csv`, `boundaries.json`, `external_features.csv`, `external_tests.csv`, `external_tables.csv`, `regime_mfe_mae.csv`, `regime_stats_all.csv`) are byte-identical to the committed ones. Not re-run: Agents 1, 2, 3b, 5 scripts and the downloads (`fetch_external.py`); FII/DII third-party data still verified on one day only (WARNING).
+- PASS (U2, resolved; `scripts/a05_fx_brent.py`, `a05_fx_brent.txt`): USD/INR hourly change rebuilt independently (03:00 UTC bar open to 09:00 UTC bar close = 08:30 to 15:30 IST of the previous session): 141 trades, max difference 1e-16, classes 100 % agree, 13 trades missing (series starts 2024-11-18 plus one day). Brent: all 154 dates strictly before the trade date, changes identical, no negative prices; 3 suspect G1-F trades as stated. Brent's daily file does contain 32 daily moves above 8 % (mostly 2020), outside the study window, which is why it is labelled quality-limited.
+- Note on W2: Agent 3's edges use ret20 with the pre-2018 lookback for early-2018 sessions (quantiles over 2018-01-01 to 2024-09-30 of the full-series return); my stricter in-window version differs slightly. Agent 3's choice is defensible; the difference is only undisclosed.
 
 ## Critical errors that invalidate findings
 None.
@@ -79,4 +80,4 @@ MFE-based tests; calendar-controlled VIX/FII comparison; sensitivity of the gap 
 Yes, for one use only: as evidence that no tested pre-entry market condition justifies a rule change or filter on G1-F (nothing survived and nothing replicated). No, as a basis for any filter built on the leads (in-line-with-GIFT, normal VIX, FII/DII, USD/INR, mid breadth): those are exploratory, small and period-confounded. The right next step is to track the pre-registered conditions on the live paper record, not to change the strategy.
 
 ## Score
-Data and joins 22/25 (-3: gap source, quintile edges undisclosed); statistics 22/25 (-3: approximate family, small half-year mismatches); conclusions 17/20 (-3: three loose statements); disclosures 11/15 (-4: two missing, one unmentioned file value); reproducibility 12/15 (-3: no full rerun, two inputs unchecked). Total 84.
+Data and joins 22/25 (-3: gap source, quintile edges undisclosed); statistics 22/25 (-3: approximate family, small half-year mismatches); conclusions 17/20 (-3: three loose statements); disclosures 11/15 (-4: two missing, one unmentioned file value); reproducibility 14/15 (-1: Agents 1, 2, 3b, 5 and the downloads not re-run). Total 86.

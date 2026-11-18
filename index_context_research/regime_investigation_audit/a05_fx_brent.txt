@@ -1,0 +1,10 @@
+G1-F rows 154 {'G1', 'G1C', 'G1F', 'XP'}
+hours present [np.int32(0), np.int32(1), np.int32(2), np.int32(3), np.int32(4), np.int32(5), np.int32(6), np.int32(7), np.int32(8), np.int32(9), np.int32(10), np.int32(11), np.int32(12), np.int32(13), np.int32(14), np.int32(15), np.int32(16), np.int32(17), np.int32(18), np.int32(19), np.int32(20), np.int32(21), np.int32(22), np.int32(23)] range 2024-11-18 00:00:00 2026-11-17 13:47:58
+usd: have 141 mine 141 max diff 1.1102230246251565e-16
+missing usd trades 13 date range of missing 2024-10-01 2026-08-27
+class agree 1.0
+usd |chg| quantiles {'count': 141.0, 'mean': 0.16, 'std': 0.149, 'min': 0.0, '25%': 0.06, '50%': 0.123, '75%': 0.212, 'max': 0.911}
+['timestamp_utc', 'local_offset_s', 'open', 'high', 'low', 'close', 'volume']
+brent lookahead rows 0 unmatched 0 max diff chg 0.0
+brent daily moves >8% : 32  negative prices 0 dates [datetime.date(2019, 9, 16), datetime.date(2020, 3, 6), datetime.date(2020, 3, 9), datetime.date(2020, 3, 10), datetime.date(2020, 3, 16)]
+suspect trades G1-F 3
