@@ -532,6 +532,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -50.0
+  },
+  {
+   "at": "12:30:13",
+   "contracts": 48,
+   "on_both": 48,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.471,
+   "same_best_bid_pct": 27.1,
+   "same_best_ask_pct": 29.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.8,
+   "upstox_minus_kotak_quote_time_s_median": -11.5
   }
  ],
  "top_gaps": [
@@ -641,6 +655,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BEL26NOV395CE",
+   "gap_pct": 1.471,
+   "kotak": 3.4,
+   "upstox": 3.35,
+   "at": "12:30"
+  },
+  {
    "contract": "POLYCAB26NOV7400PE",
    "gap_pct": 1.371,
    "kotak": 109.4,
@@ -667,23 +688,16 @@
    "kotak": 53.35,
    "upstox": 54.05,
    "at": "10:00"
-  },
-  {
-   "contract": "INDUSINDBK26NOV920CE",
-   "gap_pct": 1.304,
-   "kotak": 11.5,
-   "upstox": 11.65,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 38,
-  "contract_quotes": 1858,
+  "rounds": 39,
+  "contract_quotes": 1906,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 34.7,
   "same_best_ask_pct": 30.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.9,
-  "upstox_minus_kotak_quote_time_s_median": -33.5
+  "upstox_minus_kotak_quote_time_s_median": -33.0
  }
 }
