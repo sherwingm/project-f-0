@@ -364,6 +364,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.9,
    "upstox_minus_kotak_quote_time_s_median": -33.0
+  },
+  {
+   "at": "11:30:11",
+   "contracts": 48,
+   "on_both": 48,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.176,
+   "same_best_bid_pct": 25.0,
+   "same_best_ask_pct": 20.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.8,
+   "upstox_minus_kotak_quote_time_s_median": -39.0
   }
  ],
  "top_gaps": [
@@ -480,6 +494,13 @@
    "at": "10:45"
   },
   {
+   "contract": "LTM26NOV4100CE",
+   "gap_pct": 1.176,
+   "kotak": 63.75,
+   "upstox": 63.0,
+   "at": "11:30"
+  },
+  {
    "contract": "BHARTIARTL26NOV2100CE",
    "gap_pct": 1.159,
    "kotak": 34.5,
@@ -499,23 +520,16 @@
    "kotak": 29.05,
    "upstox": 29.35,
    "at": "10:00"
-  },
-  {
-   "contract": "ETERNAL26NOV370PE",
-   "gap_pct": 1.01,
-   "kotak": 4.95,
-   "upstox": 4.9,
-   "at": "11:00"
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 1272,
+  "rounds": 27,
+  "contract_quotes": 1320,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 30.6,
-  "same_best_ask_pct": 29.6,
+  "same_best_ask_pct": 28.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 91.8,
-  "upstox_minus_kotak_quote_time_s_median": -25.0
+  "upstox_minus_kotak_quote_time_s_median": -27.0
  }
 }
