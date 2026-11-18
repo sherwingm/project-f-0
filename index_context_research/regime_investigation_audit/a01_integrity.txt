@@ -1,0 +1,28 @@
+context_dataset rows 755 {'G1': 259, 'G1C': 235, 'G1F': 154, 'XP': 107} day range 2024-10-01 2026-10-23
+duplicates (tset,day): 0
+G1F subset of G1 (same day rows, same net_pct)?
+  G1F days not in G1: 0 | max |net_pct diff|: 0.0
+replay file rows 259 g1f==1: 154 | ctx G1 vs replay net_rs sum 40448 40448 | G1F 247046 247046
+prospective window rows (day >= 2026-11-13): 0
+labels rows 755 {'G1': 259, 'G1-C': 235, 'G1-F': 154, 'XP': 107} dup (strategy,date): 0
+  label vs context [G1-F]: n label 154, n ctx 154, matched dates 154, max|net_pct diff| 0.0000, max|net_rs diff| 0.0000
+  label vs context [G1]: n label 259, n ctx 259, matched dates 259, max|net_pct diff| 0.0000, max|net_rs diff| 0.0000
+  label vs context [G1-C]: n label 235, n ctx 235, matched dates 235, max|net_pct diff| 0.0000, max|net_rs diff| 0.0000
+  label vs context [XP]: n label 107, n ctx 107, matched dates 107, max|net_pct diff| 0.0000, max|net_rs diff| 0.0000
+--- anatomy files vs context (the MAE join)
+  G1-F: anatomy rows 154, tset values ['G1F'], dup days 0, ctx rows 154
+     matched 154, max|net_pct diff| 0.0000 (engine re-run values differ slightly), max|net_rs diff| 0.00
+     missing mae 0, missing mfe 0
+  G1: anatomy rows 259, tset values ['G1'], dup days 0, ctx rows 259
+     matched 259, max|net_pct diff| 0.0000 (engine re-run values differ slightly), max|net_rs diff| 0.00
+     missing mae 0, missing mfe 0
+  G1-C: anatomy rows 235, tset values ['G1C'], dup days 0, ctx rows 235
+     matched 235, max|net_pct diff| 0.0000 (engine re-run values differ slightly), max|net_rs diff| 0.00
+     missing mae 0, missing mfe 0
+--- gift labels (same-contract)
+rows 755 {'G1': 259, 'G1-C': 235, 'G1-F': 154, 'XP': 107} missing gift_ret_samecontract by strategy: {'G1': 2, 'G1-F': 2, 'G1-C': 2}
+--- external features
+rows 755 {'G1': 259, 'G1C': 235, 'G1F': 154, 'XP': 107}
+{'event_kind': 0.82, 'dii_cash_prev': 0.61, 'dii_cash_sign': 0.61, 'fii_cash_prev': 0.61, 'fiidii_class': 0.61, 'fii_cash_sign': 0.61, 'asia_class': 0.12, 'risk_class': 0.12, 'asia_avg_gap': 0.12, 'usd_class': 0.08}
+--- hashes: manifest vs files
+manifest files 25 problems 0

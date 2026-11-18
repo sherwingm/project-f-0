@@ -1,0 +1,8 @@
+G1-C all 130 41 -30.9 welch p 0.0048
+G1-C disc 63 19 -32.3 welch p 0.1018
+G1-C second 67 22 -29.3 welch p 0.0118
+{'G1': 259, 'G1-C': 235, 'G1-F': 154, 'XP': 107} {'second_half': 388, 'discovery': 367}
+XP disc {'falling': {'count': 14, 'mean': 83.0}, 'flat': {'count': 22, 'mean': -24.4}, 'rising': {'count': 16, 'mean': -37.1}} KW p 0.00016
+XP second {'falling': {'count': 16, 'mean': -11.2}, 'flat': {'count': 21, 'mean': -17.1}, 'rising': {'count': 18, 'mean': -3.5}} KW p 0.66008
+G1-F second dir3 KW 0.10089983784913327 {'bearish': 37, 'sideways': 35, 'bullish': 7}
+['strategy', 'agent', 'hypothesis', 'definition', 'raw_p', 'BH_q', 'BH_survive_10pct', 'family', 'n_cells_ge10', 'note']

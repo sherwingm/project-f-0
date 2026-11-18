@@ -1,0 +1,19 @@
+my ret20 quintile edges (%): [-1.93, 0.48, 2.47, 4.71] | agent file keys: ['history', 'n_sessions_nifty', 'ret5_quintile_edges', 'ret10_quintile_edges', 'ret20_quintile_edges', 'vix_p25', 'vix_p75', 'n_sessions_vix']
+   agent ret20_quintile_edges [-0.01884174782525916, 0.005152337349081965, 0.025672813639351012, 0.04713442395390777]
+my VIX p25/p75: [13.51, 19.94] n sessions 1649
+labels columns sample: [{'ret20': 0.0211, 'gap_pct': -0.1309, 'vix_prev': 12.79}, {'ret20': -0.0052, 'gap_pct': 0.1367, 'vix_prev': 14.13}, {'ret20': -0.0024, 'gap_pct': 0.1919, 'vix_prev': 14.12}]
+ret20 label vs mine: max|diff| (pct points) 9.992007221626409e-15 | gap: 0.19150625099835228 | vix_prev: 1.7763568394002505e-15
+class agreement with agent labels: q20 0.9805194805194806 dir3 0.9935064935064936 vix_level 1.0
+  disagreeing VIX-level trades: []
+G1-F direction3 (my labels):
+   bearish: n 75, win 44%, mean +11.7, median -17.3, total Rs 90,674
+   bullish: n 20, win 50%, mean +55.6, median +11.6, total Rs 90,595
+   sideways: n 59, win 34%, mean +17.5, median -36.2, total Rs 65,776
+G1-F VIX level (my labels):
+   low: n 108, win 34%, mean +11.8, median -37.6, total Rs 64,172
+   normal: n 46, win 57%, mean +38.1, median +7.4, total Rs 182,874
+KW p direction quintiles n>=10: 0.5696
+KW p VIX level: 0.0204
+GIFT same-contract: mine vs agent 3b: n 154 non-null both 152 max|diff| 9.71445146547012e-17 | missing mine 2 agent 2
+  corr(GIFT same-contract, actual NIFTY gap) on G1-F days: 0.642
+  my class counts: {'flat': 111, 'gap-down': 28, 'gap-up': 13}

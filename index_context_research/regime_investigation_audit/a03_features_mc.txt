@@ -1,0 +1,18 @@
+[gap] G1-F: max|diff| 0.192 pts, median|diff| 0.021, trades with |diff|>0.05: 36, class flips at +/-0.3: 9
+[gap] G1: max|diff| 0.367 pts, median|diff| 0.024, trades with |diff|>0.05: 80, class flips at +/-0.3: 25
+[gap] G1-C: max|diff| 0.385 pts, median|diff| 0.024, trades with |diff|>0.05: 74, class flips at +/-0.3: 10
+[gap] XP: max|diff| 0.226 pts, median|diff| 0.024, trades with |diff|>0.05: 25, class flips at +/-0.3: 6
+[asia] agent4 asia_avg_gap vs my mean(N225,HSI): matched 133, max|diff| 0.0000; agent4 non-null 133, mine 152
+[breadth] agent4 adv_share_prev vs mine (previous NSE session in index file): matched 153, max|diff| 81.12708; unit check agent mean 47.097 mine 0.473
+[fii] matched 59, max|diff| 0.000; non-null agent 59 mine 59
+[usvix] matched 145, max|diff| 0.0000
+[fii/dii] both_buy n 15 mean -29.4 | diverge n 44 mean 34.3 | Welch p 0.0043 | KW p 0.0817; wins in both_buy: 1
+[mc] consolidated rows 196 families: {'main': 148, 'robustness': 44, 'duplicate': 4}
+   G1: main tests 36, nominal p<0.05 1, expected 1.80, min p 0.0343, my min BH q 0.929, survivors at 10% 0
+   G1-C: main tests 36, nominal p<0.05 3, expected 1.80, min p 0.0028, my min BH q 0.101, survivors at 10% 0
+   G1-F: main tests 36, nominal p<0.05 4, expected 1.80, min p 0.0203, my min BH q 0.367, survivors at 10% 0
+   XP: main tests 32, nominal p<0.05 1, expected 1.60, min p 0.0105, my min BH q 0.338, survivors at 10% 0
+   P(X>=4 | n=36, p=.05) = 0.104
+   agent3 tests columns: ['hypothesis', 'section', 'kw_p', 'n_cells_ge10', 'welch_pair', 'welch_diff_pct', 'welch_p', 'strategy', 'welch2_pair', 'welch2_diff_pct']
+[headline] G1-F total Rs 247,046; top 8 Rs 190,146 = 77.0%; without top 8 mean net% 5.8, median -27.5
+   stops 64 (42%), mean -54.9%; held 90, win 70%, mean 72.7, Rs 486,789; stops Rs -239,743
