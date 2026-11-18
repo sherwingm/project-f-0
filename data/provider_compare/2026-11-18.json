@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.8,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "10:45:08",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.21,
+   "same_best_bid_pct": 38.8,
+   "same_best_ask_pct": 42.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -52.0
   }
  ],
  "top_gaps": [
@@ -326,6 +340,13 @@
    "at": "09:30"
   },
   {
+   "contract": "BHARTIARTL26NOV2140CE",
+   "gap_pct": 1.21,
+   "kotak": 12.4,
+   "upstox": 12.55,
+   "at": "10:45"
+  },
+  {
    "contract": "BSE26NOV4000CE",
    "gap_pct": 1.111,
    "kotak": 22.5,
@@ -373,23 +394,16 @@
    "kotak": 6.15,
    "upstox": 6.2,
    "at": "09:20"
-  },
-  {
-   "contract": "JINDALSTEL26NOV1120PE",
-   "gap_pct": 0.811,
-   "kotak": 18.5,
-   "upstox": 18.65,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 831,
+  "rounds": 18,
+  "contract_quotes": 880,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 22.4,
+  "same_best_bid_pct": 27.55,
+  "same_best_ask_pct": 23.45,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 91.8,
-  "upstox_minus_kotak_quote_time_s_median": -20.0
+  "upstox_minus_kotak_quote_time_s_median": -21.0
  }
 }
