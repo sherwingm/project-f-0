@@ -523,3 +523,6 @@ Pre-registered before any number (`strategies/S1_armab_gemini_hypotheses.md`), m
 
 ### 17 Nov 2026 - Index context research: no validated factor
 Pre-entry conditions (gap, VIX, GIFT basis, US overnight, futures price / OI, FII futures, option IV / put-call OI / skew, breadth proxy, events) tested on the existing index strategies: none holds out of sample; no rule, filter or live behaviour changes (`index_context_research/MASTER_INDEX_REPORT.md`). Real GIFT pre-open data, news with timestamps, FII/DII cash flows and BANKNIFTY / SENSEX trade records are missing and noted as data limits.
+
+### 18 Nov 2026 - Regime investigation: no validated market condition for G1-F
+Pre-entry conditions (direction, VIX, GIFT overnight, global markets, breadth, FII / DII, participant positioning, news / events) were tested on the recorded results of G1-F, G1, G1-C and XP: none holds up after multiple-comparison correction or across both years. No rule, filter, parameter or live behaviour changes; no switching system; leads are recorded as unproven only (`index_context_research/regime_investigation/FINAL_FINDINGS.md`). Missing data that limits the conclusion: GIFT 09:00 level, FII / DII cash before Dec 2025 and for Sep 2026, timestamped news.
