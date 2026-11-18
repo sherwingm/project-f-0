@@ -1,40 +1,40 @@
 {
  "recorder": {
-  "run_at": "2026-11-18T03:37:37+05:30",
-  "session": "2026-11-17",
+  "run_at": "2026-11-19T03:15:48+05:30",
+  "session": "2026-11-18",
   "expiry_check": {
    "bse_fo": {
-    "checked": 4083,
+    "checked": 4169,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 10047,
+    "checked": 10027,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 25387.4,
-    "contracts": 204,
-    "rows": 70063,
+    "spot": 25227.95,
+    "contracts": 200,
+    "rows": 177281,
     "expiries": [
-     "2026-11-17",
-     "2026-11-23"
+     "2026-11-23",
+     "2026-12-01"
     ]
    },
    "SENSEX": {
-    "spot": 82532.19,
+    "spot": 82031.81,
     "contracts": 328,
-    "rows": 100757,
+    "rows": 102149,
     "expiries": [
      "2026-11-19",
      "2026-11-26"
     ]
    },
    "BANKNIFTY": {
-    "spot": 62273.25,
+    "spot": 62038.65,
     "contracts": 248,
-    "rows": 65311,
+    "rows": 48286,
     "expiries": [
      "2026-11-23",
      "2026-12-29"
@@ -42,10 +42,10 @@
    }
   },
   "failures": [],
-  "chain_eod_rows": 780,
-  "calls": 884,
-  "runtime_s": 1617.4,
-  "contracts": 780
+  "chain_eod_rows": 776,
+  "calls": 915,
+  "runtime_s": 1636.4,
+  "contracts": 776
  },
  "recent_runs": [
   {
@@ -247,6 +247,14 @@
    "calls": 884,
    "runtime_s": 1617.4,
    "failures": 0
+  },
+  {
+   "run_at": "2026-11-19T03:15:48+05:30",
+   "session": "2026-11-18",
+   "contracts": 776,
+   "calls": 915,
+   "runtime_s": 1636.4,
+   "failures": 0
   }
  ],
  "spot_backfill": {
@@ -377,7 +385,7 @@
     "runtime_s": 2
    },
    "INDIAVIX": {
-    "rows_added": 376,
+    "rows_added": 375,
     "runtime_s": 2,
     "vix_fix": {
      "rows_corrected": 0
@@ -386,15 +394,15 @@
   },
   "spot_upstox_repair": {
    "NIFTY50": {
-    "bar_0915_replaced": 10,
-    "bar_0915_changed": 0,
+    "bar_0915_replaced": 12,
+    "bar_0915_changed": 2,
     "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 1
+    "days_kept_no_upstox": 0
    },
    "NIFTYBANK": {
-    "bar_0915_replaced": 11,
+    "bar_0915_replaced": 12,
     "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
@@ -402,7 +410,7 @@
     "days_kept_no_upstox": 0
    },
    "SENSEX": {
-    "bar_0915_replaced": 11,
+    "bar_0915_replaced": 12,
     "bar_0915_changed": 1,
     "minutes_added": 0,
     "days_added": 0,
@@ -410,9 +418,9 @@
     "days_kept_no_upstox": 0
    },
    "INDIAVIX": {
-    "bar_0915_replaced": 11,
+    "bar_0915_replaced": 12,
     "bar_0915_changed": 0,
-    "minutes_added": 0,
+    "minutes_added": 1,
     "days_added": 0,
     "days_dropped": 0,
     "days_kept_no_upstox": 0
@@ -422,48 +430,48 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 6933,
+   "rows": 6847,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-17",
-  "runtime_s": 25
+  "day": "2026-11-18",
+  "runtime_s": 29
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-18",
+  "run_on": "2026-11-19",
   "days": {
-   "2026-11-10": {
-    "positions": 52,
-    "stock_rows": 0,
-    "option_rows": 0
-   },
    "2026-11-11": {
     "positions": 54,
     "stock_rows": 11912,
-    "option_rows": 8906
+    "option_rows": 8910
    },
    "2026-11-12": {
     "positions": 54,
     "stock_rows": 11913,
-    "option_rows": 8091
+    "option_rows": 8120
    },
    "2026-11-13": {
     "positions": 45,
     "stock_rows": 10821,
-    "option_rows": 8354
+    "option_rows": 8366
    },
    "2026-11-16": {
     "positions": 41,
     "stock_rows": 10108,
-    "option_rows": 8509
+    "option_rows": 8518
    },
    "2026-11-17": {
     "positions": 24,
     "stock_rows": 5776,
-    "option_rows": 3552
+    "option_rows": 3594
+   },
+   "2026-11-18": {
+    "positions": 22,
+    "stock_rows": 5054,
+    "option_rows": 2853
    }
   },
   "missing_tokens": [],
-  "calls": 405
+  "calls": 363
  }
 }
