@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.8,
    "upstox_minus_kotak_quote_time_s_median": -39.0
+  },
+  {
+   "at": "11:35:11",
+   "contracts": 48,
+   "on_both": 48,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.083,
+   "same_best_bid_pct": 41.7,
+   "same_best_ask_pct": 29.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.8,
+   "upstox_minus_kotak_quote_time_s_median": -39.5
   }
  ],
  "top_gaps": [
@@ -436,6 +450,13 @@
    "kotak": 35.5,
    "upstox": 34.75,
    "at": "10:50"
+  },
+  {
+   "contract": "MCX26NOV3700CE",
+   "gap_pct": 2.083,
+   "kotak": 60.0,
+   "upstox": 58.75,
+   "at": "11:35"
   },
   {
    "contract": "M&M26NOV3350CE",
@@ -513,23 +534,16 @@
    "kotak": 22.5,
    "upstox": 22.75,
    "at": "10:30"
-  },
-  {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 1.033,
-   "kotak": 29.05,
-   "upstox": 29.35,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 1320,
+  "rounds": 28,
+  "contract_quotes": 1368,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 30.6,
-  "same_best_ask_pct": 28.6,
+  "same_best_ask_pct": 28.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.8,
-  "upstox_minus_kotak_quote_time_s_median": -27.0
+  "oi_same_pct": 92.8,
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
