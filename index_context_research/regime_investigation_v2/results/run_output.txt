@@ -1,0 +1,86 @@
+G1-F trades 154; Year 1 75 (to 2025-09-30), Year 2 79
+
+STEP 1: tests 36 | dropped (constant / too few classes): [(('A4', 'H15'), 'fewer than 2 classes with >=3 Year-1 trades')]
+pairs with |r|>=0.70: 22
+effective N = 23 (from 35 usable tests)
+
+ cluster       representative                                                                  members  size
+       1              A3b:H12                                                         A3b:H12 ; A4:H12     2
+       2                A3:H6                                         A4:X01 ; A3:H6 ; A4:X04 ; A4:H13     4
+       3 A3b:H11_samecontract                                                     A3b:H11_samecontract     1
+       4 A3b:H10_samecontract                                                     A3b:H10_samecontract     1
+       5              A3b:H11                                                                  A3b:H11     1
+       6                A3:H5                                                                    A3:H5     1
+       7              A3b:H10                                                                  A3b:H10     1
+       8               A4:X08                                                          A4:X08 ; A4:X12     2
+       9                A3:H2           A3b:C2_VIXxGIFT ; A3:H2 ; A3:H9 ; A3b:C2_VIXxGIFT_samecontract     4
+      10               A4:X10                                                                   A4:X10     1
+      11                A3:H1 A3:H7 ; A3:H1 ; A3b:C1_dir3xGIFT_samecontract ; A3:H8 ; A3b:C1_dir3xGIFT     5
+      12                A3:H3                                                                    A3:H3     1
+      13               A4:X06                                                                   A4:X06     1
+      14               A4:X05                                                                   A4:X05     1
+      15               A4:X02                                                                   A4:X02     1
+      16               A4:X03                                                                   A4:X03     1
+      17               A4:X15                                                                   A4:X15     1
+      18               A4:X09                                                                   A4:X09     1
+      19               A4:X11                                                                   A4:X11     1
+      20               A4:X14                                                                   A4:X14     1
+      21               A4:X13                                                                   A4:X13     1
+      22               A4:H14                                                                   A4:H14     1
+      23               A4:X07                                                                   A4:X07     1
+
+STEP 2/3: representatives, Year 1 (N = 23)
+                       n      pair  edge_pts  perm_F_wins_p  wins_t_p  mwu_p  perm_diff_p  spearman_rho  spearman_p   kw_p  orig_whole_kw_p  orig_whole_q
+test                                                                                                                                                     
+A3:H1                 75      0->4       NaN          0.012       NaN    NaN          NaN         0.098       0.403  0.043            0.511         0.907
+A3b:H12               74  0.0->2.0   -16.034          0.174     0.705  0.910        0.716         0.062       0.602  0.208            0.583         0.907
+A4:X02                63  0.0->2.0    38.362          0.183     0.291  0.206        0.541         0.091       0.479  0.181            0.042         0.374
+A4:X07                74  0.0->2.0     2.674          0.235     0.972  0.879        0.948         0.040       0.737  0.178            0.519         0.907
+A3b:H11_samecontract  74  0.0->2.0    -5.004          0.310     0.984  0.755        0.927        -0.002       0.988  0.556            0.077         0.490
+A4:X06                74  0.0->1.0    22.886          0.339     0.334  0.369        0.352         0.050       0.671  0.366            0.265         0.682
+A3b:H10_samecontract  74  0.0->2.0       NaN          0.400       NaN    NaN          NaN        -0.067       0.569  0.422            0.947         0.974
+A4:X11                74  0.0->1.0   -19.661          0.424     0.427  0.423        0.425        -0.061       0.603  0.420            0.603         0.907
+A4:X15                75      0->3     2.616          0.451     0.910  0.724        0.959           NaN         NaN  0.507            0.985         0.985
+A3:H6                 75      0->2    10.001          0.459     0.753  0.302        0.759         0.125       0.285  0.221            0.304         0.729
+A4:X08                74  0.0->2.0    36.449          0.500     0.308  0.403        0.235         0.144       0.219  0.236            0.103         0.529
+A3b:H11               74  0.0->2.0     5.726          0.585     0.883  0.826        0.909        -0.057       0.628  0.880            0.628         0.907
+A3:H3                 75      0->2   -27.493          0.761     0.419  0.747        0.460        -0.076       0.516  0.854            0.946         0.974
+A3b:H10               74  0.0->2.0   -43.669          0.772     0.568  0.798        0.567         0.034       0.771  0.900            0.609         0.907
+A3:H2                 75      0->1     5.410          0.793     0.789  0.478        0.821         0.002       0.990  0.474            0.020         0.367
+A4:X09                74  0.0->1.0    -8.966          0.798     0.794  0.927        0.716         0.087       0.460  0.922            0.448         0.897
+A4:X10                74  0.0->2.0   -18.024          0.800     0.530  0.292        0.548        -0.126       0.286  0.600            0.133         0.598
+A3:H5                 75      0->1    -4.567          0.855     0.874  0.870        0.907        -0.104       0.374  0.864            0.630         0.907
+A4:X05                73  0.0->1.0    -4.888          0.858     0.856  0.500        0.843         0.023       0.847  0.496            0.927         0.974
+A4:X13                74  0.0->1.0     4.423          0.879     0.879  0.787        0.859         0.006       0.959  0.782            0.230         0.682
+A4:H14                74  0.0->2.0    11.205          0.887     0.859  0.960        0.773         0.026       0.823  0.732            0.249         0.682
+A4:X14                70  0.0->1.0     0.850          0.903     0.900  0.688        0.975         0.035       0.775  0.683            0.702         0.944
+A4:X03                74  0.0->2.0     6.428          0.933     0.784  0.957        0.869         0.009       0.941  0.893            0.835         0.955
+
+min q by method (N=23):
+  PRIMARY perm-F (winsorised)        tests 23  p<0.05: 1  min p 0.0124  min q 0.285  survivors(q<0.10): 0
+  winsorised t (extreme pair)        tests 21  p<0.05: 0  min p 0.2912  min q 0.984  survivors(q<0.10): 0
+  Mann-Whitney (extreme pair)        tests 21  p<0.05: 0  min p 0.2060  min q 0.960  survivors(q<0.10): 0
+  permutation mean diff (pair)       tests 21  p<0.05: 0  min p 0.2355  min q 0.975  survivors(q<0.10): 0
+  Spearman rank (continuous)         tests 22  p<0.05: 0  min p 0.2195  min q 0.990  survivors(q<0.10): 0
+  Kruskal-Wallis Year 1              tests 23  p<0.05: 1  min p 0.0426  min q 0.906  survivors(q<0.10): 0
+Year-1 KW on all 35 usable tests (no dedup): p<0.05 1, min p 0.0426, min q 0.845
+original whole-sample KW, 36 tests: p<0.05 4, min p 0.0203, min q 0.367
+
+SIBLING (G1 puts incl. G1-F, Year 1, shuffled within half-years): min p 0.1090, min q 0.898, survivors 0
+                      n_G1_year1  stratified_perm_p      q
+test                                                      
+A3:H1                        128             0.1090  0.898
+A3:H2                        127             0.1558  0.898
+A4:X07                       127             0.1993  0.898
+A3:H3                        128             0.2611  0.898
+A3b:H10_samecontract         127             0.3178  0.898
+
+SURVIVORS (q<0.10 in Year 1, any method): none
+Year-2 read-only check for the 3 lowest-q representatives (NOT survivors; for information only)
+                test  year  n_lo  n_hi  mean_lo  mean_hi  edge_pts  spearman_rho
+               A3:H1 Year1    21     4     8.51   190.28    181.77          0.10
+               A3:H1 Year2    15     2    33.22    67.10     33.88         -0.13
+               A3:H2 Year1    37    38    22.50    27.91      5.41          0.00
+               A3:H2 Year2    71     8     6.26    86.20     79.95          0.08
+A3b:H11_samecontract Year1    10    18    54.77    49.76     -5.00         -0.00
+A3b:H11_samecontract Year2    16     6    29.90    64.64     34.74         -0.16
