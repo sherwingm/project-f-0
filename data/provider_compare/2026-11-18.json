@@ -798,6 +798,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 98.0,
    "upstox_minus_kotak_quote_time_s_median": -73.0
+  },
+  {
+   "at": "14:05:21",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.997,
+   "same_best_bid_pct": 42.9,
+   "same_best_ask_pct": 42.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.9,
+   "upstox_minus_kotak_quote_time_s_median": -97.0
   }
  ],
  "top_gaps": [
@@ -872,6 +886,13 @@
    "at": "11:35"
   },
   {
+   "contract": "M&M26NOV3350CE",
+   "gap_pct": 1.997,
+   "kotak": 32.55,
+   "upstox": 31.9,
+   "at": "14:05"
+  },
+  {
    "contract": "GAIL26NOV190CE",
    "gap_pct": 1.974,
    "kotak": 1.52,
@@ -933,18 +954,11 @@
    "kotak": 109.4,
    "upstox": 107.9,
    "at": "11:50"
-  },
-  {
-   "contract": "AMBER26NOV6500CE",
-   "gap_pct": 1.351,
-   "kotak": 29.6,
-   "upstox": 29.2,
-   "at": "12:00"
   }
  ],
  "day": {
-  "rounds": 57,
-  "contract_quotes": 2785,
+  "rounds": 58,
+  "contract_quotes": 2834,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 38.8,
   "same_best_ask_pct": 36.7,
