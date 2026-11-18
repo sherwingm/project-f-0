@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 87.8,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "10:00:06",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.455,
+   "same_best_bid_pct": 20.4,
+   "same_best_ask_pct": 20.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.8,
+   "upstox_minus_kotak_quote_time_s_median": -20.0
   }
  ],
  "top_gaps": [
@@ -144,6 +158,13 @@
    "at": "09:25"
   },
   {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 2.455,
+   "kotak": 22.4,
+   "upstox": 22.95,
+   "at": "10:00"
+  },
+  {
    "contract": "BSE26NOV4000CE",
    "gap_pct": 2.273,
    "kotak": 35.2,
@@ -165,11 +186,25 @@
    "at": "09:25"
   },
   {
+   "contract": "M&M26NOV3350CE",
+   "gap_pct": 1.312,
+   "kotak": 53.35,
+   "upstox": 54.05,
+   "at": "10:00"
+  },
+  {
    "contract": "INDUSINDBK26NOV920CE",
    "gap_pct": 1.304,
    "kotak": 11.5,
    "upstox": 11.65,
    "at": "09:30"
+  },
+  {
+   "contract": "M&M26NOV3400CE",
+   "gap_pct": 1.033,
+   "kotak": 29.05,
+   "upstox": 29.35,
+   "at": "10:00"
   },
   {
    "contract": "BSE26NOV4000CE",
@@ -233,37 +268,16 @@
    "kotak": 32.15,
    "upstox": 32.3,
    "at": "09:55"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 0.299,
-   "kotak": 33.5,
-   "upstox": 33.4,
-   "at": "09:35"
-  },
-  {
-   "contract": "HEROMOTOCO26NOVFUT",
-   "gap_pct": 0.047,
-   "kotak": 5308.0,
-   "upstox": 5305.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "M&M26NOVFUT",
-   "gap_pct": 0.047,
-   "kotak": 3394.1,
-   "upstox": 3392.5,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 390,
+  "rounds": 9,
+  "contract_quotes": 439,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 24.5,
   "same_best_ask_pct": 20.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 85.55,
-  "upstox_minus_kotak_quote_time_s_median": -8.5
+  "oi_same_pct": 85.7,
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
