@@ -126,6 +126,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.8,
    "upstox_minus_kotak_quote_time_s_median": -20.0
+  },
+  {
+   "at": "10:05:06",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.333,
+   "same_best_bid_pct": 20.4,
+   "same_best_ask_pct": 20.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 91.8,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -186,6 +200,13 @@
    "at": "09:25"
   },
   {
+   "contract": "RBLBANK26NOV390CE",
+   "gap_pct": 1.333,
+   "kotak": 3.75,
+   "upstox": 3.7,
+   "at": "10:05"
+  },
+  {
    "contract": "M&M26NOV3350CE",
    "gap_pct": 1.312,
    "kotak": 53.35,
@@ -212,6 +233,13 @@
    "kotak": 25.35,
    "upstox": 25.6,
    "at": "09:45"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
+   "gap_pct": 0.962,
+   "kotak": 26.0,
+   "upstox": 26.25,
+   "at": "10:05"
   },
   {
    "contract": "M&M26NOV3400CE",
@@ -254,30 +282,16 @@
    "kotak": 18.35,
    "upstox": 18.45,
    "at": "09:40"
-  },
-  {
-   "contract": "AMBER26NOV6500CE",
-   "gap_pct": 0.469,
-   "kotak": 32.0,
-   "upstox": 31.85,
-   "at": "09:55"
-  },
-  {
-   "contract": "PAYTM26NOV1900PE",
-   "gap_pct": 0.467,
-   "kotak": 32.15,
-   "upstox": 32.3,
-   "at": "09:55"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 439,
+  "rounds": 10,
+  "contract_quotes": 488,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 24.5,
+  "same_best_bid_pct": 22.45,
   "same_best_ask_pct": 20.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 85.7,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "oi_same_pct": 86.6,
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
