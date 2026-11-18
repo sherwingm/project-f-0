@@ -70,6 +70,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 85.4,
    "upstox_minus_kotak_quote_time_s_median": -10.0
+  },
+  {
+   "at": "09:45:05",
+   "contracts": 48,
+   "on_both": 48,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.512,
+   "same_best_bid_pct": 16.7,
+   "same_best_ask_pct": 18.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 87.5,
+   "upstox_minus_kotak_quote_time_s_median": -3.0
   }
  ],
  "top_gaps": [
@@ -79,6 +93,13 @@
    "kotak": 25.85,
    "upstox": 23.6,
    "at": "09:40"
+  },
+  {
+   "contract": "MARUTI26NOV12700CE",
+   "gap_pct": 3.512,
+   "kotak": 140.95,
+   "upstox": 136.0,
+   "at": "09:45"
   },
   {
    "contract": "INDUSINDBK26NOV920PE",
@@ -121,6 +142,13 @@
    "kotak": 11.5,
    "upstox": 11.65,
    "at": "09:30"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
+   "gap_pct": 0.986,
+   "kotak": 25.35,
+   "upstox": 25.6,
+   "at": "09:45"
   },
   {
    "contract": "M&M26NOV3400CE",
@@ -198,30 +226,16 @@
    "kotak": 4755.0,
    "upstox": 4755.6,
    "at": "09:20"
-  },
-  {
-   "contract": "HCLTECH26NOVFUT",
-   "gap_pct": 0.007,
-   "kotak": 1346.8,
-   "upstox": 1346.9,
-   "at": "09:20"
-  },
-  {
-   "contract": "ICICIBANK26NOVFUT",
-   "gap_pct": 0.006,
-   "kotak": 1607.2,
-   "upstox": 1607.1,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 244,
+  "rounds": 6,
+  "contract_quotes": 292,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 24.5,
   "same_best_ask_pct": 20.4,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 83.7,
-  "upstox_minus_kotak_quote_time_s_median": -7.0
+  "oi_same_pct": 84.55,
+  "upstox_minus_kotak_quote_time_s_median": -6.5
  }
 }
