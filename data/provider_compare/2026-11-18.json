@@ -14,9 +14,44 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 81.6,
    "upstox_minus_kotak_quote_time_s_median": -7.0
+  },
+  {
+   "at": "09:25:04",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.74,
+   "same_best_bid_pct": 24.5,
+   "same_best_ask_pct": 20.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 81.6,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "HINDZINC26NOV540CE",
+   "gap_pct": 2.74,
+   "kotak": 7.3,
+   "upstox": 7.1,
+   "at": "09:25"
+  },
+  {
+   "contract": "BSE26NOV4000CE",
+   "gap_pct": 1.639,
+   "kotak": 36.6,
+   "upstox": 36.0,
+   "at": "09:25"
+  },
+  {
+   "contract": "AMBER26NOV6500CE",
+   "gap_pct": 0.833,
+   "kotak": 24.0,
+   "upstox": 23.8,
+   "at": "09:25"
+  },
   {
    "contract": "HDFCBANK26NOV820CE",
    "gap_pct": 0.813,
@@ -51,6 +86,13 @@
    "kotak": 1346.8,
    "upstox": 1346.9,
    "at": "09:20"
+  },
+  {
+   "contract": "ICICIBANK26NOVFUT",
+   "gap_pct": 0.006,
+   "kotak": 1607.2,
+   "upstox": 1607.1,
+   "at": "09:25"
   },
   {
    "contract": "AMBER26NOV6500CE",
@@ -128,44 +170,16 @@
    "kotak": 17.0,
    "upstox": 17.0,
    "at": "09:20"
-  },
-  {
-   "contract": "HAVELLS26NOV1160PE",
-   "gap_pct": 0.0,
-   "kotak": 11.4,
-   "upstox": 11.4,
-   "at": "09:20"
-  },
-  {
-   "contract": "HAVELLS26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 1166.0,
-   "upstox": 1166.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "HCLTECH26NOV1340CE",
-   "gap_pct": 0.0,
-   "kotak": 24.1,
-   "upstox": 24.1,
-   "at": "09:20"
-  },
-  {
-   "contract": "HCLTECH26NOV1340PE",
-   "gap_pct": 0.0,
-   "kotak": 16.65,
-   "upstox": 16.65,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 49,
+  "rounds": 2,
+  "contract_quotes": 98,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 24.5,
-  "same_best_ask_pct": 24.5,
+  "same_best_ask_pct": 22.45,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 81.6,
-  "upstox_minus_kotak_quote_time_s_median": -7.0
+  "upstox_minus_kotak_quote_time_s_median": -6.5
  }
 }
