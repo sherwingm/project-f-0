@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.9,
    "upstox_minus_kotak_quote_time_s_median": -23.0
+  },
+  {
+   "at": "10:35:08",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.806,
+   "same_best_bid_pct": 30.6,
+   "same_best_ask_pct": 42.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.9,
+   "upstox_minus_kotak_quote_time_s_median": -36.0
   }
  ],
  "top_gaps": [
@@ -347,21 +361,21 @@
    "at": "09:30"
   },
   {
-   "contract": "M&M26NOV3400CE",
-   "gap_pct": 0.711,
-   "kotak": 42.2,
-   "upstox": 42.5,
-   "at": "09:20"
+   "contract": "ANGELONE26NOV350PE",
+   "gap_pct": 0.806,
+   "kotak": 6.2,
+   "upstox": 6.25,
+   "at": "10:35"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 733,
+  "rounds": 16,
+  "contract_quotes": 782,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 26.5,
-  "same_best_ask_pct": 20.8,
+  "same_best_ask_pct": 22.65,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 87.8,
-  "upstox_minus_kotak_quote_time_s_median": -18.0
+  "oi_same_pct": 89.8,
+  "upstox_minus_kotak_quote_time_s_median": -19.0
  }
 }
