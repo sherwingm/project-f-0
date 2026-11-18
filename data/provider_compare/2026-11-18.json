@@ -420,6 +420,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 91.8,
    "upstox_minus_kotak_quote_time_s_median": -62.0
+  },
+  {
+   "at": "11:50:12",
+   "contracts": 49,
+   "on_both": 49,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.676,
+   "same_best_bid_pct": 34.7,
+   "same_best_ask_pct": 32.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.9,
+   "upstox_minus_kotak_quote_time_s_median": -42.0
   }
  ],
  "top_gaps": [
@@ -501,6 +515,13 @@
    "at": "09:30"
   },
   {
+   "contract": "PGEL26NOV540PE",
+   "gap_pct": 1.676,
+   "kotak": 8.95,
+   "upstox": 8.8,
+   "at": "11:50"
+  },
+  {
    "contract": "BHARTIARTL26NOV2120CE",
    "gap_pct": 1.667,
    "kotak": 21.0,
@@ -513,6 +534,13 @@
    "kotak": 36.6,
    "upstox": 36.0,
    "at": "09:25"
+  },
+  {
+   "contract": "POLYCAB26NOV7400PE",
+   "gap_pct": 1.371,
+   "kotak": 109.4,
+   "upstox": 107.9,
+   "at": "11:50"
   },
   {
    "contract": "RBLBANK26NOV390CE",
@@ -548,30 +576,16 @@
    "kotak": 63.75,
    "upstox": 63.0,
    "at": "11:30"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 1.159,
-   "kotak": 34.5,
-   "upstox": 34.1,
-   "at": "11:15"
-  },
-  {
-   "contract": "BSE26NOV4000CE",
-   "gap_pct": 1.111,
-   "kotak": 22.5,
-   "upstox": 22.75,
-   "at": "10:30"
   }
  ],
  "day": {
-  "rounds": 30,
-  "contract_quotes": 1466,
+  "rounds": 31,
+  "contract_quotes": 1515,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 30.6,
-  "same_best_ask_pct": 29.9,
+  "same_best_ask_pct": 30.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.8,
+  "oi_same_pct": 93.8,
   "upstox_minus_kotak_quote_time_s_median": -33.0
  }
 }
