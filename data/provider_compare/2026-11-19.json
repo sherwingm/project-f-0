@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -26.0
+  },
+  {
+   "at": "10:45:08",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.805,
+   "same_best_bid_pct": 34.1,
+   "same_best_ask_pct": 46.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.2,
+   "upstox_minus_kotak_quote_time_s_median": -30.0
   }
  ],
  "top_gaps": [
@@ -361,6 +375,13 @@
    "at": "09:20"
   },
   {
+   "contract": "KEI26NOV3800PE",
+   "gap_pct": 0.805,
+   "kotak": 74.55,
+   "upstox": 75.15,
+   "at": "10:45"
+  },
+  {
    "contract": "BHARTIARTL26NOV2100CE",
    "gap_pct": 0.777,
    "kotak": 38.6,
@@ -373,21 +394,14 @@
    "kotak": 92.3,
    "upstox": 93.0,
    "at": "10:20"
-  },
-  {
-   "contract": "DELHIVERY26NOV440CE",
-   "gap_pct": 0.752,
-   "kotak": 13.3,
-   "upstox": 13.4,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 695,
+  "rounds": 18,
+  "contract_quotes": 736,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 29.3,
-  "same_best_ask_pct": 22.0,
+  "same_best_ask_pct": 24.4,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
   "upstox_minus_kotak_quote_time_s_median": -16.0
