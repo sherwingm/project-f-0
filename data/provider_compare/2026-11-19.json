@@ -126,6 +126,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "10:05:06",
+   "contracts": 40,
+   "on_both": 40,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.325,
+   "same_best_bid_pct": 35.0,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -200,6 +214,13 @@
    "at": "09:45"
   },
   {
+   "contract": "BHEL26NOV420CE",
+   "gap_pct": 1.325,
+   "kotak": 7.55,
+   "upstox": 7.45,
+   "at": "10:05"
+  },
+  {
    "contract": "TORNTPHARM26NOV4600CE",
    "gap_pct": 1.322,
    "kotak": 41.6,
@@ -256,28 +277,21 @@
    "at": "09:20"
   },
   {
-   "contract": "RELIANCE26NOV1360CE",
-   "gap_pct": 0.439,
-   "kotak": 11.4,
-   "upstox": 11.35,
-   "at": "09:30"
-  },
-  {
-   "contract": "SBIN26NOV1140CE",
-   "gap_pct": 0.415,
-   "kotak": 12.05,
-   "upstox": 12.0,
-   "at": "09:30"
+   "contract": "BHARTIARTL26NOV2160CE",
+   "gap_pct": 0.452,
+   "kotak": 11.05,
+   "upstox": 11.0,
+   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 368,
+  "rounds": 10,
+  "contract_quotes": 408,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 17.5,
+  "same_best_bid_pct": 19.75,
   "same_best_ask_pct": 19.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
-  "upstox_minus_kotak_quote_time_s_median": -11.5
+  "upstox_minus_kotak_quote_time_s_median": -13.25
  }
 }
