@@ -266,6 +266,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -29.0
+  },
+  {
+   "at": "10:55:08",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.987,
+   "same_best_bid_pct": 39.0,
+   "same_best_ask_pct": 41.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.1,
+   "upstox_minus_kotak_quote_time_s_median": -21.0
   }
  ],
  "top_gaps": [
@@ -375,6 +389,13 @@
    "at": "10:25"
   },
   {
+   "contract": "MARUTI26NOV13400PE",
+   "gap_pct": 0.987,
+   "kotak": 167.25,
+   "upstox": 168.9,
+   "at": "10:55"
+  },
+  {
    "contract": "TRENT26NOV3200PE",
    "gap_pct": 0.967,
    "kotak": 36.2,
@@ -401,23 +422,16 @@
    "kotak": 38.6,
    "upstox": 38.9,
    "at": "09:40"
-  },
-  {
-   "contract": "EICHERMOT26NOV7900CE",
-   "gap_pct": 0.758,
-   "kotak": 92.3,
-   "upstox": 93.0,
-   "at": "10:20"
   }
  ],
  "day": {
-  "rounds": 19,
-  "contract_quotes": 777,
+  "rounds": 20,
+  "contract_quotes": 818,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.3,
-  "same_best_ask_pct": 26.8,
+  "same_best_bid_pct": 31.7,
+  "same_best_ask_pct": 29.25,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
-  "upstox_minus_kotak_quote_time_s_median": -16.0
+  "upstox_minus_kotak_quote_time_s_median": -16.5
  }
 }
