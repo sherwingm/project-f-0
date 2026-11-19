@@ -56,6 +56,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "09:40:05",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.525,
+   "same_best_bid_pct": 9.8,
+   "same_best_ask_pct": 9.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.1,
+   "upstox_minus_kotak_quote_time_s_median": -4.0
   }
  ],
  "top_gaps": [
@@ -102,11 +116,32 @@
    "at": "09:35"
   },
   {
+   "contract": "TATASTEEL26NOV180PE",
+   "gap_pct": 2.525,
+   "kotak": 1.98,
+   "upstox": 1.93,
+   "at": "09:40"
+  },
+  {
+   "contract": "TORNTPHARM26NOV4600CE",
+   "gap_pct": 1.322,
+   "kotak": 41.6,
+   "upstox": 41.05,
+   "at": "09:40"
+  },
+  {
    "contract": "PIDILITIND26NOV1560CE",
    "gap_pct": 0.826,
    "kotak": 18.15,
    "upstox": 18.0,
    "at": "09:20"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2100CE",
+   "gap_pct": 0.777,
+   "kotak": 38.6,
+   "upstox": 38.9,
+   "at": "09:40"
   },
   {
    "contract": "DELHIVERY26NOV440CE",
@@ -177,37 +212,16 @@
    "kotak": 1354.5,
    "upstox": 1355.0,
    "at": "09:30"
-  },
-  {
-   "contract": "SBIN26NOVFUT",
-   "gap_pct": 0.004,
-   "kotak": 1139.15,
-   "upstox": 1139.1,
-   "at": "09:30"
-  },
-  {
-   "contract": "ATHERENERG26NOV1860CE",
-   "gap_pct": 0.0,
-   "kotak": 67.05,
-   "upstox": 67.05,
-   "at": "09:20"
-  },
-  {
-   "contract": "BANDHANBNK26NOV170CE",
-   "gap_pct": 0.0,
-   "kotak": 2.0,
-   "upstox": 2.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 4,
-  "contract_quotes": 163,
+  "rounds": 5,
+  "contract_quotes": 204,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 17.3,
-  "same_best_ask_pct": 18.3,
+  "same_best_bid_pct": 17.1,
+  "same_best_ask_pct": 17.1,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 91.45,
-  "upstox_minus_kotak_quote_time_s_median": -10.25
+  "oi_same_pct": 92.7,
+  "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
