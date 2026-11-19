@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "10:15:07",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.25,
+   "same_best_bid_pct": 41.5,
+   "same_best_ask_pct": 31.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.2,
+   "upstox_minus_kotak_quote_time_s_median": -36.0
   }
  ],
  "top_gaps": [
@@ -242,6 +256,13 @@
    "at": "09:40"
   },
   {
+   "contract": "CONCOR26NOV440CE",
+   "gap_pct": 1.25,
+   "kotak": 4.0,
+   "upstox": 3.95,
+   "at": "10:15"
+  },
+  {
    "contract": "TRENT26NOV3200PE",
    "gap_pct": 0.967,
    "kotak": 36.2,
@@ -289,18 +310,11 @@
    "kotak": 40.85,
    "upstox": 40.65,
    "at": "09:20"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2160CE",
-   "gap_pct": 0.452,
-   "kotak": 11.05,
-   "upstox": 11.0,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 449,
+  "rounds": 12,
+  "contract_quotes": 490,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 22.0,
   "same_best_ask_pct": 19.5,
