@@ -84,6 +84,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -4.0
+  },
+  {
+   "at": "09:50:05",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.526,
+   "same_best_bid_pct": 22.0,
+   "same_best_ask_pct": 19.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.1,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -193,6 +207,13 @@
    "at": "09:30"
   },
   {
+   "contract": "ABB26NOV6900PE",
+   "gap_pct": 0.526,
+   "kotak": 76.1,
+   "upstox": 75.7,
+   "at": "09:50"
+  },
+  {
    "contract": "PAYTM26NOV1780PE",
    "gap_pct": 0.49,
    "kotak": 40.85,
@@ -219,23 +240,16 @@
    "kotak": 13.3,
    "upstox": 13.35,
    "at": "09:30"
-  },
-  {
-   "contract": "TVSMOTOR26NOV4450CE",
-   "gap_pct": 0.279,
-   "kotak": 71.8,
-   "upstox": 72.0,
-   "at": "09:45"
   }
  ],
  "day": {
-  "rounds": 6,
-  "contract_quotes": 245,
+  "rounds": 7,
+  "contract_quotes": 286,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 13.45,
-  "same_best_ask_pct": 15.85,
+  "same_best_bid_pct": 17.1,
+  "same_best_ask_pct": 17.1,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.9,
+  "oi_same_pct": 95.1,
   "upstox_minus_kotak_quote_time_s_median": -9.0
  }
 }
