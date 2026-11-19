@@ -924,6 +924,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -52.0
+  },
+  {
+   "at": "14:50:20",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.059,
+   "same_best_bid_pct": 36.6,
+   "same_best_ask_pct": 36.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -1019,6 +1033,13 @@
    "at": "12:30"
   },
   {
+   "contract": "PIIND26NOV1640CE",
+   "gap_pct": 2.059,
+   "kotak": 17.0,
+   "upstox": 17.35,
+   "at": "14:50"
+  },
+  {
    "contract": "ADANIENT26NOV2700CE",
    "gap_pct": 1.98,
    "kotak": 35.35,
@@ -1059,23 +1080,16 @@
    "kotak": 12.75,
    "upstox": 12.9,
    "at": "11:25"
-  },
-  {
-   "contract": "TITAN26NOV4650PE",
-   "gap_pct": 1.098,
-   "kotak": 41.0,
-   "upstox": 41.45,
-   "at": "11:30"
   }
  ],
  "day": {
-  "rounds": 66,
-  "contract_quotes": 2704,
+  "rounds": 67,
+  "contract_quotes": 2745,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 39.0,
   "same_best_ask_pct": 41.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
-  "upstox_minus_kotak_quote_time_s_median": -35.5
+  "upstox_minus_kotak_quote_time_s_median": -35.0
  }
 }
