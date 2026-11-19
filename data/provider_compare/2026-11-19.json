@@ -840,6 +840,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "14:20:19",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.614,
+   "same_best_bid_pct": 39.0,
+   "same_best_ask_pct": 51.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -26.0
   }
  ],
  "top_gaps": [
@@ -905,6 +919,13 @@
    "kotak": 2.41,
    "upstox": 2.48,
    "at": "09:35"
+  },
+  {
+   "contract": "JINDALSTEL26NOV1120CE",
+   "gap_pct": 2.614,
+   "kotak": 7.65,
+   "upstox": 7.45,
+   "at": "14:20"
   },
   {
    "contract": "TATASTEEL26NOV180PE",
@@ -975,23 +996,16 @@
    "kotak": 41.0,
    "upstox": 41.45,
    "at": "11:30"
-  },
-  {
-   "contract": "GODREJPROP26NOV1880PE",
-   "gap_pct": 1.053,
-   "kotak": 19.0,
-   "upstox": 19.2,
-   "at": "10:25"
   }
  ],
  "day": {
-  "rounds": 60,
-  "contract_quotes": 2458,
+  "rounds": 61,
+  "contract_quotes": 2499,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 36.6,
-  "same_best_ask_pct": 40.75,
+  "same_best_ask_pct": 41.5,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
-  "upstox_minus_kotak_quote_time_s_median": -33.0
+  "upstox_minus_kotak_quote_time_s_median": -31.0
  }
 }
