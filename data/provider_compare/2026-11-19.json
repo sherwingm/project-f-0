@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.2,
    "upstox_minus_kotak_quote_time_s_median": -15.0
+  },
+  {
+   "at": "09:35:04",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 6.269,
+   "same_best_bid_pct": 22.0,
+   "same_best_ask_pct": 17.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.1,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -60,6 +74,13 @@
    "at": "09:20"
   },
   {
+   "contract": "UNITDSPR26NOV1380CE",
+   "gap_pct": 6.269,
+   "kotak": 33.5,
+   "upstox": 31.4,
+   "at": "09:35"
+  },
+  {
    "contract": "POLYCAB26NOV7300CE",
    "gap_pct": 4.583,
    "kotak": 120.0,
@@ -72,6 +93,13 @@
    "kotak": 32.05,
    "upstox": 33.45,
    "at": "09:20"
+  },
+  {
+   "contract": "SWIGGY26NOV180CE",
+   "gap_pct": 2.905,
+   "kotak": 2.41,
+   "upstox": 2.48,
+   "at": "09:35"
   },
   {
    "contract": "PIDILITIND26NOV1560CE",
@@ -170,30 +198,16 @@
    "kotak": 2.0,
    "upstox": 2.0,
    "at": "09:20"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 0.0,
-   "kotak": 40.95,
-   "upstox": 40.95,
-   "at": "09:20"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.0,
-   "kotak": 27.6,
-   "upstox": 27.6,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 122,
+  "rounds": 4,
+  "contract_quotes": 163,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 17.1,
-  "same_best_ask_pct": 19.5,
+  "same_best_bid_pct": 17.3,
+  "same_best_ask_pct": 18.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.2,
-  "upstox_minus_kotak_quote_time_s_median": -11.5
+  "oi_same_pct": 91.45,
+  "upstox_minus_kotak_quote_time_s_median": -10.25
  }
 }
