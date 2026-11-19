@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 95.1,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "09:55:06",
+   "contracts": 41,
+   "on_both": 41,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.396,
+   "same_best_bid_pct": 24.4,
+   "same_best_ask_pct": 22.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 95.1,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -128,6 +142,13 @@
    "kotak": 120.0,
    "upstox": 114.5,
    "at": "09:25"
+  },
+  {
+   "contract": "ATHERENERG26NOV1860CE",
+   "gap_pct": 4.396,
+   "kotak": 54.6,
+   "upstox": 57.0,
+   "at": "09:55"
   },
   {
    "contract": "PAYTM26NOV1780CE",
@@ -233,23 +254,16 @@
    "kotak": 12.05,
    "upstox": 12.0,
    "at": "09:30"
-  },
-  {
-   "contract": "SBIN26NOV1140PE",
-   "gap_pct": 0.376,
-   "kotak": 13.3,
-   "upstox": 13.35,
-   "at": "09:30"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 286,
+  "rounds": 8,
+  "contract_quotes": 327,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 17.1,
-  "same_best_ask_pct": 17.1,
+  "same_best_bid_pct": 17.3,
+  "same_best_ask_pct": 18.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 95.1,
-  "upstox_minus_kotak_quote_time_s_median": -9.0
+  "upstox_minus_kotak_quote_time_s_median": -10.25
  }
 }
