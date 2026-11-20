@@ -238,6 +238,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.4,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "10:45:07",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.37,
+   "same_best_bid_pct": 20.5,
+   "same_best_ask_pct": 17.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -282,6 +296,13 @@
    "kotak": 2.93,
    "upstox": 3.0,
    "at": "09:25"
+  },
+  {
+   "contract": "SHRIRAMFIN26NOV960PE",
+   "gap_pct": 2.37,
+   "kotak": 10.55,
+   "upstox": 10.3,
+   "at": "10:45"
   },
   {
    "contract": "ASIANPAINT26NOV2600CE",
@@ -347,6 +368,13 @@
    "at": "09:35"
   },
   {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 0.771,
+   "kotak": 19.45,
+   "upstox": 19.6,
+   "at": "10:45"
+  },
+  {
    "contract": "BAJFINANCE26NOV1090PE",
    "gap_pct": 0.549,
    "kotak": 9.1,
@@ -366,30 +394,16 @@
    "kotak": 27.55,
    "upstox": 27.5,
    "at": "09:20"
-  },
-  {
-   "contract": "APOLLOHOSP26NOVFUT",
-   "gap_pct": 0.18,
-   "kotak": 8879.0,
-   "upstox": 8895.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "KEI26NOVFUT",
-   "gap_pct": 0.121,
-   "kotak": 3795.1,
-   "upstox": 3799.7,
-   "at": "10:10"
   }
  ],
  "day": {
-  "rounds": 17,
-  "contract_quotes": 663,
+  "rounds": 18,
+  "contract_quotes": 702,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.8,
-  "same_best_ask_pct": 28.2,
+  "same_best_bid_pct": 29.5,
+  "same_best_ask_pct": 26.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 92.3,
-  "upstox_minus_kotak_quote_time_s_median": -22.0
+  "oi_same_pct": 93.6,
+  "upstox_minus_kotak_quote_time_s_median": -21.5
  }
 }
