@@ -322,6 +322,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 97.4,
    "upstox_minus_kotak_quote_time_s_median": -38.0
+  },
+  {
+   "at": "11:15:09",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.322,
+   "same_best_bid_pct": 41.0,
+   "same_best_ask_pct": 43.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.0
   }
  ],
  "top_gaps": [
@@ -410,6 +424,13 @@
    "at": "10:30"
   },
   {
+   "contract": "BAJFINANCE26NOV1100PE",
+   "gap_pct": 1.322,
+   "kotak": 11.35,
+   "upstox": 11.2,
+   "at": "11:15"
+  },
+  {
    "contract": "AXISBANK26NOV1380CE",
    "gap_pct": 1.258,
    "kotak": 7.95,
@@ -445,33 +466,26 @@
    "at": "10:45"
   },
   {
+   "contract": "BHARTIARTL26NOV2140PE",
+   "gap_pct": 0.707,
+   "kotak": 14.15,
+   "upstox": 14.25,
+   "at": "11:15"
+  },
+  {
    "contract": "BAJFINANCE26NOV1090PE",
    "gap_pct": 0.549,
    "kotak": 9.1,
    "upstox": 9.05,
    "at": "09:25"
-  },
-  {
-   "contract": "LTM26NOV4200PE",
-   "gap_pct": 0.232,
-   "kotak": 43.1,
-   "upstox": 43.0,
-   "at": "10:15"
-  },
-  {
-   "contract": "ATHERENERG26NOV1940CE",
-   "gap_pct": 0.181,
-   "kotak": 27.55,
-   "upstox": 27.5,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 23,
-  "contract_quotes": 897,
+  "rounds": 24,
+  "contract_quotes": 936,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 30.8,
-  "same_best_ask_pct": 30.8,
+  "same_best_ask_pct": 32.05,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.4,
   "upstox_minus_kotak_quote_time_s_median": -21.0
