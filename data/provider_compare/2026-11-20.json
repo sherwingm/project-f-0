@@ -784,15 +784,113 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 74.4,
    "upstox_minus_kotak_quote_time_s_median": -63.0
+  },
+  {
+   "at": "14:00:18",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.645,
+   "ltp_gap_pct_max": 38.129,
+   "same_best_bid_pct": 0.0,
+   "same_best_ask_pct": 0.0,
+   "volume_ratio_median": 0.991,
+   "oi_same_pct": 30.8,
+   "upstox_minus_kotak_quote_time_s_median": -375.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "NAM-INDIA26NOV1040PE",
+   "gap_pct": 38.129,
+   "kotak": 6.95,
+   "upstox": 4.3,
+   "at": "14:00"
+  },
   {
    "contract": "MAXHEALTH26NOV920CE",
    "gap_pct": 24.989,
    "kotak": 115.45,
    "upstox": 144.3,
    "at": "09:20"
+  },
+  {
+   "contract": "MPHASIS26NOV2400CE",
+   "gap_pct": 18.31,
+   "kotak": 17.75,
+   "upstox": 21.0,
+   "at": "14:00"
+  },
+  {
+   "contract": "MOTILALOFS26NOV1200CE",
+   "gap_pct": 17.424,
+   "kotak": 13.2,
+   "upstox": 15.5,
+   "at": "14:00"
+  },
+  {
+   "contract": "MPHASIS26NOV2400PE",
+   "gap_pct": 17.344,
+   "kotak": 32.0,
+   "upstox": 26.45,
+   "at": "14:00"
+  },
+  {
+   "contract": "MOTILALOFS26NOV1200PE",
+   "gap_pct": 13.9,
+   "kotak": 12.95,
+   "upstox": 11.15,
+   "at": "14:00"
+  },
+  {
+   "contract": "MOTHERSON26NOV165PE",
+   "gap_pct": 12.791,
+   "kotak": 1.72,
+   "upstox": 1.5,
+   "at": "14:00"
+  },
+  {
+   "contract": "MOTHERSON26NOV165CE",
+   "gap_pct": 11.765,
+   "kotak": 1.7,
+   "upstox": 1.9,
+   "at": "14:00"
+  },
+  {
+   "contract": "NAUKRI26NOV1180CE",
+   "gap_pct": 10.73,
+   "kotak": 11.65,
+   "upstox": 12.9,
+   "at": "14:00"
+  },
+  {
+   "contract": "NBCC26NOV80PE",
+   "gap_pct": 9.0,
+   "kotak": 1.0,
+   "upstox": 0.91,
+   "at": "14:00"
+  },
+  {
+   "contract": "NAM-INDIA26NOV1040CE",
+   "gap_pct": 7.874,
+   "kotak": 12.7,
+   "upstox": 13.7,
+   "at": "14:00"
+  },
+  {
+   "contract": "NBCC26NOV80CE",
+   "gap_pct": 7.692,
+   "kotak": 0.78,
+   "upstox": 0.84,
+   "at": "14:00"
+  },
+  {
+   "contract": "NATIONALUM26NOV305CE",
+   "gap_pct": 7.463,
+   "kotak": 3.35,
+   "upstox": 3.6,
+   "at": "14:00"
   },
   {
    "contract": "MAZDOCK26NOV1840CE",
@@ -823,6 +921,13 @@
    "at": "13:55"
   },
   {
+   "contract": "NATIONALUM26NOV305PE",
+   "gap_pct": 4.301,
+   "kotak": 4.65,
+   "upstox": 4.45,
+   "at": "14:00"
+  },
+  {
    "contract": "BAJAJFINSV26NOV1900CE",
    "gap_pct": 3.933,
    "kotak": 8.9,
@@ -835,107 +940,16 @@
    "kotak": 81.4,
    "upstox": 78.3,
    "at": "09:40"
-  },
-  {
-   "contract": "MAHABANK26NOV99CE",
-   "gap_pct": 3.604,
-   "kotak": 1.11,
-   "upstox": 1.07,
-   "at": "13:55"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 3.448,
-   "kotak": 33.35,
-   "upstox": 32.2,
-   "at": "13:55"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 3.201,
-   "kotak": 32.8,
-   "upstox": 31.75,
-   "at": "13:25"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 3.155,
-   "kotak": 20.6,
-   "upstox": 21.25,
-   "at": "11:35"
-  },
-  {
-   "contract": "COFORGE26NOV2120CE",
-   "gap_pct": 3.113,
-   "kotak": 25.7,
-   "upstox": 26.5,
-   "at": "09:35"
-  },
-  {
-   "contract": "APOLLOHOSP26NOV8900CE",
-   "gap_pct": 2.703,
-   "kotak": 74.0,
-   "upstox": 76.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 2.462,
-   "kotak": 36.55,
-   "upstox": 37.45,
-   "at": "13:15"
-  },
-  {
-   "contract": "BANKBARODA26NOV285CE",
-   "gap_pct": 2.389,
-   "kotak": 2.93,
-   "upstox": 3.0,
-   "at": "09:25"
-  },
-  {
-   "contract": "SHRIRAMFIN26NOV960PE",
-   "gap_pct": 2.37,
-   "kotak": 10.55,
-   "upstox": 10.3,
-   "at": "10:45"
-  },
-  {
-   "contract": "ASIANPAINT26NOV2600CE",
-   "gap_pct": 2.335,
-   "kotak": 12.85,
-   "upstox": 13.15,
-   "at": "09:20"
-  },
-  {
-   "contract": "M&M26NOV3550CE",
-   "gap_pct": 1.807,
-   "kotak": 16.6,
-   "upstox": 16.9,
-   "at": "13:55"
-  },
-  {
-   "contract": "GRASIM26NOV3100CE",
-   "gap_pct": 1.701,
-   "kotak": 29.4,
-   "upstox": 28.9,
-   "at": "09:50"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 1.685,
-   "kotak": 53.4,
-   "upstox": 52.5,
-   "at": "13:55"
   }
  ],
  "day": {
-  "rounds": 56,
-  "contract_quotes": 2184,
+  "rounds": 57,
+  "contract_quotes": 2223,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 35.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 98.7,
+  "oi_same_pct": 97.4,
   "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
