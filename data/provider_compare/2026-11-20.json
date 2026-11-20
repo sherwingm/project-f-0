@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -27.0
+  },
+  {
+   "at": "11:35:11",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.155,
+   "same_best_bid_pct": 51.3,
+   "same_best_ask_pct": 46.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 97.4,
+   "upstox_minus_kotak_quote_time_s_median": -57.0
   }
  ],
  "top_gaps": [
@@ -401,6 +415,13 @@
    "kotak": 81.4,
    "upstox": 78.3,
    "at": "09:40"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 3.155,
+   "kotak": 20.6,
+   "upstox": 21.25,
+   "at": "11:35"
   },
   {
    "contract": "COFORGE26NOV2120CE",
@@ -480,6 +501,13 @@
    "at": "09:25"
   },
   {
+   "contract": "EICHERMOT26NOV8100PE",
+   "gap_pct": 1.127,
+   "kotak": 62.1,
+   "upstox": 61.4,
+   "at": "11:35"
+  },
+  {
    "contract": "HCLTECH26NOV1360CE",
    "gap_pct": 1.083,
    "kotak": 13.85,
@@ -506,30 +534,16 @@
    "kotak": 19.45,
    "upstox": 19.6,
    "at": "10:45"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2140PE",
-   "gap_pct": 0.707,
-   "kotak": 14.15,
-   "upstox": 14.25,
-   "at": "11:15"
-  },
-  {
-   "contract": "BAJFINANCE26NOV1090PE",
-   "gap_pct": 0.549,
-   "kotak": 9.1,
-   "upstox": 9.05,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 1053,
+  "rounds": 28,
+  "contract_quotes": 1092,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 30.8,
-  "same_best_ask_pct": 33.3,
+  "same_best_ask_pct": 34.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.4,
-  "upstox_minus_kotak_quote_time_s_median": -22.0
+  "upstox_minus_kotak_quote_time_s_median": -24.5
  }
 }
