@@ -770,6 +770,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "13:55:18",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 6.467,
+   "same_best_bid_pct": 12.8,
+   "same_best_ask_pct": 7.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 74.4,
+   "upstox_minus_kotak_quote_time_s_median": -63.0
   }
  ],
  "top_gaps": [
@@ -781,11 +795,32 @@
    "at": "09:20"
   },
   {
+   "contract": "MAZDOCK26NOV1840CE",
+   "gap_pct": 6.467,
+   "kotak": 21.65,
+   "upstox": 23.05,
+   "at": "13:55"
+  },
+  {
    "contract": "BHARTIARTL26NOV2120CE",
    "gap_pct": 6.061,
    "kotak": 21.45,
    "upstox": 20.15,
    "at": "09:35"
+  },
+  {
+   "contract": "MAZDOCK26NOV1840PE",
+   "gap_pct": 5.118,
+   "kotak": 12.7,
+   "upstox": 12.05,
+   "at": "13:55"
+  },
+  {
+   "contract": "M&M26NOV3550PE",
+   "gap_pct": 4.533,
+   "kotak": 37.5,
+   "upstox": 35.8,
+   "at": "13:55"
   },
   {
    "contract": "BAJAJFINSV26NOV1900CE",
@@ -800,6 +835,20 @@
    "kotak": 81.4,
    "upstox": 78.3,
    "at": "09:40"
+  },
+  {
+   "contract": "MAHABANK26NOV99CE",
+   "gap_pct": 3.604,
+   "kotak": 1.11,
+   "upstox": 1.07,
+   "at": "13:55"
+  },
+  {
+   "contract": "BHARTIARTL26NOV2120CE",
+   "gap_pct": 3.448,
+   "kotak": 33.35,
+   "upstox": 32.2,
+   "at": "13:55"
   },
   {
    "contract": "BHARTIARTL26NOV2120CE",
@@ -858,6 +907,13 @@
    "at": "09:20"
   },
   {
+   "contract": "M&M26NOV3550CE",
+   "gap_pct": 1.807,
+   "kotak": 16.6,
+   "upstox": 16.9,
+   "at": "13:55"
+  },
+  {
    "contract": "GRASIM26NOV3100CE",
    "gap_pct": 1.701,
    "kotak": 29.4,
@@ -866,62 +922,20 @@
   },
   {
    "contract": "BHARTIARTL26NOV2100CE",
-   "gap_pct": 1.634,
-   "kotak": 45.9,
-   "upstox": 45.15,
-   "at": "09:20"
-  },
-  {
-   "contract": "NAUKRI26NOV1180PE",
-   "gap_pct": 1.538,
-   "kotak": 13.0,
-   "upstox": 13.2,
-   "at": "10:25"
-  },
-  {
-   "contract": "PAYTM26NOV1760PE",
-   "gap_pct": 1.51,
-   "kotak": 29.8,
-   "upstox": 30.25,
-   "at": "10:30"
-  },
-  {
-   "contract": "BAJFINANCE26NOV1100PE",
-   "gap_pct": 1.322,
-   "kotak": 11.35,
-   "upstox": 11.2,
-   "at": "11:15"
-  },
-  {
-   "contract": "BEL26NOV400CE",
-   "gap_pct": 1.266,
-   "kotak": 3.95,
-   "upstox": 4.0,
-   "at": "13:05"
-  },
-  {
-   "contract": "AXISBANK26NOV1380CE",
-   "gap_pct": 1.258,
-   "kotak": 7.95,
-   "upstox": 7.85,
-   "at": "09:25"
-  },
-  {
-   "contract": "EICHERMOT26NOV8100PE",
-   "gap_pct": 1.127,
-   "kotak": 62.1,
-   "upstox": 61.4,
-   "at": "11:35"
+   "gap_pct": 1.685,
+   "kotak": 53.4,
+   "upstox": 52.5,
+   "at": "13:55"
   }
  ],
  "day": {
-  "rounds": 55,
-  "contract_quotes": 2145,
+  "rounds": 56,
+  "contract_quotes": 2184,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 35.9,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 100.0,
+  "oi_same_pct": 98.7,
   "upstox_minus_kotak_quote_time_s_median": -34.0
  }
 }
