@@ -616,6 +616,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -86.0
+  },
+  {
+   "at": "13:00:15",
+   "contracts": 39,
+   "on_both": 39,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.933,
+   "same_best_bid_pct": 25.6,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -22.0
   }
  ],
  "top_gaps": [
@@ -632,6 +646,13 @@
    "kotak": 21.45,
    "upstox": 20.15,
    "at": "09:35"
+  },
+  {
+   "contract": "BAJAJFINSV26NOV1900CE",
+   "gap_pct": 3.933,
+   "kotak": 8.9,
+   "upstox": 8.55,
+   "at": "13:00"
   },
   {
    "contract": "DIXON26NOV13000PE",
@@ -751,23 +772,16 @@
    "kotak": 34.75,
    "upstox": 34.45,
    "at": "09:35"
-  },
-  {
-   "contract": "BHARTIARTL26NOV2120CE",
-   "gap_pct": 0.771,
-   "kotak": 19.45,
-   "upstox": 19.6,
-   "at": "10:45"
   }
  ],
  "day": {
-  "rounds": 44,
-  "contract_quotes": 1716,
+  "rounds": 45,
+  "contract_quotes": 1755,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 33.3,
   "same_best_ask_pct": 35.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 97.4,
-  "upstox_minus_kotak_quote_time_s_median": -32.5
+  "upstox_minus_kotak_quote_time_s_median": -31.0
  }
 }
