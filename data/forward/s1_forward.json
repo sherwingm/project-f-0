@@ -1,7 +1,7 @@
 {
  "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
- "last_session": "2026-11-19",
+ "last_session": "2026-11-20",
  "sessions": [
   {
    "session": "2026-10-13",
@@ -532,809 +532,34 @@
     "exited": [],
     "signals": []
    }
+  },
+  {
+   "session": "2026-11-20",
+   "A": {
+    "filled": [],
+    "exited": [
+     "ATHERENERG",
+     "TATACONSUM",
+     "CHOLAFIN",
+     "UNITDSPR",
+     "ASIANPAINT",
+     "DELHIVERY",
+     "MAXHEALTH",
+     "BHARTIARTL"
+    ],
+    "signals": []
+   },
+   "B": {
+    "filled": [],
+    "exited": [],
+    "signals": []
+   }
   }
  ],
  "arms": {
   "A": {
    "pending": [],
-   "open": [
-    {
-     "arm": "A",
-     "symbol": "ATHERENERG",
-     "sector": "nifty auto",
-     "signal_date": "2026-10-27",
-     "beat": 4.13,
-     "move": 6.29,
-     "expiry": "2026-11-23",
-     "spot": 1673.92,
-     "id": "A:ATHERENERG:2026-10-28",
-     "entry_date": "2026-10-28",
-     "strike": 1800.0,
-     "strikes_walked": 6,
-     "lot": 375,
-     "contracts_day1": 2116.0,
-     "entry_price": 20.15,
-     "entry_source": "vwap",
-     "cost": 7556.25,
-     "category": "small",
-     "best": 153.3,
-     "stall": 4,
-     "fut0": 1654.6,
-     "stock0": 1650.0,
-     "path": [
-      [
-       "2026-10-28",
-       18.4
-      ],
-      [
-       "2026-10-29",
-       20.4
-      ],
-      [
-       "2026-10-30",
-       50.05
-      ],
-      [
-       "2026-11-02",
-       52.25
-      ],
-      [
-       "2026-11-03",
-       57.8
-      ],
-      [
-       "2026-11-04",
-       62.05
-      ],
-      [
-       "2026-11-05",
-       45.3
-      ],
-      [
-       "2026-11-06",
-       64.55
-      ],
-      [
-       "2026-11-09",
-       82.3
-      ],
-      [
-       "2026-11-11",
-       92.5
-      ],
-      [
-       "2026-11-12",
-       131.3
-      ],
-      [
-       "2026-11-13",
-       153.3
-      ],
-      [
-       "2026-11-16",
-       140.95
-      ],
-      [
-       "2026-11-17",
-       124.2
-      ],
-      [
-       "2026-11-18",
-       113.4
-      ],
-      [
-       "2026-11-19",
-       125.0
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 660.79,
-      "h_peak_date": "2026-11-13",
-      "h_dip": -8.68,
-      "h_dip_date": "2026-10-28",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 125.0,
-      "mark_pct": 520.35
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "TATACONSUM",
-     "sector": "nifty fmcg",
-     "signal_date": "2026-10-27",
-     "beat": 5.96,
-     "move": 6.78,
-     "expiry": "2026-11-23",
-     "spot": 999.99,
-     "id": "A:TATACONSUM:2026-10-28",
-     "entry_date": "2026-10-28",
-     "strike": 1020.0,
-     "strikes_walked": 2,
-     "lot": 550,
-     "contracts_day1": 1610.0,
-     "entry_price": 13.26,
-     "entry_source": "vwap",
-     "cost": 7293.0,
-     "category": "large",
-     "best": 120.75,
-     "stall": 0,
-     "fut0": 1003.8,
-     "stock0": 1000.2,
-     "path": [
-      [
-       "2026-10-28",
-       18.4
-      ],
-      [
-       "2026-10-29",
-       25.7
-      ],
-      [
-       "2026-10-30",
-       25.8
-      ],
-      [
-       "2026-11-02",
-       25.3
-      ],
-      [
-       "2026-11-03",
-       53.75
-      ],
-      [
-       "2026-11-04",
-       52.5
-      ],
-      [
-       "2026-11-05",
-       61.85
-      ],
-      [
-       "2026-11-06",
-       68.2
-      ],
-      [
-       "2026-11-09",
-       69.0
-      ],
-      [
-       "2026-11-11",
-       74.2
-      ],
-      [
-       "2026-11-12",
-       76.4
-      ],
-      [
-       "2026-11-13",
-       76.4
-      ],
-      [
-       "2026-11-16",
-       93.3
-      ],
-      [
-       "2026-11-17",
-       91.15
-      ],
-      [
-       "2026-11-18",
-       101.6
-      ],
-      [
-       "2026-11-19",
-       120.75
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 810.63,
-      "h_peak_date": "2026-11-19",
-      "h_dip": 0.0,
-      "h_dip_date": null,
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 120.75,
-      "mark_pct": 810.63
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "CHOLAFIN",
-     "sector": "nifty financial services",
-     "signal_date": "2026-10-29",
-     "beat": 2.48,
-     "move": 3.82,
-     "expiry": "2026-11-23",
-     "spot": 1604.2,
-     "id": "A:CHOLAFIN:2026-10-30",
-     "entry_date": "2026-10-30",
-     "strike": 1720.0,
-     "strikes_walked": 6,
-     "lot": 625,
-     "contracts_day1": 272.0,
-     "entry_price": 10.9,
-     "entry_source": "vwap",
-     "cost": 6812.5,
-     "category": "large",
-     "best": 156.0,
-     "stall": 2,
-     "fut0": 1595.4,
-     "stock0": 1586.0,
-     "path": [
-      [
-       "2026-10-30",
-       7.8
-      ],
-      [
-       "2026-11-02",
-       13.15
-      ],
-      [
-       "2026-11-03",
-       18.0
-      ],
-      [
-       "2026-11-04",
-       16.3
-      ],
-      [
-       "2026-11-05",
-       71.9
-      ],
-      [
-       "2026-11-06",
-       78.7
-      ],
-      [
-       "2026-11-09",
-       77.85
-      ],
-      [
-       "2026-11-11",
-       90.35
-      ],
-      [
-       "2026-11-12",
-       137.4
-      ],
-      [
-       "2026-11-13",
-       108.0
-      ],
-      [
-       "2026-11-16",
-       120.6
-      ],
-      [
-       "2026-11-17",
-       156.0
-      ],
-      [
-       "2026-11-18",
-       140.0
-      ],
-      [
-       "2026-11-19",
-       146.0
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 1331.19,
-      "h_peak_date": "2026-11-17",
-      "h_dip": -28.44,
-      "h_dip_date": "2026-10-30",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 146.0,
-      "mark_pct": 1239.45
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "UNITDSPR",
-     "sector": "nifty fmcg",
-     "signal_date": "2026-10-29",
-     "beat": 3.94,
-     "move": 5.06,
-     "expiry": "2026-11-23",
-     "spot": 1289.51,
-     "id": "A:UNITDSPR:2026-10-30",
-     "entry_date": "2026-10-30",
-     "strike": 1380.0,
-     "strikes_walked": 5,
-     "lot": 400,
-     "contracts_day1": 1323.0,
-     "entry_price": 15.97,
-     "entry_source": "vwap",
-     "cost": 6388.0,
-     "category": "mid",
-     "best": 80.7,
-     "stall": 0,
-     "fut0": 1343.7,
-     "stock0": 1333.7,
-     "path": [
-      [
-       "2026-10-30",
-       17.1
-      ],
-      [
-       "2026-11-02",
-       16.15
-      ],
-      [
-       "2026-11-03",
-       29.4
-      ],
-      [
-       "2026-11-04",
-       53.15
-      ],
-      [
-       "2026-11-05",
-       43.9
-      ],
-      [
-       "2026-11-06",
-       54.0
-      ],
-      [
-       "2026-11-09",
-       58.0
-      ],
-      [
-       "2026-11-11",
-       48.5
-      ],
-      [
-       "2026-11-12",
-       53.2
-      ],
-      [
-       "2026-11-13",
-       53.2
-      ],
-      [
-       "2026-11-16",
-       55.0
-      ],
-      [
-       "2026-11-17",
-       66.5
-      ],
-      [
-       "2026-11-18",
-       66.0
-      ],
-      [
-       "2026-11-19",
-       80.7
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 405.32,
-      "h_peak_date": "2026-11-19",
-      "h_dip": 0.0,
-      "h_dip_date": null,
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 80.7,
-      "mark_pct": 405.32
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "ASIANPAINT",
-     "sector": "nifty consumer durables",
-     "signal_date": "2026-10-30",
-     "beat": 2.98,
-     "move": 0.78,
-     "expiry": "2026-11-23",
-     "spot": 2319.99,
-     "id": "A:ASIANPAINT:2026-11-02",
-     "entry_date": "2026-11-02",
-     "strike": 2400.0,
-     "strikes_walked": 4,
-     "lot": 250,
-     "contracts_day1": 9980.0,
-     "entry_price": 28.43,
-     "entry_source": "vwap",
-     "cost": 7107.5,
-     "category": "large",
-     "best": 220.0,
-     "stall": 2,
-     "fut0": 2334.1,
-     "stock0": 2344.3,
-     "path": [
-      [
-       "2026-11-02",
-       24.1
-      ],
-      [
-       "2026-11-03",
-       63.6
-      ],
-      [
-       "2026-11-04",
-       63.25
-      ],
-      [
-       "2026-11-05",
-       145.3
-      ],
-      [
-       "2026-11-06",
-       155.2
-      ],
-      [
-       "2026-11-09",
-       130.2
-      ],
-      [
-       "2026-11-11",
-       153.55
-      ],
-      [
-       "2026-11-12",
-       146.3
-      ],
-      [
-       "2026-11-13",
-       150.45
-      ],
-      [
-       "2026-11-16",
-       181.6
-      ],
-      [
-       "2026-11-17",
-       220.0
-      ],
-      [
-       "2026-11-18",
-       177.15
-      ],
-      [
-       "2026-11-19",
-       198.1
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 673.83,
-      "h_peak_date": "2026-11-17",
-      "h_dip": -15.23,
-      "h_dip_date": "2026-11-02",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 198.1,
-      "mark_pct": 596.8
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "DELHIVERY",
-     "sector": "nifty services sector",
-     "signal_date": "2026-11-02",
-     "beat": 4.18,
-     "move": 5.89,
-     "expiry": "2026-11-23",
-     "spot": 408.75,
-     "id": "A:DELHIVERY:2026-11-03",
-     "entry_date": "2026-11-03",
-     "strike": 440.0,
-     "strikes_walked": 6,
-     "lot": 2075,
-     "contracts_day1": 731.0,
-     "entry_price": 3.53,
-     "entry_source": "vwap",
-     "cost": 7324.75,
-     "category": "small",
-     "best": 18.55,
-     "stall": 2,
-     "fut0": 414.25,
-     "stock0": 412.0,
-     "path": [
-      [
-       "2026-11-03",
-       2.85
-      ],
-      [
-       "2026-11-04",
-       3.2
-      ],
-      [
-       "2026-11-05",
-       6.0
-      ],
-      [
-       "2026-11-06",
-       5.7
-      ],
-      [
-       "2026-11-09",
-       6.45
-      ],
-      [
-       "2026-11-11",
-       7.55
-      ],
-      [
-       "2026-11-12",
-       8.9
-      ],
-      [
-       "2026-11-13",
-       6.6
-      ],
-      [
-       "2026-11-16",
-       6.7
-      ],
-      [
-       "2026-11-17",
-       18.55
-      ],
-      [
-       "2026-11-18",
-       11.65
-      ],
-      [
-       "2026-11-19",
-       18.4
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 425.5,
-      "h_peak_date": "2026-11-17",
-      "h_dip": -19.26,
-      "h_dip_date": "2026-11-03",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 18.4,
-      "mark_pct": 421.25
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "MAXHEALTH",
-     "sector": "nifty healthcare index",
-     "signal_date": "2026-11-02",
-     "beat": 2.39,
-     "move": 2.88,
-     "expiry": "2026-11-23",
-     "spot": 884.74,
-     "id": "A:MAXHEALTH:2026-11-03",
-     "entry_date": "2026-11-03",
-     "strike": 920.0,
-     "strikes_walked": 4,
-     "lot": 525,
-     "contracts_day1": 1178.0,
-     "entry_price": 14.57,
-     "entry_source": "vwap",
-     "cost": 7649.25,
-     "category": "large",
-     "best": 115.45,
-     "stall": 0,
-     "fut0": 896.7,
-     "stock0": 895.5,
-     "path": [
-      [
-       "2026-11-03",
-       15.8
-      ],
-      [
-       "2026-11-04",
-       28.2
-      ],
-      [
-       "2026-11-05",
-       31.45
-      ],
-      [
-       "2026-11-06",
-       30.6
-      ],
-      [
-       "2026-11-09",
-       20.7
-      ],
-      [
-       "2026-11-11",
-       24.4
-      ],
-      [
-       "2026-11-12",
-       35.25
-      ],
-      [
-       "2026-11-13",
-       35.85
-      ],
-      [
-       "2026-11-16",
-       88.95
-      ],
-      [
-       "2026-11-17",
-       102.45
-      ],
-      [
-       "2026-11-18",
-       99.85
-      ],
-      [
-       "2026-11-19",
-       115.45
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 692.38,
-      "h_peak_date": "2026-11-19",
-      "h_dip": 0.0,
-      "h_dip_date": null,
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 115.45,
-      "mark_pct": 692.38
-     }
-    },
-    {
-     "arm": "A",
-     "symbol": "BHARTIARTL",
-     "sector": "nifty infrastructure",
-     "signal_date": "2026-11-06",
-     "beat": 3.6,
-     "move": 2.45,
-     "expiry": "2026-11-23",
-     "spot": 2107.11,
-     "id": "A:BHARTIARTL:2026-11-09",
-     "entry_date": "2026-11-09",
-     "strike": 2100.0,
-     "strikes_walked": 0,
-     "lot": 475,
-     "contracts_day1": 18067.0,
-     "entry_price": 13.51,
-     "entry_source": "vwap",
-     "cost": 6417.25,
-     "category": "large",
-     "best": 49.75,
-     "stall": 3,
-     "fut0": 2067.1,
-     "stock0": 2072.1,
-     "path": [
-      [
-       "2026-11-09",
-       14.75
-      ],
-      [
-       "2026-11-11",
-       23.65
-      ],
-      [
-       "2026-11-12",
-       23.2
-      ],
-      [
-       "2026-11-13",
-       29.65
-      ],
-      [
-       "2026-11-16",
-       49.75
-      ],
-      [
-       "2026-11-17",
-       44.05
-      ],
-      [
-       "2026-11-18",
-       33.95
-      ],
-      [
-       "2026-11-19",
-       39.4
-      ]
-     ],
-     "exit_date": null,
-     "exit_reason": null,
-     "exit_price": null,
-     "net": null,
-     "net_pct": null,
-     "excluded": "",
-     "tracking": true,
-     "stats": {
-      "h_peak": 268.25,
-      "h_peak_date": "2026-11-16",
-      "h_dip": 0.0,
-      "h_dip_date": null,
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 39.4,
-      "mark_pct": 191.64
-     }
-    }
-   ],
+   "open": [],
    "closed": [
     {
      "arm": "A",
@@ -1601,6 +826,10 @@
       [
        "2026-11-19",
        3.4
+      ],
+      [
+       "2026-11-20",
+       8.05
       ]
      ],
      "exit_date": "2026-10-26",
@@ -1609,7 +838,7 @@
      "net": -1181.25,
      "net_pct": -15.97,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 58.55,
       "h_peak_date": "2026-10-16",
@@ -1620,9 +849,9 @@
       "a_dip": -96.53,
       "a_dip_date": "2026-11-18",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 3.4,
-      "mark_pct": -94.25
+      "last_date": "2026-11-20",
+      "last_close": 8.05,
+      "mark_pct": -86.39
      },
      "charges": 63.4,
      "slippage": 422.85
@@ -1913,6 +1142,10 @@
       [
        "2026-11-19",
        10.45
+      ],
+      [
+       "2026-11-20",
+       6.3
       ]
      ],
      "exit_date": "2026-10-30",
@@ -1921,7 +1154,7 @@
      "net": -4182.42,
      "net_pct": -56.07,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -1932,9 +1165,9 @@
       "a_dip": -47.96,
       "a_dip_date": "2026-11-18",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 10.45,
-      "mark_pct": -5.43
+      "last_date": "2026-11-20",
+      "last_close": 6.3,
+      "mark_pct": -42.99
      },
      "charges": 57.16,
      "slippage": 109.01
@@ -2030,6 +1263,10 @@
       [
        "2026-11-19",
        715.05
+      ],
+      [
+       "2026-11-20",
+       1066.45
       ]
      ],
      "exit_date": "2026-10-30",
@@ -2038,20 +1275,20 @@
      "net": -3771.54,
      "net_pct": -57.37,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 4.37,
       "h_peak_date": "2026-10-27",
       "h_dip": -53.57,
       "h_dip_date": "2026-10-30",
-      "a_peak": 227.72,
-      "a_peak_date": "2026-11-05",
+      "a_peak": 305.54,
+      "a_peak_date": "2026-11-20",
       "a_dip": -12.23,
       "a_dip_date": "2026-11-02",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 715.05,
-      "mark_pct": 171.91
+      "last_date": "2026-11-20",
+      "last_close": 1066.45,
+      "mark_pct": 305.54
      },
      "charges": 56.03,
      "slippage": 192.51
@@ -2143,6 +1380,10 @@
       [
        "2026-11-19",
        0.9
+      ],
+      [
+       "2026-11-20",
+       0.65
       ]
      ],
      "exit_date": "2026-11-02",
@@ -2151,7 +1392,7 @@
      "net": -4818.99,
      "net_pct": -64.88,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 2.97,
       "h_peak_date": "2026-10-29",
@@ -2159,12 +1400,12 @@
       "h_dip_date": "2026-11-02",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -95.76,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -96.94,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 0.9,
-      "mark_pct": -95.76
+      "last_date": "2026-11-20",
+      "last_close": 0.65,
+      "mark_pct": -96.94
      },
      "charges": 56.05,
      "slippage": 205.94
@@ -2248,6 +1489,10 @@
       [
        "2026-11-19",
        2.25
+      ],
+      [
+       "2026-11-20",
+       12.93
       ]
      ],
      "exit_date": "2026-11-02",
@@ -2256,20 +1501,20 @@
      "net": -3920.2,
      "net_pct": -63.63,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
       "h_dip": -56.6,
       "h_dip_date": "2026-11-02",
-      "a_peak": 189.06,
-      "a_peak_date": "2026-11-12",
+      "a_peak": 387.92,
+      "a_peak_date": "2026-11-20",
       "a_dip": -72.08,
       "a_dip_date": "2026-11-03",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 2.25,
-      "mark_pct": -15.09
+      "last_date": "2026-11-20",
+      "last_close": 12.93,
+      "mark_pct": 387.92
      },
      "charges": 54.89,
      "slippage": 261.56
@@ -2361,6 +1606,10 @@
       [
        "2026-11-19",
        10.05
+      ],
+      [
+       "2026-11-20",
+       13.3
       ]
      ],
      "exit_date": "2026-11-03",
@@ -2369,7 +1618,7 @@
      "net": -2771.67,
      "net_pct": -43.58,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -2380,9 +1629,9 @@
       "a_dip": -60.5,
       "a_dip_date": "2026-11-19",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 10.05,
-      "mark_pct": -60.5
+      "last_date": "2026-11-20",
+      "last_close": 13.3,
+      "mark_pct": -47.72
      },
      "charges": 57.47,
      "slippage": 204.2
@@ -2470,6 +1719,10 @@
       [
        "2026-11-19",
        7.65
+      ],
+      [
+       "2026-11-20",
+       11.95
       ]
      ],
      "exit_date": "2026-11-04",
@@ -2478,7 +1731,7 @@
      "net": -3468.94,
      "net_pct": -47.0,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -2489,9 +1742,9 @@
       "a_dip": -93.56,
       "a_dip_date": "2026-11-18",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 7.65,
-      "mark_pct": -1.54
+      "last_date": "2026-11-20",
+      "last_close": 11.95,
+      "mark_pct": 53.8
      },
      "charges": 58.82,
      "slippage": 351.12
@@ -2571,6 +1824,10 @@
       [
        "2026-11-19",
        1.35
+      ],
+      [
+       "2026-11-20",
+       0.8
       ]
      ],
      "exit_date": "2026-11-06",
@@ -2579,7 +1836,7 @@
      "net": -3229.72,
      "net_pct": -46.62,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -2587,12 +1844,12 @@
       "h_dip_date": "2026-11-03",
       "a_peak": 98.77,
       "a_peak_date": "2026-11-09",
-      "a_dip": -91.72,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -95.09,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 1.35,
-      "mark_pct": -91.72
+      "last_date": "2026-11-20",
+      "last_close": 0.8,
+      "mark_pct": -95.09
      },
      "charges": 57.94,
      "slippage": 218.02
@@ -2688,6 +1945,10 @@
       [
        "2026-11-19",
        1.8
+      ],
+      [
+       "2026-11-20",
+       4.0
       ]
      ],
      "exit_date": "2026-11-09",
@@ -2696,7 +1957,7 @@
      "net": -209.82,
      "net_pct": -2.7,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 76.94,
       "h_peak_date": "2026-11-02",
@@ -2707,9 +1968,9 @@
       "a_dip": -89.02,
       "a_dip_date": "2026-11-19",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 1.8,
-      "mark_pct": -89.02
+      "last_date": "2026-11-20",
+      "last_close": 4.0,
+      "mark_pct": -75.59
      },
      "charges": 65.99,
      "slippage": 314.83
@@ -2769,6 +2030,10 @@
       [
        "2026-11-19",
        0.85
+      ],
+      [
+       "2026-11-20",
+       0.65
       ]
      ],
      "exit_date": "2026-11-12",
@@ -2777,7 +2042,7 @@
      "net": -4734.88,
      "net_pct": -60.07,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -2785,12 +2050,12 @@
       "h_dip_date": "2026-11-12",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -95.96,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -96.91,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 0.85,
-      "mark_pct": -95.96
+      "last_date": "2026-11-20",
+      "last_close": 0.65,
+      "mark_pct": -96.91
      },
      "charges": 57.35,
      "slippage": 226.28
@@ -2882,6 +2147,10 @@
       [
        "2026-11-19",
        0.8
+      ],
+      [
+       "2026-11-20",
+       0.3
       ]
      ],
      "exit_date": "2026-11-13",
@@ -2890,7 +2159,7 @@
      "net": -979.65,
      "net_pct": -14.46,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 70.89,
       "h_peak_date": "2026-11-05",
@@ -2898,12 +2167,12 @@
       "h_dip_date": "2026-11-04",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -89.15,
-      "a_dip_date": "2026-11-18",
+      "a_dip": -94.58,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 0.8,
-      "mark_pct": -85.53
+      "last_date": "2026-11-20",
+      "last_close": 0.3,
+      "mark_pct": -94.58
      },
      "charges": 62.25,
      "slippage": 390.65
@@ -2963,6 +2232,10 @@
       [
        "2026-11-19",
        1.7
+      ],
+      [
+       "2026-11-20",
+       0.8
       ]
      ],
      "exit_date": "2026-11-13",
@@ -2971,7 +2244,7 @@
      "net": -6007.14,
      "net_pct": -75.63,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 3.77,
       "h_peak_date": "2026-11-09",
@@ -2979,12 +2252,12 @@
       "h_dip_date": "2026-11-13",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -96.25,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -98.24,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 1.7,
-      "mark_pct": -96.25
+      "last_date": "2026-11-20",
+      "last_close": 0.8,
+      "mark_pct": -98.24
      },
      "charges": 54.79,
      "slippage": 100.34
@@ -3068,6 +2341,10 @@
       [
        "2026-11-19",
        16.6
+      ],
+      [
+       "2026-11-20",
+       14.55
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3076,7 +2353,7 @@
      "net": -1211.99,
      "net_pct": -16.91,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 218.89,
       "h_peak_date": "2026-11-06",
@@ -3084,12 +2361,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 66.24,
       "a_peak_date": "2026-11-17",
-      "a_dip": -28.42,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -37.26,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 16.6,
-      "mark_pct": -28.42
+      "last_date": "2026-11-20",
+      "last_close": 14.55,
+      "mark_pct": -37.26
      },
      "charges": 62.23,
      "slippage": 133.15
@@ -3173,6 +2450,10 @@
       [
        "2026-11-19",
        17.0
+      ],
+      [
+       "2026-11-20",
+       11.55
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3181,7 +2462,7 @@
      "net": 1132.14,
      "net_pct": 14.69,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 238.16,
       "h_peak_date": "2026-11-06",
@@ -3189,12 +2470,12 @@
       "h_dip_date": "2026-11-02",
       "a_peak": 30.39,
       "a_peak_date": "2026-11-17",
-      "a_dip": -15.23,
-      "a_dip_date": "2026-11-18",
+      "a_dip": -28.79,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 17.0,
-      "mark_pct": 4.81
+      "last_date": "2026-11-20",
+      "last_close": 11.55,
+      "mark_pct": -28.79
      },
      "charges": 68.09,
      "slippage": 167.77
@@ -3278,6 +2559,10 @@
       [
        "2026-11-19",
        1.4
+      ],
+      [
+       "2026-11-20",
+       0.95
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3286,7 +2571,7 @@
      "net": -3721.73,
      "net_pct": -61.28,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 74.34,
       "h_peak_date": "2026-11-06",
@@ -3294,12 +2579,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -79.65,
-      "a_dip_date": "2026-11-18",
+      "a_dip": -83.19,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 1.4,
-      "mark_pct": -75.22
+      "last_date": "2026-11-20",
+      "last_close": 0.95,
+      "mark_pct": -83.19
      },
      "charges": 54.9,
      "slippage": 173.08
@@ -3363,6 +2648,10 @@
       [
        "2026-11-19",
        2.05
+      ],
+      [
+       "2026-11-20",
+       1.7
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3371,7 +2660,7 @@
      "net": -4385.58,
      "net_pct": -57.12,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 142.84,
       "h_peak_date": "2026-11-09",
@@ -3379,12 +2668,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -85.32,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -87.82,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 2.05,
-      "mark_pct": -85.32
+      "last_date": "2026-11-20",
+      "last_close": 1.7,
+      "mark_pct": -87.82
      },
      "charges": 57.52,
      "slippage": 225.06
@@ -3448,6 +2737,10 @@
       [
        "2026-11-19",
        0.45
+      ],
+      [
+       "2026-11-20",
+       0.4
       ]
      ],
      "exit_date": "2026-11-16",
@@ -3456,7 +2749,7 @@
      "net": -4755.75,
      "net_pct": -65.6,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 53.45,
       "h_peak_date": "2026-11-09",
@@ -3464,12 +2757,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -84.48,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -86.21,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 0.45,
-      "mark_pct": -84.48
+      "last_date": "2026-11-20",
+      "last_close": 0.4,
+      "mark_pct": -86.21
      },
      "charges": 55.75,
      "slippage": 200.0
@@ -3565,6 +2858,10 @@
       [
        "2026-11-19",
        8.95
+      ],
+      [
+       "2026-11-20",
+       3.7
       ]
      ],
      "exit_date": "2026-11-17",
@@ -3573,7 +2870,7 @@
      "net": -1440.36,
      "net_pct": -22.12,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 68.43,
       "h_peak_date": "2026-11-09",
@@ -3581,12 +2878,12 @@
       "h_dip_date": "2026-11-02",
       "a_peak": 8.45,
       "a_peak_date": "2026-11-18",
-      "a_dip": -14.11,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -64.49,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 8.95,
-      "mark_pct": -14.11
+      "last_date": "2026-11-20",
+      "last_close": 3.7,
+      "mark_pct": -64.49
      },
      "charges": 60.24,
      "slippage": 117.62
@@ -3630,6 +2927,10 @@
       [
        "2026-11-19",
        67.3
+      ],
+      [
+       "2026-11-20",
+       50.55
       ]
      ],
      "exit_date": "2026-11-17",
@@ -3638,7 +2939,7 @@
      "net": -2239.24,
      "net_pct": -70.95,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -3649,9 +2950,9 @@
       "a_dip": -78.61,
       "a_dip_date": "2026-11-18",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 67.3,
-      "mark_pct": 113.24
+      "last_date": "2026-11-20",
+      "last_close": 50.55,
+      "mark_pct": 60.17
      },
      "charges": 50.71,
      "slippage": 127.53
@@ -3739,6 +3040,10 @@
       [
        "2026-11-19",
        300.25
+      ],
+      [
+       "2026-11-20",
+       283.4
       ]
      ],
      "exit_date": "2026-11-18",
@@ -3747,7 +3052,7 @@
      "net": 35064.83,
      "net_pct": 449.46,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 594.82,
       "h_peak_date": "2026-11-11",
@@ -3758,9 +3063,9 @@
       "a_dip": 0.0,
       "a_dip_date": null,
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 300.25,
-      "mark_pct": 573.51
+      "last_date": "2026-11-20",
+      "last_close": 283.4,
+      "mark_pct": 535.71
      },
      "charges": 134.27,
      "slippage": 513.15
@@ -3844,6 +3149,10 @@
       [
        "2026-11-19",
        122.65
+      ],
+      [
+       "2026-11-20",
+       242.15
       ]
      ],
      "exit_date": "2026-11-18",
@@ -3852,20 +3161,20 @@
      "net": 25440.98,
      "net_pct": 328.53,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 569.74,
       "h_peak_date": "2026-11-11",
       "h_dip": -8.56,
       "h_dip_date": "2026-10-30",
-      "a_peak": 335.55,
-      "a_peak_date": "2026-11-19",
+      "a_peak": 759.91,
+      "a_peak_date": "2026-11-20",
       "a_dip": 0.0,
       "a_dip_date": null,
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 122.65,
-      "mark_pct": 335.55
+      "last_date": "2026-11-20",
+      "last_close": 242.15,
+      "mark_pct": 759.91
      },
      "charges": 115.43,
      "slippage": 414.59
@@ -3937,6 +3246,10 @@
       [
        "2026-11-19",
        2.45
+      ],
+      [
+       "2026-11-20",
+       1.35
       ]
      ],
      "exit_date": "2026-11-18",
@@ -3945,7 +3258,7 @@
      "net": -4948.17,
      "net_pct": -75.8,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 39.71,
       "h_peak_date": "2026-11-11",
@@ -3953,12 +3266,12 @@
       "h_dip_date": "2026-11-18",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -54.96,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -75.18,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 2.45,
-      "mark_pct": -54.96
+      "last_date": "2026-11-20",
+      "last_close": 1.35,
+      "mark_pct": -75.18
      },
      "charges": 53.61,
      "slippage": 166.56
@@ -4022,6 +3335,10 @@
       [
        "2026-11-19",
        8.05
+      ],
+      [
+       "2026-11-20",
+       3.0
       ]
      ],
      "exit_date": "2026-11-18",
@@ -4030,7 +3347,7 @@
      "net": -6266.23,
      "net_pct": -79.74,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 43.8,
       "h_peak_date": "2026-11-11",
@@ -4038,12 +3355,12 @@
       "h_dip_date": "2026-11-18",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -79.51,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -92.36,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 8.05,
-      "mark_pct": -79.51
+      "last_date": "2026-11-20",
+      "last_close": 3.0,
+      "mark_pct": -92.36
      },
      "charges": 54.27,
      "slippage": 193.96
@@ -4103,6 +3420,10 @@
       [
        "2026-11-19",
        154.65
+      ],
+      [
+       "2026-11-20",
+       175.55
       ]
      ],
      "exit_date": "2026-11-18",
@@ -4111,20 +3432,20 @@
      "net": -1055.56,
      "net_pct": -14.89,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 206.63,
       "h_peak_date": "2026-11-11",
       "h_dip": -11.99,
       "h_dip_date": "2026-11-18",
-      "a_peak": 336.25,
-      "a_peak_date": "2026-11-19",
+      "a_peak": 395.2,
+      "a_peak_date": "2026-11-20",
       "a_dip": 0.0,
       "a_dip_date": null,
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 154.65,
-      "mark_pct": 336.25
+      "last_date": "2026-11-20",
+      "last_close": 175.55,
+      "mark_pct": 395.2
      },
      "charges": 62.36,
      "slippage": 133.2
@@ -4216,6 +3537,10 @@
       [
        "2026-11-19",
        20.1
+      ],
+      [
+       "2026-11-20",
+       17.2
       ]
      ],
      "exit_date": "2026-11-19",
@@ -4224,20 +3549,20 @@
      "net": 5597.29,
      "net_pct": 104.56,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 449.95,
       "h_peak_date": "2026-11-12",
       "h_dip": -31.79,
       "h_dip_date": "2026-10-30",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 84.75,
+      "a_peak_date": "2026-11-20",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 20.1,
-      "mark_pct": 115.9
+      "above_exit": false,
+      "last_date": "2026-11-20",
+      "last_close": 17.2,
+      "mark_pct": 84.75
      },
      "charges": 71.75,
      "slippage": 506.46
@@ -4321,6 +3646,10 @@
       [
        "2026-11-19",
        5.53
+      ],
+      [
+       "2026-11-20",
+       5.18
       ]
      ],
      "exit_date": "2026-11-19",
@@ -4329,20 +3658,20 @@
      "net": 11483.44,
      "net_pct": 156.36,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 294.61,
       "h_peak_date": "2026-11-12",
       "h_dip": -27.45,
       "h_dip_date": "2026-10-30",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 153.92,
+      "a_peak_date": "2026-11-20",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 5.53,
-      "mark_pct": 171.08
+      "above_exit": false,
+      "last_date": "2026-11-20",
+      "last_close": 5.18,
+      "mark_pct": 153.92
      },
      "charges": 88.4,
      "slippage": 812.16
@@ -4422,6 +3751,10 @@
       [
        "2026-11-19",
        352.2
+      ],
+      [
+       "2026-11-20",
+       349.95
       ]
      ],
      "exit_date": "2026-11-19",
@@ -4430,20 +3763,20 @@
      "net": 45405.42,
      "net_pct": 680.69,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 1170.52,
       "h_peak_date": "2026-11-12",
       "h_dip": -0.61,
       "h_dip_date": "2026-11-02",
-      "a_peak": null,
-      "a_peak_date": null,
-      "a_dip": null,
+      "a_peak": 686.94,
+      "a_peak_date": "2026-11-20",
+      "a_dip": 0.0,
       "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 352.2,
-      "mark_pct": 691.99
+      "above_exit": false,
+      "last_date": "2026-11-20",
+      "last_close": 349.95,
+      "mark_pct": 686.94
      },
      "charges": 151.65,
      "slippage": 594.93
@@ -4519,6 +3852,10 @@
       [
        "2026-11-19",
        8.05
+      ],
+      [
+       "2026-11-20",
+       2.8
       ]
      ],
      "exit_date": "2026-11-19",
@@ -4527,20 +3864,20 @@
      "net": -4000.54,
      "net_pct": -65.97,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 964.4,
       "h_peak_date": "2026-11-12",
       "h_dip": -63.49,
       "h_dip_date": "2026-11-19",
-      "a_peak": null,
+      "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": null,
-      "a_dip_date": null,
-      "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 8.05,
-      "mark_pct": -63.49
+      "a_dip": -87.3,
+      "a_dip_date": "2026-11-20",
+      "above_exit": false,
+      "last_date": "2026-11-20",
+      "last_close": 2.8,
+      "mark_pct": -87.3
      },
      "charges": 54.15,
      "slippage": 82.64
@@ -4616,6 +3953,10 @@
       [
        "2026-11-19",
        90.7
+      ],
+      [
+       "2026-11-20",
+       136.2
       ]
      ],
      "exit_date": "2026-11-19",
@@ -4624,10 +3965,244 @@
      "net": 25652.45,
      "net_pct": 490.91,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 676.96,
       "h_peak_date": "2026-11-12",
+      "h_dip": 0.0,
+      "h_dip_date": null,
+      "a_peak": 812.26,
+      "a_peak_date": "2026-11-20",
+      "a_dip": 0.0,
+      "a_dip_date": null,
+      "above_exit": true,
+      "last_date": "2026-11-20",
+      "last_close": 136.2,
+      "mark_pct": 812.26
+     },
+     "charges": 110.49,
+     "slippage": 739.06
+    },
+    {
+     "arm": "A",
+     "symbol": "ATHERENERG",
+     "sector": "nifty auto",
+     "signal_date": "2026-10-27",
+     "beat": 4.13,
+     "move": 6.29,
+     "expiry": "2026-11-23",
+     "spot": 1673.92,
+     "id": "A:ATHERENERG:2026-10-28",
+     "entry_date": "2026-10-28",
+     "strike": 1800.0,
+     "strikes_walked": 6,
+     "lot": 375,
+     "contracts_day1": 2116.0,
+     "entry_price": 20.15,
+     "entry_source": "vwap",
+     "cost": 7556.25,
+     "category": "small",
+     "best": 153.3,
+     "stall": 5,
+     "fut0": 1654.6,
+     "stock0": 1650.0,
+     "path": [
+      [
+       "2026-10-28",
+       18.4
+      ],
+      [
+       "2026-10-29",
+       20.4
+      ],
+      [
+       "2026-10-30",
+       50.05
+      ],
+      [
+       "2026-11-02",
+       52.25
+      ],
+      [
+       "2026-11-03",
+       57.8
+      ],
+      [
+       "2026-11-04",
+       62.05
+      ],
+      [
+       "2026-11-05",
+       45.3
+      ],
+      [
+       "2026-11-06",
+       64.55
+      ],
+      [
+       "2026-11-09",
+       82.3
+      ],
+      [
+       "2026-11-11",
+       92.5
+      ],
+      [
+       "2026-11-12",
+       131.3
+      ],
+      [
+       "2026-11-13",
+       153.3
+      ],
+      [
+       "2026-11-16",
+       140.95
+      ],
+      [
+       "2026-11-17",
+       124.2
+      ],
+      [
+       "2026-11-18",
+       113.4
+      ],
+      [
+       "2026-11-19",
+       125.0
+      ],
+      [
+       "2026-11-20",
+       138.15
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "1_decay",
+     "exit_price": 138.1,
+     "net": 42300.89,
+     "net_pct": 559.81,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 660.79,
+      "h_peak_date": "2026-11-13",
+      "h_dip": -8.68,
+      "h_dip_date": "2026-10-28",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 138.15,
+      "mark_pct": 585.61
+     },
+     "charges": 150.05,
+     "slippage": 1780.31
+    },
+    {
+     "arm": "A",
+     "symbol": "TATACONSUM",
+     "sector": "nifty fmcg",
+     "signal_date": "2026-10-27",
+     "beat": 5.96,
+     "move": 6.78,
+     "expiry": "2026-11-23",
+     "spot": 999.99,
+     "id": "A:TATACONSUM:2026-10-28",
+     "entry_date": "2026-10-28",
+     "strike": 1020.0,
+     "strikes_walked": 2,
+     "lot": 550,
+     "contracts_day1": 1610.0,
+     "entry_price": 13.26,
+     "entry_source": "vwap",
+     "cost": 7293.0,
+     "category": "large",
+     "best": 129.0,
+     "stall": 0,
+     "fut0": 1003.8,
+     "stock0": 1000.2,
+     "path": [
+      [
+       "2026-10-28",
+       18.4
+      ],
+      [
+       "2026-10-29",
+       25.7
+      ],
+      [
+       "2026-10-30",
+       25.8
+      ],
+      [
+       "2026-11-02",
+       25.3
+      ],
+      [
+       "2026-11-03",
+       53.75
+      ],
+      [
+       "2026-11-04",
+       52.5
+      ],
+      [
+       "2026-11-05",
+       61.85
+      ],
+      [
+       "2026-11-06",
+       68.2
+      ],
+      [
+       "2026-11-09",
+       69.0
+      ],
+      [
+       "2026-11-11",
+       74.2
+      ],
+      [
+       "2026-11-12",
+       76.4
+      ],
+      [
+       "2026-11-13",
+       76.4
+      ],
+      [
+       "2026-11-16",
+       93.3
+      ],
+      [
+       "2026-11-17",
+       91.15
+      ],
+      [
+       "2026-11-18",
+       101.6
+      ],
+      [
+       "2026-11-19",
+       120.75
+      ],
+      [
+       "2026-11-20",
+       129.0
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 128.95,
+     "net": 62660.65,
+     "net_pct": 859.19,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 872.85,
+      "h_peak_date": "2026-11-20",
       "h_dip": 0.0,
       "h_dip_date": null,
       "a_peak": null,
@@ -4635,12 +4210,622 @@
       "a_dip": null,
       "a_dip_date": null,
       "above_exit": null,
-      "last_date": "2026-11-19",
-      "last_close": 90.7,
-      "mark_pct": 507.5
+      "last_date": "2026-11-20",
+      "last_close": 129.0,
+      "mark_pct": 872.85
      },
-     "charges": 110.49,
-     "slippage": 739.06
+     "charges": 186.69,
+     "slippage": 782.15
+    },
+    {
+     "arm": "A",
+     "symbol": "CHOLAFIN",
+     "sector": "nifty financial services",
+     "signal_date": "2026-10-29",
+     "beat": 2.48,
+     "move": 3.82,
+     "expiry": "2026-11-23",
+     "spot": 1604.2,
+     "id": "A:CHOLAFIN:2026-10-30",
+     "entry_date": "2026-10-30",
+     "strike": 1720.0,
+     "strikes_walked": 6,
+     "lot": 625,
+     "contracts_day1": 272.0,
+     "entry_price": 10.9,
+     "entry_source": "vwap",
+     "cost": 6812.5,
+     "category": "large",
+     "best": 157.45,
+     "stall": 0,
+     "fut0": 1595.4,
+     "stock0": 1586.0,
+     "path": [
+      [
+       "2026-10-30",
+       7.8
+      ],
+      [
+       "2026-11-02",
+       13.15
+      ],
+      [
+       "2026-11-03",
+       18.0
+      ],
+      [
+       "2026-11-04",
+       16.3
+      ],
+      [
+       "2026-11-05",
+       71.9
+      ],
+      [
+       "2026-11-06",
+       78.7
+      ],
+      [
+       "2026-11-09",
+       77.85
+      ],
+      [
+       "2026-11-11",
+       90.35
+      ],
+      [
+       "2026-11-12",
+       137.4
+      ],
+      [
+       "2026-11-13",
+       108.0
+      ],
+      [
+       "2026-11-16",
+       120.6
+      ],
+      [
+       "2026-11-17",
+       156.0
+      ],
+      [
+       "2026-11-18",
+       140.0
+      ],
+      [
+       "2026-11-19",
+       146.0
+      ],
+      [
+       "2026-11-20",
+       157.45
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 157.4,
+     "net": 90271.43,
+     "net_pct": 1325.09,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 1344.5,
+      "h_peak_date": "2026-11-20",
+      "h_dip": -28.44,
+      "h_dip_date": "2026-10-30",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 157.45,
+      "mark_pct": 1344.5
+     },
+     "charges": 239.19,
+     "slippage": 1051.88
+    },
+    {
+     "arm": "A",
+     "symbol": "UNITDSPR",
+     "sector": "nifty fmcg",
+     "signal_date": "2026-10-29",
+     "beat": 3.94,
+     "move": 5.06,
+     "expiry": "2026-11-23",
+     "spot": 1289.51,
+     "id": "A:UNITDSPR:2026-10-30",
+     "entry_date": "2026-10-30",
+     "strike": 1380.0,
+     "strikes_walked": 5,
+     "lot": 400,
+     "contracts_day1": 1323.0,
+     "entry_price": 15.97,
+     "entry_source": "vwap",
+     "cost": 6388.0,
+     "category": "mid",
+     "best": 85.65,
+     "stall": 0,
+     "fut0": 1343.7,
+     "stock0": 1333.7,
+     "path": [
+      [
+       "2026-10-30",
+       17.1
+      ],
+      [
+       "2026-11-02",
+       16.15
+      ],
+      [
+       "2026-11-03",
+       29.4
+      ],
+      [
+       "2026-11-04",
+       53.15
+      ],
+      [
+       "2026-11-05",
+       43.9
+      ],
+      [
+       "2026-11-06",
+       54.0
+      ],
+      [
+       "2026-11-09",
+       58.0
+      ],
+      [
+       "2026-11-11",
+       48.5
+      ],
+      [
+       "2026-11-12",
+       53.2
+      ],
+      [
+       "2026-11-13",
+       53.2
+      ],
+      [
+       "2026-11-16",
+       55.0
+      ],
+      [
+       "2026-11-17",
+       66.5
+      ],
+      [
+       "2026-11-18",
+       66.0
+      ],
+      [
+       "2026-11-19",
+       80.7
+      ],
+      [
+       "2026-11-20",
+       85.65
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 85.6,
+     "net": 26923.6,
+     "net_pct": 421.47,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 436.32,
+      "h_peak_date": "2026-11-20",
+      "h_dip": 0.0,
+      "h_dip_date": null,
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 85.65,
+      "mark_pct": 436.32
+     },
+     "charges": 115.84,
+     "slippage": 812.56
+    },
+    {
+     "arm": "A",
+     "symbol": "ASIANPAINT",
+     "sector": "nifty consumer durables",
+     "signal_date": "2026-10-30",
+     "beat": 2.98,
+     "move": 0.78,
+     "expiry": "2026-11-23",
+     "spot": 2319.99,
+     "id": "A:ASIANPAINT:2026-11-02",
+     "entry_date": "2026-11-02",
+     "strike": 2400.0,
+     "strikes_walked": 4,
+     "lot": 250,
+     "contracts_day1": 9980.0,
+     "entry_price": 28.43,
+     "entry_source": "vwap",
+     "cost": 7107.5,
+     "category": "large",
+     "best": 220.0,
+     "stall": 3,
+     "fut0": 2334.1,
+     "stock0": 2344.3,
+     "path": [
+      [
+       "2026-11-02",
+       24.1
+      ],
+      [
+       "2026-11-03",
+       63.6
+      ],
+      [
+       "2026-11-04",
+       63.25
+      ],
+      [
+       "2026-11-05",
+       145.3
+      ],
+      [
+       "2026-11-06",
+       155.2
+      ],
+      [
+       "2026-11-09",
+       130.2
+      ],
+      [
+       "2026-11-11",
+       153.55
+      ],
+      [
+       "2026-11-12",
+       146.3
+      ],
+      [
+       "2026-11-13",
+       150.45
+      ],
+      [
+       "2026-11-16",
+       181.6
+      ],
+      [
+       "2026-11-17",
+       220.0
+      ],
+      [
+       "2026-11-18",
+       177.15
+      ],
+      [
+       "2026-11-19",
+       198.1
+      ],
+      [
+       "2026-11-20",
+       202.3
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 202.25,
+     "net": 42730.8,
+     "net_pct": 601.21,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 673.83,
+      "h_peak_date": "2026-11-17",
+      "h_dip": -15.23,
+      "h_dip_date": "2026-11-02",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 202.3,
+      "mark_pct": 611.57
+     },
+     "charges": 147.5,
+     "slippage": 576.7
+    },
+    {
+     "arm": "A",
+     "symbol": "DELHIVERY",
+     "sector": "nifty services sector",
+     "signal_date": "2026-11-02",
+     "beat": 4.18,
+     "move": 5.89,
+     "expiry": "2026-11-23",
+     "spot": 408.75,
+     "id": "A:DELHIVERY:2026-11-03",
+     "entry_date": "2026-11-03",
+     "strike": 440.0,
+     "strikes_walked": 6,
+     "lot": 2075,
+     "contracts_day1": 731.0,
+     "entry_price": 3.53,
+     "entry_source": "vwap",
+     "cost": 7324.75,
+     "category": "small",
+     "best": 19.5,
+     "stall": 0,
+     "fut0": 414.25,
+     "stock0": 412.0,
+     "path": [
+      [
+       "2026-11-03",
+       2.85
+      ],
+      [
+       "2026-11-04",
+       3.2
+      ],
+      [
+       "2026-11-05",
+       6.0
+      ],
+      [
+       "2026-11-06",
+       5.7
+      ],
+      [
+       "2026-11-09",
+       6.45
+      ],
+      [
+       "2026-11-11",
+       7.55
+      ],
+      [
+       "2026-11-12",
+       8.9
+      ],
+      [
+       "2026-11-13",
+       6.6
+      ],
+      [
+       "2026-11-16",
+       6.7
+      ],
+      [
+       "2026-11-17",
+       18.55
+      ],
+      [
+       "2026-11-18",
+       11.65
+      ],
+      [
+       "2026-11-19",
+       18.4
+      ],
+      [
+       "2026-11-20",
+       19.5
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 19.45,
+     "net": 31475.48,
+     "net_pct": 429.71,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 452.41,
+      "h_peak_date": "2026-11-20",
+      "h_dip": -19.26,
+      "h_dip_date": "2026-11-03",
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 19.5,
+      "mark_pct": 452.41
+     },
+     "charges": 128.01,
+     "slippage": 1430.51
+    },
+    {
+     "arm": "A",
+     "symbol": "MAXHEALTH",
+     "sector": "nifty healthcare index",
+     "signal_date": "2026-11-02",
+     "beat": 2.39,
+     "move": 2.88,
+     "expiry": "2026-11-23",
+     "spot": 884.74,
+     "id": "A:MAXHEALTH:2026-11-03",
+     "entry_date": "2026-11-03",
+     "strike": 920.0,
+     "strikes_walked": 4,
+     "lot": 525,
+     "contracts_day1": 1178.0,
+     "entry_price": 14.57,
+     "entry_source": "vwap",
+     "cost": 7649.25,
+     "category": "large",
+     "best": 165.0,
+     "stall": 0,
+     "fut0": 896.7,
+     "stock0": 895.5,
+     "path": [
+      [
+       "2026-11-03",
+       15.8
+      ],
+      [
+       "2026-11-04",
+       28.2
+      ],
+      [
+       "2026-11-05",
+       31.45
+      ],
+      [
+       "2026-11-06",
+       30.6
+      ],
+      [
+       "2026-11-09",
+       20.7
+      ],
+      [
+       "2026-11-11",
+       24.4
+      ],
+      [
+       "2026-11-12",
+       35.25
+      ],
+      [
+       "2026-11-13",
+       35.85
+      ],
+      [
+       "2026-11-16",
+       88.95
+      ],
+      [
+       "2026-11-17",
+       102.45
+      ],
+      [
+       "2026-11-18",
+       99.85
+      ],
+      [
+       "2026-11-19",
+       115.45
+      ],
+      [
+       "2026-11-20",
+       165.0
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 164.95,
+     "net": 77790.06,
+     "net_pct": 1016.96,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 1032.46,
+      "h_peak_date": "2026-11-20",
+      "h_dip": 0.0,
+      "h_dip_date": null,
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 165.0,
+      "mark_pct": 1032.46
+     },
+     "charges": 216.96,
+     "slippage": 942.48
+    },
+    {
+     "arm": "A",
+     "symbol": "BHARTIARTL",
+     "sector": "nifty infrastructure",
+     "signal_date": "2026-11-06",
+     "beat": 3.6,
+     "move": 2.45,
+     "expiry": "2026-11-23",
+     "spot": 2107.11,
+     "id": "A:BHARTIARTL:2026-11-09",
+     "entry_date": "2026-11-09",
+     "strike": 2100.0,
+     "strikes_walked": 0,
+     "lot": 475,
+     "contracts_day1": 18067.0,
+     "entry_price": 13.51,
+     "entry_source": "vwap",
+     "cost": 6417.25,
+     "category": "large",
+     "best": 50.1,
+     "stall": 0,
+     "fut0": 2067.1,
+     "stock0": 2072.1,
+     "path": [
+      [
+       "2026-11-09",
+       14.75
+      ],
+      [
+       "2026-11-11",
+       23.65
+      ],
+      [
+       "2026-11-12",
+       23.2
+      ],
+      [
+       "2026-11-13",
+       29.65
+      ],
+      [
+       "2026-11-16",
+       49.75
+      ],
+      [
+       "2026-11-17",
+       44.05
+      ],
+      [
+       "2026-11-18",
+       33.95
+      ],
+      [
+       "2026-11-19",
+       39.4
+      ],
+      [
+       "2026-11-20",
+       50.1
+      ]
+     ],
+     "exit_date": "2026-11-20",
+     "exit_reason": "2_t_minus_1",
+     "exit_price": 50.05,
+     "net": 16958.85,
+     "net_pct": 264.27,
+     "excluded": "",
+     "tracking": false,
+     "stats": {
+      "h_peak": 270.84,
+      "h_peak_date": "2026-11-20",
+      "h_dip": 0.0,
+      "h_dip_date": null,
+      "a_peak": null,
+      "a_peak_date": null,
+      "a_dip": null,
+      "a_dip_date": null,
+      "above_exit": null,
+      "last_date": "2026-11-20",
+      "last_close": 50.1,
+      "mark_pct": 270.84
+     },
+     "charges": 95.74,
+     "slippage": 301.91
     }
    ],
    "refused": [
@@ -4948,6 +5133,10 @@
       [
        "2026-11-19",
        1.35
+      ],
+      [
+       "2026-11-20",
+       0.8
       ]
      ],
      "exit_date": "2026-11-06",
@@ -4956,7 +5145,7 @@
      "net": -3229.72,
      "net_pct": -46.62,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 0.0,
       "h_peak_date": null,
@@ -4964,12 +5153,12 @@
       "h_dip_date": "2026-11-03",
       "a_peak": 98.77,
       "a_peak_date": "2026-11-09",
-      "a_dip": -91.72,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -95.09,
+      "a_dip_date": "2026-11-20",
       "above_exit": true,
-      "last_date": "2026-11-19",
-      "last_close": 1.35,
-      "mark_pct": -91.72
+      "last_date": "2026-11-20",
+      "last_close": 0.8,
+      "mark_pct": -95.09
      },
      "charges": 57.94,
      "slippage": 218.02
@@ -5033,6 +5222,10 @@
       [
        "2026-11-19",
        2.05
+      ],
+      [
+       "2026-11-20",
+       1.7
       ]
      ],
      "exit_date": "2026-11-16",
@@ -5041,7 +5234,7 @@
      "net": -4385.58,
      "net_pct": -57.12,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 142.84,
       "h_peak_date": "2026-11-09",
@@ -5049,12 +5242,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -85.32,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -87.82,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 2.05,
-      "mark_pct": -85.32
+      "last_date": "2026-11-20",
+      "last_close": 1.7,
+      "mark_pct": -87.82
      },
      "charges": 57.52,
      "slippage": 225.06
@@ -5118,6 +5311,10 @@
       [
        "2026-11-19",
        0.45
+      ],
+      [
+       "2026-11-20",
+       0.4
       ]
      ],
      "exit_date": "2026-11-16",
@@ -5126,7 +5323,7 @@
      "net": -4755.75,
      "net_pct": -65.6,
      "excluded": "",
-     "tracking": true,
+     "tracking": false,
      "stats": {
       "h_peak": 53.45,
       "h_peak_date": "2026-11-09",
@@ -5134,12 +5331,12 @@
       "h_dip_date": "2026-11-16",
       "a_peak": 0.0,
       "a_peak_date": null,
-      "a_dip": -84.48,
-      "a_dip_date": "2026-11-19",
+      "a_dip": -86.21,
+      "a_dip_date": "2026-11-20",
       "above_exit": false,
-      "last_date": "2026-11-19",
-      "last_close": 0.45,
-      "mark_pct": -84.48
+      "last_date": "2026-11-20",
+      "last_close": 0.4,
+      "mark_pct": -86.21
      },
      "charges": 55.75,
      "slippage": 200.0
