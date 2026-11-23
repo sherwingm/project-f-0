@@ -816,6 +816,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -62.5
+  },
+  {
+   "at": "14:10:20",
+   "contracts": 30,
+   "on_both": 29,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "APLAPOLLO26NOV1760PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 53.6,
+   "same_best_ask_pct": 48.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -56.0
   }
  ],
  "top_gaps": [
@@ -961,13 +977,13 @@
   }
  ],
  "day": {
-  "rounds": 58,
-  "contract_quotes": 1738,
+  "rounds": 59,
+  "contract_quotes": 1767,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 50.0,
   "same_best_ask_pct": 44.8,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -35.75
+  "upstox_minus_kotak_quote_time_s_median": -37.0
  }
 }
