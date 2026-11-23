@@ -112,6 +112,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.3,
    "upstox_minus_kotak_quote_time_s_median": -12.5
+  },
+  {
+   "at": "10:00:04",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.394,
+   "same_best_bid_pct": 23.3,
+   "same_best_ask_pct": 23.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -200,6 +214,13 @@
    "at": "09:45"
   },
   {
+   "contract": "RELIANCE26NOV1370PE",
+   "gap_pct": 0.394,
+   "kotak": 12.7,
+   "upstox": 12.65,
+   "at": "10:00"
+  },
+  {
    "contract": "NHPC26NOVFUT",
    "gap_pct": 0.237,
    "kotak": 75.95,
@@ -228,6 +249,13 @@
    "at": "09:20"
   },
   {
+   "contract": "RELIANCE26NOVFUT",
+   "gap_pct": 0.029,
+   "kotak": 1364.0,
+   "upstox": 1363.6,
+   "at": "10:00"
+  },
+  {
    "contract": "MAZDOCK26NOVFUT",
    "gap_pct": 0.028,
    "kotak": 1817.6,
@@ -240,30 +268,16 @@
    "kotak": 408.3,
    "upstox": 408.2,
    "at": "09:35"
-  },
-  {
-   "contract": "M&M26NOVFUT",
-   "gap_pct": 0.003,
-   "kotak": 3504.8,
-   "upstox": 3504.9,
-   "at": "09:35"
-  },
-  {
-   "contract": "HINDZINC26NOV520CE",
-   "gap_pct": 0.0,
-   "kotak": 5.7,
-   "upstox": 5.7,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 240,
+  "rounds": 9,
+  "contract_quotes": 270,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.65,
+  "same_best_bid_pct": 23.3,
   "same_best_ask_pct": 33.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.3,
-  "upstox_minus_kotak_quote_time_s_median": -15.0
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
