@@ -1,0 +1,171 @@
+{
+ "date": "2026-11-23",
+ "rounds": [
+  {
+   "at": "09:20:00",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.136,
+   "same_best_bid_pct": 16.7,
+   "same_best_ask_pct": 13.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.0,
+   "upstox_minus_kotak_quote_time_s_median": -17.5
+  }
+ ],
+ "top_gaps": [
+  {
+   "contract": "ICICIBANK26NOV1640CE",
+   "gap_pct": 1.136,
+   "kotak": 4.4,
+   "upstox": 4.45,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICIBANK26NOVFUT",
+   "gap_pct": 0.031,
+   "kotak": 1635.2,
+   "upstox": 1634.7,
+   "at": "09:20"
+  },
+  {
+   "contract": "HINDZINC26NOV520CE",
+   "gap_pct": 0.0,
+   "kotak": 5.7,
+   "upstox": 5.7,
+   "at": "09:20"
+  },
+  {
+   "contract": "HINDZINC26NOV520PE",
+   "gap_pct": 0.0,
+   "kotak": 3.05,
+   "upstox": 3.05,
+   "at": "09:20"
+  },
+  {
+   "contract": "HINDZINC26NOVFUT",
+   "gap_pct": 0.0,
+   "kotak": 523.1,
+   "upstox": 523.1,
+   "at": "09:20"
+  },
+  {
+   "contract": "HYUNDAI26NOV2220CE",
+   "gap_pct": 0.0,
+   "kotak": 12.6,
+   "upstox": 12.6,
+   "at": "09:20"
+  },
+  {
+   "contract": "HYUNDAI26NOV2220PE",
+   "gap_pct": 0.0,
+   "kotak": 21.0,
+   "upstox": 21.0,
+   "at": "09:20"
+  },
+  {
+   "contract": "HYUNDAI26NOVFUT",
+   "gap_pct": 0.0,
+   "kotak": 2213.9,
+   "upstox": 2213.9,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICIBANK26NOV1640PE",
+   "gap_pct": 0.0,
+   "kotak": 9.35,
+   "upstox": 9.35,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICIGI26NOV1760CE",
+   "gap_pct": 0.0,
+   "kotak": 6.75,
+   "upstox": 6.75,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICIGI26NOV1760PE",
+   "gap_pct": 0.0,
+   "kotak": 103.85,
+   "upstox": 103.85,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICIGI26NOVFUT",
+   "gap_pct": 0.0,
+   "kotak": 1752.4,
+   "upstox": 1752.4,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICILIFE26NOV465CE",
+   "gap_pct": 0.0,
+   "kotak": 1.2,
+   "upstox": 1.2,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICILIFE26NOV465PE",
+   "gap_pct": 0.0,
+   "kotak": 2.4,
+   "upstox": 2.4,
+   "at": "09:20"
+  },
+  {
+   "contract": "ICICILIFE26NOVFUT",
+   "gap_pct": 0.0,
+   "kotak": 466.0,
+   "upstox": 466.0,
+   "at": "09:20"
+  },
+  {
+   "contract": "IDEA26NOV12CE",
+   "gap_pct": 0.0,
+   "kotak": 0.05,
+   "upstox": 0.05,
+   "at": "09:20"
+  },
+  {
+   "contract": "IDEA26NOV12PE",
+   "gap_pct": 0.0,
+   "kotak": 0.03,
+   "upstox": 0.03,
+   "at": "09:20"
+  },
+  {
+   "contract": "IDEA26NOVFUT",
+   "gap_pct": 0.0,
+   "kotak": 12.03,
+   "upstox": 12.03,
+   "at": "09:20"
+  },
+  {
+   "contract": "IDFCFIRSTB26NOV87CE",
+   "gap_pct": 0.0,
+   "kotak": 0.47,
+   "upstox": 0.47,
+   "at": "09:20"
+  },
+  {
+   "contract": "IDFCFIRSTB26NOV87PE",
+   "gap_pct": 0.0,
+   "kotak": 0.8,
+   "upstox": 0.8,
+   "at": "09:20"
+  }
+ ],
+ "day": {
+  "rounds": 1,
+  "contract_quotes": 30,
+  "ltp_gap_pct_median": 0.0,
+  "same_best_bid_pct": 16.7,
+  "same_best_ask_pct": 13.3,
+  "volume_ratio_median": 1.0,
+  "oi_same_pct": 90.0,
+  "upstox_minus_kotak_quote_time_s_median": -17.5
+ }
+}
