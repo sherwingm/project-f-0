@@ -492,6 +492,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -54.0
+  },
+  {
+   "at": "12:15:12",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 4.478,
+   "same_best_bid_pct": 36.7,
+   "same_best_ask_pct": 26.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.7,
+   "upstox_minus_kotak_quote_time_s_median": -26.5
   }
  ],
  "top_gaps": [
@@ -529,6 +543,13 @@
    "kotak": 45.45,
    "upstox": 43.05,
    "at": "10:30"
+  },
+  {
+   "contract": "ADANIPORTS26NOV1920CE",
+   "gap_pct": 4.478,
+   "kotak": 3.35,
+   "upstox": 3.5,
+   "at": "12:15"
   },
   {
    "contract": "TIINDIA26NOV2250CE",
@@ -627,23 +648,16 @@
    "kotak": 85.25,
    "upstox": 85.8,
    "at": "10:30"
-  },
-  {
-   "contract": "TIINDIA26NOV2250PE",
-   "gap_pct": 0.6,
-   "kotak": 25.0,
-   "upstox": 24.85,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 35,
-  "contract_quotes": 1049,
+  "rounds": 36,
+  "contract_quotes": 1079,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 43.3,
+  "same_best_bid_pct": 40.0,
   "same_best_ask_pct": 36.7,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -29.0
+  "upstox_minus_kotak_quote_time_s_median": -27.75
  }
 }
