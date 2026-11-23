@@ -154,6 +154,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.7,
    "upstox_minus_kotak_quote_time_s_median": -29.5
+  },
+  {
+   "at": "10:15:05",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 3.943,
+   "same_best_bid_pct": 23.3,
+   "same_best_ask_pct": 26.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.3,
+   "upstox_minus_kotak_quote_time_s_median": -2.0
   }
  ],
  "top_gaps": [
@@ -179,6 +193,13 @@
    "at": "09:30"
   },
   {
+   "contract": "TIINDIA26NOV2250CE",
+   "gap_pct": 3.943,
+   "kotak": 13.95,
+   "upstox": 13.4,
+   "at": "10:15"
+  },
+  {
    "contract": "KEI26NOV3800PE",
    "gap_pct": 3.244,
    "kotak": 26.2,
@@ -191,6 +212,13 @@
    "kotak": 16.5,
    "upstox": 16.9,
    "at": "09:45"
+  },
+  {
+   "contract": "TECHM26NOV1800CE",
+   "gap_pct": 2.128,
+   "kotak": 9.4,
+   "upstox": 9.6,
+   "at": "10:15"
   },
   {
    "contract": "POLICYBZR26NOV1060PE",
@@ -221,6 +249,13 @@
    "at": "09:20"
   },
   {
+   "contract": "TCS26NOV2500CE",
+   "gap_pct": 0.837,
+   "kotak": 11.95,
+   "upstox": 12.05,
+   "at": "10:15"
+  },
+  {
    "contract": "PERSISTENT26NOV6200PE",
    "gap_pct": 0.693,
    "kotak": 36.1,
@@ -240,6 +275,13 @@
    "kotak": 15.2,
    "upstox": 15.3,
    "at": "09:45"
+  },
+  {
+   "contract": "TIINDIA26NOV2250PE",
+   "gap_pct": 0.6,
+   "kotak": 25.0,
+   "upstox": 24.85,
+   "at": "10:15"
   },
   {
    "contract": "RELIANCE26NOV1370PE",
@@ -263,49 +305,21 @@
    "at": "09:25"
   },
   {
-   "contract": "MFSL26NOVFUT",
-   "gap_pct": 0.049,
-   "kotak": 1431.0,
-   "upstox": 1431.7,
-   "at": "09:40"
-  },
-  {
-   "contract": "ICICIBANK26NOVFUT",
-   "gap_pct": 0.031,
-   "kotak": 1635.2,
-   "upstox": 1634.7,
-   "at": "09:20"
-  },
-  {
-   "contract": "RELIANCE26NOVFUT",
-   "gap_pct": 0.029,
-   "kotak": 1364.0,
-   "upstox": 1363.6,
-   "at": "10:00"
-  },
-  {
-   "contract": "MAZDOCK26NOVFUT",
-   "gap_pct": 0.028,
-   "kotak": 1817.6,
-   "upstox": 1817.1,
-   "at": "09:40"
-  },
-  {
-   "contract": "LICI26NOVFUT",
-   "gap_pct": 0.024,
-   "kotak": 408.3,
-   "upstox": 408.2,
-   "at": "09:35"
+   "contract": "TECHM26NOVFUT",
+   "gap_pct": 0.05,
+   "kotak": 1798.6,
+   "upstox": 1799.5,
+   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 11,
-  "contract_quotes": 330,
+  "rounds": 12,
+  "contract_quotes": 360,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.0,
+  "same_best_bid_pct": 26.65,
   "same_best_ask_pct": 33.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.3,
-  "upstox_minus_kotak_quote_time_s_median": -17.5
+  "upstox_minus_kotak_quote_time_s_median": -15.25
  }
 }
