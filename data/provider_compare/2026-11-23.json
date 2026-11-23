@@ -98,6 +98,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.3,
    "upstox_minus_kotak_quote_time_s_median": -19.0
+  },
+  {
+   "at": "09:55:04",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.316,
+   "same_best_bid_pct": 23.3,
+   "same_best_ask_pct": 21.4,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.3,
+   "upstox_minus_kotak_quote_time_s_median": -12.5
   }
  ],
  "top_gaps": [
@@ -137,6 +151,20 @@
    "at": "09:45"
   },
   {
+   "contract": "POLICYBZR26NOV1060PE",
+   "gap_pct": 1.316,
+   "kotak": 15.2,
+   "upstox": 15.0,
+   "at": "09:55"
+  },
+  {
+   "contract": "POLICYBZR26NOV1060CE",
+   "gap_pct": 1.31,
+   "kotak": 11.45,
+   "upstox": 11.6,
+   "at": "09:55"
+  },
+  {
    "contract": "NAUKRI26NOV1200CE",
    "gap_pct": 1.22,
    "kotak": 8.2,
@@ -149,6 +177,13 @@
    "kotak": 4.4,
    "upstox": 4.45,
    "at": "09:20"
+  },
+  {
+   "contract": "PERSISTENT26NOV6200PE",
+   "gap_pct": 0.693,
+   "kotak": 36.1,
+   "upstox": 35.85,
+   "at": "09:55"
   },
   {
    "contract": "KALYANKJIL26NOV670CE",
@@ -219,37 +254,16 @@
    "kotak": 5.7,
    "upstox": 5.7,
    "at": "09:20"
-  },
-  {
-   "contract": "HINDZINC26NOV520PE",
-   "gap_pct": 0.0,
-   "kotak": 3.05,
-   "upstox": 3.05,
-   "at": "09:20"
-  },
-  {
-   "contract": "HINDZINC26NOVFUT",
-   "gap_pct": 0.0,
-   "kotak": 523.1,
-   "upstox": 523.1,
-   "at": "09:20"
-  },
-  {
-   "contract": "HYUNDAI26NOV2220CE",
-   "gap_pct": 0.0,
-   "kotak": 12.6,
-   "upstox": 12.6,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 7,
-  "contract_quotes": 210,
+  "rounds": 8,
+  "contract_quotes": 240,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 30.0,
+  "same_best_bid_pct": 26.65,
   "same_best_ask_pct": 33.3,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.3,
-  "upstox_minus_kotak_quote_time_s_median": -17.5
+  "upstox_minus_kotak_quote_time_s_median": -15.0
  }
 }
