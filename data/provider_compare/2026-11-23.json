@@ -14,6 +14,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.0,
    "upstox_minus_kotak_quote_time_s_median": -17.5
+  },
+  {
+   "at": "09:25:01",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.072,
+   "same_best_bid_pct": 30.0,
+   "same_best_ask_pct": 33.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.3,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -23,6 +37,13 @@
    "kotak": 4.4,
    "upstox": 4.45,
    "at": "09:20"
+  },
+  {
+   "contract": "INOXWIND26NOVFUT",
+   "gap_pct": 0.072,
+   "kotak": 55.38,
+   "upstox": 55.34,
+   "at": "09:25"
   },
   {
    "contract": "ICICIBANK26NOVFUT",
@@ -149,23 +170,16 @@
    "kotak": 0.47,
    "upstox": 0.47,
    "at": "09:20"
-  },
-  {
-   "contract": "IDFCFIRSTB26NOV87PE",
-   "gap_pct": 0.0,
-   "kotak": 0.8,
-   "upstox": 0.8,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 30,
+  "rounds": 2,
+  "contract_quotes": 60,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 16.7,
-  "same_best_ask_pct": 13.3,
+  "same_best_bid_pct": 23.35,
+  "same_best_ask_pct": 23.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.0,
-  "upstox_minus_kotak_quote_time_s_median": -17.5
+  "oi_same_pct": 91.65,
+  "upstox_minus_kotak_quote_time_s_median": -13.75
  }
 }
