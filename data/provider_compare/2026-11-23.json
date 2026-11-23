@@ -196,6 +196,22 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -14.0
+  },
+  {
+   "at": "10:30:07",
+   "contracts": 30,
+   "on_both": 29,
+   "missing_kotak": [],
+   "missing_upstox": [
+    "APLAPOLLO26NOV1780PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 5.281,
+   "same_best_bid_pct": 24.1,
+   "same_best_ask_pct": 27.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.6,
+   "upstox_minus_kotak_quote_time_s_median": -19.0
   }
  ],
  "top_gaps": [
@@ -219,6 +235,13 @@
    "kotak": 15.4,
    "upstox": 14.4,
    "at": "09:30"
+  },
+  {
+   "contract": "APOLLOHOSP26NOV9300CE",
+   "gap_pct": 5.281,
+   "kotak": 45.45,
+   "upstox": 43.05,
+   "at": "10:30"
   },
   {
    "contract": "TIINDIA26NOV2250CE",
@@ -305,6 +328,13 @@
    "at": "09:45"
   },
   {
+   "contract": "APOLLOHOSP26NOV9300PE",
+   "gap_pct": 0.645,
+   "kotak": 85.25,
+   "upstox": 85.8,
+   "at": "10:30"
+  },
+  {
    "contract": "TIINDIA26NOV2250PE",
    "gap_pct": 0.6,
    "kotak": 25.0,
@@ -324,30 +354,16 @@
    "kotak": 75.95,
    "upstox": 76.13,
    "at": "09:45"
-  },
-  {
-   "contract": "INOXWIND26NOVFUT",
-   "gap_pct": 0.072,
-   "kotak": 55.38,
-   "upstox": 55.34,
-   "at": "09:25"
-  },
-  {
-   "contract": "TECHM26NOVFUT",
-   "gap_pct": 0.05,
-   "kotak": 1798.6,
-   "upstox": 1799.5,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 14,
-  "contract_quotes": 420,
+  "rounds": 15,
+  "contract_quotes": 449,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 26.65,
-  "same_best_ask_pct": 30.0,
+  "same_best_bid_pct": 24.1,
+  "same_best_ask_pct": 27.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 95.0,
-  "upstox_minus_kotak_quote_time_s_median": -15.75
+  "oi_same_pct": 96.6,
+  "upstox_minus_kotak_quote_time_s_median": -17.5
  }
 }
