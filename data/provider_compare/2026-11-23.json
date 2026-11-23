@@ -408,6 +408,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -102.0
+  },
+  {
+   "at": "11:45:10",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 2.941,
+   "same_best_bid_pct": 43.3,
+   "same_best_ask_pct": 34.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.3,
+   "upstox_minus_kotak_quote_time_s_median": -31.5
   }
  ],
  "top_gaps": [
@@ -459,6 +473,13 @@
    "kotak": 26.2,
    "upstox": 27.05,
    "at": "09:30"
+  },
+  {
+   "contract": "POLICYBZR26NOV1100CE",
+   "gap_pct": 2.941,
+   "kotak": 8.5,
+   "upstox": 8.75,
+   "at": "11:45"
   },
   {
    "contract": "MUTHOOTFIN26NOV2550CE",
@@ -543,23 +564,16 @@
    "kotak": 25.0,
    "upstox": 24.85,
    "at": "10:15"
-  },
-  {
-   "contract": "RELIANCE26NOV1370PE",
-   "gap_pct": 0.394,
-   "kotak": 12.7,
-   "upstox": 12.65,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 869,
+  "rounds": 30,
+  "contract_quotes": 899,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 36.7,
-  "same_best_ask_pct": 36.7,
+  "same_best_ask_pct": 35.6,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -26.0
+  "oi_same_pct": 98.35,
+  "upstox_minus_kotak_quote_time_s_median": -27.5
  }
 }
