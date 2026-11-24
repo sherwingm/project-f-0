@@ -1,7 +1,7 @@
 {
  "recorder": {
-  "run_at": "2026-11-24T07:03:32+05:30",
-  "session": "2026-11-23",
+  "run_at": "2026-11-25T04:56:45+05:30",
+  "session": "2026-11-24",
   "expiry_check": {
    "bse_fo": {
     "checked": 4199,
@@ -14,38 +14,26 @@
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 25349.65,
-    "contracts": 204,
-    "rows": 135613,
-    "expiries": [
-     "2026-12-01",
-     "2026-12-08"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "SENSEX": {
-    "spot": 82435.99,
-    "contracts": 328,
-    "rows": 104199,
-    "expiries": [
-     "2026-11-26",
-     "2026-12-03"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    },
    "BANKNIFTY": {
-    "spot": 62585.35,
-    "contracts": 252,
-    "rows": 45402,
-    "expiries": [
-     "2026-12-29",
-     "2027-01-25"
-    ]
+    "spot": null,
+    "contracts": 0,
+    "rows": 0
    }
   },
   "failures": [],
-  "chain_eod_rows": 784,
-  "calls": 803,
-  "runtime_s": 1415.9,
-  "contracts": 784
+  "chain_eod_rows": 0,
+  "calls": 3,
+  "runtime_s": 14.6,
+  "contracts": 0
  },
  "recent_runs": [
   {
@@ -279,6 +267,14 @@
    "calls": 803,
    "runtime_s": 1415.9,
    "failures": 0
+  },
+  {
+   "run_at": "2026-11-25T04:56:45+05:30",
+   "session": "2026-11-24",
+   "contracts": 0,
+   "calls": 3,
+   "runtime_s": 14.6,
+   "failures": 0
   }
  ],
  "spot_backfill": {
@@ -397,19 +393,19 @@
  "daily_extras": {
   "spot_vix_1m": {
    "NIFTY50": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 2
    },
    "SENSEX": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 2
    },
    "INDIAVIX": {
-    "rows_added": 376,
+    "rows_added": 0,
     "runtime_s": 2,
     "vix_fix": {
      "rows_corrected": 0
@@ -419,6 +415,16 @@
   "spot_upstox_repair": {
    "skipped": "Upstox and the stored rows disagree",
    "check": [
+    {
+     "series": "NIFTY50",
+     "day": "2026-11-23",
+     "upstox_rows": 375,
+     "stored_rows": 374,
+     "matched": 374,
+     "median_rel_diff_pct": 0.0029,
+     "p99_rel_diff_pct": 0.0136,
+     "ok": true
+    },
     {
      "series": "NIFTY50",
      "day": "2026-11-22",
@@ -460,13 +466,13 @@
      "ok": true
     },
     {
-     "series": "NIFTY50",
-     "day": "2026-11-18",
+     "series": "NIFTYBANK",
+     "day": "2026-11-23",
      "upstox_rows": 375,
      "stored_rows": 374,
      "matched": 374,
-     "median_rel_diff_pct": 0.002,
-     "p99_rel_diff_pct": 0.0151,
+     "median_rel_diff_pct": 0.0041,
+     "p99_rel_diff_pct": 0.0256,
      "ok": true
     },
     {
@@ -510,13 +516,13 @@
      "ok": true
     },
     {
-     "series": "NIFTYBANK",
-     "day": "2026-11-18",
+     "series": "SENSEX",
+     "day": "2026-11-23",
      "upstox_rows": 375,
      "stored_rows": 374,
      "matched": 374,
-     "median_rel_diff_pct": 0.0026,
-     "p99_rel_diff_pct": 0.0153,
+     "median_rel_diff_pct": 0.0019,
+     "p99_rel_diff_pct": 0.0155,
      "ok": true
     },
     {
@@ -560,13 +566,13 @@
      "ok": true
     },
     {
-     "series": "SENSEX",
-     "day": "2026-11-18",
+     "series": "INDIAVIX",
+     "day": "2026-11-23",
      "upstox_rows": 375,
      "stored_rows": 374,
      "matched": 374,
-     "median_rel_diff_pct": 0.0016,
-     "p99_rel_diff_pct": 0.0164,
+     "median_rel_diff_pct": 0.0,
+     "p99_rel_diff_pct": 0.0,
      "ok": true
     },
     {
@@ -608,32 +614,22 @@
      "median_rel_diff_pct": 0.0,
      "p99_rel_diff_pct": 0.2505,
      "ok": false
-    },
-    {
-     "series": "INDIAVIX",
-     "day": "2026-11-18",
-     "upstox_rows": 375,
-     "stored_rows": 374,
-     "matched": 374,
-     "median_rel_diff_pct": 0.0,
-     "p99_rel_diff_pct": 0.0,
-     "ok": true
     }
    ]
   },
   "options_daily": {
-   "sessions": 1,
+   "sessions": 0,
    "skipped_existing": 0,
-   "unavailable": 0,
-   "rows": 7225,
+   "unavailable": 1,
+   "rows": 0,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-23",
+  "day": "2026-11-24",
   "runtime_s": 21
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-24",
+  "run_on": "2026-11-25",
   "days": {
    "2026-11-17": {
     "positions": 24,
@@ -656,6 +652,11 @@
     "option_rows": 0
    },
    "2026-11-23": {
+    "positions": 0,
+    "stock_rows": 0,
+    "option_rows": 0
+   },
+   "2026-11-24": {
     "positions": 0,
     "stock_rows": 0,
     "option_rows": 0
