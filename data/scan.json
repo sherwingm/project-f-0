@@ -10,7 +10,7 @@
    "2026-11-23"
   ],
   "as_of_label": "Mon 23 Nov 2026",
-  "generated_at_ist": "2026-11-24 07:33 IST",
+  "generated_at_ist": "2026-11-25 05:17 IST",
   "universe_size": 218,
   "stocks_with_data": 218,
   "missing_symbols": [],
@@ -20333,7 +20333,7 @@
   "fade": {
    "rules": "S1 v12 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below 0.80 x entry from 09:16 (-20 % stop); once the bid reaches 1.10 x entry a trailing stop sells at the first bid 2 % below the highest bid since; else at 15:20 the same day.",
    "session": "2026-11-25",
-   "made_at": "2026-11-24T07:32:56+05:30",
+   "made_at": "2026-11-25T05:17:08+05:30",
    "signals": [],
    "skipped": [],
    "history": [
@@ -26924,7 +26924,7 @@
    "signals": {
     "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
     "session": "2026-11-23",
-    "generated": "2026-11-24T07:32+05:30",
+    "generated": "2026-11-25T05:17+05:30",
     "signals": [],
     "note": "expiry or rollover session: the combined OI jumps, so no signals are read today",
     "history": [
@@ -27355,49 +27355,49 @@
     "capacity": 2584,
     "ban": 1799,
     "bulk_deal": 1609,
-    "rating": 1181,
+    "rating": 1183,
     "order_win": 1171,
     "analyst_view": 70
    },
    "sources": {
     "nse_ann": {
-     "last_success": "2026-11-24T07:30:09+05:30",
+     "last_success": "2026-11-25T05:14:42+05:30",
      "error": null
     },
     "bse_ann": {
-     "last_success": "2026-11-24T07:31:12+05:30",
+     "last_success": "2026-11-25T05:15:46+05:30",
      "error": null
     },
     "nse_block": {
-     "last_success": "2026-11-24T07:31:13+05:30",
+     "last_success": "2026-11-25T05:15:46+05:30",
      "error": null
     },
     "nse_bulk": {
-     "last_success": "2026-11-24T07:31:14+05:30",
+     "last_success": "2026-11-25T05:15:47+05:30",
      "error": null
     },
     "nse_ban": {
-     "last_success": "2026-11-24T07:31:21+05:30",
-     "error": null
+     "last_success": "2026-11-25T05:15:49+05:30",
+     "error": "FetchError: https://nsearchives.nseindia.com/archives/fo/sec_ban/fo_secban_26112026.csv: HTTP 404"
     },
     "nse_pit": {
-     "last_success": "2026-11-24T07:31:15+05:30",
+     "last_success": "2026-11-25T05:15:48+05:30",
      "error": null
     },
     "rss:et_markets": {
-     "last_success": "2026-11-24T07:31:17+05:30",
+     "last_success": "2026-11-25T05:15:51+05:30",
      "error": null
     },
     "nse_bm": {
-     "last_success": "2026-11-24T07:31:17+05:30",
+     "last_success": "2026-11-25T05:15:50+05:30",
      "error": null
     },
     "rss:moneycontrol": {
-     "last_success": "2026-11-24T07:31:18+05:30",
+     "last_success": "2026-11-25T05:16:54+05:30",
      "error": null
     },
     "rss:business_standard": {
-     "last_success": "2026-11-24T07:31:19+05:30",
+     "last_success": "2026-11-25T05:16:55+05:30",
      "error": null
     }
    }
@@ -37599,7 +37599,14 @@
       "source": "nse_ann"
      }
     ],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "rating",
+      "date": "2026-11-24",
+      "sessions": 1,
+      "subject": "Adani Power Limited has informed the Exchange about Credit Rating"
+     }
+    ],
     "analyst_view": [],
     "flags": {
      "rating": "upgrade"
@@ -98849,7 +98856,14 @@
    "events": {
     "today": [],
     "last_10": [],
-    "upcoming": [],
+    "upcoming": [
+     {
+      "type": "rating",
+      "date": "2026-11-24",
+      "sessions": 1,
+      "subject": "Avenue Supermarts Limited has informed the Exchange about Credit Rating"
+     }
+    ],
     "analyst_view": [],
     "flags": {}
    },
