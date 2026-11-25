@@ -2008,6 +2008,58 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -3.0
+  },
+  {
+   "at": "12:20:09",
+   "contracts": 27,
+   "on_both": 9,
+   "missing_kotak": [
+    "HINDZINC26NOV520CE",
+    "HINDZINC26NOV520PE",
+    "HYUNDAI26NOV2120CE",
+    "HYUNDAI26NOV2120PE",
+    "ICICIBANK26NOV1640CE",
+    "ICICIBANK26NOV1640PE",
+    "ICICIGI26NOV1740CE",
+    "ICICIGI26NOV1740PE",
+    "ICICILIFE26NOV480CE",
+    "ICICILIFE26NOV480PE",
+    "IDEA26NOV12CE",
+    "IDEA26NOV12PE",
+    "IDFCFIRSTB26NOV88CE",
+    "IDFCFIRSTB26NOV88PE",
+    "INDHOTEL26NOV910CE",
+    "INDHOTEL26NOV910PE",
+    "INDIANB26NOV930CE",
+    "INDIANB26NOV930PE"
+   ],
+   "missing_upstox": [
+    "HINDZINC26NOV520CE",
+    "HINDZINC26NOV520PE",
+    "HYUNDAI26NOV2120CE",
+    "HYUNDAI26NOV2120PE",
+    "ICICIBANK26NOV1640CE",
+    "ICICIBANK26NOV1640PE",
+    "ICICIGI26NOV1740CE",
+    "ICICIGI26NOV1740PE",
+    "ICICILIFE26NOV480CE",
+    "ICICILIFE26NOV480PE",
+    "IDEA26NOV12CE",
+    "IDEA26NOV12PE",
+    "IDFCFIRSTB26NOV88CE",
+    "IDFCFIRSTB26NOV88PE",
+    "INDHOTEL26NOV910CE",
+    "INDHOTEL26NOV910PE",
+    "INDIANB26NOV930CE",
+    "INDIANB26NOV930PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 77.8,
+   "same_best_ask_pct": 55.6,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -2153,13 +2205,13 @@
   }
  ],
  "day": {
-  "rounds": 36,
-  "contract_quotes": 358,
+  "rounds": 37,
+  "contract_quotes": 367,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.5
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
