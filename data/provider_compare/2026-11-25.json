@@ -2168,6 +2168,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -13.0
+  },
+  {
+   "at": "12:35:09",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "KPITTECH26NOV520CE",
+    "KPITTECH26NOV520PE",
+    "LAURUSLABS26NOV2420CE",
+    "LAURUSLABS26NOV2420PE",
+    "LICHSGFIN26NOV605CE",
+    "LICHSGFIN26NOV605PE",
+    "LICI26NOV410CE",
+    "LICI26NOV410PE",
+    "LODHA26NOV1200CE",
+    "LODHA26NOV1200PE",
+    "LT26NOV4150CE",
+    "LT26NOV4150PE",
+    "LTF26NOV285CE",
+    "LTF26NOV285PE",
+    "LTM26NOV4200CE",
+    "LTM26NOV4200PE",
+    "LUPIN26NOV2000CE",
+    "LUPIN26NOV2000PE",
+    "M&M26NOV3500CE",
+    "M&M26NOV3500PE"
+   ],
+   "missing_upstox": [
+    "KPITTECH26NOV520CE",
+    "KPITTECH26NOV520PE",
+    "LAURUSLABS26NOV2420CE",
+    "LAURUSLABS26NOV2420PE",
+    "LICHSGFIN26NOV605CE",
+    "LICHSGFIN26NOV605PE",
+    "LICI26NOV410CE",
+    "LICI26NOV410PE",
+    "LODHA26NOV1200CE",
+    "LODHA26NOV1200PE",
+    "LT26NOV4150CE",
+    "LT26NOV4150PE",
+    "LTF26NOV285CE",
+    "LTF26NOV285PE",
+    "LTM26NOV4200CE",
+    "LTM26NOV4200PE",
+    "LUPIN26NOV2000CE",
+    "LUPIN26NOV2000PE",
+    "M&M26NOV3500CE",
+    "M&M26NOV3500PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -2313,13 +2369,13 @@
   }
  ],
  "day": {
-  "rounds": 39,
-  "contract_quotes": 386,
+  "rounds": 40,
+  "contract_quotes": 396,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -10.5
  }
 }
