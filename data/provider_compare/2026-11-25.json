@@ -3284,6 +3284,58 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "14:15:15",
+   "contracts": 27,
+   "on_both": 9,
+   "missing_kotak": [
+    "INDUSTOWER26NOV380CE",
+    "INDUSTOWER26NOV380PE",
+    "INFY26NOV1120CE",
+    "INFY26NOV1120PE",
+    "INOXWIND26NOV52CE",
+    "INOXWIND26NOV52PE",
+    "IOC26NOV146CE",
+    "IOC26NOV146PE",
+    "IRFC26NOV81CE",
+    "IRFC26NOV81PE",
+    "ITC26NOV310CE",
+    "ITC26NOV310PE",
+    "JINDALSTEL26NOV1100CE",
+    "JINDALSTEL26NOV1100PE",
+    "JIOFIN26NOV222.5CE",
+    "JIOFIN26NOV222.5PE",
+    "JSWENERGY26NOV490CE",
+    "JSWENERGY26NOV490PE"
+   ],
+   "missing_upstox": [
+    "INDUSTOWER26NOV380CE",
+    "INDUSTOWER26NOV380PE",
+    "INFY26NOV1120CE",
+    "INFY26NOV1120PE",
+    "INOXWIND26NOV52CE",
+    "INOXWIND26NOV52PE",
+    "IOC26NOV146CE",
+    "IOC26NOV146PE",
+    "IRFC26NOV81CE",
+    "IRFC26NOV81PE",
+    "ITC26NOV310CE",
+    "ITC26NOV310PE",
+    "JINDALSTEL26NOV1100CE",
+    "JINDALSTEL26NOV1100PE",
+    "JIOFIN26NOV222.5CE",
+    "JIOFIN26NOV222.5PE",
+    "JSWENERGY26NOV490CE",
+    "JSWENERGY26NOV490PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 100.0,
+   "same_best_ask_pct": 77.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
@@ -3429,13 +3481,13 @@
   }
  ],
  "day": {
-  "rounds": 59,
-  "contract_quotes": 585,
+  "rounds": 60,
+  "contract_quotes": 594,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.0
+  "upstox_minus_kotak_quote_time_s_median": -12.75
  }
 }
