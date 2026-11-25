@@ -1112,6 +1112,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -24.0
+  },
+  {
+   "at": "11:00:06",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "NESTLEIND26NOV1340CE",
+    "NESTLEIND26NOV1340PE",
+    "NHPC26NOV77CE",
+    "NHPC26NOV77PE",
+    "NMDC26NOV67CE",
+    "NMDC26NOV67PE",
+    "NTPC26NOV317.5CE",
+    "NTPC26NOV317.5PE",
+    "NYKAA26NOV360CE",
+    "NYKAA26NOV360PE",
+    "OBEROIRLTY26NOV1860CE",
+    "OBEROIRLTY26NOV1860PE",
+    "OFSS26NOV9250CE",
+    "OFSS26NOV9250PE",
+    "OIL26NOV425CE",
+    "OIL26NOV425PE",
+    "ONGC26NOV224.5CE",
+    "ONGC26NOV224.5PE",
+    "PAGEIND26NOV31000CE",
+    "PAGEIND26NOV31000PE"
+   ],
+   "missing_upstox": [
+    "NESTLEIND26NOV1340CE",
+    "NESTLEIND26NOV1340PE",
+    "NHPC26NOV77CE",
+    "NHPC26NOV77PE",
+    "NMDC26NOV67CE",
+    "NMDC26NOV67PE",
+    "NTPC26NOV317.5CE",
+    "NTPC26NOV317.5PE",
+    "NYKAA26NOV360CE",
+    "NYKAA26NOV360PE",
+    "OBEROIRLTY26NOV1860CE",
+    "OBEROIRLTY26NOV1860PE",
+    "OFSS26NOV9250CE",
+    "OFSS26NOV9250PE",
+    "OIL26NOV425CE",
+    "OIL26NOV425PE",
+    "ONGC26NOV224.5CE",
+    "ONGC26NOV224.5PE",
+    "PAGEIND26NOV31000CE",
+    "PAGEIND26NOV31000PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 70.0,
+   "same_best_ask_pct": 90.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -18.5
   }
  ],
  "top_gaps": [
@@ -1257,13 +1313,13 @@
   }
  ],
  "day": {
-  "rounds": 20,
-  "contract_quotes": 198,
+  "rounds": 21,
+  "contract_quotes": 208,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -8.25
+  "upstox_minus_kotak_quote_time_s_median": -8.5
  }
 }
