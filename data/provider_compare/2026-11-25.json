@@ -2448,6 +2448,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -45.5
+  },
+  {
+   "at": "13:00:12",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "POLYCAB26NOV7400CE",
+    "POLYCAB26NOV7400PE",
+    "POWERGRID26NOV265CE",
+    "POWERGRID26NOV265PE",
+    "POWERINDIA26NOV30000CE",
+    "POWERINDIA26NOV30000PE",
+    "PREMIERENE26NOV820CE",
+    "PREMIERENE26NOV820PE",
+    "PRESTIGE26NOV1660CE",
+    "PRESTIGE26NOV1660PE",
+    "RADICO26NOV4750CE",
+    "RADICO26NOV4750PE",
+    "RBLBANK26NOV385CE",
+    "RBLBANK26NOV385PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV185CE",
+    "RVNL26NOV185PE"
+   ],
+   "missing_upstox": [
+    "POLYCAB26NOV7400CE",
+    "POLYCAB26NOV7400PE",
+    "POWERGRID26NOV265CE",
+    "POWERGRID26NOV265PE",
+    "POWERINDIA26NOV30000CE",
+    "POWERINDIA26NOV30000PE",
+    "PREMIERENE26NOV820CE",
+    "PREMIERENE26NOV820PE",
+    "PRESTIGE26NOV1660CE",
+    "PRESTIGE26NOV1660PE",
+    "RADICO26NOV4750CE",
+    "RADICO26NOV4750PE",
+    "RBLBANK26NOV385CE",
+    "RBLBANK26NOV385PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV185CE",
+    "RVNL26NOV185PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.042,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 60.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 80.0,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
@@ -2522,6 +2578,13 @@
    "at": "10:25"
   },
   {
+   "contract": "PRESTIGE26DECFUT",
+   "gap_pct": 0.042,
+   "kotak": 1679.4,
+   "upstox": 1678.7,
+   "at": "13:00"
+  },
+  {
    "contract": "BSE26DECFUT",
    "gap_pct": 0.039,
    "kotak": 3856.0,
@@ -2534,6 +2597,13 @@
    "kotak": 14106.0,
    "upstox": 14111.0,
    "at": "10:50"
+  },
+  {
+   "contract": "POWERINDIA26DECFUT",
+   "gap_pct": 0.033,
+   "kotak": 29870.0,
+   "upstox": 29880.0,
+   "at": "13:00"
   },
   {
    "contract": "APLAPOLLO26DECFUT",
@@ -2576,30 +2646,16 @@
    "kotak": 162.51,
    "upstox": 162.5,
    "at": "09:35"
-  },
-  {
-   "contract": "AUBANK26DECFUT",
-   "gap_pct": 0.005,
-   "kotak": 1010.15,
-   "upstox": 1010.1,
-   "at": "09:55"
-  },
-  {
-   "contract": "BRITANNIA26DECFUT",
-   "gap_pct": 0.002,
-   "kotak": 4947.9,
-   "upstox": 4948.0,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 44,
-  "contract_quotes": 436,
+  "rounds": 45,
+  "contract_quotes": 446,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -12.75
+  "upstox_minus_kotak_quote_time_s_median": -12.5
  }
 }
