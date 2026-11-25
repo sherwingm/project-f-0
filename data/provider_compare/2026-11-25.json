@@ -56,6 +56,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 70.0,
    "upstox_minus_kotak_quote_time_s_median": 1.0
+  },
+  {
+   "at": "09:25:00",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "RBLBANK26NOV400CE",
+    "RBLBANK26NOV400PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV190CE",
+    "RVNL26NOV190PE",
+    "SAGILITY26NOV46CE",
+    "SAGILITY26NOV46PE",
+    "SAIL26NOV162.5CE",
+    "SAIL26NOV162.5PE",
+    "SBICARD26NOV590CE",
+    "SBICARD26NOV590PE",
+    "SBILIFE26NOV1820CE",
+    "SBILIFE26NOV1820PE",
+    "SBIN26NOV1140CE",
+    "SBIN26NOV1140PE",
+    "SHREECEM26NOV25250CE",
+    "SHREECEM26NOV25250PE"
+   ],
+   "missing_upstox": [
+    "RBLBANK26NOV400CE",
+    "RBLBANK26NOV400PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV190CE",
+    "RVNL26NOV190PE",
+    "SAGILITY26NOV46CE",
+    "SAGILITY26NOV46PE",
+    "SAIL26NOV162.5CE",
+    "SAIL26NOV162.5PE",
+    "SBICARD26NOV590CE",
+    "SBICARD26NOV590PE",
+    "SBILIFE26NOV1820CE",
+    "SBILIFE26NOV1820PE",
+    "SBIN26NOV1140CE",
+    "SBIN26NOV1140PE",
+    "SHREECEM26NOV25250CE",
+    "SHREECEM26NOV25250PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 40.0,
+   "same_best_ask_pct": 60.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -4.0
   }
  ],
  "top_gaps": [
@@ -128,16 +184,86 @@
    "kotak": 4710.0,
    "upstox": 4710.0,
    "at": "09:20"
+  },
+  {
+   "contract": "RBLBANK26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 398.8,
+   "upstox": 398.8,
+   "at": "09:25"
+  },
+  {
+   "contract": "RECLTD26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 297.25,
+   "upstox": 297.25,
+   "at": "09:25"
+  },
+  {
+   "contract": "RELIANCE26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 1381.0,
+   "upstox": 1381.0,
+   "at": "09:25"
+  },
+  {
+   "contract": "RVNL26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 190.33,
+   "upstox": 190.33,
+   "at": "09:25"
+  },
+  {
+   "contract": "SAGILITY26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 46.89,
+   "upstox": 46.89,
+   "at": "09:25"
+  },
+  {
+   "contract": "SAIL26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 162.5,
+   "upstox": 162.5,
+   "at": "09:25"
+  },
+  {
+   "contract": "SBICARD26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 593.7,
+   "upstox": 593.7,
+   "at": "09:25"
+  },
+  {
+   "contract": "SBILIFE26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 1838.6,
+   "upstox": 1838.6,
+   "at": "09:25"
+  },
+  {
+   "contract": "SBIN26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 1148.9,
+   "upstox": 1148.9,
+   "at": "09:25"
+  },
+  {
+   "contract": "SHREECEM26DECFUT",
+   "gap_pct": 0.0,
+   "kotak": 25470.0,
+   "upstox": 25470.0,
+   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 1,
-  "contract_quotes": 10,
+  "rounds": 2,
+  "contract_quotes": 20,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 60.0,
-  "same_best_ask_pct": 20.0,
+  "same_best_bid_pct": 50.0,
+  "same_best_ask_pct": 40.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 70.0,
-  "upstox_minus_kotak_quote_time_s_median": 1.0
+  "oi_same_pct": 85.0,
+  "upstox_minus_kotak_quote_time_s_median": -1.5
  }
 }
