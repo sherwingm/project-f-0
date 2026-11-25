@@ -3672,6 +3672,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "14:50:17",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "POWERINDIA26NOV30000CE",
+    "POWERINDIA26NOV30000PE",
+    "PREMIERENE26NOV820CE",
+    "PREMIERENE26NOV820PE",
+    "PRESTIGE26NOV1680CE",
+    "PRESTIGE26NOV1680PE",
+    "RADICO26NOV4700CE",
+    "RADICO26NOV4700PE",
+    "RBLBANK26NOV390CE",
+    "RBLBANK26NOV390PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV185CE",
+    "RVNL26NOV185PE",
+    "SAGILITY26NOV46CE",
+    "SAGILITY26NOV46PE",
+    "SAIL26NOV162.5CE",
+    "SAIL26NOV162.5PE"
+   ],
+   "missing_upstox": [
+    "POWERINDIA26NOV30000CE",
+    "POWERINDIA26NOV30000PE",
+    "PREMIERENE26NOV820CE",
+    "PREMIERENE26NOV820PE",
+    "PRESTIGE26NOV1680CE",
+    "PRESTIGE26NOV1680PE",
+    "RADICO26NOV4700CE",
+    "RADICO26NOV4700PE",
+    "RBLBANK26NOV390CE",
+    "RBLBANK26NOV390PE",
+    "RECLTD26NOV295CE",
+    "RECLTD26NOV295PE",
+    "RELIANCE26NOV1370CE",
+    "RELIANCE26NOV1370PE",
+    "RVNL26NOV185CE",
+    "RVNL26NOV185PE",
+    "SAGILITY26NOV46CE",
+    "SAGILITY26NOV46PE",
+    "SAIL26NOV162.5CE",
+    "SAIL26NOV162.5PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.011,
+   "same_best_bid_pct": 80.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.0,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -3809,21 +3865,21 @@
    "at": "13:45"
   },
   {
-   "contract": "INFY26DECFUT",
-   "gap_pct": 0.009,
-   "kotak": 1138.7,
-   "upstox": 1138.6,
-   "at": "12:25"
+   "contract": "RADICO26DECFUT",
+   "gap_pct": 0.011,
+   "kotak": 4738.3,
+   "upstox": 4737.8,
+   "at": "14:50"
   }
  ],
  "day": {
-  "rounds": 66,
-  "contract_quotes": 654,
+  "rounds": 67,
+  "contract_quotes": 664,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.25
+  "upstox_minus_kotak_quote_time_s_median": -13.5
  }
 }
