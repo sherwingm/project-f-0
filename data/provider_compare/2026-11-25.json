@@ -560,6 +560,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "10:10:03",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "CIPLA26NOV1430CE",
+    "CIPLA26NOV1430PE",
+    "COALINDIA26NOV384.75CE",
+    "COALINDIA26NOV384.75PE",
+    "COCHINSHIP26NOV1100CE",
+    "COCHINSHIP26NOV1100PE",
+    "COFORGE26NOV2100CE",
+    "COFORGE26NOV2100PE",
+    "COLPAL26NOV1780CE",
+    "COLPAL26NOV1780PE",
+    "CONCOR26NOV435CE",
+    "CONCOR26NOV435PE",
+    "COROMANDEL26NOV1940CE",
+    "COROMANDEL26NOV1940PE",
+    "CROMPTON26NOV222.5CE",
+    "CROMPTON26NOV222.5PE",
+    "CUB26NOV240CE",
+    "CUB26NOV240PE",
+    "CUMMINSIND26NOV4050CE",
+    "CUMMINSIND26NOV4050PE"
+   ],
+   "missing_upstox": [
+    "CIPLA26NOV1430CE",
+    "CIPLA26NOV1430PE",
+    "COALINDIA26NOV384.75CE",
+    "COALINDIA26NOV384.75PE",
+    "COCHINSHIP26NOV1100CE",
+    "COCHINSHIP26NOV1100PE",
+    "COFORGE26NOV2100CE",
+    "COFORGE26NOV2100PE",
+    "COLPAL26NOV1780CE",
+    "COLPAL26NOV1780PE",
+    "CONCOR26NOV435CE",
+    "CONCOR26NOV435PE",
+    "COROMANDEL26NOV1940CE",
+    "COROMANDEL26NOV1940PE",
+    "CROMPTON26NOV222.5CE",
+    "CROMPTON26NOV222.5PE",
+    "CUB26NOV240CE",
+    "CUB26NOV240PE",
+    "CUMMINSIND26NOV4050CE",
+    "CUMMINSIND26NOV4050PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 30.0,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -8.5
   }
  ],
  "top_gaps": [
@@ -705,13 +761,13 @@
   }
  ],
  "day": {
-  "rounds": 10,
-  "contract_quotes": 100,
+  "rounds": 11,
+  "contract_quotes": 110,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 55.0,
+  "same_best_bid_pct": 50.0,
   "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -7.25
+  "upstox_minus_kotak_quote_time_s_median": -8.0
  }
 }
