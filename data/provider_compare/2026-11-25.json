@@ -2560,6 +2560,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -24.0
+  },
+  {
+   "at": "13:10:13",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "SRF26NOV2500CE",
+    "SRF26NOV2500PE",
+    "SUNPHARMA26NOV1880CE",
+    "SUNPHARMA26NOV1880PE",
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV175CE",
+    "SWIGGY26NOV175PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1170CE",
+    "TATACONSUM26NOV1170PE",
+    "TATAELXSI26NOV3850CE",
+    "TATAELXSI26NOV3850PE",
+    "TATAPOWER26NOV320CE",
+    "TATAPOWER26NOV320PE",
+    "TATASTEEL26NOV160CE",
+    "TATASTEEL26NOV160PE"
+   ],
+   "missing_upstox": [
+    "SRF26NOV2500CE",
+    "SRF26NOV2500PE",
+    "SUNPHARMA26NOV1880CE",
+    "SUNPHARMA26NOV1880PE",
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV175CE",
+    "SWIGGY26NOV175PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1170CE",
+    "TATACONSUM26NOV1170PE",
+    "TATAELXSI26NOV3850CE",
+    "TATAELXSI26NOV3850PE",
+    "TATAPOWER26NOV320CE",
+    "TATAPOWER26NOV320PE",
+    "TATASTEEL26NOV160CE",
+    "TATASTEEL26NOV160PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 60.0,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -18.0
   }
  ],
  "top_gaps": [
@@ -2705,13 +2761,13 @@
   }
  ],
  "day": {
-  "rounds": 46,
-  "contract_quotes": 456,
+  "rounds": 47,
+  "contract_quotes": 466,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -12.75
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
