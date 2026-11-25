@@ -1672,6 +1672,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -6.0
+  },
+  {
+   "at": "11:50:08",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "BANKBARODA26NOV275CE",
+    "BANKBARODA26NOV275PE",
+    "BANKINDIA26NOV160CE",
+    "BANKINDIA26NOV160PE",
+    "BDL26NOV1040CE",
+    "BDL26NOV1040PE",
+    "BEL26NOV405CE",
+    "BEL26NOV405PE",
+    "BHARATFORG26NOV1740CE",
+    "BHARATFORG26NOV1740PE",
+    "BHARTIARTL26NOV2140CE",
+    "BHARTIARTL26NOV2140PE",
+    "BHEL26NOV420CE",
+    "BHEL26NOV420PE",
+    "BIOCON26NOV365CE",
+    "BIOCON26NOV365PE",
+    "BLUESTARCO26NOV1840CE",
+    "BLUESTARCO26NOV1840PE",
+    "BOSCHLTD26NOV49000CE",
+    "BOSCHLTD26NOV49000PE"
+   ],
+   "missing_upstox": [
+    "BANKBARODA26NOV275CE",
+    "BANKBARODA26NOV275PE",
+    "BANKINDIA26NOV160CE",
+    "BANKINDIA26NOV160PE",
+    "BDL26NOV1040CE",
+    "BDL26NOV1040PE",
+    "BEL26NOV405CE",
+    "BEL26NOV405PE",
+    "BHARATFORG26NOV1740CE",
+    "BHARATFORG26NOV1740PE",
+    "BHARTIARTL26NOV2140CE",
+    "BHARTIARTL26NOV2140PE",
+    "BHEL26NOV420CE",
+    "BHEL26NOV420PE",
+    "BIOCON26NOV365CE",
+    "BIOCON26NOV365PE",
+    "BLUESTARCO26NOV1840CE",
+    "BLUESTARCO26NOV1840PE",
+    "BOSCHLTD26NOV49000CE",
+    "BOSCHLTD26NOV49000PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 90.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -13.0
   }
  ],
  "top_gaps": [
@@ -1817,13 +1873,13 @@
   }
  ],
  "day": {
-  "rounds": 30,
-  "contract_quotes": 298,
+  "rounds": 31,
+  "contract_quotes": 308,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -9.25
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
