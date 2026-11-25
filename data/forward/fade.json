@@ -1,8 +1,71 @@
 {
  "rules": "S1 v12 results-day fade, paper only: on the first full session after a results filing, strong numbers (net profit YoY > +10 %, QoQ > 0, revenue YoY > 0) -> buy a put; weak numbers (net profit YoY < -10 %, QoQ < 0) -> buy a call. 1 lot at the live ask, Rs 600-8,000, walking away from the money from the strike nearest the live price, any time 09:15-15:20. Sold at the best bid once it is at or below 0.80 x entry from 09:16 (-20 % stop); once the bid reaches 1.10 x entry a trailing stop sells at the first bid 2 % below the highest bid since; else at 15:20 the same day.",
- "session": "2026-11-25",
- "made_at": "2026-11-25T05:17:08+05:30",
- "signals": [],
+ "session": "2026-11-26",
+ "made_at": "2026-11-26T05:01:51+05:30",
+ "signals": [
+  {
+   "symbol": "ENRIN",
+   "filed": "2026-11-25",
+   "filed_time": "20:19",
+   "quarter": "2026-09-30",
+   "np_yoy": 81.5,
+   "np_qoq": 48.0,
+   "rev_yoy": 30.5,
+   "why": "net profit YoY +81.5 %, QoQ +48.0 %; revenue YoY +30.5 %",
+   "side": "PE",
+   "expiry": "2026-12-29",
+   "spot": 2970.02,
+   "strikes": [
+    2300.0,
+    2400.0,
+    2500.0,
+    2550.0,
+    2600.0,
+    2650.0,
+    2700.0,
+    2750.0,
+    2800.0,
+    2850.0,
+    2900.0,
+    2950.0,
+    3000.0,
+    3050.0,
+    3100.0,
+    3150.0,
+    3200.0,
+    3250.0,
+    3300.0,
+    3350.0,
+    3400.0,
+    3450.0,
+    3500.0,
+    3550.0,
+    3600.0
+   ],
+   "chain_from": "2026-11-25",
+   "listing": {
+    "2300": 12.5,
+    "2400": 19.0,
+    "2500": 45.0,
+    "2550": 40.35,
+    "2600": 43.2,
+    "2700": 69.9,
+    "2750": 75.0,
+    "2800": 86.3,
+    "2850": 109.1,
+    "2900": 185.0,
+    "2950": 160.45,
+    "3000": 116.0,
+    "3100": 149.65,
+    "3200": 192.0,
+    "3400": 450.0
+   },
+   "filing_day": {
+    "market_hours": false,
+    "tagged": false
+   }
+  }
+ ],
  "skipped": [],
  "history": [
   {
@@ -6585,6 +6648,7 @@
   }
  ],
  "ban": [
+  "APLAPOLLO",
   "MANAPPURAM"
  ]
 }
