@@ -168,6 +168,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.0,
    "upstox_minus_kotak_quote_time_s_median": -5.0
+  },
+  {
+   "at": "09:35:02",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "TATACONSUM26NOV1170CE",
+    "TATACONSUM26NOV1170PE",
+    "TATAELXSI26NOV3900CE",
+    "TATAELXSI26NOV3900PE",
+    "TATAPOWER26NOV330CE",
+    "TATAPOWER26NOV330PE",
+    "TATASTEEL26NOV162.5CE",
+    "TATASTEEL26NOV162.5PE",
+    "TCS26NOV2500CE",
+    "TCS26NOV2500PE",
+    "TECHM26NOV1800CE",
+    "TECHM26NOV1800PE",
+    "TIINDIA26NOV2200CE",
+    "TIINDIA26NOV2200PE",
+    "TITAN26NOV4650CE",
+    "TITAN26NOV4650PE",
+    "TMPV26NOV260CE",
+    "TMPV26NOV260PE",
+    "TORNTPHARM26NOV4800CE",
+    "TORNTPHARM26NOV4800PE"
+   ],
+   "missing_upstox": [
+    "TATACONSUM26NOV1170CE",
+    "TATACONSUM26NOV1170PE",
+    "TATAELXSI26NOV3900CE",
+    "TATAELXSI26NOV3900PE",
+    "TATAPOWER26NOV330CE",
+    "TATAPOWER26NOV330PE",
+    "TATASTEEL26NOV162.5CE",
+    "TATASTEEL26NOV162.5PE",
+    "TCS26NOV2500CE",
+    "TCS26NOV2500PE",
+    "TECHM26NOV1800CE",
+    "TECHM26NOV1800PE",
+    "TIINDIA26NOV2200CE",
+    "TIINDIA26NOV2200PE",
+    "TITAN26NOV4650CE",
+    "TITAN26NOV4650PE",
+    "TMPV26NOV260CE",
+    "TMPV26NOV260PE",
+    "TORNTPHARM26NOV4800CE",
+    "TORNTPHARM26NOV4800PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.097,
+   "same_best_bid_pct": 30.0,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -5.5
   }
  ],
  "top_gaps": [
@@ -177,6 +233,13 @@
    "kotak": 1150.9,
    "upstox": 1153.1,
    "at": "09:20"
+  },
+  {
+   "contract": "TORNTPHARM26DECFUT",
+   "gap_pct": 0.097,
+   "kotak": 4821.4,
+   "upstox": 4826.1,
+   "at": "09:35"
   },
   {
    "contract": "POLYCAB26DECFUT",
@@ -198,6 +261,13 @@
    "kotak": 1586.8,
    "upstox": 1586.6,
    "at": "09:20"
+  },
+  {
+   "contract": "TATASTEEL26DECFUT",
+   "gap_pct": 0.006,
+   "kotak": 162.51,
+   "upstox": 162.5,
+   "at": "09:35"
   },
   {
    "contract": "PNB26DECFUT",
@@ -296,30 +366,16 @@
    "kotak": 1838.6,
    "upstox": 1838.6,
    "at": "09:25"
-  },
-  {
-   "contract": "SBIN26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 1148.9,
-   "upstox": 1148.9,
-   "at": "09:25"
-  },
-  {
-   "contract": "SHREECEM26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 25470.0,
-   "upstox": 25470.0,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 30,
+  "rounds": 4,
+  "contract_quotes": 40,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 40.0,
-  "same_best_ask_pct": 20.0,
+  "same_best_bid_pct": 35.0,
+  "same_best_ask_pct": 30.0,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 90.0,
-  "upstox_minus_kotak_quote_time_s_median": -4.0
+  "oi_same_pct": 95.0,
+  "upstox_minus_kotak_quote_time_s_median": -4.5
  }
 }
