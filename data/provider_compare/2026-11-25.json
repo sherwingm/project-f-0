@@ -3784,6 +3784,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.0,
    "upstox_minus_kotak_quote_time_s_median": -9.0
+  },
+  {
+   "at": "15:00:17",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV180CE",
+    "SWIGGY26NOV180PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1180CE",
+    "TATACONSUM26NOV1180PE",
+    "TATAELXSI26NOV3800CE",
+    "TATAELXSI26NOV3800PE",
+    "TATAPOWER26NOV320CE",
+    "TATAPOWER26NOV320PE",
+    "TATASTEEL26NOV157.5CE",
+    "TATASTEEL26NOV157.5PE",
+    "TCS26NOV2500CE",
+    "TCS26NOV2500PE",
+    "TECHM26NOV1800CE",
+    "TECHM26NOV1800PE"
+   ],
+   "missing_upstox": [
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV180CE",
+    "SWIGGY26NOV180PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1180CE",
+    "TATACONSUM26NOV1180PE",
+    "TATAELXSI26NOV3800CE",
+    "TATAELXSI26NOV3800PE",
+    "TATAPOWER26NOV320CE",
+    "TATAPOWER26NOV320PE",
+    "TATASTEEL26NOV157.5CE",
+    "TATASTEEL26NOV157.5PE",
+    "TCS26NOV2500CE",
+    "TCS26NOV2500PE",
+    "TECHM26NOV1800CE",
+    "TECHM26NOV1800PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.059,
+   "same_best_bid_pct": 30.0,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -0.5
   }
  ],
  "top_gaps": [
@@ -3837,6 +3893,13 @@
    "at": "11:10"
   },
   {
+   "contract": "TATACONSUM26DECFUT",
+   "gap_pct": 0.059,
+   "kotak": 1183.2,
+   "upstox": 1183.9,
+   "at": "15:00"
+  },
+  {
    "contract": "POWERGRID26DECFUT",
    "gap_pct": 0.057,
    "kotak": 264.6,
@@ -3844,11 +3907,25 @@
    "at": "09:20"
   },
   {
+   "contract": "SUZLON26DECFUT",
+   "gap_pct": 0.055,
+   "kotak": 36.23,
+   "upstox": 36.25,
+   "at": "15:00"
+  },
+  {
    "contract": "CGPOWER26DECFUT",
    "gap_pct": 0.051,
    "kotak": 778.25,
    "upstox": 778.65,
    "at": "10:05"
+  },
+  {
+   "contract": "SUPREMEIND26DECFUT",
+   "gap_pct": 0.05,
+   "kotak": 3175.0,
+   "upstox": 3176.6,
+   "at": "15:00"
   },
   {
    "contract": "HDFCBANK26DECFUT",
@@ -3905,37 +3982,16 @@
    "kotak": 25440.0,
    "upstox": 25445.0,
    "at": "14:55"
-  },
-  {
-   "contract": "POLICYBZR26DECFUT",
-   "gap_pct": 0.018,
-   "kotak": 1130.6,
-   "upstox": 1130.8,
-   "at": "14:45"
-  },
-  {
-   "contract": "PIIND26DECFUT",
-   "gap_pct": 0.013,
-   "kotak": 1586.8,
-   "upstox": 1586.6,
-   "at": "09:20"
-  },
-  {
-   "contract": "BSE26DECFUT",
-   "gap_pct": 0.013,
-   "kotak": 3806.7,
-   "upstox": 3807.2,
-   "at": "13:45"
   }
  ],
  "day": {
-  "rounds": 68,
-  "contract_quotes": 674,
+  "rounds": 69,
+  "contract_quotes": 684,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 63.35,
+  "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.25
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
