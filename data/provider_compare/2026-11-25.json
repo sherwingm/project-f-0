@@ -1896,6 +1896,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -15.5
+  },
+  {
+   "at": "12:10:09",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "FORCEMOT26NOV20500CE",
+    "FORCEMOT26NOV20500PE",
+    "FORTIS26NOV830CE",
+    "FORTIS26NOV830PE",
+    "GAIL26NOV185CE",
+    "GAIL26NOV185PE",
+    "GLENMARK26NOV2720CE",
+    "GLENMARK26NOV2720PE",
+    "GMRAIRPORT26NOV103CE",
+    "GMRAIRPORT26NOV103PE",
+    "GODFRYPHLP26NOV1780CE",
+    "GODFRYPHLP26NOV1780PE",
+    "GODREJCP26NOV950CE",
+    "GODREJCP26NOV950PE",
+    "GODREJPROP26NOV1920CE",
+    "GODREJPROP26NOV1920PE",
+    "GRASIM26NOV3160CE",
+    "GRASIM26NOV3160PE",
+    "GVT&D26NOV4100CE",
+    "GVT&D26NOV4100PE"
+   ],
+   "missing_upstox": [
+    "FORCEMOT26NOV20500CE",
+    "FORCEMOT26NOV20500PE",
+    "FORTIS26NOV830CE",
+    "FORTIS26NOV830PE",
+    "GAIL26NOV185CE",
+    "GAIL26NOV185PE",
+    "GLENMARK26NOV2720CE",
+    "GLENMARK26NOV2720PE",
+    "GMRAIRPORT26NOV103CE",
+    "GMRAIRPORT26NOV103PE",
+    "GODFRYPHLP26NOV1780CE",
+    "GODFRYPHLP26NOV1780PE",
+    "GODREJCP26NOV950CE",
+    "GODREJCP26NOV950PE",
+    "GODREJPROP26NOV1920CE",
+    "GODREJPROP26NOV1920PE",
+    "GRASIM26NOV3160CE",
+    "GRASIM26NOV3160PE",
+    "GVT&D26NOV4100CE",
+    "GVT&D26NOV4100PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 70.0,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -20.0
   }
  ],
  "top_gaps": [
@@ -2041,13 +2097,13 @@
   }
  ],
  "day": {
-  "rounds": 34,
-  "contract_quotes": 338,
+  "rounds": 35,
+  "contract_quotes": 348,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.5
+  "upstox_minus_kotak_quote_time_s_median": -11.0
  }
 }
