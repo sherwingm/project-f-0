@@ -3176,6 +3176,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -8.0
+  },
+  {
+   "at": "14:05:15",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "HCLTECH26NOV1360CE",
+    "HCLTECH26NOV1360PE",
+    "HDFCAMC26NOV2680CE",
+    "HDFCAMC26NOV2680PE",
+    "HDFCBANK26NOV840CE",
+    "HDFCBANK26NOV840PE",
+    "HDFCLIFE26NOV600CE",
+    "HDFCLIFE26NOV600PE",
+    "HEROMOTOCO26NOV5700CE",
+    "HEROMOTOCO26NOV5700PE",
+    "HINDALCO26NOV880CE",
+    "HINDALCO26NOV880PE",
+    "HINDPETRO26NOV390CE",
+    "HINDPETRO26NOV390PE",
+    "HINDUNILVR26NOV2120CE",
+    "HINDUNILVR26NOV2120PE",
+    "HINDZINC26NOV520CE",
+    "HINDZINC26NOV520PE",
+    "HYUNDAI26NOV2100CE",
+    "HYUNDAI26NOV2100PE"
+   ],
+   "missing_upstox": [
+    "HCLTECH26NOV1360CE",
+    "HCLTECH26NOV1360PE",
+    "HDFCAMC26NOV2680CE",
+    "HDFCAMC26NOV2680PE",
+    "HDFCBANK26NOV840CE",
+    "HDFCBANK26NOV840PE",
+    "HDFCLIFE26NOV600CE",
+    "HDFCLIFE26NOV600PE",
+    "HEROMOTOCO26NOV5700CE",
+    "HEROMOTOCO26NOV5700PE",
+    "HINDALCO26NOV880CE",
+    "HINDALCO26NOV880PE",
+    "HINDPETRO26NOV390CE",
+    "HINDPETRO26NOV390PE",
+    "HINDUNILVR26NOV2120CE",
+    "HINDUNILVR26NOV2120PE",
+    "HINDZINC26NOV520CE",
+    "HINDZINC26NOV520PE",
+    "HYUNDAI26NOV2100CE",
+    "HYUNDAI26NOV2100PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 100.0,
+   "same_best_ask_pct": 100.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -5.5
   }
  ],
  "top_gaps": [
@@ -3321,13 +3377,13 @@
   }
  ],
  "day": {
-  "rounds": 57,
-  "contract_quotes": 566,
+  "rounds": 58,
+  "contract_quotes": 576,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -13.0
+  "upstox_minus_kotak_quote_time_s_median": -12.75
  }
 }
