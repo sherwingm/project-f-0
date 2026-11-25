@@ -836,6 +836,58 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 88.9,
    "upstox_minus_kotak_quote_time_s_median": -16.0
+  },
+  {
+   "at": "10:35:05",
+   "contracts": 27,
+   "on_both": 9,
+   "missing_kotak": [
+    "INDHOTEL26NOV910CE",
+    "INDHOTEL26NOV910PE",
+    "INDIANB26NOV930CE",
+    "INDIANB26NOV930PE",
+    "INDIGO26NOV5650CE",
+    "INDIGO26NOV5650PE",
+    "INDUSINDBK26NOV980CE",
+    "INDUSINDBK26NOV980PE",
+    "INDUSTOWER26NOV385CE",
+    "INDUSTOWER26NOV385PE",
+    "INFY26NOV1140CE",
+    "INFY26NOV1140PE",
+    "INOXWIND26NOV53CE",
+    "INOXWIND26NOV53PE",
+    "IOC26NOV146CE",
+    "IOC26NOV146PE",
+    "IRFC26NOV82CE",
+    "IRFC26NOV82PE"
+   ],
+   "missing_upstox": [
+    "INDHOTEL26NOV910CE",
+    "INDHOTEL26NOV910PE",
+    "INDIANB26NOV930CE",
+    "INDIANB26NOV930PE",
+    "INDIGO26NOV5650CE",
+    "INDIGO26NOV5650PE",
+    "INDUSINDBK26NOV980CE",
+    "INDUSINDBK26NOV980PE",
+    "INDUSTOWER26NOV385CE",
+    "INDUSTOWER26NOV385PE",
+    "INFY26NOV1140CE",
+    "INFY26NOV1140PE",
+    "INOXWIND26NOV53CE",
+    "INOXWIND26NOV53PE",
+    "IOC26NOV146CE",
+    "IOC26NOV146PE",
+    "IRFC26NOV82CE",
+    "IRFC26NOV82PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 100.0,
+   "same_best_ask_pct": 88.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
@@ -981,13 +1033,13 @@
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 149,
+  "rounds": 16,
+  "contract_quotes": 158,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
-  "same_best_ask_pct": 50.0,
+  "same_best_ask_pct": 55.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -8.0
+  "upstox_minus_kotak_quote_time_s_median": -7.75
  }
 }
