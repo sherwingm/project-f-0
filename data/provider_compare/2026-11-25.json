@@ -1616,6 +1616,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -26.5
+  },
+  {
+   "at": "11:45:08",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "ASIANPAINT26NOV2620CE",
+    "ASIANPAINT26NOV2620PE",
+    "ASTRAL26NOV1240CE",
+    "ASTRAL26NOV1240PE",
+    "ATHERENERG26NOV1900CE",
+    "ATHERENERG26NOV1900PE",
+    "AUBANK26NOV1020CE",
+    "AUBANK26NOV1020PE",
+    "AUROPHARMA26NOV1840CE",
+    "AUROPHARMA26NOV1840PE",
+    "AXISBANK26NOV1440CE",
+    "AXISBANK26NOV1440PE",
+    "BAJAJ-AUTO26NOV10800CE",
+    "BAJAJ-AUTO26NOV10800PE",
+    "BAJAJFINSV26NOV1980CE",
+    "BAJAJFINSV26NOV1980PE",
+    "BAJFINANCE26NOV1150CE",
+    "BAJFINANCE26NOV1150PE",
+    "BANDHANBNK26NOV172.5CE",
+    "BANDHANBNK26NOV172.5PE"
+   ],
+   "missing_upstox": [
+    "ASIANPAINT26NOV2620CE",
+    "ASIANPAINT26NOV2620PE",
+    "ASTRAL26NOV1240CE",
+    "ASTRAL26NOV1240PE",
+    "ATHERENERG26NOV1900CE",
+    "ATHERENERG26NOV1900PE",
+    "AUBANK26NOV1020CE",
+    "AUBANK26NOV1020PE",
+    "AUROPHARMA26NOV1840CE",
+    "AUROPHARMA26NOV1840PE",
+    "AXISBANK26NOV1440CE",
+    "AXISBANK26NOV1440PE",
+    "BAJAJ-AUTO26NOV10800CE",
+    "BAJAJ-AUTO26NOV10800PE",
+    "BAJAJFINSV26NOV1980CE",
+    "BAJAJFINSV26NOV1980PE",
+    "BAJFINANCE26NOV1150CE",
+    "BAJFINANCE26NOV1150PE",
+    "BANDHANBNK26NOV172.5CE",
+    "BANDHANBNK26NOV172.5PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -6.0
   }
  ],
  "top_gaps": [
@@ -1761,13 +1817,13 @@
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 288,
+  "rounds": 30,
+  "contract_quotes": 298,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -9.25
  }
 }
