@@ -1168,6 +1168,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -18.5
+  },
+  {
+   "at": "11:05:06",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "PATANJALI26NOV405CE",
+    "PATANJALI26NOV405PE",
+    "PAYTM26NOV1720CE",
+    "PAYTM26NOV1720PE",
+    "PERSISTENT26NOV6200CE",
+    "PERSISTENT26NOV6200PE",
+    "PETRONET26NOV330CE",
+    "PETRONET26NOV330PE",
+    "PFC26NOV335CE",
+    "PFC26NOV335PE",
+    "PGEL26NOV590CE",
+    "PGEL26NOV590PE",
+    "PHOENIXLTD26NOV2300CE",
+    "PHOENIXLTD26NOV2300PE",
+    "PIDILITIND26NOV1620CE",
+    "PIDILITIND26NOV1620PE",
+    "PIIND26NOV1580CE",
+    "PIIND26NOV1580PE",
+    "PNB26NOV148CE",
+    "PNB26NOV148PE"
+   ],
+   "missing_upstox": [
+    "PATANJALI26NOV405CE",
+    "PATANJALI26NOV405PE",
+    "PAYTM26NOV1720CE",
+    "PAYTM26NOV1720PE",
+    "PERSISTENT26NOV6200CE",
+    "PERSISTENT26NOV6200PE",
+    "PETRONET26NOV330CE",
+    "PETRONET26NOV330PE",
+    "PFC26NOV335CE",
+    "PFC26NOV335PE",
+    "PGEL26NOV590CE",
+    "PGEL26NOV590PE",
+    "PHOENIXLTD26NOV2300CE",
+    "PHOENIXLTD26NOV2300PE",
+    "PIDILITIND26NOV1620CE",
+    "PIDILITIND26NOV1620PE",
+    "PIIND26NOV1580CE",
+    "PIIND26NOV1580PE",
+    "PNB26NOV148CE",
+    "PNB26NOV148PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 30.0,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -14.5
   }
  ],
  "top_gaps": [
@@ -1313,13 +1369,13 @@
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 208,
+  "rounds": 22,
+  "contract_quotes": 218,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -8.5
+  "upstox_minus_kotak_quote_time_s_median": -9.25
  }
 }
