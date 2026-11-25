@@ -1336,6 +1336,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -15.0
+  },
+  {
+   "at": "11:20:06",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "SOLARINDS26NOV18250CE",
+    "SOLARINDS26NOV18250PE",
+    "SONACOMS26NOV880CE",
+    "SONACOMS26NOV880PE",
+    "SRF26NOV2540CE",
+    "SRF26NOV2540PE",
+    "SUNPHARMA26NOV1880CE",
+    "SUNPHARMA26NOV1880PE",
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV180CE",
+    "SWIGGY26NOV180PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1180CE",
+    "TATACONSUM26NOV1180PE",
+    "TATAELXSI26NOV3850CE",
+    "TATAELXSI26NOV3850PE"
+   ],
+   "missing_upstox": [
+    "SOLARINDS26NOV18250CE",
+    "SOLARINDS26NOV18250PE",
+    "SONACOMS26NOV880CE",
+    "SONACOMS26NOV880PE",
+    "SRF26NOV2540CE",
+    "SRF26NOV2540PE",
+    "SUNPHARMA26NOV1880CE",
+    "SUNPHARMA26NOV1880PE",
+    "SUPREMEIND26NOV3150CE",
+    "SUPREMEIND26NOV3150PE",
+    "SUZLON26NOV36CE",
+    "SUZLON26NOV36PE",
+    "SWIGGY26NOV180CE",
+    "SWIGGY26NOV180PE",
+    "SYRMA26NOV1440CE",
+    "SYRMA26NOV1440PE",
+    "TATACONSUM26NOV1180CE",
+    "TATACONSUM26NOV1180PE",
+    "TATAELXSI26NOV3850CE",
+    "TATAELXSI26NOV3850PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 90.0,
+   "same_best_ask_pct": 60.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -7.0
   }
  ],
  "top_gaps": [
@@ -1481,13 +1537,13 @@
   }
  ],
  "day": {
-  "rounds": 24,
-  "contract_quotes": 238,
+  "rounds": 25,
+  "contract_quotes": 248,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.5
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
