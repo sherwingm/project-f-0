@@ -2952,6 +2952,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -33.5
+  },
+  {
+   "at": "13:45:14",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "BSE26NOV3800CE",
+    "BSE26NOV3800PE",
+    "CAMS26NOV720CE",
+    "CAMS26NOV720PE",
+    "CANBK26NOV133CE",
+    "CANBK26NOV133PE",
+    "CDSL26NOV1420CE",
+    "CDSL26NOV1420PE",
+    "CGPOWER26NOV780CE",
+    "CGPOWER26NOV780PE",
+    "CHOLAFIN26NOV1860CE",
+    "CHOLAFIN26NOV1860PE",
+    "CIPLA26NOV1430CE",
+    "CIPLA26NOV1430PE",
+    "COALINDIA26NOV384.75CE",
+    "COALINDIA26NOV384.75PE",
+    "COCHINSHIP26NOV1080CE",
+    "COCHINSHIP26NOV1080PE",
+    "COFORGE26NOV2060CE",
+    "COFORGE26NOV2060PE"
+   ],
+   "missing_upstox": [
+    "BSE26NOV3800CE",
+    "BSE26NOV3800PE",
+    "CAMS26NOV720CE",
+    "CAMS26NOV720PE",
+    "CANBK26NOV133CE",
+    "CANBK26NOV133PE",
+    "CDSL26NOV1420CE",
+    "CDSL26NOV1420PE",
+    "CGPOWER26NOV780CE",
+    "CGPOWER26NOV780PE",
+    "CHOLAFIN26NOV1860CE",
+    "CHOLAFIN26NOV1860PE",
+    "CIPLA26NOV1430CE",
+    "CIPLA26NOV1430PE",
+    "COALINDIA26NOV384.75CE",
+    "COALINDIA26NOV384.75PE",
+    "COCHINSHIP26NOV1080CE",
+    "COCHINSHIP26NOV1080PE",
+    "COFORGE26NOV2060CE",
+    "COFORGE26NOV2060PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.013,
+   "same_best_bid_pct": 90.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -9.0
   }
  ],
  "top_gaps": [
@@ -3075,6 +3131,13 @@
    "at": "09:20"
   },
   {
+   "contract": "BSE26DECFUT",
+   "gap_pct": 0.013,
+   "kotak": 3806.7,
+   "upstox": 3807.2,
+   "at": "13:45"
+  },
+  {
    "contract": "INFY26DECFUT",
    "gap_pct": 0.009,
    "kotak": 1138.7,
@@ -3087,18 +3150,11 @@
    "kotak": 1322.4,
    "upstox": 1322.5,
    "at": "10:40"
-  },
-  {
-   "contract": "TATASTEEL26DECFUT",
-   "gap_pct": 0.006,
-   "kotak": 162.51,
-   "upstox": 162.5,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 53,
-  "contract_quotes": 526,
+  "rounds": 54,
+  "contract_quotes": 536,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
