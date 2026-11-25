@@ -3232,6 +3232,58 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -5.5
+  },
+  {
+   "at": "14:10:15",
+   "contracts": 27,
+   "on_both": 9,
+   "missing_kotak": [
+    "ICICIBANK26NOV1630CE",
+    "ICICIBANK26NOV1630PE",
+    "ICICIGI26NOV1740CE",
+    "ICICIGI26NOV1740PE",
+    "ICICILIFE26NOV475CE",
+    "ICICILIFE26NOV475PE",
+    "IDEA26NOV12CE",
+    "IDEA26NOV12PE",
+    "IDFCFIRSTB26NOV87CE",
+    "IDFCFIRSTB26NOV87PE",
+    "INDHOTEL26NOV900CE",
+    "INDHOTEL26NOV900PE",
+    "INDIANB26NOV920CE",
+    "INDIANB26NOV920PE",
+    "INDIGO26NOV5700CE",
+    "INDIGO26NOV5700PE",
+    "INDUSINDBK26NOV970CE",
+    "INDUSINDBK26NOV970PE"
+   ],
+   "missing_upstox": [
+    "ICICIBANK26NOV1630CE",
+    "ICICIBANK26NOV1630PE",
+    "ICICIGI26NOV1740CE",
+    "ICICIGI26NOV1740PE",
+    "ICICILIFE26NOV475CE",
+    "ICICILIFE26NOV475PE",
+    "IDEA26NOV12CE",
+    "IDEA26NOV12PE",
+    "IDFCFIRSTB26NOV87CE",
+    "IDFCFIRSTB26NOV87PE",
+    "INDHOTEL26NOV900CE",
+    "INDHOTEL26NOV900PE",
+    "INDIANB26NOV920CE",
+    "INDIANB26NOV920PE",
+    "INDIGO26NOV5700CE",
+    "INDIGO26NOV5700PE",
+    "INDUSINDBK26NOV970CE",
+    "INDUSINDBK26NOV970PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 66.7,
+   "same_best_ask_pct": 77.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -32.0
   }
  ],
  "top_gaps": [
@@ -3377,13 +3429,13 @@
   }
  ],
  "day": {
-  "rounds": 58,
-  "contract_quotes": 576,
+  "rounds": 59,
+  "contract_quotes": 585,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -12.75
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
