@@ -1840,6 +1840,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -24.5
+  },
+  {
+   "at": "12:05:08",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "DELHIVERY26NOV465CE",
+    "DELHIVERY26NOV465PE",
+    "DIVISLAB26NOV11500CE",
+    "DIVISLAB26NOV11500PE",
+    "DIXON26NOV13250CE",
+    "DIXON26NOV13250PE",
+    "DLF26NOV800CE",
+    "DLF26NOV800PE",
+    "DMART26NOV3550CE",
+    "DMART26NOV3550PE",
+    "DRREDDY26NOV1410CE",
+    "DRREDDY26NOV1410PE",
+    "EICHERMOT26NOV8300CE",
+    "EICHERMOT26NOV8300PE",
+    "ENRIN26NOV3000CE",
+    "ENRIN26NOV3000PE",
+    "ETERNAL26NOV375CE",
+    "ETERNAL26NOV375PE",
+    "FEDERALBNK26NOV360CE",
+    "FEDERALBNK26NOV360PE"
+   ],
+   "missing_upstox": [
+    "DELHIVERY26NOV465CE",
+    "DELHIVERY26NOV465PE",
+    "DIVISLAB26NOV11500CE",
+    "DIVISLAB26NOV11500PE",
+    "DIXON26NOV13250CE",
+    "DIXON26NOV13250PE",
+    "DLF26NOV800CE",
+    "DLF26NOV800PE",
+    "DMART26NOV3550CE",
+    "DMART26NOV3550PE",
+    "DRREDDY26NOV1410CE",
+    "DRREDDY26NOV1410PE",
+    "EICHERMOT26NOV8300CE",
+    "EICHERMOT26NOV8300PE",
+    "ENRIN26NOV3000CE",
+    "ENRIN26NOV3000PE",
+    "ETERNAL26NOV375CE",
+    "ETERNAL26NOV375PE",
+    "FEDERALBNK26NOV360CE",
+    "FEDERALBNK26NOV360PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 80.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -15.5
   }
  ],
  "top_gaps": [
@@ -1985,13 +2041,13 @@
   }
  ],
  "day": {
-  "rounds": 33,
-  "contract_quotes": 328,
+  "rounds": 34,
+  "contract_quotes": 338,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -10.5
  }
 }
