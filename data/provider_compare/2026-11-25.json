@@ -2728,6 +2728,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 90.0,
    "upstox_minus_kotak_quote_time_s_median": -1.0
+  },
+  {
+   "at": "13:25:13",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "360ONE26NOV1160CE",
+    "360ONE26NOV1160PE",
+    "ABB26NOV7000CE",
+    "ABB26NOV7000PE",
+    "ABCAPITAL26NOV420CE",
+    "ABCAPITAL26NOV420PE",
+    "ADANIENSOL26NOV1440CE",
+    "ADANIENSOL26NOV1440PE",
+    "ADANIENT26NOV2650CE",
+    "ADANIENT26NOV2650PE",
+    "ADANIGREEN26NOV1360CE",
+    "ADANIGREEN26NOV1360PE",
+    "ADANIPORTS26NOV1920CE",
+    "ADANIPORTS26NOV1920PE",
+    "ADANIPOWER26NOV205CE",
+    "ADANIPOWER26NOV205PE",
+    "YESBANK26NOV18CE",
+    "YESBANK26NOV18PE",
+    "ZYDUSLIFE26NOV1220CE",
+    "ZYDUSLIFE26NOV1220PE"
+   ],
+   "missing_upstox": [
+    "360ONE26NOV1160CE",
+    "360ONE26NOV1160PE",
+    "ABB26NOV7000CE",
+    "ABB26NOV7000PE",
+    "ABCAPITAL26NOV420CE",
+    "ABCAPITAL26NOV420PE",
+    "ADANIENSOL26NOV1440CE",
+    "ADANIENSOL26NOV1440PE",
+    "ADANIENT26NOV2650CE",
+    "ADANIENT26NOV2650PE",
+    "ADANIGREEN26NOV1360CE",
+    "ADANIGREEN26NOV1360PE",
+    "ADANIPORTS26NOV1920CE",
+    "ADANIPORTS26NOV1920PE",
+    "ADANIPOWER26NOV205CE",
+    "ADANIPOWER26NOV205PE",
+    "YESBANK26NOV18CE",
+    "YESBANK26NOV18PE",
+    "ZYDUSLIFE26NOV1220CE",
+    "ZYDUSLIFE26NOV1220PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 60.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -2873,13 +2929,13 @@
   }
  ],
  "day": {
-  "rounds": 49,
-  "contract_quotes": 486,
+  "rounds": 50,
+  "contract_quotes": 496,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -12.5
+  "upstox_minus_kotak_quote_time_s_median": -12.75
  }
 }
