@@ -1448,6 +1448,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -3.0
+  },
+  {
+   "at": "11:30:07",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "UJJIVANSFB26NOV61CE",
+    "UJJIVANSFB26NOV61PE",
+    "ULTRACEMCO26NOV12800CE",
+    "ULTRACEMCO26NOV12800PE",
+    "UNIONBANK26NOV212.5CE",
+    "UNIONBANK26NOV212.5PE",
+    "UNITDSPR26NOV1500CE",
+    "UNITDSPR26NOV1500PE",
+    "UNOMINDA26NOV1380CE",
+    "UNOMINDA26NOV1380PE",
+    "UPL26NOV555CE",
+    "UPL26NOV555PE",
+    "VBL26NOV435CE",
+    "VBL26NOV435PE",
+    "VEDL26NOV235CE",
+    "VEDL26NOV235PE",
+    "VMM26NOV94CE",
+    "VMM26NOV94PE",
+    "VOLTAS26NOV1240CE",
+    "VOLTAS26NOV1240PE"
+   ],
+   "missing_upstox": [
+    "UJJIVANSFB26NOV61CE",
+    "UJJIVANSFB26NOV61PE",
+    "ULTRACEMCO26NOV12800CE",
+    "ULTRACEMCO26NOV12800PE",
+    "UNIONBANK26NOV212.5CE",
+    "UNIONBANK26NOV212.5PE",
+    "UNITDSPR26NOV1500CE",
+    "UNITDSPR26NOV1500PE",
+    "UNOMINDA26NOV1380CE",
+    "UNOMINDA26NOV1380PE",
+    "UPL26NOV555CE",
+    "UPL26NOV555PE",
+    "VBL26NOV435CE",
+    "VBL26NOV435PE",
+    "VEDL26NOV235CE",
+    "VEDL26NOV235PE",
+    "VMM26NOV94CE",
+    "VMM26NOV94PE",
+    "VOLTAS26NOV1240CE",
+    "VOLTAS26NOV1240PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 40.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -10.0
   }
  ],
  "top_gaps": [
@@ -1593,13 +1649,13 @@
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 258,
+  "rounds": 27,
+  "contract_quotes": 268,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 60.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -9.25
+  "upstox_minus_kotak_quote_time_s_median": -10.0
  }
 }
