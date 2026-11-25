@@ -504,6 +504,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -24.0
+  },
+  {
+   "at": "10:05:03",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "BLUESTARCO26NOV1820CE",
+    "BLUESTARCO26NOV1820PE",
+    "BOSCHLTD26NOV49000CE",
+    "BOSCHLTD26NOV49000PE",
+    "BPCL26NOV310CE",
+    "BPCL26NOV310PE",
+    "BRITANNIA26NOV4900CE",
+    "BRITANNIA26NOV4900PE",
+    "BSE26NOV3800CE",
+    "BSE26NOV3800PE",
+    "CAMS26NOV710CE",
+    "CAMS26NOV710PE",
+    "CANBK26NOV133CE",
+    "CANBK26NOV133PE",
+    "CDSL26NOV1400CE",
+    "CDSL26NOV1400PE",
+    "CGPOWER26NOV770CE",
+    "CGPOWER26NOV770PE",
+    "CHOLAFIN26NOV1880CE",
+    "CHOLAFIN26NOV1880PE"
+   ],
+   "missing_upstox": [
+    "BLUESTARCO26NOV1820CE",
+    "BLUESTARCO26NOV1820PE",
+    "BOSCHLTD26NOV49000CE",
+    "BOSCHLTD26NOV49000PE",
+    "BPCL26NOV310CE",
+    "BPCL26NOV310PE",
+    "BRITANNIA26NOV4900CE",
+    "BRITANNIA26NOV4900PE",
+    "BSE26NOV3800CE",
+    "BSE26NOV3800PE",
+    "CAMS26NOV710CE",
+    "CAMS26NOV710PE",
+    "CANBK26NOV133CE",
+    "CANBK26NOV133PE",
+    "CDSL26NOV1400CE",
+    "CDSL26NOV1400PE",
+    "CGPOWER26NOV770CE",
+    "CGPOWER26NOV770PE",
+    "CHOLAFIN26NOV1880CE",
+    "CHOLAFIN26NOV1880PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.051,
+   "same_best_bid_pct": 50.0,
+   "same_best_ask_pct": 30.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -8.0
   }
  ],
  "top_gaps": [
@@ -536,6 +592,13 @@
    "at": "09:20"
   },
   {
+   "contract": "CGPOWER26DECFUT",
+   "gap_pct": 0.051,
+   "kotak": 778.25,
+   "upstox": 778.65,
+   "at": "10:05"
+  },
+  {
    "contract": "APLAPOLLO26DECFUT",
    "gap_pct": 0.027,
    "kotak": 1470.9,
@@ -562,6 +625,13 @@
    "kotak": 1010.15,
    "upstox": 1010.1,
    "at": "09:55"
+  },
+  {
+   "contract": "BRITANNIA26DECFUT",
+   "gap_pct": 0.002,
+   "kotak": 4947.9,
+   "upstox": 4948.0,
+   "at": "10:05"
   },
   {
    "contract": "PNB26DECFUT",
@@ -632,30 +702,16 @@
    "kotak": 190.33,
    "upstox": 190.33,
    "at": "09:25"
-  },
-  {
-   "contract": "SAGILITY26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 46.89,
-   "upstox": 46.89,
-   "at": "09:25"
-  },
-  {
-   "contract": "SAIL26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 162.5,
-   "upstox": 162.5,
-   "at": "09:25"
   }
  ],
  "day": {
-  "rounds": 9,
-  "contract_quotes": 90,
+  "rounds": 10,
+  "contract_quotes": 100,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 60.0,
+  "same_best_bid_pct": 55.0,
   "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -6.5
+  "upstox_minus_kotak_quote_time_s_median": -7.25
  }
 }
