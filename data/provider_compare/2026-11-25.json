@@ -3336,6 +3336,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -7.0
+  },
+  {
+   "at": "14:20:16",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "JSWSTEEL26NOV1290CE",
+    "JSWSTEEL26NOV1290PE",
+    "JUBLFOOD26NOV430CE",
+    "JUBLFOOD26NOV430PE",
+    "KALYANKJIL26NOV630CE",
+    "KALYANKJIL26NOV630PE",
+    "KARURVYSYA26NOV380CE",
+    "KARURVYSYA26NOV380PE",
+    "KAYNES26NOV2700CE",
+    "KAYNES26NOV2700PE",
+    "KEI26NOV3700CE",
+    "KEI26NOV3700PE",
+    "KFINTECH26NOV940CE",
+    "KFINTECH26NOV940PE",
+    "KOTAKBANK26NOV510CE",
+    "KOTAKBANK26NOV510PE",
+    "KPITTECH26NOV520CE",
+    "KPITTECH26NOV520PE",
+    "LAURUSLABS26NOV2440CE",
+    "LAURUSLABS26NOV2440PE"
+   ],
+   "missing_upstox": [
+    "JSWSTEEL26NOV1290CE",
+    "JSWSTEEL26NOV1290PE",
+    "JUBLFOOD26NOV430CE",
+    "JUBLFOOD26NOV430PE",
+    "KALYANKJIL26NOV630CE",
+    "KALYANKJIL26NOV630PE",
+    "KARURVYSYA26NOV380CE",
+    "KARURVYSYA26NOV380PE",
+    "KAYNES26NOV2700CE",
+    "KAYNES26NOV2700PE",
+    "KEI26NOV3700CE",
+    "KEI26NOV3700PE",
+    "KFINTECH26NOV940CE",
+    "KFINTECH26NOV940PE",
+    "KOTAKBANK26NOV510CE",
+    "KOTAKBANK26NOV510PE",
+    "KPITTECH26NOV520CE",
+    "KPITTECH26NOV520PE",
+    "LAURUSLABS26NOV2440CE",
+    "LAURUSLABS26NOV2440PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 70.0,
+   "same_best_ask_pct": 70.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -14.0
   }
  ],
  "top_gaps": [
@@ -3481,13 +3537,13 @@
   }
  ],
  "day": {
-  "rounds": 60,
-  "contract_quotes": 594,
+  "rounds": 61,
+  "contract_quotes": 604,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 60.0,
   "same_best_ask_pct": 70.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -12.75
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
