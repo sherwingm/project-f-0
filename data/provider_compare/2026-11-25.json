@@ -448,6 +448,62 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -11.0
+  },
+  {
+   "at": "10:00:03",
+   "contracts": 30,
+   "on_both": 10,
+   "missing_kotak": [
+    "BAJFINANCE26NOV1120CE",
+    "BAJFINANCE26NOV1120PE",
+    "BANDHANBNK26NOV172.5CE",
+    "BANDHANBNK26NOV172.5PE",
+    "BANKBARODA26NOV277.5CE",
+    "BANKBARODA26NOV277.5PE",
+    "BANKINDIA26NOV160CE",
+    "BANKINDIA26NOV160PE",
+    "BDL26NOV1020CE",
+    "BDL26NOV1020PE",
+    "BEL26NOV395CE",
+    "BEL26NOV395PE",
+    "BHARATFORG26NOV1720CE",
+    "BHARATFORG26NOV1720PE",
+    "BHARTIARTL26NOV2140CE",
+    "BHARTIARTL26NOV2140PE",
+    "BHEL26NOV410CE",
+    "BHEL26NOV410PE",
+    "BIOCON26NOV360CE",
+    "BIOCON26NOV360PE"
+   ],
+   "missing_upstox": [
+    "BAJFINANCE26NOV1120CE",
+    "BAJFINANCE26NOV1120PE",
+    "BANDHANBNK26NOV172.5CE",
+    "BANDHANBNK26NOV172.5PE",
+    "BANKBARODA26NOV277.5CE",
+    "BANKBARODA26NOV277.5PE",
+    "BANKINDIA26NOV160CE",
+    "BANKINDIA26NOV160PE",
+    "BDL26NOV1020CE",
+    "BDL26NOV1020PE",
+    "BEL26NOV395CE",
+    "BEL26NOV395PE",
+    "BHARATFORG26NOV1720CE",
+    "BHARATFORG26NOV1720PE",
+    "BHARTIARTL26NOV2140CE",
+    "BHARTIARTL26NOV2140PE",
+    "BHEL26NOV410CE",
+    "BHEL26NOV410PE",
+    "BIOCON26NOV360CE",
+    "BIOCON26NOV360PE"
+   ],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.0,
+   "same_best_bid_pct": 70.0,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -24.0
   }
  ],
  "top_gaps": [
@@ -593,13 +649,13 @@
   }
  ],
  "day": {
-  "rounds": 8,
-  "contract_quotes": 80,
+  "rounds": 9,
+  "contract_quotes": 90,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 55.0,
-  "same_best_ask_pct": 55.0,
+  "same_best_bid_pct": 60.0,
+  "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -6.0
+  "upstox_minus_kotak_quote_time_s_median": -6.5
  }
 }
