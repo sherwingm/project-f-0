@@ -1,40 +1,40 @@
 {
  "recorder": {
-  "run_at": "2026-11-26T04:30:44+05:30",
-  "session": "2026-11-25",
+  "run_at": "2026-11-27T04:24:21+05:30",
+  "session": "2026-11-26",
   "expiry_check": {
    "bse_fo": {
     "checked": 4199,
     "mismatch": 0
    },
    "nse_fo": {
-    "checked": 9616,
+    "checked": 9694,
     "mismatch": 0
    }
   },
   "underlyings": {
    "NIFTY": {
-    "spot": 25819.25,
+    "spot": 25884.5,
     "contracts": 208,
-    "rows": 69431,
+    "rows": 60224,
     "expiries": [
      "2026-12-01",
      "2026-12-08"
     ]
    },
    "SENSEX": {
-    "spot": 83938.28,
+    "spot": 84328.59,
     "contracts": 336,
-    "rows": 99031,
+    "rows": 105582,
     "expiries": [
      "2026-11-26",
      "2026-12-03"
     ]
    },
    "BANKNIFTY": {
-    "spot": 63703.25,
-    "contracts": 252,
-    "rows": 36261,
+    "spot": 63535.3,
+    "contracts": 256,
+    "rows": 31463,
     "expiries": [
      "2026-12-29",
      "2027-01-25"
@@ -42,20 +42,12 @@
    }
   },
   "failures": [],
-  "chain_eod_rows": 796,
-  "calls": 843,
-  "runtime_s": 1501.2,
-  "contracts": 796
+  "chain_eod_rows": 800,
+  "calls": 827,
+  "runtime_s": 1432.6,
+  "contracts": 800
  },
  "recent_runs": [
-  {
-   "run_at": "2026-10-18T22:40:50+05:30",
-   "session": "2026-10-16",
-   "contracts": 712,
-   "calls": 736,
-   "runtime_s": 1269.8,
-   "failures": 0
-  },
   {
    "run_at": "2026-10-20T02:40:02+05:30",
    "session": "2026-10-20",
@@ -287,6 +279,14 @@
    "calls": 843,
    "runtime_s": 1501.2,
    "failures": 0
+  },
+  {
+   "run_at": "2026-11-27T04:24:21+05:30",
+   "session": "2026-11-26",
+   "contracts": 800,
+   "calls": 827,
+   "runtime_s": 1432.6,
+   "failures": 0
   }
  ],
  "spot_backfill": {
@@ -409,7 +409,7 @@
     "runtime_s": 1
    },
    "NIFTYBANK": {
-    "rows_added": 361,
+    "rows_added": 376,
     "runtime_s": 2
    },
    "SENSEX": {
@@ -427,30 +427,30 @@
   "spot_upstox_repair": {
    "NIFTY50": {
     "bar_0915_replaced": 16,
-    "bar_0915_changed": 2,
-    "minutes_added": 14,
+    "bar_0915_changed": 0,
+    "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
-    "days_kept_no_upstox": 0
+    "days_kept_no_upstox": 1
    },
    "NIFTYBANK": {
-    "bar_0915_replaced": 16,
-    "bar_0915_changed": 2,
-    "minutes_added": 14,
+    "bar_0915_replaced": 17,
+    "bar_0915_changed": 1,
+    "minutes_added": 0,
     "days_added": 0,
     "days_dropped": 0,
     "days_kept_no_upstox": 0
    },
    "SENSEX": {
-    "bar_0915_replaced": 16,
-    "bar_0915_changed": 2,
+    "bar_0915_replaced": 17,
+    "bar_0915_changed": 0,
     "minutes_added": 13,
     "days_added": 0,
     "days_dropped": 0,
     "days_kept_no_upstox": 0
    },
    "INDIAVIX": {
-    "bar_0915_replaced": 16,
+    "bar_0915_replaced": 17,
     "bar_0915_changed": 0,
     "minutes_added": 0,
     "days_added": 0,
@@ -462,21 +462,16 @@
    "sessions": 1,
    "skipped_existing": 0,
    "unavailable": 0,
-   "rows": 6377,
+   "rows": 6401,
    "errors": [],
    "runtime_s": 1
   },
-  "day": "2026-11-25",
-  "runtime_s": 25
+  "day": "2026-11-26",
+  "runtime_s": 85
  },
  "s1_trades_1m": {
-  "run_on": "2026-11-26",
+  "run_on": "2026-11-27",
   "days": {
-   "2026-11-18": {
-    "positions": 22,
-    "stock_rows": 5054,
-    "option_rows": 0
-   },
    "2026-11-19": {
     "positions": 13,
     "stock_rows": 2888,
@@ -501,28 +496,14 @@
     "positions": 0,
     "stock_rows": 0,
     "option_rows": 0
+   },
+   "2026-11-26": {
+    "positions": 1,
+    "stock_rows": 361,
+    "option_rows": 193
    }
   },
   "missing_tokens": [
-   "LT26NOV3900CE",
-   "GAIL26NOV182.5CE",
-   "MARICO26NOV910CE",
-   "MARICO26NOV930CE",
-   "BSE26NOV4000CE",
-   "M&M26NOV3400CE",
-   "M&M26NOV3350CE",
-   "AMBER26NOV6500CE",
-   "BANDHANBNK26NOV170CE",
-   "PHOENIXLTD26NOV2200CE",
-   "ATHERENERG26NOV1860CE",
-   "TATACONSUM26NOV1030CE",
-   "TATACONSUM26NOV1020CE",
-   "UNITDSPR26NOV1380CE",
-   "DELHIVERY26NOV440CE",
-   "MAXHEALTH26NOV910CE",
-   "MAXHEALTH26NOV920CE",
-   "BHARTIARTL26NOV2120CE",
-   "BHARTIARTL26NOV2100CE",
    "BANDHANBNK26NOV170CE",
    "PHOENIXLTD26NOV2200CE",
    "ATHERENERG26NOV1860CE",
@@ -544,6 +525,6 @@
    "BHARTIARTL26NOV2120CE",
    "BHARTIARTL26NOV2100CE"
   ],
-  "calls": 28
+  "calls": 16
  }
 }
