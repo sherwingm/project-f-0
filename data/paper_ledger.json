@@ -35570,7 +35570,7 @@
     },
     "last": {
      "price": 31.75,
-     "at": "2026-11-26T15:19:50+05:30"
+     "at": "2026-11-26T15:20:06+05:30"
     },
     "peak_bid": {
      "price": 33.75,
@@ -35638,12 +35638,21 @@
      "level": 33.761
     },
     "shadow_v10": {
-     "status": "pending",
-     "stopped_at": "2026-11-26T12:36:59+05:30"
+     "status": "done",
+     "stopped_at": "2026-11-26T12:36:59+05:30",
+     "fill": 30.9,
+     "net": 115.04,
+     "at": "2026-11-26T15:20:06+05:30",
+     "late": false
     },
     "shadow_v11": {
-     "status": "tracking",
-     "since": "2026-11-26T12:36:59+05:30"
+     "status": "done",
+     "since": "2026-11-26T12:36:59+05:30",
+     "fill": 30.9,
+     "net": 115.04,
+     "why": "15:20",
+     "at": "2026-11-26T15:20:06+05:30",
+     "late": false
     },
     "shadow_trail": {
      "status": "done",
@@ -36044,7 +36053,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-26T15:19:50+05:30",
+ "saved_at": "2026-11-26T15:20:06+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -36143,7 +36152,7 @@
    "2026-11-12:KALYANKJIL": "refused",
    "2026-11-16:AMBER": "bought"
   },
-  "exits_checked": "2026-11-25",
+  "exits_checked": "2026-11-26",
   "refused": [
    {
     "date": "2026-10-14",
