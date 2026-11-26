@@ -574,6 +574,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.7,
    "upstox_minus_kotak_quote_time_s_median": -44.0
+  },
+  {
+   "at": "12:45:09",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.552,
+   "same_best_bid_pct": 36.7,
+   "same_best_ask_pct": 60.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.7,
+   "upstox_minus_kotak_quote_time_s_median": -31.5
   }
  ],
  "top_gaps": [
@@ -639,6 +653,13 @@
    "kotak": 61.0,
    "upstox": 61.4,
    "at": "09:30"
+  },
+  {
+   "contract": "TMPV26DEC260PE",
+   "gap_pct": 0.552,
+   "kotak": 9.05,
+   "upstox": 9.1,
+   "at": "12:45"
   },
   {
    "contract": "JIOFIN26DEC225PE",
@@ -709,23 +730,16 @@
    "kotak": 1767.5,
    "upstox": 1767.0,
    "at": "10:35"
-  },
-  {
-   "contract": "HINDALCO26DECFUT",
-   "gap_pct": 0.027,
-   "kotak": 921.05,
-   "upstox": 921.3,
-   "at": "11:50"
   }
  ],
  "day": {
-  "rounds": 41,
-  "contract_quotes": 1270,
+  "rounds": 42,
+  "contract_quotes": 1300,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 48.4,
   "same_best_ask_pct": 45.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -36.0
+  "upstox_minus_kotak_quote_time_s_median": -35.5
  }
 }
