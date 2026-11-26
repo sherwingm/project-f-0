@@ -406,6 +406,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -49.0
+  },
+  {
+   "at": "11:45:07",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.935,
+   "same_best_bid_pct": 48.4,
+   "same_best_ask_pct": 29.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.5,
+   "upstox_minus_kotak_quote_time_s_median": -12.0
   }
  ],
  "top_gaps": [
@@ -438,6 +452,13 @@
    "at": "09:20"
   },
   {
+   "contract": "GODREJCP26DEC940PE",
+   "gap_pct": 0.935,
+   "kotak": 26.75,
+   "upstox": 27.0,
+   "at": "11:45"
+  },
+  {
    "contract": "COALINDIA26DEC385CE",
    "gap_pct": 0.926,
    "kotak": 10.8,
@@ -450,6 +471,13 @@
    "kotak": 61.0,
    "upstox": 61.4,
    "at": "09:30"
+  },
+  {
+   "contract": "GVT&D26DEC4200CE",
+   "gap_pct": 0.457,
+   "kotak": 219.0,
+   "upstox": 218.0,
+   "at": "11:45"
   },
   {
    "contract": "CDSL26DEC1440CE",
@@ -478,6 +506,13 @@
    "kotak": 174.15,
    "upstox": 174.05,
    "at": "09:40"
+  },
+  {
+   "contract": "HAVELLS26DECFUT",
+   "gap_pct": 0.051,
+   "kotak": 1182.7,
+   "upstox": 1182.1,
+   "at": "11:45"
   },
   {
    "contract": "COFORGE26DECFUT",
@@ -527,37 +562,16 @@
    "kotak": 33.85,
    "upstox": 33.85,
    "at": "09:20"
-  },
-  {
-   "contract": "360ONE26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 1183.6,
-   "upstox": 1183.6,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26DEC7100PE",
-   "gap_pct": 0.0,
-   "kotak": 292.85,
-   "upstox": 292.85,
-   "at": "09:20"
-  },
-  {
-   "contract": "ABB26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 7100.0,
-   "upstox": 7100.0,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 29,
-  "contract_quotes": 899,
+  "rounds": 30,
+  "contract_quotes": 930,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 45.2,
   "same_best_ask_pct": 41.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -30.0
+  "upstox_minus_kotak_quote_time_s_median": -29.0
  }
 }
