@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -25.0
+  },
+  {
+   "at": "11:55:08",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.703,
+   "same_best_bid_pct": 64.5,
+   "same_best_ask_pct": 54.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -64.0
   }
  ],
  "top_gaps": [
@@ -478,6 +492,13 @@
    "kotak": 10.8,
    "upstox": 10.7,
    "at": "09:40"
+  },
+  {
+   "contract": "INDIGO26DEC5650CE",
+   "gap_pct": 0.703,
+   "kotak": 192.0,
+   "upstox": 193.35,
+   "at": "11:55"
   },
   {
    "contract": "BAJAJFINSV26DEC1900CE",
@@ -564,28 +585,21 @@
    "at": "10:10"
   },
   {
-   "contract": "ASIANPAINT26DECFUT",
-   "gap_pct": 0.008,
-   "kotak": 2612.5,
-   "upstox": 2612.7,
-   "at": "09:25"
-  },
-  {
-   "contract": "RELIANCE26DECFUT",
-   "gap_pct": 0.007,
-   "kotak": 1387.0,
-   "upstox": 1387.1,
-   "at": "10:45"
+   "contract": "INFY26DECFUT",
+   "gap_pct": 0.009,
+   "kotak": 1167.9,
+   "upstox": 1167.8,
+   "at": "11:55"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 961,
+  "rounds": 32,
+  "contract_quotes": 992,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 45.2,
+  "same_best_bid_pct": 46.8,
   "same_best_ask_pct": 41.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -28.0
+  "upstox_minus_kotak_quote_time_s_median": -29.0
  }
 }
