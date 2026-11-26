@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -6.0
+  },
+  {
+   "at": "09:35:03",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.024,
+   "same_best_bid_pct": 25.8,
+   "same_best_ask_pct": 41.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -17.0
   }
  ],
  "top_gaps": [
@@ -65,6 +79,13 @@
    "kotak": 61.0,
    "upstox": 61.4,
    "at": "09:30"
+  },
+  {
+   "contract": "BHARTIARTL26DECFUT",
+   "gap_pct": 0.024,
+   "kotak": 2118.5,
+   "upstox": 2118.0,
+   "at": "09:35"
   },
   {
    "contract": "ASIANPAINT26DECFUT",
@@ -177,23 +198,16 @@
    "kotak": 2673.8,
    "upstox": 2673.8,
    "at": "09:20"
-  },
-  {
-   "contract": "ADANIGREEN26DEC1360CE",
-   "gap_pct": 0.0,
-   "kotak": 54.3,
-   "upstox": 54.3,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 93,
+  "rounds": 4,
+  "contract_quotes": 124,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 29.0,
-  "same_best_ask_pct": 38.7,
+  "same_best_bid_pct": 27.4,
+  "same_best_ask_pct": 40.3,
   "volume_ratio_median": 1.0,
-  "oi_same_pct": 93.5,
-  "upstox_minus_kotak_quote_time_s_median": -15.0
+  "oi_same_pct": 95.15,
+  "upstox_minus_kotak_quote_time_s_median": -16.0
  }
 }
