@@ -35560,9 +35560,26 @@
    },
    "after": {
     "until": "2026-12-24",
-    "peak": null,
-    "trough": null,
-    "last": null
+    "peak": {
+     "price": 33.75,
+     "at": "2026-11-26T12:37:16+05:30"
+    },
+    "trough": {
+     "price": 33.75,
+     "at": "2026-11-26T12:37:16+05:30"
+    },
+    "last": {
+     "price": 33.75,
+     "at": "2026-11-26T12:37:16+05:30"
+    },
+    "peak_bid": {
+     "price": 33.75,
+     "at": "2026-11-26T12:37:16+05:30"
+    },
+    "low_bid": {
+     "price": 33.75,
+     "at": "2026-11-26T12:37:16+05:30"
+    }
    },
    "peak_capture": {
     "basis": "highest observed live best bid (not LTP, not a candle high); peak_net is an estimated opportunity that assumes the whole lot sells at that bid",
@@ -36023,7 +36040,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-26T12:37:00+05:30",
+ "saved_at": "2026-11-26T12:37:16+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
