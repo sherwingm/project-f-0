@@ -770,6 +770,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -78.0
+  },
+  {
+   "at": "13:55:11",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.105,
+   "same_best_bid_pct": 56.7,
+   "same_best_ask_pct": 40.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.7,
+   "upstox_minus_kotak_quote_time_s_median": -9.5
   }
  ],
  "top_gaps": [
@@ -879,6 +893,13 @@
    "at": "12:00"
   },
   {
+   "contract": "KPITTECH26DECFUT",
+   "gap_pct": 0.105,
+   "kotak": 522.55,
+   "upstox": 522.0,
+   "at": "13:55"
+  },
+  {
    "contract": "OBEROIRLTY26DECFUT",
    "gap_pct": 0.1,
    "kotak": 1892.2,
@@ -905,21 +926,14 @@
    "kotak": 4205.0,
    "upstox": 4207.5,
    "at": "13:35"
-  },
-  {
-   "contract": "BSE26DEC3900CE",
-   "gap_pct": 0.057,
-   "kotak": 174.15,
-   "upstox": 174.05,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 55,
-  "contract_quotes": 1690,
+  "rounds": 56,
+  "contract_quotes": 1720,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 48.4,
-  "same_best_ask_pct": 46.7,
+  "same_best_ask_pct": 45.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
   "upstox_minus_kotak_quote_time_s_median": -37.0
