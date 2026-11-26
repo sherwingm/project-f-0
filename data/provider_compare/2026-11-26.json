@@ -910,6 +910,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -113.0
+  },
+  {
+   "at": "14:45:13",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.064,
+   "same_best_bid_pct": 46.7,
+   "same_best_ask_pct": 50.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -65.0
   }
  ],
  "top_gaps": [
@@ -1047,21 +1061,21 @@
    "at": "13:45"
   },
   {
-   "contract": "GVT&D26DECFUT",
-   "gap_pct": 0.059,
-   "kotak": 4205.0,
-   "upstox": 4207.5,
-   "at": "13:35"
+   "contract": "ADANIENSOL26DECFUT",
+   "gap_pct": 0.064,
+   "kotak": 1400.4,
+   "upstox": 1399.5,
+   "at": "14:45"
   }
  ],
  "day": {
-  "rounds": 65,
-  "contract_quotes": 1990,
+  "rounds": 66,
+  "contract_quotes": 2020,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 50.0,
+  "same_best_bid_pct": 49.2,
   "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -37.5
+  "upstox_minus_kotak_quote_time_s_median": -38.25
  }
 }
