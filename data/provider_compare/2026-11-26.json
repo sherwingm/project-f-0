@@ -742,6 +742,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -63.5
+  },
+  {
+   "at": "13:45:11",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.099,
+   "same_best_bid_pct": 53.3,
+   "same_best_ask_pct": 46.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -28.0
   }
  ],
  "top_gaps": [
@@ -858,6 +872,20 @@
    "at": "10:30"
   },
   {
+   "contract": "INFY26DEC1160CE",
+   "gap_pct": 0.099,
+   "kotak": 50.6,
+   "upstox": 50.65,
+   "at": "13:45"
+  },
+  {
+   "contract": "INDIANB26DECFUT",
+   "gap_pct": 0.064,
+   "kotak": 942.0,
+   "upstox": 942.6,
+   "at": "13:45"
+  },
+  {
    "contract": "GVT&D26DECFUT",
    "gap_pct": 0.059,
    "kotak": 4205.0,
@@ -870,28 +898,14 @@
    "kotak": 174.15,
    "upstox": 174.05,
    "at": "09:40"
-  },
-  {
-   "contract": "HAVELLS26DECFUT",
-   "gap_pct": 0.051,
-   "kotak": 1182.7,
-   "upstox": 1182.1,
-   "at": "11:45"
-  },
-  {
-   "contract": "COFORGE26DECFUT",
-   "gap_pct": 0.039,
-   "kotak": 2043.5,
-   "upstox": 2042.7,
-   "at": "09:40"
   }
  ],
  "day": {
-  "rounds": 53,
-  "contract_quotes": 1630,
+  "rounds": 54,
+  "contract_quotes": 1660,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 48.4,
-  "same_best_ask_pct": 45.2,
+  "same_best_ask_pct": 45.95,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
   "upstox_minus_kotak_quote_time_s_median": -37.0
