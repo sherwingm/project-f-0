@@ -378,6 +378,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -30.0
+  },
+  {
+   "at": "11:35:07",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.128,
+   "same_best_bid_pct": 61.3,
+   "same_best_ask_pct": 64.5,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -71.0
   }
  ],
  "top_gaps": [
@@ -429,6 +443,13 @@
    "kotak": 59.1,
    "upstox": 59.2,
    "at": "09:40"
+  },
+  {
+   "contract": "CROMPTON26DECFUT",
+   "gap_pct": 0.128,
+   "kotak": 217.91,
+   "upstox": 218.19,
+   "at": "11:35"
   },
   {
    "contract": "OBEROIRLTY26DECFUT",
@@ -513,23 +534,16 @@
    "kotak": 7100.0,
    "upstox": 7100.0,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26DEC420CE",
-   "gap_pct": 0.0,
-   "kotak": 15.95,
-   "upstox": 15.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 27,
-  "contract_quotes": 837,
+  "rounds": 28,
+  "contract_quotes": 868,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.9,
+  "same_best_bid_pct": 43.55,
   "same_best_ask_pct": 41.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -28.0
+  "upstox_minus_kotak_quote_time_s_median": -29.0
  }
 }
