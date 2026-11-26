@@ -448,6 +448,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -64.0
+  },
+  {
+   "at": "12:00:08",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.484,
+   "same_best_bid_pct": 77.4,
+   "same_best_ask_pct": 54.8,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.5,
+   "upstox_minus_kotak_quote_time_s_median": -67.0
   }
  ],
  "top_gaps": [
@@ -480,6 +494,13 @@
    "at": "09:20"
   },
   {
+   "contract": "JIOFIN26DEC225CE",
+   "gap_pct": 1.484,
+   "kotak": 8.76,
+   "upstox": 8.63,
+   "at": "12:00"
+  },
+  {
    "contract": "GODREJCP26DEC940PE",
    "gap_pct": 0.935,
    "kotak": 26.75,
@@ -508,6 +529,13 @@
    "at": "09:30"
   },
   {
+   "contract": "JIOFIN26DEC225PE",
+   "gap_pct": 0.478,
+   "kotak": 6.27,
+   "upstox": 6.3,
+   "at": "12:00"
+  },
+  {
    "contract": "GVT&D26DEC4200CE",
    "gap_pct": 0.457,
    "kotak": 219.0,
@@ -527,6 +555,13 @@
    "kotak": 217.91,
    "upstox": 218.19,
    "at": "11:35"
+  },
+  {
+   "contract": "JIOFIN26DECFUT",
+   "gap_pct": 0.11,
+   "kotak": 227.5,
+   "upstox": 227.25,
+   "at": "12:00"
   },
   {
    "contract": "OBEROIRLTY26DECFUT",
@@ -569,37 +604,16 @@
    "kotak": 921.05,
    "upstox": 921.3,
    "at": "11:50"
-  },
-  {
-   "contract": "BHARTIARTL26DECFUT",
-   "gap_pct": 0.024,
-   "kotak": 2118.5,
-   "upstox": 2118.0,
-   "at": "09:35"
-  },
-  {
-   "contract": "INFY26DECFUT",
-   "gap_pct": 0.009,
-   "kotak": 1171.0,
-   "upstox": 1171.1,
-   "at": "10:10"
-  },
-  {
-   "contract": "INFY26DECFUT",
-   "gap_pct": 0.009,
-   "kotak": 1167.9,
-   "upstox": 1167.8,
-   "at": "11:55"
   }
  ],
  "day": {
-  "rounds": 32,
-  "contract_quotes": 992,
+  "rounds": 33,
+  "contract_quotes": 1023,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 46.8,
+  "same_best_bid_pct": 48.4,
   "same_best_ask_pct": 41.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -29.0
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
