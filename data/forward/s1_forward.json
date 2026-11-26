@@ -1,7 +1,7 @@
 {
  "rules": "S1 v7 rules without near-expiry trades: results beat (day-0 move >= 2 % above its sector, < 10 % raw) -> next session buy 1 call lot, current monthly expiry if >= 2 sessions remain (10 until 2026-10-17) else next monthly, first strike from at-the-money upward with >= 50 contracts and Rs 600-8,000 a lot, at the day's average price + 1 tick. Exit at the close: 50 % stop, 5 sessions without a new closing high, or T-1. From 2026-10-14 a quiet results day is skipped (the stock's high-low range under 3 % of the previous close). Failed the 2021-24 backtest gate (DECISIONS.md); paper only.",
  "first_session": "2026-10-13",
- "last_session": "2026-11-25",
+ "last_session": "2026-11-26",
  "sessions": [
   {
    "session": "2026-10-13",
@@ -580,11 +580,82 @@
     "exited": [],
     "signals": []
    }
+  },
+  {
+   "session": "2026-11-26",
+   "A": {
+    "filled": [],
+    "exited": [],
+    "signals": [
+     "ENRIN"
+    ]
+   },
+   "B": {
+    "filled": [],
+    "exited": [],
+    "signals": []
+   }
   }
  ],
  "arms": {
   "A": {
-   "pending": [],
+   "pending": [
+    {
+     "arm": "A",
+     "symbol": "ENRIN",
+     "sector": "nifty infrastructure",
+     "signal_date": "2026-11-26",
+     "beat": 2.56,
+     "move": 2.96,
+     "expiry": "2026-12-29",
+     "spot": 3057.72,
+     "strikes": [
+      2500.0,
+      2600.0,
+      2650.0,
+      2700.0,
+      2750.0,
+      2800.0,
+      2850.0,
+      2900.0,
+      2950.0,
+      3000.0,
+      3050.0,
+      3100.0,
+      3150.0,
+      3200.0,
+      3250.0,
+      3300.0,
+      3350.0,
+      3400.0,
+      3450.0,
+      3500.0,
+      3550.0,
+      3600.0,
+      3650.0
+     ],
+     "open_strike": 3600.0,
+     "open_lot": 175,
+     "open_ref": 41.04,
+     "liquid_strikes": [
+      2900.0,
+      2950.0,
+      3000.0,
+      3050.0,
+      3100.0,
+      3150.0,
+      3200.0,
+      3250.0,
+      3300.0,
+      3350.0,
+      3400.0,
+      3450.0,
+      3500.0,
+      3600.0,
+      3650.0
+     ]
+    }
+   ],
    "open": [],
    "closed": [
     {
