@@ -45,17 +45,17 @@
    "t2_date": "2026-12-24",
    "stop_triggered_at": null,
    "mark": {
-    "price": 26.75,
-    "bid": 26.75,
-    "ask": 27.45,
+    "price": 26.95,
+    "bid": 26.95,
+    "ask": 27.75,
     "ltp": 27.0,
-    "at": "2026-11-26T09:35:58+05:30",
+    "at": "2026-11-26T09:36:14+05:30",
     "stale": false
    },
-   "unrealised_gross": -551.25,
-   "exit_charges_est": 32.58,
-   "unrealised": -609.8,
-   "liquidation_value": 4648.67,
+   "unrealised_gross": -516.25,
+   "exit_charges_est": 32.65,
+   "unrealised": -574.87,
+   "liquidation_value": 4683.6,
    "rule": {
     "strategy": "fade",
     "version": "v12",
@@ -166,11 +166,11 @@
      "qty": 350
     },
     "last": {
-     "price": 26.75,
-     "at": "2026-11-26T09:35:58+05:30",
+     "price": 26.95,
+     "at": "2026-11-26T09:36:14+05:30",
      "qty": 175
     },
-    "n": 1261,
+    "n": 1278,
     "missing": 0,
     "sources": [
      "live best bid (1-s exit check)",
@@ -35761,7 +35761,7 @@
   },
   "2026-11-26": {
    "start_equity": 1362548.96,
-   "end_equity": 1361939.16,
+   "end_equity": 1361974.09,
    "realised": 0.0
   }
  },
@@ -35956,7 +35956,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-26T09:35:58+05:30",
+ "saved_at": "2026-11-26T09:36:14+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
