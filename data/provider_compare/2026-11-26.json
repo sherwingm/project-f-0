@@ -1008,6 +1008,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -15.5
+  },
+  {
+   "at": "15:20:14",
+   "contracts": 30,
+   "on_both": 30,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.424,
+   "same_best_bid_pct": 56.7,
+   "same_best_ask_pct": 53.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.3,
+   "upstox_minus_kotak_quote_time_s_median": -10.5
   }
  ],
  "top_gaps": [
@@ -1096,6 +1110,13 @@
    "at": "11:45"
   },
   {
+   "contract": "ETERNAL26DEC370CE",
+   "gap_pct": 0.424,
+   "kotak": 11.8,
+   "upstox": 11.85,
+   "at": "15:20"
+  },
+  {
    "contract": "CDSL26DEC1440CE",
    "gap_pct": 0.169,
    "kotak": 59.1,
@@ -1143,23 +1164,16 @@
    "kotak": 942.0,
    "upstox": 942.6,
    "at": "13:45"
-  },
-  {
-   "contract": "ADANIENSOL26DECFUT",
-   "gap_pct": 0.064,
-   "kotak": 1400.4,
-   "upstox": 1399.5,
-   "at": "14:45"
   }
  ],
  "day": {
-  "rounds": 72,
-  "contract_quotes": 2200,
+  "rounds": 73,
+  "contract_quotes": 2230,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 50.0,
   "same_best_ask_pct": 50.0,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 100.0,
-  "upstox_minus_kotak_quote_time_s_median": -38.25
+  "upstox_minus_kotak_quote_time_s_median": -37.5
  }
 }
