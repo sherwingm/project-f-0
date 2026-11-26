@@ -210,6 +210,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -41.0
+  },
+  {
+   "at": "10:35:05",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.028,
+   "same_best_bid_pct": 51.6,
+   "same_best_ask_pct": 32.3,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -58.0
   }
  ],
  "top_gaps": [
@@ -284,6 +298,13 @@
    "at": "09:40"
   },
   {
+   "contract": "PAYTM26DECFUT",
+   "gap_pct": 0.028,
+   "kotak": 1767.5,
+   "upstox": 1767.0,
+   "at": "10:35"
+  },
+  {
    "contract": "BHARTIARTL26DECFUT",
    "gap_pct": 0.024,
    "kotak": 2118.5,
@@ -345,23 +366,16 @@
    "kotak": 12.45,
    "upstox": 12.45,
    "at": "09:20"
-  },
-  {
-   "contract": "ABCAPITAL26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 422.95,
-   "upstox": 422.95,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 15,
-  "contract_quotes": 465,
+  "rounds": 16,
+  "contract_quotes": 496,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.7,
+  "same_best_bid_pct": 39.35,
   "same_best_ask_pct": 41.9,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -20.0
+  "upstox_minus_kotak_quote_time_s_median": -21.5
  }
 }
