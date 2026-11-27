@@ -434,6 +434,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -85.0
+  },
+  {
+   "at": "11:55:09",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.048,
+   "same_best_bid_pct": 58.1,
+   "same_best_ask_pct": 58.1,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -121.0
   }
  ],
  "top_gaps": [
@@ -571,16 +585,16 @@
    "at": "10:20"
   },
   {
-   "contract": "GODREJPROP26DECFUT",
-   "gap_pct": 0.045,
-   "kotak": 2002.5,
-   "upstox": 2001.6,
-   "at": "11:05"
+   "contract": "POWERINDIA26DECFUT",
+   "gap_pct": 0.048,
+   "kotak": 31345.0,
+   "upstox": 31360.0,
+   "at": "11:55"
   }
  ],
  "day": {
-  "rounds": 31,
-  "contract_quotes": 961,
+  "rounds": 32,
+  "contract_quotes": 992,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 48.4,
   "same_best_ask_pct": 45.2,
