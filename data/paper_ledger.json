@@ -47,9 +47,9 @@
    "mark": {
     "price": 30.65,
     "bid": 30.65,
-    "ask": 31.35,
+    "ask": 31.3,
     "ltp": 31.0,
-    "at": "2026-11-27T15:21:09+05:30",
+    "at": "2026-11-27T15:21:24+05:30",
     "stale": false
    },
    "unrealised_gross": -428.75,
@@ -130,10 +130,10 @@
     },
     "last": {
      "price": 30.65,
-     "at": "2026-11-27T15:21:09+05:30",
-     "qty": 525
+     "at": "2026-11-27T15:21:24+05:30",
+     "qty": 350
     },
-    "n": 1357,
+    "n": 1358,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -183,17 +183,17 @@
    "t2_date": "2026-12-24",
    "stop_triggered_at": null,
    "mark": {
-    "price": 44.25,
-    "bid": 44.25,
-    "ask": 44.8,
+    "price": 44.1,
+    "bid": 44.1,
+    "ask": 44.7,
     "ltp": 44.55,
-    "at": "2026-11-27T15:21:09+05:30",
+    "at": "2026-11-27T15:21:24+05:30",
     "stale": false
    },
-   "unrealised_gross": -122.5,
-   "exit_charges_est": 38.48,
-   "unrealised": -188.12,
-   "liquidation_value": 7705.27,
+   "unrealised_gross": -148.75,
+   "exit_charges_est": 38.42,
+   "unrealised": -214.31,
+   "liquidation_value": 7679.08,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -261,16 +261,16 @@
      "qty": 175
     },
     "low": {
-     "price": 44.25,
-     "at": "2026-11-27T15:21:09+05:30",
+     "price": 44.1,
+     "at": "2026-11-27T15:21:24+05:30",
      "qty": 175
     },
     "last": {
-     "price": 44.25,
-     "at": "2026-11-27T15:21:09+05:30",
+     "price": 44.1,
+     "at": "2026-11-27T15:21:24+05:30",
      "qty": 175
     },
-    "n": 4,
+    "n": 5,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -35846,7 +35846,7 @@
     },
     "last": {
      "price": 24.15,
-     "at": "2026-11-27T15:21:09+05:30"
+     "at": "2026-11-27T15:21:24+05:30"
     },
     "peak_bid": {
      "price": 37.25,
@@ -36139,7 +36139,7 @@
   },
   "2026-11-27": {
    "start_equity": 1363161.79,
-   "end_equity": 1362484.8,
+   "end_equity": 1362458.61,
    "realised": 0.0
   }
  },
@@ -36334,7 +36334,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-27T15:21:09+05:30",
+ "saved_at": "2026-11-27T15:21:24+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
