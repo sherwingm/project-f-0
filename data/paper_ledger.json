@@ -1,7 +1,7 @@
 {
  "epoch": "2026-10-14 S1 rules",
  "capital": 500000.0,
- "cash": 1357343.0800000008,
+ "cash": 1349449.6900000009,
  "positions": [
   {
    "id": "P-1795751126080-6",
@@ -139,6 +139,108 @@
      "live best bid (feed poll)"
     ],
     "max_gap_s": 18.9
+   }
+  },
+  {
+   "id": "P-1795773009603-9",
+   "symbol": "ENRIN",
+   "instrument": "CE",
+   "expiry": "2026-12-29",
+   "strike": 3500.0,
+   "tradingsymbol": "ENRIN26DEC3500CE",
+   "lot_size": 175,
+   "side": "BUY",
+   "lots": 1,
+   "qty": 175,
+   "entry": {
+    "price": 44.95,
+    "levels": [],
+    "class": "rule",
+    "mode": "rule_close",
+    "mid": null,
+    "slippage_vs_mid": null,
+    "overflow_qty": 0
+   },
+   "entry_charges": {
+    "instrument": "CE",
+    "side": "BUY",
+    "qty": 175,
+    "price": 44.95,
+    "value": 7866.25,
+    "brokerage": 20.0,
+    "stt": 0.0,
+    "exchange": 2.79,
+    "sebi": 0.01,
+    "stamp": 0.24,
+    "gst": 4.1,
+    "total": 27.14
+   },
+   "entry_charges_open": 27.14,
+   "stop": null,
+   "max_loss_at_entry": 7893.39,
+   "margin": 0.0,
+   "opened_at": "2026-11-27T15:20:09+05:30",
+   "t2_date": "2026-12-24",
+   "stop_triggered_at": null,
+   "mark": null,
+   "unrealised_gross": 0.0,
+   "exit_charges_est": 38.7,
+   "unrealised": -65.84,
+   "liquidation_value": 7827.55,
+   "rule": {
+    "entry_mode": "close",
+    "arms": [
+     "A"
+    ],
+    "signal_date": "2026-11-26",
+    "beat": 2.56,
+    "move": 2.96,
+    "best": 44.95,
+    "stall": 0,
+    "checked": null
+   },
+   "entry_quote": {
+    "bid": 44.4,
+    "bid_qty": 175,
+    "ask": 44.95,
+    "ask_qty": 175,
+    "ltp": 44.8,
+    "spread_pct": 1.23,
+    "spot": 3130.0,
+    "volume": 246050,
+    "oi": 62825,
+    "source": "upstox_stream",
+    "day_open": 42.85,
+    "todays_book": true,
+    "ltt": "2026-11-27 15:19:52",
+    "at": "2026-11-27T15:20:09+05:30",
+    "ltt_age_s": 17.6,
+    "stale_ltt": false,
+    "stale_ltt_reason": null
+   },
+   "peak": {
+    "price": 44.95,
+    "at": "2026-11-27T15:20:09+05:30"
+   },
+   "trough": {
+    "price": 44.95,
+    "at": "2026-11-27T15:20:09+05:30"
+   },
+   "order": {
+    "decision_price": 44.95,
+    "limit": 46.3,
+    "tick": 0.05,
+    "placed_at": "2026-11-27T15:20:08+05:30",
+    "filled_at": "2026-11-27T15:20:09+05:30",
+    "wait_s": 1.2,
+    "tries": 1,
+    "levels": [
+     {
+      "price": 44.95,
+      "qty": 175
+     }
+    ],
+    "old_price": 44.58
    }
   }
  ],
@@ -36002,7 +36104,7 @@
   },
   "2026-11-27": {
    "start_equity": 1363161.79,
-   "end_equity": 1362699.11,
+   "end_equity": 1362633.27,
    "realised": 0.0
   }
  },
@@ -36197,7 +36299,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-27T15:20:08+05:30",
+ "saved_at": "2026-11-27T15:20:09+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
@@ -36296,7 +36398,7 @@
    "2026-11-09:TITAN": "bought",
    "2026-11-12:KALYANKJIL": "refused",
    "2026-11-16:AMBER": "bought",
-   "2026-11-27:ENRIN": "ordered"
+   "2026-11-27:ENRIN": "bought"
   },
   "exits_checked": "2026-11-27",
   "refused": [
