@@ -47,9 +47,9 @@
    "mark": {
     "price": 30.0,
     "bid": 30.0,
-    "ask": 30.5,
+    "ask": 30.45,
     "ltp": 30.2,
-    "at": "2026-11-27T15:28:29+05:30",
+    "at": "2026-11-27T15:28:44+05:30",
     "stale": false
    },
    "unrealised_gross": -542.5,
@@ -130,10 +130,10 @@
     },
     "last": {
      "price": 30.0,
-     "at": "2026-11-27T15:28:29+05:30",
+     "at": "2026-11-27T15:28:44+05:30",
      "qty": 875
     },
-    "n": 1386,
+    "n": 1387,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -183,17 +183,17 @@
    "t2_date": "2026-12-24",
    "stop_triggered_at": null,
    "mark": {
-    "price": 42.65,
-    "bid": 42.65,
-    "ask": 43.25,
+    "price": 42.75,
+    "bid": 42.75,
+    "ask": 43.2,
     "ltp": 42.9,
-    "at": "2026-11-27T15:28:29+05:30",
+    "at": "2026-11-27T15:28:44+05:30",
     "stale": false
    },
-   "unrealised_gross": -402.5,
-   "exit_charges_est": 37.94,
-   "unrealised": -467.58,
-   "liquidation_value": 7425.81,
+   "unrealised_gross": -385.0,
+   "exit_charges_est": 37.97,
+   "unrealised": -450.11,
+   "liquidation_value": 7443.28,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -266,11 +266,11 @@
      "qty": 525
     },
     "last": {
-     "price": 42.65,
-     "at": "2026-11-27T15:28:29+05:30",
-     "qty": 525
+     "price": 42.75,
+     "at": "2026-11-27T15:28:44+05:30",
+     "qty": 175
     },
-    "n": 33,
+    "n": 34,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -35846,7 +35846,7 @@
     },
     "last": {
      "price": 24.5,
-     "at": "2026-11-27T15:28:29+05:30"
+     "at": "2026-11-27T15:28:44+05:30"
     },
     "peak_bid": {
      "price": 37.25,
@@ -36139,7 +36139,7 @@
   },
   "2026-11-27": {
    "start_equity": 1363161.79,
-   "end_equity": 1362091.8,
+   "end_equity": 1362109.27,
    "realised": 0.0
   }
  },
@@ -36334,7 +36334,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-27T15:28:29+05:30",
+ "saved_at": "2026-11-27T15:28:44+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
