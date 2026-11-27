@@ -70,9 +70,37 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -20.0
+  },
+  {
+   "at": "09:45:02",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 1.091,
+   "same_best_bid_pct": 25.8,
+   "same_best_ask_pct": 38.7,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.3,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
+  {
+   "contract": "MCX26DEC3900CE",
+   "gap_pct": 1.091,
+   "kotak": 187.95,
+   "upstox": 190.0,
+   "at": "09:45"
+  },
+  {
+   "contract": "MAZDOCK26DEC1880CE",
+   "gap_pct": 0.44,
+   "kotak": 91.0,
+   "upstox": 90.6,
+   "at": "09:45"
+  },
   {
    "contract": "HINDALCO26DEC930PE",
    "gap_pct": 0.351,
@@ -93,6 +121,13 @@
    "kotak": 30.0,
    "upstox": 30.05,
    "at": "09:20"
+  },
+  {
+   "contract": "MCX26DEC3900PE",
+   "gap_pct": 0.122,
+   "kotak": 164.0,
+   "upstox": 164.2,
+   "at": "09:45"
   },
   {
    "contract": "HDFCAMC26DECFUT",
@@ -144,6 +179,13 @@
    "at": "09:20"
   },
   {
+   "contract": "MCX26DECFUT",
+   "gap_pct": 0.023,
+   "kotak": 3923.9,
+   "upstox": 3924.8,
+   "at": "09:45"
+  },
+  {
    "contract": "INFY26DECFUT",
    "gap_pct": 0.017,
    "kotak": 1162.4,
@@ -184,39 +226,11 @@
    "kotak": 220.0,
    "upstox": 220.0,
    "at": "09:20"
-  },
-  {
-   "contract": "GVT&D26DEC4200PE",
-   "gap_pct": 0.0,
-   "kotak": 158.7,
-   "upstox": 158.7,
-   "at": "09:20"
-  },
-  {
-   "contract": "GVT&D26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 4275.0,
-   "upstox": 4275.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "HAL26DEC4900CE",
-   "gap_pct": 0.0,
-   "kotak": 181.0,
-   "upstox": 181.0,
-   "at": "09:20"
-  },
-  {
-   "contract": "HAL26DEC4900PE",
-   "gap_pct": 0.0,
-   "kotak": 128.85,
-   "upstox": 128.85,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 5,
-  "contract_quotes": 155,
+  "rounds": 6,
+  "contract_quotes": 186,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 38.7,
   "same_best_ask_pct": 38.7,
