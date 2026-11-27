@@ -1,10 +1,68 @@
 {
  "rule": "short build-up: price -3 % or more, combined futures OI +10 % or more, volume 1.5x its 20-day average (expiry day and the day after skipped); S2 step 2 decides whether a put is traded",
- "session": "2026-11-26",
- "generated": "2026-11-27T05:01+05:30",
- "signals": [],
+ "session": "2026-11-27",
+ "generated": "2026-11-28T04:39+05:30",
+ "signals": [
+  {
+   "symbol": "HYUNDAI",
+   "close": 2006.0,
+   "price_pct": -4.67,
+   "oi_pct": 15.8,
+   "vol_ratio": 2.41,
+   "put": {
+    "expiry": "2026-12-29",
+    "strike": 1860.0,
+    "premium": 28.87,
+    "lot": 275,
+    "lot_cost": 7939,
+    "below_spot_pct": 7.28,
+    "contracts": 476.0
+   }
+  },
+  {
+   "symbol": "SHRIRAMFIN",
+   "close": 923.5,
+   "price_pct": -3.99,
+   "oi_pct": 18.75,
+   "vol_ratio": 3.48,
+   "put": {
+    "expiry": "2026-12-29",
+    "strike": 840.0,
+    "premium": 8.49,
+    "lot": 825,
+    "lot_cost": 7004,
+    "below_spot_pct": 9.04,
+    "contracts": 2302.0
+   }
+  },
+  {
+   "symbol": "SBICARD",
+   "close": 565.8,
+   "price_pct": -3.46,
+   "oi_pct": 15.57,
+   "vol_ratio": 2.81,
+   "put": {
+    "expiry": "2026-12-29",
+    "strike": 540.0,
+    "premium": 8.11,
+    "lot": 800,
+    "lot_cost": 6488,
+    "below_spot_pct": 4.56,
+    "contracts": 550.0
+   }
+  }
+ ],
  "note": null,
  "history": [
+  {
+   "session": "2026-11-27",
+   "symbols": [
+    "HYUNDAI",
+    "SHRIRAMFIN",
+    "SBICARD"
+   ],
+   "note": null
+  },
   {
    "session": "2026-11-26",
    "symbols": [],
@@ -129,11 +187,6 @@
     "HEROMOTOCO"
    ],
    "note": null
-  },
-  {
-   "session": "2026-10-28",
-   "symbols": [],
-   "note": "expiry or rollover session: the combined OI jumps, so no signals are read today"
   }
  ]
 }
