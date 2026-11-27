@@ -42,6 +42,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -33.0
+  },
+  {
+   "at": "09:35:02",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.037,
+   "same_best_bid_pct": 48.4,
+   "same_best_ask_pct": 45.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.5,
+   "upstox_minus_kotak_quote_time_s_median": -16.0
   }
  ],
  "top_gaps": [
@@ -93,6 +107,20 @@
    "kotak": 1448.0,
    "upstox": 1447.2,
    "at": "09:20"
+  },
+  {
+   "contract": "KEI26DECFUT",
+   "gap_pct": 0.037,
+   "kotak": 3816.0,
+   "upstox": 3814.6,
+   "at": "09:35"
+  },
+  {
+   "contract": "KEI26DEC3800CE",
+   "gap_pct": 0.029,
+   "kotak": 175.0,
+   "upstox": 175.05,
+   "at": "09:35"
   },
   {
    "contract": "HINDALCO26DECFUT",
@@ -170,30 +198,16 @@
    "kotak": 128.85,
    "upstox": 128.85,
    "at": "09:20"
-  },
-  {
-   "contract": "HAL26DECFUT",
-   "gap_pct": 0.0,
-   "kotak": 4947.5,
-   "upstox": 4947.5,
-   "at": "09:20"
-  },
-  {
-   "contract": "HAVELLS26DEC1170CE",
-   "gap_pct": 0.0,
-   "kotak": 42.4,
-   "upstox": 42.4,
-   "at": "09:20"
   }
  ],
  "day": {
-  "rounds": 3,
-  "contract_quotes": 93,
+  "rounds": 4,
+  "contract_quotes": 124,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 38.7,
-  "same_best_ask_pct": 35.5,
+  "same_best_bid_pct": 40.3,
+  "same_best_ask_pct": 37.1,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 93.5,
-  "upstox_minus_kotak_quote_time_s_median": -10.0
+  "upstox_minus_kotak_quote_time_s_median": -13.0
  }
 }
