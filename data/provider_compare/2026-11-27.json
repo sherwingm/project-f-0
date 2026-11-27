@@ -350,6 +350,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -32.0
+  },
+  {
+   "at": "11:25:08",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.549,
+   "same_best_bid_pct": 45.2,
+   "same_best_ask_pct": 41.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 96.8,
+   "upstox_minus_kotak_quote_time_s_median": -36.0
   }
  ],
  "top_gaps": [
@@ -359,6 +373,13 @@
    "kotak": 187.95,
    "upstox": 190.0,
    "at": "09:45"
+  },
+  {
+   "contract": "LAURUSLABS26DEC2520CE",
+   "gap_pct": 0.549,
+   "kotak": 91.0,
+   "upstox": 91.5,
+   "at": "11:25"
   },
   {
    "contract": "TATASTEEL26DEC165PE",
@@ -387,6 +408,13 @@
    "kotak": 28.5,
    "upstox": 28.6,
    "at": "09:20"
+  },
+  {
+   "contract": "KOTAKBANK26DEC500CE",
+   "gap_pct": 0.348,
+   "kotak": 14.35,
+   "upstox": 14.4,
+   "at": "11:25"
   },
   {
    "contract": "INFY26DEC1154CE",
@@ -478,30 +506,16 @@
    "kotak": 191.01,
    "upstox": 191.08,
    "at": "10:05"
-  },
-  {
-   "contract": "SBICARD26DECFUT",
-   "gap_pct": 0.034,
-   "kotak": 592.85,
-   "upstox": 593.05,
-   "at": "10:10"
-  },
-  {
-   "contract": "KEI26DEC3800CE",
-   "gap_pct": 0.029,
-   "kotak": 175.0,
-   "upstox": 175.05,
-   "at": "09:35"
   }
  ],
  "day": {
-  "rounds": 25,
-  "contract_quotes": 775,
+  "rounds": 26,
+  "contract_quotes": 806,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.9,
+  "same_best_bid_pct": 43.55,
   "same_best_ask_pct": 45.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -29.0
+  "upstox_minus_kotak_quote_time_s_median": -29.5
  }
 }
