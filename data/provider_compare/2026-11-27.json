@@ -294,6 +294,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 100.0,
    "upstox_minus_kotak_quote_time_s_median": -41.0
+  },
+  {
+   "at": "11:05:07",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.045,
+   "same_best_bid_pct": 35.5,
+   "same_best_ask_pct": 29.0,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 93.5,
+   "upstox_minus_kotak_quote_time_s_median": -64.0
   }
  ],
  "top_gaps": [
@@ -403,6 +417,13 @@
    "at": "10:20"
   },
   {
+   "contract": "GODREJPROP26DECFUT",
+   "gap_pct": 0.045,
+   "kotak": 2002.5,
+   "upstox": 2001.6,
+   "at": "11:05"
+  },
+  {
    "contract": "KEI26DECFUT",
    "gap_pct": 0.037,
    "kotak": 3816.0,
@@ -429,23 +450,16 @@
    "kotak": 175.0,
    "upstox": 175.05,
    "at": "09:35"
-  },
-  {
-   "contract": "TATAELXSI26DEC3900CE",
-   "gap_pct": 0.028,
-   "kotak": 181.0,
-   "upstox": 180.95,
-   "at": "10:15"
   }
  ],
  "day": {
-  "rounds": 21,
-  "contract_quotes": 651,
+  "rounds": 22,
+  "contract_quotes": 682,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 41.9,
+  "same_best_bid_pct": 40.3,
   "same_best_ask_pct": 45.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -26.0
+  "upstox_minus_kotak_quote_time_s_median": -27.5
  }
 }
