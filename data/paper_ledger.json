@@ -47,9 +47,9 @@
    "mark": {
     "price": 30.0,
     "bid": 30.0,
-    "ask": 30.6,
+    "ask": 30.55,
     "ltp": 31.15,
-    "at": "2026-11-27T15:23:56+05:30",
+    "at": "2026-11-27T15:24:11+05:30",
     "stale": false
    },
    "unrealised_gross": -542.5,
@@ -130,10 +130,10 @@
     },
     "last": {
      "price": 30.0,
-     "at": "2026-11-27T15:23:56+05:30",
-     "qty": 1050
+     "at": "2026-11-27T15:24:11+05:30",
+     "qty": 700
     },
-    "n": 1368,
+    "n": 1369,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -183,17 +183,17 @@
    "t2_date": "2026-12-24",
    "stop_triggered_at": null,
    "mark": {
-    "price": 43.0,
-    "bid": 43.0,
-    "ask": 43.65,
+    "price": 43.65,
+    "bid": 43.65,
+    "ask": 44.4,
     "ltp": 43.5,
-    "at": "2026-11-27T15:23:56+05:30",
+    "at": "2026-11-27T15:24:11+05:30",
     "stale": false
    },
-   "unrealised_gross": -341.25,
-   "exit_charges_est": 38.05,
-   "unrealised": -406.44,
-   "liquidation_value": 7486.95,
+   "unrealised_gross": -227.5,
+   "exit_charges_est": 38.27,
+   "unrealised": -292.91,
+   "liquidation_value": 7600.48,
    "rule": {
     "entry_mode": "close",
     "arms": [
@@ -266,11 +266,11 @@
      "qty": 175
     },
     "last": {
-     "price": 43.0,
-     "at": "2026-11-27T15:23:56+05:30",
-     "qty": 350
+     "price": 43.65,
+     "at": "2026-11-27T15:24:11+05:30",
+     "qty": 175
     },
-    "n": 15,
+    "n": 16,
     "missing": 0,
     "sources": [
      "live best bid (feed poll)"
@@ -35846,7 +35846,7 @@
     },
     "last": {
      "price": 24.5,
-     "at": "2026-11-27T15:23:56+05:30"
+     "at": "2026-11-27T15:24:11+05:30"
     },
     "peak_bid": {
      "price": 37.25,
@@ -36139,7 +36139,7 @@
   },
   "2026-11-27": {
    "start_equity": 1363161.79,
-   "end_equity": 1362152.94,
+   "end_equity": 1362266.47,
    "realised": 0.0
   }
  },
@@ -36334,7 +36334,7 @@
    "closed": []
   }
  ],
- "saved_at": "2026-11-27T15:23:56+05:30",
+ "saved_at": "2026-11-27T15:24:11+05:30",
  "rules": {
   "open": {
    "2026-10-14:HCLTECH": "refused",
