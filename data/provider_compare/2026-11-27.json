@@ -364,6 +364,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 96.8,
    "upstox_minus_kotak_quote_time_s_median": -36.0
+  },
+  {
+   "at": "11:30:08",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.052,
+   "same_best_bid_pct": 54.8,
+   "same_best_ask_pct": 45.2,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 90.3,
+   "upstox_minus_kotak_quote_time_s_median": -38.0
   }
  ],
  "top_gaps": [
@@ -480,6 +494,20 @@
    "at": "09:20"
   },
   {
+   "contract": "M&M26DEC3500CE",
+   "gap_pct": 0.052,
+   "kotak": 95.25,
+   "upstox": 95.2,
+   "at": "11:30"
+  },
+  {
+   "contract": "M&M26DECFUT",
+   "gap_pct": 0.052,
+   "kotak": 3481.3,
+   "upstox": 3483.1,
+   "at": "11:30"
+  },
+  {
    "contract": "TRENT26DEC3300CE",
    "gap_pct": 0.05,
    "kotak": 100.3,
@@ -492,30 +520,16 @@
    "kotak": 2002.5,
    "upstox": 2001.6,
    "at": "11:05"
-  },
-  {
-   "contract": "KEI26DECFUT",
-   "gap_pct": 0.037,
-   "kotak": 3816.0,
-   "upstox": 3814.6,
-   "at": "09:35"
-  },
-  {
-   "contract": "RVNL26DECFUT",
-   "gap_pct": 0.037,
-   "kotak": 191.01,
-   "upstox": 191.08,
-   "at": "10:05"
   }
  ],
  "day": {
-  "rounds": 26,
-  "contract_quotes": 806,
+  "rounds": 27,
+  "contract_quotes": 837,
   "ltp_gap_pct_median": 0.0,
-  "same_best_bid_pct": 43.55,
+  "same_best_bid_pct": 45.2,
   "same_best_ask_pct": 45.2,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -29.5
+  "upstox_minus_kotak_quote_time_s_median": -30.0
  }
 }
