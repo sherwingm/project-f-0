@@ -784,6 +784,20 @@
    "volume_ratio_median": 1.0,
    "oi_same_pct": 93.5,
    "upstox_minus_kotak_quote_time_s_median": -18.0
+  },
+  {
+   "at": "14:00:12",
+   "contracts": 31,
+   "on_both": 31,
+   "missing_kotak": [],
+   "missing_upstox": [],
+   "ltp_gap_pct_median": 0.0,
+   "ltp_gap_pct_max": 0.343,
+   "same_best_bid_pct": 32.3,
+   "same_best_ask_pct": 41.9,
+   "volume_ratio_median": 1.0,
+   "oi_same_pct": 100.0,
+   "upstox_minus_kotak_quote_time_s_median": -104.0
   }
  ],
  "top_gaps": [
@@ -865,6 +879,13 @@
    "at": "11:25"
   },
   {
+   "contract": "TRENT26DEC3300CE",
+   "gap_pct": 0.343,
+   "kotak": 102.15,
+   "upstox": 102.5,
+   "at": "14:00"
+  },
+  {
    "contract": "INFY26DEC1154CE",
    "gap_pct": 0.32,
    "kotak": 46.85,
@@ -907,35 +928,28 @@
    "at": "13:25"
   },
   {
+   "contract": "UJJIVANSFB26DECFUT",
+   "gap_pct": 0.069,
+   "kotak": 57.92,
+   "upstox": 57.96,
+   "at": "14:00"
+  },
+  {
    "contract": "HINDUNILVR26DECFUT",
    "gap_pct": 0.066,
    "kotak": 2137.4,
    "upstox": 2136.0,
    "at": "09:25"
-  },
-  {
-   "contract": "ITC26DECFUT",
-   "gap_pct": 0.065,
-   "kotak": 308.3,
-   "upstox": 308.5,
-   "at": "09:30"
-  },
-  {
-   "contract": "PERSISTENT26DECFUT",
-   "gap_pct": 0.064,
-   "kotak": 6226.0,
-   "upstox": 6230.0,
-   "at": "10:00"
   }
  ],
  "day": {
-  "rounds": 56,
-  "contract_quotes": 1736,
+  "rounds": 57,
+  "contract_quotes": 1767,
   "ltp_gap_pct_median": 0.0,
   "same_best_bid_pct": 51.6,
   "same_best_ask_pct": 51.6,
   "volume_ratio_median": 1.0,
   "oi_same_pct": 96.8,
-  "upstox_minus_kotak_quote_time_s_median": -37.5
+  "upstox_minus_kotak_quote_time_s_median": -38.0
  }
 }
